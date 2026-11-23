@@ -5,9 +5,9 @@ import { randomUUID } from 'node:crypto';
 
 import { runAutomation, type AutomationEngineContext } from '@learny/automations';
 import { createLogger } from '@learny/core/server';
-import { closeDb, serviceDb, sql } from '@learny/db';
-import { createTestProgramme } from '@learny/db/testing';
 import { createBrick, createNotionState, makeModuleWithBank } from '@learny/testing';
+import { closeDb, serviceDb, sql } from '@learny/testing/db';
+import { createTestProgramme } from '@learny/testing/db';
 import { expect, test } from '@learny/testing/playwright';
 import {
   createTestSession,

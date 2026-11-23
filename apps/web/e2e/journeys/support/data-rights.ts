@@ -1,20 +1,13 @@
 // Support of the SPEC-807 EF-6 journey (data rights): declared fixtures of the two isolated
 // learners, a strict reader of the ZIP produced by the export job, and the nightly deletion run
 // with an injected clock (ADR-0047 — the machine clock is never touched).
-import { randomUUID } from 'node:crypto';
 import { inflateRawSync } from 'node:zlib';
 
 import { createClient } from '@supabase/supabase-js';
 
-import { serviceDb, sql } from '@learny/db';
-import { createTestCourse, createTestProgramme } from '@learny/db/testing';
-import { createJobContext, runAccountDeletion, type AccountDeletionOutcome } from '@learny/jobs';
-import {
-  createAttempt,
-  createFixedClock,
-  createNotionState,
-  createResource,
-} from '@learny/testing';
+import { createAttempt, createNotionState, createResource } from '@learny/testing';
+import { serviceDb, sql } from '@learny/testing/db';
+import { createTestCourse, createTestProgramme } from '@learny/testing/db';
 import { supabaseLocalEnv } from '@learny/testing/supabase';
 
 /** Data seeded for one learner: every marker must (or must not) be found in an archive. */
@@ -235,26 +228,4 @@ export function readZip(archive: Buffer): Map<string, Buffer> {
   return files;
 }
 
-const DAY_MS = 24 * 60 * 60 * 1000;
-const directStep = {
-  run: <T>(_id: string, body: () => Promise<T>): Promise<T> => body(),
-};
-
-/**
- * Runs the nightly `account-deletion` step of one learner (SPEC-211 EF-7) with an injected clock
- * set `offsetMs` after the reference instant. The job re-reads the request under lock and only
- * deletes a due, still pending request (CL-7): the clock is the only thing the test moves.
- * The e-mails of this process use the memory transport (SPEC-807 ET-1).
- */
-export async function runNightlyDeletion(
-  userId: string,
-  referenceIso: string,
-  offsetMs: number,
-): Promise<AccountDeletionOutcome> {
-  process.env.EMAIL_MODE ??= 'memory';
-  const at = new Date(Date.parse(referenceIso) + offsetMs).toISOString();
-  const ctx = createJobContext({ requestId: randomUUID(), clock: createFixedClock(at) });
-  return runAccountDeletion({ ctx, step: directStep, logger: ctx.logger, userId });
-}
-
-export const THIRTY_DAYS_MS = 30 * DAY_MS;
+/** The erasure is a Python worker job now; see `test_personal_data.py` for the itinerary. */

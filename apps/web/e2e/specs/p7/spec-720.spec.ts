@@ -10,14 +10,14 @@ import { randomUUID } from 'node:crypto';
 import { runAutomation } from '@learny/automations';
 import { formatWeeklyStudy, weeklyRetentionLabel } from '@learny/contracts';
 import { createLogger } from '@learny/core/server';
-import { closeDb, serviceDb, sql } from '@learny/db';
+import { closeDb, serviceDb, sql } from '@learny/testing/db';
 import {
   DEMO_AUTOMATION_ACTIONS,
   DEMO_USERS,
   demoFormationId,
   demoId,
   demoUserId,
-} from '@learny/db/seed/fixtures';
+} from '@learny/testing/db-factories';
 import { expect, restoreDemoData, test } from '@learny/testing/playwright';
 import {
   createDemoSession,

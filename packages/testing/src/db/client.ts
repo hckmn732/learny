@@ -12,8 +12,7 @@ import { z } from 'zod';
 import { parseServerEnv } from '@learny/config/server';
 import { AppError } from '@learny/core';
 import { createLogger } from '@learny/core/server';
-
-import * as schema from './schema/index';
+import * as schema from '@learny/db/schema';
 
 /** Local Supabase database (SPEC-008), used when DATABASE_URL is not exported. */
 export const DEFAULT_DATABASE_URL = 'postgresql://postgres:postgres@127.0.0.1:54322/postgres';

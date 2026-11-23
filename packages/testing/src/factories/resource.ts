@@ -2,7 +2,7 @@
 // links carry a reserved `.test` URL. The owner may be the formation owner or an active member.
 import { randomUUID } from 'node:crypto';
 
-import { sql, type DbTx } from '@learny/db';
+import { sql, type DbTx } from '../db';
 
 import { assertChapterBelongsTo, assertFormationAccess, insert, type IdRow } from './helpers';
 

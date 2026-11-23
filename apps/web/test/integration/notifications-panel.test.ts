@@ -2,8 +2,8 @@ import { NextRequest } from 'next/server';
 import { afterAll, afterEach, beforeAll, beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { NotificationListDto } from '@learny/contracts';
-import { closeDb, serviceDb, sql } from '@learny/db';
 import { createNotification } from '@learny/testing';
+import { closeDb, serviceDb, sql } from '@learny/testing/db';
 import {
   createTestSession,
   deleteTestSession,

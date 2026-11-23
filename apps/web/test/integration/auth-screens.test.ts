@@ -4,9 +4,9 @@ import { createClient } from '@supabase/supabase-js';
 import { NextRequest } from 'next/server';
 import { afterAll, beforeAll, describe, expect, it, vi } from 'vitest';
 
-import { closeDb, serviceDb, sql } from '@learny/db';
 import { setSignedUpEmitter } from '@learny/services';
 import { extractAuthLink, waitForMail } from '@learny/testing/auth';
+import { closeDb, serviceDb, sql } from '@learny/testing/db';
 import { supabaseLocalEnv } from '@learny/testing/supabase';
 
 import { honoRoute } from './hono-route';

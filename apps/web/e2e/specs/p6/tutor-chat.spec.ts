@@ -1,4 +1,4 @@
-import { closeDb, serviceDb, sql } from '@learny/db';
+import { closeDb, serviceDb, sql } from '@learny/testing/db';
 import {
   DEMO_USERS,
   demoChapterId,
@@ -6,7 +6,7 @@ import {
   demoId,
   demoModuleId,
   demoUserId,
-} from '@learny/db/seed/fixtures';
+} from '@learny/testing/db-factories';
 import { expect, test } from '@learny/testing/playwright';
 import { createDemoSession, deleteTestSession, type TestSession } from '@learny/testing/supabase';
 import { expectScreenshotBaseline, expectTokens } from '@learny/testing/visual';

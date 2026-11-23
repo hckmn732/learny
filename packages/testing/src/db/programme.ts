@@ -2,7 +2,7 @@
 // demonstration dataset; every caller must run it inside a transaction, typically `withRollback`.
 import { sql } from 'drizzle-orm';
 
-import type { DbTx } from '../client';
+import type { DbTx } from './client';
 
 export interface TestProgrammeOptions {
   /** Number of modules (default 2). */

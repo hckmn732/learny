@@ -6,9 +6,9 @@ import { randomBytes } from 'node:crypto';
 import type { Page } from '@playwright/test';
 
 import { createLogger } from '@learny/core/server';
-import { serviceDb, sql } from '@learny/db';
 import { processResource } from '@learny/ingestion';
 import { createFixedClock, FIXED_TIME_ISO } from '@learny/testing';
+import { serviceDb, sql } from '@learny/testing/db';
 import { expect } from '@learny/testing/playwright';
 
 /** ET-2 — every run owns its learner: a unique reserved address, deleted at the end. */

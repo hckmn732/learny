@@ -9,8 +9,8 @@ import AxeBuilder from '@axe-core/playwright';
 import type { BrowserContext, Page } from '@playwright/test';
 import type { Result } from 'axe-core';
 
-import { closeDb, serviceDb, sql } from '@learny/db';
-import { DEMO_USERS, demoId, demoUserId } from '@learny/db/seed/fixtures';
+import { closeDb, serviceDb, sql } from '@learny/testing/db';
+import { DEMO_USERS, demoId, demoUserId } from '@learny/testing/db-factories';
 import { expect, restoreDemoData, test } from '@learny/testing/playwright';
 import { createDemoSession, type TestSession } from '@learny/testing/supabase';
 

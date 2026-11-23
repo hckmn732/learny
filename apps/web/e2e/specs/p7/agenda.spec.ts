@@ -4,8 +4,8 @@
 // 2026-11-11T12:20:00Z and the seed is reset by the global setup of every end-to-end run.
 import { fileURLToPath } from 'node:url';
 
-import { closeDb } from '@learny/db';
-import { DEMO_USERS, demoFormationId, demoModuleId, demoUserId } from '@learny/db/seed/fixtures';
+import { closeDb } from '@learny/testing/db';
+import { DEMO_USERS, demoFormationId, demoModuleId, demoUserId } from '@learny/testing/db-factories';
 import { expect, restoreDemoData, test } from '@learny/testing/playwright';
 import {
   createDemoSession,

@@ -10,7 +10,6 @@ import { afterAll, afterEach, beforeEach, describe, expect, it, vi } from 'vites
 import { z } from 'zod';
 
 import { ProblemDetails, defineRoute } from '@learny/contracts';
-import { closeDb, serviceDb, sql } from '@learny/db';
 import { handler } from '@learny/http/handler';
 import { setOriginGuard } from '@learny/http/origin';
 import { setRateLimiter } from '@learny/http/rate-limit';
@@ -20,6 +19,7 @@ import {
   registerSecurity,
 } from '@learny/http/security';
 import { setSessionResolver } from '@learny/http/session';
+import { closeDb, serviceDb, sql } from '@learny/testing/db';
 
 import { proxy } from '../../proxy';
 

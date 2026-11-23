@@ -2,9 +2,9 @@ import { NextRequest } from 'next/server';
 import { afterAll, afterEach, beforeAll, beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { HeaderDto } from '@learny/contracts';
-import { closeDb, serviceDb, sql } from '@learny/db';
-import { createTestProgramme } from '@learny/db/testing';
 import { createNotification } from '@learny/testing';
+import { closeDb, serviceDb, sql } from '@learny/testing/db';
+import { createTestProgramme } from '@learny/testing/db';
 import {
   createTestSession,
   deleteTestSession,

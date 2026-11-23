@@ -1,8 +1,8 @@
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
-import { closeDb } from '@learny/db';
-import { DEMO_USERS, demoUserId } from '@learny/db/seed/fixtures';
+import { closeDb } from '@learny/testing/db';
+import { DEMO_USERS, demoUserId } from '@learny/testing/db-factories';
 import { expect, test } from '@learny/testing/playwright';
 import { createDemoSession, deleteTestSession, type TestSession } from '@learny/testing/supabase';
 

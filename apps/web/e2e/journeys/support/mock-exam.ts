@@ -3,9 +3,9 @@
 // modules are studied, one choice question per notion and an exam guide whose official format is
 // only proposed, so the learner has to confirm it before starting. Everything else (format
 // confirmation, start, answers, marks, resumption, submission, gaps) goes through the product.
-import { serviceDb, sql } from '@learny/db';
-import { createTestProgramme } from '@learny/db/testing';
 import { createBrick } from '@learny/testing';
+import { serviceDb, sql } from '@learny/testing/db';
+import { createTestProgramme } from '@learny/testing/db';
 
 /** Official format of the guide: 8 questions in 16 minutes, 75 % to pass (≠ default 20/40/70). */
 export const GUIDE_FORMAT = { questions: 8, durationMin: 16, threshold: 75 } as const;

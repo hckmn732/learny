@@ -1,7 +1,7 @@
 import { createHash, randomUUID } from 'node:crypto';
 
-import { closeDb, serviceDb, sql } from '@learny/db';
-import { DEMO_USERS, demoUserId } from '@learny/db/seed/fixtures';
+import { closeDb, serviceDb, sql } from '@learny/testing/db';
+import { DEMO_USERS, demoUserId } from '@learny/testing/db-factories';
 import { expect, test } from '@learny/testing/playwright';
 import {
   createDemoSession,

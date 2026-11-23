@@ -3,9 +3,9 @@ import { fileURLToPath } from 'node:url';
 
 import { clock } from '@learny/core';
 import { createLogger } from '@learny/core/server';
-import { closeDb, serviceDb, sql } from '@learny/db';
-import { createTestProgramme } from '@learny/db/testing';
 import { processResource } from '@learny/ingestion';
+import { closeDb, serviceDb, sql } from '@learny/testing/db';
+import { createTestProgramme } from '@learny/testing/db';
 import { expect, test } from '@learny/testing/playwright';
 import { createTestSession, deleteTestSession, type TestSession } from '@learny/testing/supabase';
 import {

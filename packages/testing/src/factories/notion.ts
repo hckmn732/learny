@@ -1,6 +1,6 @@
 // Notion factory (SPEC-115 EF-6). A notion always belongs to the chapter, module and formation
 // given by the caller; the composite keys of SPEC-103 are verified before the insert.
-import { sql, type DbTx } from '@learny/db';
+import { sql, type DbTx } from '../db';
 
 import {
   assertChapterBelongsTo,

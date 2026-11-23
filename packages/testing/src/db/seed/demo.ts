@@ -12,8 +12,6 @@ import { SQL, sql } from 'drizzle-orm';
 
 import { AI_TASKS, LEGAL_VERSIONS } from '@learny/config';
 
-import { serviceDb, type DbTx } from '../client';
-
 import {
   DEMO_AGENDA,
   DEMO_AGENDA_DAYS,
@@ -42,7 +40,9 @@ import {
   type DemoFormationFixture,
   type DemoModuleFixture,
   type DemoNotionFixture,
-} from './demo-fixtures';
+} from '../../db-factories/demo-fixtures';
+import { serviceDb, type DbTx } from '../client';
+
 import {
   assertDemoEnvironment,
   demoNow,

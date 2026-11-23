@@ -22,7 +22,7 @@ function writeFixture(file: string, content: string): string {
 
 describe('[SPEC-1302] permanent coupling check', () => {
   it('counts a server import introduced in apps/web and makes --check fail (CA-2)', () => {
-    writeFixture('apps/web/lib/coupled.ts', "import { serviceDb } from '@learny/db';\n");
+    writeFixture('apps/web/lib/coupled.ts', "import { serviceDb } from '@learny/testing/db';\n");
     writeFixture('packages/contracts/src/routes.ts', 'export const ROUTES = {} as const;\n');
     vi.spyOn(console, 'log').mockImplementation(() => undefined);
     vi.spyOn(console, 'error').mockImplementation(() => undefined);

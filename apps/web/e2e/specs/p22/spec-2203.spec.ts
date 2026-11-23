@@ -2,8 +2,8 @@
 // the web. The three operations exercised here carry a path parameter (module, contribution), so
 // they are exactly the ones the parity recorder cannot generate a scenario for: the integration
 // suite covers their use cases under RLS and this test covers the façade contract end to end.
-import { serviceDb } from '@learny/db';
 import { createFormation, createModule, createResource } from '@learny/testing';
+import { serviceDb } from '@learny/testing/db';
 import { expect, test } from '@learny/testing/playwright';
 import { createTestSession, deleteTestSession } from '@learny/testing/supabase';
 

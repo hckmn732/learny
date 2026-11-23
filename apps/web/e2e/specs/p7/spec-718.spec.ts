@@ -3,8 +3,8 @@
 // The journey uses the SPEC-115 demonstration day and the frozen clock of ADR-0047. It checks the
 // six admitted settings, the smoothed tutor box, « Annuler le lissage » reopening every due notion
 // without a fake review log, the error state and the visual tokens captured on desktop and mobile.
-import { closeDb, serviceDb, sql } from '@learny/db';
-import { DEMO_USERS, demoFormationId, demoId, demoUserId } from '@learny/db/seed/fixtures';
+import { closeDb, serviceDb, sql } from '@learny/testing/db';
+import { DEMO_USERS, demoFormationId, demoId, demoUserId } from '@learny/testing/db-factories';
 import { expect, restoreDemoData, test } from '@learny/testing/playwright';
 import {
   createDemoSession,

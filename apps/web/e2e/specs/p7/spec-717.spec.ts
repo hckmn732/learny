@@ -7,7 +7,7 @@ import { randomUUID } from 'node:crypto';
 
 import { runAutomation, type AutomationEngineContext } from '@learny/automations';
 import { createLogger } from '@learny/core/server';
-import { closeDb, serviceDb, sql } from '@learny/db';
+import { closeDb, serviceDb, sql } from '@learny/testing/db';
 import {
   DEMO_USERS,
   demoChapterId,
@@ -15,7 +15,7 @@ import {
   demoId,
   demoNotionId,
   demoUserId,
-} from '@learny/db/seed/fixtures';
+} from '@learny/testing/db-factories';
 import { expect, restoreDemoData, test } from '@learny/testing/playwright';
 import {
   createDemoSession,

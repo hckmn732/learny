@@ -3,10 +3,10 @@ import { NextRequest } from 'next/server';
 import { createElement } from 'react';
 import { afterAll, afterEach, beforeAll, beforeEach, describe, expect, it, vi } from 'vitest';
 
-import { closeDb, serviceDb, sql } from '@learny/db';
-import { createTestCourse, createTestProgramme } from '@learny/db/testing';
 import { fr } from '@learny/i18n/fr/search';
 import { createServiceContext } from '@learny/services';
+import { closeDb, serviceDb, sql } from '@learny/testing/db';
+import { createTestCourse, createTestProgramme } from '@learny/testing/db';
 import { cleanup, renderComponent, screen } from '@learny/testing/render';
 import {
   createTestSession,

@@ -4,7 +4,7 @@ import { createClient } from '@supabase/supabase-js';
 
 import { createApiClient } from '@learny/api-client';
 import { activeLegalVersions } from '@learny/config';
-import { serviceDb, sql } from '@learny/db';
+import { serviceDb, sql } from '@learny/testing/db';
 
 import { createCourse } from './factories/course';
 import { createModule } from './factories/module';

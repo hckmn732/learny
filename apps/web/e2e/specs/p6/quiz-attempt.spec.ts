@@ -1,6 +1,6 @@
-import { closeDb, serviceDb, sql } from '@learny/db';
-import { createTestCourse, createTestProgramme } from '@learny/db/testing';
 import { createBrick, makeModuleWithBank } from '@learny/testing';
+import { closeDb, serviceDb, sql } from '@learny/testing/db';
+import { createTestCourse, createTestProgramme } from '@learny/testing/db';
 import { expect, test } from '@learny/testing/playwright';
 import {
   createTestSession,

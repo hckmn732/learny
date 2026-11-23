@@ -11,8 +11,8 @@ import type { Page } from '@playwright/test';
 
 import { runAutomation, type AutomationEngineContext } from '@learny/automations';
 import { createLogger } from '@learny/core/server';
-import { closeDb, serviceDb } from '@learny/db';
 import { createFixedClock } from '@learny/testing/clock';
+import { closeDb, serviceDb } from '@learny/testing/db';
 import { expect, test } from '@learny/testing/playwright';
 
 import {

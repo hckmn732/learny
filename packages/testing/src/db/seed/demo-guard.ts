@@ -4,7 +4,7 @@
 // L'horloge est toujours figée (valeur ADR-0047 par défaut) ; la seed ne lit jamais l'heure réelle.
 import { createClockFromEnv } from '@learny/core';
 
-import { DEMO_NOW_ISO } from './demo-fixtures';
+import { DEMO_NOW_ISO } from '../../db-factories/demo-fixtures';
 
 export const DEFAULT_DEMO_DATABASE_URL = 'postgresql://postgres:postgres@127.0.0.1:54322/postgres';
 

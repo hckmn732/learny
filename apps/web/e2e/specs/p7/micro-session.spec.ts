@@ -1,8 +1,8 @@
 import { fileURLToPath } from 'node:url';
 
-import { closeDb, serviceDb, sql } from '@learny/db';
-import { DEMO_USERS, demoFormationId, demoUserId } from '@learny/db/seed/fixtures';
 import { createBrick } from '@learny/testing';
+import { closeDb, serviceDb, sql } from '@learny/testing/db';
+import { DEMO_USERS, demoFormationId, demoUserId } from '@learny/testing/db-factories';
 import {
   expect,
   restoreDemoData,

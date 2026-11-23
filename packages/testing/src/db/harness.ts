@@ -1,4 +1,4 @@
-// Integration-test harness of @learny/db (`@learny/db/testing`, SPEC-101 ET-7).
+// Integration-test harness of @learny/db (`@learny/testing/db`, SPEC-101 ET-7).
 //
 // Every integration test runs in `withRollback`: all writes are discarded, so suites stay
 // independent without truncating shared tables. `createTestUser` inserts directly into
@@ -11,7 +11,7 @@ import { z } from 'zod';
 
 import { AppError } from '@learny/core';
 
-import { buildUserClaims, serviceDb, type DbTx } from '../client';
+import { buildUserClaims, serviceDb, type DbTx } from './client';
 
 const UUID = z.uuid();
 const rollbackContext = new AsyncLocalStorage<true>();

@@ -4,8 +4,9 @@
 // so the fingerprints are distinct and the draw never reports an accidental duplicate.
 import { randomUUID } from 'node:crypto';
 
-import { sql, type DbTx } from '@learny/db';
-import { createTestProgramme } from '@learny/db/testing';
+import { createTestProgramme } from '@learny/testing/db';
+
+import { sql, type DbTx } from '../db';
 
 import { createBrick } from './brick';
 
@@ -164,7 +165,10 @@ export async function makeModuleWithBank(
   for (const [index, notion] of notions.entries()) {
     const distractor = notions[(index + 1) % notions.length]?.label ?? notion.label;
     for (let variant = 1; variant <= variants; variant += 1) {
-      const formats: Array<{ type: 'choice_question' | 'cloze' | 'matching' | 'open_question'; payload: unknown }> = [
+      const formats: Array<{
+        type: 'choice_question' | 'cloze' | 'matching' | 'open_question';
+        payload: unknown;
+      }> = [
         { type: 'choice_question', payload: choicePayload(notion.label, distractor, variant) },
         { type: 'cloze', payload: clozePayload(notion.label, variant) },
         { type: 'matching', payload: matchingPayload(notion.label, notion.id, variant) },
