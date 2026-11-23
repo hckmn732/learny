@@ -2,7 +2,7 @@
 
 import json
 from types import SimpleNamespace
-from typing import Any
+from typing import Any, cast
 
 import pytest
 from fastapi import FastAPI
@@ -48,7 +48,7 @@ def request(body: Any) -> Request:
 
 async def call(body: Any, enabled: bool = True) -> tuple[int, Any, dict[str, str]]:
     response = await demo_job(request(body), context(enabled))
-    return response.status_code, json.loads(response.body), dict(response.headers)
+    return response.status_code, json.loads(bytes(response.body)), dict(response.headers)
 
 
 @pytest.fixture(autouse=True)
@@ -145,7 +145,7 @@ def test_install_registers_the_route_when_python_owns_it() -> None:
     app = FastAPI()
     ownership = SimpleNamespace(special={DEMO_JOB_KEY: "py"})
 
-    installed = sdd_tools.install(app, context(), ownership)
+    installed = sdd_tools.install(app, context(), cast(Any, ownership))
 
     assert DEMO_JOB_KEY in installed
     assert any(getattr(route, "path", None) == DEMO_JOB_PATH for route in app.routes)
