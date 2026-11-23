@@ -38,6 +38,10 @@ const env = {
   // ADR-3018 — le build e2e joint l'API locale de l'émulateur en HTTP (`10.0.2.2`) : le plugin de
   // configuration n'autorise le trafic en clair que lorsque cette variable est posée.
   LEARNY_E2E_CLEARTEXT: '1',
+  // ADR-3018 : un build e2e ne sert qu'à l'émulateur local (x86_64). Les 4 ABI
+  // multipliaient la compilation native par quatre (~20 min par spec).
+  ORG_GRADLE_PROJECT_reactNativeArchitectures:
+    process.env.ORG_GRADLE_PROJECT_reactNativeArchitectures ?? 'x86_64',
   ANDROID_HOME: process.env.ANDROID_HOME ?? '/opt/android-sdk',
   ANDROID_SDK_ROOT: process.env.ANDROID_SDK_ROOT ?? '/opt/android-sdk',
   CI: '1',
