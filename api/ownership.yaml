@@ -171,7 +171,7 @@ special:
   'POST /api/v1/dev/sdd/stripe/checkout/cancel': py
   'POST /api/v1/dev/sdd/stripe/checkout/pay': py
   'POST /api/v1/dev/sdd/stripe/simulate': py
-  'POST /api/v1/formations/:fid/sprints': ts
+  'POST /api/v1/formations/:fid/sprints': py
 
 consumers:
   # SPEC-2207: every consumer of the P22 table is wired to the Python worker (ADR-2032 closed).
