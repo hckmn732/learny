@@ -255,3 +255,45 @@ le job refuse une empreinte différente.
   région de `tools/deploy/check.mjs` ne s'appliquent pas. La région d'hébergement et les
   obligations de confidentialité (BR-PLA-04) sont celles de votre serveur.
 - Pas de bascule automatique ni de sauvegarde gérée : elles dépendent de votre serveur Coolify.
+
+## 10. Services Python de la bascule (SPEC-2301)
+
+La bascule vers l'API et le worker Python (ADR-2007) ajoute **deux services à la même image**,
+`docker/api-py.Dockerfile` (SPEC-2003), aux côtés de `api` (Hono), `web` et `migrate`. Ils sont
+désactivés de fait tant que `web` n'a pas basculé son `API_INTERNAL_URL` : la façade démarre en
+**relais pur** vers Hono, et tout ce qui reste `ts` dans `api/ownership.yaml` lui est renvoyé tel
+quel (ADR-2005).
+
+| Service | Rôle | Commande | Sonde | Port interne |
+|---|---|---|---|---|
+| `api-py` | façade FastAPI : opérations `py`, relais `ts` | `uvicorn learny_api.main:app --port 8000 --workers $PY_API_WORKERS` | `GET /health` | 8000 |
+| `worker-py` | outbox, livraisons, planificateur singleton | `python -m learny_worker` | `GET /health/live` et `/health/ready` sur `PY_WORKER_HEALTH_PORT` | 8081 (sondes locales au conteneur) |
+
+- **Une image, deux commandes** : la CI construit `docker/api-py.Dockerfile` à chaque commit
+  (`.github/workflows/ci.yml`), et Coolify construit la même image depuis le Compose ; aucun
+  registre ni secret de registre n'est nécessaire.
+- **Limites de ressources** : `api-py` 2 vCPU / 2 Go, `worker-py` 1 vCPU / 1 Go
+  (`deploy.resources.limits`), redémarrage `unless-stopped`, système de fichiers en lecture seule,
+  `no-new-privileges`, toutes capacités Linux retirées.
+- **Budget de connexions** : le pooler doit accepter au moins
+  `répliques api × PY_API_WORKERS × DATABASE_POOL_MAX + répliques worker × DATABASE_POOL_MAX + Hono`.
+  Départs : `PY_API_WORKERS=2`, `PY_DATABASE_POOL_MAX=5` (soit 35 connexions avec un worker et Hono).
+- **Migrations** : le job `migrate` reste un singleton (`restart: 'no'`, image cible `migrate`) et
+  `api-py`/`worker-py` attendent `service_completed_successfully`. Pour Supabase géré, le job de
+  release est verrouillé : `flock /tmp/learny-migrate.lock node tools/deploy/migrate.mjs --env staging`.
+- **Variables** : mêmes noms que le TypeScript, plus les variables `PY_*` (`PY_API_WORKERS`,
+  `PY_DATABASE_POOL_MAX`, `PY_WORKER_CONCURRENCY`, `PY_WORKER_HEALTH_PORT`, `PY_HONO_UPSTREAM_URL`)
+  et `OWNERSHIP_OVERRIDES`. **Aucune valeur de secret n'est écrite dans le dépôt** : la liste des
+  noms est dans l'ancre `x-py-environment` de `docker/compose.coolify.yml` (et
+  `docker/compose.coolify-qa.yml` pour la recette), les valeurs restent dans Coolify.
+- **Surcharge de propriété** : `OWNERSHIP_OVERRIDES` n'est jamais saisie à la main, elle est
+  produite par `node tools/deploy/cutover.mjs` (voir `docs/operations/python-cutover.md`) et lue au
+  démarrage de `api-py` : chaque changement exige un redéploiement du service.
+- **Bascule du web** : `API_INTERNAL_URL=http://api-py:8000` sur `web`, puis redéploiement. Le
+  retour à `http://api:3001` est le rollback immédiat de cette étape ; la configuration versionnée
+  reste volontairement sur Hono.
+
+Les commandes de bascule, de drain, de rollback et de restauration sont dans
+`docs/operations/python-cutover.md`. Les mesures de charge, de canary et de restauration se font sur
+le staging fourni par le porteur (ADR-2009) ; tant qu'il manque, SPEC-2301 est bloquée `--external`
+et le reste est prouvé en local.

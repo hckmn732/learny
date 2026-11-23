@@ -83,6 +83,52 @@ x-app-environment: &app-environment
   LEGAL_PRIVACY_VERSION: ${LEGAL_PRIVACY_VERSION:-2026-11-11}
   ENABLE_SDD_PAGES: 'false'
 
+# SPEC-2301 — variables de la façade et du worker Python (ADR-2007). Mêmes noms que le TypeScript,
+# plus les variables `PY_*` ; aucune valeur de secret n'est écrite ici, toutes viennent de Coolify.
+# `OWNERSHIP_OVERRIDES` n'est jamais saisie à la main : elle est produite par
+# `node tools/deploy/cutover.mjs` (docs/operations/python-cutover.md).
+x-py-environment: &py-environment
+  APP_ENV: production
+  LOG_LEVEL: ${LOG_LEVEL:-info}
+  APP_VERSION: ${APP_VERSION:-}
+  GIT_COMMIT: ${GIT_COMMIT:-}
+  DATABASE_URL: postgresql://postgres:${POSTGRES_PASSWORD:?}@db:5432/postgres
+  # Budget de connexions (plan P23, étape 1) : pooler >= api répliques x PY_API_WORKERS x
+  # DATABASE_POOL_MAX + worker répliques x DATABASE_POOL_MAX + Hono pendant la coexistence.
+  DATABASE_POOL_MAX: ${PY_DATABASE_POOL_MAX:-5}
+  SUPABASE_URL: ${LEARNY_PUBLIC_SUPABASE_URL:?}
+  SUPABASE_ANON_KEY: ${NEXT_PUBLIC_SUPABASE_ANON_KEY:?}
+  SUPABASE_SERVICE_ROLE_KEY: ${SUPABASE_SERVICE_ROLE_KEY:?}
+  SUPABASE_JWT_SECRET: ${SUPABASE_JWT_SECRET:?}
+  NEXT_PUBLIC_APP_URL: ${LEARNY_PUBLIC_APP_URL:?}
+  ALLOWED_ORIGINS: ${ALLOWED_ORIGINS:-}
+  API_PROXY_SECRET: ${API_PROXY_SECRET:?}
+  TRUST_PROXY: 'true'
+  APP_ENCRYPTION_KEY: ${APP_ENCRYPTION_KEY:?}
+  APP_ENCRYPTION_KEY_PREVIOUS: ${APP_ENCRYPTION_KEY_PREVIOUS:-}
+  RATE_LIMIT_IP_SECRET: ${RATE_LIMIT_IP_SECRET:?}
+  LLM_MODE: live
+  ANTHROPIC_API_KEY: ${ANTHROPIC_API_KEY:-}
+  VOYAGE_API_KEY: ${VOYAGE_API_KEY:?}
+  SEARCH_API_KEY: ${SEARCH_API_KEY:-}
+  EMAIL_MODE: ${EMAIL_MODE:-resend}
+  EMAIL_FROM: ${EMAIL_FROM:?}
+  EMAIL_LINK_SECRET: ${EMAIL_LINK_SECRET:?}
+  RESEND_API_KEY: ${RESEND_API_KEY:-}
+  SMTP_HOST: ${SMTP_HOST:?}
+  SMTP_PORT: ${SMTP_PORT:?}
+  PUSH_MODE: live
+  NEXT_PUBLIC_VAPID_PUBLIC_KEY: ${NEXT_PUBLIC_VAPID_PUBLIC_KEY:?}
+  VAPID_PRIVATE_KEY: ${VAPID_PRIVATE_KEY:?}
+  VAPID_SUBJECT: ${VAPID_SUBJECT:?}
+  STRIPE_MODE: ${STRIPE_MODE:-live}
+  STRIPE_SECRET_KEY: ${STRIPE_SECRET_KEY:?}
+  STRIPE_WEBHOOK_SECRET: ${STRIPE_WEBHOOK_SECRET:?}
+  STRIPE_PRICE_ID: ${STRIPE_PRICE_ID:?}
+  SENTRY_DSN: ${SENTRY_DSN:-}
+  ENABLE_SDD_PAGES: 'false'
+  OWNERSHIP_OVERRIDES: ${OWNERSHIP_OVERRIDES:-}
+
 services:
   db:
     build:
@@ -333,6 +379,101 @@ services:
       retries: 6
       start_period: 15s
     restart: unless-stopped
+    logging: *logging
+
+  # SPEC-2301 — façade Python (ADR-2007, ADR-2005). Même image que le worker, commande distincte.
+  # Le web ne bascule son `API_INTERNAL_URL` sur http://api-py:8000 qu'à l'étape 1 de la bascule
+  # (docs/operations/python-cutover.md) ; revenir à http://api:3001 est le rollback immédiat.
+  # Tant que le web n'a pas basculé, la façade ne reçoit que les sondes.
+  api-py:
+    build:
+      context: ..
+      dockerfile: docker/api-py.Dockerfile
+    command:
+      - sh
+      - -c
+      - exec uvicorn learny_api.main:app --host 0.0.0.0 --port 8000 --workers "$${PY_API_WORKERS:-2}"
+    user: '1001:1001'
+    read_only: true
+    tmpfs:
+      - /tmp:size=32m
+    security_opt:
+      - no-new-privileges:true
+    cap_drop: [ALL]
+    environment:
+      <<: *py-environment
+      PY_API_WORKERS: ${PY_API_WORKERS:-2}
+      # Position de repli de la bascule : tout ce qui reste `ts` est relayé à Hono, tel quel.
+      PY_HONO_UPSTREAM_URL: http://api:3001
+    expose:
+      - '8000'
+    depends_on:
+      migrate:
+        condition: service_completed_successfully
+      db:
+        condition: service_healthy
+      api:
+        condition: service_healthy
+    healthcheck:
+      test:
+        - CMD-SHELL
+        - >-
+          python -c "import sys, urllib.request;
+          sys.exit(0 if urllib.request.urlopen('http://127.0.0.1:8000/health', timeout=3).status == 200 else 1)"
+      interval: 10s
+      timeout: 5s
+      retries: 6
+      start_period: 20s
+    restart: unless-stopped
+    deploy:
+      resources:
+        limits:
+          cpus: '2.0'
+          memory: 2g
+    logging: *logging
+
+  # SPEC-2301 — worker Python : répartiteur d'outbox, exécuteur de livraisons et planificateur.
+  # Un seul service par environnement : le planificateur est déjà un singleton (verrou consultatif).
+  worker-py:
+    build:
+      context: ..
+      dockerfile: docker/api-py.Dockerfile
+    command: ['python', '-m', 'learny_worker']
+    user: '1001:1001'
+    read_only: true
+    tmpfs:
+      - /tmp:size=32m
+    security_opt:
+      - no-new-privileges:true
+    cap_drop: [ALL]
+    environment:
+      <<: *py-environment
+      JOBS_MODE: worker
+      PY_WORKER_CONCURRENCY: ${PY_WORKER_CONCURRENCY:-8}
+      PY_WORKER_HEALTH_PORT: ${PY_WORKER_HEALTH_PORT:-8081}
+    depends_on:
+      migrate:
+        condition: service_completed_successfully
+      db:
+        condition: service_healthy
+    healthcheck:
+      test:
+        - CMD-SHELL
+        - >-
+          python -c "import os, sys, urllib.request;
+          port = os.environ['PY_WORKER_HEALTH_PORT'];
+          urls = [f'http://127.0.0.1:{port}/health/live', f'http://127.0.0.1:{port}/health/ready'];
+          sys.exit(0 if all(urllib.request.urlopen(url, timeout=3).status == 200 for url in urls) else 1)"
+      interval: 10s
+      timeout: 5s
+      retries: 6
+      start_period: 30s
+    restart: unless-stopped
+    deploy:
+      resources:
+        limits:
+          cpus: '1.0'
+          memory: 1g
     logging: *logging
 
   # Application web. Domaine Coolify sur le port 3000 (URL = LEARNY_PUBLIC_APP_URL).

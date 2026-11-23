@@ -121,6 +121,50 @@ x-app-environment: &app-environment
   # Pages /_dev/sdd/* : seule la valeur exacte `true` les active ; refusées en production.
   ENABLE_SDD_PAGES: ${ENABLE_SDD_PAGES:-true}
 
+# SPEC-2301 — variables de la façade et du worker Python sur la pile de QA (ADR-2007) : les modes
+# simulés de recette restent ceux de la pile, aucune valeur de secret n'est écrite ici.
+x-py-environment: &py-environment
+  APP_ENV: ${APP_ENV:-local}
+  LOG_LEVEL: ${LOG_LEVEL:-info}
+  APP_VERSION: ${APP_VERSION:-}
+  GIT_COMMIT: ${GIT_COMMIT:-}
+  DATABASE_URL: postgresql://postgres:${POSTGRES_PASSWORD:?}@db:5432/postgres
+  DATABASE_POOL_MAX: ${PY_DATABASE_POOL_MAX:-5}
+  SUPABASE_URL: ${LEARNY_PUBLIC_SUPABASE_URL:?}
+  SUPABASE_ANON_KEY: ${NEXT_PUBLIC_SUPABASE_ANON_KEY:?}
+  SUPABASE_SERVICE_ROLE_KEY: ${SUPABASE_SERVICE_ROLE_KEY:?}
+  SUPABASE_JWT_SECRET: ${SUPABASE_JWT_SECRET:?}
+  NEXT_PUBLIC_APP_URL: ${LEARNY_PUBLIC_APP_URL:?}
+  ALLOWED_ORIGINS: ${ALLOWED_ORIGINS:-}
+  API_PROXY_SECRET: ${API_PROXY_SECRET:?}
+  TRUST_PROXY: ${TRUST_PROXY:-true}
+  APP_ENCRYPTION_KEY: ${APP_ENCRYPTION_KEY:?}
+  APP_ENCRYPTION_KEY_PREVIOUS: ${APP_ENCRYPTION_KEY_PREVIOUS:-}
+  RATE_LIMIT_IP_SECRET: ${RATE_LIMIT_IP_SECRET:?}
+  RATE_LIMIT_MODE: ${RATE_LIMIT_MODE:-off}
+  CLOCK_FIXED_AT: ${CLOCK_FIXED_AT:-2026-11-11T12:20:00Z}
+  LLM_MODE: ${LLM_MODE:-mock}
+  ANTHROPIC_API_KEY: ${ANTHROPIC_API_KEY:-}
+  VOYAGE_API_KEY: ${VOYAGE_API_KEY:-}
+  SEARCH_API_KEY: ${SEARCH_API_KEY:-}
+  EMAIL_MODE: ${EMAIL_MODE:-smtp}
+  EMAIL_FROM: ${EMAIL_FROM:-Learny QA <qa@learny.test>}
+  EMAIL_LINK_SECRET: ${EMAIL_LINK_SECRET:?}
+  RESEND_API_KEY: ${RESEND_API_KEY:-}
+  SMTP_HOST: ${SMTP_HOST:-mailpit}
+  SMTP_PORT: ${SMTP_PORT:-1025}
+  PUSH_MODE: ${PUSH_MODE:-mock}
+  NEXT_PUBLIC_VAPID_PUBLIC_KEY: ${NEXT_PUBLIC_VAPID_PUBLIC_KEY:-}
+  VAPID_PRIVATE_KEY: ${VAPID_PRIVATE_KEY:-}
+  VAPID_SUBJECT: ${VAPID_SUBJECT:-mailto:qa@learny.test}
+  STRIPE_MODE: ${STRIPE_MODE:-mock}
+  STRIPE_SECRET_KEY: ${STRIPE_SECRET_KEY:-}
+  STRIPE_WEBHOOK_SECRET: ${STRIPE_WEBHOOK_SECRET:-}
+  STRIPE_PRICE_ID: ${STRIPE_PRICE_ID:-}
+  SENTRY_DSN: ${SENTRY_DSN:-}
+  ENABLE_SDD_PAGES: ${ENABLE_SDD_PAGES:-true}
+  OWNERSHIP_OVERRIDES: ${OWNERSHIP_OVERRIDES:-}
+
 services:
   db:
     build:
@@ -417,6 +461,97 @@ services:
       retries: 6
       start_period: 15s
     restart: unless-stopped
+    logging: *logging
+
+  # SPEC-2301 — façade Python de la recette (ADR-2007) : même image que le worker, commande
+  # distincte. Le web ne pointe ici qu'après la bascule de `API_INTERNAL_URL`.
+  api-py:
+    build:
+      context: ..
+      dockerfile: docker/api-py.Dockerfile
+    command:
+      - sh
+      - -c
+      - exec uvicorn learny_api.main:app --host 0.0.0.0 --port 8000 --workers "$${PY_API_WORKERS:-2}"
+    user: '1001:1001'
+    read_only: true
+    tmpfs:
+      - /tmp:size=32m
+    security_opt:
+      - no-new-privileges:true
+    cap_drop: [ALL]
+    environment:
+      <<: *py-environment
+      PY_API_WORKERS: ${PY_API_WORKERS:-2}
+      PY_HONO_UPSTREAM_URL: http://api:3001
+    expose:
+      - '8000'
+    depends_on:
+      seed:
+        condition: service_completed_successfully
+      db:
+        condition: service_healthy
+      api:
+        condition: service_healthy
+    healthcheck:
+      test:
+        - CMD-SHELL
+        - >-
+          python -c "import sys, urllib.request;
+          sys.exit(0 if urllib.request.urlopen('http://127.0.0.1:8000/health', timeout=3).status == 200 else 1)"
+      interval: 10s
+      timeout: 5s
+      retries: 6
+      start_period: 20s
+    restart: unless-stopped
+    deploy:
+      resources:
+        limits:
+          cpus: '2.0'
+          memory: 2g
+    logging: *logging
+
+  # SPEC-2301 — worker Python de la recette : outbox, livraisons et planificateur.
+  worker-py:
+    build:
+      context: ..
+      dockerfile: docker/api-py.Dockerfile
+    command: ['python', '-m', 'learny_worker']
+    user: '1001:1001'
+    read_only: true
+    tmpfs:
+      - /tmp:size=32m
+    security_opt:
+      - no-new-privileges:true
+    cap_drop: [ALL]
+    environment:
+      <<: *py-environment
+      JOBS_MODE: worker
+      PY_WORKER_CONCURRENCY: ${PY_WORKER_CONCURRENCY:-8}
+      PY_WORKER_HEALTH_PORT: ${PY_WORKER_HEALTH_PORT:-8081}
+    depends_on:
+      seed:
+        condition: service_completed_successfully
+      db:
+        condition: service_healthy
+    healthcheck:
+      test:
+        - CMD-SHELL
+        - >-
+          python -c "import os, sys, urllib.request;
+          port = os.environ['PY_WORKER_HEALTH_PORT'];
+          urls = [f'http://127.0.0.1:{port}/health/live', f'http://127.0.0.1:{port}/health/ready'];
+          sys.exit(0 if all(urllib.request.urlopen(url, timeout=3).status == 200 for url in urls) else 1)"
+      interval: 10s
+      timeout: 5s
+      retries: 6
+      start_period: 30s
+    restart: unless-stopped
+    deploy:
+      resources:
+        limits:
+          cpus: '1.0'
+          memory: 1g
     logging: *logging
 
   # Application web. Domaine Coolify sur le port 3000 (URL = LEARNY_PUBLIC_APP_URL).
