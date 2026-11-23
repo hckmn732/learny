@@ -102,6 +102,7 @@ async def run_committed(
     event_ids: list[str],
     *,
     depth: int = 0,
+    exclude: tuple[str, ...] = (),
     logger: Any = None,
 ) -> None:
     """Fans out and runs the committed events, then the events their consumers commit, depth first.
@@ -114,7 +115,7 @@ async def run_committed(
     try:
         with collect_committed_events() as produced:
             await dispatcher.dispatch_events(event_ids)
-            await runner.run_events(event_ids)
+            await runner.run_events(event_ids, exclude=exclude)
     except Exception as error:
         log.error("inline dispatch failed", code=type(error).__name__, error=str(error)[:200])
         return
@@ -124,7 +125,7 @@ async def run_committed(
     if following is None:
         log.error("inline dispatch depth exceeded", outcome="inline_depth_exceeded")
         return
-    await run_committed(dispatcher, runner, produced, depth=following, logger=log)
+    await run_committed(dispatcher, runner, produced, depth=following, exclude=exclude, logger=log)
 
 
 def next_depth(depth: int) -> int | None:
