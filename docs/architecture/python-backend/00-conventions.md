@@ -205,12 +205,14 @@ async def submit_attempt(call: Call) -> object:
 
 `learny.shared.config.Settings(BaseSettings)` reads the **existing env var names** (no renaming): `DATABASE_URL`, `DATABASE_POOL_MAX`, `SUPABASE_URL`, `SUPABASE_ANON_KEY`, `SUPABASE_SERVICE_ROLE_KEY`, `SUPABASE_JWT_SECRET`, `SUPABASE_JWKS_URL`, `APP_ENV`, `APP_ENCRYPTION_KEY(_PREVIOUS)`, `API_PROXY_SECRET(_PREVIOUS)`, `TRUST_PROXY`, `ALLOWED_ORIGINS`, `NEXT_PUBLIC_APP_URL`, `RATE_LIMIT_MODE`, `RATE_LIMIT_IP_SECRET`, `CLOCK_FIXED_AT`, `LLM_MODE`, `JOBS_MODE`, `EMAIL_MODE`, `STRIPE_MODE`, `PUSH_MODE`, `VOYAGE_API_KEY`, `SEARCH_API_KEY`, `ENABLE_SDD_PAGES`, `SENTRY_DSN`… — the agent copies the full list from the TS config readers (`packages/config`, `packages/*/src/**/env*.ts`). New variables only for Python-specific needs, prefixed `PY_` (e.g. `PY_HONO_UPSTREAM_URL` for the facade, `OWNERSHIP_OVERRIDES`). Same production guards as TS (e.g. `LLM_MODE=mock`, `JOBS_MODE=inline`, `RATE_LIMIT_MODE=off` refused in production).
 
+**Amended by ADR-2042 (2026-11-23):** `Settings` now reads only `ENVIRONMENT_VARIABLES` (18 contract variables plus optional rotation, SMTP target, local models, test/QA switches, build metadata and the coexistence variables). The Supabase names are the public ones (`NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY`); `LLM_MODE`, `EMAIL_MODE`, `PUSH_MODE`, `JOBS_MODE`, `RATE_LIMIT_MODE` derive from `APP_ENV`/`CLOCK_FIXED_AT`, `STRIPE_MODE` from the secret key, `RATE_LIMIT_IP_SECRET` from `APP_ENCRYPTION_KEY`, the VAPID public key and subject from `VAPID_PRIVATE_KEY`/`EMAIL_FROM`; `PY_*` tuning, pool size, SMTP port, JWT audience/JWKS/issuer, legal versions and `TRUST_PROXY`/`ALLOWED_ORIGINS` are constants. No new variable without amending ADR-2042.
+
 ## 9. Logging and observability
 
 - structlog JSON to stdout; one access line per request with the **same field names as the TS request log** (copy from `packages/http/src/route-handler.ts`), `request_id` bound in contextvars.
 - Never log tokens, cookies, API keys, prompts, model outputs or personal data (redaction processor with the same key list as TS).
 - Sentry initialised from `SENTRY_DSN`, same environment/release tags as `apps/api/src/sentry.ts`.
-- Health: `/health` (always 200 `{status, version, commit}`) and `/api/v1/health` (DB probe 2 s, 503 when degraded) with identical bodies. Worker exposes `/health/live` and `/health/ready` on `PY_WORKER_HEALTH_PORT` for Coolify only.
+- Health: `/health` (always 200 `{status, version, commit}`) and `/api/v1/health` (DB probe 2 s, 503 when degraded) with identical bodies. Worker exposes `/health/live` and `/health/ready` on the standard `PORT` for Coolify only (ADR-2042).
 
 ## 10. Testing conventions
 

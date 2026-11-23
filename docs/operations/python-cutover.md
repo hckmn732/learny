@@ -45,16 +45,16 @@ il n'y a **aucun secret de registre** à configurer.
    docker compose -f "$COOLIFY_COMPOSE" ps api-py worker-py
    curl -fsS "https://<domaine-de-api-py>/health"
    docker compose -f "$COOLIFY_COMPOSE" exec worker-py \
-     python -c "import os,urllib.request; p=os.environ['PY_WORKER_HEALTH_PORT']; \
+     python -c "import os,urllib.request; p=os.environ['PORT']; \
      print(urllib.request.urlopen(f'http://127.0.0.1:{p}/health/ready').status)"
    ```
 
    **Critère** : `api-py` sain sur `GET /health`, `worker-py` sain sur `/health/live` **et**
    `/health/ready`.
 3. **Budget de connexions** : le pooler Supabase doit accepter au moins
-   `répliques api × PY_API_WORKERS × DATABASE_POOL_MAX + répliques worker × DATABASE_POOL_MAX + Hono`.
-   Valeurs de départ : `PY_API_WORKERS=2`, `PY_DATABASE_POOL_MAX=5`, un worker →
-   `2 × 2 × 5 + 5 + 10 = 35` connexions. Vérifier la limite du pooler avant de monter ces valeurs.
+   `répliques api × 2 processus × 5 connexions + répliques worker × 5 + Hono` (constantes du code,
+   ADR-2042) : un worker → `2 × 2 × 5 + 5 + 10 = 35` connexions. Vérifier la limite du pooler
+   avant d'ajouter des répliques.
 4. **Migrations** : le job `migrate` reste un singleton (`restart: 'no'`, image cible `migrate`,
    enregistrement SHA-256 par fichier dans `public.selfhost_schema_migrations`) ; `api-py` et
    `worker-py` attendent `service_completed_successfully`. Pour les environnements Supabase gérés,
