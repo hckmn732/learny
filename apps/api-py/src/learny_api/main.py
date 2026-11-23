@@ -1,21 +1,19 @@
 """FastAPI facade of the Learny API (SPEC-2003, ADR-2005, ADR-2012).
 
-In P20 every entry of `api/ownership.yaml` is owned by `ts`, so the facade relays 100 % of the
-traffic to Hono. Python-owned operations are registered by later specs; the relay stays the
-fallback for everything else.
+The facade serves every operation the contract declares: `pipeline.install` registers the
+operations of `learny_api.generated.routes`, `special.install` registers the routes outside the
+generic pipeline. There is no fallback: a path the table does not declare answers the 404 of
+Starlette, which is the behaviour of the TypeScript backend for an unknown route (SPEC-2302).
 """
 
 import json
-from collections.abc import AsyncIterator
-from contextlib import asynccontextmanager
 
-from fastapi import FastAPI, Request
+from fastapi import FastAPI
 from learny.shared.config import Settings, load_settings
 from learny.shared.deps import build_deps
-from learny.shared.errors import AppError, ErrorEntry, load_catalog, to_problem
-from starlette.responses import JSONResponse, Response
+from learny.shared.errors import ErrorEntry, load_catalog
 
-from learny_api import handlers, pipeline, relay, special  # noqa: F401 - handlers registers roles
+from learny_api import handlers, pipeline, special  # noqa: F401 - handlers registers roles
 from learny_api.contract_files import api_dir
 from learny_api.contract_files import inventory_file as _inventory_file
 from learny_api.contract_files import ownership_file as _ownership_file
@@ -50,29 +48,13 @@ def load_ownership_checked(settings: Settings) -> Ownership:
     return ownership
 
 
-def _problem(code: str, request_id: str) -> JSONResponse:
-    """Builds the same problem+json body as the TypeScript backend."""
-    problem = to_problem(AppError(code), request_id, CATALOG)
-    return JSONResponse(problem, status_code=int(problem["status"]))
-
-
-@asynccontextmanager
-async def _lifespan(app: FastAPI) -> AsyncIterator[None]:
-    client = relay.create_client()
-    app.state.relay_client = client
-    try:
-        yield
-    finally:
-        await client.aclose()
-
-
 def create_app(
     settings: Settings | None = None,
     *,
     ownership: Ownership | None = None,
     context: pipeline.PipelineContext | None = None,
 ) -> FastAPI:
-    """Builds the facade; `py`-owned operations are registered before the relay catch-all.
+    """Builds the facade and registers every route of the contract once.
 
     `ownership` and `context` are injectable so a test can serve one operation with fake guards
     without touching the real table or opening a database connection.
@@ -89,7 +71,6 @@ def create_app(
         docs_url=None,
         redoc_url=None,
         openapi_url=None,
-        lifespan=_lifespan,
     )
     app.state.settings = resolved
     app.state.ownership = resolved_ownership
@@ -99,25 +80,9 @@ def create_app(
     if inline_jobs is not None:
         app.add_middleware(InlineJobsMiddleware, **inline_jobs)
 
-    # Special routes first: a development route must refuse before any authentication, and the
-    # catch-all relay below only sees what is still `ts` (SPEC-2207).
+    # Special routes first: a development route must refuse before any authentication (SPEC-2207).
     special.install(app, resolved_context, resolved_ownership)
     pipeline.install(app, resolved_context, resolved_ownership)
-
-    @app.api_route(
-        "/{path:path}",
-        methods=["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS", "HEAD"],
-    )
-    async def relay_to_upstream(request: Request) -> Response:
-        request_id = request.headers.get("x-request-id", "-")
-        try:
-            return await relay.forward(
-                request,
-                request.app.state.relay_client,
-                resolved.py_hono_upstream_url,
-            )
-        except relay.UpstreamUnavailable:
-            return _problem("API_UNAVAILABLE", request_id)
 
     return app
 

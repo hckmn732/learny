@@ -114,7 +114,6 @@ class FakeGoTrue:
 def settings_for() -> Settings:
     return Settings(
         app_env="test",
-        py_hono_upstream_url="http://upstream",
         next_public_app_url=VECTORS["publicAppUrl"],
         supabase_url=VECTORS["supabaseUrl"],
         supabase_anon_key="fake-anon-key",

@@ -104,7 +104,6 @@ def settings_for(env: Mapping[str, str | None], *, failing: bool = False) -> Set
     return Settings(
         app_env=str(env.get("APP_ENV") or "test"),
         enable_sdd_pages=env.get("ENABLE_SDD_PAGES"),
-        py_hono_upstream_url="http://upstream",
         rate_limit_mode="off",
         database_url="postgresql://postgres:postgres@127.0.0.1:54322/postgres",
         app_version="1.4.2",
@@ -185,6 +184,3 @@ def test_an_unavailable_database_answers_503_and_a_degraded_status() -> None:
     assert body["status"] == "degraded"
     assert body["database"] == "unavailable"
     assert body["components"] == {"database": "unavailable", "build": "ok"}
-
-
-# --- GET /api/v1/dev/sdd/relay-stream ------------------------------------------------------------

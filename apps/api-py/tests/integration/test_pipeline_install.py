@@ -1,7 +1,8 @@
-"""[SPEC-2201] Python-owned routes are served by the pipeline, everything else still relays.
+"""[SPEC-2201] Python-owned routes are served by the pipeline and nothing else.
 
-The facade registers every operation whose `api/ownership.yaml` entry is `py` before the catch-all
-relay, so one test can serve a single operation without touching the real ownership table.
+The facade registers every operation whose `api/ownership.yaml` entry is `py`, so one test can
+serve a single operation without touching the real ownership table; an undeclared path answers
+the default 404 of Starlette (SPEC-2302).
 """
 
 from collections.abc import AsyncIterator, Callable
@@ -11,7 +12,6 @@ from datetime import UTC, datetime
 from pathlib import Path
 from typing import Any
 
-import httpx
 import pytest
 from fastapi import FastAPI
 from fastapi.testclient import TestClient
@@ -19,7 +19,6 @@ from learny.identity.public import Actor
 from learny.shared.config import Settings
 from learny.shared.errors import ErrorEntry, load_catalog
 from learny_api import pipeline
-from learny_api.generated.routes import ROUTES_BY_ID
 from learny_api.guards.idempotency import IdempotencyStart
 from learny_api.guards.rate_limit import RateLimitDecision
 from learny_api.main import create_app
@@ -114,9 +113,8 @@ def ownership_with(*route_ids: str) -> Ownership:
 def build_app(
     route_ids: tuple[str, ...],
     handlers: dict[str, Callable[[Call], Any]],
-    upstream: str = "http://upstream",
 ) -> tuple[FastAPI, TestClient]:
-    settings = Settings(app_env="test", py_hono_upstream_url=upstream, rate_limit_mode="off")
+    settings = Settings(app_env="test", rate_limit_mode="off")
     app = create_app(settings, ownership=ownership_with(*route_ids), context=context_with(handlers))
 
     @asynccontextmanager
@@ -125,10 +123,6 @@ def build_app(
 
     app.router.lifespan_context = lifespan
     return app, TestClient(app)
-
-
-def install_transport(app: FastAPI, handler: Callable[[httpx.Request], httpx.Response]) -> None:
-    app.state.relay_client = httpx.AsyncClient(transport=httpx.MockTransport(handler))
 
 
 async def callback(call: Call) -> Response:
@@ -155,21 +149,6 @@ def test_a_python_route_answers_through_the_pipeline(monkeypatch: pytest.MonkeyP
     assert response.headers["x-served-by"] == "learny-api"
     assert response.headers["server-timing"].startswith("app;dur=")
     assert "cache-control" not in response.headers
-
-
-def test_a_ts_route_still_relays_to_hono(monkeypatch: pytest.MonkeyPatch) -> None:
-    monkeypatch.setattr(pipeline, "HANDLERS", {"auth.callback": callback})
-
-    def handler(request: httpx.Request) -> httpx.Response:
-        assert request.url.path == "/api/v1/me"
-        return httpx.Response(200, json={"relayed": True})
-
-    app, client = build_app(("auth.callback",), {"auth.callback": callback})
-    install_transport(app, handler)
-    response = client.get("/api/v1/me")
-
-    assert response.status_code == 200
-    assert response.json() == {"relayed": True}
 
 
 def test_a_protected_python_route_still_requires_a_session(monkeypatch: pytest.MonkeyPatch) -> None:
@@ -207,10 +186,11 @@ def test_a_python_route_without_a_handler_fails_at_startup() -> None:
         build_app(("auth.callback",), {})
 
 
-def test_the_relay_catch_all_is_registered_last(monkeypatch: pytest.MonkeyPatch) -> None:
+def test_an_undeclared_path_answers_the_default_404(monkeypatch: pytest.MonkeyPatch) -> None:
     monkeypatch.setattr(pipeline, "HANDLERS", {"auth.callback": callback})
-    app, _ = build_app(("auth.callback",), {"auth.callback": callback})
-    paths = [getattr(route, "path", "") for route in app.routes]
+    _app, client = build_app(("auth.callback",), {"auth.callback": callback})
 
-    assert paths[-1] == "/{path:path}"
-    assert paths.index(ROUTES_BY_ID["auth.callback"].path) < paths.index("/{path:path}")
+    response = client.get("/api/v1/me")
+
+    assert response.status_code == 404
+    assert response.json() == {"detail": "Not Found"}

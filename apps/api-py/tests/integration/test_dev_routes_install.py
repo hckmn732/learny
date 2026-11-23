@@ -25,7 +25,7 @@ ROOT = Path(__file__).resolve().parents[4]
 
 @pytest.fixture
 def app() -> FastAPI:
-    settings = Settings(app_env="test", py_hono_upstream_url="http://upstream")
+    settings = Settings(app_env="test")
     instance = create_app(settings)
 
     @asynccontextmanager
@@ -71,7 +71,7 @@ def test_every_python_special_development_route_uses_the_special_registry(app: F
 
 def test_the_development_guard_of_the_real_table_is_closed_in_production(app: FastAPI) -> None:
     ownership = load_ownership(ROOT / "api" / "ownership.yaml")
-    settings = Settings(app_env="production", py_hono_upstream_url="http://upstream")
+    settings = Settings(app_env="production")
     instance = create_app(settings, ownership=ownership, context=app.state.pipeline)
     names = {getattr(route, "name", "") for route in instance.routes}
 

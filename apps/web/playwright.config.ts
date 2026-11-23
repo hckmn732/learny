@@ -45,7 +45,6 @@ const BASE_URL = `http://127.0.0.1:${String(PORT)}`;
 // the SPEC-006 end-to-end test starts its own Next server on PORT+2 and that port cannot change.
 const FACADE_PORT = PORT + 1;
 const API_PORT = PORT + 12;
-const HONO_URL = `http://127.0.0.1:${String(API_PORT)}`;
 const API_INTERNAL_URL = `http://127.0.0.1:${String(FACADE_PORT)}`;
 // The SPEC-301 test starts a second web server from its own process: the child inherits
 // `process.env`, so the relay target and the proxy secret must be exported here, not only in
@@ -169,7 +168,7 @@ export default defineConfig({
       },
     },
     {
-      // SPEC-2003: the web only talks to the facade; every operation is still relayed to Hono.
+      // SPEC-2302: the web only talks to the facade, which serves the whole contract.
       command: `uv run uvicorn learny_api.main:app --host 127.0.0.1 --port ${String(FACADE_PORT)}`,
       url: `${API_INTERNAL_URL}/health`,
       cwd: ROOT,
@@ -178,9 +177,8 @@ export default defineConfig({
       env: {
         ...TEST_SERVER_ENV,
         // SPEC-2204: BYOK encryption is served by the Python facade, which reads the keyring at
-        // request time; it receives the same test-only key as the web and Hono.
+        // request time; it receives the same test-only key as the web.
         APP_ENCRYPTION_KEY: TEST_ENCRYPTION_KEY,
-        PY_HONO_UPSTREAM_URL: HONO_URL,
         // The facade health probes the database only when DATABASE_URL is set explicitly.
         DATABASE_URL:
           process.env.DATABASE_URL ?? 'postgresql://postgres:postgres@127.0.0.1:54322/postgres',
@@ -194,10 +192,10 @@ export default defineConfig({
         // limiter switched off (ADR-0336); the relay secret makes TRUST_PROXY unnecessary.
         APP_ENV: 'test',
         // SPEC-2201: the facade serves the operations owned by `py`, so it must trust the web
-        // relay exactly like Hono does (SPEC-208 origin guard) — same secret, same forwarded host.
+        // relay (SPEC-208 origin guard) — same secret, same forwarded host.
         API_PROXY_SECRET: 'learny-test-only-api-proxy-secret-value',
         // SPEC-2207: the demonstration routes are served by the Python facade, so it needs the
-        // same development flag as the web and Hono or `devOnly` answers 404 to every page.
+        // same development flag as the web or `devOnly` answers 404 to every page.
         ENABLE_SDD_PAGES: 'true',
       },
     },
