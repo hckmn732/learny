@@ -1,0 +1,14 @@
+{% extends "layout.txt.j2" %}
+{% block content %}{{ title }}
+
+{{ study_figure }} · {{ retention_figure }} · {{ at_risk_figure }}
+
+{{ succeeded_text }}
+{{ at_risk_text }}
+{{ next_week_text }}
+
+{{ question }}
+
+{{ cta_label }} : {{ cta_href }}
+{{ secondary_label }} : {{ secondary_href }}
+{% endblock %}

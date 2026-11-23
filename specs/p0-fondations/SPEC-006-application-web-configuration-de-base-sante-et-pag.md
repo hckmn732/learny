@@ -115,3 +115,8 @@ Toutes les conditions de `docs/engineering/testing.md` §7 passent. `GET /api/v1
 ## 15. Décisions et hypothèses
 
 ADR-0004 fixe Next.js et l'API intégrée, ADR-0049 les pages de démonstration, ADR-0203 leur propriété entre SPEC-003 et SPEC-006. Le statut `not_configured` permet l'amorçage avant la base ; il est distinct de `ok` pour ne pas inventer une preuve de disponibilité.
+
+## Amendements
+
+- **2026-11-23, ADR-2037** — Depuis SPEC-1203, `GET /api/v1/health` est servi par l'API via le relais du web ; « Santé de l'application » affiche la santé de l'API (`readApiHealth`), les sondes simulées continuent d'exercer `getHealth`. Les serveurs web démarrés à part sont prêts sur la route de manifeste du web (`/manifest.webmanifest`), qui ne dépend pas de l'API.
+- **2026-11-23, ADR-2037** — CA-2 en production : le web démarre (il ne valide plus que sa configuration publique) et la garde répond 404 à toutes les pages SDD ; le refus d'un démarrage de production incomplet relève de l'API.

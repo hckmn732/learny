@@ -103,4 +103,5 @@ Définition commune de `docs/engineering/testing.md` §7 : lint, typecheck, buil
 
 - ADR applicables : ADR-1001, ADR-2001, ADR-2005, ADR-2008, ADR-2011, ADR-2002, ADR-2003, ADR-2007, ADR-2012, ADR-2015.
 - ADR-2002, ADR-2003, ADR-2005, ADR-2007.
+- ADR-2019 — CA-2 interprété comme « aucune régression introduite par la façade » : la suite complète est déjà rouge sur `main` (SPEC-006), ses deux oracles se contredisant.
 - Hors périmètre : refonte visuelle ou fonctionnelle, changement de schéma sans ADR, clients mobiles, specs gelées par ADR-2001.

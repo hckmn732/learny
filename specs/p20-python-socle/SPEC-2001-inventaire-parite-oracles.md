@@ -103,4 +103,5 @@ Définition commune de `docs/engineering/testing.md` §7 : lint, typecheck, buil
 
 - ADR applicables : ADR-1001, ADR-2001, ADR-2005, ADR-2008, ADR-2011, ADR-2004.
 - ADR-2004 explique l'écart 217/219. Aucune décision d'architecture nouvelle.
+- ADR-2016 — normalisation de parité (identifiants, horodatages, e-mails, durées, plans EXPLAIN) et scénarios de lecture générés depuis l inventaire.
 - Hors périmètre : refonte visuelle ou fonctionnelle, changement de schéma sans ADR, clients mobiles, specs gelées par ADR-2001.

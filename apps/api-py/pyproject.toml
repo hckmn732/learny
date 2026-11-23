@@ -1,0 +1,23 @@
+[project]
+name = "learny-api"
+version = "0.0.0"
+description = "FastAPI facade of the Learny API (ADR-2002, ADR-2012)."
+requires-python = ">=3.13,<3.14"
+dependencies = [
+  "learny",
+  "learny-worker",
+  "fastapi>=0.115",
+  "uvicorn[standard]>=0.30",
+  "sentry-sdk[fastapi]>=2.14",
+]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/learny_api"]
+
+[tool.uv.sources]
+learny = { workspace = true }
+learny-worker = { workspace = true }

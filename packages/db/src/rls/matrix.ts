@@ -216,6 +216,10 @@ export const RLS_MATRIX: readonly RlsTableMatrix[] = [
     'Seaux de limitation de débit réservés au service (SPEC-112 EF-4, SPEC-208) ; aucune lecture ni écriture client.',
   ),
   service(
+    'job_deliveries',
+    'Livraisons durables du worker Python (SPEC-2102 ET-1, ADR-2014) ; aucune lecture ni écriture client.',
+  ),
+  service(
     'event_outbox',
     'Boîte d’envoi des événements de domaine (SPEC-203 ET-2, ADR-0122) : écrite uniquement par la fonction security definer enqueue_event, lue et mise à jour par le service ; aucun accès client.',
   ),

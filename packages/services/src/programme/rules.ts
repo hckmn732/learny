@@ -37,6 +37,40 @@ export function normalizeDraft(raw: unknown): ProgrammeProposalPayload {
   return checked.data;
 }
 
+const DAY_MS = 86_400_000;
+
+function shiftCivilDate(value: string, days: number): string {
+  const time = Date.parse(`${value}T00:00:00Z`);
+  return new Date(time + days * DAY_MS).toISOString().slice(0, 10);
+}
+
+/**
+ * Hotfix QA: the model picks the module dates and may place them in the past (it does not know
+ * today's date). A programme that starts before `now` is moved by whole weeks so it starts on or
+ * after today, keeping weekdays, durations and gaps.
+ */
+export function anchorProgrammeDates(
+  payload: ProgrammeProposalPayload,
+  now: Date,
+): ProgrammeProposalPayload {
+  const first = payload.modules[0]?.plannedStart;
+  if (first === undefined) return payload;
+  const today = now.toISOString().slice(0, 10);
+  if (first >= today) return payload;
+  const late = Math.round(
+    (Date.parse(`${today}T00:00:00Z`) - Date.parse(`${first}T00:00:00Z`)) / DAY_MS,
+  );
+  const shift = Math.ceil(late / 7) * 7;
+  return {
+    ...payload,
+    modules: payload.modules.map((module) => ({
+      ...module,
+      plannedStart: shiftCivilDate(module.plannedStart, shift),
+      plannedEnd: shiftCivilDate(module.plannedEnd, shift),
+    })),
+  };
+}
+
 export function parseProposalPayload(value: unknown): ProgrammeProposalPayload {
   const parsed = ProgrammeProposalPayloadSchema.safeParse(value);
   if (!parsed.success) throw incomplete(parsed.error.issues);

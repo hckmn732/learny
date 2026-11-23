@@ -234,6 +234,29 @@ Origine : **Validée** = décision prise avec le porteur du projet ; **Déduite*
 | [ADR-2013](ADR-2013-persistance-sqlalchemy-core-avec-sql-explicite-sans-orm.md) | Persistance SQLAlchemy Core avec SQL explicite, sans ORM | Déduite | ADR-2002, ADR-2010, SPEC-2101 |
 | [ADR-2014](ADR-2014-livraisons-de-jobs-coexistence-asynchrone-et-bascule-groupee.md) | Livraisons de jobs, coexistence asynchrone et bascule groupée des consommateurs | Déduite | ADR-2005, ADR-2006, SPEC-2102, SPEC-2207 |
 | [ADR-2015](ADR-2015-bibliotheques-python-retenues.md) | Bibliothèques Python retenues | Déduite | ADR-2002, ADR-2011 |
+| [ADR-2016](ADR-2016-parite-normalisee-et-scenarios-de-lecture-generes.md) | Parite normalisee et scenarios de lecture generes | Déduite | SPEC-2001 |
+| [ADR-2017](ADR-2017-contrat-openapi-enrichi-sans-modifier-le-json-servi.md) | Contrat OpenAPI enrichi sans modifier le JSON servi | Déduite | SPEC-2002 |
+| [ADR-2018](ADR-2018-ports-playwright-avec-la-facade-python.md) | Ports Playwright avec la facade Python | Déduite | SPEC-2003 |
+| [ADR-2019](ADR-2019-ca-2-de-spec-2003-interprete-comme-absence-de-regression.md) | CA-2 de SPEC-2003 interprete comme absence de regression | Déduite | SPEC-2003 |
+| [ADR-2020](ADR-2020-routes-dev-jobs-encore-typescript-jusqu-au-pipeline-python.md) | Routes dev-jobs encore TypeScript jusqu au pipeline Python | Déduite | SPEC-2102, SPEC-2003, ADR-2005, ADR-2011, ADR-2014 |
+| [ADR-2021](ADR-2021-pipeline-de-contrat-python-livre-par-spec-2201-et-bascule-de.md) | Pipeline de contrat Python livre par SPEC-2201 et bascule dev-jobs laissee a SPEC-2207 | Déduite | SPEC-2201, ADR-2012, ADR-2020, SPEC-2207 |
+| [ADR-2022](ADR-2022-routes-auth-encore-typescript-faute-de-cookies-byte-identiqu.md) | Routes auth encore TypeScript faute de cookies byte-identiques | Déduite | SPEC-2201, ADR-2005, ADR-2008, ADR-2010 |
+| [ADR-2023](ADR-2023-home-get-encore-typescript-car-il-depend-du-moteur-d-apprent.md) | home.get encore TypeScript car il depend du moteur d apprentissage | Déduite | SPEC-2201, SPEC-2202, ADR-2001, ADR-2005 |
+| [ADR-2024](ADR-2024-reprise-de-formation-laissee-en-typescript.md) | Reprise de formation laissee en TypeScript | Déduite | — |
+| [ADR-2025](ADR-2025-offsets-de-passage-en-points-de-code-et-emission-de-resource.md) | Offsets de passage en points de code et emission de resource/uploaded dans la transaction | Déduite | SPEC-2203, ADR-2006, ADR-2008, ADR-2014 |
+| [ADR-2026](ADR-2026-copie-verbatim-des-predicates-prives-du-service-dans-l-oracl.md) | Copie verbatim des predicates prives du service dans l'oracle tuteur | Déduite | SPEC-2204, ADR-2008 |
+| [ADR-2027](ADR-2027-learny-api-sse-py-cree-par-spec-2204-malgre-la-section-2-des.md) | `learny_api/sse.py` créé par SPEC-2204 malgré la section 2 des conventions | Déduite | SPEC-2204, ADR-2012 |
+| [ADR-2028](ADR-2028-qualification-byok-sondes-de-connexion-et-de-compatibilite-s.md) | Qualification BYOK : sondes de connexion et de compatibilite seulement | Déduite | SPEC-2204, SPEC-506 |
+| [ADR-2029](ADR-2029-session-de-fixtures-dans-llmgateway-pour-la-batterie-de-comp.md) | Session de fixtures dans LlmGateway pour la batterie de compatibilite | Déduite | SPEC-2204, ADR-0048, ADR-0153 |
+| [ADR-2030](ADR-2030-validation-stricte-des-corps-en-mode-json-pour-les-enums.md) | Validation stricte des corps en mode JSON pour les enums | Déduite | SPEC-2204, SPEC-2201, ADR-2012 |
+| [ADR-2031](ADR-2031-verification-de-la-signature-stripe-a-horloge-injectee.md) | Vérification de la signature Stripe à horloge injectée | Déduite | SPEC-2206, ADR-0047, ADR-2015, ADR-0215 |
+| [ADR-2032](ADR-2032-consommateur-generate-course-laisse-en-typescript-faute-de-c.md) | Consommateur generate-course laisse en TypeScript faute de cas d'usage Python | Déduite | SPEC-2207, SPEC-2204, ADR-2006, ADR-2014 |
+| [ADR-2033](ADR-2033-extraction-mecanique-de-deux-regles-pures-du-pipeline-de-c.md) | Extraction mécanique de deux règles pures du pipeline de cours pour l'oracle | Déduite | SPEC-2207, SPEC-608, ADR-2008, ADR-2026 |
+| [ADR-2034](ADR-2034-auth-et-reprise-de-formation-portees-les-adr-2022-et-20.md) | Auth et reprise de formation portées en Python, ADR-2022 et ADR-2024 levées | Déduite | SPEC-2207, SPEC-202, SPEC-618, ADR-2008, ADR-2011, ADR-2022, ADR-2023, ADR-2024 |
+| [ADR-2035](ADR-2035-bascule-spec-2207-livree-avec-trente-entrees-relayees.md) | Bascule SPEC-2207 livrée avec trente entrées relayées | Déduite | SPEC-2207, ADR-2019, ADR-2023 |
+| [ADR-2036](ADR-2036-compteurs-d-inventaire-des-pages-de-demonstration-couverts-p.md) | Compteurs d'inventaire des pages de démonstration couverts par exception de checkpoint | Validée | CP-21, CP-22, ADR-2008, ADR-2019, SPEC-113, SPEC-2001, SPEC-2207 |
+| [ADR-2037](ADR-2037-oracles-e2e-alignes-sur-les-refactors-assumes.md) | Oracles e2e alignés sur les refactors assumés | Validée | ADR-2008, ADR-2019, ADR-1003, SPEC-001, SPEC-006, SPEC-009, SPEC-505, SPEC-1103, SPEC-709, SPEC-1203, SPEC-2207 |
+| [ADR-2038](ADR-2038-correctifs-qa-du-2026-11-21-portes-dans-le-backend-python.md) | Correctifs QA du 2026-11-21 portés dans le backend Python | Déduite | SPEC-504, SPEC-513, SPEC-503, SPEC-605, SPEC-704, SPEC-2207 |
 | [ADR-3001](ADR-3001-piste-sdd-mobile-et-branche-mobile.md) | Piste SDD « mobile » sur la branche `mobile` | Validée | ADR-1004, ADR-1006, ADR-2001, SPEC-3001 |
 | [ADR-3002](ADR-3002-perimetre-v1-de-l-application-mobile-compagnon.md) | Périmètre V1 de l'application mobile : compagnon d'apprentissage | Déduite | ADR-0005, ADR-1004, SPEC-3102 |
 | [ADR-3003](ADR-3003-maquette-mobile-de-reference-et-corrections-normatives.md) | Maquette mobile de référence et corrections normatives | Déduite | ADR-0034, SPEC-3002, SPEC-3304, SPEC-3305 |

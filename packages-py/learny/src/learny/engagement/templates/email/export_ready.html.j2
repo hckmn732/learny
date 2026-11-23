@@ -1,0 +1,8 @@
+{% extends "layout.html.j2" %}
+{% from "_macros.html.j2" import h1, para, cta %}
+{% block content %}
+{{ h1(title) }}
+{{ para(body) }}
+{{ cta(download_url, download_label) }}
+<p style="margin:0 0 12px;font-size:13px;line-height:20px;color:#62626B"><br />{{ private_note }}</p>
+{% endblock %}

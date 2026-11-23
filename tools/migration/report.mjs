@@ -84,11 +84,40 @@ export function countRegistryRoutes(root = ROOT) {
     const file = path.join(root, 'packages', 'contracts', 'src', `${name}.ts`);
     if (!fs.existsSync(file)) continue;
     const source = fs.readFileSync(file, 'utf8');
-    const explicit = source.match(/defineRoute\(/g)?.length ?? 0;
     const factories = source.match(/= (?:demo|action)\(/g)?.length ?? 0;
+    const explicit = (source.match(/defineRoute\(/g)?.length ?? 0) - factoryDefinitions(source);
     total += explicit + factories;
   }
   return total;
+}
+
+/**
+ * Nombre de `defineRoute(` situés dans le corps d'une fabrique de routes (`function demo(…)`,
+ * `function action(…)`, …) : ces appels ne sont pas des routes, chaque invocation de la fabrique
+ * en produit une. Sans cette soustraction, `dev-sdd-migration.ts` comptait 45 routes au lieu de 43
+ * et le registre affichait 219 au lieu de 217 (SPEC-2001, ADR-2004).
+ */
+export function factoryDefinitions(source) {
+  const lines = source.split('\n');
+  let inside = 0;
+  for (let index = 0; index < lines.length; index += 1) {
+    if (!/^function\s+\w+\s*\(/.test(lines[index])) continue;
+    let depth = 0;
+    let opened = false;
+    let body = '';
+    for (let cursor = index; cursor < lines.length; cursor += 1) {
+      body += `${lines[cursor]}\n`;
+      for (const character of lines[cursor]) {
+        if (character === '{') {
+          depth += 1;
+          opened = true;
+        } else if (character === '}') depth -= 1;
+      }
+      if (opened && depth === 0) break;
+    }
+    inside += body.match(/defineRoute\(/g)?.length ?? 0;
+  }
+  return inside;
 }
 
 /**

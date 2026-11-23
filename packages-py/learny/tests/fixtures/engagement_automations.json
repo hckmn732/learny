@@ -1,0 +1,1221 @@
+{
+  "params": [
+    {
+      "key": "reprise",
+      "input": {},
+      "ok": true,
+      "data": {
+        "inactiveDays": 2,
+        "lightenDays": 5,
+        "mode": "accord"
+      }
+    },
+    {
+      "key": "reprise",
+      "input": {
+        "inactiveDays": 3,
+        "lightenDays": 7,
+        "mode": "auto"
+      },
+      "ok": true,
+      "data": {
+        "inactiveDays": 3,
+        "lightenDays": 7,
+        "mode": "auto"
+      }
+    },
+    {
+      "key": "reprise",
+      "input": {
+        "inactiveDays": 9
+      },
+      "ok": false,
+      "path": "inactiveDays",
+      "message": "Invalid input"
+    },
+    {
+      "key": "reprise",
+      "input": {
+        "inactiveDays": 3,
+        "lightenDays": 2
+      },
+      "ok": false,
+      "path": "lightenDays",
+      "message": "Invalid input"
+    },
+    {
+      "key": "reprise",
+      "input": {
+        "mode": "x"
+      },
+      "ok": false,
+      "path": "mode",
+      "message": "Invalid option: expected one of \"auto\"|\"accord\""
+    },
+    {
+      "key": "reprise",
+      "input": {
+        "unknownKey": true
+      },
+      "ok": true,
+      "data": {
+        "inactiveDays": 2,
+        "lightenDays": 5,
+        "mode": "accord"
+      }
+    },
+    {
+      "key": "micro_seance",
+      "input": {},
+      "ok": true,
+      "data": {
+        "hour": 20,
+        "durationMin": 5
+      }
+    },
+    {
+      "key": "micro_seance",
+      "input": {
+        "hour": 19,
+        "durationMin": 10
+      },
+      "ok": true,
+      "data": {
+        "hour": 19,
+        "durationMin": 10
+      }
+    },
+    {
+      "key": "micro_seance",
+      "input": {
+        "hour": 18
+      },
+      "ok": false,
+      "path": "hour",
+      "message": "Invalid input"
+    },
+    {
+      "key": "micro_seance",
+      "input": {
+        "durationMin": 7
+      },
+      "ok": false,
+      "path": "durationMin",
+      "message": "Invalid input"
+    },
+    {
+      "key": "echauffement",
+      "input": {},
+      "ok": true,
+      "data": {
+        "count": 3,
+        "scope": "yesterday_prerequisites"
+      }
+    },
+    {
+      "key": "echauffement",
+      "input": {
+        "count": 5,
+        "scope": "yesterday"
+      },
+      "ok": true,
+      "data": {
+        "count": 5,
+        "scope": "yesterday"
+      }
+    },
+    {
+      "key": "echauffement",
+      "input": {
+        "count": 4
+      },
+      "ok": false,
+      "path": "count",
+      "message": "Invalid input"
+    },
+    {
+      "key": "echauffement",
+      "input": {
+        "scope": "yesterday_and_prerequisites"
+      },
+      "ok": true,
+      "data": {
+        "count": 3,
+        "scope": "yesterday_prerequisites"
+      }
+    },
+    {
+      "key": "echauffement",
+      "input": {
+        "questionCount": 5
+      },
+      "ok": true,
+      "data": {
+        "count": 5,
+        "scope": "yesterday_prerequisites"
+      }
+    },
+    {
+      "key": "echauffement",
+      "input": {
+        "questionCount": 2,
+        "count": 5
+      },
+      "ok": true,
+      "data": {
+        "count": 5,
+        "scope": "yesterday_prerequisites"
+      }
+    },
+    {
+      "key": "remediation",
+      "input": {},
+      "ok": true,
+      "data": {
+        "delayHours": 24,
+        "mode": "advised"
+      }
+    },
+    {
+      "key": "remediation",
+      "input": {
+        "delayHours": 48,
+        "mode": "mandatory"
+      },
+      "ok": true,
+      "data": {
+        "delayHours": 48,
+        "mode": "mandatory"
+      }
+    },
+    {
+      "key": "remediation",
+      "input": {
+        "retryDelayHours": 48
+      },
+      "ok": true,
+      "data": {
+        "delayHours": 48,
+        "mode": "advised"
+      }
+    },
+    {
+      "key": "remediation",
+      "input": {
+        "mode": "required"
+      },
+      "ok": true,
+      "data": {
+        "delayHours": 24,
+        "mode": "mandatory"
+      }
+    },
+    {
+      "key": "remediation",
+      "input": {
+        "delayHours": 5
+      },
+      "ok": false,
+      "path": "delayHours",
+      "message": "Invalid input"
+    },
+    {
+      "key": "remediation",
+      "input": {
+        "mode": "x"
+      },
+      "ok": false,
+      "path": "mode",
+      "message": "Invalid option: expected one of \"advised\"|\"mandatory\""
+    },
+    {
+      "key": "jeu_lacune",
+      "input": {},
+      "ok": true,
+      "data": {
+        "preference": "vary"
+      }
+    },
+    {
+      "key": "jeu_lacune",
+      "input": {
+        "preference": "matching"
+      },
+      "ok": true,
+      "data": {
+        "preference": "matching"
+      }
+    },
+    {
+      "key": "jeu_lacune",
+      "input": {
+        "preference": "x"
+      },
+      "ok": false,
+      "path": "preference",
+      "message": "Invalid option: expected one of \"vary\"|\"cards\"|\"matching\""
+    },
+    {
+      "key": "questions_cartes",
+      "input": {},
+      "ok": true,
+      "data": {
+        "mode": "confirm"
+      }
+    },
+    {
+      "key": "questions_cartes",
+      "input": {
+        "mode": "auto"
+      },
+      "ok": true,
+      "data": {
+        "mode": "auto"
+      }
+    },
+    {
+      "key": "questions_cartes",
+      "input": {
+        "mode": "x"
+      },
+      "ok": false,
+      "path": "mode",
+      "message": "Invalid option: expected one of \"confirm\"|\"auto\""
+    },
+    {
+      "key": "plafond_quiz",
+      "input": {},
+      "ok": true,
+      "data": {
+        "maxMinutes": 15,
+        "targetRetention": 0.9
+      }
+    },
+    {
+      "key": "plafond_quiz",
+      "input": {
+        "maxMinutes": 30,
+        "targetRetention": 0.95
+      },
+      "ok": true,
+      "data": {
+        "maxMinutes": 30,
+        "targetRetention": 0.95
+      }
+    },
+    {
+      "key": "plafond_quiz",
+      "input": {
+        "maxMinutes": 12
+      },
+      "ok": false,
+      "path": "maxMinutes",
+      "message": "Invalid input"
+    },
+    {
+      "key": "plafond_quiz",
+      "input": {
+        "targetRetention": 0.8
+      },
+      "ok": false,
+      "path": "targetRetention",
+      "message": "Invalid input"
+    },
+    {
+      "key": "sprint",
+      "input": {},
+      "ok": true,
+      "data": {
+        "daysBefore": 3,
+        "durationMin": 30
+      }
+    },
+    {
+      "key": "sprint",
+      "input": {
+        "daysBefore": 2,
+        "durationMin": 5
+      },
+      "ok": true,
+      "data": {
+        "daysBefore": 2,
+        "durationMin": 5
+      }
+    },
+    {
+      "key": "sprint",
+      "input": {
+        "durationMin": 120
+      },
+      "ok": true,
+      "data": {
+        "daysBefore": 3,
+        "durationMin": 120
+      }
+    },
+    {
+      "key": "sprint",
+      "input": {
+        "daysBefore": 4
+      },
+      "ok": false,
+      "path": "daysBefore",
+      "message": "Invalid input"
+    },
+    {
+      "key": "sprint",
+      "input": {
+        "durationMin": 4
+      },
+      "ok": false,
+      "path": "durationMin",
+      "message": "Too small: expected number to be >=5"
+    },
+    {
+      "key": "sprint",
+      "input": {
+        "durationMin": 121
+      },
+      "ok": false,
+      "path": "durationMin",
+      "message": "Too big: expected number to be <=120"
+    },
+    {
+      "key": "bilan",
+      "input": {},
+      "ok": true,
+      "data": {
+        "weekday": 7,
+        "hour": 19,
+        "channel": "app"
+      }
+    },
+    {
+      "key": "bilan",
+      "input": {
+        "weekday": 5,
+        "hour": 18,
+        "channel": "app_email"
+      },
+      "ok": true,
+      "data": {
+        "weekday": 5,
+        "hour": 18,
+        "channel": "app_email"
+      }
+    },
+    {
+      "key": "bilan",
+      "input": {
+        "weekday": 4
+      },
+      "ok": false,
+      "path": "weekday",
+      "message": "Invalid input"
+    },
+    {
+      "key": "bilan",
+      "input": {
+        "hour": 17
+      },
+      "ok": false,
+      "path": "hour",
+      "message": "Invalid input"
+    },
+    {
+      "key": "bilan",
+      "input": {
+        "channel": "email"
+      },
+      "ok": false,
+      "path": "channel",
+      "message": "Invalid option: expected one of \"app\"|\"app_email\""
+    },
+    {
+      "key": "pause",
+      "input": {},
+      "ok": true,
+      "data": {
+        "diagnosticOnReturn": true,
+        "diagnosticMinutes": 10
+      }
+    },
+    {
+      "key": "pause",
+      "input": {
+        "pauseUntil": "2026-11-20",
+        "diagnosticOnReturn": false
+      },
+      "ok": true,
+      "data": {
+        "pauseUntil": "2026-11-20",
+        "diagnosticOnReturn": false,
+        "diagnosticMinutes": 10
+      }
+    },
+    {
+      "key": "pause",
+      "input": {
+        "pauseUntil": "2026-11-1"
+      },
+      "ok": false,
+      "path": "pauseUntil",
+      "message": "date civile AAAA-MM-JJ attendue"
+    },
+    {
+      "key": "pause",
+      "input": {
+        "diagnosticMinutes": 4
+      },
+      "ok": false,
+      "path": "diagnosticMinutes",
+      "message": "Too small: expected number to be >=5"
+    },
+    {
+      "key": "pause",
+      "input": {
+        "diagnosticMinutes": 31
+      },
+      "ok": false,
+      "path": "diagnosticMinutes",
+      "message": "Too big: expected number to be <=30"
+    },
+    {
+      "key": "pause",
+      "input": {
+        "diagnosticOnReturn": "yes"
+      },
+      "ok": false,
+      "path": "diagnosticOnReturn",
+      "message": "Invalid input: expected boolean, received string"
+    },
+    {
+      "key": "pause",
+      "input": {
+        "unexpected": 1
+      },
+      "ok": false,
+      "path": "",
+      "message": "Unrecognized key: \"unexpected\""
+    }
+  ],
+  "summaries": [
+    {
+      "value": "Pause déclarée jusqu’au 2026-11-20.",
+      "ok": true,
+      "data": "Pause déclarée jusqu’au 2026-11-20."
+    },
+    {
+      "value": "Annulé : Sprint placé avant le jalon.",
+      "ok": true,
+      "data": "Annulé : Sprint placé avant le jalon."
+    },
+    {
+      "value": "  espaces autour  ",
+      "ok": true,
+      "data": "espaces autour"
+    },
+    {
+      "value": "",
+      "ok": false,
+      "path": "",
+      "message": "Too small: expected string to have >=1 characters"
+    },
+    {
+      "value": "   ",
+      "ok": false,
+      "path": "",
+      "message": "Too small: expected string to have >=1 characters"
+    },
+    {
+      "value": "ligne\nsuivante",
+      "ok": false,
+      "path": "",
+      "message": "une seule ligne, sans retour à la ligne"
+    },
+    {
+      "value": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+      "ok": true,
+      "data": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+    },
+    {
+      "value": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+      "ok": false,
+      "path": "",
+      "message": "Too big: expected string to have <=160 characters"
+    }
+  ],
+  "kinds": [
+    {
+      "value": "warmup_added",
+      "ok": true
+    },
+    {
+      "value": "pause_ended",
+      "ok": true
+    },
+    {
+      "value": "Micro_Session",
+      "ok": false
+    },
+    {
+      "value": "micro_session",
+      "ok": true
+    },
+    {
+      "value": "_leading",
+      "ok": false
+    },
+    {
+      "value": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "ok": true
+    },
+    {
+      "value": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "ok": false
+    },
+    {
+      "value": "with-dash",
+      "ok": false
+    },
+    {
+      "value": "",
+      "ok": false
+    }
+  ],
+  "selection": {
+    "actions": [
+      {
+        "id": "00000000-0000-4000-8000-00000000000b",
+        "automation": "sprint",
+        "createdAt": "2026-11-11T12:20:00.000Z"
+      },
+      {
+        "id": "00000000-0000-4000-8000-00000000000a",
+        "automation": "bilan",
+        "createdAt": "2026-11-11T12:20:00.000Z"
+      },
+      {
+        "id": "00000000-0000-4000-8000-00000000000c",
+        "automation": "reprise",
+        "createdAt": "2026-11-11T22:30:00.000Z"
+      },
+      {
+        "id": "00000000-0000-4000-8000-00000000000d",
+        "automation": "pause",
+        "createdAt": "2026-11-15T10:00:00.000Z"
+      },
+      {
+        "id": "00000000-0000-4000-8000-00000000000e",
+        "automation": "bilan",
+        "createdAt": "2026-11-09T08:00:00.000Z"
+      }
+    ],
+    "sorted": [
+      "00000000-0000-4000-8000-00000000000d",
+      "00000000-0000-4000-8000-00000000000c",
+      "00000000-0000-4000-8000-00000000000a",
+      "00000000-0000-4000-8000-00000000000b",
+      "00000000-0000-4000-8000-00000000000e"
+    ],
+    "weeks": [
+      {
+        "count": 0,
+        "ids": []
+      },
+      {
+        "count": 3,
+        "ids": [
+          "00000000-0000-4000-8000-00000000000d",
+          "00000000-0000-4000-8000-00000000000c",
+          "00000000-0000-4000-8000-00000000000a"
+        ]
+      },
+      {
+        "count": 5,
+        "ids": [
+          "00000000-0000-4000-8000-00000000000d",
+          "00000000-0000-4000-8000-00000000000c",
+          "00000000-0000-4000-8000-00000000000a",
+          "00000000-0000-4000-8000-00000000000b",
+          "00000000-0000-4000-8000-00000000000e"
+        ]
+      },
+      {
+        "count": 9,
+        "ids": [
+          "00000000-0000-4000-8000-00000000000d",
+          "00000000-0000-4000-8000-00000000000c",
+          "00000000-0000-4000-8000-00000000000a",
+          "00000000-0000-4000-8000-00000000000b",
+          "00000000-0000-4000-8000-00000000000e"
+        ]
+      }
+    ]
+  },
+  "cursors": [
+    {
+      "value": {
+        "k": "2026-11-11T12:20:00.000Z",
+        "id": "00000000-0000-4000-8000-00000000000a"
+      },
+      "encoded": "eyJrIjoiMjAyNi0xMS0xMVQxMjoyMDowMC4wMDBaIiwiaWQiOiIwMDAwMDAwMC0wMDAwLTQwMDAtODAwMC0wMDAwMDAwMDAwMGEifQ",
+      "decoded": {
+        "k": "2026-11-11T12:20:00.000Z",
+        "id": "00000000-0000-4000-8000-00000000000a"
+      }
+    },
+    {
+      "value": {
+        "k": 20261111,
+        "id": "abc"
+      },
+      "encoded": "eyJrIjoyMDI2MTExMSwiaWQiOiJhYmMifQ",
+      "decoded": {
+        "k": 20261111,
+        "id": "abc"
+      }
+    },
+    {
+      "value": {
+        "k": "",
+        "id": "x"
+      },
+      "encoded": "eyJrIjoiIiwiaWQiOiJ4In0",
+      "decoded": {
+        "k": "",
+        "id": "x"
+      }
+    }
+  ],
+  "cursorGarbage": [
+    {
+      "value": "",
+      "decoded": null
+    },
+    {
+      "value": "not-base64!",
+      "decoded": null
+    },
+    {
+      "value": "eyJhIjoxfQ",
+      "decoded": null
+    },
+    {
+      "value": "W10",
+      "decoded": null
+    },
+    {
+      "value": "eyJrIjoiMjAyNi0xMS0xMVQxMjoyMDowMC4wMDBaIiwiaWQiOiJ4In0",
+      "decoded": {
+        "k": "2026-11-11T12:20:00.000Z",
+        "id": "x"
+      }
+    }
+  ],
+  "expiry": [
+    {
+      "status": "pending_consent",
+      "payload": {
+        "dedupeKey": "x",
+        "expiresAt": "2026-11-11T12:00:00.000Z"
+      },
+      "due": true
+    },
+    {
+      "status": "pending_consent",
+      "payload": {
+        "dedupeKey": "x",
+        "expiresAt": "2026-11-11T12:20:00.000Z"
+      },
+      "due": true
+    },
+    {
+      "status": "pending_consent",
+      "payload": {
+        "dedupeKey": "x",
+        "expiresAt": "2026-11-11T13:00:00.000Z"
+      },
+      "due": false
+    },
+    {
+      "status": "pending_consent",
+      "payload": {
+        "dedupeKey": "x"
+      },
+      "due": false
+    },
+    {
+      "status": "applied",
+      "payload": {
+        "dedupeKey": "x",
+        "expiresAt": "2026-11-11T12:00:00.000Z"
+      },
+      "due": false
+    },
+    {
+      "status": "pending_consent",
+      "payload": {
+        "dedupeKey": "x",
+        "expiresAt": "not-an-instant"
+      },
+      "due": false
+    }
+  ],
+  "weeks": [
+    {
+      "instant": "2026-11-11T12:20:00.000Z",
+      "timeZone": "Europe/Paris",
+      "week": {
+        "weekKey": "2026-W46",
+        "weekStart": "2026-11-09",
+        "weekEnd": "2026-11-11",
+        "nextWeekStart": "2026-11-16",
+        "localDay": "2026-11-11",
+        "weekday": 3
+      },
+      "startOfUserWeek": "2026-11-08T23:00:00.000Z"
+    },
+    {
+      "instant": "2026-11-11T22:30:00.000Z",
+      "timeZone": "Europe/Paris",
+      "week": {
+        "weekKey": "2026-W46",
+        "weekStart": "2026-11-09",
+        "weekEnd": "2026-11-11",
+        "nextWeekStart": "2026-11-16",
+        "localDay": "2026-11-11",
+        "weekday": 3
+      },
+      "startOfUserWeek": "2026-11-08T23:00:00.000Z"
+    },
+    {
+      "instant": "2026-11-15T10:00:00.000Z",
+      "timeZone": "Europe/Paris",
+      "week": {
+        "weekKey": "2026-W46",
+        "weekStart": "2026-11-09",
+        "weekEnd": "2026-11-15",
+        "nextWeekStart": "2026-11-16",
+        "localDay": "2026-11-15",
+        "weekday": 7
+      },
+      "startOfUserWeek": "2026-11-08T23:00:00.000Z"
+    },
+    {
+      "instant": "2026-11-16T00:30:00.000Z",
+      "timeZone": "Europe/Paris",
+      "week": {
+        "weekKey": "2026-W47",
+        "weekStart": "2026-11-16",
+        "weekEnd": "2026-11-16",
+        "nextWeekStart": "2026-11-23",
+        "localDay": "2026-11-16",
+        "weekday": 1
+      },
+      "startOfUserWeek": "2026-11-15T23:00:00.000Z"
+    },
+    {
+      "instant": "2026-11-11T12:20:00.000Z",
+      "timeZone": "America/New_York",
+      "week": {
+        "weekKey": "2026-W46",
+        "weekStart": "2026-11-09",
+        "weekEnd": "2026-11-11",
+        "nextWeekStart": "2026-11-16",
+        "localDay": "2026-11-11",
+        "weekday": 3
+      },
+      "startOfUserWeek": "2026-11-09T05:00:00.000Z"
+    },
+    {
+      "instant": "2026-01-01T00:30:00.000Z",
+      "timeZone": "Europe/Paris",
+      "week": {
+        "weekKey": "2026-W01",
+        "weekStart": "2025-12-29",
+        "weekEnd": "2026-01-01",
+        "nextWeekStart": "2026-01-05",
+        "localDay": "2026-01-01",
+        "weekday": 4
+      },
+      "startOfUserWeek": "2025-12-28T23:00:00.000Z"
+    },
+    {
+      "instant": "2026-12-31T23:30:00.000Z",
+      "timeZone": "UTC",
+      "week": {
+        "weekKey": "2026-W53",
+        "weekStart": "2026-12-28",
+        "weekEnd": "2026-12-31",
+        "nextWeekStart": "2027-01-04",
+        "localDay": "2026-12-31",
+        "weekday": 4
+      },
+      "startOfUserWeek": "2026-12-28T00:00:00.000Z"
+    }
+  ],
+  "weekKeys": [
+    {
+      "day": "2026-11-09",
+      "weekKey": "2026-W46"
+    },
+    {
+      "day": "2026-11-15",
+      "weekKey": "2026-W46"
+    },
+    {
+      "day": "2026-01-01",
+      "weekKey": "2026-W01"
+    },
+    {
+      "day": "2026-12-31",
+      "weekKey": "2026-W53"
+    },
+    {
+      "day": "2026-03-02",
+      "weekKey": "2026-W10"
+    },
+    {
+      "day": "not-a-day",
+      "weekKey": "not-a-day"
+    }
+  ],
+  "studyLabels": [
+    {
+      "minutes": 0,
+      "label": "0 min"
+    },
+    {
+      "minutes": 59,
+      "label": "59 min"
+    },
+    {
+      "minutes": 60,
+      "label": "1 h"
+    },
+    {
+      "minutes": 61,
+      "label": "1 h 1"
+    },
+    {
+      "minutes": 90,
+      "label": "1 h 30"
+    },
+    {
+      "minutes": 125,
+      "label": "2 h 5"
+    },
+    {
+      "minutes": 600,
+      "label": "10 h"
+    },
+    {
+      "minutes": -5,
+      "label": "0 min"
+    },
+    {
+      "minutes": 59.6,
+      "label": "1 h"
+    }
+  ],
+  "retentionLabels": [
+    {
+      "rate": null,
+      "label": "Non disponible"
+    },
+    {
+      "rate": 0,
+      "label": "0 %"
+    },
+    {
+      "rate": 85.4,
+      "label": "85 %"
+    },
+    {
+      "rate": 85.5,
+      "label": "86 %"
+    },
+    {
+      "rate": 100,
+      "label": "100 %"
+    },
+    {
+      "rate": 12.2,
+      "label": "12 %"
+    }
+  ],
+  "periodLabels": [
+    {
+      "start": "2026-11-02",
+      "end": "2026-11-08",
+      "label": "2 – 8 nov."
+    },
+    {
+      "start": "2026-11-02",
+      "end": "2026-11-30",
+      "label": "2 – 30 nov."
+    },
+    {
+      "start": "2026-12-28",
+      "end": "2027-01-03",
+      "label": "28 déc. – 3 janv."
+    }
+  ],
+  "receivedLabels": [
+    {
+      "instant": "2026-11-11T12:20:00.000Z",
+      "timeZone": "Europe/Paris",
+      "label": "reçu mer. 13:20"
+    },
+    {
+      "instant": "2026-11-11T22:30:00.000Z",
+      "timeZone": "Europe/Paris",
+      "label": "reçu mer. 23:30"
+    },
+    {
+      "instant": "2026-11-15T10:00:00.000Z",
+      "timeZone": "Europe/Paris",
+      "label": "reçu dim. 11:00"
+    },
+    {
+      "instant": "2026-11-11T12:20:00.000Z",
+      "timeZone": "America/New_York",
+      "label": "reçu mer. 07:20"
+    }
+  ],
+  "atRisk": [
+    {
+      "now": "2026-11-11T12:20:00.000Z",
+      "notions": [
+        {
+          "notionId": "b",
+          "label": "Beta",
+          "mastery": 42,
+          "dueAt": "2026-11-11T10:00:00.000Z",
+          "gapNature": null,
+          "gapClearedAt": null
+        },
+        {
+          "notionId": "a",
+          "label": "Alpha",
+          "mastery": 42,
+          "dueAt": null,
+          "gapNature": "confusion",
+          "gapClearedAt": null
+        },
+        {
+          "notionId": "c",
+          "label": "Gamma",
+          "mastery": 59.5,
+          "dueAt": "2026-11-11T12:20:00.000Z",
+          "gapNature": null,
+          "gapClearedAt": "2026-11-01T00:00:00.000Z"
+        },
+        {
+          "notionId": "d",
+          "label": "Delta",
+          "mastery": 60,
+          "dueAt": "2026-11-11T12:20:00.000Z",
+          "gapNature": "confusion",
+          "gapClearedAt": null
+        },
+        {
+          "notionId": "e",
+          "label": "Epsilon",
+          "mastery": 10,
+          "dueAt": "2026-11-11T12:20:01.000Z",
+          "gapNature": null,
+          "gapClearedAt": null
+        },
+        {
+          "notionId": "f",
+          "label": "Zêta",
+          "mastery": 10,
+          "dueAt": "2026-11-11T12:20:00.000Z",
+          "gapNature": null,
+          "gapClearedAt": null
+        },
+        {
+          "notionId": "g",
+          "label": "Êta",
+          "mastery": 42,
+          "dueAt": null,
+          "gapNature": "confusion",
+          "gapClearedAt": null
+        }
+      ],
+      "atRisk": [true, true, true, false, false, true, true],
+      "sorted": [
+        {
+          "notionId": "f",
+          "label": "Zêta",
+          "mastery": 10
+        },
+        {
+          "notionId": "a",
+          "label": "Alpha",
+          "mastery": 42
+        },
+        {
+          "notionId": "b",
+          "label": "Beta",
+          "mastery": 42
+        },
+        {
+          "notionId": "g",
+          "label": "Êta",
+          "mastery": 42
+        },
+        {
+          "notionId": "c",
+          "label": "Gamma",
+          "mastery": 59.5
+        }
+      ]
+    }
+  ],
+  "planMinutes": [
+    {
+      "plan": [],
+      "minutes": 0
+    },
+    {
+      "plan": [
+        {
+          "date": "2026-11-17",
+          "minutes": 30,
+          "slots": 1
+        }
+      ],
+      "minutes": 30
+    },
+    {
+      "plan": [
+        {
+          "date": "2026-11-17",
+          "minutes": 30,
+          "slots": 1
+        },
+        {
+          "date": "2026-11-18",
+          "minutes": 45,
+          "slots": 2
+        }
+      ],
+      "minutes": 75
+    }
+  ],
+  "pause": {
+    "summaries": [
+      {
+        "kind": "pause_started",
+        "tone": "tu",
+        "enabled": true,
+        "text": "Pause déclarée jusqu’au 2026-11-20. Ton planning est gelé et ta série reste intacte."
+      },
+      {
+        "kind": "pause_started",
+        "tone": "tu",
+        "enabled": false,
+        "text": "Pause déclarée jusqu’au 2026-11-20. Ton planning est gelé et ta série reste intacte."
+      },
+      {
+        "kind": "pause_started",
+        "tone": "vous",
+        "enabled": true,
+        "text": "Pause déclarée jusqu’au 2026-11-20. Votre planning est gelé et votre série reste intacte."
+      },
+      {
+        "kind": "pause_started",
+        "tone": "vous",
+        "enabled": false,
+        "text": "Pause déclarée jusqu’au 2026-11-20. Votre planning est gelé et votre série reste intacte."
+      },
+      {
+        "kind": "pause_ended",
+        "tone": "tu",
+        "enabled": true,
+        "text": "Pause terminée : un diagnostic de 10 minutes sur les notions à risque précède la reprise."
+      },
+      {
+        "kind": "pause_ended",
+        "tone": "tu",
+        "enabled": false,
+        "text": "Pause terminée : ton planning reprend dès aujourd’hui."
+      },
+      {
+        "kind": "pause_ended",
+        "tone": "vous",
+        "enabled": true,
+        "text": "Pause terminée : un diagnostic de 10 minutes sur les notions à risque précède la reprise."
+      },
+      {
+        "kind": "pause_ended",
+        "tone": "vous",
+        "enabled": false,
+        "text": "Pause terminée : votre planning reprend dès aujourd’hui."
+      }
+    ],
+    "endDates": [
+      {
+        "endDate": "2026-11-20",
+        "localDay": "2026-11-11",
+        "result": {
+          "ok": true
+        }
+      },
+      {
+        "endDate": "2026-11-11",
+        "localDay": "2026-11-11",
+        "result": {
+          "ok": true
+        }
+      },
+      {
+        "endDate": "2026-11-10",
+        "localDay": "2026-11-11",
+        "result": {
+          "ok": false,
+          "message": "la fin de pause ne peut pas précéder aujourd’hui"
+        }
+      },
+      {
+        "endDate": "2026-11-1",
+        "localDay": "2026-11-11",
+        "result": {
+          "ok": false,
+          "message": "date civile AAAA-MM-JJ attendue"
+        }
+      },
+      {
+        "endDate": "2026-1-1",
+        "localDay": "2026-11-11",
+        "result": {
+          "ok": false,
+          "message": "date civile AAAA-MM-JJ attendue"
+        }
+      }
+    ],
+    "endDateInZone": [
+      {
+        "instant": "2026-11-11T12:20:00.000Z",
+        "timeZone": "Europe/Paris",
+        "days": 3,
+        "endDate": "2026-11-14"
+      },
+      {
+        "instant": "2026-11-11T12:20:00.000Z",
+        "timeZone": "America/New_York",
+        "days": 7,
+        "endDate": "2026-11-18"
+      },
+      {
+        "instant": "2026-12-31T23:30:00.000Z",
+        "timeZone": "UTC",
+        "days": 1,
+        "endDate": "2027-01-01"
+      }
+    ]
+  }
+}

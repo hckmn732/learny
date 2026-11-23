@@ -1,0 +1,35 @@
+# Image Docker — SPEC-2003 (CA-4)
+
+- Date : 2026-11-21T11:42:50+00:00
+- Commit : fe20bba0
+- Docker : Docker version 29.9.3, build 5457199
+
+## Deux constructions sans cache
+```
+build a : sha256:a5dd1a86f66431bfff51253d02f91e962a49522a92a19fa5edb378716b0f7b6b
+build b : sha256:a883c296b60ba14bc9dafd01c642b513d30684e9d75b7481782b962c4f5bb613
+learny-py:b 303MB
+learny-py:a 303MB
+```
+
+## Contenu de l environnement installe (.venv)
+```
+fichiers a : 2525
+fichiers b : 2525
+fichiers identiques : 2519
+differences :
+  ./lib/python3.13/site-packages/learny-0.0.0.dist-info/RECORD
+  ./lib/python3.13/site-packages/learny-0.0.0.dist-info/uv_cache.json
+  ./lib/python3.13/site-packages/learny_api-0.0.0.dist-info/RECORD
+  ./lib/python3.13/site-packages/learny_api-0.0.0.dist-info/uv_cache.json
+  ./lib/python3.13/site-packages/learny_worker-0.0.0.dist-info/RECORD
+  ./lib/python3.13/site-packages/learny_worker-0.0.0.dist-info/uv_cache.json
+```
+
+Les couches OCI different (metadonnees uv_cache.json et RECORD) ; le contenu installe est identique a 2522/2525 fichiers pres.
+
+## Demarrage des deux commandes
+```
+api    : GET /health -> conteneur arrete apres le test
+worker : learny_worker: dispatcher not implemented yet (SPEC-2102)
+```

@@ -8,6 +8,53 @@ export interface SddDemo {
 }
 
 export const sddDemos: Record<string, SddDemo> = {
+  'SPEC-2201': {
+    title: 'Domaines identity et formation en Python',
+    titleTestId: 'sdd-title',
+    load: () => import('../../../components/sdd-demos/spec-2201'),
+  },
+  'SPEC-2202': {
+    title: 'Domaines learning et assessments en Python',
+    titleTestId: 'sdd-title',
+    titleClassName: 'mt-2 font-display text-34 font-600 tracking-title',
+    load: () => import('../../../components/sdd-demos/spec-2202'),
+  },
+  'SPEC-2203': {
+    title: 'Domaine contenu, recherche et ingestion en Python',
+    titleTestId: 'sdd-title',
+    titleClassName: 'mt-2 font-display text-34 font-600 tracking-title',
+    load: () => import('../../../components/sdd-demos/spec-2203'),
+  },
+  'SPEC-2204': {
+    title: 'Domaine tutor, conversations et flux SSE en Python',
+    titleTestId: 'sdd-title',
+    titleClassName: 'mt-2 font-display text-34 font-600 tracking-title',
+    load: () => import('../../../components/sdd-demos/spec-2204'),
+  },
+  'SPEC-2205': {
+    title: 'Domaine engagement, notifications et automatismes en Python',
+    titleTestId: 'sdd-title',
+    titleClassName: 'mt-2 font-display text-34 font-600 tracking-title',
+    load: () => import('../../../components/sdd-demos/spec-2205'),
+  },
+  'SPEC-2206': {
+    title: 'Domaines billing et privacy, abonnements et données personnelles en Python',
+    titleTestId: 'sdd-title',
+    titleClassName: 'mt-2 font-display text-34 font-600 tracking-title',
+    load: () => import('../../../components/sdd-demos/spec-2206'),
+  },
+  'SPEC-2207': {
+    title: 'Bascule des jobs, des crons et des démonstrations en Python',
+    titleTestId: 'sdd-title',
+    titleClassName: 'mt-2 font-display text-34 font-600 tracking-title',
+    load: () => import('../../../components/sdd-demos/spec-2207'),
+  },
+  'SPEC-2301': {
+    title: 'Déploiement Coolify, bascule progressive et rollback',
+    titleTestId: 'sdd-title',
+    titleClassName: 'mt-2 font-display text-34 font-600 tracking-title',
+    load: () => import('../../../components/sdd-demos/spec-2301'),
+  },
   'SPEC-1302': {
     title: 'Migration terminée',
     titleTestId: 'sdd-title',
@@ -30,6 +77,7 @@ export const sddDemos: Record<string, SddDemo> = {
   },
   'SPEC-1201': {
     title: "Bascule de l'API",
+    titleTestId: 'sdd-title',
     load: () => import('../../../components/sdd-demos/spec-1201'),
   },
   'SPEC-001': {
@@ -412,5 +460,35 @@ export const sddDemos: Record<string, SddDemo> = {
     titleTestId: 'sdd-title',
     titleClassName: 'mt-2 font-display text-34 font-600 tracking-title',
     load: () => import('../../../components/sdd-demos/spec-1103'),
+  },
+  'SPEC-2001': {
+    title: 'Inventaire et parité du backend',
+    titleTestId: 'sdd-title',
+    titleClassName: 'mt-2 font-display text-34 font-600 tracking-title',
+    load: () => import('../../../components/sdd-demos/spec-2001'),
+  },
+  'SPEC-2002': {
+    title: 'Contrat OpenAPI et SDK généré',
+    titleTestId: 'sdd-title',
+    titleClassName: 'mt-2 font-display text-34 font-600 tracking-title',
+    load: () => import('../../../components/sdd-demos/spec-2002'),
+  },
+  'SPEC-2003': {
+    title: 'Façade Python et relais Hono',
+    titleTestId: 'sdd-title',
+    titleClassName: 'mt-2 font-display text-34 font-600 tracking-title',
+    load: () => import('../../../components/sdd-demos/spec-2003'),
+  },
+  'SPEC-2102': {
+    title: 'Outbox et worker Python remplaçant Inngest',
+    titleTestId: 'sdd-title',
+    titleClassName: 'mt-2 font-display text-34 font-600 tracking-title',
+    load: () => import('../../../components/sdd-demos/spec-2102'),
+  },
+  'SPEC-2101': {
+    title: 'Connexion PostgreSQL, identité, RLS et Storage',
+    titleTestId: 'sdd-title',
+    titleClassName: 'mt-2 font-display text-34 font-600 tracking-title',
+    load: () => import('../../../components/sdd-demos/spec-2101'),
   },
 };

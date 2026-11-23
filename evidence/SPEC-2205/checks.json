@@ -1,0 +1,42 @@
+{
+  "lint": {
+    "status": "passed",
+    "at": "2026-11-22T12:48:42.514Z",
+    "details": ""
+  },
+  "typecheck": {
+    "status": "passed",
+    "at": "2026-11-22T12:49:53.309Z",
+    "details": ""
+  },
+  "build": {
+    "status": "passed",
+    "at": "2026-11-22T12:32:13.064Z",
+    "details": ""
+  },
+  "unit": {
+    "status": "passed",
+    "at": "2026-11-22T12:34:18.052Z",
+    "details": "0 test(s) réussi(s), 0 échec(s) ; pytest : 2113 réussi(s), 0 échec(s)"
+  },
+  "integration": {
+    "status": "passed",
+    "at": "2026-11-22T12:40:59.176Z",
+    "details": "0 test(s) réussi(s), 0 échec(s) ; pytest : 94 réussi(s), 0 échec(s)"
+  },
+  "e2e": {
+    "status": "passed",
+    "at": "2026-11-22T12:50:52.010Z",
+    "details": "2 réussi(s), 0 échec(s), 4 vidéo(s)"
+  },
+  "visual": {
+    "status": "passed",
+    "at": "2026-11-22T12:50:52.010Z",
+    "details": "1 test(s) @visual réussi(s) (mode demo)"
+  },
+  "acceptance": {
+    "status": "passed",
+    "at": "2026-11-22T12:50:52.039Z",
+    "details": "5/5 critères ✅"
+  }
+}

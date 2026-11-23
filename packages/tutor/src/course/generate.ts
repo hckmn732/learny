@@ -3,6 +3,7 @@ import {
   RETRIEVAL_TOKEN_BUDGETS,
   type CourseChapterDraft,
   type CourseDraft,
+  type CourseDraftLink,
   type CourseSectionDraft,
   type TutorDocument,
   type TutorProfile,
@@ -136,7 +137,7 @@ interface ModuleSnapshot {
   allowedChunkIds: Set<string>;
 }
 
-const SECTION_KIND: Record<CourseSectionDraft['kind'], string> = {
+export const SECTION_KIND: Record<CourseSectionDraft['kind'], string> = {
   markdown: 'text',
   quick_question: 'flash_question',
   comparison: 'dont_confuse',
@@ -145,7 +146,7 @@ const SECTION_KIND: Record<CourseSectionDraft['kind'], string> = {
   summary_prompt: 'summary_prompt',
 };
 
-const MEDIA_KIND: Record<string, string> = {
+export const MEDIA_KIND: Record<string, string> = {
   pdf: 'pdf',
   audio: 'audio',
   video: 'video',
@@ -155,7 +156,7 @@ const MEDIA_KIND: Record<string, string> = {
   image: 'image',
 };
 
-function locationOf(value: unknown): Record<string, unknown> {
+export function locationOf(value: unknown): Record<string, unknown> {
   if (value !== null && typeof value === 'object' && !Array.isArray(value)) {
     return value as Record<string, unknown>;
   }
@@ -172,7 +173,7 @@ function locationOf(value: unknown): Record<string, unknown> {
   return {};
 }
 
-function toKnownChunk(row: PassageRow, ownerId: string): KnownChunk {
+export function toKnownChunk(row: PassageRow, ownerId: string): KnownChunk {
   return {
     chunkId: row.chunk_id,
     ownerId,
@@ -188,22 +189,22 @@ function toKnownChunk(row: PassageRow, ownerId: string): KnownChunk {
   };
 }
 
-function asRecord(value: unknown): Record<string, unknown> {
+export function asRecord(value: unknown): Record<string, unknown> {
   return value !== null && typeof value === 'object' && !Array.isArray(value)
     ? (value as Record<string, unknown>)
     : {};
 }
 
-function uuidArray(ids: readonly string[]): string {
+export function uuidArray(ids: readonly string[]): string {
   return `{${ids.join(',')}}`;
 }
 
-function errorMessage(error: unknown): string {
+export function errorMessage(error: unknown): string {
   if (error instanceof AppError) return error.message;
   return error instanceof Error ? error.message : 'La génération du cours a échoué.';
 }
 
-function retryable(error: unknown): boolean {
+export function retryable(error: unknown): boolean {
   return (
     isAppError(error) &&
     (error.code === 'AI_UNAVAILABLE' ||
@@ -214,6 +215,35 @@ function retryable(error: unknown): boolean {
 
 function appError(code: string, message: string, cause?: unknown): AppError {
   return new AppError(code, message, cause === undefined ? {} : { cause });
+}
+
+/**
+ * Selects the passages of one chapter inside the course context budget (SPEC-511 EF-3, EF-4).
+ * A passage that does not fit stops the selection: the model never receives half a tag and the
+ * budget is never exceeded, so the identifiers of the returned documents are the only citable ones.
+ */
+export function selectChapterDocuments(chunks: readonly KnownChunk[]): TutorDocument[] {
+  const documents: TutorDocument[] = [];
+  let budget = RETRIEVAL_TOKEN_BUDGETS.course;
+  for (const chunk of chunks) {
+    const document: TutorDocument = {
+      source: chunk.resourceTitle.slice(0, 200),
+      chunkId: chunk.chunkId,
+      title: chunk.resourceTitle.slice(0, 200),
+      text: chunk.text,
+    };
+    const formatted = formatDocumentChunk({
+      chunkId: chunk.chunkId,
+      source: chunk.resourceTitle,
+      text: chunk.text,
+      location: asRecord(chunk.location) as never,
+    });
+    const cost = estimateTokens(formatted);
+    if (cost > budget) break;
+    budget -= cost;
+    documents.push(document);
+  }
+  return documents;
 }
 
 async function readModuleContext(
@@ -297,26 +327,9 @@ async function readModuleContext(
         label: notion.label,
         definition: notion.short_definition,
       }));
-    const documents: TutorDocument[] = [];
-    let budget = RETRIEVAL_TOKEN_BUDGETS.course;
-    for (const chunk of byChapter.get(chapter.id) ?? []) {
-      const document: TutorDocument = {
-        source: chunk.resourceTitle.slice(0, 200),
-        chunkId: chunk.chunkId,
-        title: chunk.resourceTitle.slice(0, 200),
-        text: chunk.text,
-      };
-      const formatted = formatDocumentChunk({
-        chunkId: chunk.chunkId,
-        source: chunk.resourceTitle,
-        text: chunk.text,
-        location: asRecord(chunk.location) as never,
-      });
-      const cost = estimateTokens(formatted);
-      if (cost > budget) break;
-      budget -= cost;
-      documents.push(document);
-      allowedChunkIds.add(chunk.chunkId);
+    const documents = selectChapterDocuments(byChapter.get(chapter.id) ?? []);
+    for (const document of documents) {
+      if (document.chunkId !== undefined) allowedChunkIds.add(document.chunkId);
     }
     return {
       id: chapter.id,
@@ -348,18 +361,21 @@ async function readModuleContext(
   };
 }
 
-function documentsOf(chapter: ChapterSnapshot): TutorDocument[] {
+export function documentsOf(chapter: ChapterSnapshot): TutorDocument[] {
   return chapter.documents;
 }
 
-function scenarioFor(ctx: CourseGenerationContext, chapter: ChapterSnapshot): string | undefined {
+export function scenarioFor(
+  ctx: Pick<CourseGenerationContext, 'deps'>,
+  chapter: Pick<ChapterSnapshot, 'id' | 'passages'>,
+): string | undefined {
   const forced = ctx.deps?.scenarioForChapter?.(chapter.id);
   if (forced !== undefined) return forced;
   if (ctx.deps?.scenario !== undefined) return ctx.deps.scenario;
   return chapter.passages.length === 0 ? 'course-base' : 'course-sourced';
 }
 
-function assertDraftBelongsToChapter(
+export function assertDraftBelongsToChapter(
   draft: CourseChapterDraft,
   chapter: ChapterSnapshot,
   moduleNotionIds: ReadonlySet<string>,
@@ -383,7 +399,7 @@ function assertDraftBelongsToChapter(
   }
 }
 
-function sectionAnchor(
+export function sectionAnchor(
   chapter: ChapterSnapshot,
   section: CourseSectionDraft,
   position: number,
@@ -418,7 +434,7 @@ function sectionAnchor(
   return anchor;
 }
 
-function dataOf(section: CourseSectionDraft): Record<string, unknown> | null {
+export function dataOf(section: CourseSectionDraft): Record<string, unknown> | null {
   switch (section.kind) {
     case 'quick_question':
       return { question: section.question, answer: section.answer };
@@ -437,20 +453,20 @@ function dataOf(section: CourseSectionDraft): Record<string, unknown> | null {
   }
 }
 
-function contentOf(section: CourseSectionDraft): string | null {
+export function contentOf(section: CourseSectionDraft): string | null {
   if (section.kind === 'markdown' || section.kind === 'tutor_addition') return section.contentMd;
   if (section.kind === 'summary_prompt') return section.prompt ?? null;
   return null;
 }
 
-function mediaOf(chunk: KnownChunk): string {
+export function mediaOf(chunk: KnownChunk): string {
   if (chunk.resourceKind === 'exam_guide') {
     return chunk.resourceMime?.startsWith('application/pdf') === true ? 'pdf' : 'web';
   }
   return MEDIA_KIND[chunk.resourceKind] ?? 'web';
 }
 
-function citationsOf(
+export function citationsOf(
   resolved: readonly ResolvedCitation[],
   chapterId: string,
   sectionIndex: number,
@@ -504,6 +520,15 @@ async function insertSuggestions(
   }
 }
 
+/** Canonical order of the ends of a link: a confusion link is stored from the smallest id. */
+export function notionLinkEnds(
+  link: Pick<CourseDraftLink, 'fromNotionId' | 'toNotionId' | 'kind'>,
+): readonly [string, string] {
+  return link.kind === 'confusion' && link.fromNotionId > link.toNotionId
+    ? [link.toNotionId, link.fromNotionId]
+    : [link.fromNotionId, link.toNotionId];
+}
+
 async function insertNotionLinks(
   tx: DbTx,
   ctx: CourseGenerationContext,
@@ -512,10 +537,7 @@ async function insertNotionLinks(
   now: string,
 ): Promise<void> {
   for (const link of draft.links) {
-    const [from, to] =
-      link.kind === 'confusion' && link.fromNotionId > link.toNotionId
-        ? [link.toNotionId, link.fromNotionId]
-        : [link.fromNotionId, link.toNotionId];
+    const [from, to] = notionLinkEnds(link);
     await tx.execute(sql`
       insert into public.notion_links (
         formation_id, from_notion_id, to_notion_id, kind, owner_id, rationale, created_at

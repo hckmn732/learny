@@ -1,0 +1,10 @@
+{
+  "url": "https://fixture.learny.test/comptabilite/compte-de-resultat",
+  "contentType": "text/html; charset=utf-8",
+  "title": "Comptabilité de gestion — le compte de résultat",
+  "siteName": "Learnothèque",
+  "language": "fr",
+  "forbidden": ["navigation", "Navigation", "Publicité", "analytics"],
+  "anchors": ["marge-brute", "resultat-net"],
+  "html": "<!doctype html>\n<html lang=\"fr\">\n  <head>\n    <meta charset=\"utf-8\">\n    <title>Comptabilité de gestion — le compte de résultat</title>\n    <meta property=\"og:site_name\" content=\"Learnothèque\">\n    <script>window.analytics = \"navigation-script\";</script>\n    <style>body { color: red; }</style>\n  </head>\n  <body>\n    <header><p>Navigation d’en-tête à ignorer</p></header>\n    <nav><a href=\"/\">Accueil navigation</a><a href=\"/cours\">Cours navigation</a></nav>\n    <main>\n      <article>\n        <h1 id=\"compte-resultat\">Le compte de résultat</h1>\n        <p>Le compte de résultat présente les charges et les produits d’un exercice comptable.</p>\n        <p>Il se lit en trois niveaux : exploitation, financier et exceptionnel.</p>\n        <h2 id=\"marge-brute\">La marge brute</h2>\n        <p>La marge brute est la différence entre le chiffre d’affaires et le coût des marchandises vendues.</p>\n        <div id=\"resultat-net\">\n          <p>Le résultat net tient compte de l’impôt sur les sociétés et du résultat financier.</p>\n          <ul>\n            <li>Le résultat d’exploitation précède le résultat financier.</li>\n            <li>Le résultat net clôture le compte de résultat.</li>\n          </ul>\n        </div>\n      </article>\n    </main>\n    <aside><p>Publicité à ignorer</p></aside>\n    <footer><p>Pied de page navigation à ignorer</p></footer>\n  </body>\n</html>"
+}

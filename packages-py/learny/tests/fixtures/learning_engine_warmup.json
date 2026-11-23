@@ -1,0 +1,479 @@
+{
+  "inputs": {
+    "base": {
+      "formationId": "f1",
+      "seenNotions": [
+        {
+          "notionId": "n1",
+          "formationId": "f1",
+          "chapterId": "c1",
+          "lastSeenOn": "2026-11-10",
+          "suspended": false,
+          "mastery": 40,
+          "retrievability": 0.4
+        },
+        {
+          "notionId": "n2",
+          "formationId": "f1",
+          "chapterId": "c1",
+          "lastSeenOn": "2026-11-10",
+          "suspended": false,
+          "mastery": 70,
+          "retrievability": 0.7
+        },
+        {
+          "notionId": "n3",
+          "formationId": "f1",
+          "chapterId": "c2",
+          "lastSeenOn": "2026-11-08",
+          "suspended": false,
+          "mastery": 20,
+          "retrievability": null
+        },
+        {
+          "notionId": "n4",
+          "formationId": "f1",
+          "chapterId": "c2",
+          "lastSeenOn": "2026-11-09",
+          "suspended": true,
+          "mastery": 90,
+          "retrievability": 0.9
+        },
+        {
+          "notionId": "n5",
+          "formationId": "f2",
+          "chapterId": "c1",
+          "lastSeenOn": "2026-11-10",
+          "suspended": false,
+          "mastery": 50,
+          "retrievability": 0.5
+        },
+        {
+          "notionId": "n6",
+          "formationId": "f1",
+          "chapterId": "c3",
+          "lastSeenOn": null,
+          "suspended": false,
+          "mastery": 0,
+          "retrievability": null
+        },
+        {
+          "notionId": "n7",
+          "formationId": "f1",
+          "chapterId": "c2",
+          "lastSeenOn": "2026-11-10",
+          "suspended": false,
+          "mastery": 30,
+          "retrievability": 0.3
+        },
+        {
+          "notionId": "n8",
+          "formationId": "f1",
+          "chapterId": "c4",
+          "lastSeenOn": "2026-10-01",
+          "suspended": false,
+          "mastery": 60,
+          "retrievability": 0.6
+        }
+      ],
+      "prerequisiteLinks": [
+        {
+          "fromNotionId": "n3",
+          "toNotionId": "n6",
+          "kind": "prerequisite"
+        },
+        {
+          "fromNotionId": "n1",
+          "toNotionId": "n6",
+          "kind": "prerequisite"
+        },
+        {
+          "fromNotionId": "n2",
+          "toNotionId": "n7",
+          "kind": "prerequisite"
+        },
+        {
+          "fromNotionId": "n8",
+          "toNotionId": "n6",
+          "kind": "confusion"
+        }
+      ],
+      "nextChapterId": "c3",
+      "accessibleChapterIds": ["c1", "c2", "c3"],
+      "localDate": "2026-11-11",
+      "seed": "graine-echauffement"
+    },
+    "variants": [
+      {
+        "name": "default"
+      },
+      {
+        "name": "yesterday-only",
+        "scope": "yesterday"
+      },
+      {
+        "name": "count-2",
+        "count": 2
+      },
+      {
+        "name": "count-5",
+        "count": 5
+      },
+      {
+        "name": "no-links",
+        "prerequisiteLinks": []
+      },
+      {
+        "name": "other-seed",
+        "seed": "autre-graine"
+      }
+    ],
+    "params": {
+      "defaultCount": 3,
+      "allowedCounts": [2, 3, 5],
+      "defaultScope": "yesterday_and_prerequisites",
+      "lookbackDays": 7
+    }
+  },
+  "output": [
+    {
+      "name": "default",
+      "choices": [
+        {
+          "notionId": "n3",
+          "reason": "prerequisite"
+        },
+        {
+          "notionId": "n7",
+          "reason": "yesterday"
+        },
+        {
+          "notionId": "n1",
+          "reason": "yesterday"
+        }
+      ],
+      "candidates": {
+        "yesterdayOn": "2026-11-10",
+        "yesterday": [
+          {
+            "notionId": "n7",
+            "reason": "yesterday",
+            "lastSeenOn": "2026-11-10",
+            "mastery": 30,
+            "retrievability": 0.3
+          },
+          {
+            "notionId": "n1",
+            "reason": "yesterday",
+            "lastSeenOn": "2026-11-10",
+            "mastery": 40,
+            "retrievability": 0.4
+          },
+          {
+            "notionId": "n2",
+            "reason": "yesterday",
+            "lastSeenOn": "2026-11-10",
+            "mastery": 70,
+            "retrievability": 0.7
+          }
+        ],
+        "prerequisites": [
+          {
+            "notionId": "n1",
+            "reason": "prerequisite",
+            "lastSeenOn": "2026-11-10",
+            "mastery": 40,
+            "retrievability": 0.4
+          },
+          {
+            "notionId": "n3",
+            "reason": "prerequisite",
+            "lastSeenOn": "2026-11-08",
+            "mastery": 20,
+            "retrievability": null
+          }
+        ]
+      }
+    },
+    {
+      "name": "yesterday-only",
+      "choices": [
+        {
+          "notionId": "n7",
+          "reason": "yesterday"
+        },
+        {
+          "notionId": "n1",
+          "reason": "yesterday"
+        },
+        {
+          "notionId": "n2",
+          "reason": "yesterday"
+        }
+      ],
+      "candidates": {
+        "yesterdayOn": "2026-11-10",
+        "yesterday": [
+          {
+            "notionId": "n7",
+            "reason": "yesterday",
+            "lastSeenOn": "2026-11-10",
+            "mastery": 30,
+            "retrievability": 0.3
+          },
+          {
+            "notionId": "n1",
+            "reason": "yesterday",
+            "lastSeenOn": "2026-11-10",
+            "mastery": 40,
+            "retrievability": 0.4
+          },
+          {
+            "notionId": "n2",
+            "reason": "yesterday",
+            "lastSeenOn": "2026-11-10",
+            "mastery": 70,
+            "retrievability": 0.7
+          }
+        ],
+        "prerequisites": [
+          {
+            "notionId": "n1",
+            "reason": "prerequisite",
+            "lastSeenOn": "2026-11-10",
+            "mastery": 40,
+            "retrievability": 0.4
+          },
+          {
+            "notionId": "n3",
+            "reason": "prerequisite",
+            "lastSeenOn": "2026-11-08",
+            "mastery": 20,
+            "retrievability": null
+          }
+        ]
+      }
+    },
+    {
+      "name": "count-2",
+      "choices": [
+        {
+          "notionId": "n3",
+          "reason": "prerequisite"
+        },
+        {
+          "notionId": "n7",
+          "reason": "yesterday"
+        }
+      ],
+      "candidates": {
+        "yesterdayOn": "2026-11-10",
+        "yesterday": [
+          {
+            "notionId": "n7",
+            "reason": "yesterday",
+            "lastSeenOn": "2026-11-10",
+            "mastery": 30,
+            "retrievability": 0.3
+          },
+          {
+            "notionId": "n1",
+            "reason": "yesterday",
+            "lastSeenOn": "2026-11-10",
+            "mastery": 40,
+            "retrievability": 0.4
+          },
+          {
+            "notionId": "n2",
+            "reason": "yesterday",
+            "lastSeenOn": "2026-11-10",
+            "mastery": 70,
+            "retrievability": 0.7
+          }
+        ],
+        "prerequisites": [
+          {
+            "notionId": "n1",
+            "reason": "prerequisite",
+            "lastSeenOn": "2026-11-10",
+            "mastery": 40,
+            "retrievability": 0.4
+          },
+          {
+            "notionId": "n3",
+            "reason": "prerequisite",
+            "lastSeenOn": "2026-11-08",
+            "mastery": 20,
+            "retrievability": null
+          }
+        ]
+      }
+    },
+    {
+      "name": "count-5",
+      "choices": [
+        {
+          "notionId": "n3",
+          "reason": "prerequisite"
+        },
+        {
+          "notionId": "n7",
+          "reason": "yesterday"
+        },
+        {
+          "notionId": "n1",
+          "reason": "yesterday"
+        },
+        {
+          "notionId": "n2",
+          "reason": "yesterday"
+        }
+      ],
+      "candidates": {
+        "yesterdayOn": "2026-11-10",
+        "yesterday": [
+          {
+            "notionId": "n7",
+            "reason": "yesterday",
+            "lastSeenOn": "2026-11-10",
+            "mastery": 30,
+            "retrievability": 0.3
+          },
+          {
+            "notionId": "n1",
+            "reason": "yesterday",
+            "lastSeenOn": "2026-11-10",
+            "mastery": 40,
+            "retrievability": 0.4
+          },
+          {
+            "notionId": "n2",
+            "reason": "yesterday",
+            "lastSeenOn": "2026-11-10",
+            "mastery": 70,
+            "retrievability": 0.7
+          }
+        ],
+        "prerequisites": [
+          {
+            "notionId": "n1",
+            "reason": "prerequisite",
+            "lastSeenOn": "2026-11-10",
+            "mastery": 40,
+            "retrievability": 0.4
+          },
+          {
+            "notionId": "n3",
+            "reason": "prerequisite",
+            "lastSeenOn": "2026-11-08",
+            "mastery": 20,
+            "retrievability": null
+          }
+        ]
+      }
+    },
+    {
+      "name": "no-links",
+      "choices": [
+        {
+          "notionId": "n7",
+          "reason": "yesterday"
+        },
+        {
+          "notionId": "n1",
+          "reason": "yesterday"
+        },
+        {
+          "notionId": "n2",
+          "reason": "yesterday"
+        }
+      ],
+      "candidates": {
+        "yesterdayOn": "2026-11-10",
+        "yesterday": [
+          {
+            "notionId": "n7",
+            "reason": "yesterday",
+            "lastSeenOn": "2026-11-10",
+            "mastery": 30,
+            "retrievability": 0.3
+          },
+          {
+            "notionId": "n1",
+            "reason": "yesterday",
+            "lastSeenOn": "2026-11-10",
+            "mastery": 40,
+            "retrievability": 0.4
+          },
+          {
+            "notionId": "n2",
+            "reason": "yesterday",
+            "lastSeenOn": "2026-11-10",
+            "mastery": 70,
+            "retrievability": 0.7
+          }
+        ],
+        "prerequisites": []
+      }
+    },
+    {
+      "name": "other-seed",
+      "choices": [
+        {
+          "notionId": "n3",
+          "reason": "prerequisite"
+        },
+        {
+          "notionId": "n7",
+          "reason": "yesterday"
+        },
+        {
+          "notionId": "n2",
+          "reason": "yesterday"
+        }
+      ],
+      "candidates": {
+        "yesterdayOn": "2026-11-10",
+        "yesterday": [
+          {
+            "notionId": "n7",
+            "reason": "yesterday",
+            "lastSeenOn": "2026-11-10",
+            "mastery": 30,
+            "retrievability": 0.3
+          },
+          {
+            "notionId": "n1",
+            "reason": "yesterday",
+            "lastSeenOn": "2026-11-10",
+            "mastery": 40,
+            "retrievability": 0.4
+          },
+          {
+            "notionId": "n2",
+            "reason": "yesterday",
+            "lastSeenOn": "2026-11-10",
+            "mastery": 70,
+            "retrievability": 0.7
+          }
+        ],
+        "prerequisites": [
+          {
+            "notionId": "n1",
+            "reason": "prerequisite",
+            "lastSeenOn": "2026-11-10",
+            "mastery": 40,
+            "retrievability": 0.4
+          },
+          {
+            "notionId": "n3",
+            "reason": "prerequisite",
+            "lastSeenOn": "2026-11-08",
+            "mastery": 20,
+            "retrievability": null
+          }
+        ]
+      }
+    }
+  ]
+}

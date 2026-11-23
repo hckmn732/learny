@@ -20,9 +20,8 @@ test("affiche la topologie de déploiement @SPEC-1103", async ({
   await expect(page.getByTestId('spec-1103-topology')).toContainText('dépend de');
   await expect(page.getByTestId('spec-1103-role-value')).toHaveText('all');
   await expect(page.getByTestId('spec-1103-health')).toHaveText('ok');
-  const functionItems = page.getByTestId('spec-1103-functions').getByRole('listitem');
-  expect(await functionItems.count()).toBeGreaterThan(0);
-  await expect(page.getByTestId('spec-1103-functions')).toContainText('learny-sdd-demo-job');
+  // SPEC-2207 retired Inngest: the API exposes no function registry any more.
+  await expect(page.getByTestId('spec-1103-functions')).toHaveCount(0);
   await axeCheck();
   await captureEvidence('spec-1103-deploiement-api');
   expect(consoleErrors).toEqual([]);

@@ -1,0 +1,986 @@
+{
+  "detect": [
+    {
+      "input": {
+        "notion": "n1",
+        "attempts": [
+          {
+            "attemptId": "t1",
+            "attemptKind": "validation_quiz",
+            "answers": [
+              {
+                "answerId": "a1",
+                "attemptId": "t1",
+                "attemptKind": "validation_quiz",
+                "attemptNo": 1,
+                "source": "validation",
+                "notionIds": ["n1"],
+                "format": "choice_question",
+                "correct": true,
+                "score": null,
+                "maxScore": null,
+                "selfRating": null,
+                "timeMs": 12000,
+                "answeredAt": "2026-11-01T09:00:00.000Z",
+                "chosenDistractorNotionId": null,
+                "confusedWithNotionId": null,
+                "normalizedResponse": null,
+                "offTopic": false,
+                "countsForGaps": true
+              }
+            ]
+          },
+          {
+            "attemptId": "t2",
+            "attemptKind": "validation_quiz",
+            "answers": [
+              {
+                "answerId": "a2",
+                "attemptId": "t2",
+                "attemptKind": "validation_quiz",
+                "attemptNo": 1,
+                "source": "validation",
+                "notionIds": ["n1"],
+                "format": "choice_question",
+                "correct": false,
+                "score": null,
+                "maxScore": null,
+                "selfRating": null,
+                "timeMs": 12000,
+                "answeredAt": "2026-11-09T09:00:00.000Z",
+                "chosenDistractorNotionId": null,
+                "confusedWithNotionId": null,
+                "normalizedResponse": null,
+                "offTopic": false,
+                "countsForGaps": true
+              }
+            ]
+          }
+        ],
+        "mastery": 40,
+        "now": "2026-11-11T12:20:00.000Z"
+      },
+      "output": {
+        "active": true,
+        "nature": "forgetting",
+        "confusedWith": null,
+        "evidence": "Notion r\u00e9ussie le 2026-11-01, \u00e9chou\u00e9e 8 jours plus tard. Quiz de validation sous le seuil de 80 % pour cette notion.",
+        "recommendedAction": "global_quiz",
+        "event": "detected",
+        "triggers": ["qualifying_attempt"],
+        "repeatedErrors": [],
+        "gap": {
+          "nature": "forgetting",
+          "confusedWith": null,
+          "detectedAt": "2026-11-11T12:20:00.000Z",
+          "evidence": "Notion r\u00e9ussie le 2026-11-01, \u00e9chou\u00e9e 8 jours plus tard. Quiz de validation sous le seuil de 80 % pour cette notion.",
+          "clearedAt": null
+        }
+      }
+    },
+    {
+      "input": {
+        "notion": "n1",
+        "attempts": [
+          {
+            "attemptId": "t1",
+            "attemptKind": "exercise",
+            "answers": [
+              {
+                "answerId": "a1",
+                "attemptId": "t1",
+                "attemptKind": "exercise",
+                "attemptNo": 1,
+                "source": "exercise",
+                "notionIds": ["n1"],
+                "format": "choice_question",
+                "correct": false,
+                "score": null,
+                "maxScore": null,
+                "selfRating": null,
+                "timeMs": 12000,
+                "answeredAt": "2026-11-02T09:00:00.000Z",
+                "chosenDistractorNotionId": "n2",
+                "confusedWithNotionId": null,
+                "normalizedResponse": null,
+                "offTopic": false,
+                "countsForGaps": true
+              }
+            ]
+          },
+          {
+            "attemptId": "t2",
+            "attemptKind": "exercise",
+            "answers": [
+              {
+                "answerId": "a2",
+                "attemptId": "t2",
+                "attemptKind": "exercise",
+                "attemptNo": 1,
+                "source": "exercise",
+                "notionIds": ["n1"],
+                "format": "choice_question",
+                "correct": false,
+                "score": null,
+                "maxScore": null,
+                "selfRating": null,
+                "timeMs": 12000,
+                "answeredAt": "2026-11-04T09:00:00.000Z",
+                "chosenDistractorNotionId": "n2",
+                "confusedWithNotionId": null,
+                "normalizedResponse": null,
+                "offTopic": false,
+                "countsForGaps": true
+              }
+            ]
+          }
+        ],
+        "mastery": 55,
+        "now": "2026-11-11T12:20:00.000Z"
+      },
+      "output": {
+        "active": true,
+        "nature": "confusion",
+        "confusedWith": "n2",
+        "evidence": "2 r\u00e9ponse(s) erron\u00e9e(s) avec le distracteur \u00ab n2 \u00bb. Exercice sous le seuil de 80 % pour cette notion. Erreur \u00ab distractor:n2 \u00bb r\u00e9p\u00e9t\u00e9e sur 2 tentatives.",
+        "recommendedAction": "confrontation",
+        "event": "detected",
+        "triggers": ["qualifying_attempt", "repeated_error"],
+        "repeatedErrors": [
+          {
+            "key": "distractor:n2",
+            "attemptIds": ["t1", "t2"]
+          }
+        ],
+        "gap": {
+          "nature": "confusion",
+          "confusedWith": "n2",
+          "detectedAt": "2026-11-11T12:20:00.000Z",
+          "evidence": "2 r\u00e9ponse(s) erron\u00e9e(s) avec le distracteur \u00ab n2 \u00bb. Exercice sous le seuil de 80 % pour cette notion. Erreur \u00ab distractor:n2 \u00bb r\u00e9p\u00e9t\u00e9e sur 2 tentatives.",
+          "clearedAt": null
+        }
+      }
+    },
+    {
+      "input": {
+        "notion": "n1",
+        "attempts": [
+          {
+            "attemptId": "t1",
+            "attemptKind": "validation_quiz",
+            "answers": [
+              {
+                "answerId": "a1",
+                "attemptId": "t1",
+                "attemptKind": "validation_quiz",
+                "attemptNo": 1,
+                "source": "validation",
+                "notionIds": ["n1"],
+                "format": "choice_question",
+                "correct": true,
+                "score": null,
+                "maxScore": null,
+                "selfRating": null,
+                "timeMs": 12000,
+                "answeredAt": "2026-11-02T09:00:00.000Z",
+                "chosenDistractorNotionId": null,
+                "confusedWithNotionId": null,
+                "normalizedResponse": null,
+                "offTopic": false,
+                "countsForGaps": true
+              }
+            ]
+          },
+          {
+            "attemptId": "t2",
+            "attemptKind": "exercise",
+            "answers": [
+              {
+                "answerId": "a2",
+                "attemptId": "t2",
+                "attemptKind": "exercise",
+                "attemptNo": 1,
+                "source": "exercise",
+                "notionIds": ["n1"],
+                "format": "choice_question",
+                "correct": false,
+                "score": null,
+                "maxScore": null,
+                "selfRating": null,
+                "timeMs": 12000,
+                "answeredAt": "2026-11-05T09:00:00.000Z",
+                "chosenDistractorNotionId": null,
+                "confusedWithNotionId": null,
+                "normalizedResponse": null,
+                "offTopic": false,
+                "countsForGaps": true
+              }
+            ]
+          }
+        ],
+        "mastery": 70,
+        "now": "2026-11-11T12:20:00.000Z"
+      },
+      "output": {
+        "active": true,
+        "nature": "application",
+        "confusedWith": null,
+        "evidence": "Questions de d\u00e9finition r\u00e9ussies mais exercice \u00e9chou\u00e9. Exercice sous le seuil de 80 % pour cette notion.",
+        "recommendedAction": "practice_exercise",
+        "event": "detected",
+        "triggers": ["qualifying_attempt"],
+        "repeatedErrors": [],
+        "gap": {
+          "nature": "application",
+          "confusedWith": null,
+          "detectedAt": "2026-11-11T12:20:00.000Z",
+          "evidence": "Questions de d\u00e9finition r\u00e9ussies mais exercice \u00e9chou\u00e9. Exercice sous le seuil de 80 % pour cette notion.",
+          "clearedAt": null
+        }
+      }
+    },
+    {
+      "input": {
+        "notion": "n1",
+        "attempts": [
+          {
+            "attemptId": "t1",
+            "attemptKind": "exercise",
+            "answers": [
+              {
+                "answerId": "a1",
+                "attemptId": "t1",
+                "attemptKind": "exercise",
+                "attemptNo": 1,
+                "source": "exercise",
+                "notionIds": ["n1"],
+                "format": "open_question",
+                "correct": null,
+                "score": 0,
+                "maxScore": 2,
+                "selfRating": null,
+                "timeMs": 12000,
+                "answeredAt": "2026-11-03T09:00:00.000Z",
+                "chosenDistractorNotionId": null,
+                "confusedWithNotionId": null,
+                "normalizedResponse": "  Hors   SUJET ",
+                "offTopic": true,
+                "countsForGaps": true
+              },
+              {
+                "answerId": "a2",
+                "attemptId": "t1",
+                "attemptKind": "exercise",
+                "attemptNo": 1,
+                "source": "exercise",
+                "notionIds": ["n1"],
+                "format": "open_question",
+                "correct": null,
+                "score": 0,
+                "maxScore": 2,
+                "selfRating": null,
+                "timeMs": 12000,
+                "answeredAt": "2026-11-03T09:05:00.000Z",
+                "chosenDistractorNotionId": null,
+                "confusedWithNotionId": null,
+                "normalizedResponse": "hors sujet",
+                "offTopic": true,
+                "countsForGaps": true
+              }
+            ]
+          }
+        ],
+        "mastery": 30,
+        "now": "2026-11-11T12:20:00.000Z"
+      },
+      "output": {
+        "active": true,
+        "nature": "misunderstanding",
+        "confusedWith": null,
+        "evidence": "2 \u00e9checs sur la notion, dont une r\u00e9ponse ouverte hors sujet. Exercice sous le seuil de 80 % pour cette notion.",
+        "recommendedAction": "alternative_explanation",
+        "event": "detected",
+        "triggers": ["qualifying_attempt"],
+        "repeatedErrors": [],
+        "gap": {
+          "nature": "misunderstanding",
+          "confusedWith": null,
+          "detectedAt": "2026-11-11T12:20:00.000Z",
+          "evidence": "2 \u00e9checs sur la notion, dont une r\u00e9ponse ouverte hors sujet. Exercice sous le seuil de 80 % pour cette notion.",
+          "clearedAt": null
+        }
+      }
+    },
+    {
+      "input": {
+        "notion": "n1",
+        "attempts": [
+          {
+            "attemptId": "t1",
+            "attemptKind": "validation_quiz",
+            "answers": [
+              {
+                "answerId": "a1",
+                "attemptId": "t1",
+                "attemptKind": "validation_quiz",
+                "attemptNo": 1,
+                "source": "validation",
+                "notionIds": ["n1"],
+                "format": "choice_question",
+                "correct": true,
+                "score": null,
+                "maxScore": null,
+                "selfRating": null,
+                "timeMs": 12000,
+                "answeredAt": "2026-10-01T09:00:00.000Z",
+                "chosenDistractorNotionId": null,
+                "confusedWithNotionId": null,
+                "normalizedResponse": null,
+                "offTopic": false,
+                "countsForGaps": true
+              }
+            ]
+          },
+          {
+            "attemptId": "t2",
+            "attemptKind": "validation_quiz",
+            "answers": [
+              {
+                "answerId": "a2",
+                "attemptId": "t2",
+                "attemptKind": "validation_quiz",
+                "attemptNo": 1,
+                "source": "validation",
+                "notionIds": ["n1"],
+                "format": "choice_question",
+                "correct": false,
+                "score": null,
+                "maxScore": null,
+                "selfRating": null,
+                "timeMs": 12000,
+                "answeredAt": "2026-11-09T09:00:00.000Z",
+                "chosenDistractorNotionId": null,
+                "confusedWithNotionId": null,
+                "normalizedResponse": null,
+                "offTopic": false,
+                "countsForGaps": true
+              }
+            ]
+          }
+        ],
+        "mastery": 45,
+        "now": "2026-11-11T12:20:00.000Z"
+      },
+      "output": {
+        "active": true,
+        "nature": "forgetting",
+        "confusedWith": null,
+        "evidence": "Notion r\u00e9ussie le 2026-10-01, \u00e9chou\u00e9e 39 jours plus tard. Quiz de validation sous le seuil de 80 % pour cette notion.",
+        "recommendedAction": "global_quiz",
+        "event": "detected",
+        "triggers": ["qualifying_attempt"],
+        "repeatedErrors": [],
+        "gap": {
+          "nature": "forgetting",
+          "confusedWith": null,
+          "detectedAt": "2026-11-11T12:20:00.000Z",
+          "evidence": "Notion r\u00e9ussie le 2026-10-01, \u00e9chou\u00e9e 39 jours plus tard. Quiz de validation sous le seuil de 80 % pour cette notion.",
+          "clearedAt": null
+        }
+      }
+    },
+    {
+      "input": {
+        "notion": "n1",
+        "attempts": [
+          {
+            "attemptId": "t1",
+            "attemptKind": "validation_quiz",
+            "answers": [
+              {
+                "answerId": "a1",
+                "attemptId": "t1",
+                "attemptKind": "validation_quiz",
+                "attemptNo": 1,
+                "source": "validation",
+                "notionIds": ["n1"],
+                "format": "choice_question",
+                "correct": true,
+                "score": null,
+                "maxScore": null,
+                "selfRating": null,
+                "timeMs": 12000,
+                "answeredAt": "2026-11-08T09:00:00.000Z",
+                "chosenDistractorNotionId": null,
+                "confusedWithNotionId": null,
+                "normalizedResponse": null,
+                "offTopic": false,
+                "countsForGaps": true
+              }
+            ]
+          }
+        ],
+        "mastery": 92,
+        "now": "2026-11-11T12:20:00.000Z"
+      },
+      "output": {
+        "active": false,
+        "nature": null,
+        "confusedWith": null,
+        "evidence": "Ma\u00eetrise 92 % au seuil de 80 %, aucune erreur r\u00e9p\u00e9t\u00e9e.",
+        "recommendedAction": null,
+        "event": null,
+        "triggers": [],
+        "repeatedErrors": [],
+        "gap": null
+      }
+    },
+    {
+      "input": {
+        "notion": "n1",
+        "attempts": [],
+        "mastery": 0,
+        "now": "2026-11-11T12:20:00.000Z"
+      },
+      "output": {
+        "active": false,
+        "nature": null,
+        "confusedWith": null,
+        "evidence": "Aucune tentative qualifiante pour cette notion.",
+        "recommendedAction": null,
+        "event": null,
+        "triggers": [],
+        "repeatedErrors": [],
+        "gap": null
+      }
+    },
+    {
+      "input": {
+        "notion": "n1",
+        "attempts": [
+          {
+            "attemptId": "t1",
+            "attemptKind": "exercise",
+            "answers": [
+              {
+                "answerId": "a1",
+                "attemptId": "t1",
+                "attemptKind": "exercise",
+                "attemptNo": 1,
+                "source": "exercise",
+                "notionIds": ["n1"],
+                "format": "choice_question",
+                "correct": false,
+                "score": null,
+                "maxScore": null,
+                "selfRating": null,
+                "timeMs": 12000,
+                "answeredAt": "2026-11-09T09:00:00.000Z",
+                "chosenDistractorNotionId": "n2",
+                "confusedWithNotionId": null,
+                "normalizedResponse": null,
+                "offTopic": false,
+                "countsForGaps": true
+              }
+            ]
+          }
+        ],
+        "mastery": 50,
+        "now": "2026-11-11T12:20:00.000Z",
+        "existingGap": {
+          "nature": "forgetting",
+          "confusedWith": null,
+          "detectedAt": "2026-11-05T09:00:00.000Z",
+          "evidence": "Lapse FSRS signal\u00e9 sur la notion.",
+          "clearedAt": null
+        }
+      },
+      "output": {
+        "active": true,
+        "nature": "confusion",
+        "confusedWith": "n2",
+        "evidence": "1 r\u00e9ponse(s) erron\u00e9e(s) avec le distracteur \u00ab n2 \u00bb. Exercice sous le seuil de 80 % pour cette notion.",
+        "recommendedAction": "confrontation",
+        "event": "nature_changed",
+        "triggers": ["qualifying_attempt"],
+        "repeatedErrors": [],
+        "gap": {
+          "nature": "confusion",
+          "confusedWith": "n2",
+          "detectedAt": "2026-11-05T09:00:00.000Z",
+          "evidence": "1 r\u00e9ponse(s) erron\u00e9e(s) avec le distracteur \u00ab n2 \u00bb. Exercice sous le seuil de 80 % pour cette notion.",
+          "clearedAt": null
+        }
+      }
+    },
+    {
+      "input": {
+        "notion": "n1",
+        "attempts": [
+          {
+            "attemptId": "t1",
+            "attemptKind": "validation_quiz",
+            "answers": [
+              {
+                "answerId": "a1",
+                "attemptId": "t1",
+                "attemptKind": "validation_quiz",
+                "attemptNo": 1,
+                "source": "validation",
+                "notionIds": ["n1"],
+                "format": "choice_question",
+                "correct": false,
+                "score": null,
+                "maxScore": null,
+                "selfRating": null,
+                "timeMs": 12000,
+                "answeredAt": "2026-11-10T09:00:00.000Z",
+                "chosenDistractorNotionId": null,
+                "confusedWithNotionId": null,
+                "normalizedResponse": null,
+                "offTopic": false,
+                "countsForGaps": true
+              }
+            ]
+          }
+        ],
+        "mastery": 90,
+        "now": "2026-11-11T12:20:00.000Z",
+        "existingGap": {
+          "nature": "confusion",
+          "confusedWith": "n2",
+          "detectedAt": "2026-11-05T09:00:00.000Z",
+          "evidence": "Confusion entre deux notions.",
+          "clearedAt": null
+        }
+      },
+      "output": {
+        "active": true,
+        "nature": "confusion",
+        "confusedWith": "n2",
+        "evidence": "Confusion entre deux notions.",
+        "recommendedAction": "confrontation",
+        "event": null,
+        "triggers": [],
+        "repeatedErrors": [],
+        "gap": {
+          "nature": "confusion",
+          "confusedWith": "n2",
+          "detectedAt": "2026-11-05T09:00:00.000Z",
+          "evidence": "Confusion entre deux notions.",
+          "clearedAt": null
+        }
+      }
+    },
+    {
+      "input": {
+        "notion": "n1",
+        "attempts": [
+          {
+            "attemptId": "t1",
+            "attemptKind": "validation_quiz",
+            "answers": [
+              {
+                "answerId": "a1",
+                "attemptId": "t1",
+                "attemptKind": "validation_quiz",
+                "attemptNo": 1,
+                "source": "validation",
+                "notionIds": ["n1"],
+                "format": "choice_question",
+                "correct": false,
+                "score": null,
+                "maxScore": null,
+                "selfRating": null,
+                "timeMs": 12000,
+                "answeredAt": "2026-11-10T09:00:00.000Z",
+                "chosenDistractorNotionId": null,
+                "confusedWithNotionId": null,
+                "normalizedResponse": null,
+                "offTopic": false,
+                "countsForGaps": true
+              }
+            ]
+          }
+        ],
+        "mastery": 90,
+        "now": "2026-11-11T12:20:00.000Z",
+        "fsrsLapsed": true
+      },
+      "output": {
+        "active": false,
+        "nature": null,
+        "confusedWith": null,
+        "evidence": "Ma\u00eetrise 90 % au seuil de 80 %, aucune erreur r\u00e9p\u00e9t\u00e9e.",
+        "recommendedAction": null,
+        "event": null,
+        "triggers": [],
+        "repeatedErrors": [],
+        "gap": null
+      }
+    }
+  ],
+  "clear": [
+    {
+      "input": {
+        "gap": {
+          "nature": "confusion",
+          "confusedWith": "n2",
+          "detectedAt": "2026-11-01T09:00:00.000Z",
+          "evidence": "Confusion entre deux notions.",
+          "clearedAt": null
+        },
+        "successes": [
+          {
+            "answerId": "s1",
+            "attemptId": "t1",
+            "attemptKind": "validation_quiz",
+            "attemptNo": 1,
+            "source": "validation",
+            "notionIds": ["n1"],
+            "format": "choice_question",
+            "correct": true,
+            "score": null,
+            "maxScore": null,
+            "selfRating": null,
+            "timeMs": 12000,
+            "answeredAt": "2026-11-05T09:00:00.000Z",
+            "chosenDistractorNotionId": null,
+            "confusedWithNotionId": null,
+            "normalizedResponse": null,
+            "offTopic": false,
+            "countsForGaps": true
+          },
+          {
+            "answerId": "s2",
+            "attemptId": "t1",
+            "attemptKind": "validation_quiz",
+            "attemptNo": 1,
+            "source": "validation",
+            "notionIds": ["n1"],
+            "format": "choice_question",
+            "correct": true,
+            "score": null,
+            "maxScore": null,
+            "selfRating": null,
+            "timeMs": 12000,
+            "answeredAt": "2026-11-07T09:00:00.000Z",
+            "chosenDistractorNotionId": null,
+            "confusedWithNotionId": null,
+            "normalizedResponse": null,
+            "offTopic": false,
+            "countsForGaps": true
+          }
+        ],
+        "mastery": 85,
+        "now": "2026-11-11T12:20:00.000Z",
+        "notion": "n1"
+      },
+      "output": {
+        "cleared": true,
+        "event": "cleared",
+        "clearedAt": "2026-11-11T12:20:00.000Z",
+        "evidence": "Lacune lev\u00e9e : 2 r\u00e9ussites espac\u00e9es de 48 h, ma\u00eetrise 85 % \u2265 80 %.",
+        "gap": {
+          "nature": "confusion",
+          "confusedWith": "n2",
+          "detectedAt": "2026-11-01T09:00:00.000Z",
+          "evidence": "Confusion entre deux notions.",
+          "clearedAt": "2026-11-11T12:20:00.000Z"
+        },
+        "successCount": 2,
+        "intervalHours": 48,
+        "checks": {
+          "activeGap": true,
+          "enoughSuccesses": true,
+          "spaced": true,
+          "masteryReached": true
+        }
+      }
+    },
+    {
+      "input": {
+        "gap": {
+          "nature": "confusion",
+          "confusedWith": "n2",
+          "detectedAt": "2026-11-01T09:00:00.000Z",
+          "evidence": "Confusion entre deux notions.",
+          "clearedAt": null
+        },
+        "successes": [
+          {
+            "answerId": "s1",
+            "attemptId": "t1",
+            "attemptKind": "validation_quiz",
+            "attemptNo": 1,
+            "source": "validation",
+            "notionIds": ["n1"],
+            "format": "choice_question",
+            "correct": true,
+            "score": null,
+            "maxScore": null,
+            "selfRating": null,
+            "timeMs": 12000,
+            "answeredAt": "2026-11-05T09:00:00.000Z",
+            "chosenDistractorNotionId": null,
+            "confusedWithNotionId": null,
+            "normalizedResponse": null,
+            "offTopic": false,
+            "countsForGaps": true
+          }
+        ],
+        "mastery": 85,
+        "now": "2026-11-11T12:20:00.000Z"
+      },
+      "output": {
+        "cleared": false,
+        "event": null,
+        "clearedAt": null,
+        "evidence": "Lacune maintenue : 1 r\u00e9ussite(s) sur 2 requises.",
+        "gap": {
+          "nature": "confusion",
+          "confusedWith": "n2",
+          "detectedAt": "2026-11-01T09:00:00.000Z",
+          "evidence": "Confusion entre deux notions.",
+          "clearedAt": null
+        },
+        "successCount": 1,
+        "intervalHours": null,
+        "checks": {
+          "activeGap": true,
+          "enoughSuccesses": false,
+          "spaced": false,
+          "masteryReached": true
+        }
+      }
+    },
+    {
+      "input": {
+        "gap": {
+          "nature": "confusion",
+          "confusedWith": "n2",
+          "detectedAt": "2026-11-01T09:00:00.000Z",
+          "evidence": "Confusion entre deux notions.",
+          "clearedAt": null
+        },
+        "successes": [
+          {
+            "answerId": "s1",
+            "attemptId": "t1",
+            "attemptKind": "validation_quiz",
+            "attemptNo": 1,
+            "source": "validation",
+            "notionIds": ["n1"],
+            "format": "choice_question",
+            "correct": true,
+            "score": null,
+            "maxScore": null,
+            "selfRating": null,
+            "timeMs": 12000,
+            "answeredAt": "2026-11-05T09:00:00.000Z",
+            "chosenDistractorNotionId": null,
+            "confusedWithNotionId": null,
+            "normalizedResponse": null,
+            "offTopic": false,
+            "countsForGaps": true
+          },
+          {
+            "answerId": "s2",
+            "attemptId": "t1",
+            "attemptKind": "validation_quiz",
+            "attemptNo": 1,
+            "source": "validation",
+            "notionIds": ["n1"],
+            "format": "choice_question",
+            "correct": true,
+            "score": null,
+            "maxScore": null,
+            "selfRating": null,
+            "timeMs": 12000,
+            "answeredAt": "2026-11-05T23:59:00.000Z",
+            "chosenDistractorNotionId": null,
+            "confusedWithNotionId": null,
+            "normalizedResponse": null,
+            "offTopic": false,
+            "countsForGaps": true
+          }
+        ],
+        "mastery": 85,
+        "now": "2026-11-11T12:20:00.000Z"
+      },
+      "output": {
+        "cleared": false,
+        "event": null,
+        "clearedAt": null,
+        "evidence": "Lacune maintenue : 14,98 h entre les r\u00e9ussites, minimum 24 h.",
+        "gap": {
+          "nature": "confusion",
+          "confusedWith": "n2",
+          "detectedAt": "2026-11-01T09:00:00.000Z",
+          "evidence": "Confusion entre deux notions.",
+          "clearedAt": null
+        },
+        "successCount": 2,
+        "intervalHours": 14.983333333333333,
+        "checks": {
+          "activeGap": true,
+          "enoughSuccesses": true,
+          "spaced": false,
+          "masteryReached": true
+        }
+      }
+    },
+    {
+      "input": {
+        "gap": {
+          "nature": "confusion",
+          "confusedWith": "n2",
+          "detectedAt": "2026-11-01T09:00:00.000Z",
+          "evidence": "Confusion entre deux notions.",
+          "clearedAt": null
+        },
+        "successes": [
+          {
+            "answerId": "s1",
+            "attemptId": "t1",
+            "attemptKind": "validation_quiz",
+            "attemptNo": 1,
+            "source": "validation",
+            "notionIds": ["n1"],
+            "format": "choice_question",
+            "correct": true,
+            "score": null,
+            "maxScore": null,
+            "selfRating": null,
+            "timeMs": 12000,
+            "answeredAt": "2026-11-05T09:00:00.000Z",
+            "chosenDistractorNotionId": null,
+            "confusedWithNotionId": null,
+            "normalizedResponse": null,
+            "offTopic": false,
+            "countsForGaps": true
+          },
+          {
+            "answerId": "s2",
+            "attemptId": "t1",
+            "attemptKind": "validation_quiz",
+            "attemptNo": 1,
+            "source": "validation",
+            "notionIds": ["n1"],
+            "format": "choice_question",
+            "correct": true,
+            "score": null,
+            "maxScore": null,
+            "selfRating": null,
+            "timeMs": 12000,
+            "answeredAt": "2026-11-07T09:00:00.000Z",
+            "chosenDistractorNotionId": null,
+            "confusedWithNotionId": null,
+            "normalizedResponse": null,
+            "offTopic": false,
+            "countsForGaps": true
+          }
+        ],
+        "mastery": 60,
+        "now": "2026-11-11T12:20:00.000Z"
+      },
+      "output": {
+        "cleared": false,
+        "event": null,
+        "clearedAt": null,
+        "evidence": "Lacune maintenue : ma\u00eetrise 60 % sous le seuil 80 %.",
+        "gap": {
+          "nature": "confusion",
+          "confusedWith": "n2",
+          "detectedAt": "2026-11-01T09:00:00.000Z",
+          "evidence": "Confusion entre deux notions.",
+          "clearedAt": null
+        },
+        "successCount": 2,
+        "intervalHours": 48,
+        "checks": {
+          "activeGap": true,
+          "enoughSuccesses": true,
+          "spaced": true,
+          "masteryReached": false
+        }
+      }
+    },
+    {
+      "input": {
+        "gap": {
+          "nature": "confusion",
+          "confusedWith": "n2",
+          "detectedAt": "2026-11-01T09:00:00.000Z",
+          "evidence": "Confusion entre deux notions.",
+          "clearedAt": "2026-11-06T09:00:00.000Z"
+        },
+        "successes": [
+          {
+            "answerId": "s1",
+            "attemptId": "t1",
+            "attemptKind": "validation_quiz",
+            "attemptNo": 1,
+            "source": "validation",
+            "notionIds": ["n1"],
+            "format": "choice_question",
+            "correct": true,
+            "score": null,
+            "maxScore": null,
+            "selfRating": null,
+            "timeMs": 12000,
+            "answeredAt": "2026-11-07T09:00:00.000Z",
+            "chosenDistractorNotionId": null,
+            "confusedWithNotionId": null,
+            "normalizedResponse": null,
+            "offTopic": false,
+            "countsForGaps": true
+          },
+          {
+            "answerId": "s2",
+            "attemptId": "t1",
+            "attemptKind": "validation_quiz",
+            "attemptNo": 1,
+            "source": "validation",
+            "notionIds": ["n1"],
+            "format": "choice_question",
+            "correct": true,
+            "score": null,
+            "maxScore": null,
+            "selfRating": null,
+            "timeMs": 12000,
+            "answeredAt": "2026-11-09T09:00:00.000Z",
+            "chosenDistractorNotionId": null,
+            "confusedWithNotionId": null,
+            "normalizedResponse": null,
+            "offTopic": false,
+            "countsForGaps": true
+          }
+        ],
+        "mastery": 85,
+        "now": "2026-11-11T12:20:00.000Z"
+      },
+      "output": {
+        "cleared": false,
+        "event": null,
+        "clearedAt": null,
+        "evidence": "Aucune lacune active \u00e0 lever.",
+        "gap": {
+          "nature": "confusion",
+          "confusedWith": "n2",
+          "detectedAt": "2026-11-01T09:00:00.000Z",
+          "evidence": "Confusion entre deux notions.",
+          "clearedAt": "2026-11-06T09:00:00.000Z"
+        },
+        "successCount": 2,
+        "intervalHours": 48,
+        "checks": {
+          "activeGap": false,
+          "enoughSuccesses": true,
+          "spaced": true,
+          "masteryReached": true
+        }
+      }
+    }
+  ]
+}

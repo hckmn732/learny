@@ -67,6 +67,8 @@ export interface TestSession {
   cookies: { name: string; value: string }[];
   /** Value of the `Cookie` request header. */
   cookieHeader: string;
+  /** Supabase access token: the `Authorization: Bearer` proof of an external client (SPEC-2301). */
+  accessToken: string;
 }
 
 export interface TestSessionOptions {
@@ -116,11 +118,13 @@ export async function createTestSession(options: TestSessionOptions = {}): Promi
   }
 
   const cookies = [...jar].map(([name, value]) => ({ name, value }));
+  const accessToken = signedIn.data.session.access_token;
   return {
     userId: created.data.user.id,
     email,
     cookies,
     cookieHeader: cookies.map((c) => `${c.name}=${encodeURIComponent(c.value)}`).join('; '),
+    accessToken,
   };
 }
 
@@ -156,11 +160,13 @@ export async function createDemoSession(userId: string, email: string): Promise<
   const signedIn = await client.auth.signInWithPassword({ email, password });
   if (signedIn.error !== null) throw new Error(`signIn : ${signedIn.error.message}`);
   const cookies = [...jar].map(([name, value]) => ({ name, value }));
+  const accessToken = signedIn.data.session.access_token;
   return {
     userId,
     email,
     cookies,
     cookieHeader: cookies.map((c) => `${c.name}=${encodeURIComponent(c.value)}`).join('; '),
+    accessToken,
   };
 }
 

@@ -6,6 +6,7 @@ import { cn } from '@learny/ui';
 
 import type { CorrectionView } from '../../correction-view';
 import { FeedbackBox } from '../../view/feedback-box';
+import { InlineCode } from '../../view/inline-code';
 import { resolveLabels } from '../../view/labels';
 import { QuestionHeader } from '../../view/question-header';
 import type { BrickViewProps } from '../../view-types';
@@ -126,7 +127,9 @@ export function ChoiceQuestionView(props: BrickViewProps<'choice_question'>) {
               >
                 {letter}
               </span>
-              <span className="break-words">{option.text}</span>
+              <span className="break-words">
+                <InlineCode text={option.text} />
+              </span>
               {stateText ? <span className="sr-only">{` — ${stateText}`}</span> : null}
               {correct && state.rationale ? (
                 <span className="sr-only">{` — ${state.rationale}`}</span>

@@ -1,0 +1,21 @@
+{# Building blocks of the e-mail templates: the same computed styles as `emails/layout.tsx`, so a
+   reader (and the tests) find one heading, one paragraph style and two button styles. #}
+{% macro h1(value) -%}
+<h1 style="margin:28px 0 12px;font-family:'Space Grotesk',Arial,sans-serif;font-size:24px;line-height:32px;font-weight:600;color:#111113">{{ value }}</h1>
+{%- endmacro %}
+
+{% macro para(value) -%}
+<p style="margin:0 0 16px;font-size:15px;line-height:24px;color:#111113">{{ value }}</p>
+{%- endmacro %}
+
+{% macro muted(value) -%}
+<p style="margin:0 0 12px;font-size:13px;line-height:20px;color:#62626B">{{ value }}</p>
+{%- endmacro %}
+
+{% macro cta(href, label, testid='email-cta') -%}
+<a href="{{ href }}" data-testid="{{ testid }}" style="display:inline-block;box-sizing:border-box;min-height:44px;padding:14px 22px;border-radius:12px;background-color:#111113;color:#FFFFFF;font-family:'Inter','Helvetica Neue',Helvetica,Arial,sans-serif;font-size:15px;line-height:16px;font-weight:600;text-decoration:none">{{ label }}</a>
+{%- endmacro %}
+
+{% macro secondary(href, label) -%}
+<a href="{{ href }}" style="display:inline-block;box-sizing:border-box;min-height:44px;padding:13px 22px;border-radius:12px;border:1px solid #E7E6E1;background-color:#FFFFFF;color:#111113;font-family:'Inter','Helvetica Neue',Helvetica,Arial,sans-serif;font-size:15px;line-height:16px;font-weight:600;text-decoration:none">{{ label }}</a>
+{%- endmacro %}

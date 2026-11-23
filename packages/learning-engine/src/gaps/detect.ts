@@ -43,6 +43,15 @@ export const RECOMMENDED_ACTION_BY_NATURE: Readonly<Record<GapNature, GapRecomme
 };
 
 /** Detection triggers, in stable display order. */
+// Hotfix QA: the learner-facing reason names the activity in French instead of its internal key.
+const ATTEMPT_KIND_LABELS: Readonly<Record<string, string>> = {
+  validation_quiz: 'Quiz de validation',
+  global_quiz: 'Quiz global',
+  mock_exam: 'Examen blanc',
+  exercise: 'Exercice',
+  remediation: 'Remédiation',
+};
+
 export type GapTrigger = 'qualifying_attempt' | 'repeated_error';
 
 /** BR-LAC-02 — attempt kinds whose failure qualifies the notion for a gap. */
@@ -613,7 +622,7 @@ function triggerEvidence(
   ) {
     triggers.push('qualifying_attempt');
     parts.push(
-      `Tentative qualifiante « ${latest.attemptKind} » sous le seuil de ${formatNumber(params.masteryThreshold)} %.`,
+      `${ATTEMPT_KIND_LABELS[latest.attemptKind] ?? 'Tentative'} sous le seuil de ${formatNumber(params.masteryThreshold)} % pour cette notion.`,
     );
   }
   if (repeatedErrors.length > 0) {

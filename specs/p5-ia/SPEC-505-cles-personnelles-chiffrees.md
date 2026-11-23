@@ -164,3 +164,7 @@ Définition commune (`docs/engineering/testing.md` §7) ; `docs/operations/key-r
 - Décisions créées : **ADR-0154** (format, AAD, rotation, masquage, régions, modèles locaux) et **ADR-0159** (anti-SSRF, dont la partie validation d'adresse est livrée ici) ; **ADR-0293** consigne le statut de validation 422 propre à la route, le recalcul d'empreinte pendant la rotation et l'option de rotation ciblée par apprenant.
 - Pas de route de modification : changer de clé = supprimer puis ajouter (comme la maquette : « Supprimer la clé », « Tester à nouveau »).
 - La pastille « Hors UE » de l'IA fournie n'est pas affichée (maquette) ; ce point est à revérifier lors de la mise en production (SPEC-808).
+
+## Amendements
+
+- **2026-11-23, ADR-2037** — SPEC-709 : la plateforme ne fournit aucun modèle, le compte de démonstration possède donc son « Modèle de démonstration ». CA-8 : la démonstration ajoute, affiche masquée et supprime sa clé OpenAI à côté de ce modèle, qui reste en place.
