@@ -21,6 +21,7 @@ from learny_api.contract_files import inventory_file as _inventory_file
 from learny_api.contract_files import ownership_file as _ownership_file
 from learny_api.ownership import (
     Ownership,
+    apply_overrides,
     load_ownership,
     overrides_from_env,
     special_key,
@@ -42,14 +43,7 @@ def load_ownership_checked(settings: Settings) -> Ownership:
     """Loads the ownership table, applies overrides outside production and validates coverage."""
     ownership = load_ownership(_ownership_file())
     if settings.app_env != "test":
-        overrides = overrides_from_env(settings.ownership_overrides)
-        if overrides:
-            ownership = Ownership(
-                operations={**ownership.operations, **overrides},
-                special={**ownership.special, **overrides},
-                consumers=ownership.consumers,
-                crons=ownership.crons,
-            )
+        ownership = apply_overrides(ownership, overrides_from_env(settings.ownership_overrides))
     operation_ids, special_keys = _load_contract_entries()
     validate_completeness(ownership, operation_ids, special_keys)
     return ownership
