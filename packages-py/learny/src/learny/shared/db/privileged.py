@@ -103,6 +103,10 @@ PRIVILEGED_CALLERS: Final = MappingProxyType(
         # already be gone, so they need the owner role (SPEC-211 EF-7, EF-8).
         "learny.privacy.application.deletion_job": "nightly deletion of due accounts",
         "learny.privacy.application.purge": "nightly purge of expired exports",
+        # SPEC-611 CL-6 - the correction of an open answer is a job: it resolves the learner's
+        # own `tutor` model outside RLS before calling the provider, like the other job-side
+        # resolvers (SPEC-504, BR-IA-02). The correction stays pending without an assignment.
+        "learny.assessments.application.grade_open": "job-side resolution of the learner tutor model",
         # The worker owns the outbox tables: fanned-out deliveries, claims and completion.
         "learny_worker.dispatcher": "outbox fan-out into job deliveries",
         "learny_worker.runner": "claims, completion and backoff of the deliveries",
