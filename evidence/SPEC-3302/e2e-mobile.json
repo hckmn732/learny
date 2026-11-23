@@ -1,0 +1,55 @@
+{
+  "spec": "SPEC-3302",
+  "platform": "android",
+  "transport": "local",
+  "device": {
+    "platform": "android",
+    "model": "sdk_gphone64_x86_64",
+    "apiLevel": "35",
+    "size": "Physical size: 1080x2400"
+  },
+  "tags": [
+    "SPEC-3302"
+  ],
+  "startedAt": "2026-11-23T19:26:31.530Z",
+  "finishedAt": "2026-11-23T19:27:07.731Z",
+  "passed": 1,
+  "failed": 0,
+  "videos": 1,
+  "campaignVideo": "artifacts/campagne/campagne.mp4",
+  "visual": 1,
+  "junitCases": 1,
+  "flows": [
+    {
+      "file": "apps/mobile/e2e/flows/SPEC-3302-lecture.yaml",
+      "name": "SPEC-3302 lecture",
+      "tags": [
+        "SPEC-3302",
+        "visual"
+      ],
+      "status": "passed",
+      "durationSec": 32.316,
+      "message": null,
+      "videos": [],
+      "screenshots": [
+        "artifacts/spec-3302-lecture/SPEC-3302-lecture.png"
+      ],
+      "visual": {
+        "flow": "SPEC-3302 lecture",
+        "status": "passed",
+        "diffRatio": 0.0727,
+        "capture": "/root/wt/SPEC-3302/test-results/sdd/SPEC-3302/artifacts/spec-3302-lecture/SPEC-3302-lecture.png",
+        "baseline": "/root/wt/SPEC-3302/apps/mobile/e2e/visual/baselines/SPEC-3302-lecture.png",
+        "diff": "/root/wt/SPEC-3302/test-results/sdd/SPEC-3302/artifacts/spec-3302-lecture/SPEC-3302-lecture.diff.png"
+      }
+    }
+  ],
+  "visualChecks": [
+    {
+      "flow": "SPEC-3302 lecture",
+      "status": "passed",
+      "diffRatio": 0.0727
+    }
+  ],
+  "unattributed": []
+}
