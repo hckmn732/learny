@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <testsuites>
-  <testsuite name="Test Suite" device="learny" tests="1" failures="0" time="47.871" timestamp="2026-11-23T20:49:10">
-    <testcase id="SPEC-3304 quiz" name="SPEC-3304 quiz" classname="SPEC-3304 quiz" file="apps/mobile/e2e/flows/SPEC-3304-quiz.yaml" time="47.856" timestamp="2026-11-23T20:49:10" status="SUCCESS">
+  <testsuite name="Test Suite" device="emulator-5554" tests="1" failures="0" time="50.189" timestamp="2026-11-23T22:46:42">
+    <testcase id="SPEC-3304 quiz" name="SPEC-3304 quiz" classname="SPEC-3304 quiz" file="apps/mobile/e2e/flows/SPEC-3304-quiz.yaml" time="50.165" timestamp="2026-11-23T22:46:42" status="SUCCESS">
       <properties>
         <property name="tags" value="SPEC-3304, visual"/>
       </properties>

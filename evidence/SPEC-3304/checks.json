@@ -1,37 +1,37 @@
 {
   "lint": {
     "status": "passed",
-    "at": "2026-11-23T20:47:11.321Z",
+    "at": "2026-11-23T22:44:56.647Z",
     "details": ""
   },
   "typecheck": {
     "status": "passed",
-    "at": "2026-11-23T20:47:17.391Z",
+    "at": "2026-11-23T22:45:02.485Z",
     "details": ""
   },
   "unit": {
-    "status": "failed",
-    "at": "2026-11-23T20:49:01.727Z",
+    "status": "passed",
+    "at": "2026-11-23T22:46:35.899Z",
     "details": "17 Vitest + 12 Jest test(s) [SPEC-3304] réussi(s), 0 échec(s)"
   },
   "integration": {
     "status": "passed",
-    "at": "2026-11-23T20:49:02.625Z",
+    "at": "2026-11-23T22:46:36.774Z",
     "details": "3 test(s) réussi(s), 0 échec(s)"
   },
   "e2e": {
     "status": "passed",
-    "at": "2026-11-23T20:49:59.300Z",
+    "at": "2026-11-23T22:47:33.156Z",
     "details": "1 flux réussi(s), 0 échec(s), 1 vidéo(s)"
   },
   "visual": {
     "status": "passed",
-    "at": "2026-11-23T20:49:59.300Z",
+    "at": "2026-11-23T22:47:33.156Z",
     "details": "1 flux @visual réussi(s) (mode mockup)"
   },
   "acceptance": {
-    "status": "failed",
-    "at": "2026-11-23T20:49:59.310Z",
-    "details": "0/5 critères ✅ ; manquants : CA-1, CA-2, CA-3, CA-4, CA-5 ; 1 ❌"
+    "status": "passed",
+    "at": "2026-11-23T22:47:33.165Z",
+    "details": "5/5 critères ✅"
   }
 }

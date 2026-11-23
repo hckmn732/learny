@@ -1,7 +1,7 @@
 # Preuves — SPEC-3304 : Quiz de validation et résultat
 
-- Date : 2026-11-23T20:49:59.304Z
-- Commit : ed87f626
+- Date : 2026-11-23T22:47:33.160Z
+- Commit : 417843ab
 - Spécification : `specs/p33-mobile-apprentissage/SPEC-3304-quiz-de-validation-et-resultat.md`
 
 ## Rapports

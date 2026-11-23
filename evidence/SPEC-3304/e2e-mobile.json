@@ -11,8 +11,8 @@
   "tags": [
     "SPEC-3304"
   ],
-  "startedAt": "2026-11-23T20:49:04.833Z",
-  "finishedAt": "2026-11-23T20:49:59.285Z",
+  "startedAt": "2026-11-23T22:46:38.927Z",
+  "finishedAt": "2026-11-23T22:47:33.141Z",
   "passed": 1,
   "failed": 0,
   "videos": 1,
@@ -28,7 +28,7 @@
         "visual"
       ],
       "status": "passed",
-      "durationSec": 47.856,
+      "durationSec": 50.165,
       "message": null,
       "videos": [],
       "screenshots": [
