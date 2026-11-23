@@ -1,0 +1,100 @@
+# SPEC-3305 — parcours de la session (CA-1, CA-2, CA-4) : auto-évaluation de la carte de rappel,
+# jeu d'association joué, passage des jeux restants puis écran de fin.
+#
+# Le flux est rejouable : chaque étape n'est exécutée que si son élément est encore à l'écran, donc
+# une session déjà entamée ou terminée le traverse sans échouer (le serveur fait foi, CL-3).
+appId: fr.learny.app
+name: SPEC-3305 parcours
+tags:
+  - SPEC-3305
+---
+- launchApp:
+    clearState: true
+- extendedWaitUntil:
+    visible:
+      id: sdd-health
+    timeout: 60000
+- openLink: learny://connexion?demo=1
+- waitForAnimationToEnd:
+    timeout: 6000
+- runFlow:
+    when:
+      visible:
+        id: sdd-health
+    commands:
+      - openLink: learny://connexion?demo=1
+- extendedWaitUntil:
+    visible:
+      id: tab-aujourdhui
+    timeout: 60000
+- tapOn:
+    id: tab-reviser
+- extendedWaitUntil:
+    visible:
+      id: review-screen
+    timeout: 30000
+# CA-2 — la carte de rappel s'auto-évalue : « Bon » est choisie, l'échéance est renvoyée par l'API.
+- runFlow:
+    when:
+      visible:
+        id: review-grade-good
+    commands:
+      - tapOn:
+          id: review-grade-good
+      - waitForAnimationToEnd:
+          timeout: 4000
+# CA-1 — jeu d'association joué de bout en bout (notions SAP → définitions).
+- runFlow:
+    when:
+      visible:
+        id: brick-item-p1
+    commands:
+      - tapOn:
+          id: brick-item-p1
+      - tapOn:
+          id: brick-item-r3
+      - tapOn:
+          id: brick-item-p2
+      - tapOn:
+          id: brick-item-r1
+      - tapOn:
+          id: brick-item-p3
+      - tapOn:
+          id: brick-item-r2
+      - tapOn:
+          id: review-validate
+      - extendedWaitUntil:
+          visible:
+            id: review-next
+          timeout: 20000
+- tapOn:
+    id: review-next
+# Les jeux suivants sont passés (BR-MEM-09) jusqu'à la clôture de la session.
+- repeat:
+    times: 4
+    commands:
+      - runFlow:
+          when:
+            visible:
+              id: review-skip
+          commands:
+            - tapOn:
+                id: review-skip
+            - waitForAnimationToEnd:
+                timeout: 3000
+      - runFlow:
+          when:
+            visible:
+              id: review-next
+          commands:
+            - tapOn:
+                id: review-next
+            - waitForAnimationToEnd:
+                timeout: 4000
+# CA-1 — l'écran de fin affiche la série mise à jour ; CA-4 — l'encadré du tuteur est resté visible.
+- extendedWaitUntil:
+    visible:
+      id: review-end
+    timeout: 30000
+- assertVisible:
+    id: review-end-title

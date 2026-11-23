@@ -1,0 +1,81 @@
+{
+  "spec": "SPEC-3305",
+  "platform": "android",
+  "transport": "local",
+  "device": {
+    "platform": "android",
+    "model": "sdk_gphone64_x86_64",
+    "apiLevel": "35",
+    "size": "Physical size: 1080x2400"
+  },
+  "tags": [
+    "SPEC-3305"
+  ],
+  "startedAt": "2026-11-23T20:30:19.756Z",
+  "finishedAt": "2026-11-23T20:32:16.498Z",
+  "passed": 3,
+  "failed": 0,
+  "videos": 1,
+  "campaignVideo": "artifacts/campagne/campagne.mp4",
+  "visual": 1,
+  "junitCases": 3,
+  "flows": [
+    {
+      "file": "apps/mobile/e2e/flows/SPEC-3305-a-session.yaml",
+      "name": "SPEC-3305 session",
+      "tags": [
+        "SPEC-3305",
+        "visual"
+      ],
+      "status": "passed",
+      "durationSec": 19.464,
+      "message": null,
+      "videos": [],
+      "screenshots": [
+        "artifacts/spec-3305-session/SPEC-3305-session.png"
+      ],
+      "visual": {
+        "flow": "SPEC-3305 session",
+        "status": "passed",
+        "diffRatio": 0,
+        "capture": "/root/wt/SPEC-3305/test-results/sdd/SPEC-3305/artifacts/spec-3305-session/SPEC-3305-session.png",
+        "baseline": "/root/wt/SPEC-3305/apps/mobile/e2e/visual/baselines/SPEC-3305-a-session.png",
+        "diff": "/root/wt/SPEC-3305/test-results/sdd/SPEC-3305/artifacts/spec-3305-session/SPEC-3305-a-session.diff.png"
+      }
+    },
+    {
+      "file": "apps/mobile/e2e/flows/SPEC-3305-b-parcours.yaml",
+      "name": "SPEC-3305 parcours",
+      "tags": [
+        "SPEC-3305"
+      ],
+      "status": "passed",
+      "durationSec": 66.695,
+      "message": null,
+      "videos": [],
+      "screenshots": [],
+      "visual": null
+    },
+    {
+      "file": "apps/mobile/e2e/flows/SPEC-3305-c-echauffement.yaml",
+      "name": "SPEC-3305 echauffement",
+      "tags": [
+        "SPEC-3305"
+      ],
+      "status": "passed",
+      "durationSec": 24.345,
+      "message": null,
+      "videos": [],
+      "screenshots": [],
+      "visual": null
+    }
+  ],
+  "visualChecks": [
+    {
+      "flow": "SPEC-3305 session",
+      "status": "passed",
+      "diffRatio": 0
+    }
+  ],
+  "unattributed": []
+}

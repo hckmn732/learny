@@ -557,6 +557,119 @@ export const mobile = {
       gapsWeb: 'Voir mes lacunes sur le web',
     },
   },
+  reviser: {
+    title: 'Réviser',
+    sessionTitle: 'Quiz global',
+    sessionEyebrow: (day: string) => `Session du ${day}`,
+    close: 'Fermer la session',
+    progress: {
+      notion: (current: number, total: number) => `Notion ${String(current)} sur ${String(total)}`,
+      minutes: (minutes: number) => `${String(minutes)} min`,
+      label: (current: number, total: number) =>
+        `Progression de la session : notion ${String(current)} sur ${String(total)}`,
+    },
+    rail: {
+      label: 'Jeux de la session',
+      status: { done: 'Fait', current: 'En cours', upcoming: 'À venir' },
+    },
+    grades: {
+      prompt: 'Aviez-vous trouvé ?',
+      again: 'Raté',
+      hard: 'Difficile',
+      good: 'Bon',
+      easy: 'Facile',
+      due: (label: string) => `Revient ${label}`,
+      offlineDue: 'Échéance calculée au retour du réseau',
+    },
+    skip: 'Passer',
+    next: 'Suivant',
+    finish: 'Terminer la session',
+    validate: 'Valider ma réponse',
+    streak: {
+      title: (days: number) => (days === 1 ? 'Série de 1 jour' : `Série de ${String(days)} jours`),
+      subtitle: '14 derniers jours',
+      label: (days: number) =>
+        days === 1
+          ? 'Série de 1 jour, 14 derniers jours'
+          : `Série de ${String(days)} jours, 14 derniers jours`,
+    },
+    tutor: {
+      title: 'Réglé par le tuteur',
+      deferred: (count: number, day: string, cap: number) =>
+        `Le tuteur a reporté ${String(count)} ${count === 1 ? 'notion' : 'notions'} à ${day} pour garder la session sous ${String(cap)} minutes.`,
+      undo: 'Annuler',
+      undoPending: 'Annulation…',
+      undoError: 'Le report n’a pas pu être annulé. Réessayez.',
+      offline: 'L’annulation du report est indisponible hors ligne.',
+    },
+    end: {
+      badge: 'Session terminée',
+      title: (notions: number, minutes: number) =>
+        `${String(notions)} ${notions === 1 ? 'notion revue' : 'notions revues'} en ${String(minutes)} ${minutes === 1 ? 'minute' : 'minutes'}`,
+      ok: 'notions réussies, espacées davantage',
+      soon: 'à revoir plus tôt',
+      streak: (days: number) => `${String(days)} j`,
+      streakLabel: 'de série',
+      next: (day: string, time: string) => `Prochaine session : ${day}, ${time}.`,
+      noNext: 'Aucune session planifiée pour l’instant.',
+      home: 'Retour à Aujourd’hui',
+      summaryLabel: 'Résumé de la session',
+    },
+    warmup: {
+      title: 'Échauffement',
+      question: (current: number, total: number) =>
+        `Question ${String(current)} sur ${String(total)}`,
+      show: 'Voir la réponse',
+      knew: 'Je savais',
+      again: 'À revoir',
+      score: (knew: number, total: number) => `${String(knew)} sur ${String(total)}`,
+      scoreLabel: (knew: number, total: number) =>
+        `Score de l’échauffement : ${String(knew)} sur ${String(total)}`,
+      done: 'Échauffement terminé',
+      doneBody: 'Les notions « À revoir » rejoignent le quiz global de ce soir.',
+      back: 'Retour à Réviser',
+      added: 'Cette notion rejoint le quiz de ce soir.',
+      loadError: 'Impossible de charger l’échauffement.',
+      answerError: 'Votre réponse n’a pas pu être enregistrée. Réessayez.',
+      empty: 'Aucun échauffement à faire.',
+      offline: 'L’échauffement a besoin du réseau.',
+      formation: 'Formation de l’échauffement',
+    },
+    offline: {
+      banner: 'Mode hors ligne · vos réponses seront envoyées au retour du réseau.',
+      expired: 'Session expirée, reconnectez-vous pour la session du jour',
+      cached: 'Session préchargée lue hors ligne.',
+      rejected: (count: number) =>
+        count === 1
+          ? '1 réponse n’a pas pu être prise en compte'
+          : `${String(count)} réponses n’ont pas pu être prises en compte`,
+      synced: 'Réponses hors ligne envoyées.',
+      syncError: 'La synchronisation des réponses attendra le prochain retour du réseau.',
+      stored: 'Paquet hors ligne enregistré.',
+    },
+    states: {
+      emptyTitle: 'Rien à revoir aujourd’hui',
+      emptyBody:
+        'Toutes vos notions sont à jour. Le prochain quiz global sera prêt dès que des notions seront dues.',
+      emptyAction: 'Retour à Aujourd’hui',
+      pausedTitle: 'Formation en pause',
+      pausedBody: 'Le quiz global reprendra quand vous relancerez cette formation.',
+      errorTitle: 'Impossible de charger le quiz global.',
+      retry: 'Réessayer',
+      loading: 'Chargement de la session…',
+      answerError: 'Votre réponse n’a pas pu être enregistrée. Réessayez.',
+      completeError: 'La session n’a pas pu être terminée. Réessayez.',
+      withdrawn: 'Ce jeu n’est plus disponible.',
+    },
+    formation: {
+      label: 'Formation de la session',
+    },
+    warmupCard: {
+      title: (count: number) =>
+        `Échauffement · ${String(count)} ${count === 1 ? 'question' : 'questions'}`,
+      open: 'Ouvrir l’échauffement avant la session',
+    },
+  },
   programme: {
     title: 'Programme',
     formationFallback: 'Formation',
