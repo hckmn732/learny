@@ -291,10 +291,9 @@ export function TodayScreen() {
             <WarmupCard
               warmup={warmup}
               onOpen={() => {
-                openDestination({
-                  kind: 'web',
-                  path: warmup.href.startsWith('#') ? '/reviser' : warmup.href,
-                });
+                // SPEC-3305 EF-5 — l'échauffement est joué dans l'application ; le web ne reçoit
+                // plus la main pour cette carte (ADR-3002 § 3).
+                router.push(`/reviser/echauffement/${warmup.activityId}`);
               }}
             />
           </View>

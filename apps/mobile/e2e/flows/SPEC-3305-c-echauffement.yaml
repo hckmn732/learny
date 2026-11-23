@@ -1,0 +1,62 @@
+# SPEC-3305 — échauffement (CA-2, EF-5) : la carte de Réviser ouvre l'échauffement, « Voir la
+# réponse » révèle la réponse, les boutons « À revoir » / « Je savais » sont présents.
+#
+# Le flux ne répond pas : l'échauffement reste à faire pour les autres spécifications qui lisent la
+# carte d'Aujourd'hui, et la campagne devient rejouable (les gestes sont couverts par les tests
+# Jest `warmup.test.tsx`).
+appId: fr.learny.app
+name: SPEC-3305 echauffement
+tags:
+  - SPEC-3305
+---
+- launchApp:
+    clearState: true
+- extendedWaitUntil:
+    visible:
+      id: sdd-health
+    timeout: 60000
+- openLink: learny://connexion?demo=1
+- waitForAnimationToEnd:
+    timeout: 6000
+- runFlow:
+    when:
+      visible:
+        id: sdd-health
+    commands:
+      - openLink: learny://connexion?demo=1
+- extendedWaitUntil:
+    visible:
+      id: tab-aujourdhui
+    timeout: 60000
+- tapOn:
+    id: tab-reviser
+- extendedWaitUntil:
+    visible:
+      id: review-screen
+    timeout: 30000
+- tapOn:
+    id: review-warmup-card
+- extendedWaitUntil:
+    visible:
+      id: warmup-screen
+    timeout: 20000
+- assertVisible:
+    id: warmup-title
+- assertVisible:
+    id: warmup-question
+- tapOn:
+    id: warmup-reveal
+- extendedWaitUntil:
+    visible:
+      id: warmup-answer
+    timeout: 10000
+- assertVisible:
+    id: warmup-again
+- assertVisible:
+    id: warmup-knew
+- tapOn:
+    id: warmup-close
+- extendedWaitUntil:
+    visible:
+      id: review-screen
+    timeout: 20000

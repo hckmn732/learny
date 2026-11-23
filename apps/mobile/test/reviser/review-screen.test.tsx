@@ -115,6 +115,15 @@ describe('[SPEC-3305] session du jour (EF-1, EF-2, CA-1)', () => {
     expect(view.getByTestId('review-end-title')).toHaveTextContent('5 notions revues en 9 minutes');
   });
 
+  it('remonte « Annuler » du report du tuteur (CA-4)', async () => {
+    const onUndo = jest.fn();
+    const view = await renderSession({ onUndo });
+
+    await fireEvent.press(await view.findByTestId('review-tutor-undo'));
+
+    expect(onUndo).toHaveBeenCalledWith('00000000-0000-4000-8000-000000000013');
+  });
+
   it('signale une erreur d’envoi sans perdre la session (EF-6)', async () => {
     const view = await renderSession({ answerError: true, pending: true });
 

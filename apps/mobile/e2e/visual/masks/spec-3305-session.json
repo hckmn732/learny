@@ -1,0 +1,9 @@
+[
+  {
+    "x": 0,
+    "y": 0.93,
+    "width": 1,
+    "height": 0.07,
+    "why": "Barre d'onglets native (ADR-3003 § 3) : rendue par Material 3 et différente de l'export ; la zone masquée est celle des 126 px de la barre de la référence 824 × 1830, jamais une zone de contenu. La barre d'état est déjà couverte par le masque natif par défaut (haut 5 %)."
+  }
+]

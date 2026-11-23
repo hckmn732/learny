@@ -173,7 +173,7 @@ export function ReviewSession(props: ReviewSessionProps) {
                 ? {
                     actions: (
                       <RecallGrades
-                        intervals={item.intervals}
+                        intervals={props.online ? item.intervals : null}
                         timeZone={props.timeZone}
                         now={props.now}
                         disabled={props.pending}
@@ -183,50 +183,6 @@ export function ReviewSession(props: ReviewSessionProps) {
                   }
                 : {})}
             />
-          </View>
-        )}
-
-        {ended ? null : (
-          <View style={styles.footer}>
-            {selfAssessed || !answerable ? null : (
-              <Button
-                label={t.validate}
-                onPress={props.onSubmit}
-                loading={props.pending}
-                block
-                testID="review-validate"
-              />
-            )}
-            <View style={styles.footerRow}>
-              <View style={styles.footerItem}>
-                <Button
-                  label={t.skip}
-                  variant="outline"
-                  onPress={props.onSkip}
-                  disabled={!answerable || props.pending}
-                  testID="review-skip"
-                />
-              </View>
-              <View style={styles.footerItem}>
-                <Button
-                  label={last ? t.finish : t.next}
-                  variant="primary"
-                  onPress={last ? props.onNext : props.onNext}
-                  disabled={item === null || props.pending}
-                  testID="review-next"
-                />
-              </View>
-            </View>
-            {props.answerError ? (
-              <Text variant="caption" tone="danger" testID="review-answer-error">
-                {t.states.answerError}
-              </Text>
-            ) : null}
-            {props.completeError ? (
-              <Text variant="caption" tone="danger" testID="review-complete-error">
-                {t.states.completeError}
-              </Text>
-            ) : null}
           </View>
         )}
 
@@ -241,6 +197,50 @@ export function ReviewSession(props: ReviewSessionProps) {
           />
         )}
       </ScrollView>
+      {ended ? null : (
+        <View style={styles.footer}>
+          {selfAssessed || !answerable ? null : (
+            <Button
+              label={t.validate}
+              onPress={props.onSubmit}
+              loading={props.pending}
+              block
+              testID="review-validate"
+            />
+          )}
+          <View style={styles.footerRow}>
+            <View style={styles.footerItem}>
+              <Button
+                label={t.skip}
+                variant="outline"
+                onPress={props.onSkip}
+                disabled={!answerable || props.pending}
+                testID="review-skip"
+              />
+            </View>
+            <View style={styles.footerItem}>
+              <Button
+                label={last ? t.finish : t.next}
+                variant="primary"
+                onPress={last ? props.onNext : props.onNext}
+                disabled={item === null || props.pending}
+                testID="review-next"
+              />
+            </View>
+          </View>
+          {props.answerError ? (
+            <Text variant="caption" tone="danger" testID="review-answer-error">
+              {t.states.answerError}
+            </Text>
+          ) : null}
+          {props.completeError ? (
+            <Text variant="caption" tone="danger" testID="review-complete-error">
+              {t.states.completeError}
+            </Text>
+          ) : null}
+        </View>
+      )}
+
       {props.toast === null ? null : <View style={styles.toastSlot} testID="review-toast" />}
     </View>
   );
@@ -262,7 +262,15 @@ const styles = StyleSheet.create({
   warmup: { paddingHorizontal: theme.spacing.xl },
   pressed: { opacity: 0.9 },
   game: { paddingHorizontal: theme.spacing.xl },
-  footer: { paddingHorizontal: theme.spacing.xl, gap: theme.spacing.sm },
+  footer: {
+    paddingHorizontal: theme.spacing.xl,
+    paddingTop: theme.spacing.sm,
+    paddingBottom: theme.spacing.md,
+    gap: theme.spacing.sm,
+    backgroundColor: theme.colors.canvas,
+    borderTopWidth: 1,
+    borderTopColor: theme.colors.border,
+  },
   footerRow: { flexDirection: 'row', gap: theme.spacing.sm },
   footerItem: { flex: 1 },
   toastSlot: { height: 0 },
