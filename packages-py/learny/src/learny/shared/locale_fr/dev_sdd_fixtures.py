@@ -205,6 +205,10 @@ SPEC106_RESPONSE = "La clé 401 est un compte fournisseur."
 
 # SPEC-107 - the second learner of the isolation probe.
 SPEC107_FOREIGN_FORMATION = "Formation privée"
+SPEC107_FOREIGN_FIRST_NAME = "Béatrice"
+SPEC107_EVIDENCE_CHOSEN = "Compte de résultat"
+SPEC107_EVIDENCE_EXPECTED = "Compte fournisseur"
+SPEC115_MISSING_FIRST_NAME = "—"
 
 # SPEC-108 - the five slots, the consent action, the daily activity and the milestones.
 SPEC108_ORIGIN_TITLE = "Lecture du cours"

@@ -153,7 +153,7 @@ def main(argv: list[str] | None = None) -> int:
             "drain : "
             f"running={state.running} pending={state.pending} failed={state.failed} "
             f"undispatched={state.undispatched} orphaned={state.orphaned} "
-            f"-> {'ok' if ok else 'refusé'}"
+            f"-> {'ok' if ok else 'refused'}"
         )
     return 0 if ok else 1
 

@@ -32,14 +32,14 @@ OWNERSHIP = ROOT / "api" / "ownership.yaml"
 def run_cutover(*args: str, check: bool = True) -> subprocess.CompletedProcess[str]:
     """Runs the planner on the committed artefacts; stdout is the override, stderr the summary."""
     result = subprocess.run(  # noqa: S603 - les arguments sont des options litterales
-        ["node", str(CUTOVER), *args],  # noqa: S607 - node est resolu par PATH
+        ["node", str(CUTOVER), *args],  # noqa: S607 - node is resolved through PATH
         cwd=ROOT,
         capture_output=True,
         text=True,
         check=False,
     )
     if check and result.returncode != 0:
-        raise AssertionError(f"cutover a échoué ({result.returncode}) : {result.stderr}")
+        raise AssertionError(f"cutover failed ({result.returncode}): {result.stderr}")
     return result
 
 

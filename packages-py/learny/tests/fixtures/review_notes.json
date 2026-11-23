@@ -1,0 +1,10 @@
+{
+  "source": "packages/services/src/review/global-quiz.ts (note of a smoothed day, SPEC-701 EF-4)",
+  "smoothedNote": {
+    "dueCount": 18,
+    "deferredCount": 4,
+    "weekday": "jeudi",
+    "capMinutes": 15,
+    "expected": "18 notions étaient dues aujourd’hui : 4 sont reportées à jeudi pour que vos révisions restent sous 15 min."
+  }
+}

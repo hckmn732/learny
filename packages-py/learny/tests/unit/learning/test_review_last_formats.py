@@ -5,6 +5,8 @@ receives one `{notionId, format}` per notion, and a game is split from its contr
 (`gameCorrection`), never from the brick grade. The note of a smoothed day keeps the TypeScript verb.
 """
 
+import json
+from pathlib import Path
 from typing import Any
 
 import pytest
@@ -14,6 +16,8 @@ from learny.learning.infrastructure import queries
 from learny.shared.locale_fr import review as texts
 
 pytestmark = pytest.mark.spec("SPEC-701")
+
+FIXTURES = Path(__file__).resolve().parents[2] / "fixtures"
 
 
 async def test_the_latest_answer_gives_the_format_of_each_notion(monkeypatch: pytest.MonkeyPatch) -> None:
@@ -71,14 +75,12 @@ def test_a_matching_is_split_from_its_contract_pairs() -> None:
 
 
 def test_the_smoothing_note_keeps_the_typescript_verb() -> None:
+    oracle = json.loads((FIXTURES / "review_notes.json").read_text(encoding="utf-8"))["smoothedNote"]
     note = texts.NOTE_DEFERRED.format(
-        due=review.was_due_word(18),
-        deferred=4,
+        due=review.was_due_word(oracle["dueCount"]),
+        deferred=oracle["deferredCount"],
         verb=texts.SMOOTHING_VERB_MANY,
-        day="jeudi",
-        cap=15,
+        day=oracle["weekday"],
+        cap=oracle["capMinutes"],
     )
-    assert note == (
-        "18 notions \u00e9taient dues aujourd\u2019hui : 4 sont report\u00e9es \u00e0 jeudi"
-        " pour que vos r\u00e9visions restent sous 15 min."
-    )
+    assert note == oracle["expected"]
