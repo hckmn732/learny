@@ -19,6 +19,7 @@ from fastapi.testclient import TestClient
 from learny.identity.public import Actor
 from learny.shared.config import Settings
 from learny.shared.errors import ErrorEntry, load_catalog
+from learny.shared.locale_fr import validation
 from learny_api import pipeline
 from learny_api.guards.idempotency import IdempotencyStart
 from learny_api.guards.rate_limit import RateLimitDecision
@@ -233,7 +234,7 @@ def test_the_body_is_strict_and_refuses_an_unknown_key(monkeypatch: pytest.Monke
     body = response.json()
     assert body["code"] == "VALIDATION_FAILED"
     assert body["errors"][0]["path"] == "body"
-    assert "Unrecognized key" in body["errors"][0]["message"]
+    assert body["errors"][0]["message"] == validation.unrecognized_keys(["unknown"])
 
 
 def test_the_optional_exam_slot_refuses_an_explicit_null(monkeypatch: pytest.MonkeyPatch) -> None:
@@ -246,7 +247,7 @@ def test_the_optional_exam_slot_refuses_an_explicit_null(monkeypatch: pytest.Mon
     assert response.status_code == 400
     body = response.json()
     assert body["errors"] == [
-        {"path": "body.examSlotId", "message": "Invalid input: expected string, received null"}
+        {"path": "body.examSlotId", "message": validation.invalid_type("string", "null")}
     ]
 
 
