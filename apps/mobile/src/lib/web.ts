@@ -48,3 +48,25 @@ export async function openOnWeb(
   await open(url);
   return url;
 }
+
+/** True when the link is an absolute URL the in-app browser may open (ET-3, CL-5). */
+export function isExternalUrl(url: string): boolean {
+  return /^(https?:|mailto:)/i.test(url.trim());
+}
+
+/**
+ * Opens an absolute URL of the charge — a Markdown link, or the URL of
+ * `GET /resources/:rid/url` fetched by the owning screen (BR-COU-02, ET-3) — in the in-app
+ * browser. Any other scheme is refused: the renderer never opens a `javascript:` link (CL-5).
+ */
+export async function openExternal(
+  url: string,
+  options: { readonly open?: BrowserOpener } = {},
+): Promise<string> {
+  if (!isExternalUrl(url)) throw new Error(`URL externe attendue : ${url.trim().slice(0, 32)}`);
+  const trimmed = url.trim();
+  const open = options.open ?? installedOpener;
+  if (open === null) throw new Error('Aucun navigateur installé : importer src/lib/web-browser.');
+  await open(trimmed);
+  return trimmed;
+}

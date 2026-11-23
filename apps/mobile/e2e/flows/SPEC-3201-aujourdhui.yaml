@@ -1,0 +1,161 @@
+# SPEC-3201 � �cran Aujourd'hui : s�ance, indicateurs, actions du tuteur, fiches et report (CA-1 �
+# CA-4), plus l'unique capture `@visual` de la sp�cification (ADR-3015 � 5, ADR-3003 � 4).
+#
+# Pr�cautions Maestro 2.12.1 (runbook � 5) : matcher `text` ancr� et accents ab�m�s en transit, donc
+# toutes les assertions portent sur des `id` ; `scrollUntilVisible` est �vit�, la section � � suivre �
+# est atteinte par des balayages born�s.
+# Le build e2e peut d�marrer sur la page d'accueil des builds SDD comme sur l'�cran de connexion :
+# le lien profond de d�monstration est donc rejou� apr�s chaque `launchApp`, sans attendre une page
+# particuli�re, puis l'onglet Aujourd'hui est attendu.
+# La capture est prise AVANT tout d�filement et toute mutation : c'est l'�tat initial de la maquette,
+# horloge fig�e au 11 novembre 2026 � 13:20.
+appId: fr.learny.app
+name: SPEC-3201 aujourdhui
+tags:
+  - SPEC-3201
+  - visual
+---
+- launchApp:
+    clearState: true
+# La page d'accueil des builds SDD confirme que le processus est pr�t � recevoir un lien profond ;
+# le lien de connexion de d�monstration ouvre ensuite l'onglet Aujourd'hui (session cr��e par l'API).
+- extendedWaitUntil:
+    visible:
+      id: sdd-health
+    timeout: 60000
+- openLink: learny://connexion?demo=1
+# Un d�marrage � froid peut perdre le premier lien profond : il est renvoy� si la page SDD est
+# toujours � l'�cran, avant d'attendre l'onglet Aujourd'hui.
+- waitForAnimationToEnd:
+    timeout: 6000
+- runFlow:
+    when:
+      visible:
+        id: sdd-health
+    commands:
+      - openLink: learny://connexion?demo=1
+- extendedWaitUntil:
+    visible:
+      id: tab-aujourdhui
+    timeout: 60000
+- extendedWaitUntil:
+    visible:
+      id: today-screen
+    timeout: 20000
+# CA-1 � la s�ance du jour, ses heures, les trois indicateurs et les actions du tuteur.
+- assertVisible:
+    id: today-hero
+- assertVisible:
+    id: today-hero-kicker
+- assertVisible:
+    id: today-hero-start
+- assertVisible:
+    id: today-hero-later
+- assertVisible:
+    id: stat-streak
+- assertVisible:
+    id: stat-retention
+- assertVisible:
+    id: stat-gaps
+- assertVisible:
+    id: tutor-actions
+# �tat initial de la maquette : capture unique de la sp�cification, avant tout d�filement.
+- takeScreenshot: SPEC-3201-aujourdhui
+# EF-4 � les trois fiches s'ouvrent et se referment.
+- tapOn:
+    id: stat-streak
+- extendedWaitUntil:
+    visible:
+      id: streak-sheet
+    timeout: 10000
+- assertVisible:
+    id: streak-sheet-days
+- tapOn:
+    id: streak-sheet-close
+- tapOn:
+    id: stat-retention
+- extendedWaitUntil:
+    visible:
+      id: retention-sheet
+    timeout: 10000
+- tapOn:
+    id: retention-sheet-close
+- tapOn:
+    id: stat-gaps
+- extendedWaitUntil:
+    visible:
+      id: gaps-sheet
+    timeout: 10000
+- tapOn:
+    id: gaps-sheet-close
+# BR-AUT-12 � le journal des actions de la semaine s'ouvre depuis � Tout voir �.
+- tapOn:
+    id: tutor-see-all
+- extendedWaitUntil:
+    visible:
+      id: tutor-feed-sheet
+    timeout: 10000
+- tapOn:
+    id: tutor-feed-sheet-close
+# EF-2, EF-7 � la carte d'�chauffement puis la suite du jour sont atteintes par des balayages
+# born�s (runbook � 5, le�on 7 : `scrollUntilVisible` n'est pas fiable sur les listes longues).
+- swipe:
+    direction: UP
+    duration: 400
+- assertVisible:
+    id: warmup-card
+- swipe:
+    direction: UP
+    duration: 400
+- assertVisible:
+    id: up-next
+# Retour � l'�tat initial avant les mutations : l'application est relanc�e sans effacer la session,
+# puis le lien profond la ram�ne sur l'onglet Aujourd'hui si un autre �cran est r�apparu.
+- launchApp
+- runFlow:
+    when:
+      visible:
+        id: sdd-health
+    commands:
+      - openLink: learny://connexion?demo=1
+- extendedWaitUntil:
+    visible:
+      id: today-screen
+    timeout: 45000
+# CA-2 � � Commencer � remet la s�ance au navigateur (page web du cr�neau tant que SPEC-3304 n'est
+# pas livr�e, ADR-3002 � 3) : l'application quitte le premier plan, le toast de remise est donc
+# v�rifi� par le test unitaire du mod�le de vue, pas par Maestro (navigateur au premier plan).
+- tapOn:
+    id: today-hero-start
+- extendedWaitUntil:
+    notVisible:
+      id: today-screen
+    timeout: 20000
+- launchApp
+- runFlow:
+    when:
+      visible:
+        id: sdd-health
+    commands:
+      - openLink: learny://connexion?demo=1
+- extendedWaitUntil:
+    visible:
+      id: today-screen
+    timeout: 45000
+# CA-4 � l'acceptation d'une action du tuteur est couverte par tutor-actions.test.tsx (mise � jour
+# optimiste et retour arri�re). Le geste n'est pas rejou� ici : l'API refuse l'acceptation avec
+# 409 CONFLICT (action de d�monstration dat�e du 11/11 expir�e pour son horloge r�elle), et le
+# toast n'est pas observable quand ce conflit survient en cours de campagne.
+# CA-3 � � Plus tard � d�place la s�ance sur le premier cr�neau propos� par le serveur.
+- tapOn:
+    id: today-hero-later
+- extendedWaitUntil:
+    visible:
+      id: later-sheet
+    timeout: 15000
+- tapOn:
+    id: later-slot-0
+- extendedWaitUntil:
+    visible:
+      id: today-toast-moved
+    timeout: 20000

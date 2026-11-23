@@ -150,3 +150,44 @@ export function formatShortDay(
   const month = SHORT_MONTHS[parts.month - 1] ?? '';
   return `${weekday} ${String(parts.day)} ${month}`;
 }
+
+/** Parts of a `YYYY-MM-DD` civil day; a malformed value reads as 1970-01-01. */
+export function civilDayParts(day: string): { year: number; month: number; day: number } {
+  const [year = 1970, month = 1, date = 1] = day.split('-').map((part) => Number(part));
+  return { year, month, day: date };
+}
+
+/** `Mercredi 11 novembre` for a civil day, without converting it through an instant (SPEC-3203). */
+export function civilDayLong(day: string): string {
+  const parts = civilDayParts(day);
+  const weekday = LONG_WEEKDAYS[weekdayOf(day)] ?? '';
+  const month = MONTHS[parts.month - 1] ?? '';
+  const label = `${weekday} ${String(parts.day)} ${month}`;
+  return label.charAt(0).toUpperCase() + label.slice(1);
+}
+
+/** `mer. 11 nov.` — the compact day of the agenda rows and of the proposals (SPEC-3203). */
+export function civilDayShort(day: string): string {
+  const parts = civilDayParts(day);
+  const weekday = SHORT_WEEKDAYS[weekdayOf(day)] ?? '';
+  const month = SHORT_MONTHS[parts.month - 1] ?? '';
+  return `${weekday} ${String(parts.day)} ${month}`;
+}
+
+/** `9 novembre` — a day and its month, without the weekday (SPEC-3203). */
+export function civilDayMonth(day: string): string {
+  const parts = civilDayParts(day);
+  const month = MONTHS[parts.month - 1] ?? '';
+  return `${String(parts.day)} ${month}`;
+}
+
+/** `novembre 2026` — the caption of the month view (SPEC-3203). */
+export function civilMonthYear(day: string): string {
+  const parts = civilDayParts(day);
+  return `${MONTHS[parts.month - 1] ?? ''} ${String(parts.year)}`;
+}
+
+/** Day number of a civil day (`11`), for the strip and the month grid (SPEC-3203). */
+export function civilDayNumber(day: string): number {
+  return civilDayParts(day).day;
+}
