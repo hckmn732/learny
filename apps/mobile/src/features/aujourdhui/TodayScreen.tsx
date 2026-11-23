@@ -224,73 +224,87 @@ export function TodayScreen() {
         ) : null}
 
         {hero === null ? null : (
-          <SessionHeroCard
-            hero={hero}
-            online={online}
-            onStart={() => {
-              openDestination(hero.destination);
-            }}
-            onLater={() => {
-              setSheet('later');
-            }}
-          />
+          <View style={styles.heroBlock}>
+            <SessionHeroCard
+              hero={hero}
+              online={online}
+              onStart={() => {
+                openDestination(hero.destination);
+              }}
+              onLater={() => {
+                setSheet('later');
+              }}
+            />
+          </View>
         )}
 
         {home === null || noFormation ? null : (
-          <StatsRow
-            streakDays={streakDays(streak.data)}
-            retention={retentionOf(home)}
-            gaps={gaps.data?.summary.openGaps ?? null}
-            onPressStreak={() => {
-              setSheet('streak');
-            }}
-            onPressRetention={() => {
-              setSheet('retention');
-            }}
-            onPressGaps={() => {
-              setSheet('gaps');
-            }}
-          />
+          <View style={styles.statsBlock}>
+            <StatsRow
+              streakDays={streakDays(streak.data)}
+              retention={retentionOf(home)}
+              gaps={gaps.data?.summary.openGaps ?? null}
+              onPressStreak={() => {
+                setSheet('streak');
+              }}
+              onPressRetention={() => {
+                setSheet('retention');
+              }}
+              onPressGaps={() => {
+                setSheet('gaps');
+              }}
+            />
+          </View>
         )}
 
+        {home === null || noFormation ? null : (
+          <View style={styles.sectionBlock}>
+            <TutorActionsSection
+              pending={automations.pending}
+              recent={automations.recent}
+              online={online}
+              busy={tutor.pending}
+              timeZone={timeZone}
+              onSeeAll={() => {
+                setSheet('feed');
+              }}
+              onAccept={(item) => {
+                runAction(item, 'accept');
+              }}
+              onDecline={(item) => {
+                runAction(item, 'decline');
+              }}
+              onUndo={(item) => {
+                runAction(item, 'undo');
+              }}
+              onChooseSlot={(item, startsAt) => {
+                runAction(item, 'accept', startsAt);
+              }}
+            />
+          </View>
+        )}
+
+        {/* EF-7 — l'échauffement ouvre la suite de la journée : sa carte précède « À suivre »
+            et ne coupe pas l'ordre de la maquette (séance, indicateurs, tuteur, À suivre). */}
         {warmup === null ? null : (
-          <WarmupCard
-            warmup={warmup}
-            onOpen={() => {
-              openDestination({
-                kind: 'web',
-                path: warmup.href.startsWith('#') ? '/reviser' : warmup.href,
-              });
-            }}
-          />
+          <View style={styles.warmupBlock}>
+            <WarmupCard
+              warmup={warmup}
+              onOpen={() => {
+                openDestination({
+                  kind: 'web',
+                  path: warmup.href.startsWith('#') ? '/reviser' : warmup.href,
+                });
+              }}
+            />
+          </View>
         )}
 
-        {home === null || noFormation ? null : (
-          <TutorActionsSection
-            pending={automations.pending}
-            recent={automations.recent}
-            online={online}
-            busy={tutor.pending}
-            timeZone={timeZone}
-            onSeeAll={() => {
-              setSheet('feed');
-            }}
-            onAccept={(item) => {
-              runAction(item, 'accept');
-            }}
-            onDecline={(item) => {
-              runAction(item, 'decline');
-            }}
-            onUndo={(item) => {
-              runAction(item, 'undo');
-            }}
-            onChooseSlot={(item, startsAt) => {
-              runAction(item, 'accept', startsAt);
-            }}
-          />
+        {lines.length === 0 ? null : (
+          <View style={styles.sectionBlock}>
+            <UpNextSection lines={lines} onOpen={onLine} />
+          </View>
         )}
-
-        {lines.length === 0 ? null : <UpNextSection lines={lines} onOpen={onLine} />}
       </ScrollView>
 
       <StreakSheet
@@ -367,11 +381,16 @@ export function TodayScreen() {
 
 const styles = StyleSheet.create({
   base: { flex: 1, backgroundColor: theme.colors.canvas },
+  // `app.css` `.hero` (margin 2px 16px 0), `.stat-row` (12px 16px 0), `.section` (22px 16px 0):
+  // the rhythm of the mockup is carried by explicit margins instead of one uniform gap.
   content: {
-    gap: theme.spacing.lg,
     paddingBottom: theme.spacing.xxxl,
-    paddingHorizontal: theme.spacing.xl,
+    paddingHorizontal: 16,
   },
+  heroBlock: { marginTop: 2 },
+  statsBlock: { marginTop: 12 },
+  sectionBlock: { marginTop: 22 },
+  warmupBlock: { marginTop: 14 },
   skeleton: { gap: theme.spacing.sm },
   toast: {
     position: 'absolute',

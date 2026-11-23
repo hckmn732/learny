@@ -3,7 +3,9 @@
 #
 # Précautions Maestro 2.12.1 (runbook § 5) : matcher `text` ancré et accents abîmés en transit, donc
 # toutes les assertions portent sur des `id` ; `scrollUntilVisible` est évité, la section « À suivre »
-# est atteinte par un balayage borné puis l'application est relancée avant les mutations.
+# est atteinte par deux balayages bornés.
+# Chaque `launchApp` peut retomber sur la page d'accueil des builds SDD : le lien profond de
+# connexion de démonstration est donc rejoué après chaque relance, avant d'attendre `today-screen`.
 # La capture est prise AVANT tout défilement et toute mutation : c'est l'état initial de la maquette,
 # horloge figée au 11 novembre 2026 à 13:20.
 appId: fr.learny.app
@@ -83,14 +85,22 @@ tags:
     timeout: 10000
 - tapOn:
     id: tutor-feed-sheet-close
-# EF-2, EF-6 — la suite du jour est atteinte par un balayage borné (runbook § 5, leçon 7).
+# EF-2, EF-7 — la carte d'échauffement puis la suite du jour sont atteintes par des balayages
+# bornés (runbook § 5, leçon 7 : `scrollUntilVisible` n'est pas fiable sur les listes longues).
+- swipe:
+    direction: UP
+    duration: 400
+- assertVisible:
+    id: warmup-card
 - swipe:
     direction: UP
     duration: 400
 - assertVisible:
     id: up-next
-# Retour à l'état initial avant les mutations : l'application est relancée sans effacer la session.
+# Retour à l'état initial avant les mutations : l'application est relancée sans effacer la session,
+# puis le lien profond la ramène sur l'onglet Aujourd'hui si la page d'accueil SDD est réapparue.
 - launchApp
+- openLink: learny://connexion?demo=1
 - extendedWaitUntil:
     visible:
       id: today-screen
@@ -103,6 +113,7 @@ tags:
       id: today-toast-start
     timeout: 15000
 - launchApp
+- openLink: learny://connexion?demo=1
 - extendedWaitUntil:
     visible:
       id: today-screen

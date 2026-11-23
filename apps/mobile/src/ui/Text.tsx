@@ -35,7 +35,7 @@ const TONE_COLORS: Record<TextTone, string> = {
   onDarkSecondary: theme.colors.onDarkSecondary,
 };
 
-const HEADING_VARIANTS: readonly TextVariant[] = ['largeTitle', 'sectionTitle'];
+const HEADING_VARIANTS: readonly TextVariant[] = ['largeTitle', 'sectionTitle', 'heroTitle'];
 
 export interface TextProps {
   readonly children: string | number | readonly (string | number)[];
