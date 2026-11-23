@@ -163,3 +163,24 @@ async def test_follow_up_events_delays_and_retries(events: list[str], database: 
     assert second.runs == [follow_up, follow_up]
     assert await delivery(database, event_id, "inline.first") == {"status": "done", "attempts": 1}
     assert await delivery(database, follow_up, "inline.second") == {"status": "done", "attempts": 2}
+
+
+async def test_worker_only_consumers_are_left_for_the_worker(events: list[str], database: Database) -> None:
+    inline = Recorder()
+    worker_only = Recorder()
+    inline_consumer = Consumer(name="inline.first", on=FIRST_EVENT, run=inline.run)
+    export_consumer = Consumer(name="privacy.run_data_export", on=FIRST_EVENT, run=worker_only.run)
+    dispatcher, runner = loops(database, inline_consumer, export_consumer)
+    event_id = new_id(events)
+    async with database.service_tx() as tx:
+        await tx.emit(FIRST_EVENT, {"n": 1}, event_id=event_id)
+
+    await run_committed(dispatcher, runner, [event_id], exclude=("privacy.run_data_export",))
+
+    assert inline.runs == [event_id]
+    assert worker_only.runs == []
+    assert await delivery(database, event_id, "inline.first") == {"status": "done", "attempts": 1}
+    assert await delivery(database, event_id, "privacy.run_data_export") == {
+        "status": "pending",
+        "attempts": 0,
+    }

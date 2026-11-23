@@ -20,15 +20,26 @@ from learny_worker.runner import Runner
 from starlette.types import ASGIApp, Message, Receive, Scope, Send
 
 INLINE_MODE = "inline"
+# The personal-data export is asynchronous by contract (202 then polling, SPEC-211): the
+# TypeScript backend never ran it inline because its emitter was already Python, and running it
+# before the answer would flip the queued row to done. It always stays on the worker.
+WORKER_ONLY_CONSUMERS = ("privacy.run_data_export",)
 
 
 class InlineJobsMiddleware:
     """Runs the consumers of the events a request committed before `http.response.start`."""
 
-    def __init__(self, app: ASGIApp, dispatcher: Dispatcher, runner: Runner) -> None:
+    def __init__(
+        self,
+        app: ASGIApp,
+        dispatcher: Dispatcher,
+        runner: Runner,
+        exclude: tuple[str, ...] = (),
+    ) -> None:
         self._app = app
         self._dispatcher = dispatcher
         self._runner = runner
+        self._exclude = exclude
 
     async def __call__(self, scope: Scope, receive: Receive, send: Send) -> None:
         if scope["type"] != "http":
@@ -40,7 +51,12 @@ class InlineJobsMiddleware:
                 if message["type"] == "http.response.start" and committed:
                     event_ids = list(committed)
                     committed.clear()
-                    await run_committed(self._dispatcher, self._runner, event_ids)
+                    await run_committed(
+                        self._dispatcher,
+                        self._runner,
+                        event_ids,
+                        exclude=self._exclude,
+                    )
                 await send(message)
 
             await self._app(scope, receive, send_after_jobs)
@@ -56,4 +72,5 @@ def inline_jobs_options(settings: Settings, deps: Any, ownership: Ownership) -> 
     return {
         "dispatcher": Dispatcher(deps, ownership, consumers=consumers),
         "runner": Runner(deps, consumers),
+        "exclude": WORKER_ONLY_CONSUMERS,
     }

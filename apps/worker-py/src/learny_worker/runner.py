@@ -72,7 +72,7 @@ class Runner:
         )
         return len(claimed)
 
-    async def run_events(self, event_ids: list[str]) -> None:
+    async def run_events(self, event_ids: list[str], *, exclude: tuple[str, ...] = ()) -> None:
         """Runs the deliveries of the given events until none is pending or running (inline mode).
 
         A failed attempt is rescheduled and claimed again at once (the delays are ignored), so the
@@ -83,12 +83,12 @@ class Runner:
         deadline = loop.time() + INLINE_SETTLE_TIMEOUT_S
         while True:
             async with self._deps.db.service_tx() as tx:
-                claimed = await outbox.claim_events(tx, event_ids, self._max_lease())
+                claimed = await outbox.claim_events(tx, event_ids, self._max_lease(), exclude=exclude)
             if claimed:
                 await asyncio.gather(*(self._run(item.delivery, item.event) for item in claimed))
                 continue
             async with self._deps.db.service_tx() as tx:
-                unsettled = await outbox.unsettled(tx, event_ids)
+                unsettled = await outbox.unsettled(tx, event_ids, exclude=exclude)
             if unsettled == 0 or loop.time() >= deadline:
                 return
             await asyncio.sleep(INLINE_SETTLE_POLL_S)
