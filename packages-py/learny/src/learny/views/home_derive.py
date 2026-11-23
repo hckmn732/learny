@@ -201,7 +201,7 @@ def civil_day_label(day: str, time_zone: str) -> str:
 
 
 def short_civil_day(day: str, time_zone: str) -> str:
-    """EF-6: "11 déc. 2026" for an end or completion date."""
+    """EF-6: "11 dec. 2026" for an end or completion date."""
     return _short_day(day, time_zone)
 
 
@@ -257,7 +257,7 @@ def completed_summary(
     volume_hours: int | None,
     time_zone: str,
 ) -> dict[str, Any]:
-    """EF-7: "4 semaines · 60 h" of a completed formation."""
+    """EF-7: the "4 weeks - 60 h" summary of a completed formation."""
     if completed_at is None:
         return {"completedOn": None, "dateLabel": None, "weeks": None, "hours": volume_hours}
     completed_ms = _instant_ms(completed_at)
