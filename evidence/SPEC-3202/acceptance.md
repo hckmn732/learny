@@ -72,6 +72,11 @@
    avec le module 3 déplié, la reprise et le module 4 passent sous la barre d'onglets ; un
    défilement borné les amène à l'écran, un défilement inverse ramène en haut avant la capture.
    `scrollUntilVisible` reste écarté (Maestro 2.12.1, longues listes).
+3. **Animation de la carte de rappel** (`fix(SPEC-3301): …`, `4481abca`, repris par `0d20c4ee`) :
+   `RecallCardView` démarrait une animation native sans arrêter la précédente ni nettoyer au
+   démontage ; Jest la signalait par « Unable to locate attached view in the native tree ». Ce
+   composant appartient à SPEC-3301 : le correctif est repris de `mobile` tel quel, sans modifier
+   le test. La cause résiduelle de l'instabilité locale était `NODE_ENV` (voir § 4).
 
 ## 4. Tests
 
@@ -86,12 +91,16 @@ Fichiers rouges préexistants hors périmètre mobile, non réparés (décision 
 `evidence/SPEC-3001/acceptance.md`) : `packages/config/src/commit-rules.test.ts`,
 `apps/web/test/unit/bundle-split.test.ts`, `tools/migration/test/unit/report.test.ts`.
 
-**Instabilité connue hors périmètre** : `apps/mobile/test/bricks/recall-card.test.tsx` (SPEC-3301)
-échoue de façon intermittente sous `pnpm test:mobile` parallèle (« Unable to locate attached view
-in the native tree » : animation native démarrée avant le montage de la vue). Le fichier passe
-seul (3/3) et la suite complète passe en série (`jest --runInBand`, 35/35 suites, 214/214 tests).
-Ce n'est pas une régression de SPEC-3202 — le test appartient à SPEC-3301 —, il est consigné ici
-pour la traçabilité de la preuve.
+**Instabilité locale, cause identifiée** : `apps/mobile/test/bricks/recall-card.test.tsx` (SPEC-3301)
+échouait sous `pnpm test:mobile` (« Unable to locate attached view in the native tree »). Deux
+causes distinctes, toutes deux hors du code de SPEC-3202 : (1) `RecallCardView` démarrait une
+animation native sans arrêter la précédente ni nettoyer au démontage, corrigé sur `mobile`
+(`4481abca`, repris ici par `0d20c4ee`) ; (2) surtout, environnement : `.env.local` exporte
+`NODE_ENV=development`, que le sourcing transmettait à Jest (`set -a; . ./.env.local`) ; sous
+`NODE_ENV=development`, React/RN exécutent leur build de développement et la suite mobile est
+instable. `validate` doit donc tourner avec `NODE_ENV=test` après le sourcing (voir § 7) : dans ce
+mode la suite passe 214/214 (`pnpm test:mobile`, exit 0, reproduit à l'identique sans et avec
+`.env.local`).
 
 ## 5. Validation visuelle
 
@@ -132,8 +141,9 @@ Maestro, capture, diff et vidéo. Critères :
 ```sh
 cd /root/wt/SPEC-3202
 set -a; . ./.env.local; set +a
+export NODE_ENV=test            # .env.local exporte NODE_ENV=development : Jest exige test
+export PATH=/root/.local/bin:$PATH
 flock /tmp/learny-gradle.lock env ORG_GRADLE_PROJECT_reactNativeArchitectures=x86_64 pnpm -s build:mobile:e2e
 flock /tmp/learny-emulator.lock pnpm -s test:e2e:mobile --tags SPEC-3202
-export PATH=/root/.local/bin:$PATH
 node tools/sdd/validate.mjs SPEC-3202 --skip-build
 ```
