@@ -1,94 +1,99 @@
-// Tests du préflight de campagne mobile (ADR-3015 § 5).
+// Tests du préflight de campagne mobile sur émulateur local (ADR-3018).
 //
-// Les fonctions pures sont testées ici : lecture/écriture de `e2e.env`, cohérence des clés,
-// classement d'une réponse de port public (périmé / service arrêté), seuil disque et verdict de
-// l'agent. Le CLI fait les appels réseau et n'est pas testé unitairement.
+// Les fonctions pures sont testées ici : lecture de `e2e.env`, cohérence des clés (clés du mode
+// distant refusées), réécriture de la sonde `10.0.2.2` → `127.0.0.1`, classement d'une réponse
+// HTTP, seuil disque et verdicts d'`adb devices` / `sys.boot_completed`. Le CLI, qui exécute les
+// commandes et les requêtes, n'est pas testé unitairement.
 import { describe, expect, it } from 'vitest';
 
 import {
-  agentVerdict,
+  adbVerdict,
+  bootVerdict,
   checkEnv,
-  classifyPortResponse,
+  classifyHttp,
   diskVerdict,
+  hostProbeUrl,
   parseEnvFile,
-  PUBLISHED_PORTS,
   REQUIRED_KEYS,
-  republishCapability,
-  rewriteEnvFile,
 } from '../../mobile-preflight.mjs';
 
-const COMPLETE = {
-  EXPO_PUBLIC_API_URL: 'https://api.example.test',
-  EXPO_PUBLIC_SUPABASE_URL: 'https://supabase.example.test',
+const LOCAL = {
+  EXPO_PUBLIC_API_URL: 'http://10.0.2.2:3001',
+  EXPO_PUBLIC_SUPABASE_URL: 'http://10.0.2.2:54321',
   EXPO_PUBLIC_SUPABASE_ANON_KEY: 'anon',
-  MOBILE_APK_URL: 'https://apk.example.test/app-release.apk',
-  MOBILE_DEVICE_AGENT_URL: 'https://agent.example.test',
-  MOBILE_DEVICE_AGENT_TOKEN: 'jeton',
+  EXPO_PUBLIC_WEB_URL: 'http://10.0.2.2:3100',
 };
 
-describe('[SPEC-3001] préflight de campagne mobile', () => {
-  it('lit et réécrit e2e.env sans perdre les commentaires ni l’ordre', () => {
+describe('[SPEC-3001] préflight de campagne mobile locale', () => {
+  it('lit e2e.env sans confondre commentaires et valeurs', () => {
     const content = [
       '# commentaire',
-      'EXPO_PUBLIC_API_URL=https://vieux.test',
+      'EXPO_PUBLIC_API_URL=http://10.0.2.2:3001',
       '',
-      'MOBILE_AVD=agent37',
+      'MOBILE_AVD=learny',
     ].join('\n');
 
     const env = parseEnvFile(content);
-    expect(env.EXPO_PUBLIC_API_URL).toBe('https://vieux.test');
-    expect(env.MOBILE_AVD).toBe('agent37');
-
-    const rewritten = rewriteEnvFile(content, { EXPO_PUBLIC_API_URL: 'https://neuf.test' });
-    expect(rewritten.split('\n')[0]).toBe('# commentaire');
-    expect(rewritten).toContain('EXPO_PUBLIC_API_URL=https://neuf.test');
-    expect(rewritten).toContain('MOBILE_AVD=agent37');
+    expect(env.EXPO_PUBLIC_API_URL).toBe('http://10.0.2.2:3001');
+    expect(env.MOBILE_AVD).toBe('learny');
+    expect(env['# commentaire']).toBeUndefined();
   });
 
-  it('ajoute une clé absente à la fin du fichier', () => {
-    const rewritten = rewriteEnvFile('MOBILE_AVD=agent37', {
-      MOBILE_APK_URL: 'https://apk/app.apk',
-    });
-
-    expect(rewritten.split('\n')).toEqual([
-      'MOBILE_AVD=agent37',
-      'MOBILE_APK_URL=https://apk/app.apk',
+  it('exige les quatre clés du build et de la campagne', () => {
+    expect([...REQUIRED_KEYS].sort()).toEqual([
+      'EXPO_PUBLIC_API_URL',
+      'EXPO_PUBLIC_SUPABASE_ANON_KEY',
+      'EXPO_PUBLIC_SUPABASE_URL',
+      'EXPO_PUBLIC_WEB_URL',
     ]);
-  });
-
-  it('exige les clés sans lesquelles la campagne ne démarre pas', () => {
     expect(checkEnv({}).missing.sort()).toEqual([...REQUIRED_KEYS].sort());
-    expect(checkEnv(COMPLETE).ok).toBe(true);
+    expect(checkEnv(LOCAL).ok).toBe(true);
   });
 
-  it('refuse 10.0.2.2 en mode agent et un agent sans jeton', () => {
-    const env = { ...COMPLETE, EXPO_PUBLIC_API_URL: 'http://10.0.2.2:3001' };
-    const withoutToken = { ...COMPLETE, MOBILE_DEVICE_AGENT_TOKEN: '' };
-
-    expect(checkEnv(env).ok).toBe(false);
-    expect(checkEnv(env).problems.join(' ')).toContain('10.0.2.2');
-    expect(checkEnv(withoutToken).problems.join(' ')).toContain('MOBILE_DEVICE_AGENT_TOKEN');
+  it('refuse les clés du mode distant retiré (ADR-3018)', () => {
+    for (const key of [
+      'MOBILE_DEVICE_AGENT_URL',
+      'MOBILE_DEVICE_AGENT_TOKEN',
+      'MOBILE_APK_URL',
+      'AGENT37_INSTANCE_ID',
+    ]) {
+      const verdict = checkEnv({ ...LOCAL, [key]: 'https://vieux.test' });
+      expect(verdict.ok).toBe(false);
+      expect(verdict.problems.join(' ')).toContain(key);
+    }
   });
 
-  it('accepte 10.0.2.2 quand il n’y a pas d’agent (transport local)', () => {
-    const env = {
-      ...COMPLETE,
-      EXPO_PUBLIC_API_URL: 'http://10.0.2.2:3001',
-      MOBILE_DEVICE_AGENT_URL: '',
-      MOBILE_DEVICE_AGENT_TOKEN: '',
-    };
-
-    expect(checkEnv(env).ok).toBe(true);
+  it('refuse la boucle locale de l’hôte : l’émulateur la joint par 10.0.2.2', () => {
+    for (const value of ['http://127.0.0.1:3001', 'http://localhost:3001']) {
+      const verdict = checkEnv({ ...LOCAL, EXPO_PUBLIC_API_URL: value });
+      expect(verdict.ok).toBe(false);
+      expect(verdict.problems.join(' ')).toContain('10.0.2.2');
+    }
   });
 
-  it('distingue un port périmé d’un service arrêté', () => {
-    expect(classifyPortResponse(200)).toBe('ok');
-    expect(classifyPortResponse(405)).toBe('ok');
-    expect(classifyPortResponse(404)).toBe('stale');
-    expect(classifyPortResponse(0)).toBe('stale');
-    expect(classifyPortResponse(502)).toBe('down');
-    expect(classifyPortResponse(503)).toBe('down');
-    expect(classifyPortResponse(401)).toBe('unauthorized');
+  it('refuse une URL qui n’est pas http(s)', () => {
+    const verdict = checkEnv({ ...LOCAL, EXPO_PUBLIC_API_URL: '10.0.2.2:3001' });
+    expect(verdict.ok).toBe(false);
+    expect(verdict.problems.join(' ')).toContain('http(s)');
+  });
+
+  it('réécrit 10.0.2.2 en 127.0.0.1 pour sonder depuis l’hôte', () => {
+    expect(hostProbeUrl('http://10.0.2.2:3001')).toBe('http://127.0.0.1:3001/');
+    expect(hostProbeUrl('https://10.0.2.2')).toBe('https://127.0.0.1/');
+    expect(hostProbeUrl('http://127.0.0.1:54321')).toBe('http://127.0.0.1:54321/');
+    expect(hostProbeUrl('https://api.example.test')).toBe('https://api.example.test/');
+    expect(hostProbeUrl('pas une url')).toBeNull();
+  });
+
+  it('classe une réponse HTTP : prête, à authentifier ou en panne', () => {
+    expect(classifyHttp(200)).toBe('ok');
+    expect(classifyHttp(204)).toBe('ok');
+    expect(classifyHttp(301)).toBe('ok');
+    expect(classifyHttp(401)).toBe('unauthorized');
+    expect(classifyHttp(403)).toBe('unauthorized');
+    expect(classifyHttp(404)).toBe('down');
+    expect(classifyHttp(502)).toBe('down');
+    expect(classifyHttp(0)).toBe('down');
   });
 
   it('applique le seuil disque de 4 Go', () => {
@@ -97,27 +102,22 @@ describe('[SPEC-3001] préflight de campagne mobile', () => {
     expect(diskVerdict(0, 4).freeGb).toBe(0);
   });
 
-  it('juge l’agent libre, occupé ou injoignable', () => {
-    expect(agentVerdict(null).ok).toBe(false);
-    expect(agentVerdict({ ok: true, busy: false, version: 2 })).toMatchObject({ ok: true });
-    const busy = agentVerdict({ ok: true, busy: true, jobId: 'j-1', version: 2 });
-    expect(busy.ok).toBe(false);
-    expect(busy.detail).toContain('j-1');
+  it('juge un appareil connecté, hors ligne ou absent', () => {
+    const connected = adbVerdict('List of devices attached\nemulator-5554\tdevice\n');
+    expect(connected).toMatchObject({ ok: true, serial: 'emulator-5554', offline: null });
+
+    const offline = adbVerdict('List of devices attached\nemulator-5554\toffline\n');
+    expect(offline.ok).toBe(false);
+    expect(offline.offline).toBe('emulator-5554');
+
+    const none = adbVerdict('List of devices attached\n\n');
+    expect(none).toMatchObject({ ok: false, serial: null, detail: 'aucun appareil adb' });
   });
 
-  it('déclare la republication possible seulement avec une clé', () => {
-    expect(republishCapability({ ...COMPLETE }, () => '').ok).toBe(false);
-    expect(republishCapability({ ...COMPLETE }, () => 'cle').ok).toBe(true);
-    expect(republishCapability({ ...COMPLETE, AGENT37_API_KEY: 'cle' }, () => '').key).toBe('cle');
-  });
-
-  it('décrit les ports publiés d’une campagne (APK, API, Supabase, agent)', () => {
-    expect(PUBLISHED_PORTS.map((entry) => entry.label)).toEqual([
-      'apk',
-      'api',
-      'supabase',
-      'device-agent',
-    ]);
-    expect(PUBLISHED_PORTS.filter((entry) => entry.instance === 'phone')).toHaveLength(1);
+  it('ne considère le démarrage terminé que pour sys.boot_completed=1', () => {
+    expect(bootVerdict('1\n').booted).toBe(true);
+    expect(bootVerdict('0').booted).toBe(false);
+    expect(bootVerdict('').booted).toBe(false);
+    expect(bootVerdict(undefined).booted).toBe(false);
   });
 });
