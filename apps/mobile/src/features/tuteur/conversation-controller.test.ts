@@ -196,17 +196,38 @@ describe('[SPEC-3303] contrôleur : ouverture de la discussion', () => {
     });
   });
 
-  it('ouvre une discussion avec une clé d’idempotence puis libère la clé (ET-1)', async () => {
+  it('n’ouvre aucune discussion à la simple ouverture (ET-1, CL-3)', async () => {
+    const fake = fakeClient({ existing: [] });
+    const { controller } = controllerOf(fake);
+    await controller.load();
+    expect(fake.calls.create).toHaveLength(0);
+    expect(controller.getSnapshot().status).toBe('ready');
+    expect(controller.getSnapshot().messages).toEqual([]);
+    expect(controller.getSnapshot().conversationId).toBeNull();
+
+    // « Nouvelle discussion » ne crée rien non plus : la première question ouvre la discussion,
+    // avec une clé d'idempotence libérée après succès (ET-1).
+    controller.newDiscussion();
+    expect(fake.calls.create).toHaveLength(0);
+  });
+
+  it('ouvre la discussion à la première question, avec une clé libérée après succès (ET-1)', async () => {
     const fake = fakeClient({ existing: [] });
     fake.setCreated(conversation({ id: 'c-new', messages: [message()] }));
     const { controller, resolved } = controllerOf(fake);
     await controller.load();
+    await controller.send('Pourquoi deux dates ?');
     expect(fake.calls.create).toEqual([
       { courseId: 'course-1', chapterId: 'chapter-1', key: 'key-1' },
     ]);
     expect(resolved).toEqual(['tutor:create:course-1:chapter-1']);
-    expect(controller.getSnapshot().messages).toHaveLength(1);
-    expect(controller.getSnapshot().suggestions).toEqual([]);
+    expect(controller.getSnapshot().conversationId).toBe('c-new');
+    // L'accueil du serveur precede la question, puis la reponse diffusee ferme le fil.
+    expect(controller.getSnapshot().messages.map((entry) => entry.role)).toEqual([
+      'tutor',
+      'learner',
+      'tutor',
+    ]);
   });
 });
 
@@ -322,7 +343,16 @@ describe('[SPEC-3303] contrôleur : flux et interruption', () => {
 
 describe('[SPEC-3303] contrôleur : contexte, Teste-moi et carte', () => {
   it('n’envoie que les éléments inclus dans le contexte (CA-5)', async () => {
-    const fake = fakeClient({ existing: [] });
+    const fake = fakeClient({
+      existing: [
+        {
+          id: 'c-1',
+          title: null,
+          createdAt: '2026-11-11T12:20:00.000Z',
+          lastMessageAt: '2026-11-11T12:21:00.000Z',
+        },
+      ],
+    });
     const { controller } = controllerOf(fake);
     await controller.load();
     controller.toggleContext('chapter');
@@ -347,14 +377,24 @@ describe('[SPEC-3303] contrôleur : contexte, Teste-moi et carte', () => {
   });
 
   it('propose la carte de la conversation et l’accepte avec une clé (CA-3, BR-AUT-06)', async () => {
-    const fake = fakeClient({ existing: [], cards: [CARD] });
+    const fake = fakeClient({
+      existing: [
+        {
+          id: 'c-1',
+          title: null,
+          createdAt: '2026-11-11T12:20:00.000Z',
+          lastMessageAt: '2026-11-11T12:21:00.000Z',
+        },
+      ],
+      cards: [CARD],
+    });
     const { controller, resolved } = controllerOf(fake);
     await controller.load();
     expect(controller.getSnapshot().card?.id).toBe('a-card');
     const created = await controller.createCard();
     expect(created).toBe(true);
     expect(fake.calls.accepts).toEqual([{ id: 'a-card', key: 'key-1' }]);
-    expect(resolved).toEqual(['tutor:create:course-1:chapter-1', 'tutor:card']);
+    expect(resolved).toEqual(['tutor:card']);
     expect(controller.getSnapshot().cardCreated).toBe(true);
     expect(controller.getSnapshot().card).toBeNull();
   });

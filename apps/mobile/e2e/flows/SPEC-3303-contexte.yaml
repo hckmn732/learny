@@ -1,0 +1,78 @@
+# SPEC-3303 — contexte transmis et nouvelle discussion (BR-TUT-02, CA-5, BR-TUT-06).
+#
+# Le chapitre est retiré du contexte depuis la fiche, puis une question est posée : la requête part
+# avec `chapter: false` (preuve du corps dans `evidence/SPEC-3303/tutor-context-request.json`). Le
+# menu « Nouvelle discussion » vide le fil sans écrire côté serveur et repropose les questions de
+# l'API (EF-4, ET-1).
+#
+# Écart consigné : le flux d'interruption par coupure réseau (mode avion pendant le flux) n'est pas
+# automatisable ici — l'émulateur est partagé par plusieurs spécifications et Maestro 2.12.1 ne
+# pilote pas la radio. CA-4 est couvert par `stream-state.test.ts`, `conversation-controller.test.ts`
+# (« Arrêter » puis « Réessayer ») et le test Jest de la feuille.
+appId: fr.learny.app
+name: SPEC-3303 contexte
+tags:
+  - SPEC-3303
+---
+- launchApp:
+    clearState: true
+- extendedWaitUntil:
+    visible:
+      id: sdd-health
+    timeout: 30000
+- openLink: learny://connexion?demo=1
+- waitForAnimationToEnd:
+    timeout: 5000
+- runFlow:
+    when:
+      visible:
+        id: onboarding-error
+    commands:
+      - tapOn:
+          id: onboarding-error-retry
+- extendedWaitUntil:
+    visible:
+      id: tab-aujourdhui
+    timeout: 60000
+- openLink: learny://tuteur
+- extendedWaitUntil:
+    visible:
+      id: tutor-sheet
+    timeout: 30000
+# BR-TUT-02 — la ligne « Contexte · N éléments » et la fiche d'interrupteurs.
+- tapOn:
+    id: tutor-context
+- extendedWaitUntil:
+    visible:
+      id: tutor-context-sheet
+    timeout: 10000
+# Le chapitre n'est proposé que si le serveur l'a construit : la garde évite un échec de campagne
+# quand le chapitre courant n'apporte rien au contexte.
+- runFlow:
+    when:
+      visible:
+        id: tutor-context-chapter
+    commands:
+      - tapOn:
+          id: tutor-context-switch-chapter
+- tapOn:
+    id: tutor-context-sheet-close
+# CA-5 — la question suivante part sans le chapitre : la réponse arrive tout de même.
+- tapOn:
+    id: tutor-input
+- inputText: Comment se lit un en-tete de piece ?
+- tapOn:
+    id: tutor-send
+- extendedWaitUntil:
+    visible:
+      id: tutor-message-4
+    timeout: 30000
+# BR-TUT-06 — « Nouvelle discussion » vide le fil ; les questions de l'API restent proposées (EF-4).
+- tapOn:
+    id: tutor-new-discussion
+- extendedWaitUntil:
+    visible:
+      id: tutor-empty
+    timeout: 20000
+- assertVisible:
+    id: tutor-suggestion-0

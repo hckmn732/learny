@@ -262,7 +262,9 @@ export class ConversationController {
       const list = await this.deps.client.listConversations(this.deps.courseId);
       const latest = list.items[0];
       if (latest === undefined) {
-        await this.ensureConversation();
+        // ET-1 — the discussion is opened by the first question, not by opening the sheet: the
+        // sheet of a course without any discussion shows the empty state and creates nothing.
+        this.set({ status: 'ready' });
       } else {
         this.applyConversation(await this.deps.client.getConversation(latest.id));
       }
@@ -528,7 +530,11 @@ export class ConversationController {
     }
   }
 
-  /** « Nouvelle discussion »: the thread is cleared and the discussion reopened on demand. */
+  /**
+   * « Nouvelle discussion »: the thread is cleared and nothing is written on the server — the first
+   * question opens the new discussion (ET-1), so a tap on the menu never creates an empty row. The
+   * suggestions stay the API labels already received (EF-4).
+   */
   newDiscussion(): void {
     this.stop();
     this.lastQuestion = null;
@@ -542,13 +548,10 @@ export class ConversationController {
       error: null,
       card: null,
       cardCreated: false,
-      suggestions: [],
+      suggestions: this.snapshot.suggestions,
       selfTestPending: false,
       status: 'ready',
       include: includeOf(contextItems),
-    });
-    void this.ensureConversation().catch((error: unknown) => {
-      this.set({ error: { code: errorCodeOf(error), retryAfterSec: null } });
     });
   }
 
