@@ -16,7 +16,8 @@ mesuré est marqué ❌ avec la raison.
 
 | Preuve | Commande | Résultat |
 |---|---|---|
-| Suite unitaire TypeScript (web, contrat, outils) | `flock /tmp/learny-sdd-db.lock pnpm exec vitest run --project unit` | **1846 passed, 1 failed** — l'unique échec est `apps/web/test/unit/bundle-split.test.ts`, qui exige `pnpm build` (échec connu, hors périmètre) ; aucune assertion modifiée par ce lot (détail : `checks-unit.md`) |
+| Suite unitaire TypeScript (web, contrat, outils) | `pnpm -s build` puis `flock /tmp/learny-sdd-db.lock pnpm exec vitest run --project unit` | **236 fichiers, 1847 tests, exit 0** — aucune assertion modifiée par ce lot (détail : `checks-unit.md`) |
+| Build sans backend TypeScript | `pnpm -s build` | **code 0**, seul `@learny/web` est construit |
 | Couverture du contrat côté Python | `uv run pytest apps/api-py/tests/unit/test_route_coverage.py apps/api-py/tests/unit/test_contract_artifacts.py -q` | **16 passed in 5.96s** (2026-11-23) |
 | Aucune assertion d'oracle modifiée | `git diff --stat chore/backend-100-python..HEAD -- apps/web/e2e` | **aucun fichier** : les suites e2e, visuelles et axe sont intactes |
 | Parité disponible contre l'API Python | `pnpm parity:check --target http://127.0.0.1:3001` | non rejoué ici (exige une pile locale démarrée et un enregistrement à jour) |
@@ -29,6 +30,10 @@ mesuré est marqué ❌ avec la raison.
   d'outillage de ce lot.
 - ❌ **axe** (aucune violation `serious`/`critical`) n'a pas été mesuré pour la même raison.
 - ❌ les **oracles visuels** n'ont pas été comparés aux lignes de base.
+- ❌ `pnpm run lint` échoue sur un point, hors zone de ce lot : `apps/web/playwright.config.ts:47`
+  garde la constante `API_PORT` (port du serveur Hono retiré par L4). Le reste de la chaîne `lint`
+  passe ; la correction (supprimer la constante et le commentaire « relays to Hono on PORT+12 »)
+  revient au lot propriétaire de `apps/web/**`.
 
 Aucune ligne de base n'a été régénérée (ET-2) : il n'y a donc pas de régression visuelle constatée,
 mais pas de mesure non plus.

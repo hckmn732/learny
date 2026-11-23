@@ -22,16 +22,38 @@ Tous les paquets TypeScript et `tsc -p tsconfig.tools.json --noEmit` passent ; `
 | `node tools/sdd/audit.mjs` | 0 | `Erreurs : 0`, `Avertissements : 0` |
 | `pnpm run py:lint` (`ruff format --check`, `ruff check`, `lint-imports`) | 0 | `Contracts: 2 kept, 0 broken.` |
 
+## `pnpm -s build` → code 0
+
+Le build Turbo (Next.js, 1 min 0 s) passe sans le backend TypeScript : il ne reste que
+`@learny/web`. Les artefacts du build sont nécessaires au test `bundle-split` ci-dessous.
+
 ## `flock /tmp/learny-sdd-db.lock pnpm exec vitest run --project unit`
 
+Première exécution, sans `pnpm build` : `1 failed | 1846 passed (1847)`, l'unique échec étant
+`apps/web/test/unit/bundle-split.test.ts` (il lit le build de production absent).
+
+Après `pnpm -s build` :
+
 ```
-Test Files  1 failed | 235 passed (236)
-     Tests  1 failed | 1846 passed (1847)
-  Duration  55.25s
+Test Files  236 passed (236)
+     Tests  1847 passed (1847)
+  Duration  51.59s
+(exit 0)
 ```
 
-Unique échec : `apps/web/test/unit/bundle-split.test.ts` — « ne charge pas la carte, le tuteur ni
-les jeux dans /accueil ». Il mesure le découpage du bundle de production et exige `pnpm build`
-(absent de ce lot) ; échec connu et hors périmètre de SPEC-2302 (aucun fichier de ce test n'est
-modifié par la branche). Tous les autres tests unitaires passent, y compris
-`packages/api-sdk/src/schema.test.ts` qui lit `api/inventory.json`.
+Aucun test n'a été modifié, ignoré ni déplacé : le test `bundle-split` dépendait seulement des
+artefacts de build, que le hook `pre-push` (`pnpm -s typecheck && pnpm -s test:unit`) exige donc
+après un `pnpm build`.
+
+## `pnpm run lint` — une erreur, hors zone de ce lot
+
+`pnpm run lint` échoue sur un unique point, dans `apps/web/playwright.config.ts:47` :
+
+```
+error  'API_PORT' is assigned a value but never used  @typescript-eslint/no-unused-vars
+```
+
+`API_PORT = PORT + 12` était le port du serveur Hono retiré par le lot L4 ; la constante et son
+commentaire sont restés. `apps/web/**` est une zone interdite à ce lot : la correction (supprimer
+la constante et mettre à jour le commentaire « relays to Hono on PORT+12 ») revient au lot
+propriétaire de `apps/web`. Toutes les autres entrées de `lint` passent (voir tableau ci-dessus).
