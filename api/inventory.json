@@ -70,6 +70,7 @@
       "events": [],
       "tests": [
         "apps/api/test/integration/auth-routes.test.ts",
+        "apps/web/lib/api/relay.test.ts",
         "apps/web/test/integration/auth-screens.test.ts",
         "packages/services/src/auth/requests.test.ts",
         "packages/services/src/auth/templates.test.ts"
@@ -6615,7 +6616,6 @@
         "apps/web/e2e/specs/p0/spec-001.spec.ts",
         "apps/web/e2e/specs/p0/spec-003.spec.ts",
         "apps/web/e2e/specs/p0/spec-006.spec.ts",
-        "apps/web/e2e/specs/p0/spec-009.spec.ts",
         "apps/web/e2e/specs/p0/spec-010.spec.ts",
         "apps/web/e2e/specs/p0/spec-012.spec.ts",
         "apps/web/e2e/specs/p10/spec-1002.spec.ts",
@@ -6623,6 +6623,7 @@
         "apps/web/e2e/specs/p3/spec-301-tokens.spec.ts",
         "apps/web/e2e/specs/p4/spec-401.spec.ts",
         "apps/web/lib/api/relay.test.ts",
+        "apps/web/lib/health.test.ts",
         "apps/web/test/integration/api-client-origin.test.ts",
         "apps/web/test/integration/observability.test.ts",
         "apps/web/test/integration/server-timing.test.ts",
