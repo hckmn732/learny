@@ -31,8 +31,7 @@ def test_the_contract_artefacts_are_loaded_from_the_repository() -> None:
     assert (ROOT / "api" / "errors.json").exists()
     assert (ROOT / "api" / "inventory.json").exists()
     app, _client = build_app()
-    assert app.state.ownership.operations["health.get"] == "py"
-    assert app.state.ownership.special["GET /api/v1/health"] == "py"
+    assert "health.get" in app.state.pipeline.handlers
 
 
 def test_an_unknown_path_answers_the_default_404() -> None:

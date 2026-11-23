@@ -1,8 +1,8 @@
-"""[SPEC-2201] Python-owned routes are served by the pipeline and nothing else.
+"""[SPEC-2201] The pipeline serves the operations of the contract and refuses a missing handler.
 
-The facade registers every operation whose `api/ownership.yaml` entry is `py`, so one test can
-serve a single operation without touching the real ownership table; an undeclared path answers
-the default 404 of Starlette (SPEC-2302).
+The facade registers every operation of `ROUTES`, so a test can serve one of them with fake guards
+and a stub handler without opening a database connection; a path the contract does not declare
+answers the default 404 of Starlette (SPEC-2302).
 """
 
 from collections.abc import AsyncIterator, Callable
@@ -18,14 +18,12 @@ from fastapi.testclient import TestClient
 from learny.identity.public import Actor
 from learny.shared.config import Settings
 from learny.shared.errors import ErrorEntry, load_catalog
-from learny_api import pipeline
+from learny_api import handlers, pipeline  # noqa: F401 - handlers registers roles
 from learny_api.guards.idempotency import IdempotencyStart
 from learny_api.guards.rate_limit import RateLimitDecision
 from learny_api.main import create_app
-from learny_api.ownership import Ownership
 from learny_api.pipeline import Call, PipelineContext
 from starlette.requests import Request
-from starlette.responses import Response
 
 pytestmark = pytest.mark.spec("SPEC-2201")
 
@@ -89,7 +87,7 @@ class Deps:
     settings: Any = None
 
 
-def context_with(handlers: dict[str, Callable[[Call], Any]]) -> PipelineContext:
+def context_with(registry: dict[str, Callable[[Call], Any]]) -> PipelineContext:
     return PipelineContext(
         deps=Deps(),  # type: ignore[arg-type]
         catalog=CATALOG,
@@ -97,25 +95,16 @@ def context_with(handlers: dict[str, Callable[[Call], Any]]) -> PipelineContext:
         origin_guard=OriginGuard(),  # type: ignore[arg-type]
         rate_limiter=RateLimiter(),
         idempotency=Idempotency(),  # type: ignore[arg-type]
-        handlers=handlers,
+        handlers=registry,
     )
 
 
-def ownership_with(*route_ids: str) -> Ownership:
-    return Ownership(
-        operations={route_id: "py" for route_id in route_ids},
-        special={},
-        consumers={},
-        crons={},
-    )
-
-
-def build_app(
-    route_ids: tuple[str, ...],
-    handlers: dict[str, Callable[[Call], Any]],
-) -> tuple[FastAPI, TestClient]:
+def build_app(overrides: dict[str, Callable[[Call], Any]] | None = None) -> tuple[FastAPI, TestClient]:
+    """The real registry, with the handler of the route under test replaced by a stub."""
+    registry = dict(pipeline.HANDLERS)
+    registry.update(overrides or {})
     settings = Settings(app_env="test", rate_limit_mode="off")
-    app = create_app(settings, ownership=ownership_with(*route_ids), context=context_with(handlers))
+    app = create_app(settings, context=context_with(registry))
 
     @asynccontextmanager
     async def lifespan(_: FastAPI) -> AsyncIterator[None]:
@@ -125,54 +114,28 @@ def build_app(
     return app, TestClient(app)
 
 
-async def callback(call: Call) -> Response:
-    return Response(status_code=302, headers={"location": "/"})
-
-
 async def access(call: Call) -> None:
     return None
 
 
-def test_a_python_route_answers_through_the_pipeline(monkeypatch: pytest.MonkeyPatch) -> None:
-    monkeypatch.setattr(pipeline, "HANDLERS", {"auth.callback": callback})
-    _app, client = build_app(("auth.callback",), {"auth.callback": callback})
-    response = client.get(
-        "/api/v1/auth/callback",
-        params={"token_hash": "abc", "type": "magiclink"},
-        headers={"x-request-id": "abcdefgh"},
-        follow_redirects=False,
-    )
-
-    assert response.status_code == 302
-    assert response.headers["location"] == "/"
-    assert response.headers["x-request-id"] == "abcdefgh"
-    assert response.headers["x-served-by"] == "learny-api"
-    assert response.headers["server-timing"].startswith("app;dur=")
-    assert "cache-control" not in response.headers
-
-
-def test_a_protected_python_route_still_requires_a_session(monkeypatch: pytest.MonkeyPatch) -> None:
+def test_a_protected_route_still_requires_a_session(monkeypatch: pytest.MonkeyPatch) -> None:
     async def refuse(*args: Any, **kwargs: Any) -> None:
         return None
 
-    monkeypatch.setattr(pipeline, "HANDLERS", {"formations.access": access})
     monkeypatch.setattr(pipeline, "authenticate", refuse)
-    _app, client = build_app(("formations.access",), {"formations.access": access})
+    _app, client = build_app({"formations.access": access})
     response = client.get(f"/api/v1/formations/{FID}/access")
 
     assert response.status_code == 401
     assert response.json()["code"] == "UNAUTHENTICATED"
 
 
-def test_a_protected_python_route_answers_204_when_authorised(
-    monkeypatch: pytest.MonkeyPatch,
-) -> None:
+def test_a_protected_route_answers_204_when_authorised(monkeypatch: pytest.MonkeyPatch) -> None:
     async def allow(*args: Any, **kwargs: Any) -> Actor:
         return Actor(user_id=USER_ID, email="a@b.c", email_confirmed=True, transport="bearer")
 
-    monkeypatch.setattr(pipeline, "HANDLERS", {"formations.access": access})
     monkeypatch.setattr(pipeline, "authenticate", allow)
-    _app, client = build_app(("formations.access",), {"formations.access": access})
+    _app, client = build_app({"formations.access": access})
     response = client.get(f"/api/v1/formations/{FID}/access")
 
     assert response.status_code == 204
@@ -181,16 +144,18 @@ def test_a_protected_python_route_answers_204_when_authorised(
     assert response.headers["x-served-by"] == "learny-api"
 
 
-def test_a_python_route_without_a_handler_fails_at_startup() -> None:
+def test_a_route_without_a_handler_fails_at_startup() -> None:
+    partial = dict(pipeline.HANDLERS)
+    del partial["formations.access"]
+
     with pytest.raises(RuntimeError, match="no handler"):
-        build_app(("auth.callback",), {})
+        pipeline.install(FastAPI(), context_with(partial))
 
 
-def test_an_undeclared_path_answers_the_default_404(monkeypatch: pytest.MonkeyPatch) -> None:
-    monkeypatch.setattr(pipeline, "HANDLERS", {"auth.callback": callback})
-    _app, client = build_app(("auth.callback",), {"auth.callback": callback})
+def test_an_undeclared_path_answers_the_default_404() -> None:
+    _app, client = build_app()
 
-    response = client.get("/api/v1/me")
+    response = client.get("/api/v1/unknown")
 
     assert response.status_code == 404
     assert response.json() == {"detail": "Not Found"}

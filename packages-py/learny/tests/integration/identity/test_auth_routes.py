@@ -24,7 +24,6 @@ from learny_api import (
     pipeline,
 )
 from learny_api.main import create_app
-from learny_api.ownership import load_ownership
 
 pytestmark = pytest.mark.spec("SPEC-2207")
 
@@ -133,7 +132,6 @@ def build_app(document: Any, error: Any = None) -> tuple[FastAPI, TestClient, Fa
     context = pipeline.build_context(deps, settings, CATALOG)
     app = create_app(
         settings,
-        ownership=load_ownership(ROOT / "api" / "ownership.yaml"),
         context=context,
     )
     # The recorded requests reached the API on this origin, so `Secure` is left out as it was.

@@ -61,7 +61,6 @@ ENVIRONMENT_VARIABLES: tuple[str, ...] = (
     "CLOCK_FIXED_AT",
     "GIT_COMMIT",
     "APP_VERSION",
-    "OWNERSHIP_OVERRIDES",
     # Standard variables (ADR-0227): the CI marker and the listening port of the worker health.
     "CI",
     "PORT",
@@ -161,7 +160,6 @@ class Settings(BaseSettings):
     # Build metadata of the health probe (SPEC-006 EF-1): the names the deployment already sets.
     git_commit: str | None = None
     app_version: str | None = None
-    ownership_overrides: str | None = None
     ci: str | None = None
     port: int = 0
 

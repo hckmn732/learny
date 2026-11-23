@@ -23,7 +23,6 @@ from learny_api import (
 from learny_api.guards.idempotency import IdempotencyStart
 from learny_api.guards.rate_limit import RateLimitDecision
 from learny_api.main import create_app
-from learny_api.ownership import Ownership
 from learny_api.pipeline import PipelineContext
 from starlette.requests import Request
 
@@ -33,7 +32,6 @@ ROOT = Path(__file__).resolve().parents[4]
 CATALOG: dict[str, ErrorEntry] = load_catalog(ROOT / "api" / "errors.json")
 NOW = datetime(2026, 11, 11, 12, 20, tzinfo=UTC)
 HEALTH_KEY = "GET /api/v1/health"
-OWNED_SPECIAL_KEYS = (HEALTH_KEY,)
 
 
 class Clock:
@@ -119,22 +117,13 @@ def context(settings: Settings, env: Mapping[str, str | None], *, failing: bool 
         origin_guard=OriginGuard(),  # type: ignore[arg-type]
         rate_limiter=RateLimiter(),
         idempotency=Idempotency(),  # type: ignore[arg-type]
-        handlers={"health.get": pipeline.HANDLERS["health.get"]},
-    )
-
-
-def ownership() -> Ownership:
-    return Ownership(
-        operations={"health.get": "py"},
-        special={key: "py" for key in OWNED_SPECIAL_KEYS},
-        consumers={},
-        crons={},
+        handlers=dict(pipeline.HANDLERS),
     )
 
 
 def build_app(env: Mapping[str, str | None], *, failing: bool = False) -> tuple[FastAPI, TestClient]:
     settings = settings_for(env, failing=failing)
-    app = create_app(settings, ownership=ownership(), context=context(settings, env, failing=failing))
+    app = create_app(settings, context=context(settings, env, failing=failing))
 
     @asynccontextmanager
     async def lifespan(_: FastAPI) -> AsyncIterator[None]:

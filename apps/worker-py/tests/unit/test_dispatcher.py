@@ -1,14 +1,12 @@
-"""[SPEC-2102] Dispatcher: fan-out, ownership filtering, delayed runs, rejected payloads."""
+"""[SPEC-2102] Dispatcher: fan-out, delayed runs, rejected payloads."""
 
 from collections.abc import Mapping
-from dataclasses import dataclass, field
 from datetime import datetime
 from typing import Any
 
 import pytest
 from learny.shared.clock import Clock
 from learny.shared.outbox.events import Event
-from learny.shared.ownership import Owner
 from learny.shared.time import parse_iso
 from learny_worker.consumers import Consumer, demo_job, validate_demo_event
 from learny_worker.dispatcher import Dispatcher
@@ -18,12 +16,6 @@ pytestmark = pytest.mark.spec("SPEC-2102")
 
 FIXED = parse_iso("2026-11-11T12:20:00Z")
 RUN_ID = "11111111-1111-4111-8111-111111111111"
-
-
-@dataclass
-class FakeOwnership:
-    consumers: dict[str, Owner] = field(default_factory=dict)
-    crons: dict[str, Owner] = field(default_factory=dict)
 
 
 EVENT = Event(
@@ -47,14 +39,12 @@ def row(event: Event = EVENT) -> dict[str, object]:
 
 def dispatcher(
     *events: Event,
-    owner: Owner = "py",
     registry: tuple[Consumer, ...] | None = None,
 ) -> tuple[Dispatcher, FakeDatabase, RecordingLogger]:
     database = FakeDatabase()
     database.conn = RecordingConnection([[row(event) for event in events]])
     logger = RecordingLogger()
     deps = FakeDeps(db=database, clock=FakeClock(FIXED), logger=logger)
-    ownership = FakeOwnership(consumers={"devtools.demo_job": owner})
     consumers = registry or (
         Consumer(
             "devtools.demo_job",
@@ -63,9 +53,8 @@ def dispatcher(
             validate=validate_demo_event,
         ),
     )
-    active = tuple(consumer for consumer in consumers if ownership.consumers.get(consumer.name) == "py")
     return (
-        Dispatcher(deps, ownership, consumers=active, logger=logger),
+        Dispatcher(deps, consumers=consumers, logger=logger),
         database,
         logger,
     )
@@ -90,13 +79,6 @@ async def test_fans_out_one_delivery_per_python_consumer() -> None:
 
 async def test_nothing_undispatched_creates_nothing() -> None:
     dispatcher_under_test, database, _ = dispatcher()
-    assert await dispatcher_under_test.dispatch_once() == 0
-    assert deliveries(database) == []
-
-
-async def test_a_typescript_owned_consumer_is_never_fanned_out() -> None:
-    # CA-3: the registry describes it, but the ownership table keeps it for Hono.
-    dispatcher_under_test, database, _ = dispatcher(EVENT, owner="ts")
     assert await dispatcher_under_test.dispatch_once() == 0
     assert deliveries(database) == []
 
@@ -149,9 +131,7 @@ async def test_a_database_error_is_logged_and_the_loop_survives() -> None:
     database.conn = RecordingConnection([RuntimeError("connection lost")])
     logger = RecordingLogger()
     deps = FakeDeps(db=database, clock=FakeClock(FIXED), logger=logger)
-    dispatcher_under_test = Dispatcher(
-        deps, FakeOwnership(consumers={"devtools.demo_job": "py"}), logger=logger
-    )
+    dispatcher_under_test = Dispatcher(deps, logger=logger)
     stop = asyncio.Event()
 
     async def stop_soon() -> None:

@@ -25,9 +25,8 @@ from learny_api import pipeline
 from learny_api.guards.idempotency import IdempotencyStart
 from learny_api.guards.rate_limit import RateLimitDecision
 from learny_api.main import create_app
-from learny_api.ownership import Ownership
 from learny_api.pipeline import Call, PipelineContext
-from learny_api.special.sprints import SPRINTS_KEY, SPRINTS_ROUTE_ID
+from learny_api.special.sprints import SPRINTS_ROUTE_ID
 from starlette.requests import Request
 
 pytestmark = pytest.mark.spec("SPEC-2302")
@@ -162,10 +161,6 @@ def context_with(
     )
 
 
-def ownership() -> Ownership:
-    return Ownership(operations={}, special={SPRINTS_KEY: "py"}, consumers={}, crons={})
-
-
 def build_app(
     handlers: dict[str, Callable[[Call], Any]] | None = None,
     idempotency: Idempotency | None = None,
@@ -173,8 +168,7 @@ def build_app(
     store = idempotency or Idempotency()
     app = create_app(
         settings_for(),
-        ownership=ownership(),
-        context=context_with({} if handlers is None else handlers, store),
+        context=context_with({**pipeline.HANDLERS, **(handlers or {})}, store),
     )
 
     @asynccontextmanager

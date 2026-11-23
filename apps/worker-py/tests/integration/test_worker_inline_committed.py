@@ -15,7 +15,6 @@ import pytest
 from learny.shared.clock import Clock
 from learny.shared.db.uow import Database, collect_committed_events
 from learny.shared.outbox.events import Event
-from learny.shared.ownership import Owner
 from learny.shared.time import parse_iso
 from learny_worker.consumers import Consumer
 from learny_worker.dispatcher import Dispatcher
@@ -29,12 +28,6 @@ pytestmark = pytest.mark.spec("SPEC-2102")
 FIXED = parse_iso("2026-11-11T12:20:00Z")
 FIRST_EVENT = "sdd/demo-requested"
 SECOND_EVENT = "sdd/inline-follow-up"
-
-
-@dataclass
-class Ownership:
-    consumers: dict[str, Owner] = field(default_factory=dict)
-    crons: dict[str, Owner] = field(default_factory=dict)
 
 
 @dataclass
@@ -69,8 +62,7 @@ async def events(database: Database) -> AsyncIterator[list[str]]:
 
 def loops(database: Database, *consumers: Consumer) -> tuple[Dispatcher, Runner]:
     deps = Deps(db=database, clock=FakeClock(FIXED), logger=RecordingLogger())
-    ownership = Ownership(consumers={consumer.name: "py" for consumer in consumers})
-    return Dispatcher(deps, ownership, consumers=consumers), Runner(deps, consumers)
+    return Dispatcher(deps, consumers=consumers), Runner(deps, consumers)
 
 
 async def delivery(database: Database, event_id: str, consumer: str) -> dict[str, Any]:

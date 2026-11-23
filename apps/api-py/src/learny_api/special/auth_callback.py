@@ -25,7 +25,6 @@ from learny_api.validate import query_to_object, validate_input
 
 CALLBACK_ROUTE_ID = "auth.callback"
 CALLBACK_PATH = "/api/v1/auth/callback"
-CALLBACK_KEY = "GET /api/v1/auth/callback"
 
 
 def auth_request(request: Request, settings: Any) -> identity.AuthRequest:
@@ -105,18 +104,16 @@ async def endpoint(request: Request, context: PipelineContext) -> Response:
     return await callback_response(request, context.deps, request_id)
 
 
-def install(app: FastAPI, context: PipelineContext, ownership: "Any") -> list[str]:
-    """Registers the `py`-owned callback; returns the installed special keys."""
-    if ownership.special.get(CALLBACK_KEY) != "py":
-        return []
+def install(app: FastAPI, context: PipelineContext) -> list[str]:
+    """Registers the callback route; returns the installed route id."""
     app.add_api_route(
         CALLBACK_PATH,
         _handler(request_context=context),
         methods=["GET"],
         include_in_schema=False,
-        name="special:authCallback",
+        name=f"special:{CALLBACK_ROUTE_ID}",
     )
-    return [CALLBACK_KEY]
+    return [CALLBACK_ROUTE_ID]
 
 
 def _handler(request_context: PipelineContext) -> Any:
@@ -127,9 +124,4 @@ def _handler(request_context: PipelineContext) -> Any:
     return route
 
 
-def route_spec() -> RouteSpec:
-    """The generated route of the callback, for the ownership check of the special registry."""
-    return ROUTES_BY_ID[CALLBACK_ROUTE_ID]
-
-
-__all__ = ["CALLBACK_KEY", "CALLBACK_PATH", "CALLBACK_ROUTE_ID", "callback_response", "install"]
+__all__ = ["CALLBACK_PATH", "CALLBACK_ROUTE_ID", "callback_response", "install"]

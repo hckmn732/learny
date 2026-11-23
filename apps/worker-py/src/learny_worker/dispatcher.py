@@ -11,7 +11,7 @@ from typing import Any
 import structlog
 from learny.shared.outbox import deliveries as outbox
 
-from learny_worker.consumers import Consumer, Ownership, active_consumers
+from learny_worker.consumers import CONSUMERS, Consumer
 
 DISPATCH_BATCH_SIZE = 100
 DEFAULT_DISPATCH_INTERVAL_MS = 500
@@ -23,7 +23,6 @@ class Dispatcher:
     def __init__(
         self,
         deps: Any,
-        ownership: Ownership,
         *,
         interval_ms: int = DEFAULT_DISPATCH_INTERVAL_MS,
         batch_size: int = DISPATCH_BATCH_SIZE,
@@ -31,10 +30,9 @@ class Dispatcher:
         logger: Any = None,
     ) -> None:
         self._deps = deps
-        self._ownership = ownership
         self._interval = max(interval_ms, 1) / 1000
         self._batch_size = batch_size
-        self._consumers = consumers if consumers is not None else active_consumers(ownership)
+        self._consumers = consumers if consumers is not None else CONSUMERS
         self._logger = logger or structlog.get_logger("learny.worker.dispatcher")
 
     async def dispatch_once(self) -> int:

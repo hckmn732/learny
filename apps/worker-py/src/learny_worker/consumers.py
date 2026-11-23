@@ -2,9 +2,8 @@
 
 A consumer is one async function subscribed to one event name, declared by the table of the P22
 plan (SPEC-2207). Every consumer delegates to the use case of its context, imported from the
-`public.py` of that context: the worker holds no business rule and no SQL. `ownership.yaml` decides
-which consumers Python runs: a consumer declared `ts` is never executed here (CA-3), even though it
-is listed, so the registry describes the target state before the flip.
+`public.py` of that context: the worker holds no business rule and no SQL. Python runs every
+consumer of the registry: the TypeScript backend is gone (SPEC-2302, ADR-2006).
 
 Options of the table: `timeout_s` is the Inngest `timeouts.finish` of the function (a sane default
 otherwise), `max_attempts` counts the first attempt (`retries + 1`) and `run_at` replaces
@@ -17,7 +16,7 @@ import uuid
 from collections.abc import Awaitable, Callable, Mapping
 from dataclasses import dataclass, field
 from datetime import datetime, timedelta
-from typing import Any, Protocol
+from typing import Any
 
 from learny.assessments import public as assessments
 from learny.content import public as content
@@ -32,7 +31,6 @@ from learny.shared.devtools import run_demo_pipeline
 from learny.shared.outbox.errors import PermanentJobError
 from learny.shared.outbox.events import Event
 from learny.shared.outbox.purge import purge_outbox
-from learny.shared.ownership import Owner
 from learny.shared.time import parse_iso
 from learny.tutor import public as tutor
 
@@ -73,13 +71,6 @@ OBJECT = "object"
 RunConsumer = Callable[[Any, Event], Awaitable[None]]
 RunAt = Callable[[Event, Clock], datetime | None]
 Validate = Callable[[Event], None]
-
-
-class Ownership(Protocol):
-    """The part of the ownership table the worker reads."""
-
-    @property
-    def consumers(self) -> dict[str, Owner]: ...
 
 
 @dataclass(frozen=True, slots=True)
@@ -638,14 +629,6 @@ CONSUMERS: tuple[Consumer, ...] = (
         tags={"context": "devtools"},
     ),
 )
-
-
-def active_consumers(
-    ownership: Ownership,
-    registry: tuple[Consumer, ...] = CONSUMERS,
-) -> tuple[Consumer, ...]:
-    """The consumers Python owns; `ts`-owned ones are described but never run (CA-3)."""
-    return tuple(consumer for consumer in registry if ownership.consumers.get(consumer.name) == "py")
 
 
 def subscribed(consumers: tuple[Consumer, ...], event_name: str) -> tuple[Consumer, ...]:
