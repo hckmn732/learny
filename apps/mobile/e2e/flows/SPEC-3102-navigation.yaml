@@ -1,0 +1,81 @@
+# SPEC-3102 — coquille : cinq onglets, piles et en-tête natif (CA-1, CA-6).
+#
+# Unique flux `@visual` de la spécification (ADR-3015 § 5) : il capture Aujourd'hui dans l'état de
+# la maquette (cloche avec pastille, avatar « AP »), comparé à la zone haute de l'export de
+# référence `design/app-mobile/exports/screens/android-02-aujourdhui.png` (ADR-3003 § 4).
+#
+# Précautions Maestro 2.12.1 : matcher `text` ancré et accents abîmés en transit, donc toutes les
+# assertions portent sur des `id` ou des textes ASCII ; la barre d'onglets native est masquée dans
+# la comparaison (ADR-3003 § 3) mais vérifiée structurellement ici.
+appId: fr.learny.app
+name: SPEC-3102 navigation
+tags:
+  - SPEC-3102
+  - visual
+---
+- launchApp:
+    clearState: true
+# Page d'accueil des builds SDD : l'application est prête à recevoir le lien profond.
+- extendedWaitUntil:
+    visible:
+      id: sdd-health
+    timeout: 30000
+- openLink: learny://connexion?demo=1
+# La garde d'onboarding du compte de démonstration est franchie : les onglets sont là.
+- extendedWaitUntil:
+    visible:
+      id: tab-aujourdhui
+    timeout: 60000
+# CA-1 — les cinq onglets avec les libellés exacts de la maquette.
+- assertVisible:
+    id: tab-programme
+- assertVisible:
+    id: tab-reviser
+- assertVisible:
+    id: tab-agenda
+- assertVisible:
+    id: tab-profil
+# BR-NAV-01 — l'en-tête d'Aujourd'hui : cloche, pastille des non lues et compte.
+- assertVisible:
+    id: header-bell
+- assertVisible:
+    id: header-account
+# EF-1 — chaque onglet a sa pile ; l'appui sur l'onglet actif revient à sa racine.
+- tapOn:
+    id: tab-programme
+- extendedWaitUntil:
+    visible:
+      id: programme-screen
+    timeout: 20000
+- tapOn:
+    id: tab-reviser
+- extendedWaitUntil:
+    visible:
+      id: reviser-screen
+    timeout: 20000
+- tapOn:
+    id: tab-reviser
+- assertVisible:
+    id: reviser-screen
+- tapOn:
+    id: tab-agenda
+- extendedWaitUntil:
+    visible:
+      id: agenda-screen
+    timeout: 20000
+- tapOn:
+    id: tab-profil
+- extendedWaitUntil:
+    visible:
+      id: profil-screen
+    timeout: 20000
+# Retour à Aujourd'hui : l'état de la maquette pour la comparaison visuelle.
+- tapOn:
+    id: tab-aujourdhui
+- extendedWaitUntil:
+    visible:
+      id: today-screen
+    timeout: 20000
+- assertVisible:
+    id: header-bell
+- takeScreenshot: SPEC-3102-navigation

@@ -193,4 +193,22 @@ Définition commune adaptée par ADR-3004 ; `validate.mjs SPEC-3102` vert.
 
 - ADR appliqués : ADR-0046, ADR-3002, ADR-3003, ADR-3004.
 - La recherche globale n'existe pas sur mobile V1 (ADR-3002).
-- Choix effectif onglets natifs ou `Tabs` : à consigner ici à l'implémentation (ET-1).
+- **ET-1 — choix effectif : `Tabs` d'Expo Router (`expo-router/js-tabs`) derrière `AppTabs`**, avec
+  une barre propre (`AppTabBar`) construite sur les jetons. La bascule prévue par ET-1 est exercée :
+  `expo-router/native-tabs` est stable dans cette version, mais ses icônes Android exigent le paquet
+  `expo-symbols` (dépendance nouvelle, interdite sans ADR-3004) et sa documentation indique que son
+  `testID` n'est pas lisible par Maestro sur Android — or CA-1 exige des `testID` vérifiables. La
+  barre JavaScript rend les cinq icônes de la maquette (maison, couches, cartes, calendrier,
+  personne) et reste remplaçable : aucun écran n'importe `AppTabs`.
+- **Garde d'onboarding** : la garde s'applique tant que `GET /me/onboarding` ne répond pas `done`
+  (ADR-3002 § 3, prioritaire sur la formulation « étape IA » de BR-ACC-04) ; CA-3 est couvert.
+- **Destinations `cours` et `quiz` (ET-3)** : les écrans arrivent avec SPEC-3202 et SPEC-3203 ; d'ici
+  là la table résout ces types vers la page web de la ligne (`item.href`, ADR-3002 § 3), et le
+  passage en route native se fera avec l'écran, sans toucher au reste de la table.
+- **Un seul flux `@visual`** (ADR-3015 § 5) : la capture est l'onglet Aujourd'hui à l'horloge figée,
+  comparée à la **zone haute** de `android-02-aujourdhui.png` ; la zone de contenu est masquée car
+  elle est reportée à SPEC-3201 (EF-2). iOS n'est pas exécutable ici (pas de macOS) : la
+  comparaison porte sur l'export Android, plateforme de validation d'ADR-3004 § 6.
+- **Hors ligne (CA-5)** : Maestro 2.12.1 ne coupe pas la radio de l'émulateur (précédent SPEC-3003) ;
+  CA-5 est prouvé par Jest (`common-states`, `notifications-sheet`) et le bandeau est monté par la
+  coquille, pas de flux Maestro dédié.

@@ -1,0 +1,83 @@
+{
+  "spec": "SPEC-3102",
+  "platform": "android",
+  "transport": "agent",
+  "jobId": "20261123031052-001",
+  "device": {
+    "serial": "emulator-5554",
+    "model": "sdk_gphone64_x86_64",
+    "apiLevel": "35",
+    "size": "Physical size: 1080x2400",
+    "platform": "android"
+  },
+  "tags": [
+    "SPEC-3102"
+  ],
+  "startedAt": "2026-11-23T03:10:52.071Z",
+  "finishedAt": "2026-11-23T03:12:44.301Z",
+  "passed": 3,
+  "failed": 0,
+  "videos": 1,
+  "campaignVideo": "artifacts/campagne/campagne.mp4",
+  "visual": 1,
+  "junitCases": 3,
+  "flows": [
+    {
+      "file": "apps/mobile/e2e/flows/SPEC-3102-compte.yaml",
+      "name": "SPEC-3102 compte",
+      "tags": [
+        "SPEC-3102"
+      ],
+      "status": "passed",
+      "durationSec": 24.89,
+      "message": null,
+      "videos": [],
+      "screenshots": [],
+      "visual": null
+    },
+    {
+      "file": "apps/mobile/e2e/flows/SPEC-3102-navigation.yaml",
+      "name": "SPEC-3102 navigation",
+      "tags": [
+        "SPEC-3102",
+        "visual"
+      ],
+      "status": "passed",
+      "durationSec": 32.815,
+      "message": null,
+      "videos": [],
+      "screenshots": [
+        "artifacts/spec-3102-navigation/SPEC-3102-navigation.png"
+      ],
+      "visual": {
+        "flow": "SPEC-3102 navigation",
+        "status": "passed",
+        "diffRatio": 0.0579,
+        "capture": "/root/learny-mobile/test-results/sdd/SPEC-3102/artifacts/spec-3102-navigation/SPEC-3102-navigation.png",
+        "baseline": "/root/learny-mobile/apps/mobile/e2e/visual/baselines/SPEC-3102-navigation.png",
+        "diff": "/root/learny-mobile/test-results/sdd/SPEC-3102/artifacts/spec-3102-navigation/SPEC-3102-navigation.diff.png"
+      }
+    },
+    {
+      "file": "apps/mobile/e2e/flows/SPEC-3102-notifications.yaml",
+      "name": "SPEC-3102 notifications",
+      "tags": [
+        "SPEC-3102"
+      ],
+      "status": "passed",
+      "durationSec": 29.44,
+      "message": null,
+      "videos": [],
+      "screenshots": [],
+      "visual": null
+    }
+  ],
+  "visualChecks": [
+    {
+      "flow": "SPEC-3102 navigation",
+      "status": "passed",
+      "diffRatio": 0.0579
+    }
+  ],
+  "unattributed": []
+}

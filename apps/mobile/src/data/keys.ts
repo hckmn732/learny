@@ -6,6 +6,10 @@
 export const queryKeys = {
   me: () => ['me'] as const,
   profile: () => ['me', 'profile'] as const,
+  header: () => ['me', 'header'] as const,
+  onboarding: () => ['me', 'onboarding'] as const,
+  unreadCount: () => ['notifications', 'unread-count'] as const,
+  notifications: (filter: string) => ['notifications', 'list', filter] as const,
   home: () => ['home'] as const,
   formations: () => ['formations'] as const,
   formation: (formationId: string) => ['formation', formationId] as const,
