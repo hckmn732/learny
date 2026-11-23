@@ -99,7 +99,7 @@ export function TutorActionsSection({
         const alternatives = alternativesOf(item);
         const open = openAlternatives === item.id;
         return (
-          <Card key={item.id} testID={`tutor-action-${item.id}`}>
+          <Card key={item.id} testID={`tutor-action-${item.id}`} padded={false} style={styles.card}>
             <View style={styles.kindRow}>
               <View style={styles.dot} />
               <Text variant="label" tone="muted">
@@ -174,7 +174,7 @@ export function TutorActionsSection({
       {shown.map((item, index) => {
         const undoable = item.status === 'applied';
         return (
-          <Card key={item.id} testID={`tutor-action-${item.id}`}>
+          <Card key={item.id} testID={`tutor-action-${item.id}`} padded={false} style={styles.card}>
             <View style={styles.kindRow}>
               <View style={[styles.dot, styles.dotIndigo]} />
               <Text variant="label" tone="muted">
@@ -212,7 +212,9 @@ export function TutorActionsSection({
 }
 
 const styles = StyleSheet.create({
-  section: { gap: theme.spacing.md },
+  section: { gap: 8 },
+  // `app.css` `.tutor-card` : padding 14, gap 8, rayon 18.
+  card: { padding: 14, gap: 8 },
   head: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' },
   kindRow: { flexDirection: 'row', alignItems: 'center', gap: theme.spacing.sm },
   dot: {

@@ -33,6 +33,9 @@ function textStyle(token: TypeToken): TextStyle {
     fontSize: token.fontSize,
     lineHeight: token.lineHeight,
     letterSpacing: token.letterSpacing,
+    // The mockups set `line-height` and the box follows it exactly; Android adds the font padding
+    // by default, which pushed every line below the baseline of the reference (SPEC-3201 CA-5).
+    includeFontPadding: false,
     ...(token.textTransform === undefined ? {} : { textTransform: token.textTransform }),
   };
 }

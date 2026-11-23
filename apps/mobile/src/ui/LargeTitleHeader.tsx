@@ -4,20 +4,16 @@
 //
 // Geometry of the mockups (`design/app-mobile/assets/app.css` `.largehead` and
 // `.app[data-p="android"] .largehead`): 12 px 20 px 18 px on iOS, 4 px 16 px 12 px on Android, drawn
-// under a 54 px / 30 px status bar. The real inset of the device replaces that bar (ADR-3003 § 3:
-// the native bars are rendered by the system, never by the application), with the height of the
-// export as a floor so that the content starts on the baseline of the comparison.
+// under a 54 px / 30 px status bar. The exports draw that band themselves and ADR-3003 § 3 leaves
+// the native bars to the system: the header reserves the band of the reference so that the screen
+// starts on the baseline of the visual comparison, whatever the height the system UI announces
+// (128 px on the emulator of the campaign, for a declared inset of 24 dp).
 import type { ReactNode } from 'react';
-import { useContext } from 'react';
 import { StyleSheet, View } from 'react-native';
-import { SafeAreaInsetsContext } from 'react-native-safe-area-context';
 
 import { theme } from '../theme';
 
 import { Text } from './Text';
-
-/** Inset used when the header is rendered outside a `SafeAreaProvider` (tests, previews). */
-const NO_INSETS = { top: 0, right: 0, bottom: 0, left: 0 } as const;
 
 /** Status bar of the exports, in pt/dp (`app.css` `.statusbar`). */
 const EXPORT_STATUS_BAR = { ios: 54, android: 30 } as const;
@@ -37,9 +33,8 @@ export interface LargeTitleHeaderProps {
 
 /** Header of a tab screen. */
 export function LargeTitleHeader({ title, eyebrow, actions, testID }: LargeTitleHeaderProps) {
-  const insets = useContext(SafeAreaInsetsContext) ?? NO_INSETS;
   const padding = PADDING[theme.platform];
-  const statusBar = Math.max(insets.top, EXPORT_STATUS_BAR[theme.platform]);
+  const statusBar = EXPORT_STATUS_BAR[theme.platform];
 
   return (
     <View

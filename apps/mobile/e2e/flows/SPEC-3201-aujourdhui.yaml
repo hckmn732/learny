@@ -3,9 +3,10 @@
 #
 # Précautions Maestro 2.12.1 (runbook § 5) : matcher `text` ancré et accents abîmés en transit, donc
 # toutes les assertions portent sur des `id` ; `scrollUntilVisible` est évité, la section « À suivre »
-# est atteinte par deux balayages bornés.
-# Chaque `launchApp` peut retomber sur la page d'accueil des builds SDD : le lien profond de
-# connexion de démonstration est donc rejoué après chaque relance, avant d'attendre `today-screen`.
+# est atteinte par des balayages bornés.
+# Le build e2e peut démarrer sur la page d'accueil des builds SDD comme sur l'écran de connexion :
+# le lien profond de démonstration est donc rejoué après chaque `launchApp`, sans attendre une page
+# particulière, puis l'onglet Aujourd'hui est attendu.
 # La capture est prise AVANT tout défilement et toute mutation : c'est l'état initial de la maquette,
 # horloge figée au 11 novembre 2026 à 13:20.
 appId: fr.learny.app
@@ -16,16 +17,17 @@ tags:
 ---
 - launchApp:
     clearState: true
-# Page d'accueil des builds SDD : l'application est prête à recevoir le lien profond.
+# La page d'accueil des builds SDD confirme que le processus est prêt à recevoir un lien profond ;
+# le lien de connexion de démonstration ouvre ensuite l'onglet Aujourd'hui (session créée par l'API).
 - extendedWaitUntil:
     visible:
       id: sdd-health
-    timeout: 30000
+    timeout: 60000
 - openLink: learny://connexion?demo=1
 - extendedWaitUntil:
     visible:
       id: tab-aujourdhui
-    timeout: 60000
+    timeout: 45000
 - extendedWaitUntil:
     visible:
       id: today-screen
@@ -98,7 +100,7 @@ tags:
 - assertVisible:
     id: up-next
 # Retour à l'état initial avant les mutations : l'application est relancée sans effacer la session,
-# puis le lien profond la ramène sur l'onglet Aujourd'hui si la page d'accueil SDD est réapparue.
+# puis le lien profond la ramène sur l'onglet Aujourd'hui si un autre écran est réapparu.
 - launchApp
 - openLink: learny://connexion?demo=1
 - extendedWaitUntil:
