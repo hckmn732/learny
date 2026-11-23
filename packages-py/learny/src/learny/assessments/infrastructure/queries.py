@@ -56,6 +56,36 @@ LOCK_BRICK = text(
     """
 )
 
+INSERT_BRICK = text(
+    """
+    insert into public.bricks (
+      owner_id, formation_id, type, notion_ids, purpose, status, current_version
+    ) values (
+      cast(:owner_id as uuid),
+      cast(:formation_id as uuid),
+      :type,
+      cast(:notion_ids as uuid[]),
+      :purpose,
+      'active',
+      1
+    )
+    returning id::text as id
+    """
+)
+
+READ_PUBLIC_BRICK = text(
+    """
+    select b.id::text as brick_id,
+           v.id::text as version_id,
+           b.type::text as type,
+           b.notion_ids::text[] as notion_ids,
+           v.payload as payload
+      from public.brick_versions v
+      join public.bricks b on b.id = v.brick_id
+     where v.id = cast(:version_id as uuid) and b.owner_id = cast(:user_id as uuid)
+    """
+)
+
 INSERT_BRICK_VERSION = text(
     """
     insert into public.brick_versions (
@@ -231,6 +261,37 @@ async def insert_brick_version(
     )
     found = result.mappings().first()
     return None if found is None else str(found["id"])
+
+
+async def insert_brick(
+    tx: Tx,
+    *,
+    owner_id: str,
+    formation_id: str,
+    type_name: str,
+    notion_ids: Sequence[str],
+    purpose: str,
+) -> str | None:
+    """EF-1 - the brick envelope, version 1 being inserted in the same transaction."""
+    result = await tx.conn.execute(
+        INSERT_BRICK,
+        {
+            "owner_id": owner_id,
+            "formation_id": formation_id,
+            "type": type_name,
+            "notion_ids": "{" + ",".join(notion_ids) + "}",
+            "purpose": purpose,
+        },
+    )
+    found = result.mappings().first()
+    return None if found is None else str(found["id"])
+
+
+async def read_public_brick(tx: Tx, *, user_id: str, version_id: str) -> Mapping[str, Any] | None:
+    """EF-6 - one owned version and the envelope of its brick."""
+    result = await tx.conn.execute(READ_PUBLIC_BRICK, {"user_id": user_id, "version_id": version_id})
+    found = result.mappings().first()
+    return None if found is None else row_of(found)
 
 
 async def update_brick_current_version(
