@@ -2,7 +2,7 @@
 //
 // The screen is rendered with the navigation, the Supabase client and the API client injected:
 // no network, no native Auth client. React Native Testing Library v14 renders asynchronously.
-import { fireEvent, render, screen, waitFor } from '@testing-library/react-native';
+import { act, fireEvent, render, screen, waitFor } from '@testing-library/react-native';
 import type { ReactElement } from 'react';
 import { SafeAreaProvider, type Metrics } from 'react-native-safe-area-context';
 
@@ -163,10 +163,13 @@ describe('[SPEC-3101] écran de connexion et d’inscription', () => {
   });
 
   it('n’envoie qu’une requête sur un double appui (CL-1)', async () => {
+    // The first request stays pending until both presses are done: a timer would let it finish
+    // between the presses on a slow machine and make the second request legitimate.
+    let release: () => void = () => undefined;
     mockSignIn.mockImplementation(
       () =>
         new Promise<void>((resolve) => {
-          setTimeout(resolve, 20);
+          release = resolve;
         }),
     );
     const view = await renderScreen('login');
@@ -176,6 +179,11 @@ describe('[SPEC-3101] écran de connexion et d’inscription', () => {
     await fireEvent.press(view.getByTestId('auth-submit'));
     await fireEvent.press(view.getByTestId('auth-submit'));
 
+    expect(mockSignIn).toHaveBeenCalledTimes(1);
+    await act(async () => {
+      release();
+      await Promise.resolve();
+    });
     await waitFor(() => {
       expect(mockSignIn).toHaveBeenCalledTimes(1);
     });
