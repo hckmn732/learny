@@ -557,6 +557,119 @@ export const mobile = {
       gapsWeb: 'Voir mes lacunes sur le web',
     },
   },
+  reviser: {
+    title: 'Réviser',
+    sessionTitle: 'Quiz global',
+    sessionEyebrow: (day: string) => `Session du ${day}`,
+    close: 'Fermer la session',
+    progress: {
+      notion: (current: number, total: number) => `Notion ${String(current)} sur ${String(total)}`,
+      minutes: (minutes: number) => `${String(minutes)} min`,
+      label: (current: number, total: number) =>
+        `Progression de la session : notion ${String(current)} sur ${String(total)}`,
+    },
+    rail: {
+      label: 'Jeux de la session',
+      status: { done: 'Fait', current: 'En cours', upcoming: 'À venir' },
+    },
+    grades: {
+      prompt: 'Aviez-vous trouvé ?',
+      again: 'Raté',
+      hard: 'Difficile',
+      good: 'Bon',
+      easy: 'Facile',
+      due: (label: string) => `Revient ${label}`,
+      offlineDue: 'Échéance calculée au retour du réseau',
+    },
+    skip: 'Passer',
+    next: 'Suivant',
+    finish: 'Terminer la session',
+    validate: 'Valider ma réponse',
+    streak: {
+      title: (days: number) => (days === 1 ? 'Série de 1 jour' : `Série de ${String(days)} jours`),
+      subtitle: '14 derniers jours',
+      label: (days: number) =>
+        days === 1
+          ? 'Série de 1 jour, 14 derniers jours'
+          : `Série de ${String(days)} jours, 14 derniers jours`,
+    },
+    tutor: {
+      title: 'Réglé par le tuteur',
+      deferred: (count: number, day: string, cap: number) =>
+        `Le tuteur a reporté ${String(count)} ${count === 1 ? 'notion' : 'notions'} à ${day} pour garder la session sous ${String(cap)} minutes.`,
+      undo: 'Annuler',
+      undoPending: 'Annulation…',
+      undoError: 'Le report n’a pas pu être annulé. Réessayez.',
+      offline: 'L’annulation du report est indisponible hors ligne.',
+    },
+    end: {
+      badge: 'Session terminée',
+      title: (notions: number, minutes: number) =>
+        `${String(notions)} ${notions === 1 ? 'notion revue' : 'notions revues'} en ${String(minutes)} ${minutes === 1 ? 'minute' : 'minutes'}`,
+      ok: 'notions réussies, espacées davantage',
+      soon: 'à revoir plus tôt',
+      streak: (days: number) => `${String(days)} j`,
+      streakLabel: 'de série',
+      next: (day: string, time: string) => `Prochaine session : ${day}, ${time}.`,
+      noNext: 'Aucune session planifiée pour l’instant.',
+      home: 'Retour à Aujourd’hui',
+      summaryLabel: 'Résumé de la session',
+    },
+    warmup: {
+      title: 'Échauffement',
+      question: (current: number, total: number) =>
+        `Question ${String(current)} sur ${String(total)}`,
+      show: 'Voir la réponse',
+      knew: 'Je savais',
+      again: 'À revoir',
+      score: (knew: number, total: number) => `${String(knew)} sur ${String(total)}`,
+      scoreLabel: (knew: number, total: number) =>
+        `Score de l’échauffement : ${String(knew)} sur ${String(total)}`,
+      done: 'Échauffement terminé',
+      doneBody: 'Les notions « À revoir » rejoignent le quiz global de ce soir.',
+      back: 'Retour à Réviser',
+      added: 'Cette notion rejoint le quiz de ce soir.',
+      loadError: 'Impossible de charger l’échauffement.',
+      answerError: 'Votre réponse n’a pas pu être enregistrée. Réessayez.',
+      empty: 'Aucun échauffement à faire.',
+      offline: 'L’échauffement a besoin du réseau.',
+      formation: 'Formation de l’échauffement',
+    },
+    offline: {
+      banner: 'Mode hors ligne · vos réponses seront envoyées au retour du réseau.',
+      expired: 'Session expirée, reconnectez-vous pour la session du jour',
+      cached: 'Session préchargée lue hors ligne.',
+      rejected: (count: number) =>
+        count === 1
+          ? '1 réponse n’a pas pu être prise en compte'
+          : `${String(count)} réponses n’ont pas pu être prises en compte`,
+      synced: 'Réponses hors ligne envoyées.',
+      syncError: 'La synchronisation des réponses attendra le prochain retour du réseau.',
+      stored: 'Paquet hors ligne enregistré.',
+    },
+    states: {
+      emptyTitle: 'Rien à revoir aujourd’hui',
+      emptyBody:
+        'Toutes vos notions sont à jour. Le prochain quiz global sera prêt dès que des notions seront dues.',
+      emptyAction: 'Retour à Aujourd’hui',
+      pausedTitle: 'Formation en pause',
+      pausedBody: 'Le quiz global reprendra quand vous relancerez cette formation.',
+      errorTitle: 'Impossible de charger le quiz global.',
+      retry: 'Réessayer',
+      loading: 'Chargement de la session…',
+      answerError: 'Votre réponse n’a pas pu être enregistrée. Réessayez.',
+      completeError: 'La session n’a pas pu être terminée. Réessayez.',
+      withdrawn: 'Ce jeu n’est plus disponible.',
+    },
+    formation: {
+      label: 'Formation de la session',
+    },
+    warmupCard: {
+      title: (count: number) =>
+        `Échauffement · ${String(count)} ${count === 1 ? 'question' : 'questions'}`,
+      open: 'Ouvrir l’échauffement avant la session',
+    },
+  },
   programme: {
     title: 'Programme',
     formationFallback: 'Formation',
@@ -672,8 +785,80 @@ export const mobile = {
       contributionsInProgress: 'Apports en cours',
     },
   },
-  // SPEC-3304 — quiz de validation et résultat (SCR-09, BR-QUI-01 à BR-QUI-08, ADR-3003 § 2).
-  // L'écran ne reprend pas les libellés du web : le quiz mobile est plein écran, sans onglets.
+  // SPEC-3302 — écran Cours : en-tête, sommaire, sections, source, version et fin de chapitre.
+  // Les libellés identiques au web (lecture, question éclair, « À retenir », « Ne pas confondre »,
+  // résumé, signalement, quiz) restent importés de `fr.course` ; cet espace ne porte que le
+  // chrome et les états propres au mobile.
+  cours: {
+    header: {
+      back: 'Retour au programme',
+      openToc: 'Ouvrir le sommaire',
+      badge: (position: number, total: number) =>
+        `Chapitre ${String(position)} sur ${String(total)}`,
+      progressLabel: (percent: number) => `${String(percent)} % de ce chapitre lu`,
+    },
+    meta: {
+      reading: (minutes: number) => `${String(minutes)} min de lecture`,
+      contributions: (count: number) => (count === 1 ? '1 apport' : `${String(count)} apports`),
+      base: 'Cours de base · aucun apport',
+      updated: (day: string) => `mis à jour le ${day}`,
+    },
+    states: {
+      loading: 'Le tuteur rédige votre cours',
+      loadingBody: 'Les chapitres sont rédigés puis vérifiés source par source.',
+      emptyTitle: 'Le cours est en préparation',
+      emptyBody:
+        'Le tuteur rédige le cours du module. La génération se lance depuis le web ; cette page se rafraîchit toute seule ensuite.',
+      refresh: 'Rafraîchir',
+      errorTitle: 'Impossible de charger le cours.',
+      errorBody: 'Vérifiez votre connexion, puis réessayez.',
+      retry: 'Réessayer',
+      notFound: 'Chapitre introuvable.',
+    },
+    toc: {
+      title: 'Sommaire',
+      chapters: 'Chapitres',
+      sections: 'Sections',
+      read: 'Lu',
+      chapter: (position: number, title: string, percent: number) =>
+        `Chapitre ${String(position)}, ${title}, ${percent >= 100 ? 'lu' : `${String(percent)} % lu`}`,
+      section: (label: string) => `Aller à la section ${label}`,
+      close: 'Fermer le sommaire',
+    },
+    section: {
+      menuTitle: 'Cette section',
+      askTutor: 'Demander au tuteur sur ce passage',
+      report: 'Signaler une erreur',
+      editOnWeb: 'Corriger sur le web',
+      menuClose: 'Fermer le menu',
+      reported: 'Section signalée · exclue des nouveaux quiz jusqu’à sa correction.',
+      actionsLabel: (label: string) => `Actions de la section ${label}`,
+      noAction: 'Aucune action disponible sur cette section.',
+    },
+    source: {
+      title: 'Source',
+      open: 'Ouvrir la ressource',
+      unavailable: 'Source indisponible',
+      unavailableBody: 'Cette source a été supprimée ou n’est plus disponible.',
+      loading: 'Résolution de la source…',
+      error: 'La source n’a pas pu être ouverte.',
+      close: 'Fermer la source',
+      page: (page: number) => `p. ${String(page)}`,
+      minute: (minute: string) => `minute ${minute}`,
+      anchor: 'extrait',
+    },
+    version: {
+      notice: 'Une nouvelle version est disponible',
+      reload: 'Recharger',
+    },
+    offline: {
+      write: 'Le résumé et le signalement demandent une connexion.',
+    },
+    footer: {
+      askTutor: 'Demander au tuteur',
+      quiz: 'Ouvrir le quiz de validation',
+    },
+  },
   quiz: {
     title: 'Quiz de validation',
     loading: 'Chargement du quiz',

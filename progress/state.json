@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-11-23T19:02:45.552Z",
+  "updatedAt": "2026-11-23T20:36:40.024Z",
   "specs": {
     "SPEC-001": {
       "status": "done",
@@ -7215,14 +7215,50 @@
       "validations": {}
     },
     "SPEC-3305": {
-      "status": "pending",
+      "status": "done",
       "attempts": 0,
-      "startedAt": null,
-      "completedAt": null,
-      "branch": null,
-      "commit": null,
+      "startedAt": "2026-11-23T19:15:28.422Z",
+      "completedAt": "2026-11-23T20:35:58.481Z",
+      "branch": "spec/SPEC-3305-reviser-quiz-global-echauffement-hors-li",
+      "commit": "879204ff",
       "lastError": null,
-      "validations": {}
+      "validations": {
+        "lint": {
+          "status": "passed",
+          "at": "2026-11-23T20:33:58.123Z",
+          "details": ""
+        },
+        "typecheck": {
+          "status": "passed",
+          "at": "2026-11-23T20:34:04.096Z",
+          "details": ""
+        },
+        "unit": {
+          "status": "passed",
+          "at": "2026-11-23T20:24:46.568Z",
+          "details": "16 Vitest + 20 Jest test(s) [SPEC-3305] réussi(s), 0 échec(s)"
+        },
+        "integration": {
+          "status": "passed",
+          "at": "2026-11-23T20:24:47.514Z",
+          "details": "5 test(s) réussi(s), 0 échec(s)"
+        },
+        "e2e": {
+          "status": "passed",
+          "at": "2026-11-23T20:34:04.652Z",
+          "details": "3 flux réussi(s), 0 échec(s), 1 vidéo(s)"
+        },
+        "visual": {
+          "status": "passed",
+          "at": "2026-11-23T20:34:04.652Z",
+          "details": "1 flux @visual réussi(s) (mode mockup)"
+        },
+        "acceptance": {
+          "status": "passed",
+          "at": "2026-11-23T20:34:04.663Z",
+          "details": "5/5 critères ✅"
+        }
+      }
     },
     "SPEC-3401": {
       "status": "pending",

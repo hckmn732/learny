@@ -25,20 +25,25 @@ export const queryKeys = {
   programme: (formationId: string) => ['formation', formationId, 'programme'] as const,
   module: (moduleId: string) => ['module', moduleId] as const,
   moduleCourse: (moduleId: string) => ['module', moduleId, 'course'] as const,
-  // SPEC-3304 ET-1 — the attempt and its result; the result key is nested so a submission can
-  // invalidate the attempt without dropping the whole module cache.
-  attempt: (attemptId: string) => ['attempt', attemptId] as const,
-  attemptResult: (attemptId: string) => ['attempt', attemptId, 'result'] as const,
+  // SPEC-3302 ET-1 — the course of one chapter of a module: the selected chapter is part of the
+  // key, so opening another chapter reads its own page and keeps the previous one in the cache.
+  course: (moduleId: string, chapterId: string) =>
+    ['module', moduleId, 'course', chapterId] as const,
   agenda: (from: string, to: string, formationId: string | null) =>
     ['agenda', from, to, formationId] as const,
   // SPEC-3203 EF-7 — the three windows proposed by the planner for one slot; the sheet always
   // re-reads them after a conflict (CL-1), hence the dedicated key.
   offlinePack: (day: string) => ['offline', 'pack', day] as const,
+  // SPEC-3305 EF-1 — session du jour d'une formation, relue après chaque réponse (ET-3).
+  globalQuizToday: (formationId: string) => ['global-quiz', formationId, 'today'] as const,
+  warmupDetail: (activityId: string) => ['warmup', activityId] as const,
   tutor: (conversationId: string) => ['tutor', conversationId] as const,
   sdd: {
     health: (apiUrl: string) => ['sdd', 'health', apiUrl] as const,
     me: () => ['sdd', 'me'] as const,
   },
+  attempt: (attemptId: string) => ['attempt', attemptId] as const,
+  attemptResult: (attemptId: string) => ['attempt', attemptId, 'result'] as const,
 } as const;
 
 export type QueryKeys = typeof queryKeys;

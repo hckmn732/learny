@@ -1,0 +1,55 @@
+# SPEC-3305 — écran de session de Réviser : en-tête, progression, rail, carte de rappel, série,
+# encadré du tuteur et capture `@visual` unique de la spécification (ADR-3003 § 4, ADR-3021).
+#
+# Le flux ne mute rien : la capture est prise sur l'état initial du jour (carte de rappel en tête,
+# notions du jeu de démonstration du 11 novembre 2026 à 13:20). C'est ce qui rend la comparaison
+# pixel reproductible d'une campagne à l'autre ; le parcours joué est le flux `SPEC-3305-parcours`.
+appId: fr.learny.app
+name: SPEC-3305 session
+tags:
+  - SPEC-3305
+  - visual
+---
+- launchApp:
+    clearState: true
+- extendedWaitUntil:
+    visible:
+      id: sdd-health
+    timeout: 60000
+- openLink: learny://connexion?demo=1
+- waitForAnimationToEnd:
+    timeout: 6000
+- runFlow:
+    when:
+      visible:
+        id: sdd-health
+    commands:
+      - openLink: learny://connexion?demo=1
+- extendedWaitUntil:
+    visible:
+      id: tab-aujourdhui
+    timeout: 60000
+- tapOn:
+    id: tab-reviser
+- extendedWaitUntil:
+    visible:
+      id: review-screen
+    timeout: 30000
+- assertVisible:
+    id: review-title
+- assertVisible:
+    id: review-progress
+- assertVisible:
+    id: review-rail
+- assertVisible:
+    id: review-card
+- assertVisible:
+    id: review-streak
+# Capture avant toute mutation : l'état initial de la maquette corrigée.
+- takeScreenshot: SPEC-3305-session
+# L'encadré du tuteur est sous la carte, atteint par un balayage borné (leçon 7 du BRIEF).
+- swipe:
+    direction: UP
+    duration: 400
+- assertVisible:
+    id: review-tutor-note
