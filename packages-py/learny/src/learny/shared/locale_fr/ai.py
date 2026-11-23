@@ -56,6 +56,13 @@ MISTRAL_NOTE = "Vérifiez la région de traitement proposée par votre offre."
 COMPATIBLE_NOTE = "Vérifiez où ce service traite les données avant de l’utiliser."
 LOCAL_NOTE = "Les données restent sur votre machine."
 
+# --- résolution du modèle de tâche (SPEC-709) ---------------------------------------------------
+
+AI_UNAVAILABLE_MODEL = (
+    "Cette fonction demande un modèle d’IA. "
+    "Choisissez un modèle de votre propre clé dans Paramètres › Modèles d’IA."
+)
+
 # --- compatibilité d'une tâche (réserve non bloquante) ------------------------------------------
 
 RESERVE_STRUCTURED_UNRELIABLE = (
