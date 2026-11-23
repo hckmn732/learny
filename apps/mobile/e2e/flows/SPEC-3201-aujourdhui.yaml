@@ -24,10 +24,20 @@ tags:
       id: sdd-health
     timeout: 60000
 - openLink: learny://connexion?demo=1
+# Un démarrage à froid peut perdre le premier lien profond : il est renvoyé si la page SDD est
+# toujours à l'écran, avant d'attendre l'onglet Aujourd'hui.
+- waitForAnimationToEnd:
+    timeout: 6000
+- runFlow:
+    when:
+      visible:
+        id: sdd-health
+    commands:
+      - openLink: learny://connexion?demo=1
 - extendedWaitUntil:
     visible:
       id: tab-aujourdhui
-    timeout: 45000
+    timeout: 60000
 - extendedWaitUntil:
     visible:
       id: today-screen
@@ -102,27 +112,45 @@ tags:
 # Retour à l'état initial avant les mutations : l'application est relancée sans effacer la session,
 # puis le lien profond la ramène sur l'onglet Aujourd'hui si un autre écran est réapparu.
 - launchApp
-- openLink: learny://connexion?demo=1
+- runFlow:
+    when:
+      visible:
+        id: sdd-health
+    commands:
+      - openLink: learny://connexion?demo=1
 - extendedWaitUntil:
     visible:
       id: today-screen
-    timeout: 30000
-# CA-2 — « Commencer » ouvre le quiz de validation (web tant que SPEC-3304 n'est pas livrée).
+    timeout: 45000
+# CA-2 — « Commencer » remet la séance au navigateur (page web du créneau tant que SPEC-3304 n'est
+# pas livrée, ADR-3002 § 3) : l'application quitte le premier plan, le toast de remise est donc
+# vérifié par le test unitaire du modèle de vue, pas par Maestro (navigateur au premier plan).
 - tapOn:
     id: today-hero-start
 - extendedWaitUntil:
-    visible:
-      id: today-toast-start
-    timeout: 15000
+    notVisible:
+      id: today-screen
+    timeout: 20000
 - launchApp
-- openLink: learny://connexion?demo=1
+- runFlow:
+    when:
+      visible:
+        id: sdd-health
+    commands:
+      - openLink: learny://connexion?demo=1
 - extendedWaitUntil:
     visible:
       id: today-screen
-    timeout: 30000
+    timeout: 45000
 # CA-4 — accepter la reprise la retire des actions en attente, puis « Annuler » la défait.
+# L'écran se rafraîchit au retour au premier plan : on attend la fin des animations et la carte
+# avant de toucher le bouton, sinon le tap part sur des coordonnées périmées.
+- waitForAnimationToEnd:
+    timeout: 8000
+- assertVisible:
+    id: today-hero
 - tapOn:
-    id: tutor-accept-0
+    text: Accepter
 - extendedWaitUntil:
     visible:
       id: today-toast-accept
