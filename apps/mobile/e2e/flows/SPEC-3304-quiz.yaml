@@ -39,7 +39,9 @@ tags:
     visible:
       id: tab-aujourdhui
     timeout: 60000
-# EF-1 — entrée depuis le Programme : « Quiz de validation » du module 3 (tentative en cours).
+# EF-1 — entrée depuis le Programme : fiche du module 3, puis « Quiz de validation » (tentative en
+# cours). L'accordéon garde son renvoi au web pour le quiz (comportement de SPEC-3202, inchangé) :
+# la fiche du module est le point d'entrée natif de SPEC-3304.
 - tapOn:
     id: tab-programme
 - extendedWaitUntil:
@@ -48,11 +50,17 @@ tags:
     timeout: 30000
 - scrollUntilVisible:
     element:
-      id: module-3-quiz
+      id: module-3-detail
     direction: DOWN
     timeout: 15000
 - tapOn:
-    id: module-3-quiz
+    id: module-3-detail
+- extendedWaitUntil:
+    visible:
+      id: module-detail-quiz
+    timeout: 20000
+- tapOn:
+    id: module-detail-quiz
 - extendedWaitUntil:
     visible:
       id: quiz-question
@@ -111,11 +119,11 @@ tags:
     id: quiz-quit-confirm
 - extendedWaitUntil:
     visible:
-      id: module-3-quiz
+      id: module-detail-quiz
     timeout: 15000
 # CA-4 — rouvrir la tentative reprend à la première question sans réponse, pas à la première.
 - tapOn:
-    id: module-3-quiz
+    id: module-detail-quiz
 - extendedWaitUntil:
     visible:
       id: quiz-question
