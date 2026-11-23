@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-11-23T04:38:27.608Z",
+  "updatedAt": "2026-11-23T11:48:33.457Z",
   "specs": {
     "SPEC-001": {
       "status": "done",
@@ -6595,677 +6595,144 @@
       "validations": {}
     },
     "SPEC-2001": {
-      "status": "done",
+      "status": "pending",
       "attempts": 0,
-      "startedAt": "2026-11-21T08:39:38.120Z",
-      "completedAt": "2026-11-21T09:42:11.905Z",
-      "branch": "spec/SPEC-2001-inventaire-parite-oracles",
-      "commit": "4be3ad78",
+      "startedAt": null,
+      "completedAt": null,
+      "branch": null,
+      "commit": null,
       "lastError": null,
-      "validations": {
-        "lint": {
-          "status": "passed",
-          "at": "2026-11-21T09:33:25.597Z",
-          "details": ""
-        },
-        "typecheck": {
-          "status": "passed",
-          "at": "2026-11-21T09:38:04.867Z",
-          "details": ""
-        },
-        "build": {
-          "status": "passed",
-          "at": "2026-11-21T09:39:10.941Z",
-          "details": ""
-        },
-        "unit": {
-          "status": "passed",
-          "at": "2026-11-21T09:41:00.084Z",
-          "details": "9 test(s) [SPEC-2001] réussi(s), 0 échec(s)"
-        },
-        "integration": {
-          "status": "passed",
-          "at": "2026-11-21T09:41:03.867Z",
-          "details": "2 test(s) [SPEC-2001] réussi(s), 0 échec(s)"
-        },
-        "e2e": {
-          "status": "passed",
-          "at": "2026-11-21T09:41:52.141Z",
-          "details": "2 réussi(s), 0 échec(s), 4 vidéo(s)"
-        },
-        "visual": {
-          "status": "passed",
-          "at": "2026-11-21T09:41:52.141Z",
-          "details": "1 test(s) @visual réussi(s) (mode demo)"
-        },
-        "acceptance": {
-          "status": "passed",
-          "at": "2026-11-21T09:41:52.170Z",
-          "details": "5/5 critères ✅"
-        }
-      }
+      "validations": {}
     },
     "SPEC-2002": {
-      "status": "done",
+      "status": "pending",
       "attempts": 0,
-      "startedAt": "2026-11-21T09:52:40.024Z",
-      "completedAt": "2026-11-21T10:44:21.872Z",
-      "branch": "spec/SPEC-2002-contrat-openapi-sdk",
-      "commit": "6026c8ee",
+      "startedAt": null,
+      "completedAt": null,
+      "branch": null,
+      "commit": null,
       "lastError": null,
-      "validations": {
-        "lint": {
-          "status": "passed",
-          "at": "2026-11-21T10:34:07.966Z",
-          "details": ""
-        },
-        "typecheck": {
-          "status": "passed",
-          "at": "2026-11-21T10:34:20.328Z",
-          "details": ""
-        },
-        "build": {
-          "status": "passed",
-          "at": "2026-11-21T10:34:21.422Z",
-          "details": ""
-        },
-        "unit": {
-          "status": "passed",
-          "at": "2026-11-21T10:36:16.912Z",
-          "details": "10 test(s) [SPEC-2002] réussi(s), 0 échec(s)"
-        },
-        "integration": {
-          "status": "passed",
-          "at": "2026-11-21T10:36:19.249Z",
-          "details": "2 test(s) [SPEC-2002] réussi(s), 0 échec(s)"
-        },
-        "e2e": {
-          "status": "passed",
-          "at": "2026-11-21T10:37:08.278Z",
-          "details": "2 réussi(s), 0 échec(s), 4 vidéo(s)"
-        },
-        "visual": {
-          "status": "passed",
-          "at": "2026-11-21T10:37:08.278Z",
-          "details": "1 test(s) @visual réussi(s) (mode demo)"
-        },
-        "acceptance": {
-          "status": "passed",
-          "at": "2026-11-21T10:37:08.309Z",
-          "details": "3/3 critères ✅"
-        }
-      }
+      "validations": {}
     },
     "SPEC-2003": {
-      "status": "done",
+      "status": "pending",
       "attempts": 0,
-      "startedAt": "2026-11-21T10:53:00.795Z",
-      "completedAt": "2026-11-21T13:21:55.512Z",
-      "branch": "spec/SPEC-2003-socle-python-facade",
-      "commit": "2febe3c1",
+      "startedAt": null,
+      "completedAt": null,
+      "branch": null,
+      "commit": null,
       "lastError": null,
-      "validations": {
-        "lint": {
-          "status": "passed",
-          "at": "2026-11-21T13:12:59.543Z",
-          "details": ""
-        },
-        "typecheck": {
-          "status": "passed",
-          "at": "2026-11-21T13:13:15.214Z",
-          "details": ""
-        },
-        "build": {
-          "status": "passed",
-          "at": "2026-11-21T12:04:17.382Z",
-          "details": ""
-        },
-        "unit": {
-          "status": "passed",
-          "at": "2026-11-21T13:15:23.036Z",
-          "details": "4 test(s) réussi(s), 0 échec(s) ; pytest : 59 réussi(s), 0 échec(s)"
-        },
-        "integration": {
-          "status": "passed",
-          "at": "2026-11-21T13:21:44.448Z",
-          "details": "0 test(s) réussi(s), 0 échec(s) ; pytest : 4 réussi(s), 0 échec(s)"
-        },
-        "e2e": {
-          "status": "passed",
-          "at": "2026-11-21T12:13:21.038Z",
-          "details": "2 réussi(s), 0 échec(s), 4 vidéo(s)"
-        },
-        "visual": {
-          "status": "passed",
-          "at": "2026-11-21T12:13:21.038Z",
-          "details": "1 test(s) @visual réussi(s) (mode demo)"
-        },
-        "acceptance": {
-          "status": "passed",
-          "at": "2026-11-21T13:21:44.477Z",
-          "details": "4/4 critères ✅"
-        }
-      }
+      "validations": {}
     },
     "SPEC-2101": {
-      "status": "done",
+      "status": "pending",
       "attempts": 0,
-      "startedAt": "2026-11-21T14:31:12.248Z",
-      "completedAt": "2026-11-21T16:37:15.447Z",
-      "branch": "spec/SPEC-2101-donnees-identite-rls",
-      "commit": "a365479d",
+      "startedAt": null,
+      "completedAt": null,
+      "branch": null,
+      "commit": null,
       "lastError": null,
-      "validations": {
-        "lint": {
-          "status": "passed",
-          "at": "2026-11-21T16:32:42.092Z",
-          "details": ""
-        },
-        "typecheck": {
-          "status": "passed",
-          "at": "2026-11-21T16:32:56.844Z",
-          "details": ""
-        },
-        "build": {
-          "status": "passed",
-          "at": "2026-11-21T16:18:25.910Z",
-          "details": ""
-        },
-        "unit": {
-          "status": "passed",
-          "at": "2026-11-21T16:34:56.581Z",
-          "details": "0 test(s) réussi(s), 0 échec(s) ; pytest : 193 réussi(s), 0 échec(s)"
-        },
-        "integration": {
-          "status": "passed",
-          "at": "2026-11-21T16:27:08.301Z",
-          "details": "0 test(s) réussi(s), 0 échec(s) ; pytest : 5 réussi(s), 0 échec(s)"
-        },
-        "e2e": {
-          "status": "passed",
-          "at": "2026-11-21T16:28:01.585Z",
-          "details": "2 réussi(s), 0 échec(s), 4 vidéo(s)"
-        },
-        "visual": {
-          "status": "passed",
-          "at": "2026-11-21T16:28:01.585Z",
-          "details": "1 test(s) @visual réussi(s) (mode demo)"
-        },
-        "acceptance": {
-          "status": "passed",
-          "at": "2026-11-21T16:34:56.608Z",
-          "details": "3/3 critères ✅"
-        }
-      }
+      "validations": {}
     },
     "SPEC-2102": {
-      "status": "done",
+      "status": "pending",
       "attempts": 0,
-      "startedAt": "2026-11-21T16:42:16.672Z",
-      "completedAt": "2026-11-21T18:31:16.620Z",
-      "branch": "spec/SPEC-2102-outbox-worker",
-      "commit": "064cb798",
+      "startedAt": null,
+      "completedAt": null,
+      "branch": null,
+      "commit": null,
       "lastError": null,
-      "validations": {
-        "lint": {
-          "status": "passed",
-          "at": "2026-11-21T18:09:35.134Z",
-          "details": ""
-        },
-        "typecheck": {
-          "status": "passed",
-          "at": "2026-11-21T18:14:24.137Z",
-          "details": ""
-        },
-        "build": {
-          "status": "passed",
-          "at": "2026-11-21T18:15:33.390Z",
-          "details": ""
-        },
-        "unit": {
-          "status": "passed",
-          "at": "2026-11-21T18:17:39.025Z",
-          "details": "0 test(s) réussi(s), 0 échec(s) ; pytest : 52 réussi(s), 0 échec(s)"
-        },
-        "integration": {
-          "status": "passed",
-          "at": "2026-11-21T18:23:55.588Z",
-          "details": "0 test(s) réussi(s), 0 échec(s) ; pytest : 9 réussi(s), 0 échec(s)"
-        },
-        "e2e": {
-          "status": "passed",
-          "at": "2026-11-21T18:24:50.963Z",
-          "details": "2 réussi(s), 0 échec(s), 4 vidéo(s)"
-        },
-        "visual": {
-          "status": "passed",
-          "at": "2026-11-21T18:24:50.964Z",
-          "details": "1 test(s) @visual réussi(s) (mode demo)"
-        },
-        "acceptance": {
-          "status": "passed",
-          "at": "2026-11-21T18:24:50.990Z",
-          "details": "3/3 critères ✅"
-        }
-      }
+      "validations": {}
     },
     "SPEC-2201": {
-      "status": "done",
+      "status": "pending",
       "attempts": 0,
-      "startedAt": "2026-11-21T18:35:49.561Z",
-      "completedAt": "2026-11-21T20:41:53.281Z",
-      "branch": "spec/SPEC-2201-domaines-identite-formation",
-      "commit": "f99cb039",
+      "startedAt": null,
+      "completedAt": null,
+      "branch": null,
+      "commit": null,
       "lastError": null,
-      "validations": {
-        "lint": {
-          "status": "passed",
-          "at": "2026-11-21T20:31:41.899Z",
-          "details": ""
-        },
-        "typecheck": {
-          "status": "passed",
-          "at": "2026-11-21T20:31:56.752Z",
-          "details": ""
-        },
-        "build": {
-          "status": "passed",
-          "at": "2026-11-21T20:31:57.853Z",
-          "details": ""
-        },
-        "unit": {
-          "status": "passed",
-          "at": "2026-11-21T20:34:00.561Z",
-          "details": "0 test(s) réussi(s), 0 échec(s) ; pytest : 121 réussi(s), 0 échec(s)"
-        },
-        "integration": {
-          "status": "passed",
-          "at": "2026-11-21T20:40:39.045Z",
-          "details": "0 test(s) réussi(s), 0 échec(s) ; pytest : 75 réussi(s), 0 échec(s)"
-        },
-        "e2e": {
-          "status": "passed",
-          "at": "2026-11-21T20:41:36.232Z",
-          "details": "2 réussi(s), 0 échec(s), 4 vidéo(s)"
-        },
-        "visual": {
-          "status": "passed",
-          "at": "2026-11-21T20:41:36.232Z",
-          "details": "1 test(s) @visual réussi(s) (mode demo)"
-        },
-        "acceptance": {
-          "status": "passed",
-          "at": "2026-11-21T20:41:36.258Z",
-          "details": "5/5 critères ✅"
-        }
-      }
+      "validations": {}
     },
     "SPEC-2202": {
-      "status": "done",
+      "status": "pending",
       "attempts": 0,
-      "startedAt": "2026-11-21T20:47:26.697Z",
-      "completedAt": "2026-11-22T07:02:58.035Z",
-      "branch": "spec/SPEC-2202-domaines-apprentissage-evaluations",
-      "commit": "5ffc30c2",
+      "startedAt": null,
+      "completedAt": null,
+      "branch": null,
+      "commit": null,
       "lastError": null,
-      "validations": {
-        "lint": {
-          "status": "passed",
-          "at": "2026-11-22T06:58:51.666Z",
-          "details": ""
-        },
-        "typecheck": {
-          "status": "passed",
-          "at": "2026-11-22T07:00:00.521Z",
-          "details": ""
-        },
-        "build": {
-          "status": "passed",
-          "at": "2026-11-22T06:28:21.079Z",
-          "details": ""
-        },
-        "unit": {
-          "status": "passed",
-          "at": "2026-11-22T06:30:20.387Z",
-          "details": "0 test(s) réussi(s), 0 échec(s) ; pytest : 729 réussi(s), 0 échec(s)"
-        },
-        "integration": {
-          "status": "passed",
-          "at": "2026-11-22T06:36:55.774Z",
-          "details": "0 test(s) réussi(s), 0 échec(s) ; pytest : 210 réussi(s), 0 échec(s)"
-        },
-        "e2e": {
-          "status": "passed",
-          "at": "2026-11-22T07:02:04.036Z",
-          "details": "2 réussi(s), 0 échec(s), 4 vidéo(s)"
-        },
-        "visual": {
-          "status": "passed",
-          "at": "2026-11-22T07:02:04.036Z",
-          "details": "1 test(s) @visual réussi(s) (mode demo)"
-        },
-        "acceptance": {
-          "status": "passed",
-          "at": "2026-11-22T07:02:04.064Z",
-          "details": "5/5 critères ✅"
-        }
-      }
+      "validations": {}
     },
     "SPEC-2203": {
-      "status": "done",
+      "status": "pending",
       "attempts": 0,
-      "startedAt": "2026-11-22T07:07:41.139Z",
-      "completedAt": "2026-11-22T09:30:25.568Z",
-      "branch": "spec/SPEC-2203-domaine-contenu-ingestion",
-      "commit": "f45fa0fb",
+      "startedAt": null,
+      "completedAt": null,
+      "branch": null,
+      "commit": null,
       "lastError": null,
-      "validations": {
-        "lint": {
-          "status": "passed",
-          "at": "2026-11-22T09:14:59.546Z",
-          "details": ""
-        },
-        "typecheck": {
-          "status": "passed",
-          "at": "2026-11-22T09:19:45.525Z",
-          "details": ""
-        },
-        "build": {
-          "status": "passed",
-          "at": "2026-11-22T09:20:56.146Z",
-          "details": ""
-        },
-        "unit": {
-          "status": "passed",
-          "at": "2026-11-22T09:22:58.389Z",
-          "details": "0 test(s) réussi(s), 0 échec(s) ; pytest : 174 réussi(s), 0 échec(s)"
-        },
-        "integration": {
-          "status": "passed",
-          "at": "2026-11-22T09:29:21.032Z",
-          "details": "0 test(s) réussi(s), 0 échec(s) ; pytest : 77 réussi(s), 0 échec(s)"
-        },
-        "e2e": {
-          "status": "passed",
-          "at": "2026-11-22T09:30:16.878Z",
-          "details": "2 réussi(s), 0 échec(s), 4 vidéo(s)"
-        },
-        "visual": {
-          "status": "passed",
-          "at": "2026-11-22T09:30:16.878Z",
-          "details": "1 test(s) @visual réussi(s) (mode demo)"
-        },
-        "acceptance": {
-          "status": "passed",
-          "at": "2026-11-22T09:30:16.918Z",
-          "details": "5/5 critères ✅"
-        }
-      }
+      "validations": {}
     },
     "SPEC-2204": {
-      "status": "done",
+      "status": "pending",
       "attempts": 0,
-      "startedAt": "2026-11-22T13:58:00Z",
-      "branch": "spec/SPEC-2204-domaine-tuteur-sse",
-      "completedAt": "2026-11-22T15:22:52.899Z",
-      "commit": "16ac9752",
+      "startedAt": null,
+      "completedAt": null,
+      "branch": null,
+      "commit": null,
       "lastError": null,
-      "validations": {
-        "lint": {
-          "status": "passed",
-          "at": "2026-11-22T15:15:54.086Z",
-          "details": ""
-        },
-        "typecheck": {
-          "status": "passed",
-          "at": "2026-11-22T15:16:09.195Z",
-          "details": ""
-        },
-        "build": {
-          "status": "passed",
-          "at": "2026-11-22T15:03:17.721Z",
-          "details": ""
-        },
-        "unit": {
-          "status": "passed",
-          "at": "2026-11-22T15:05:25.089Z",
-          "details": "4 test(s) réussi(s), 0 échec(s) ; pytest : 72 réussi(s), 0 échec(s)"
-        },
-        "integration": {
-          "status": "passed",
-          "at": "2026-11-22T15:22:31.128Z",
-          "details": "0 test(s) réussi(s), 0 échec(s) ; pytest : 55 réussi(s), 0 échec(s)"
-        },
-        "e2e": {
-          "status": "passed",
-          "at": "2026-11-22T15:12:58.624Z",
-          "details": "2 réussi(s), 0 échec(s), 4 vidéo(s)"
-        },
-        "visual": {
-          "status": "passed",
-          "at": "2026-11-22T15:12:58.624Z",
-          "details": "1 test(s) @visual réussi(s) (mode demo)"
-        },
-        "acceptance": {
-          "status": "passed",
-          "at": "2026-11-22T15:22:31.160Z",
-          "details": "5/5 critères ✅"
-        }
-      }
+      "validations": {}
     },
     "SPEC-2205": {
-      "status": "done",
+      "status": "pending",
       "attempts": 0,
-      "startedAt": "2026-11-22T09:35:00Z",
-      "branch": "spec/SPEC-2205-domaine-engagement",
-      "completedAt": "2026-11-22T12:51:01.387Z",
-      "commit": "f99707a9",
+      "startedAt": null,
+      "completedAt": null,
+      "branch": null,
+      "commit": null,
       "lastError": null,
-      "validations": {
-        "lint": {
-          "status": "passed",
-          "at": "2026-11-22T12:48:42.514Z",
-          "details": ""
-        },
-        "typecheck": {
-          "status": "passed",
-          "at": "2026-11-22T12:49:53.309Z",
-          "details": ""
-        },
-        "build": {
-          "status": "passed",
-          "at": "2026-11-22T12:32:13.064Z",
-          "details": ""
-        },
-        "unit": {
-          "status": "passed",
-          "at": "2026-11-22T12:34:18.052Z",
-          "details": "0 test(s) réussi(s), 0 échec(s) ; pytest : 2113 réussi(s), 0 échec(s)"
-        },
-        "integration": {
-          "status": "passed",
-          "at": "2026-11-22T12:40:59.176Z",
-          "details": "0 test(s) réussi(s), 0 échec(s) ; pytest : 94 réussi(s), 0 échec(s)"
-        },
-        "e2e": {
-          "status": "passed",
-          "at": "2026-11-22T12:50:52.010Z",
-          "details": "2 réussi(s), 0 échec(s), 4 vidéo(s)"
-        },
-        "visual": {
-          "status": "passed",
-          "at": "2026-11-22T12:50:52.010Z",
-          "details": "1 test(s) @visual réussi(s) (mode demo)"
-        },
-        "acceptance": {
-          "status": "passed",
-          "at": "2026-11-22T12:50:52.039Z",
-          "details": "5/5 critères ✅"
-        }
-      }
+      "validations": {}
     },
     "SPEC-2206": {
-      "status": "done",
+      "status": "pending",
       "attempts": 0,
-      "startedAt": "2026-11-22T15:31:58.000Z",
-      "completedAt": "2026-11-22T16:46:23.098Z",
-      "branch": "spec/SPEC-2206-domaines-facturation-confidentialite",
-      "commit": "e6eefcfa",
+      "startedAt": null,
+      "completedAt": null,
+      "branch": null,
+      "commit": null,
       "lastError": null,
-      "validations": {
-        "lint": {
-          "status": "passed",
-          "at": "2026-11-22T16:35:03.827Z",
-          "details": ""
-        },
-        "typecheck": {
-          "status": "passed",
-          "at": "2026-11-22T16:36:17.735Z",
-          "details": ""
-        },
-        "build": {
-          "status": "passed",
-          "at": "2026-11-22T16:36:18.927Z",
-          "details": ""
-        },
-        "unit": {
-          "status": "passed",
-          "at": "2026-11-22T16:38:26.781Z",
-          "details": "0 test(s) réussi(s), 0 échec(s) ; pytest : 53 réussi(s), 0 échec(s)"
-        },
-        "integration": {
-          "status": "passed",
-          "at": "2026-11-22T16:44:56.507Z",
-          "details": "0 test(s) réussi(s), 0 échec(s) ; pytest : 14 réussi(s), 0 échec(s)"
-        },
-        "e2e": {
-          "status": "passed",
-          "at": "2026-11-22T16:45:53.957Z",
-          "details": "2 réussi(s), 0 échec(s), 4 vidéo(s)"
-        },
-        "visual": {
-          "status": "passed",
-          "at": "2026-11-22T16:45:53.957Z",
-          "details": "1 test(s) @visual réussi(s) (mode demo)"
-        },
-        "acceptance": {
-          "status": "passed",
-          "at": "2026-11-22T16:45:53.986Z",
-          "details": "5/5 critères ✅"
-        }
-      }
+      "validations": {}
     },
     "SPEC-2301": {
-      "status": "blocked",
-      "attempts": 1,
-      "startedAt": "2026-11-23T00:22:20.027Z",
+      "status": "pending",
+      "attempts": 0,
+      "startedAt": null,
       "completedAt": null,
-      "branch": "spec/SPEC-2301-deploiement-bascule-rollback",
+      "branch": null,
       "commit": null,
-      "lastError": "staging Coolify non fourni par le porteur : CA-1/CA-2/CA-3/CA-4 non mesurables (ADR-2009, CL-3)",
-      "validations": {
-        "lint": {
-          "status": "passed",
-          "at": "2026-11-23T01:24:07.541Z",
-          "details": ""
-        },
-        "typecheck": {
-          "status": "passed",
-          "at": "2026-11-23T01:24:22.797Z",
-          "details": ""
-        },
-        "build": {
-          "status": "passed",
-          "at": "2026-11-23T01:07:17.303Z",
-          "details": ""
-        },
-        "unit": {
-          "status": "passed",
-          "at": "2026-11-23T01:23:15.800Z",
-          "details": "24 test(s) réussi(s), 0 échec(s) ; pytest : 8 réussi(s), 0 échec(s)"
-        },
-        "integration": {
-          "status": "passed",
-          "at": "2026-11-23T01:15:29.334Z",
-          "details": "0 test(s) réussi(s), 0 échec(s) ; pytest : 4 réussi(s), 0 échec(s)"
-        },
-        "e2e": {
-          "status": "passed",
-          "at": "2026-11-23T01:16:23.884Z",
-          "details": "2 réussi(s), 0 échec(s), 4 vidéo(s)"
-        },
-        "visual": {
-          "status": "passed",
-          "at": "2026-11-23T01:16:23.885Z",
-          "details": "1 test(s) @visual réussi(s) (mode demo)"
-        },
-        "acceptance": {
-          "status": "passed",
-          "at": "2026-11-23T01:24:23.901Z",
-          "details": "4/4 critères ✅"
-        }
-      }
+      "lastError": null,
+      "validations": {}
     },
     "SPEC-2302": {
-      "status": "in_progress",
-      "attempts": 1,
-      "startedAt": "2026-11-23T01:39:40.000Z",
+      "status": "pending",
+      "attempts": 0,
+      "startedAt": null,
       "completedAt": null,
-      "branch": "spec/SPEC-2302-retrait-backend-typescript",
+      "branch": null,
       "commit": null,
-      "lastError": "retrait du TypeScript impossible : 16 entrees encore relayees (15 demos dev.sdd.spec-* + home.get) faute de cas d'usage Python (bricks.create/getPublicBrick, resolveModel, buildTutorDemo, searchWeb, runNativeClientScenario, fixtures d'ingestion) ; apps/api ne peut pas etre supprime tant qu'une entree est ts",
+      "lastError": null,
       "validations": {}
     },
     "SPEC-2207": {
-      "status": "done",
+      "status": "pending",
       "attempts": 0,
-      "startedAt": "2026-11-22T17:52:00.000Z",
-      "completedAt": "2026-11-23T00:10:15.725Z",
-      "branch": "spec/SPEC-2207-bascule-jobs-crons-demos",
-      "commit": "226eea68",
+      "startedAt": null,
+      "completedAt": null,
+      "branch": null,
+      "commit": null,
       "lastError": null,
-      "validations": {
-        "lint": {
-          "status": "passed",
-          "at": "2026-11-23T00:01:07.109Z",
-          "details": ""
-        },
-        "typecheck": {
-          "status": "passed",
-          "at": "2026-11-23T00:01:22.630Z",
-          "details": ""
-        },
-        "build": {
-          "status": "passed",
-          "at": "2026-11-22T23:51:11.095Z",
-          "details": ""
-        },
-        "unit": {
-          "status": "passed",
-          "at": "2026-11-22T23:53:14.953Z",
-          "details": "0 test(s) réussi(s), 0 échec(s) ; pytest : 207 réussi(s), 0 échec(s)"
-        },
-        "integration": {
-          "status": "passed",
-          "at": "2026-11-22T23:59:50.593Z",
-          "details": "0 test(s) réussi(s), 0 échec(s) ; pytest : 162 réussi(s), 0 échec(s)"
-        },
-        "e2e": {
-          "status": "passed",
-          "at": "2026-11-23T00:02:41.077Z",
-          "details": "2 réussi(s), 0 échec(s), 4 vidéo(s)"
-        },
-        "visual": {
-          "status": "passed",
-          "at": "2026-11-23T00:02:41.078Z",
-          "details": "1 test(s) @visual réussi(s) (mode demo)"
-        },
-        "acceptance": {
-          "status": "passed",
-          "at": "2026-11-23T00:02:41.105Z",
-          "details": "3/3 critères ✅"
-        }
-      }
+      "validations": {}
     },
     "SPEC-3001": {
       "status": "done",
@@ -7508,11 +6975,11 @@
       "validations": {}
     },
     "SPEC-3202": {
-      "status": "pending",
+      "status": "in_progress",
       "attempts": 0,
-      "startedAt": null,
+      "startedAt": "2026-11-23T11:48:33.457Z",
       "completedAt": null,
-      "branch": null,
+      "branch": "spec/SPEC-3202-programme-modules-et-chapitres",
       "commit": null,
       "lastError": null,
       "validations": {}
@@ -7704,31 +7171,28 @@
       "report": null
     },
     "CP-20": {
-      "status": "passed",
-      "at": "2026-11-21T14:26:02.176Z",
-      "tag": "cp-20",
-      "report": "evidence/checkpoints/CP-20/summary.md",
-      "exception": true,
-      "reason": "Suite e2e complete rouge sur main (SPEC-006) ; exception autorisee par le porteur du projet."
+      "status": "pending",
+      "at": null,
+      "tag": null,
+      "report": null
     },
     "CP-21": {
-      "status": "failed",
-      "at": "2026-11-23T04:38:27.000Z",
+      "status": "pending",
+      "at": null,
       "tag": null,
-      "report": "evidence/checkpoints/CP-21/summary.md"
+      "report": null
     },
     "CP-22": {
-      "status": "failed",
-      "at": "2026-11-23T04:38:27.000Z",
+      "status": "pending",
+      "at": null,
       "tag": null,
-      "report": "evidence/checkpoints/CP-22/summary.md"
+      "report": null
     },
     "CP-23": {
       "status": "pending",
       "at": null,
       "tag": null,
-      "report": "evidence/checkpoints/CP-23/summary.md",
-      "reason": "non franchi : SPEC-2301 bloquee externe et SPEC-2302 incomplete (16 entrees relayees)"
+      "report": null
     },
     "CP-30": {
       "status": "passed",
@@ -7767,13 +7231,5 @@
       "report": null
     }
   },
-  "anomalies": [
-    {
-      "spec": "SPEC-2301",
-      "at": "2026-11-23T01:24:33.787Z",
-      "attempts": 1,
-      "reason": "staging Coolify non fourni par le porteur : CA-1/CA-2/CA-3/CA-4 non mesurables (ADR-2009, CL-3)",
-      "external": true
-    }
-  ]
+  "anomalies": []
 }
