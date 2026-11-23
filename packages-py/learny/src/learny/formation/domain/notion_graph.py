@@ -1,9 +1,9 @@
 """Read model of the notion map (SPEC-616 EF-1 to EF-5, ET-3 to ET-5; BR-CAR-01 to 05).
 
-Port of `notion-graph/get-graph.ts` and of the link derivation of `gaps/links.ts`. The projection is
-pure: the service reads the rows under the learner's RLS transaction and this module decides the
-nodes, the typed links, the gap cards and the statistics. A contribution belongs to a chapter, so it
-feeds every notion of that chapter (ADR-0307): the graph never invents a private relation.
+The projection is pure: the service reads the rows under the learner's RLS transaction and this
+module decides the nodes, the typed links, the gap cards and the statistics. A contribution belongs
+to a chapter, so it feeds every notion of that chapter (ADR-0307): the graph never invents a private
+relation.
 """
 
 import unicodedata
@@ -26,7 +26,7 @@ MASTERY_STATUSES = ("upcoming", "to_consolidate", "mastered")
 
 
 def encode(value: str) -> str:
-    """`encodeURIComponent` of the TypeScript link builders."""
+    """`encodeURIComponent`: one path segment of a notion link."""
     return quote(value, safe="-_.!~*'()")
 
 

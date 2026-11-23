@@ -1,4 +1,4 @@
-"""Task catalogue of `learny.platform.llm` (SPEC-2201, port of `packages/llm/src/tasks.ts`).
+"""Task catalogue of `learny.platform.llm` (SPEC-2201).
 
 The single source of task budgets (SPEC-504 ET-1). No model is attached to a task here: the learner
 chooses it (BR-IA-02), so this table only declares what each task needs.

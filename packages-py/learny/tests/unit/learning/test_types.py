@@ -1,9 +1,4 @@
-"""[SPEC-2202] Public contracts of the pure engine (SPEC-401 ET-2, CL-6, CL-9).
-
-Ported from `packages/learning-engine/src/types.test.ts`. The TypeScript file also runs fast-check
-JSON round-trip properties on generated objects; the Python port keeps the same contracts with
-explicit cases, and covers `assert_availability`, which had no direct test until now.
-"""
+"""[SPEC-2202] Public contracts of the pure engine (SPEC-401 ET-2, CL-6, CL-9)."""
 
 import json
 

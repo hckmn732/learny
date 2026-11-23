@@ -1,13 +1,7 @@
 """[SPEC-2203] Upload limits, real type detection and Storage access.
 
-Ported from `packages/services/src/resources/upload.test.ts` (SPEC-206 section 12, CA-1; EF-1 to
-EF-7, ET-2 to ET-5, CL-1 to CL-3, BR-APP-02): the same bounds at their exact edge, the same real
-bytes, the same business codes and the same problem+json status. Nothing here opens a socket: the
-Storage reader gets an `httpx.MockTransport`.
-
-Two cases of the TypeScript file have no Python equivalent by design: the SDD simulation page
-(`simulateUpload`, an `apps/web` dev route delivered by SPEC-2207) and the byte-length padding of
-the 50 MB PDF (the byte bound is exercised on the constant, the page bound on real bytes).
+The same bounds at their exact edge, the same real bytes, the same business codes and the same
+problem+json status. Nothing here opens a socket: the Storage reader gets an `httpx.MockTransport`.
 """
 
 import base64

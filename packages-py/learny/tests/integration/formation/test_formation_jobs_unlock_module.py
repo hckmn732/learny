@@ -1,8 +1,8 @@
-"""[SPEC-2207] The module unlock job against the local stack (port of `module-unlock`).
+"""[SPEC-2207] The module unlock job against the local stack.
 
 A passed validation quiz validates its module, opens the next one, puts the notions in review,
-queues `module/validated`, writes the milestone and notifies once. A replay finds the module
-already validated and only raises `best_score` (CL-3); a failed attempt writes nothing.
+queues `module/validated`, writes the milestone and notifies once. A replay finds the module already
+validated and only raises `best_score` (CL-3); a failed attempt writes nothing.
 """
 
 from typing import Any

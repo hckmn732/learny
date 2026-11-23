@@ -1,10 +1,10 @@
 """Initial planning of a validated programme (SPEC-605 EF-4, ET-5, SPEC-407).
 
-Port of `packages/jobs/src/functions/programme.ts`: the event `formation/programme-validated`
-carries the formation identifier once; a replay finds the planner slots already written and writes
-nothing. The planner of SPEC-407 is reused as it is (`plan_schedule`, `ENGINE['planner']`), so no
-planning rule is duplicated here: this use case only reads the formation, its modules and its
-chapters, builds the planner input and inserts the planned slots.
+The event `formation/programme-validated` carries the formation identifier once; a replay finds the
+planner slots already written and writes nothing. The planner of SPEC-407 is reused as it is
+(`plan_schedule`, `ENGINE['planner']`), so no planning rule is duplicated here: this use case only
+reads the formation, its modules and its chapters, builds the planner input and inserts the planned
+slots.
 
 The three early returns of the source ("formation absente", "programme vide", "deja planifie") are
 internal outcomes of the job, never shown to a learner: the Python backend keeps them in English

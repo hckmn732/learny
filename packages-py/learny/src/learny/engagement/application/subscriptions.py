@@ -1,7 +1,5 @@
 """Browser push subscriptions of a learner (SPEC-2205).
 
-Ported from `packages/notifications/src/push/subscriptions.ts`.
-
 Every write goes through the RLS transaction of the caller: a learner only ever sees and touches
 their own rows. The `unique(endpoint)` constraint keeps one endpoint on one account; when the insert
 trips it, the endpoint belongs to someone else and the answer is a neutral refusal that neither

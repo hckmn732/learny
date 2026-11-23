@@ -1,9 +1,9 @@
 """Monotone reading progress of a course (SPEC-609 EF-3, ET-5, BR-COU-08).
 
-Port of `packages/services/src/courses/progress.ts`: the client sends the sections it has seen, the
-server derives the percentage from the sections that actually belong to the chapter. A smaller
-value never replaces a larger one and the course percentage is the mean of its chapters. Every
-transition is one transactional write with one deterministic event, so a replay is a no-op.
+The client sends the sections it has seen, the server derives the percentage from the sections that
+actually belong to the chapter. A smaller value never replaces a larger one and the course
+percentage is the mean of its chapters. Every transition is one transactional write with one
+deterministic event, so a replay is a no-op.
 """
 
 import math

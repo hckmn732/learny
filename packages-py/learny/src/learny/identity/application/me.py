@@ -1,8 +1,7 @@
 """Profile of the authenticated learner (SPEC-601 EF-10, completed by SPEC-602; SPEC-2201).
 
-Port of `packages/services/src/me.ts`: everything is read with the learner's own RLS transaction, so
-another learner's profile never reaches the DTO. `read_me` is reused by the settings and onboarding
-use cases, exactly like the TypeScript module exports it.
+Everything is read with the learner's own RLS transaction, so another learner's profile never
+reaches the DTO. `read_me` is reused by the settings and onboarding use cases.
 """
 
 from collections.abc import Mapping

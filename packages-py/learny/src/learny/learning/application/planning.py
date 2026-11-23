@@ -1,10 +1,10 @@
 """Agenda move and BR-FOR-14 replanning (SPEC-705, BR-AGE-05, ADR-0029, ADR-0326).
 
-Port of `packages/services/src/agenda-deplacer-et-reajuster-le-planning.ts`: every availability,
-local hour and projected end date comes from the pure planner of SPEC-407 (`find_compatible_slots`,
-`plan_schedule`). The service only reads the learner's rows behind RLS, persists the committed
-transition (old slot `moved`, new slot with `moved_from_id`, replay-safe automation action) and
-emits the domain events after the commit. A content version guards stale moves and stale plans.
+Every availability, local hour and projected end date comes from the pure planner of SPEC-407
+(`find_compatible_slots`, `plan_schedule`). The service only reads the learner's rows behind RLS,
+persists the committed transition (old slot `moved`, new slot with `moved_from_id`, replay-safe
+automation action) and emits the domain events after the commit. A content version guards stale
+moves and stale plans.
 """
 
 import hashlib
@@ -1046,8 +1046,8 @@ SELECT_ACTIVE_FORMATIONS = text(
 async def replan_formation_in_tx(tx: Any, user_id: str, formation_id: str, now: datetime) -> None:
     """Replans one formation in place, reusing the planner and the slot reconciliation.
 
-    Port of `replanFormationAfterResume` of `packages/services/src/planning/index.ts`: the pause
-    and the module unlock share it, so no planning rule is duplicated (ADR-2011 section 4).
+    The pause and the module unlock share it, so no planning rule is duplicated (ADR-2011 section
+    4).
     """
     actor = Actor(user_id=user_id, email="", email_confirmed=True, transport="bearer")
     context = await _read_planning_context_tx(tx, actor, formation_id, now)

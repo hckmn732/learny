@@ -1,6 +1,4 @@
-"""JSON rendering identical to the TypeScript backend (00-conventions section 7).
-
-`dumps` mirrors `JSON.stringify` (no spaces, no ASCII escaping, insertion order) and `canonical`
+"""`dumps` mirrors `JSON.stringify` (no spaces, no ASCII escaping, insertion order) and `canonical`
 mirrors `canonicalJson` from `packages/db` (keys sorted by UTF-16 code units, `null` members kept).
 Both are used for API bodies, event ids and idempotency request hashes, so they must be
 byte-identical across runtimes.

@@ -5,13 +5,12 @@ and retries every 15 s (CL-2). Two schedules only, hard-coded: hourly at minute 
 01:30, both UTC.
 
 - hourly: expires the pending automation actions whose instant has passed (SPEC-711 ET-4), emits one
-  `user/local-tick` per active learner (pages of 500, the exact payload of the TypeScript cron) and
-  then `cron/hourly-tick` (`{tickAt}`);
+`user/local-tick` per active learner and
+then `cron/hourly-tick` (`{tickAt}`);
 - nightly: emits `cron/nightly` (`{runDate}`), which fans out to the six nightly treatments.
 
-The outbox resend of the TypeScript tick is not ported: the dispatcher polls. Both tasks are served
-by Python (SPEC-2302); the event identifiers (`hourly-tick:<T>`, `nightly:<runDate>`,
-`local-tick:<user>:<windowStart>`) make a replay harmless.
+Both tasks are served by Python (SPEC-2302); the event identifiers (`hourly-tick:<T>`,
+`nightly:<runDate>`, `local-tick:<user>:<windowStart>`) make a replay harmless.
 """
 
 import asyncio
@@ -43,7 +42,7 @@ CRON_NIGHTLY = "cron/nightly"
 
 
 def hourly_tick_instant(now: datetime) -> datetime:
-    """`T` truncated to the minute, as the TypeScript cron does."""
+    """`T` truncated to the minute."""
     return now.astimezone(UTC).replace(second=0, microsecond=0)
 
 
@@ -126,8 +125,7 @@ class Scheduler:
     async def hourly_task(self, now: datetime) -> int:
         """`cron-hourly-tick`: expire, fan the local ticks out, then emit the tick itself.
 
-        Returns how many learners received a local tick. The order is the one of the TypeScript
-        cron; the actions expire on the same injected instant as the rest of the run.
+        Returns how many learners received a local tick.
         """
         instant = hourly_tick_instant(now)
         expired = await expire_due_automation_actions(self._deps)

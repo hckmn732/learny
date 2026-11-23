@@ -1,10 +1,10 @@
-"""E-mail channel of the engagement context (SPEC-2205, ported from `packages/notifications/src/email`).
+"""E-mail channel of the engagement context (SPEC-2205).
 
-Three transports, selected by `EMAIL_MODE` exactly like the TypeScript backend: `memory` captures
-every message in a process-local outbox and never opens a socket (unit and integration tests),
-`smtp` talks to Mailpit through `aiosmtplib` in local development, `resend` calls the HTTP API with
-the caller's idempotency key in production. A transport error is either transient (worth another
-attempt) or a definitive rejection, and never carries the recipient address (SPEC-204 ET-5, CL-2).
+Three transports, selected by `EMAIL_MODE`: `memory` captures every message in a process-local
+outbox and never opens a socket (unit and integration tests), `smtp` talks to Mailpit through
+`aiosmtplib` in local development, `resend` calls the HTTP API with the caller's idempotency key in
+production. A transport error is either transient (worth another attempt) or a definitive rejection,
+and never carries the recipient address (SPEC-204 ET-5, CL-2).
 
 The server-side configuration is validated when it is first read, before any send: a production
 process without `EMAIL_LINK_SECRET`, or a `resend` mode without `RESEND_API_KEY`, fails there.
@@ -31,7 +31,7 @@ EmailMode = Literal["memory", "smtp", "resend"]
 DEFAULT_EMAIL_FROM = "Learny <bonjour@learny.app>"
 DEFAULT_APP_URL = "http://localhost:3000"
 # Development value of `.env.example`; the production configuration refuses it by requiring an
-# explicit `EMAIL_LINK_SECRET` (packages/notifications/src/email/config.ts).
+# explicit `EMAIL_LINK_SECRET`.
 DEV_LINK_SECRET = "learny-test-only-email-link-secret-00000000"  # noqa: S105
 
 UNSUBSCRIBE_PATH = "/api/v1/email/unsubscribe"

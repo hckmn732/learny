@@ -1,8 +1,4 @@
-"""[SPEC-2202] Retention at one and two months (SPEC-408).
-
-Ported from `packages/learning-engine/src/metrics/retention.test.ts`; expected values recorded from
-the TypeScript engine on 2026-11-21.
-"""
+"""[SPEC-2202] Retention at one and two months (SPEC-408)."""
 
 import json
 from pathlib import Path

@@ -1,8 +1,8 @@
 """Demonstration of the upload limits (SPEC-206 EF-7).
 
-Port of `packages/services/src/dev/uploads.ts`. The simulated sizes go through the very checks of the
-real flow (`assert_declared_upload`, `assert_pdf_pages`, `assert_capacity`, `detect_upload`) without
-creating a file, a row or a blob; a refusal raises the same `AppError` as the real service.
+The simulated sizes go through the very checks of the real flow (`assert_declared_upload`,
+`assert_pdf_pages`, `assert_capacity`, `detect_upload`) without creating a file, a row or a blob; a
+refusal raises the same `AppError` as the real service.
 """
 
 from typing import Any

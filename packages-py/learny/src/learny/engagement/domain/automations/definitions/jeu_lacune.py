@@ -1,9 +1,9 @@
 """Gap game of the automations (SPEC-716, BR-AUT-05, ADR-0190).
 
-Ported from `packages/automations/src/definitions/jeu-lacune.ts`: the explanation of the three
-natures and of the six statuses, and the effect of an `exercise_scheduled` proposal (one practice
-slot). When the exercise could not be prepared yet the action keeps `pendingGeneration` - the same
-branch as an unavailable AI, which the job of SPEC-2207 will fill.
+The explanation of the three natures and of the six statuses, and the effect of an
+`exercise_scheduled` proposal (one practice slot). When the exercise could not be prepared yet the
+action keeps `pendingGeneration` - the same branch as an unavailable AI, which the job of SPEC-2207
+will fill.
 """
 
 from typing import Any

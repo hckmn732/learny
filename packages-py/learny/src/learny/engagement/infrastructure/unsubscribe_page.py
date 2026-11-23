@@ -1,7 +1,5 @@
 """French HTML pages of the one-click unsubscribe flow (SPEC-2205).
 
-Ported from `api-routes/src/special/unsubscribe-page.ts`.
-
 Static markup, no script, the same tokens as the e-mails; the token is only echoed inside the form
 action. The `<style>` block is stamped with the CSP nonce of the response: `style-src-elem` only
 admits a nonce, so an anonymous `<style>` would be refused by the browser. A nonce that is not
@@ -43,7 +41,7 @@ def px(value: int) -> str:
 
 
 def escape_html(value: str) -> str:
-    """The five replacements of the TypeScript helper, apostrophe included (`&#39;`)."""
+    """The five HTML replacements, apostrophe included (`&#39;`)."""
     return _escape(value, quote=True).replace("&#x27;", "&#39;")
 
 

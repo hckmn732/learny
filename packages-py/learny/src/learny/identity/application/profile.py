@@ -1,8 +1,8 @@
 """Settings screen of the learner (SPEC-707 EF-1 to EF-5, ET-1 to ET-5; SPEC-2201).
 
-Port of `packages/services/src/parametres-onglets-et-profil.ts`: the whole screen is read in one RLS
-transaction, and `PATCH /me/profile` writes the profile and the rhythm in ONE transaction with the
-expected version of ET-3. A stale version answers 409 and nothing is written (CL-2).
+The whole screen is read in one RLS transaction, and `PATCH /me/profile` writes the profile and the
+rhythm in ONE transaction with the expected version of ET-3. A stale version answers 409 and nothing
+is written (CL-2).
 """
 
 from collections.abc import Mapping

@@ -1,9 +1,8 @@
 """Collection of one learner's data under row-level security (SPEC-211 EF-3, ET-3).
 
-Port of `packages/jobs/src/personal-data/collect.ts`: every read runs through the learner's
-transaction, so a shared formation contributes its programme and the learner's own course but never
-another member's apports, results or settings. The returned model is JSON-serialisable; a storage
-path is carried as is and read only later, in the zip step.
+Every read runs through the learner's transaction, so a shared formation contributes its programme
+and the learner's own course but never another member's apports, results or settings. The returned
+model is JSON-serialisable; a storage path is carried as is and read only later, in the zip step.
 """
 
 from dataclasses import dataclass

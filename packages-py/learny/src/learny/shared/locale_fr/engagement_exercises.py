@@ -1,8 +1,8 @@
 """User-facing French content of the practice exercises (ADR-2011).
 
-Copied verbatim from `packages/services/src/exercises/ensure-practice-exercise.ts`: the
-deterministic `LLM_MODE=mock` fixture of the exercise of one notion. The table instruction is the
-one notion whose label matches « equilibre ... piece »; every other notion gets the generic text.
+Copied verbatim from the reference implementation: the deterministic `LLM_MODE=mock` fixture of the
+exercise of one notion. The table instruction is the one notion whose label matches « equilibre ...
+piece »; every other notion gets the generic text.
 """
 
 from typing import Any

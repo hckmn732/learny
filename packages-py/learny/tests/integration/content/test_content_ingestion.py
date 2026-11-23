@@ -1,9 +1,8 @@
 """[SPEC-2203] Ingestion of a contribution: five stages, resumability and domain events.
 
-Ported from `packages/ingestion/test/integration/resource.test.ts` and the delivery cases of
-`process-resource.test.ts`: a note becomes `ready` with located passages and one `resource/ready`
-event, a duplicate delivery does nothing, a permanent failure ends in `failed` with
-`resource/failed`, and a transient embedding outage leaves the resource `processing` for the retry.
+A note becomes `ready` with located passages and one `resource/ready` event, a duplicate delivery
+does nothing, a permanent failure ends in `failed` with `resource/failed`, and a transient embedding
+outage leaves the resource `processing` for the retry.
 """
 
 from dataclasses import dataclass

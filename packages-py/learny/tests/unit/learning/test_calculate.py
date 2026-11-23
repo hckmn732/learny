@@ -1,10 +1,4 @@
-"""[SPEC-2202] Weighted mastery and streak (SPEC-403, SPEC-409).
-
-Ported from `packages/learning-engine/src/mastery/calculate.test.ts` and
-`packages/learning-engine/src/streak/calculate.test.ts`; the expected values are the recordings of
-the TypeScript engine (2026-11-21), including the two vectors of
-`api/oracles/vectors/learning-engine.json`.
-"""
+"""[SPEC-2202] Weighted mastery and streak (SPEC-403, SPEC-409)."""
 
 import json
 from pathlib import Path

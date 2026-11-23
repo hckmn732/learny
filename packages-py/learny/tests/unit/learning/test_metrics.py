@@ -1,8 +1,4 @@
-"""[SPEC-2202] Progress indicators of a formation (SPEC-408 ET-2).
-
-Ported from `packages/learning-engine/test/integration/metrics.test.ts`; expected values recorded
-from the TypeScript engine on 2026-11-21.
-"""
+"""[SPEC-2202] Progress indicators of a formation (SPEC-408 ET-2)."""
 
 import json
 from pathlib import Path

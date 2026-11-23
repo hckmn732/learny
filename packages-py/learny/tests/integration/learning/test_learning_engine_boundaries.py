@@ -1,10 +1,4 @@
-"""[SPEC-2202] Boundaries of the learning engine (SPEC-401, CA-5, CA-7, EF-3).
-
-Ported from `packages/learning-engine/test/integration/engine-boundaries.test.ts`. The TypeScript
-suite probes the ESLint restricted-paths rule; here the same invariant is checked on the Python
-sources by AST, which is exactly what `docs/architecture/python-backend/00-conventions.md` section 3
-requires of a pure domain package: no configuration package, no database, no network, no clock.
-"""
+"""[SPEC-2202] Boundaries of the learning engine (SPEC-401, CA-5, CA-7, EF-3)."""
 
 import ast
 from pathlib import Path

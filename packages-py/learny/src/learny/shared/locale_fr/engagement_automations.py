@@ -1,13 +1,11 @@
 """User-facing French strings of the automation engine (SPEC-2205, ADR-2011).
 
-Every literal is copied word for word from the TypeScript: the one-line summaries and their status
-prefixes of `packages/automations/src/moteur-d-automatismes.ts`, the zod messages the settings
-service forwards, the global-pause sentences of `packages/services/src/pause/index.ts`, the
-weekly-review labels of `packages/contracts/src/automatisme-9-bilan-de-la-semaine.ts` and the
-explanations of the ten definitions of `packages/automations/src/definitions/*.ts`.
+Every literal is copied verbatim from the reference implementation: the one-line summaries and
+their status prefixes, the forwarded validation messages, the global-pause sentences, the
+weekly-review labels and the explanations of the ten definitions.
 """
 
-# packages/automations/src/moteur-d-automatismes.ts - the journal line of a decided action.
+# the journal line of a decided action.
 SUMMARY_UNDONE_PREFIX = "Annulé : "
 SUMMARY_DECLINED_PREFIX = "Refusé : "
 SUMMARY_ELLIPSIS = "…"
@@ -29,7 +27,7 @@ NOTIFICATION_HREF_INVALID = "chemin interne commençant par « / » attendu"
 REPRISE_ORDER = "le seuil d’allègement doit être supérieur au seuil de reprise"
 PAUSE_UNTIL_PATTERN = "date civile AAAA-MM-JJ attendue"
 
-# packages/services/src/pause/index.ts - the two journal sentences of the pause.
+# the two journal sentences of the pause.
 PAUSE_STARTED = {
     "tu": "Pause déclarée jusqu’au {end_date}. Ton planning est gelé et ta série reste intacte.",
     "vous": "Pause déclarée jusqu’au {end_date}. Votre planning est gelé et votre série reste intacte.",
@@ -65,7 +63,7 @@ WEEKLY_MONTHS = (
 )
 WEEKLY_WEEKDAYS = ("lun.", "mar.", "mer.", "jeu.", "ven.", "sam.", "dim.")
 
-# packages/services/src/weekly-review.ts - one review that is not this learner's own.
+# one review that is not this learner's own.
 WEEKLY_REVIEW_NOT_FOUND = "Bilan introuvable."
 
 # The French month names of the warm-up day label.
@@ -84,7 +82,6 @@ MONTHS_LONG = (
     "décembre",
 )
 
-# packages/automations/src/definitions/micro-seance.ts
 MICRO_SLOT_TITLE = "Micro-séance de secours"
 MICRO_SLOT_META = "{duration} min · ajoutée par le tuteur"
 MICRO_CONSUMED = "Micro-séance de {duration} min proposée et faite : série conservée."
@@ -104,7 +101,6 @@ MICRO_NOTIFICATION_BODY = {
     "vous": "Pas eu le temps aujourd’hui ? {duration} minutes de cartes de rappel suffisent pour garder votre série.",  # noqa: E501
 }
 
-# packages/automations/src/definitions/questions-cartes.ts
 QUESTION_CARD = {
     "declined": "Refusé : la question sur « {notion} » ne devient pas une carte.",
     "undone": "Annulé : carte de rappel « {notion} » retirée des prochains tirages.",
@@ -116,7 +112,6 @@ QUESTION_CARD = {
 QUESTION_CARD_DEFAULT_NOTION = "cette notion"
 QUESTION_CARD_DEFAULT_SOURCE = "Votre question au tuteur"
 
-# packages/automations/src/automatisme-7-quiz-global-plafonne-et-lisse.ts
 QUIZ_SMOOTHED_UNDONE = "Annulé : le lissage du {day} est retiré, toutes les notions dues restent aujourd’hui."
 QUIZ_SMOOTHED_NONE = "Aucune notion reportée : la journée tient sous {cap} min."
 QUIZ_SMOOTHED_SINGULAR = (
@@ -124,7 +119,6 @@ QUIZ_SMOOTHED_SINGULAR = (
 )
 QUIZ_SMOOTHED_PLURAL = "{due} notions étaient dues aujourd’hui : {deferred} sont reportées à {weekday} pour rester sous {cap} min."  # noqa: E501
 
-# packages/automations/src/automatisme-9-bilan-de-la-semaine.ts
 WEEKLY_REVIEW_SENTENCE = "{prefix}Bilan de la semaine{received} : {study} d’étude, {retention}, {at_risk}."
 WEEKLY_REVIEW_RETENTION_UNAVAILABLE = "rétention non disponible"
 WEEKLY_REVIEW_RETENTION = "{label} retenu à 1 mois"
@@ -132,7 +126,6 @@ WEEKLY_REVIEW_NO_RISK = "aucune notion à risque"
 WEEKLY_REVIEW_ONE_RISK = "1 notion à risque"
 WEEKLY_REVIEW_MANY_RISK = "{count} notions à risque"
 
-# packages/automations/src/definitions/echauffement.ts
 WARMUP_SLOT_TITLE = "Échauffement"
 WARMUP_ADDED = {
     "tu": "Échauffement ajouté avant ton {noun} de {hour} : {count} question{suffix} sur {notions}.",
@@ -149,7 +142,6 @@ WARMUP_WHEN_AFTERNOON = "cet après-midi"
 WARMUP_WHEN_YESTERDAY = "hier"
 WARMUP_WHEN_DAY = "le {day}"
 
-# packages/automations/src/definitions/jeu-lacune.ts
 GAME_FORMAT = {
     "recall_card": "carte de rappel",
     "choice_question": "question",
@@ -171,7 +163,6 @@ GAME_EXERCISE_TITLE = "Exercice pratique"
 GAME_EXERCISE_META = "{notion} · ajouté par le tuteur"
 GAME_INCOMPLETE = "Exercice incomplet."
 
-# packages/automations/src/definitions/remediation.ts
 REMEDIATION_UNDONE = "Annulé : délai et remédiation planifiée du quiz du module {position}."
 REMEDIATION_PENDING = "Quiz à {score} % : tentative {attempt} placée {when}. La remédiation sera prête dès que l’IA sera disponible."  # noqa: E501
 REMEDIATION_READY = "Quiz à {score} % : remédiation de 15 min préparée, tentative {attempt} placée {when}."
@@ -180,7 +171,6 @@ REMEDIATION_AT_RESUME = "à la reprise"
 REMEDIATION_RETRY_TITLE = "Quiz · tentative {attempt}"
 REMEDIATION_RETRY_META = "Nouvelle tentative après remédiation"
 
-# packages/automations/src/definitions/reprise.ts
 REPRISE_DEFAULT_TITLE = "Séance de travail"
 REPRISE_DEFAULT_FORMATION = "votre formation"
 REPRISE_ONE_DAY = "1 jour"
@@ -217,7 +207,6 @@ REPRISE_SHORT_SLOT_TITLE = "Reprise en douceur"
 REPRISE_CHOICE_INVALID = "Le créneau choisi ne fait pas partie des alternatives."
 REPRISE_UNKNOWN_OPTION = "Choisissez « Décaler la fin » ou « Alléger le programme »."
 
-# packages/automations/src/automatisme-8-sprint-avant-un-jalon.ts
 SPRINT_UNDONE = (
     "Annulé : sprints avant « {exam} » retirés ; les créneaux déjà faits restent dans l’historique."
 )

@@ -1,10 +1,9 @@
 """Global pause and return of the learner (SPEC-721, BR-AUT-10, ADR-0016, ADR-0190).
 
-Ported from `packages/services/src/pause/index.ts`: the state (`none|active|ended`, `returnDue`),
-the start and the end of the pause, the freezing and resuming of the formations, the deterministic
-ten-minute diagnostic of SPEC-406 and the daily activity of SPEC-411. Every read and write of the
-learner runs in ONE RLS transaction (CL-1); the journal row is written on the service role after the
-commit, exactly like the TypeScript `recordPauseAction`. A read on the return day finalises the
+The state (`none|active|ended`, `returnDue`), the start and the end of the pause, the freezing and
+resuming of the formations, the deterministic ten-minute diagnostic of SPEC-406 and the daily
+activity of SPEC-411. Every read and write of the learner runs in ONE RLS transaction (CL-1); the
+journal row is written on the service role after the commit. A read on the return day finalises the
 pause once (EF-2); the diagnostic result replans the resumed formations, never before a real answer.
 """
 

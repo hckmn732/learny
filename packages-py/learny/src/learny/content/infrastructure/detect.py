@@ -1,8 +1,8 @@
 """Real type and page count of an uploaded file (SPEC-206 ET-2, CL-2).
 
-Port of `packages/services/src/resources/detect.ts`: the media type is read from the first bytes,
-never from the extension or from the announced `Content-Type`, and the pages of a PDF are counted by
-`pypdf`, which only opens the document (no rendering, no embedded script).
+The media type is read from the first bytes, never from the extension or from the announced
+`Content-Type`, and the pages of a PDF are counted by `pypdf`, which only opens the document (no
+rendering, no embedded script).
 """
 
 import io

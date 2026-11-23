@@ -1,9 +1,9 @@
-"""[SPEC-613] Validation of a practice production (ported from `validate-production.test.ts`).
+"""[SPEC-613] Validation of a practice production.
 
 The pure validator runs before any tutor call: the typed columns, the declared `sum_equal` control
-and the written explanation are code rules, never model-provided JavaScript (ADR-0027). Each case
-is the Python port of a Vitest case of `packages/services/src/exercises/validate-production.test.ts`;
-the expected messages come from the French locale constants, never from a literal.
+and the written explanation are code rules, never model-provided JavaScript (ADR-0027). Each
+case replays one reference case of the production validation; the expected messages come from
+the French locale constants, never from a literal.
 """
 
 from typing import Any
@@ -16,7 +16,7 @@ pytestmark = pytest.mark.spec("SPEC-2202")
 
 
 def table_instruction() -> dict[str, Any]:
-    """The `tableInstruction` fixture of the TypeScript test, same shape."""
+    """The `tableInstruction` fixture of the reference suite, same shape."""
     parsed = parse_instruction(
         {
             "title": "Piece equilibree",
@@ -83,7 +83,7 @@ def table_instruction() -> dict[str, Any]:
 
 
 def table_submission(montant_right: str = "120") -> dict[str, Any]:
-    """The `tableSubmission` fixture of the TypeScript test, same shape."""
+    """The `tableSubmission` fixture of the reference suite, same shape."""
     parsed, issues = parse_submission(
         {
             "kind": "table",

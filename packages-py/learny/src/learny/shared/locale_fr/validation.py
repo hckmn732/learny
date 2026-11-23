@@ -1,9 +1,9 @@
 """User-facing French messages of the input validation (ADR-2011).
 
-Verbatim copy of Zod's `fr` locale (`zod/v4/locales/fr.js`, version 4.6.7), which is what
-`packages/http/src/validate.ts` passes to `safeParse`. Every sentence, space and typographic detail
-is normative: the Python pipeline must answer the same `errors[].message` as the TypeScript backend.
-The message builders take the same arguments as the Zod issue fields they render.
+Verbatim copy of Zod's `fr` locale (`zod/v4/locales/fr.js`, version 4.6.7), which is the locale the
+contract validation applies. Every sentence, space and typographic detail is normative: the Python
+pipeline must answer the same `errors[].message` as the contract. The message builders take the
+same arguments as the Zod issue fields they render.
 """
 
 from typing import Any

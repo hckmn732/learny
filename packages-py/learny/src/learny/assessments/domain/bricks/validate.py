@@ -1,7 +1,6 @@
 """Complete validation of a brick (SPEC-501 ET-5, BR-IA-11).
 
-Port of `packages/bricks/src/validate.ts`. The order is normative:
-    1. the draft envelope; 2. the type schema; 3. internal rules; 4. common rules; 5. references.
+1. the draft envelope; 2. the type schema; 3. internal rules; 4. common rules; 5. references.
 Steps 3 to 5 only run when 1 and 2 succeed; every issue of a step is returned together, so the tutor
 loop (SPEC-508) can send one complete, readable correction to the model. The reference resolver is
 an injected port: the domain stays free of IO and only awaits the caller's lookups.

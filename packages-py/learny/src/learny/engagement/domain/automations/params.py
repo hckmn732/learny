@@ -1,10 +1,8 @@
 """Canonical parameter schemas of the ten automations (SPEC-2205, SPEC-710 ET-4).
 
-Ported from `AUTOMATION_PARAM_SCHEMAS` of `packages/contracts/src/parametres-automatismes.ts` and
-from the four schemas of `packages/contracts/src/automations.ts`. The engine validates the stored
-`automation_settings.params` with these rules and always emits the canonical object, including the
-two legacy aliases (`questionCount`, `retryDelayHours`, `required`) so a setting written by an older
-specification keeps working (ADR-0190 section 5, ADR-0327).
+The engine validates the stored `automation_settings.params` with these rules and always emits the
+canonical object, including the two legacy aliases (`questionCount`, `retryDelayHours`, `required`)
+so a setting written by an older specification keeps working (ADR-0190 section 5, ADR-0327).
 
 Every rejection carries the message zod produces, captured by the oracle
 (`tools/engagement/oracle-automations.mjs`): the service copies it into the `VALIDATION_FAILED`

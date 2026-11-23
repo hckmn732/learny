@@ -1,7 +1,4 @@
-"""[SPEC-2202] Seeded randomness of the engine (SPEC-401 ET-5, CL-8).
-
-Ported from `packages/learning-engine/src/random.test.ts`.
-"""
+"""[SPEC-2202] Seeded randomness of the engine (SPEC-401 ET-5, CL-8)."""
 
 import pytest
 from learny.shared.prng import fnv1a32, seeded_random, stable_shuffle

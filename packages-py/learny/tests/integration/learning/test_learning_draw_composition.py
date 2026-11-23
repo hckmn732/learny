@@ -1,8 +1,7 @@
 """[SPEC-2202] Composition of the mastery, the gaps and the draw (SPEC-405, CA-1 to CA-4).
 
-Ported from `packages/learning-engine/test/integration/draw-attempt.test.ts`: the notions of the
-reference curriculum are enriched with the computed mastery and the detected gaps, then drawn from
-the brick bank with a seeded PRNG.
+The notions of the reference curriculum are enriched with the computed mastery and the detected
+gaps, then drawn from the brick bank with a seeded PRNG.
 """
 
 from typing import Any

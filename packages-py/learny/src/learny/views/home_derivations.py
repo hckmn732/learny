@@ -1,9 +1,8 @@
 """Pure derivations of the home screen (SPEC-603 ET-3, EF-1, EF-2, EF-4, EF-6, EF-7).
 
-Port of `packages/domain/src/home/derive.ts`: every function receives its instant, its time zone
-and its identifiers from the caller; nothing reads the clock, the database or the settings. The
-service and the client share these rules, so the remaining minutes stay exact between two
-refreshes without a second implementation.
+Every function receives its instant, its time zone and its identifiers from the caller; nothing
+reads the clock, the database or the settings. The service and the client share these rules, so the
+remaining minutes stay exact between two refreshes without a second implementation.
 """
 
 import math

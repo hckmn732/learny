@@ -1,9 +1,9 @@
-"""[SPEC-2204] Tutor domain against the TypeScript oracle (SPEC-610, CA-2).
+"""[SPEC-2204] Tutor domain against the reference oracle (SPEC-610, CA-2).
 
-The expected values of `api/oracles/vectors/tutor.json` are the recordings of the real TypeScript
-services (`assembleContext`, `greetingOf`, `buildTutorChatPrompt`, `SourceMarkerFilter`,
-`resolveSources`, `buildFollowUps`) and of the private helpers reproduced by the oracle script
-(2026-11-22). Equality is strict: a divergence is a Python bug, never an oracle change (ADR-2008).
+The expected values of `api/oracles/vectors/tutor.json` are the reference recordingss
+(`assembleContext`, `greetingOf`, `buildTutorChatPrompt`, `SourceMarkerFilter`, `resolveSources`,
+`buildFollowUps`) and of the private helpers reproduced by the oracle script (2026-11-22). Equality
+is strict: a divergence is a Python bug, never an oracle change (ADR-2008).
 """
 
 import json

@@ -1,7 +1,6 @@
 """[SPEC-2206] Stripe statuses, webhook signatures and return paths (SPEC-210 EF-5, ET-6, CL-3, CL-5).
 
-Ported from `billing/status.test.ts`: the same cases and the same expected values, against the pure
-domain module.
+The same cases and the same expected values, against the pure domain module.
 """
 
 from datetime import timedelta

@@ -1,10 +1,4 @@
-"""[SPEC-2203] Course read model: empty generation states, typed sections and their citations.
-
-Ported from `packages/services/src/courses/get-course.test.ts` and `get-course-detail.test.ts`
-(SPEC-608 EF-1 to EF-5, SPEC-609 BR-COU-02/07/08/11): the same module, chapter, course, section,
-citation, suggestion, summary and progress fixtures as the TypeScript fakes, read under RLS on the
-local stack.
-"""
+"""[SPEC-2203] Course read model: empty generation states, typed sections and their citations."""
 
 from typing import Any
 

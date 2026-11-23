@@ -1,10 +1,8 @@
 """Access and opening rules of the subscription (SPEC-210 EF-1, EF-3, EF-5; BR-PLA-05).
 
 The subscription row *is* the entitlement: `active` (which Stripe reports for `active` and
-`trialing`) grants the right to use the application, every other status grants nothing. There is no
-extra grace period in the TypeScript code: `past_due`, `unpaid` and `paused` fail closed and the
-learner recovers access through the portal, which is why `current_period_end` is informational and
-never extends access. These rules are pure so the use cases and the contract agree by construction.
+`trialing`) grants the right to use the application, every other status grants nothing. These rules
+are pure so the use cases and the contract agree by construction.
 """
 
 from dataclasses import dataclass
@@ -27,7 +25,7 @@ def grants_access(status: SubscriptionStatus | str) -> bool:
 def blocks_new_checkout(status: SubscriptionStatus | str) -> bool:
     """EF-1 - a learner already `active` cannot open a second Checkout (`ALREADY_SUBSCRIBED`).
 
-    A canceled learner may subscribe again, exactly like the TypeScript service.
+    A canceled learner may subscribe again.
     """
     return status == "active"
 
@@ -56,7 +54,7 @@ def change_of(previous: SubscriptionStatus, current: SubscriptionStatus, event_i
 
 
 def subscription_changed_payload(user_id: str, change: SubscriptionChange) -> dict[str, object]:
-    """Payload of `billing/subscription-changed`, in the key order of the TypeScript literal."""
+    """Payload of `billing/subscription-changed`, in the published key order."""
     return {"userId": user_id, "status": change.current, "previousStatus": change.previous}
 
 

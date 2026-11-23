@@ -1,8 +1,7 @@
 """Simulation of the Stripe journey for the demonstration pages (SPEC-210 EF-7, EF-8).
 
-Port of `packages/services/src/billing/dev.ts`. Only the simulated gateway supports it; every
-function refuses another mode. The webhook is delivered through `handle_webhook`, so signature,
-deduplication and ordering are exercised for real.
+Only the simulated gateway supports it; every function refuses another mode. The webhook is
+delivered through `handle_webhook`, so signature, deduplication and ordering are exercised for real.
 """
 
 from typing import Any, Literal, cast

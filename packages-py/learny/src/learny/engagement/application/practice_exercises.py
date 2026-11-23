@@ -1,10 +1,9 @@
 """Idempotent creation of the practice exercise of one notion (SPEC-2205, from SPEC-613 ET-4).
 
-Ported from `packages/services/src/exercises/ensure-practice-exercise.ts`: the use case reads the
-notion and the current ready course version, serialises on an advisory lock keyed by both, then
-creates one `instruction` brick, its unique version and one ready `exercise` activity per
-`(owner, notion, course version)`. The tutor generation is the committed deterministic fixture of
-`locale_fr.engagement_exercises`: no provider is called (ADR-0048).
+The use case reads the notion and the current ready course version, serialises on an advisory lock
+keyed by both, then creates one `instruction` brick, its unique version and one ready `exercise`
+activity per `(owner, notion, course version)`. The tutor generation is the committed deterministic
+fixture of `locale_fr.engagement_exercises`: no provider is called (ADR-0048).
 """
 
 import json

@@ -1,9 +1,7 @@
 """SQL of the ingestion pipeline (SPEC-509 ET-1 to ET-5, SPEC-510).
 
-Copied statement by statement from `packages/ingestion/src/process-resource.ts`: same columns,
-same `for update`, same jsonb marker patches, same guarded updates. The stage guard replaces the
-Inngest concurrency key (`resourceId/1`): a duplicate delivery sees the persisted state and does
-nothing.
+Copied statement by statement: same columns, same `for update`, same jsonb marker patches, same
+guarded updates.
 """
 
 # ruff: noqa: S608 - only the constant column list is interpolated, never a request value.

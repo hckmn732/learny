@@ -1,10 +1,7 @@
 """[SPEC-2204] Personal AI keys: BYOK creation, RLS, qualification and the models tab.
 
-Ported from `packages/services/src/ai/credentials-service.test.ts`,
-`packages/services/src/ai/qualify-model.test.ts` (the route-reachable part),
-`apps/api/test/integration/ai-credentials-routes.test.ts`, `ai-qualify-route.test.ts` and
-`spec-709-routes.test.ts`: the seeded rows replace the fakes, every read runs as the authenticated
-learner under RLS, and the model is the committed mock adapter (ADR-0048).
+The seeded rows replace the fakes, every read runs as the authenticated learner under RLS, and the
+model is the committed mock adapter (ADR-0048).
 """
 
 import json

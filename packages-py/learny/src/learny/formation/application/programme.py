@@ -1,9 +1,8 @@
 """Proposed and active programme use cases (SPEC-605 EF-1 to EF-5, SPEC-606 EF-1 to EF-4).
 
-Port of `programme/{state,get,generate,adjust,import,validate,get-active-programme}.ts` and of
-`programme/progress.ts`. The tutor call runs outside any transaction; the write of a version and the
-status transition are one transaction guarded by the programme advisory lock and the expected
-version. Modules and planning rows are never touched before the validation.
+The tutor call runs outside any transaction; the write of a version and the status transition are
+one transaction guarded by the programme advisory lock and the expected version. Modules and
+planning rows are never touched before the validation.
 """
 
 import json

@@ -1,9 +1,8 @@
 """Account deletion request and cancellation (SPEC-211 EF-5, EF-6, ET-6, CL-7; BR-ACC-11).
 
-Port of `packages/services/src/personal-data/deletion.ts`. Scheduling is idempotent: a second call
-returns the same deadline and sends no second e-mail. The session stays valid and the learner is
-sent to `/parametres#profil` where the cancellation is offered. The effective deletion belongs to the
-nightly job, never to the HTTP request.
+Scheduling is idempotent: a second call returns the same deadline and sends no second e-mail. The
+session stays valid and the learner is sent to `/parametres#profil` where the cancellation is
+offered. The effective deletion belongs to the nightly job, never to the HTTP request.
 """
 
 from typing import Any, cast

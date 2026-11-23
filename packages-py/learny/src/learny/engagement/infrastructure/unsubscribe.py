@@ -1,10 +1,7 @@
 """One-click unsubscribe token (SPEC-2205).
 
-Ported from `packages/notifications/src/email/unsubscribe-token.ts`.
-
 `base64url(userId) + '.' + base64url(HMAC-SHA256(EMAIL_LINK_SECRET, 'unsubscribe:v1:' + userId))`,
-without expiry, verified in constant time (SPEC-204 ET-4, ADR-0124). The vectors pinned by the unit
-tests are produced by the TypeScript implementation itself, so both runtimes accept the same links.
+without expiry, verified in constant time (SPEC-204 ET-4, ADR-0124).
 """
 
 import base64

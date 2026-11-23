@@ -1,7 +1,6 @@
 """[SPEC-2202] Fingerprint of the question types (SPEC-501 ET-6, BR-BRI-07, ADR-0151).
 
-Ported from `packages/bricks/src/fingerprint.test.ts`. The expected digests are the recordings of
-the TypeScript engine taken on 2026-11-21 from the reference examples.
+The expected digests are the reference recordings.
 """
 
 import copy

@@ -1,9 +1,8 @@
 """[SPEC-2202] Test factories of the learning engine (SPEC-401 ET-8).
 
-Ported from `packages/learning-engine/src/fixtures/builders.test.ts`. The `fast-check`
-properties become explicit cases, as specified by `evidence/SPEC-2202/test-port-map.md`: the
-recorded defaults must stay valid against the domain types, and the date helper must stay
-independent from the system clock.
+The `fast-check` properties become explicit cases, as specified by
+`evidence/SPEC-2202/test-port-map.md`: the recorded defaults must stay valid against the domain
+types, and the date helper must stay independent from the system clock.
 """
 
 import pytest

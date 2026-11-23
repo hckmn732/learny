@@ -1,7 +1,6 @@
 """Unlock of the next module after a passed validation quiz (SPEC-612 EF-7, ET-3, BR-QUI-05).
 
-Port of `packages/services/src/quiz/module-unlock.ts` and of the `module-unlock` function: one
-transaction performs every domain write and queues `module/validated` and `formation/completed`;
+One transaction performs every domain write and queues `module/validated` and `formation/completed`;
 the milestone, the notification and the replanning happen after the commit. A replay finds the
 module already validated and only raises `best_score` (CL-3): no second milestone, notification or
 event. The advisory lock serialises two deliveries of the same module (CL-2).
@@ -281,7 +280,7 @@ async def unlock_module(
     attempt_id: str | None = None,
 ) -> dict[str, Any]:
     """Unlocks the next module once; a passed attempt on a validated module only raises the score."""
-    del attempt_id  # the event carries it for traceability only, exactly like the TypeScript job
+    del attempt_id  # the event carries it for traceability only
     if not _is_uuid(user_id):
         raise AppError("VALIDATION_FAILED", details.USER_ID_INVALID)
     if not passed:

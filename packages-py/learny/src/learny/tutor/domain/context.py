@@ -1,9 +1,9 @@
 """Context sent to the tutor (SPEC-610 ET-4, BR-TUT-02, ADR-0178).
 
-Port of `packages/services/src/tutor-chat/context.ts`: the server alone builds the context
-transmitted to the tutor. The client chooses included keys and the selected passage; only included
-keys reach the model, as data inside escaped tags. The resource passages keep the 4 000-token
-budget of `read_resources` (ai.md section 3). No IO, no clock, no model call.
+The server alone builds the context transmitted to the tutor. The client chooses included keys and
+the selected passage; only included keys reach the model, as data inside escaped tags. The resource
+passages keep the 4 000-token budget of `read_resources` (ai.md section 3). No IO, no clock, no
+model call.
 """
 
 import re

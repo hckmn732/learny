@@ -1,9 +1,8 @@
 """[SPEC-2202] Complete validation of a brick draft (SPEC-501 ET-5, BR-IA-11).
 
-Ported from `packages/bricks/src/validate.test.ts` and `validate-locations.test.ts`. The expected
-bricks and issue lists are the recordings of the TypeScript engine taken on 2026-11-21 with the same
-in-memory resolver. Messages are compared for every code except `SCHEMA_INVALID`, whose wording is
-written in English by the Python validator (ADR-2011).
+The expected bricks and issue lists are the reference recordings with the same in-memory resolver.
+Messages are compared for every code except `SCHEMA_INVALID`, whose wording is written in English by
+the Python validator (ADR-2011).
 """
 
 import asyncio

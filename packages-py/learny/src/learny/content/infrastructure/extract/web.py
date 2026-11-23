@@ -1,9 +1,8 @@
 """Web page extractor (SPEC-510 EF-1, ET-2, CA-1; ADR-0057).
 
-Port of `packages/ingestion/src/extract/web.ts`: `safe_fetch` retrieves the page with its anti-SSRF
-guard, 15 s and 5 MB bounds and robots.txt; `readability-lxml` isolates the main article; the text
-is rebuilt block by block with the exact character range and nearest anchor of every block.
-Navigation, headers and footers are never copied.
+`safe_fetch` retrieves the page with its anti-SSRF guard, 15 s and 5 MB bounds and robots.txt;
+`readability-lxml` isolates the main article; the text is rebuilt block by block with the exact
+character range and nearest anchor of every block. Navigation, headers and footers are never copied.
 """
 
 import re

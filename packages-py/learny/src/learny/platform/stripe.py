@@ -1,10 +1,10 @@
-"""Stripe capability of the backend (SPEC-2206, port of `packages/services/src/billing`).
+"""Stripe capability of the backend (SPEC-2206).
 
 Two gateways behind one protocol: `StripeSdkGateway` talks to Stripe (server-side key only, never
 returned to the browser) and `MockStripeGateway` is the deterministic simulation selected by
 `STRIPE_MODE=mock`; no test ever reaches the network. Identifiers are numbered (`cus_mock_1`,
-`sub_mock_1`, `cs_mock_1`, `evt_mock_1`), time comes from the injected clock, and webhooks are signed
-with the scheme Stripe documents.
+`sub_mock_1`, `cs_mock_1`, `evt_mock_1`), time comes from the injected clock, and webhooks are
+signed with the scheme Stripe documents.
 
 The signature check uses `learny.billing.domain.webhook.verify_signature`, not the SDK's
 `Webhook.construct_event`: the SDK reads the process clock for the 300 s tolerance, which ADR-0047

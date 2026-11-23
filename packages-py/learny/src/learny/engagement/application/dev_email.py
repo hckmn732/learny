@@ -1,8 +1,8 @@
 """Development demonstrations of SPEC-204: template preview, send and memory outbox.
 
-Port of `packages/services/src/email/dev.ts`. The preview renders the real template with the sample
-data of the tone; the send goes through the real service to the signed-in learner; the outbox exists
-only for the `memory` transport, so a visual capture never inherits another scenario's messages.
+The preview renders the real template with the sample data of the tone; the send goes through the
+real service to the signed-in learner; the outbox exists only for the `memory` transport, so a
+visual capture never inherits another scenario's messages.
 """
 
 from typing import Any

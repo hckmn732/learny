@@ -1,9 +1,9 @@
 """Sprints before a milestone (SPEC-719, BR-AUT-08, ADR-0190).
 
-Ported from `packages/automations/src/automatisme-8-sprint-avant-un-jalon.ts`: the pure helpers
-(the two relative target days J-K and J-1, the weakest-notation ranking and the placement of the two
-30-minute slots with the planner of SPEC-407), the one-line explanation and the two effects (cancel
-the future sprints of the milestone, insert the new targets with their stable planner key).
+The pure helpers (the two relative target days J-K and J-1, the weakest-notation ranking and the
+placement of the two 30-minute slots with the planner of SPEC-407), the one-line explanation and the
+two effects (cancel the future sprints of the milestone, insert the new targets with their stable
+planner key).
 """
 
 import re
@@ -117,7 +117,7 @@ class SprintPlacement:
 
 
 def _preferences_mapping(preferences: PlannerPreferences) -> dict[str, Any]:
-    """The mapping form the planner boundary validates (the TypeScript `PlannerPreferences`)."""
+    """The mapping form the planner boundary validates."""
     return {
         "tz": preferences.tz,
         "availability": preferences.availability.to_dict(),
@@ -174,7 +174,7 @@ def place_sprint_targets(
                 _preferences_mapping(preferences),
                 PLACEMENT_COUNT,
             )
-        except Exception:  # the TypeScript catches every planner refusal: the day is impossible
+        except Exception:
             candidates = []
         chosen = next((candidate for candidate in candidates if candidate.get("date") == day), None)
         if chosen is None:

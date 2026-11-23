@@ -1,9 +1,9 @@
 """[SPEC-2207] The auth routes answer the recorded `Set-Cookie` headers, byte for byte.
 
-`api/oracles/vectors/auth-cookies.json` was recorded from `@learny/api` (Hono) serving these
-requests through `@supabase/ssr` 0.12.7, whose GoTrue answers are the `gotrue` member of each case.
-The facade is built with a fake Auth client replaying those answers, so this test compares the
-Python writer with the real library and never with itself. The recorded account does not exist in
+`api/oracles/vectors/auth-cookies.json` was recorded from `@learny/api` serving these requests
+through `@supabase/ssr` 0.12.7, whose GoTrue answers are the `gotrue` member of each case. The
+facade is built with a fake Auth client replaying those answers, so this test compares the Python
+writer with the real library and never with itself. The recorded account does not exist in
 `auth.users`, so the first verification performs no write and the destination is a fresh account.
 """
 

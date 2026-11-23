@@ -1,7 +1,7 @@
 """Server-authoritative exam timer (SPEC-502 EF-7, CL-8, BR-PRA-03).
 
-Port of `packages/bricks/src/types/timer/state.ts`. The caller passes the server instant as epoch
-milliseconds, the Python analogue of `Date#getTime`; the function never reads the system clock.
+The caller passes the server instant as epoch milliseconds, the Python analogue of `Date#getTime`;
+the function never reads the system clock.
 """
 
 import math

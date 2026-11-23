@@ -1,7 +1,6 @@
 """[SPEC-2203] Retrieval selection and document formatting (SPEC-511 EF-2 to EF-4).
 
-Ported from `packages/ingestion/src/retrieval/{select-context,format-document}.ts`. The vectors are
-the recordings of the TypeScript implementation (`tools/content/oracle.mjs`).
+The vectors are the reference recordings (`tools/content/oracle.mjs`).
 """
 
 import json

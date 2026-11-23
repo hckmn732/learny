@@ -1,8 +1,8 @@
 """Emergency micro-session of the automations (SPEC-713, BR-AUT-02, ADR-0190, ADR-0192 section 1).
 
-Ported from `packages/automations/src/definitions/micro-seance.ts`: the four journal statuses, the
-slot of the five-minute session and the inbox cleanup of an undo. The definition decides; the use
-case writes through the effect specifications of `domain/automations/effects.py`.
+The four journal statuses, the slot of the five-minute session and the inbox cleanup of an undo. The
+definition decides; the use case writes through the effect specifications of
+`domain/automations/effects.py`.
 """
 
 from typing import Any

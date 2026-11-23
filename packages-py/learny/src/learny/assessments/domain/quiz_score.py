@@ -1,8 +1,8 @@
 """Pure score of a validation attempt (SPEC-611 EF-9, ET-3, ADR-0014, ADR-0170).
 
-Port of `packages/services/src/quiz/score.ts`: no IO, no clock. A question is worth `maxScore`
-points; the global score is the earned share of the 100-point scale, rounded to two decimals.
-`perNotion` averages the success ratio of the questions attached to the notion.
+No IO, no clock. A question is worth `maxScore` points; the global score is the earned share of the
+100-point scale, rounded to two decimals. `perNotion` averages the success ratio of the questions
+attached to the notion.
 """
 
 import math

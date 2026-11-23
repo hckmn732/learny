@@ -1,4 +1,4 @@
-"""Templates of the sixteen notification types, ported from `templates/index.ts` (SPEC-209 ET-2).
+"""Templates of the sixteen notification types (SPEC-209 ET-2).
 
 One template decides the icon, the title, the body, the internal link and the e-mail template of a
 notification. Every text exists in two variants, `vous` and `tu`; the literals live in

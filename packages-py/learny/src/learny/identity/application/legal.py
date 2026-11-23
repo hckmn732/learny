@@ -1,8 +1,8 @@
 """Legal acceptance of the active documents (SPEC-806 EF-3, EF-4, ET-3, ET-4; SPEC-2201).
 
-Port of `acceptLegalVersions` (`packages/services/src/legal/accept.ts`): the pair (`cgu`,
-`privacy`) is written once in the same transaction, a version that is no longer active is a 409
-that writes nothing, and a replay of the same pair returns the original acceptance instant.
+The pair (`cgu`, `privacy`) is written once in the same transaction, a version that is no longer
+active is a 409 that writes nothing, and a replay of the same pair returns the original acceptance
+instant.
 """
 
 from collections.abc import Mapping

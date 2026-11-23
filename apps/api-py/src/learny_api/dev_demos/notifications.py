@@ -1,8 +1,7 @@
 """Demonstrations of SPEC-209 (EF-8) and SPEC-706 (EF-8): the real producers and `notify`.
 
-Port of `packages/services/src/dev/notifications.ts` and of the demonstration section of
-`notifications-generation-des-rappels.ts`. The learner's stored settings and tone are temporarily
-replaced and restored in a `finally`, so the demonstration never leaves the account altered.
+The learner's stored settings and tone are temporarily replaced and restored in a `finally`, so the
+demonstration never leaves the account altered.
 """
 
 from dataclasses import replace

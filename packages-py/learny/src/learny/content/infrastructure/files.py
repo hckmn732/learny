@@ -1,8 +1,8 @@
 """Private file reader of the ingestion (SPEC-509 ET-4, EF-2).
 
-Port of `createSupabasePdfReader` (`packages/ingestion/src/deps.ts`): the path is re-bound to the
-owner and to the resource identifier, so a bad row can never read another learner's object, and the
-bound is applied before and after the download. Nothing here is logged.
+The path is re-bound to the owner and to the resource identifier, so a bad row can never read
+another learner's object, and the bound is applied before and after the download. Nothing here is
+logged.
 """
 
 from collections.abc import Awaitable, Callable

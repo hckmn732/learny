@@ -1,11 +1,9 @@
 """Weekly review of the learner (SPEC-2205, SPEC-720 BR-AUT-09).
 
-Ported from `collectWeeklyReviewData` and `getWeeklyReview` of
-`packages/services/src/weekly-review.ts`. The four measures of the local week come from the
-learner's own rows under RLS (ET-4): done slot minutes, the thirty-day retention, the notions due or
-carrying an open gap, and the planned slots of the next week. A missing measure stays `None`, so the
-interface can say it is unavailable instead of inventing a zero (CL-4). A foreign `actionId` is
-never disclosed: it is simply absent (CL-1).
+The four measures of the local week come from the learner's own rows under RLS (ET-4): done slot
+minutes, the thirty-day retention, the notions due or carrying an open gap, and the planned slots of
+the next week. A missing measure stays `None`, so the interface can say it is unavailable instead of
+inventing a zero (CL-4). A foreign `actionId` is never disclosed: it is simply absent (CL-1).
 """
 
 from collections.abc import Mapping

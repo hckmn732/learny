@@ -1,4 +1,4 @@
-"""[SPEC-2201] Pure derivations of the header and sidebar (port of header.test.ts, sidebar.test.ts)."""
+"""[SPEC-2201] Pure derivations of the header and sidebar."""
 
 from typing import Any
 

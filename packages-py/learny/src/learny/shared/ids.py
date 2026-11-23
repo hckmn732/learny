@@ -1,4 +1,4 @@
-"""Identifiers (00-conventions section 7): UUIDv4 strings, like `crypto.randomUUID` in TypeScript."""
+"""Identifiers (00-conventions section 7): UUIDv4 strings from `new_id`."""
 
 import re
 import uuid

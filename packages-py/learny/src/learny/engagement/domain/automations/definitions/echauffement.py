@@ -1,9 +1,8 @@
 """Warm-up before a session (SPEC-714, BR-AUT-01, ADR-0190).
 
-Ported from `packages/automations/src/definitions/echauffement.ts`: the warm-up activity, its slot
-ten minutes before the upcoming session, the four journal statuses (both tones) and the undo that
-archives an unanswered activity. The duration, the meta and the noun come from the pure
-derivations of `packages/services/src/warmup/derive.ts`, ported here without IO.
+The warm-up activity, its slot ten minutes before the upcoming session, the four journal statuses
+(both tones) and the undo that archives an unanswered activity. The duration, the meta and the noun
+come from the pure derivations, ported here without IO.
 """
 
 from typing import Any, Final

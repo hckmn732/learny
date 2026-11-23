@@ -1,6 +1,5 @@
 """Attempt lifecycle of a practice exercise (SPEC-613 EF-1 to EF-5; BR-PRA-01).
 
-Port of `packages/services/src/exercises/{attempt-service,get-practice-exercise,exercise-store}.ts`.
 Draft, hint and submit all go through one locked attempt: a second identical request observes the
 committed transition and changes nothing. The submit transaction writes the answer, the attempt and
 the `exercise/submitted` outbox row together; the mastery application of SPEC-411 runs after the

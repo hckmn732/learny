@@ -1,9 +1,7 @@
 """User-facing French strings of the daily review session and the warm-up answer (ADR-2011).
 
-Every literal is copied verbatim from the TypeScript backend: the game labels, the rationale
-bullets and the micro-session note come from `packages/config/src/product.ts`,
-`packages/services/src/review/*.ts` and `packages/services/src/warmup/answer.ts`. Codes reference
-the constant, never an inline French string.
+Every literal is copied verbatim from the reference implementation. Codes reference the constant,
+never an inline French string.
 """
 
 # packages/config/src/product.ts — GAME_LABELS (EF-6, EF-8).
@@ -17,7 +15,7 @@ GAME_LABELS: dict[str, dict[str, str]] = {
     "open_question": {"name": "Question", "tech": "Question"},
 }
 
-# packages/services/src/review/global-quiz.ts — rail reasons (EF-6) and the question card code.
+# rail reasons (EF-6) and the question card code.
 REASON_TEXTS: dict[str, str] = {
     "gap_forgetting": "Choisi pour votre oubli",
     "gap_confusion": "Choisi pour votre confusion",
@@ -32,7 +30,7 @@ QUESTION_CARD_FORMAT = "recall_card"
 QUESTION_CARD_REASON_CODE = "question_card"
 QUESTION_CARD_REASON_LABEL = "Votre question"
 
-# packages/services/src/review/rationale.ts — « Réglé par le tuteur » bullets.
+# « Réglé par le tuteur » bullets.
 RATIONALE_GAP_LABEL = "Lacune en priorité"
 RATIONALE_LOAD_LABEL = "Charge lissée"
 RATIONALE_MODULES_LABEL = "Modules mêlés"
@@ -52,7 +50,7 @@ RATIONALE_LOAD_TEXT = (
 )
 RATIONALE_GAP_TEXT = "{notion}, oubliée depuis le {day}, revient en {game}."
 
-# packages/services/src/review/rationale.ts — buildMicroNote (SPEC-703 EF-3, CL-1, CL-2).
+# buildMicroNote (SPEC-703 EF-3, CL-1, CL-2).
 MICRO_NOTE_MANY_CARDS = (
     "Version courte de secours : deux cartes de rappel et une question. "
     "Elle garde le rythme et la série les jours chargés."
@@ -67,7 +65,7 @@ MICRO_NOTE_QUESTION = (
 MICRO_NOTE_TWO_CARDS = "Version courte de secours : deux cartes de rappel."
 MICRO_NOTE_ONE_CARD_ONLY = "Version courte de secours : une carte de rappel."
 
-# packages/services/src/review/global-quiz.ts — tutor box of the imposed gaps (SPEC-716 ET-7).
+# tutor box of the imposed gaps (SPEC-716 ET-7).
 TUNED_LABEL = "Lacune en priorité"
 TUNED_FORGETTING = "{notion}, oubliée depuis le {day}, revient en carte de rappel."
 TUNED_CONFUSION = "« {notion} » et « {confused} » se confondent : {format} les oppose."
@@ -76,7 +74,7 @@ TUNED_FORMAT_PAIR = "une association"
 TUNED_RECENT = "récemment"
 TUNED_DEFAULT_NOTION = "cette notion"
 
-# packages/services/src/review/global-quiz.ts — notes and headers (EF-3, EF-4).
+# notes and headers (EF-3, EF-4).
 NOTE_DEFERRED = "{due} aujourd’hui : {deferred} {verb} à {day} pour que vos révisions restent sous {cap} min."
 NOTE_DEFAULT = "{notions} à revoir aujourd’hui, lacunes en priorité."
 NOTE_WARMUP_ITEM = "Rappel de l’échauffement"
@@ -92,7 +90,7 @@ SMOOTHING_SUMMARY = (
 SMOOTHING_VERB_ONE = "est reportée"
 SMOOTHING_VERB_MANY = "sont reportées"
 
-# packages/services/src/learning/apply-result.ts — service errors.
+# service errors.
 REVIEW_ATTEMPT_NOT_FOUND = "Tentative introuvable."
 REVIEW_ATTEMPT_NOT_GRADED = (
     "La tentative n’est pas corrigée : ses résultats ne peuvent pas encore être appliqués."
@@ -101,7 +99,7 @@ REVIEW_ATTEMPT_KIND_UNSUPPORTED = "Ce type d’activité n’alimente pas le mot
 REVIEW_NOTION_NOT_FOUND = "Notion introuvable."
 REVIEW_ANSWER_MISSING = "Réponse de la tentative introuvable."
 
-# packages/services/src/review/global-quiz.ts — service errors.
+# service errors.
 SESSION_FORMATION_INVALID = "Identifiant de formation invalide."
 SESSION_FORMATION_NOT_FOUND = "Formation introuvable."
 SESSION_CONFIG_UNREADABLE = "Configuration de session illisible."
@@ -115,7 +113,7 @@ SESSION_GAME_INCOMPLETE = "La réponse du jeu est incomplète ou invalide."
 SESSION_GAME_UNKNOWN_ID = "La réponse du jeu contient un identifiant inconnu."
 SESSION_RESPONSE_INVALID = "Réponse invalide."
 
-# packages/services/src/warmup/answer.ts — service errors.
+# service errors.
 WARMUP_ID_INVALID = "Identifiant d’échauffement invalide."
 WARMUP_POSITION_INVALID = "Position de question invalide."
 WARMUP_POSITION_HINT = "entier positif ou nul attendu"
@@ -127,7 +125,7 @@ WARMUP_ALREADY_ANSWERED = "Cette question a déjà été répondue : rechargez l
 WARMUP_QUESTION_NOT_FOUND = "Question d’échauffement introuvable."
 WARMUP_ATTEMPT_MISSING = "Tentative d’échauffement absente."
 
-# packages/services/src/warmup/derive.ts — warmUpConsumedSummary (EF-10).
+# warmUpConsumedSummary (EF-10).
 WARMUP_SCORE = "Échauffement fait : {knew} sur {count}"
 WARMUP_CONSUMED_REVIEW_ONE = "1 notion repasse"
 WARMUP_CONSUMED_REVIEW_MANY = "{count} notions repassent"
@@ -137,7 +135,7 @@ WARMUP_CONSUMED_EVENING_QUIZ = "dans le quiz global du soir"
 # packages/contracts/src/review.ts — `ReviewAnswerInputSchema` refinement (SPEC-701 ET-3).
 REVIEW_ANSWER_EXCLUSIVE = "Exactement l’un de skipped ou response est requis."
 
-# packages/services/src/review/global-quiz.ts -- weekday and month labels of the subtitle.
+# weekday and month labels of the subtitle.
 WEEKDAY_LABELS = ("dimanche", "lundi", "mardi", "mercredi", "jeudi", "vendredi", "samedi")
 MONTH_LABELS = (
     "janvier",

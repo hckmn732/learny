@@ -1,4 +1,4 @@
-"""[SPEC-2201] Scoping chat: reads, creation and the concluded state (port of cadrage/*.ts)."""
+"""[SPEC-2201] Scoping chat: reads, creation and the concluded state."""
 
 from typing import Any
 

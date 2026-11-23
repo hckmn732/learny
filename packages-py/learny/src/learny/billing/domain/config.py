@@ -1,4 +1,4 @@
-"""Billing configuration read from the environment (port of `billing/config.ts`, SPEC-210 ADR-0215).
+"""Billing configuration read from the environment (SPEC-210, ADR-0215).
 
 `STRIPE_MODE=mock` is refused in production here too (defence in depth: the settings already refuse
 it at startup). Pure: the mapping is passed in, nothing is read from the process environment.

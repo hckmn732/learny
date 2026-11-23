@@ -1,7 +1,7 @@
 """[SPEC-2202] Composition of gap detection and clearance (SPEC-404, CA-1 to CA-4).
 
-Ported from `packages/learning-engine/test/integration/gaps.test.ts`: the mastery, the FSRS lapse,
-the normalised error and the spaced successes of the engine are chained with `ENGINE.gaps` bounds.
+The mastery, the FSRS lapse, the normalised error and the spaced successes of the engine are chained
+with `ENGINE.gaps` bounds.
 """
 
 import ast

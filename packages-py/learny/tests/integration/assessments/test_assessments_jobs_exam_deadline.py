@@ -1,4 +1,4 @@
-"""[SPEC-2207] The exam deadline job against the local stack (port of `exam-deadline`).
+"""[SPEC-2207] The exam deadline job against the local stack.
 
 The consumer runs at `deadlineAt + 5 s`; the exam service checks the deadline again, so an early
 delivery leaves the attempt running and a delivery after the tolerance grades it once. A duplicated

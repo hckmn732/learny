@@ -1,9 +1,8 @@
 """Registry and draft validation of the automation engine (SPEC-2205, ET-3 of SPEC-711).
 
-Ported from `AutomationRegistry` and `validateDraft` of
-`packages/automations/src/moteur-d-automatismes.ts`: one definition per key at most, an unknown key
-is a defect, and every draft is validated before any write (`dedupeKey`, kind, summary, `expiresAt`,
-notification href). The registry holds no state beyond the definitions and performs no IO.
+One definition per key at most, an unknown key is a defect, and every draft is validated before any
+write (`dedupeKey`, kind, summary, `expiresAt`, notification href). The registry holds no state
+beyond the definitions and performs no IO.
 """
 
 import re

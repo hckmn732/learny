@@ -1,9 +1,7 @@
-"""Discovery of the provider model catalogue (SPEC-2204, port of `discover-models.ts`).
+"""Discovery of the provider model catalogue (SPEC-2204).
 
-The learner's key is sent to the provider exactly as the TypeScript backend does it, with a bounded
-timeout, and only chat models are kept. Simulation mode (`LLM_MODE=mock`, ADR-0048) never opens a
-socket: each provider answers a fixed list. The HTTP seam (`fetcher`) exists so a test proves the
-live branch without any network, exactly like `fetchImpl` in TypeScript.
+The learner's key is sent to the provider. Simulation mode (`LLM_MODE=mock`, ADR-0048) never opens a
+socket: each provider answers a fixed list.
 """
 
 import re

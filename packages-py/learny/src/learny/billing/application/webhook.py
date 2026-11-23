@@ -1,10 +1,9 @@
 """Stripe webhook processing (SPEC-210 EF-4, ET-4, ET-5, CL-1 to CL-3, CL-9; ADR-0215).
 
-Port of `packages/services/src/billing/webhook.ts`. One transaction: the event is claimed in
-`stripe_events` (a duplicate stops there), the learner's subscription row is locked, an event older
-than the last one applied is dropped, then the subscription is READ AGAIN from Stripe and the row is
-updated from that state. The events that follow a change are written in the same transaction
-(outbox) and dispatched after the commit.
+One transaction: the event is claimed in `stripe_events` (a duplicate stops there), the learner's
+subscription row is locked, an event older than the last one applied is dropped, then the
+subscription is READ AGAIN from Stripe and the row is updated from that state. The events that
+follow a change are written in the same transaction (outbox) and dispatched after the commit.
 """
 
 import re

@@ -1,9 +1,8 @@
 """Measurement and reading of an uploaded object (SPEC-206 EF-2, ET-2, ET-4).
 
-Port of `packages/services/src/resources/storage.ts`: the object is measured and read through the
-Storage API under the caller's identity, so the Storage policies still apply, and the body is
-streamed with a hard cap: an object that grew after it was measured can never exhaust memory.
-Nothing here is logged.
+The object is measured and read through the Storage API under the caller's identity, so the Storage
+policies still apply, and the body is streamed with a hard cap: an object that grew after it was
+measured can never exhaust memory. Nothing here is logged.
 """
 
 from dataclasses import dataclass

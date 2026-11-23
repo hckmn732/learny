@@ -1,8 +1,8 @@
 """[SPEC-2102] `JOBS_MODE=inline`: the API runs the events a request committed before answering.
 
-P21 plan, step 6 (port of the inline branch of `withTransaction`): the committed events are fanned
-out and executed through the same `job_deliveries` rows as with the worker, depth first, delays
-ignored, a failed attempt retried at once. Every event created by a test is deleted afterwards.
+P21 plan, step 6: the committed events are fanned out and executed through the same `job_deliveries`
+rows as with the worker, depth first, delays ignored, a failed attempt retried at once. Every event
+created by a test is deleted afterwards.
 """
 
 import uuid

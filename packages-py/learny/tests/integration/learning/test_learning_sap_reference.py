@@ -1,9 +1,4 @@
-"""[SPEC-2202] Reference SAP dataset (SPEC-401 ET-7, CA-6).
-
-Ported from `packages/learning-engine/src/fixtures/sap-reference.test.ts`. The dataset itself is
-recorded from TypeScript (`learning_engine_reference.json`); the cases below assert its shape, so a
-change in the recording breaks one place only.
-"""
+"""[SPEC-2202] Reference SAP dataset (SPEC-401 ET-7, CA-6)."""
 
 import pytest
 from factories.learning_support import (

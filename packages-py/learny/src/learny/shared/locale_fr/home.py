@@ -1,9 +1,7 @@
 """User-facing French strings of the home screen (SPEC-603, ADR-2011).
 
-Every literal is copied verbatim from the TypeScript backend: the derivations come from
-`packages/domain/src/home/derive.ts`, the service messages and the action labels from
-`packages/services/src/home/get-home.ts`. Codes reference the constant, never an inline French
-string.
+Every literal is copied verbatim from the reference implementation. Codes reference the constant,
+never an inline French string.
 """
 
 # packages/domain/src/home/derive.ts `OBJECTIVE_LABELS` (EF-6).
@@ -65,7 +63,7 @@ PRIMARY_START_MOCK_EXAM = "Commencer l'examen blanc"
 # `slotHref` (EF-2): the pill link of a warm-up.
 SLOT_ANCHOR_WARMUP = "#echauffement"
 
-# packages/services/src/home/get-home.ts: the action of a formation card.
+# the action of a formation card.
 ACTION_RESUME = "Reprendre"
 ACTION_CONTINUE = "Continuer"
 ACTION_REVIEW = "Réviser"

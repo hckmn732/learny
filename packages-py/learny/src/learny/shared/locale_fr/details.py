@@ -1,28 +1,28 @@
 """User-facing French strings of the problem details (ADR-2011).
 
-Every literal here is copied verbatim from the TypeScript backend. Code references the constant,
-never an inline French string.
+Every literal here is copied verbatim from the reference implementation. Code references the
+constant, never an inline French string.
 """
 
 UNEXPECTED_ERROR = "Une erreur inattendue est survenue. Référence : {request_id}."
 
-# packages/services/src/security/origin-guard.ts (SPEC-208 EF-6, ported by SPEC-2101).
+# SPEC-208 EF-6, SPEC-2101.
 ORIGIN_REJECTED = "Requête refusée : origine non autorisée."
 
-# packages/http/src/route-handler.ts (SPEC-201 ET-3, SPEC-2201): request body reading.
+# SPEC-201 ET-3, SPEC-2201: request body reading.
 PAYLOAD_TOO_LARGE = "La requête dépasse la taille maximale de 1 Mo."
 INVALID_JSON_BODY = "Le corps de la requête n’est pas un JSON valide."
 
-# packages/http/src/validate.ts (SPEC-201 EF-1).
+# SPEC-201 EF-1.
 INVALID_INPUT = "Les données envoyées sont invalides."
 
-# packages/http/src/route-handler.ts (SPEC-208 EF-2).
+# SPEC-208 EF-2.
 RATE_LIMITED = "Vous avez envoyé trop de requêtes. Réessayez dans {seconds} s."
 
-# packages/services/src/security/rate-limit.ts (SPEC-208 EF-1).
+# SPEC-208 EF-1.
 SERVICE_UNAVAILABLE = "Service momentanément indisponible."
 
-# packages/http/src/idempotency.ts (SPEC-201 ET-4, ADR-0120).
+# SPEC-201 ET-4, ADR-0120.
 IDEMPOTENCY_KEY_REQUIRED = (
     "L’en-tête Idempotency-Key est obligatoire (8 à 128 caractères : lettres, chiffres, - et _)."
 )
@@ -33,22 +33,22 @@ IDEMPOTENCY_IN_PROGRESS = "La requête initiale est encore en cours."
 IDEMPOTENCY_RESERVATION_NOT_FOUND = "Réservation d’idempotence introuvable."
 IDEMPOTENCY_KEY_NOT_FOUND = "Clé d’idempotence réservée introuvable."
 
-# packages/llm/src/credentials/crypto.ts (SPEC-505 ET-1, ported by SPEC-2201).
+# SPEC-505 ET-1, SPEC-2201.
 CREDENTIAL_DECRYPT_FAILED = (
     "La clé enregistrée n’a pas pu être déchiffrée. Supprimez-la puis enregistrez-la à nouveau."
 )
 
-# packages/llm/src/mock/select.ts (SPEC-504 ET-6, ported by SPEC-2201).
+# SPEC-504 ET-6, SPEC-2201.
 MOCK_SCENARIO_TRIED = "scénario « {scenario} »"
 MOCK_FIXTURE_NOT_FOUND = (
     "Aucune fixture pour la tâche « {task} » et la consigne « {prompt_id} » (candidats : {candidates})."
 )
 
-# packages/http/src/route-handler.ts authentication steps (SPEC-201).
+# authentication steps (SPEC-201).
 UNAUTHENTICATED = "Vous devez être connecté pour effectuer cette action."
 EMAIL_NOT_CONFIRMED = "Confirmez votre adresse e-mail pour continuer."
 
-# packages/services/src/auth/gotrue-errors.ts (SPEC-202 ET-2, ported by SPEC-2101).
+# SPEC-202 ET-2, SPEC-2101.
 INVALID_CREDENTIALS = "Adresse e-mail ou mot de passe incorrect."
 EMAIL_NOT_CONFIRMED_SIGN_IN = "Vérifiez votre adresse e-mail avant de vous connecter."
 RESEND_TOO_SOON = "Vous pourrez renvoyer le lien dans {seconds} secondes."
@@ -58,13 +58,13 @@ TOO_MANY_ATTEMPTS = "Trop de tentatives : réessayez dans un instant."
 AUTH_UNAVAILABLE = "Le service d’authentification est momentanément indisponible."
 AUTH_NOT_CONFIGURED = "Le service d’authentification n’est pas configuré."
 
-# packages/services/src/legal/accept.ts (SPEC-806 ET-3, ET-4, ported by SPEC-2101).
+# SPEC-806 ET-3, ET-4, SPEC-2101.
 LEGAL_ACCEPTANCE_REQUIRED = "Une nouvelle version des conditions doit être acceptée avant cette action."
 LEGAL_VERSIONS_CONFLICT = "Les versions soumises ne sont plus les versions actives. Rechargez la page."
 LEGAL_VERSIONS_INVALID = "Les versions soumises sont invalides."
 
-# packages/services/src/me.ts, header.ts, sidebar.ts, onboarding/*.ts, parametres-onglets-et-profil.ts
-# and ai/qualify-model.ts (SPEC-2201). Every literal is copied verbatim from its TypeScript source.
+# header.ts, sidebar.ts, onboarding/*.ts, parametres-onglets-et-profil.ts
+# SPEC-2201: . Every literal is copied verbatim from the reference implementation.
 PROFILE_NOT_FOUND = "Profil introuvable."
 PREFERENCES_NOT_FOUND = "Préférences introuvables."
 PROFILE_VERSION_CONFLICT = "Le profil a été modifié ailleurs. Rechargez vos réglages."
@@ -76,7 +76,7 @@ TASK_MODEL_INVALID = "Affectation de modèle invalide."
 ONBOARDING_AI_REQUIRED = "Testez une clé personnelle et affectez-la aux cinq tâches."
 LEGAL_ACCEPTANCE_STORED_NOT_FOUND = "Acceptation introuvable après insertion."
 
-# packages/db/src/storage/paths.ts and signed-urls.ts (SPEC-114, ported by SPEC-2101).
+# packages/db/src/storage/paths.ts and signed-urls.ts (SPEC-114, SPEC-2101).
 STORAGE_PATH_REFUSED = "Chemin de stockage refusé."
 STORAGE_EXPORT_RESERVED = "Seul le job d’export peut déposer une archive."
 STORAGE_FILE_NOT_FOUND = "Fichier introuvable."
@@ -98,7 +98,7 @@ STORAGE_RESOURCE_ID_INVALID = "Identifiant de ressource invalide."
 STORAGE_EXPORT_ID_INVALID = "Identifiant d’export invalide."
 
 # --------------------------------------------------------------------------------------------------
-# Formation context (SPEC-2201), copied verbatim from the TypeScript services it replaces.
+# Formation context (SPEC-2201), copied verbatim from the reference implementation.
 # --------------------------------------------------------------------------------------------------
 CADRAGE_INVALID_SUGGESTIONS = "Les valeurs des suggestions doivent être uniques."
 CADRAGE_MULTI_NEEDS_TWO = "Une question à choix multiple exige au moins deux suggestions."
@@ -229,19 +229,19 @@ ELLIPSIS = "…"
 WEB_SEARCH_UNAVAILABLE = "Recherche web indisponible : la proposition repose sur le cadrage seul."
 PROGRAMME_PROPOSAL_VERSION_TITLE = "Version {version} de la proposition"
 
-# packages/services/src/resources/storage.ts — the Storage JWT secret is missing.
+# the Storage JWT secret is missing.
 STORAGE_ACCESS_SECRET_MISSING = "Accès au stockage indisponible : secret JWT absent."
 
 # --------------------------------------------------------------------------------------------------
-# Job use cases of SPEC-2207, copied verbatim from the TypeScript services they replace.
+# Job use cases of SPEC-2207, copied verbatim from the reference implementation.
 # --------------------------------------------------------------------------------------------------
 USER_ID_INVALID = "Identifiant utilisateur invalide."
 MODULE_NOT_FOUND = "Module introuvable."
 
-# packages/http/src/dev-guard.ts (SPEC-201 ET-7, CL-10, ported by SPEC-2207).
+# SPEC-201 ET-7, CL-10, SPEC-2207.
 RESOURCE_NOT_FOUND = "Ressource introuvable."
 
-# packages/services/src/dev/echo.ts (SPEC-201): demonstration payloads.
+# SPEC-201: demonstration payloads.
 DEV_ECHO_FORMATION_LIMIT = (
     "Vous avez déjà trois formations actives : archivez-en une pour en créer une autre."
 )

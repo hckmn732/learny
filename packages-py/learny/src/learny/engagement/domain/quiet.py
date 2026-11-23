@@ -1,4 +1,4 @@
-"""Quiet hours of the learner, ported from `packages/core/src/time.ts` (BR-NOT-04, SPEC-2205).
+"""Quiet hours of the learner (BR-NOT-04, SPEC-2205).
 
 The range is `[start, end)` on the local clock and crosses midnight when `start > end`; an empty
 range (`start == end`) means no quiet hours at all. The zone is always explicit and the instant is

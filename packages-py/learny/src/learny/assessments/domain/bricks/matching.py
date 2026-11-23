@@ -2,7 +2,7 @@
 
 Opaque ids are rebuilt with the version seed through `opaque_mapping`, the same function that built
 the public payload. An error between two different notions becomes a confusion (CA-2); an extra
-right or a null never does (CL-5). Pure port of `packages/bricks/src/types/matching/grade.ts`.
+right or a null never does (CL-5).
 """
 
 from collections.abc import Mapping
@@ -15,7 +15,7 @@ from learny.assessments.domain.bricks.grade_support import (
     round4,
 )
 from learny.assessments.domain.bricks.normalize import normalize_text
-from learny.assessments.domain.bricks.public import opaque_mapping
+from learny.assessments.domain.bricks.public_payload import opaque_mapping
 from learny.assessments.domain.bricks.responses import read_object, read_record
 
 

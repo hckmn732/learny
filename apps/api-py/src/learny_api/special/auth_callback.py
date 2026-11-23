@@ -1,4 +1,4 @@
-"""The e-mailed link callback (port of `special/auth-callback.ts`, SPEC-202 EF-6, ADR-0121).
+"""The e-mailed link callback (SPEC-202, EF-6, ADR-0121).
 
 The route is native, not a pipeline operation: any failure, including an unreadable query, still
 answers the same 302 to the invalid-link page (CL-1), and the session cookies written by the

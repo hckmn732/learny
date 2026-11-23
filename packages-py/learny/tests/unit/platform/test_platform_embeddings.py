@@ -1,8 +1,4 @@
-"""[SPEC-2203] Embedding adapters: deterministic mock, Voyage errors and bounds.
-
-Ported from `packages/ingestion/src/embeddings.ts` (mock vectors, key failure, transient 429/5xx,
-invalid answer) and the `voyageEmbeddingClient` cases of the TypeScript suite.
-"""
+"""[SPEC-2203] Embedding adapters: deterministic mock, Voyage errors and bounds."""
 
 import json
 

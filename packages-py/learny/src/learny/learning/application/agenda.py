@@ -1,7 +1,7 @@
 """Agenda read model (SPEC-704 ET-2, BR-AGE-01, BR-AGE-04, BR-AGE-06).
 
-Port of `packages/services/src/agenda/get-agenda.ts`: one read-only call behind RLS, the local day
-and minutes of every slot computed in the learner's zone, and no clock read (ADR-0047).
+One read-only call behind RLS, the local day and minutes of every slot computed in the learner's
+zone, and no clock read (ADR-0047).
 """
 
 from collections.abc import Mapping, Sequence

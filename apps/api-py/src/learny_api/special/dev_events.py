@@ -1,9 +1,8 @@
 """Development demonstrations of SPEC-203: the outbox pipeline and the hourly tick.
 
-Port of `packages/services/src/dev/events.ts`. The start emits `sdd/demo-requested` in the caller's
-transaction so the worker pipeline runs for real; the run reads its state; the tick previews the
-local windows of the factory users (address prefix `sdd-203-`) and the outbox returns the counts of
-the caller's own events.
+The start emits `sdd/demo-requested` in the caller's transaction so the worker pipeline runs for
+real; the run reads its state; the tick previews the local windows of the factory users (address
+prefix `sdd-203-`) and the outbox returns the counts of the caller's own events.
 """
 
 from datetime import datetime
@@ -32,7 +31,7 @@ SELECT_RUN = text(
     "select run_id::text as run_id, steps, attempts, finished_at "
     "from public.sdd_demo_runs where run_id = cast(:run_id as uuid)"
 )
-# `selectTickUsers` (packages/jobs/src/tick.ts) with the factory prefix of the demonstration: an
+# `selectTickUsers` with the factory prefix of the demonstration: an
 # active learner only, and never one whose account deletion is scheduled at the tick instant.
 SELECT_TICK_USERS = text(
     """
@@ -46,9 +45,6 @@ SELECT_TICK_USERS = text(
     limit :limit
     """
 )
-# The worker stamps `dispatched_at` instead of `sent_at` (SPEC-2102): an event handed to the
-# dispatcher is no longer pending, and the demonstration counts it as sent, exactly like the
-# TypeScript page did when Inngest delivered it inline.
 COUNT_OUTBOX = text(
     """
     select count(*) filter (

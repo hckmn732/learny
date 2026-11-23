@@ -1,10 +1,9 @@
 """Conversations of the tutor (SPEC-610 ET-3, BR-TUT-07, ADR-0040).
 
-Port of `packages/services/src/tutor-chat/conversations.ts`: conversations are private, kept per
-course version, and every read runs under the caller's RLS client. A foreign or missing
-conversation is a 404, never a leak of its existence. The greeting is composed by the code: no model
-call when opening. Each function opens its own short transaction, so nothing is held across a model
-call.
+Conversations are private, kept per course version, and every read runs under the caller's RLS
+client. A foreign or missing conversation is a 404, never a leak of its existence. The greeting is
+composed by the code: no model call when opening. Each function opens its own short transaction, so
+nothing is held across a model call.
 """
 
 import json

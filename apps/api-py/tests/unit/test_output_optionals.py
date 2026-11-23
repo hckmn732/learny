@@ -1,9 +1,7 @@
 """[SPEC-2202] An absent optional output field is omitted, exactly like the Zod contract.
 
-`zod` keeps an optional field the handler did not set absent, and `JSON.stringify` omits it. Pydantic
-fills it with `None`, so the pipeline drops every key the handler did not provide while an explicit
-`null` stays a `null`: the wire response of a flipped route is byte-identical to the TypeScript one.
-The e2e `@SPEC-2202` observes it on `offline.sync` (a rejected entry carries no `correct` key).
+`zod` keeps an optional field the handler did not set absent, and `JSON.stringify` omits it. The e2e
+`@SPEC-2202` observes it on `offline.sync` (a rejected entry carries no `correct` key).
 """
 
 from typing import Any

@@ -1,11 +1,9 @@
 """`JOBS_MODE=inline` for the tests: a request's events run before its answer (P21 plan, step 6).
 
-Port of the inline branch of `withTransaction` (`packages/jobs/src/emit.ts`): the TypeScript backend
-committed, ran the consumers of the committed events in the process, then answered, so a page opened
-right after a request already sees what its jobs wrote. This middleware collects the events the
-request commits and, when the answer starts, hands them to `learny_worker.inline.run_committed`
-(same `job_deliveries` rows as the worker). Events committed once a streamed answer has started are
-left to the worker. Forbidden in production, like `resolveJobsMode`.
+This middleware collects the events the request commits and, when the answer starts, hands them to
+`learny_worker.inline.run_committed` (same `job_deliveries` rows as the worker). Events committed
+once a streamed answer has started are left to the worker. Forbidden in production, like
+`resolveJobsMode`.
 """
 
 from typing import Any
@@ -19,9 +17,7 @@ from learny_worker.runner import Runner
 from starlette.types import ASGIApp, Message, Receive, Scope, Send
 
 INLINE_MODE = "inline"
-# The personal-data export is asynchronous by contract (202 then polling, SPEC-211): the
-# TypeScript backend never ran it inline because its emitter was already Python, and running it
-# before the answer would flip the queued row to done. It always stays on the worker.
+# It always stays on the worker.
 WORKER_ONLY_CONSUMERS = ("privacy.run_data_export",)
 
 

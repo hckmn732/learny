@@ -1,9 +1,8 @@
 """[SPEC-2302] Brick creation and public payload (SPEC-501 EF-1, EF-6).
 
-Port of the `createBrick` and `getPublicBrick` cases of `packages/services/src/bricks/
-brick-service.test.ts`, run on the real database: a valid draft creates the brick and its
-version 1 in one transaction, an unknown formation or an invalid payload is refused, and the
-public payload of a version is only served to its owner, without the correct answers.
+A valid draft creates the brick and its version 1 in one transaction, an unknown formation or an
+invalid payload is refused, and the public payload of a version is only served to its owner, without
+the correct answers.
 """
 
 import json
@@ -30,7 +29,7 @@ pytestmark = pytest.mark.spec("SPEC-2302")
 
 
 def choice_payload(notion_ids: list[str], stem: str = "Which account increases on debit?") -> dict[str, Any]:
-    """A valid single-choice payload, exactly the shape of the TypeScript fixture."""
+    """A valid single-choice payload, exactly the shape of the reference fixture."""
     return {
         "stem": stem,
         "mode": "single",

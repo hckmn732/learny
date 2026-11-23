@@ -1,10 +1,4 @@
-"""Validation of the three inputs of a route (SPEC-2201, port of `packages/http/src/validate.ts`).
-
-The TypeScript wrapper validates with Zod and renders its issues with the French locale; here the
-generated Pydantic models validate the same values and their errors are translated back into the
-Zod issue shape (`path` prefixed by the input location, `message` from `locale_fr.validation`), so a
-`400`/`422` answer is byte-identical to the one the Hono backend sends (ADR-2012, ADR-1001).
-"""
+"""Validation of the three inputs of a route (SPEC-2201)."""
 
 import re
 from collections.abc import Callable, Iterable, Mapping, Sequence, Sized

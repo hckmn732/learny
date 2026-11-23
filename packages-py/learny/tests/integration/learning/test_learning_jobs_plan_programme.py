@@ -1,4 +1,4 @@
-"""[SPEC-2207] The initial planning of a validated programme (port of `plan-programme`).
+"""[SPEC-2207] The initial planning of a validated programme.
 
 The first run writes the planner slots of the formation; a replay finds them and writes nothing, so
 a duplicated delivery of `formation/programme-validated` never plans twice.

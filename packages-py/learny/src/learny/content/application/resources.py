@@ -1,8 +1,7 @@
 """Contributions of a chapter: creation, upload, finalization, read URL, rename, retry, deletion.
 
-Port of `packages/services/src/resources/{create-resource,create-upload,finalize,read,rename,retry,
-delete,queries,limits}.ts` (SPEC-206, SPEC-607). One transaction per command, one deterministic
-event in the outbox, the same `AppError` codes and the same French details.
+One transaction per command, one deterministic event in the outbox, the same `AppError` codes and
+the same French details.
 """
 
 import hashlib

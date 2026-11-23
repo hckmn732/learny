@@ -1,7 +1,6 @@
 """Sample data of the SDD demonstration pages (SPEC-110, SPEC-114, SPEC-1203).
 
-Copied from `packages/api-routes/src/dev-sdd/spec-110.ts` and from the static answers of
-`implementations/dev-sdd.ts`. Only the labels and identifiers live here.
+Copied from the reference implementation. Only the labels and identifiers live here.
 """
 
 CREDENTIAL_ANTHROPIC_LABEL = "Clé Anthropic d’Alex"
@@ -146,8 +145,7 @@ KEY_ID_MISSING = "Identifiant de clé manquant."
 # SPEC-002 - the `file` a scanned secret is reported under (`scanText(text, 'saisie')`).
 SECRET_SCAN_SOURCE = "saisie"
 
-# SPEC-103 / SPEC-2302 - the programme factory of the demonstration pages (port of
-# `packages/db/src/testing/programme.ts`).
+# SPEC-103 / SPEC-2302 - the programme factory of the demonstration pages.
 PROGRAMME_TITLE = "Formation de démonstration"
 MODULE_TITLE = "Partie {position}"
 CHAPTER_TITLE = "Chapitre {module}.{chapter}"
@@ -251,7 +249,7 @@ SPEC113_CATEGORIES = (
     ("service", 7),
 )
 
-# SPEC-115 - the demonstration dataset measured by the page (port of `demo-fixtures.ts`).
+# SPEC-115 - the demonstration dataset measured by the page.
 SPEC115_AGENDA_DAYS = (
     {"date": "2026-11-09", "label": "lundi 9 novembre"},
     {"date": "2026-11-10", "label": "mardi 10 novembre"},

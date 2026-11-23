@@ -1,11 +1,11 @@
-"""[SPEC-603] Pure derivations of the home screen (port of `derive.test.ts`)."""
+"""[SPEC-603] Pure derivations of the home screen."""
 
 from typing import Any
 
 import pytest
 from learny.shared.locale_fr import home as texts
 from learny.shared.time import parse_iso
-from learny.views.home_derive import (
+from learny.views.home_derivations import (
     ActionSlot,
     DaySlot,
     ScheduledSlot,

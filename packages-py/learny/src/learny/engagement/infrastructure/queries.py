@@ -1,11 +1,4 @@
-"""SQL of the engagement context, copied from the TypeScript repositories (00-conventions section 3).
-
-Every raw `sql` block of `packages/db/src/repositories/{notifications,push-subscriptions}.ts` and
-of `packages/services/src/{notifications/list,parametres-notifications}.ts` is copied verbatim,
-with `${x}` turned into a bound `:x` parameter and the same `order by`, `for update` and
-`on conflict` clauses. Each function takes the transaction as its first parameter and returns a
-frozen row.
-"""
+"""Each function takes the transaction as its first parameter and returns a frozen row."""
 
 import json
 from collections.abc import Mapping
@@ -226,7 +219,7 @@ INCREMENT_SUBSCRIPTION_FAILURES = text(
     "where id = cast(:subscription_id as uuid)"
 )
 
-# packages/notifications/src/deliveries.ts (`automationStaleAt`): an automation notification
+# (`automationStaleAt`): an automation notification
 # expires with the action it announces.
 SELECT_AUTOMATION_ACTION_EXPIRY = text(
     "select payload from public.automation_actions where id = cast(:action_id as uuid) limit 1"
@@ -702,7 +695,6 @@ async def read_automation_action_expiry(tx: Tx, action_id: str) -> object | None
 
 # --- automations of SPEC-2205 ------------------------------------------------------------------
 #
-# Copied from `packages/services/src/automations/index.ts` and
 # `packages/db/src/repositories/automation-actions.ts`: the same columns, the same
 # `on conflict (user_id, key)` and the same `(created_at, id) < cursor` page.
 
@@ -897,7 +889,7 @@ async def expire_due_automation_actions(tx: Tx, now: datetime) -> int:
 
 # --- weekly review of SPEC-2205 ----------------------------------------------------------------
 #
-# Copied from `packages/services/src/weekly-review.ts`: the four measures of the local week and the
+# Copied: the four measures of the local week and the
 # two reads of the `bilan` journal row.
 
 SELECT_WEEKLY_STUDY_MINUTES = text(
@@ -1189,9 +1181,7 @@ async def update_automation_action_effect(
 
 # --- job use cases (SPEC-2205): daily digest, reminders and practice exercises ---------------------
 #
-# The SQL below is copied from `packages/notifications/src/digest.ts`,
-# `packages/notifications/src/producers/reminders.ts`, `packages/jobs/src/tick.ts` and
-# `packages/services/src/exercises/ensure-practice-exercise.ts`, with `${x}` turned into a bound
+# , with `${x}` turned into a bound
 # `:x` parameter.
 
 SELECT_TICK_USERS = text(
@@ -1652,12 +1642,8 @@ async def list_reminder_owners(tx: Tx, *, limit: int) -> list[str]:
     return [str(row["user_id"]) for row in result.mappings()]
 
 
-# --- sprints before a milestone (SPEC-719, BR-AUT-08, ADR-0190) --------------------------------
-#
-# Copied from `automatisme-8-sprint-avant-un-jalon.ts` with `${x}` turned into a bound `:x`
-# parameter. Widths and guards are the TypeScript ones: the same lookback of the busy agenda, the
-# same `status in ('planned', 'done', 'missed')`, the same `order by` and the same unique dedupe
-# index (`automation_actions_dedupe_uq`) that turns a replay into a no-op (EF-4).
+# --- sprints before a milestone (SPEC-719, BR-AUT-08, ADR-0190) -------------------------------- Copied from
+# `automatisme-8-sprint-avant-un-jalon.ts` with `${x}` turned into a bound `:x` parameter.
 
 SELECT_PLANNING_RHYTHM = text(
     "select p.timezone, p.tutor_tone::text as tutor_tone, sp.hours_per_day, sp.study_days, "

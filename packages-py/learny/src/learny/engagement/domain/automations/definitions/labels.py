@@ -1,4 +1,4 @@
-"""French labels of the automation explanations (SPEC-2205, port of `reprise/labels.ts`).
+"""French labels of the automation explanations (SPEC-2205).
 
 Pure functions: the zone and the reference instant are explicit, so the tests pin the words without
 depending on the process clock or the machine time zone (ADR-0047, ADR-0030). The texts themselves
@@ -35,7 +35,7 @@ WEEKDAYS: Final = (
 
 
 def clip(value: str) -> str:
-    """One line, at most 160 characters, ending with an ellipsis like the TS `clip`."""
+    """One line, at most 160 characters, ending with an ellipsis."""
     if len(value) <= SUMMARY_MAX:
         return value
     return f"{value[: SUMMARY_MAX - 1].rstrip()}{fr.SUMMARY_ELLIPSIS}"

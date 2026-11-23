@@ -2,11 +2,10 @@
 
 `POST /api/v1/formations/:fid/sprints` is a standard `handler()` route whose contract
 (`sprintPlanRoute`, SPEC-719) was never added to the `ROUTES` registry: `api/openapi.yaml` does not
-carry it, so `learny_api.generated.routes` cannot describe it (see
-`packages/api-routes/src/special/sprints.ts` and `evidence/SPEC-1004/acceptance.md`). The route is
-therefore declared here with a local `RouteSpec` and local strict models, then handed to
-`pipeline.handle`: authentication, rate limit, idempotency, validation and output validation stay
-the shared twelve steps of ADR-2012, with the same codes and the same headers as the TypeScript.
+carry it, so `learny_api.generated.routes` cannot describe it. The route is therefore declared here
+with a local `RouteSpec` and local strict models, then handed to `pipeline.handle`: authentication,
+rate limit, idempotency, validation and output validation stay the shared twelve steps of ADR-2012,
+with the same codes and the same headers.
 """
 
 from dataclasses import replace

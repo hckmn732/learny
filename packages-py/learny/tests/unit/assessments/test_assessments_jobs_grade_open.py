@@ -1,7 +1,6 @@
-"""Pure parts of the open-answer correction (SPEC-2207, port of `grade-open.ts`).
+"""Pure parts of the open-answer correction (SPEC-2207).
 
-The learner text never becomes an instruction: it is escaped inside its tag. The schema bounds the
-score and the readable fields exactly like the Zod schema of the TypeScript service.
+The learner text never becomes an instruction: it is escaped inside its tag.
 """
 
 from collections.abc import Mapping

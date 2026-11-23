@@ -1,7 +1,7 @@
 """Code grading of a choice question (SPEC-502 ET-3, EF-2, EF-3).
 
 Single mode is all-or-nothing; multiple mode applies `max(0, (TP - FP) / C)` and is correct only on
-the exact set. Pure port of `packages/bricks/src/types/choice-question/grade.ts`.
+the exact set.
 """
 
 from collections.abc import Mapping

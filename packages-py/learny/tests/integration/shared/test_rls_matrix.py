@@ -1,9 +1,9 @@
 """[SPEC-2101] RLS matrix replayed under Python against the exported inventory (CA-1, CA-3).
 
-The inventory comes from `api/oracles/vectors/rls-matrix.json`, exported from
-`packages/db/src/rls/matrix.ts` (single source of truth). Every fixture is written by the owner role,
-then every permission is proved with a real `authenticated` role and JWT claims, inside a savepoint
-of a transaction that is rolled back: the local database is left unchanged.
+The inventory comes from `api/oracles/vectors/rls-matrix.json` (single source of truth). Every
+fixture is written by the owner
+role, then every permission is proved with a real `authenticated` role and JWT claims, inside a
+savepoint of a transaction that is rolled back: the local database is left unchanged.
 """
 
 import json

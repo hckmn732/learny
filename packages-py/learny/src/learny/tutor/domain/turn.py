@@ -1,10 +1,9 @@
 """Deterministic turn helpers of the tutor chat (SPEC-610 ET-2, ET-3).
 
-Ports the private helpers of `packages/services/src/tutor-chat/stream.ts` (`summaryOf`,
-`textChunks`, `scenarioFor`) and of `self-test.ts` (`looksInjection`, `asksForTest`,
-`mockGradeScenario`). The JavaScript regular expressions are compiled with `re.ASCII`, because
-`\\b` and `\\w` are ASCII-based in JavaScript: without the flag Python would not split around an
-accented letter.
+Ports the private helpers (`summaryOf`, `textChunks`, `scenarioFor`) and of `self-test.ts`
+(`looksInjection`, `asksForTest`, `mockGradeScenario`). The JavaScript regular expressions are
+compiled with `re.ASCII`, because `\\b` and `\\w` are ASCII-based in JavaScript: without the flag
+Python would not split around an accented letter.
 """
 
 import re
@@ -57,7 +56,7 @@ def mock_grade_scenario(answer: str) -> str:
 
 
 def scenario_for(text: str, follow_up: str | None, gap_first: bool) -> str:
-    """`scenarioFor`: the mock scenario of a chat turn, in the TypeScript order."""
+    """`scenarioFor`: the mock scenario of a chat turn."""
     if looks_injection(text):
         return "chat-injection"
     if gap_first:

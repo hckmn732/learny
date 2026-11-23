@@ -1,7 +1,7 @@
 """Code grading of a cloze (SPEC-502 ET-3, BR-MEM-05).
 
 Every gap is compared through `normalize_text` against the accepted variants; no spelling tolerance
-beyond that (CL-3, CL-4). Pure port of `packages/bricks/src/types/cloze/grade.ts`.
+beyond that (CL-3, CL-4).
 """
 
 from collections.abc import Mapping

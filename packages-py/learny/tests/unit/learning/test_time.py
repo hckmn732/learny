@@ -1,7 +1,4 @@
-"""[SPEC-2202] Canonical instants, civil days and local times (SPEC-401 ET-3, CL-1 to CL-3).
-
-Ported from `packages/learning-engine/src/time.test.ts`.
-"""
+"""[SPEC-2202] Canonical instants, civil days and local times (SPEC-401 ET-3, CL-1 to CL-3)."""
 
 import pytest
 from learny.learning.domain.errors import EngineError

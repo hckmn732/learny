@@ -1,9 +1,9 @@
 """[SPEC-2202] Prompt and mock fixture of the remediation plan (SPEC-612 ET-4, ADR-0048).
 
 The structured plan is produced by `learny.platform.llm` with the same task, prompt identifier and
-mock fixture as the TypeScript service; the simulated model cannot know the runtime notion
-identifiers, so an unknown identifier is aligned on the input order. The selection of the questions
-follows the nature of the gap and never replays a seen fingerprint.
+mock fixture; the simulated model cannot know the runtime notion identifiers, so an unknown
+identifier is aligned on the input order. The selection of the questions follows the nature of the
+gap and never replays a seen fingerprint.
 """
 
 import json

@@ -1,8 +1,8 @@
 """Return paths of Checkout and of the portal (SPEC-210 EF-1, EF-2, CL-5).
 
-Port of `isSafeRelativePath` (`packages/contracts/src/billing.ts`): a path of this application, one
-leading `/`, never `//` nor `/\\`, no control character and no space. The pipeline validates the body
-through the generated contract; this pure rule is reused by the service so both agree.
+A path of this application, one leading `/`, never `//` nor `/\\`, no control character and no
+space. The pipeline validates the body through the generated contract; this pure rule is reused by
+the service so both agree.
 """
 
 import re
@@ -12,7 +12,6 @@ from learny.shared.locale_fr import billing as fr
 
 SAFE_PATH_MAX = 512
 
-# `/[\\\s\u0000-\u001f\u007f]/` of the TypeScript source.
 _FORBIDDEN = re.compile(r"[\\\s\x00-\x1f\x7f]")
 
 # `/parametres#abonnement` - the "Abonnement" tab (BR-SET-01) the portal returns to (EF-2).
@@ -29,7 +28,7 @@ def is_safe_relative_path(value: str) -> bool:
 
 
 def invalid_path(field: str) -> AppError:
-    """`invalidPath`: the Zod-shaped `VALIDATION_FAILED` of the TypeScript service."""
+    """`invalidPath`: the `VALIDATION_FAILED` problem of an external return path."""
     return AppError(
         "VALIDATION_FAILED",
         fr.RETURN_PATH_INVALID,
@@ -38,12 +37,7 @@ def invalid_path(field: str) -> AppError:
 
 
 def absolute_url(path: str, app_url: str, field: str) -> str:
-    """`absoluteUrl`: a relative path resolved against the application, checked to stay inside it.
-
-    `is_safe_relative_path` already refuses a scheme, a protocol-relative path and a backslash, so
-    the resolved URL can only be `origin + path`: the origin check of the TypeScript source is kept
-    as an explicit guard rather than re-parsed.
-    """
+    """`absoluteUrl`: a relative path resolved against the application, checked to stay inside it."""
     if not is_safe_relative_path(path):
         raise invalid_path(field)
     origin = origin_of(app_url)

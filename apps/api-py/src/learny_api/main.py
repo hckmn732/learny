@@ -1,9 +1,8 @@
 """FastAPI facade of the Learny API (SPEC-2003, ADR-2005, ADR-2012).
 
-The facade serves every operation the contract declares: `pipeline.install` registers the
-operations of `learny_api.generated.routes`, `special.install` registers the routes outside the
-generic pipeline. There is no fallback: a path the table does not declare answers the 404 of
-Starlette, which is the behaviour of the TypeScript backend for an unknown route (SPEC-2302).
+The facade serves every operation the contract declares: `pipeline.install` registers the operations
+of `learny_api.generated.routes`, `special.install` registers the routes outside the generic
+pipeline.
 """
 
 from fastapi import FastAPI

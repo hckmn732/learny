@@ -1,9 +1,4 @@
-"""[SPEC-2202] Planner boundary validation and existing-slot handling (SPEC-407 ET-5, BR-FOR-15).
-
-Ported from `packages/learning-engine/src/planner/plan-validation.test.ts`. Every recorded error
-is replayed with its stable code and its JSON path, and the preserved slots are compared with the
-TypeScript recordings of 2026-11-21.
-"""
+"""[SPEC-2202] Planner boundary validation and existing-slot handling (SPEC-407 ET-5, BR-FOR-15)."""
 
 import json
 from pathlib import Path
@@ -41,12 +36,12 @@ FORMATIONS = PLAN_INPUTS["base"]["formations"]
 
 
 def preferences(**overrides: Any) -> dict[str, Any]:
-    """The learner preferences of the TypeScript test, with availability overrides."""
+    """The learner preferences of the reference suite, with availability overrides."""
     return {"tz": TZ, "availability": {**AVAILABILITY, **overrides}, "holidays": ["2026-11-11"]}
 
 
 def plan_input(**overrides: Any) -> dict[str, Any]:
-    """One planning input built like the TypeScript `input()` helper."""
+    """One planning input for the validation cases."""
     payload: dict[str, Any] = {
         "formations": [FORMATIONS[0]],
         "preferences": preferences(),
@@ -58,7 +53,7 @@ def plan_input(**overrides: Any) -> dict[str, Any]:
 
 
 def with_module(**overrides: Any) -> list[dict[str, Any]]:
-    """The single-module formation of the TypeScript fixtures with module overrides."""
+    """The single-module formation of the reference fixtures with module overrides."""
     formation = {**FORMATIONS[0], "modules": [{**FORMATIONS[0]["modules"][0], **overrides}]}
     return [formation]
 

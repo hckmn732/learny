@@ -1,7 +1,7 @@
 """Code grading of an ordering (SPEC-502 ET-3).
 
 One point per item left in its expected position, with the expected and the given index of every
-item in the correction. Pure port of `packages/bricks/src/types/ordering/grade.ts`.
+item in the correction.
 """
 
 from collections.abc import Mapping

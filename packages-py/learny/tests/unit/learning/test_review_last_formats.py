@@ -1,9 +1,4 @@
-"""[SPEC-701] Daily global quiz: last formats, per-notion split and the smoothing note.
-
-Ports of `loadLastFormats` and `splitResultByNotion` (`packages/services/src/review`): the engine
-receives one `{notionId, format}` per notion, and a game is split from its contract correction
-(`gameCorrection`), never from the brick grade. The note of a smoothed day keeps the TypeScript verb.
-"""
+"""[SPEC-701] Daily global quiz: last formats, per-notion split and the smoothing note."""
 
 import json
 from pathlib import Path

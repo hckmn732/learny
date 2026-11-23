@@ -1,11 +1,7 @@
-# --------------------------------------------------------------------------------------------------
-# Personal AI keys and model assignments (SPEC-2204, port of
-# `packages/services/src/ai/{credentials-service,qualify-model}.ts` and
-# `packages/services/src/parametres-modeles-d-ia.ts`).
-#
-# Same tables, same selected columns in the same order, same `order by`, same `for update`, same
-# advisory lock. A learner's row is never readable through another learner: every statement filters
-# on `user_id` and runs under RLS.
+# -------------------------------------------------------------------------------------------------- Personal
+# AI keys and model assignments (SPEC-2204). Same tables, same selected columns in the same order, same `order
+# by`, same `for update`, same advisory lock. A learner's row is never readable through another learner: every
+# statement filters on `user_id` and runs under RLS.
 # --------------------------------------------------------------------------------------------------
 
 from sqlalchemy import text

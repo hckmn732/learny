@@ -1,10 +1,10 @@
 """Pure grading of a mock exam and its question selection (SPEC-614 EF-3, EF-4, ET-4, ET-5).
 
-Port of `packages/services/src/mock-exams/{grade,attempt}.ts` without any IO: the studied score only
-counts the modules already studied, the diagnostic score of the unseen modules is reported
-separately and never lowers the studied score, and only a failure of a studied module becomes a gap
-(BR-PRA-04). The selection is deterministic: the official count is shared over the modules in
-proportion to their notions and each module draws from its own bank, shuffled with one seed.
+The studied score only counts the modules already studied, the diagnostic score of the unseen
+modules is reported separately and never lowers the studied score, and only a failure of a studied
+module becomes a gap (BR-PRA-04). The selection is deterministic: the official count is shared over
+the modules in proportion to their notions and each module draws from its own bank, shuffled with
+one seed.
 """
 
 import json
@@ -14,7 +14,7 @@ from typing import Any
 
 from learny.assessments.domain.bricks.grade import grade_brick
 from learny.assessments.domain.bricks.grade_support import BrickGradeError
-from learny.assessments.domain.bricks.public import project_public
+from learny.assessments.domain.bricks.public_payload import project_public
 from learny.assessments.domain.bricks.random import shuffle_seeded
 from learny.assessments.domain.bricks.schema import parse_payload
 from learny.assessments.domain.exam_format import allocate_question_counts
@@ -299,7 +299,7 @@ def _studied_label(modules: Sequence[Mapping[str, Any]]) -> str:
 def plan_of(
     gaps: Sequence[Mapping[str, Any]], modules: Sequence[Mapping[str, Any]], diagnostic: int
 ) -> list[str]:
-    """`plan`: the two or three sentences of the revision plan, copied from the TypeScript."""
+    """`plan`: the two or three sentences of the revision plan."""
     label = _studied_label(modules)
     if not gaps:
         plan = [

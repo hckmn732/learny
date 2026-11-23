@@ -1,11 +1,11 @@
-"""Session cookies of `@supabase/ssr` (port of its storage adapter, SPEC-202 ET-3, ADR-0121).
+"""Session cookies of `@supabase/ssr` (SPEC-202, ET-3, ADR-0121).
 
 The bytes matter: the browser replays these cookies to every context, and both runtimes must agree
 on the name, the chunking and the attributes. This module reproduces `@supabase/ssr` 0.12.7 with the
 `base64url` encoding it uses by default and the attribute order of `cookie` 1.1.1:
 
-    sb-<ref>-auth-token[.n]=base64-<base64url(session JSON)>; Max-Age=34560000; Path=/; HttpOnly;
-    SameSite=Lax[; Secure]
+sb-<ref>-auth-token[.n]=base64-<base64url(session JSON)>; Max-Age=34560000; Path=/; HttpOnly;
+SameSite=Lax[; Secure]
 
 `<ref>` is the first label of the Supabase host, as `_getStorageKey` derives it. A value longer than
 3180 characters is cut into `.<n>` chunks on its URI-encoded form; the session alphabet here is

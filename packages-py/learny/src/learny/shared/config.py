@@ -199,7 +199,7 @@ class Settings(BaseSettings):
 
     @property
     def fixed_instant(self) -> str | None:
-        """`CLOCK_FIXED_AT` unless empty or `real` (the real clock, like the TypeScript stack)."""
+        """`CLOCK_FIXED_AT` unless empty or `real`."""
         value = (self.clock_fixed_at or "").strip()
         return None if value in ("", "real") else value
 
@@ -297,9 +297,6 @@ class ConfigurationError(RuntimeError):
         super().__init__(CONFIGURATION_INVALID.format(scope=scope, names=", ".join(self.names)))
 
 
-# Port of PRODUCTION_REQUIRED_KEYS (packages/config/src/env.ts), restricted to the contract of the
-# Python backend (ADR-2040, ADR-2042). Inngest is gone (ADR-2006), the platform owns no AI key
-# (SPEC-709); the rate-limit key and the VAPID public key and subject are derived (ADR-2042).
 PRODUCTION_REQUIRED_ENV: tuple[str, ...] = (
     "APP_ENCRYPTION_KEY",
     "API_PROXY_SECRET",
@@ -363,7 +360,7 @@ def ensure_production_configuration(
     settings: Settings,
     environ: Mapping[str, str] | None = None,
 ) -> None:
-    """Refuses an incomplete APP_ENV=production start (port of checkEnvironment, SPEC-009 CA-2)."""
+    """Refuses an incomplete APP_ENV=production start (SPEC-009, CA-2)."""
     if not settings.is_production:
         return
     issues = production_configuration_issues(settings, environ)

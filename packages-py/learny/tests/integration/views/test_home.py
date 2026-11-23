@@ -1,11 +1,9 @@
-"""[SPEC-603] Home read under RLS against the local stack (port of `services/test/integration/home.test.ts`).
+"""[SPEC-603] Home read under RLS against the local stack.
 
-The TypeScript test replays the demonstration seed (`seedDemo`); that seed is not ported (its 5 000
-lines belong to the QA fixtures, SPEC-2302 step 2 keeps only what the web needs). These tests build
-the same scenario with the shared factories - a current SAP formation with seven modules, a done
-course, a warm-up, the highlighted validation quiz, a revision, the daily global quiz, a due notion
-with its brick, two validated modules and a review at the one-month horizon - and check the same
-values the TypeScript test checks.
+These tests build the same scenario with the shared factories - a current SAP formation with seven
+modules, a done course, a warm-up, the highlighted validation quiz, a revision, the daily global
+quiz, a due notion with its brick, two validated modules and a review at the one-month horizon - and
+check the same values the reference suite checks.
 """
 
 from typing import Any

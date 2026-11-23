@@ -1,8 +1,8 @@
 """Deterministic public-caption fixtures of the YouTube extractor (SPEC-510 EF-2, ET-5).
 
-The values are identical to `packages/ingestion/fixtures/youtube.ts` and live in the JSON fixture
-`packages/llm/fixtures/youtube/captions.json`, so the Python source stays ASCII and the committed
-data is the single copy the mock provider reads. No test or demonstration ever calls YouTube.
+The values are identical and live in the JSON fixture, so the Python source stays ASCII and the
+committed data is the single copy the mock provider reads. No test or demonstration ever calls
+YouTube.
 """
 
 import json
@@ -16,7 +16,7 @@ NO_CAPTIONS_VIDEO_ID = "noCaptions1"
 
 
 def youtube_fixtures_path() -> Path:
-    """`<packages/llm/fixtures>/youtube/captions.json`."""
+    """Committed captions fixture of the extractor."""
     return fixtures_directory() / "youtube" / "captions.json"
 
 

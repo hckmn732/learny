@@ -1,7 +1,6 @@
 """[SPEC-603] Home aggregation: the day, the slots, retention, the global quiz and both tabs.
 
-Port of `packages/services/src/home/get-home.test.ts`: the queries are faked, so these tests pin
-the projection of the screen and not the SQL.
+The queries are faked, so these tests pin the projection of the screen and not the SQL.
 """
 
 from collections.abc import AsyncIterator

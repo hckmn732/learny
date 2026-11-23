@@ -1,8 +1,7 @@
 """Study rhythm of the learner (SPEC-602 ET-1; SPEC-2201).
 
-Port of `getStudyPreferences` and `updateStudyPreferences`
-(`packages/services/src/onboarding/advance.ts`): one RLS transaction, the whole tuple replaced by the
-PATCH, and `NOT_FOUND` when the learner has no row.
+One RLS transaction, the whole tuple replaced by the PATCH, and `NOT_FOUND` when the learner has no
+row.
 """
 
 from collections.abc import Mapping

@@ -1,7 +1,6 @@
 """[SPEC-2202] Deterministic shuffle of the public payloads (SPEC-501 ET-7, ADR-0140).
 
-Ported from `packages/bricks/src/random.ts` through the recordings of 2026-11-21: same seed, same
-order, and the input is never mutated.
+Same seed, same order, and the input is never mutated.
 """
 
 import json

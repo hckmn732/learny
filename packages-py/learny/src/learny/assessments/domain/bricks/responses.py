@@ -1,9 +1,8 @@
 """Shape checks of the graded responses (SPEC-502 ET-1).
 
-The TypeScript package validates a response with a Zod schema and reports every issue as
-`RESPONSE_INVALID`. The Python port keeps the same stable code and the same JSON paths; the message
-of an issue is written here in English instead of being copied from Zod, which is an internal
-implementation detail never rendered to a learner (ADR-2011).
+The Python port keeps the same stable code and the same JSON paths; the message of an issue is
+written here in English instead of being copied from Zod, which is an internal implementation detail
+never rendered to a learner (ADR-2011).
 """
 
 from collections.abc import Mapping, Sequence

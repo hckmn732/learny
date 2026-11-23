@@ -1,8 +1,6 @@
 """[SPEC-2202] Deterministic draw of one validation attempt (SPEC-405, BR-QUI-03, ADR-0170).
 
-Ported from `packages/learning-engine/src/draw/draw-attempt.test.ts`. The expected questions,
-quotas, exhaustion report and diagnostics are the recordings of the TypeScript engine taken on
-2026-11-21 from the same inputs.
+The expected questions, quotas, exhaustion report and diagnostics are the reference recordings.
 """
 
 import json

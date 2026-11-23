@@ -1,9 +1,4 @@
-"""[SPEC-2202] Agenda and gaps read-model helpers (SPEC-704, SPEC-615).
-
-The pure parts of `packages/services/src/agenda/get-agenda.ts` and `gaps/{links,list-gaps}.ts`:
-slot targets, period totals, training and course links, and the two `AgendaQuery` refinements of
-`packages/contracts/src/agenda.ts`.
-"""
+"""[SPEC-2202] Agenda and gaps read-model helpers (SPEC-704, SPEC-615)."""
 
 from typing import Any
 

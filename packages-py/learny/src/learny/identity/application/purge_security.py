@@ -1,10 +1,9 @@
 """Hourly purge of the expired security rows (SPEC-208 EF-7, ADR-0258).
 
-Port of `packages/services/src/security/purge.ts` and of the `security-purge` function: the
-idempotency keys created more than 24 hours ago and the rate-limit buckets untouched for 24 hours
-are deleted. The comparison is strict, so a key of 23 h 59 min is kept and a key of 24 h + 1 s is
-deleted. The `cron/hourly-tick` identifier is the idempotency key of the consumer: a replayed tick
-purges once.
+The idempotency keys created more than 24 hours ago and the rate-limit buckets untouched for 24
+hours are deleted. The comparison is strict, so a key of 23 h 59 min is kept and a key of 24 h + 1 s
+is deleted. The `cron/hourly-tick` identifier is the idempotency key of the consumer: a replayed
+tick purges once.
 """
 
 from collections.abc import Mapping

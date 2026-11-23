@@ -3,7 +3,7 @@
 One `@handler("<route id>")` per operation, no logic: the body is the generated contract model and
 the use case lives in `learny.billing`. `billing.webhook` is a public route authenticated by the
 `Stripe-Signature` header of the raw body, so it reads the bytes itself (a parsed body would break
-the signature) and caps them like the TypeScript handler.
+the signature) and caps them.
 """
 
 from typing import Any, cast

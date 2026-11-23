@@ -1,13 +1,11 @@
 """Sprint planning before the next milestones of one formation (SPEC-719, BR-AUT-08, ADR-0190).
 
-Ported from `planSprintsBeforeMilestones` of
-`packages/automations/src/automatisme-8-sprint-avant-un-jalon.ts`. The ownership checks run through
-the learner client: a foreign formation or slot answers 404 without revealing its existence, an
-obsolete slot answers 409 and an invalid identifier answers 400. The proposal path is the one of
-`runAutomation` (`packages/automations/src/moteur-d-automatismes.ts`): the setting and the global
-pause are checked first (CL-5), every draft is validated before any write (ET-3), the unique
-`dedupeKey` index turns a replay into a no-op (EF-4) and a proposal written without consent is
-applied and journaled in the same transaction.
+The ownership checks run through the learner client: a foreign formation or slot answers 404 without
+revealing its existence, an obsolete slot answers 409 and an invalid identifier answers 400. The
+proposal path is the one of `runAutomation`: the setting and the global pause are checked first
+(CL-5), every draft is validated before any write
+(ET-3), the unique `dedupeKey` index turns a replay into a no-op (EF-4) and a proposal written
+without consent is applied and journaled in the same transaction.
 """
 
 from collections.abc import Mapping
@@ -68,7 +66,7 @@ def _validation_failed(detail: str, path: str, message: str) -> AppError:
 
 
 def _preferences(row: queries.PlanningRhythmRow) -> PlannerPreferences:
-    """`preferencesOf`: the rhythm of the learner, with the defaults of the TypeScript engine."""
+    """`preferencesOf`: the rhythm of the learner, with the engine defaults."""
     slots = [slot for slot in (row.preferred_slots or []) if slot in STUDY_SLOTS]
     days = sorted(int(day) for day in (row.study_days or DEFAULT_STUDY_DAYS) if 1 <= int(day) <= 7)
     return PlannerPreferences(
@@ -213,10 +211,7 @@ async def _with_slot_ids(
 ) -> list[dict[str, Any]]:
     """Completes the applied targets with the identifiers the executor just inserted.
 
-    The TypeScript `apply` returns the row identifier of each insert inside the payload; the Python
-    definition asks the executor for the effects instead, so the identifiers are read back from the
-    stable planner key of each target (EF-3). The definition already dropped the past targets,
-    exactly like `appliedTargets`.
+    The definition already dropped the past targets, exactly like `appliedTargets`.
     """
     targets = payload.get("targets")
     raw_targets = targets if isinstance(targets, list) else []
