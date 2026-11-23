@@ -1,21 +1,9 @@
-// Types of mobile-preflight.mjs for TypeScript consumers (Vitest unit tests, ADR-3015 § 5).
-export interface PublishedPort {
-  label: string;
-  port: number;
-  key: string;
-  suffix: string;
-  /** Chemin sondé sur le port (ex. `/api/v1/health`) ; vide pour l'APK. */
-  path: string;
-  instance: 'dev' | 'phone';
-}
-
+// Types of mobile-preflight.mjs for TypeScript consumers (Vitest unit tests, ADR-3018).
 export interface EnvCheck {
   missing: string[];
   problems: string[];
   ok: boolean;
 }
-
-export type PortKind = 'ok' | 'down' | 'stale' | 'unauthorized';
 
 export interface DiskVerdict {
   freeGb: number;
@@ -23,33 +11,28 @@ export interface DiskVerdict {
   ok: boolean;
 }
 
-export interface AgentVerdict {
+export interface AdbVerdict {
   ok: boolean;
+  serial: string | null;
+  offline: string | null;
   detail: string;
-  busy?: boolean;
-  jobId?: string | null;
-  version?: string | null;
 }
 
-export interface RepublishCapability {
-  key: string | null;
-  devInstance: string | null;
-  phoneInstance: string | null;
-  ok: boolean;
+export interface BootVerdict {
+  booted: boolean;
+  value: string;
 }
 
-export const API_ROOT: string;
-export const SANDBOX_ROOT: string;
+export type HttpKind = 'ok' | 'unauthorized' | 'down';
+
 export const REQUIRED_KEYS: string[];
-export const PUBLISHED_PORTS: PublishedPort[];
+export const DEPRECATED_KEYS: string[];
 
 export function parseEnvFile(content: string): Record<string, string>;
-export function rewriteEnvFile(content: string, updates: Record<string, string>): string;
 export function checkEnv(env: Record<string, string>): EnvCheck;
-export function classifyPortResponse(status: number): PortKind;
+/** URL à sonder depuis l'hôte : `10.0.2.2` devient `127.0.0.1` ; `null` si ce n'est pas une URL. */
+export function hostProbeUrl(value: string): string | null;
+export function classifyHttp(status: number): HttpKind;
 export function diskVerdict(freeBytes: number, minGb: number): DiskVerdict;
-export function agentVerdict(health: Record<string, unknown> | null): AgentVerdict;
-export function republishCapability(
-  env: Record<string, string>,
-  readKey: () => string,
-): RepublishCapability;
+export function adbVerdict(output: string | null | undefined): AdbVerdict;
+export function bootVerdict(output: string | null | undefined): BootVerdict;
