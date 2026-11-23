@@ -29,6 +29,8 @@ describe('[SPEC-3301] jeux jouables sans glisser', () => {
       pairs: expect.objectContaining({ [left]: right }) as unknown,
     });
     expect(screen.getByTestId('brick-live')).toBeTruthy();
+    // The placement is written under the notion it belongs to (EF-5).
+    expect(screen.getByTestId(`brick-placed-${left}`)).toBeTruthy();
   });
 
   it('[SPEC-3301] association corrigée : la bonne définition est rappelée (BR-MEM-10)', async () => {

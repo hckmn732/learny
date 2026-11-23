@@ -72,6 +72,8 @@ tags:
     id: brick-item-a
 - tapOn:
     id: brick-item-r1
+# La région vive ne porte un texte qu'après un placement : elle prouve que les deux appuis ont
+# réellement changé l'état du jeu (ET-4).
 - assertVisible:
-    id: brick-placed-a
+    id: brick-live
 - takeScreenshot: SPEC-3301-association
