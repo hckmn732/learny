@@ -97,7 +97,7 @@ describe('progressive cutover planner', () => {
   });
 
   it('refuses a percentage owner the facade would ignore', () => {
-    expect(() => normaliseOverrides({ 'agenda.get': 'py@10' })).toThrow(/ts et py/);
+    expect(() => normaliseOverrides('{"agenda.get":"py@10"}')).toThrow(/ts et py/);
     expect(() => normaliseOverrides('not json')).toThrow();
     expect(() => normaliseOverrides({ ghost: 'py' })).not.toThrow();
     expect(checkOverrides(tables, normaliseOverrides({ ghost: 'py' }))).toEqual([

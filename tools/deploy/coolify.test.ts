@@ -36,6 +36,13 @@ function overlayFile(overlay: string): string {
   return path.posix.join('docker', overlay.replace('./', ''));
 }
 
+/** One service of a parsed Compose document; a missing name is a broken fixture. */
+function service(doc: ComposeDoc, name: string): Service {
+  const found = doc.services[name];
+  if (found === undefined) throw new Error(`service ${name} absent du Compose`);
+  return found;
+}
+
 function environment(service: Service): Record<string, unknown> {
   return (service.environment ?? {}) as Record<string, unknown>;
 }
@@ -50,8 +57,8 @@ const ALLOWED_LITERAL = /^(production|live|mock|resend|smtp|on|off|true|false|wo
 describe.each(STACKS)('$base — services Python de la bascule', ({ base, overlay }) => {
   const stack = readYaml(base);
   const python = readYaml(overlayFile(overlay));
-  const api = python.doc.services['api-py'];
-  const worker = python.doc.services['worker-py'];
+  const api = service(python.doc, 'api-py');
+  const worker = service(python.doc, 'worker-py');
 
   it('includes the overlay without touching the rendered topology', () => {
     expect(
@@ -114,7 +121,7 @@ describe.each(STACKS)('$base — services Python de la bascule', ({ base, overla
       expect(Number.parseFloat(limits.cpus ?? '0')).toBeGreaterThan(0);
       expect(service.read_only).toBe(true);
     }
-    const migrate = stack.doc.services.migrate;
+    const migrate = service(stack.doc, 'migrate');
     expect(migrate, base).toBeDefined();
     expect(migrate.restart, base).toBe('no');
     const migrationJobs = Object.entries(stack.doc.services).filter(
@@ -125,7 +132,7 @@ describe.each(STACKS)('$base — services Python de la bascule', ({ base, overla
     const gate = dependencies.migrate ?? dependencies.seed;
     expect(gate?.condition, overlay).toBe('service_completed_successfully');
     if (dependencies.seed !== undefined) {
-      const seedDependencies = stack.doc.services.seed.depends_on as Record<
+      const seedDependencies = service(stack.doc, 'seed').depends_on as Record<
         string,
         { condition: string }
       >;
@@ -134,7 +141,7 @@ describe.each(STACKS)('$base — services Python de la bascule', ({ base, overla
   });
 
   it('keeps the web on Hono until the documented flip', () => {
-    const web = environment(stack.doc.services.web);
+    const web = environment(service(stack.doc, 'web'));
     expect(web.API_INTERNAL_URL, base).toBe('http://api:3001');
     expect(environment(api).PY_HONO_UPSTREAM_URL, overlay).toBe('http://api:3001');
     expect(environment(api).OWNERSHIP_OVERRIDES, overlay).toBe('${OWNERSHIP_OVERRIDES:-}');

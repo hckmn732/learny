@@ -31,8 +31,8 @@ OWNERSHIP = ROOT / "api" / "ownership.yaml"
 
 def run_cutover(*args: str, check: bool = True) -> subprocess.CompletedProcess[str]:
     """Runs the planner on the committed artefacts; stdout is the override, stderr the summary."""
-    result = subprocess.run(
-        ["node", str(CUTOVER), *args],
+    result = subprocess.run(  # noqa: S603 - les arguments sont des options litterales
+        ["node", str(CUTOVER), *args],  # noqa: S607 - node est resolu par PATH
         cwd=ROOT,
         capture_output=True,
         text=True,
@@ -72,7 +72,8 @@ def test_the_read_canary_is_accepted_and_moves_only_the_reads() -> None:
 
     applied = apply_overrides(ownership(), overrides)
     reads, writes = context_operations("learning")
-    assert reads and writes
+    assert reads
+    assert writes
     assert all(applied.operations[route] == "py" for route in reads)
     assert all(applied.operations[route] == "ts" for route in writes)
     # The rest of the contract stays on the relay: one writer per entry, no partial context.
@@ -87,9 +88,7 @@ def test_the_read_canary_is_accepted_and_moves_only_the_reads() -> None:
 
 def test_the_promotion_moves_every_mutation_of_the_context_at_once() -> None:
     canary = run_cutover("--relay-only", "--context", "learning", "--stage", "reads").stdout.strip()
-    promoted = run_cutover(
-        "--context", "learning", "--stage", "writes", "--current", canary
-    ).stdout.strip()
+    promoted = run_cutover("--context", "learning", "--stage", "writes", "--current", canary).stdout.strip()
     applied = apply_overrides(ownership(), overrides_from_env(promoted))
     reads, writes = context_operations("learning")
     assert all(applied.operations[route] == "py" for route in [*reads, *writes])
@@ -115,7 +114,12 @@ def test_the_end_of_the_cutover_is_the_committed_table() -> None:
 
 def test_the_planner_refuses_a_mutation_on_both_sides() -> None:
     result = run_cutover(
-        "--context", "learning", "--stage", "writes", "--current", '{"*":"ts","slots.move":"py"}',
+        "--context",
+        "learning",
+        "--stage",
+        "writes",
+        "--current",
+        '{"*":"ts","slots.move":"py"}',
         check=False,
     )
     assert result.returncode == 2
@@ -124,16 +128,19 @@ def test_the_planner_refuses_a_mutation_on_both_sides() -> None:
 
 
 def test_the_planner_refuses_a_promotion_before_the_canary() -> None:
-    result = run_cutover(
-        "--relay-only", "--context", "learning", "--stage", "writes", check=False
-    )
+    result = run_cutover("--relay-only", "--context", "learning", "--stage", "writes", check=False)
     assert result.returncode == 2
     assert "READS_NOT_PROMOTED" in result.stderr
 
 
 def test_the_planner_refuses_a_percentage_owner_the_runtime_would_ignore() -> None:
     result = run_cutover(
-        "--context", "learning", "--stage", "writes", "--current", '{"*":"ts","agenda.get":"py@10"}',
+        "--context",
+        "learning",
+        "--stage",
+        "writes",
+        "--current",
+        '{"*":"ts","agenda.get":"py@10"}',
         check=False,
     )
     assert result.returncode == 2
