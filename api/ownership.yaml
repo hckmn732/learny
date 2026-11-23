@@ -234,7 +234,7 @@ special:
   'GET /api/v1/dev/sdd/stripe/events': py
   'GET /api/v1/health': py
   'POST /api/v1/_dev/commit-check': ts
-  'POST /api/v1/_dev/demo-job': ts
+  'POST /api/v1/_dev/demo-job': py
   'POST /api/v1/_dev/secret-scan': py
   'POST /api/v1/dev/sdd/cron/hourly-tick': py
   'POST /api/v1/dev/sdd/echo': py
