@@ -996,6 +996,7 @@ export default tseslint.config(
       'apps/mobile/*.config.js',
       'apps/mobile/test/**/*.js',
       'apps/mobile/e2e/**/*.mjs',
+      'apps/mobile/plugins/**/*.cjs',
     ],
     languageOptions: {
       globals: {
