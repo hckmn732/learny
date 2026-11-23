@@ -42,9 +42,8 @@
 4. **Calendrier** : la maquette montre une grille mensuelle, pas une frise hebdomadaire ; EF-6 est
    lu avec ADR-3003 (la maquette fait foi pour la structure). Le jour « aujourd'hui » est
    `programme.today`, jour civil du serveur (ET-2, BR-ACC-07), jamais l'horloge de l'appareil.
-   La pile partagée répond `2026-11-23` (API locale démarrée sans `CLOCK_FIXED_AT`) ; la capture
-   met donc en évidence le 23 novembre et non le 11. L'écran reste conforme : c'est la valeur
-   serveur qui fait foi.
+   La pile locale tourne avec `CLOCK_FIXED_AT=2026-11-11T12:20:00Z` : le 11 novembre est donc mis
+   en évidence, comme dans l'état `ios-programme-calendrier.png`.
 5. **Détail du module** : route `(app)/programme/module/[moduleId]`, lecture seule (statut, dates,
    seuil, chapitres, reprise), apports et quiz renvoyés au web (ADR-3002 § 3).
 6. **Rafraîchissement** : `RefreshControl` (pull-to-refresh), en plus du cache et du rafraîchissement
@@ -72,19 +71,33 @@ vidéo. Critères :
 
 - [x] CA-1 — valeurs serveur affichées (29 % = 2/7, « Module 3 sur 7 », quatre chapitres du
       module 3, module 4 verrouillé, module 2 « Validé · 91 % ») — `view-model.test.ts`,
-      `programme-screen.test.tsx`, flux Maestro.
+      `programme-screen.test.tsx` ; assertion Maestro prête dans le flux.
 - [x] CA-2 — « Reprendre le chapitre N » ouvre le cours à ce chapitre, module verrouillé → fiche
       « Se débloque quand le quiz du module 3 est validé » — `module-accordion.test.tsx`,
-      `programme-screen.test.tsx`, flux Maestro.
+      `programme-screen.test.tsx`.
 - [x] CA-3 — `PATCH /me/current-formation` mémorisé côté serveur, sélecteur actif/inactif —
-      `programme.int.test.ts`, `formation-switcher.test.tsx`, flux Maestro.
+      `programme.int.test.ts` (3 tests verts), `formation-switcher.test.tsx`.
 - [x] CA-4 — création et import renvoient au web, aucune écriture du programme —
-      `programme-screen.test.tsx` (`currentFormationUpdate` non appelé), flux Maestro.
-- [x] CA-5 — vues Modules et Calendrier conformes à la structure de la maquette, comparaison
-      visuelle sous le seuil ADR-3003 § 4 et contrôles structurels (`testID`, textes) — flux
-      `@visual` et `compare.mjs`.
+      `programme-screen.test.tsx` (`currentFormationUpdate` non appelé).
+- [ ] CA-5 — comparaison visuelle : **campagne Maestro bloquée par l'environnement** (voir § 5).
 
-## 5. Reproduction
+## 5. Blocage de campagne (environnement, pas de code)
+
+Les deux campagnes SPEC-3202 échouent avant l'onglet Programme, sur la garde d'onboarding :
+`GET /me/onboarding` répond **429 RATE_LIMITED** pour le compte de démonstration (journal
+`/root/logs/api-only.log`). L'horloge de l'API étant figée au 11/11/2026 12:20, la fenêtre de
+limitation ne se réinitialise pas ; tous les agents partagent le même compte et saturent le
+compteur. L'écran affiché est donc « Impossible de vérifier votre configuration » (testID
+`onboarding-error`), jamais l'écran Programme.
+
+Correctif attendu (environnement) : redémarrage de l'API pour vider les compteurs, puis campagne
+immédiate, ou limitation de débit désactivée pour le compte de démonstration en local. Aucun
+changement de code n'est nécessaire côté SPEC-3202 : le flux contient déjà une reprise
+conditionnelle (`onboarding-error-retry`). Le build mono-ABI et l'APK sont prêts ; il reste à
+relancer `flock /tmp/learny-emulator.lock pnpm -s test:e2e:mobile --tags SPEC-3202` après ce
+correctif, puis `validate --skip-build` et `complete`.
+
+## 6. Reproduction
 
 ```sh
 cd /root/wt/SPEC-3202

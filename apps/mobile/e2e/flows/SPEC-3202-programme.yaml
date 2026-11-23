@@ -21,6 +21,17 @@ tags:
       id: sdd-health
     timeout: 30000
 - openLink: learny://connexion?demo=1
+# La restauration de session peut précéder la publication du jeton : si la garde d'onboarding a
+# déjà échoué (API redémarrée pendant la campagne), on réessaie une fois avant d'attendre les onglets.
+- waitForAnimationToEnd:
+    timeout: 5000
+- runFlow:
+    when:
+      visible:
+        id: onboarding-error
+    commands:
+      - tapOn:
+          id: onboarding-error-retry
 - extendedWaitUntil:
     visible:
       id: tab-programme
