@@ -209,6 +209,9 @@ export default defineConfig({
         // request time; it receives the same test-only key as the web and Hono.
         APP_ENCRYPTION_KEY: TEST_ENCRYPTION_KEY,
         PY_HONO_UPSTREAM_URL: HONO_URL,
+        // The facade health probes the database only when DATABASE_URL is set explicitly.
+        DATABASE_URL:
+          process.env.DATABASE_URL ?? 'postgresql://postgres:postgres@127.0.0.1:54322/postgres',
         // The Python settings read SUPABASE_URL / SUPABASE_ANON_KEY, mapped from the public names
         // exactly like docker/compose.coolify-py.yml (Storage, Auth admin and export jobs).
         SUPABASE_URL: process.env.NEXT_PUBLIC_SUPABASE_URL ?? 'http://127.0.0.1:54321',
