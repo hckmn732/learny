@@ -5,15 +5,8 @@
 // no native Auth client ever starts in a test. `setSessionToken` publishes the token to the API
 // client before the session provider's own notification, which is asynchronous.
 import { authFailure } from './email-auth';
-import { expectedLegalVersions, type LegalVersions } from './legal';
 import type { ProviderId, ProviderName, ProviderResult } from './providers/types';
 import { setSessionToken } from './session-token';
-
-/**
- * Placeholder versions of the probe: they never match an active pair, so the call can only be
- * refused with the expected pair and never records an acceptance without the learner's consent.
- */
-export const LEGAL_PROBE_VERSIONS: LegalVersions = { cguVersion: '0', privacyVersion: '0' };
 
 interface ProviderSessionData {
   readonly access_token: string;
@@ -83,18 +76,6 @@ export async function currentProviderSession(client: ProviderAuthClient): Promis
 export interface ProviderAccessApi {
   me(): Promise<{ readonly firstName: string | null; readonly lastName: string | null }>;
   updateProfile(body: { readonly firstName?: string; readonly lastName?: string }): Promise<void>;
-  /** Sends the probe pair; only ever answered by a refusal carrying the active versions. */
-  probeLegalAcceptance(): Promise<void>;
-}
-
-/** Versions the learner still has to accept, or `null` when the account is up to date. */
-export async function pendingLegalVersions(api: ProviderAccessApi): Promise<LegalVersions | null> {
-  try {
-    await api.probeLegalAcceptance();
-    return null;
-  } catch (error) {
-    return expectedLegalVersions(error);
-  }
 }
 
 /** EF-2 — the name announced at the first connection fills the empty fields of the profile. */
