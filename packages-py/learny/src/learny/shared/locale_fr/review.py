@@ -77,9 +77,7 @@ TUNED_RECENT = "récemment"
 TUNED_DEFAULT_NOTION = "cette notion"
 
 # packages/services/src/review/global-quiz.ts — notes and headers (EF-3, EF-4).
-NOTE_DEFERRED = (
-    "{due} aujourd’hui : {deferred} reportée{plural} à {day} pour que vos révisions restent sous {cap} min."
-)
+NOTE_DEFERRED = "{due} aujourd’hui : {deferred} {verb} à {day} pour que vos révisions restent sous {cap} min."
 NOTE_DEFAULT = "{notions} à revoir aujourd’hui, lacunes en priorité."
 NOTE_WARMUP_ITEM = "Rappel de l’échauffement"
 SCOPE_MODULE = "Module {position}"

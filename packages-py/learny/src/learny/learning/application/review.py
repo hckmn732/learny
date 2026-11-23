@@ -1110,7 +1110,9 @@ async def build_dto(
         note = texts.NOTE_DEFERRED.format(
             due=was_due_word(int(config["dueCount"])),
             deferred=config["deferredCount"],
-            plural="" if int(config["deferredCount"]) == 1 else "s",
+            verb=(
+                texts.SMOOTHING_VERB_ONE if int(config["deferredCount"]) == 1 else texts.SMOOTHING_VERB_MANY
+            ),
             day=weekday_label(str(config["deferredTo"])),
             cap=config["capMinutes"],
         )
@@ -1265,7 +1267,7 @@ async def reopen_deferred_notions(
         for row in review_rows
     ]
     automation = await load_automation_params(tx, user_id)
-    last_formats = await queries.read_quiz_last_formats(tx, user_id, formation_id)
+    last_formats = await load_last_formats(tx, user_id, formation_id)
     forced_games = await load_forced_games(tx, user_id, formation_id, due_rows)
     drawn = global_quiz.build_daily_session(
         formation_id=formation_id,
@@ -1438,6 +1440,17 @@ def _due_notion(row: Mapping[str, Any], engine_notions: Mapping[str, Mapping[str
     }
 
 
+async def load_last_formats(tx: Any, user_id: str, formation_id: str) -> list[dict[str, str]]:
+    """`loadLastFormats`: the format of the latest answer of each notion, newest answers first."""
+    last_by_notion: dict[str, dict[str, str]] = {}
+    for row in await queries.read_quiz_last_formats(tx, user_id, formation_id):
+        for notion_id in row["notion_ids"] or []:
+            last_by_notion.setdefault(
+                str(notion_id), {"notionId": str(notion_id), "format": str(row["type"])}
+            )
+    return list(last_by_notion.values())
+
+
 async def get_or_create_today_session(
     deps: LearningDeps, actor: Actor, formation_id: str, mode: str
 ) -> dict[str, Any]:
@@ -1497,7 +1510,7 @@ async def get_or_create_today_session(
             }
             for row in review_rows
         ]
-        last_formats = await queries.read_quiz_last_formats(tx, user_id, formation_id)
+        last_formats = await load_last_formats(tx, user_id, formation_id)
         forced_games = await load_forced_games(tx, user_id, formation_id, due_rows)
         automation = await load_automation_params(tx, user_id)
         micro_minutes = automation["microMinutes"]
@@ -1872,7 +1885,7 @@ async def answer_review_item(
                 game_notions = split_result_by_notion(
                     brick_type,
                     brick["payload"],
-                    graded["correction"],
+                    correction,
                     {
                         "notionIds": brick_notion_ids,
                         "isCorrect": is_correct,
