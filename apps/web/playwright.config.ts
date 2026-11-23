@@ -41,10 +41,9 @@ const DESKTOP = { ...devices['Desktop Chrome'], ...COMMON, viewport: { width: 14
 // Shared worktrees may already run a server on the default port: allow an isolated run.
 const PORT = Number(process.env.PLAYWRIGHT_PORT ?? 3100);
 const BASE_URL = `http://127.0.0.1:${String(PORT)}`;
-// SPEC-2003 / ADR-2018: the Python facade sits on PORT+1 and relays to Hono on PORT+12, because
-// the SPEC-006 end-to-end test starts its own Next server on PORT+2 and that port cannot change.
+// SPEC-2003 / ADR-2018: the Python facade sits on PORT+1, because the SPEC-006 end-to-end test
+// starts its own Next server on PORT+2 and that port cannot change.
 const FACADE_PORT = PORT + 1;
-const API_PORT = PORT + 12;
 const API_INTERNAL_URL = `http://127.0.0.1:${String(FACADE_PORT)}`;
 // The SPEC-301 test starts a second web server from its own process: the child inherits
 // `process.env`, so the relay target and the proxy secret must be exported here, not only in
