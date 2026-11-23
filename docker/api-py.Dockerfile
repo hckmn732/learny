@@ -21,9 +21,9 @@ FROM python:3.13-slim-bookworm AS runtime
 RUN useradd --uid 1001 --create-home --shell /usr/sbin/nologin learny
 
 WORKDIR /app
+# The contract artefacts are found in /app/api from the working directory (ADR-2042).
 ENV PYTHONDONTWRITEBYTECODE=1 \
     PYTHONUNBUFFERED=1 \
-    PY_API_DIR=/app/api \
     PATH="/app/.venv/bin:$PATH"
 
 COPY --from=builder /app/.venv /app/.venv
