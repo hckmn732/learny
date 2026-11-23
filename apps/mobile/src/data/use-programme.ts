@@ -1,4 +1,4 @@
-﻿// Data of the Programme tab (SPEC-3202 ET-1, ET-3, BR-FOR-11, BR-COU-08; canevas Â§ 4).
+// Data of the Programme tab (SPEC-3202 ET-1, ET-3, BR-FOR-11, BR-COU-08; canevas Â§ 4).
 //
 // Four authenticated reads, one key per route: the learner's profile (`/me`), the formation
 // switcher (`/me/sidebar`), the programme of the current formation
@@ -32,7 +32,6 @@ export function useMe(): { status: QueryStatus; data: Me | null; retry: () => vo
   const query = useQuery({
     queryKey: queryKeys.me(),
     queryFn: () => requireApiClient().api.meGet({}),
-    retry: 1,
   });
   return {
     status: statusOf(query),
@@ -49,11 +48,11 @@ export function useFormationOptions(): {
   formations: readonly SidebarFormation[];
   current: SidebarFormation | null;
   retry: () => void;
+  refresh: () => Promise<void>;
 } {
   const query = useQuery({
     queryKey: queryKeys.sidebar(),
     queryFn: () => requireApiClient().api.sidebarGet({}),
-    retry: 1,
   });
   const data: SidebarDto | undefined = query.data;
   return {
@@ -62,6 +61,9 @@ export function useFormationOptions(): {
     current: data?.currentFormation ?? null,
     retry: () => {
       void query.refetch();
+    },
+    refresh: async () => {
+      await query.refetch();
     },
   };
 }
@@ -82,6 +84,7 @@ export interface ProgrammeQuery {
   readonly status: QueryStatus;
   readonly data: import('@learny/contracts').ProgrammeScreenStateDto | null;
   readonly retry: () => void;
+  readonly refresh: () => Promise<void>;
 }
 
 /**
@@ -94,11 +97,44 @@ export function useProgramme(formationId: string | null): ProgrammeQuery {
     queryKey: queryKeys.programme(formationId ?? 'none'),
     queryFn: () => requireApiClient().api.programmeGet({ params: { fid: formationId ?? '' } }),
     enabled: formationId !== null,
-    retry: 1,
   });
   return {
-    status: formationId === null ? 'loading' : statusOf(query),
+    // A learner without any formation has no programme to load: the screen shows its empty state.
+    status: formationId === null ? 'ready' : statusOf(query),
     data: query.data ?? null,
+    retry: () => {
+      void query.refetch();
+    },
+    refresh: async () => {
+      await query.refetch();
+    },
+  };
+}
+
+export interface FormationOption {
+  readonly id: string;
+  readonly title: string;
+  readonly status: SidebarFormation['status'];
+  readonly monogram: string;
+  readonly progressPercent: number;
+}
+
+/**
+ * Minimal list of the learner's formations (SPEC-604): it makes the difference between « no
+ * formation », « programme to validate » (CL-1) and « formation archived ».
+ */
+export function useFormationsList(): {
+  readonly status: QueryStatus;
+  readonly items: readonly import('@learny/contracts').FormationSummary[];
+  readonly retry: () => void;
+} {
+  const query = useQuery({
+    queryKey: queryKeys.formations(),
+    queryFn: () => requireApiClient().api.formationsList({}),
+  });
+  return {
+    status: statusOf(query),
+    items: query.data?.items ?? [],
     retry: () => {
       void query.refetch();
     },
@@ -110,18 +146,21 @@ export function useModuleCourse(moduleId: string | null): {
   readonly status: QueryStatus;
   readonly data: import('@learny/contracts').ModuleCourseScreen | null;
   readonly retry: () => void;
+  readonly refresh: () => Promise<void>;
 } {
   const query = useQuery({
     queryKey: queryKeys.moduleCourse(moduleId ?? 'none'),
     queryFn: () => requireApiClient().api.moduleCourse({ params: { mid: moduleId ?? '' } }),
     enabled: moduleId !== null,
-    retry: 1,
   });
   return {
     status: moduleId === null ? 'loading' : statusOf(query),
     data: query.data ?? null,
     retry: () => {
       void query.refetch();
+    },
+    refresh: async () => {
+      await query.refetch();
     },
   };
 }
