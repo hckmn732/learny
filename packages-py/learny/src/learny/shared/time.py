@@ -179,6 +179,16 @@ FRENCH_WEEKDAYS = (
     "dimanche",
 )
 """`Intl.DateTimeFormat('fr-FR', {weekday: 'long'})`."""
+FRENCH_WEEKDAYS_SHORT = (
+    "lun.",
+    "mar.",
+    "mer.",
+    "jeu.",
+    "ven.",
+    "sam.",
+    "dim.",
+)
+"""`Intl.DateTimeFormat('fr-FR', {weekday: 'short'})`."""
 
 FRENCH_MONTHS_SHORT = (
     "janv.",
