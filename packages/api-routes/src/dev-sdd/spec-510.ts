@@ -164,6 +164,26 @@ export async function loadSpec510Demo(): Promise<Spec510Data> {
       insert into public.subscriptions (user_id, status, current_period_end)
       values (${user.id}::uuid, 'active', ${new Date(clock.now().getTime() + 30 * 86_400_000).toISOString()}::timestamptz)
     `);
+    // SPEC-709: the platform provides no model, the simulated reading needs a personal key assigned
+    // to the `light` task, exactly like `seedOwnModels` does for the end-to-end suites. The
+    // ciphertext is a placeholder (`LLM_MODE=mock` never decrypts it) and the row only lives in the
+    // rolled-back transaction: the demonstration never touches real data.
+    const credential = await tx.execute<{ id: string }>(sql`
+      insert into public.ai_credentials
+        (user_id, provider, label, base_url, model_ids, encrypted_key, key_last4, status, qualified_at)
+      values (
+        ${user.id}::uuid, 'anthropic', 'Modèle simulé de la démonstration', null,
+        array['claude-haiku-5-5']::text[], decode(repeat('07', 32), 'hex'), 'demo',
+        'qualified', now()
+      )
+      returning id::text as id
+    `);
+    const credentialId = credential[0]?.id;
+    if (credentialId === undefined) throw new Error('clé simulée absente');
+    await tx.execute(sql`
+      insert into public.ai_task_models (user_id, task, credential_id, model_id)
+      values (${user.id}::uuid, 'light', ${credentialId}::uuid, 'claude-haiku-5-5')
+    `);
     const programme = await createTestProgramme(tx, user.id, {
       modules: 1,
       chaptersPerModule: 1,
