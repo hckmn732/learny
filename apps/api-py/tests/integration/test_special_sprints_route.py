@@ -16,6 +16,7 @@ from typing import Any
 import pytest
 from fastapi import FastAPI
 from fastapi.testclient import TestClient
+from learny.engagement import public as engagement_public
 from learny.identity.public import Actor
 from learny.shared.config import Settings
 from learny.shared.errors import ErrorEntry, load_catalog
@@ -313,6 +314,34 @@ def test_the_same_key_replays_the_recorded_answer(monkeypatch: pytest.MonkeyPatc
     assert second.headers["idempotent-replayed"] == "true"
     assert second.json() == RESULT
     assert len(calls) == 1
+
+
+def test_the_installed_handler_reads_the_formation_and_the_optional_slot(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    """The real adapter of the route: `fid` from the path, `examSlotId` from the strict body."""
+    seen: dict[str, Any] = {}
+
+    async def fake(
+        deps: Any,
+        actor: Any,
+        formation_id: str,
+        exam_slot_id: str | None = None,
+    ) -> dict[str, Any]:
+        seen.update(formation_id=formation_id, exam_slot_id=exam_slot_id, actor=actor)
+        return RESULT
+
+    monkeypatch.setattr(engagement_public, "plan_sprints_before_milestones", fake)
+    allow_authentication(monkeypatch)
+    client = build_app()
+
+    response = client.post(PATH, json={"examSlotId": EXAM}, headers={"Idempotency-Key": KEY})
+
+    assert response.status_code == 200
+    assert response.json() == RESULT
+    assert seen["formation_id"] == FID
+    assert seen["exam_slot_id"] == EXAM
+    assert seen["actor"].user_id == USER_ID
 
 
 def test_an_invalid_output_is_a_contract_violation(monkeypatch: pytest.MonkeyPatch) -> None:
