@@ -13,6 +13,7 @@ from learny_api.dev_demos import (
     push,
     sdd,
     sdd_actions,
+    sdd_config,
     sdd_records,
     sdd_state,
 )
@@ -295,3 +296,8 @@ async def dev_spec_113_demo(call: Call) -> dict[str, Any]:
 @handler("dev.sdd.spec-115.demo")
 async def dev_spec_115_demo(call: Call) -> dict[str, Any]:
     return await sdd_records.spec_115(call)
+
+
+@handler("dev.sdd.spec-009.demo")
+async def dev_spec_009_demo(call: Call) -> dict[str, Any]:
+    return await sdd_config.spec_009(call)

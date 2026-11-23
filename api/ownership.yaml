@@ -52,7 +52,7 @@ operations:
   'dev.rateLimit.origin': py
   'dev.rateLimit.purge': py
   'dev.sdd.spec-007.demo': py
-  'dev.sdd.spec-009.demo': ts
+  'dev.sdd.spec-009.demo': py
   'dev.sdd.spec-1004.demo': py
   'dev.sdd.spec-101.demo': py
   'dev.sdd.spec-102.create': py
