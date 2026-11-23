@@ -45,7 +45,11 @@ tags:
     id: review-card
 - assertVisible:
     id: review-streak
-- assertVisible:
-    id: review-tutor-note
 # Capture avant toute mutation : l'état initial de la maquette corrigée.
 - takeScreenshot: SPEC-3305-session
+# L'encadré du tuteur est sous la carte, atteint par un balayage borné (leçon 7 du BRIEF).
+- swipe:
+    direction: UP
+    duration: 400
+- assertVisible:
+    id: review-tutor-note

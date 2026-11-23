@@ -89,7 +89,7 @@ export default function WarmupRoute() {
         );
       }}
       onClose={() => {
-        router.back();
+        router.replace('/reviser');
       }}
     />
   );
