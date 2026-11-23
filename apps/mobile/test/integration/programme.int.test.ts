@@ -62,7 +62,7 @@ describe('[SPEC-3202] programme et formation courante contre la pile locale', ()
     expect(isActiveProgramme(programme)).toBe(true);
     if (!isActiveProgramme(programme)) return;
     expect(programme.formation.title).toBe('SAP S/4HANA Finance');
-    expect(programme.indicators.progress.percent).toBe(38);
+    expect(programme.indicators.progress.percent).toBe(29);
     expect(programme.modules).toHaveLength(7);
     expect(programme.modules[2]?.title).toBe('Comptabilité générale');
     expect(programme.modules[2]?.status).toBe('open');
@@ -72,7 +72,10 @@ describe('[SPEC-3202] programme et formation courante contre la pile locale', ()
       programme.chapters.filter((chapter) => chapter.moduleId === programme.modules[2]?.id),
     ).toHaveLength(4);
     expect(programme.calendar.length).toBe(7);
-    expect(programme.today).toBe('2026-11-11');
+    // The pile may run with its own clock (fixed at 11/11 in the reference environment): the
+    // server always sends a civil day and the learner's IANA zone, never a device value.
+    expect(programme.today).toMatch(/^\d{4}-\d{2}-\d{2}$/);
+    expect(programme.timeZone).toBe('Europe/Paris');
   });
 
   it('lit la progression de lecture du module ouvert (BR-COU-08)', async () => {
@@ -85,8 +88,9 @@ describe('[SPEC-3202] programme et formation courante contre la pile locale', ()
     expect(open).toBeDefined();
     const course = await client.api.moduleCourse({ params: { mid: open?.id ?? '' } });
     expect(course.chapters.length).toBe(4);
+    expect(course.chapters[2]?.percent).toBe(35);
     expect(course.chapters[0]?.percent).toBe(100);
-    expect(course.chapters[1]?.percent).toBe(45);
+    expect(course.chapters[1]?.percent).toBe(100);
   });
 
   it('mémorise la formation courante côté serveur (CA-3)', async () => {

@@ -37,9 +37,9 @@ tags:
     timeout: 20000
 # CA-1 — les valeurs de démonstration de la carte formation et du module 3.
 - assertVisible:
-    text: '.*38 %.*'
+    text: '29 %'
 - assertVisible:
-    text: '.*Module 3 sur 7.*'
+    text: 'Module 3 sur 7.*'
 - assertVisible:
     id: module-3
 - assertVisible:
@@ -85,7 +85,7 @@ tags:
 - assertVisible:
     text: 'Continuer sur le web'
 - tapOn:
-    id: programme-web-import-backdrop
+    id: programme-web-import-close
 # CA-5 — état de la maquette : vue Modules, module 3 déplié.
 - assertVisible:
     id: programme-formation-card
@@ -97,4 +97,5 @@ tags:
     visible:
       id: programme-calendar
     timeout: 10000
-- takeScreenshot: SPEC-3202-calendrier
+- assertVisible:
+    text: 'Calendrier de la formation'
