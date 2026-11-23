@@ -34,7 +34,7 @@ function operationIds(context: string): { reads: string[]; writes: string[] } {
   return group;
 }
 
-describe('progressive cutover planner', () => {
+describe('[SPEC-2301] progressive cutover planner', () => {
   it('a canary moves the reads only, never a mutation', () => {
     const plan = planCutover(tables, { stage: 'reads', context: 'learning', current: RELAY_ONLY });
     const { reads, writes } = operationIds('learning');

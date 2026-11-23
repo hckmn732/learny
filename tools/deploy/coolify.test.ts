@@ -54,7 +54,7 @@ function healthcheck(service: Service): { test: string[] } {
 /** A committed secret would be a literal value: every entry is an interpolation or a fixed mode. */
 const ALLOWED_LITERAL = /^(production|live|mock|resend|smtp|on|off|true|false|worker|\d+)$/;
 
-describe.each(STACKS)('$base — services Python de la bascule', ({ base, overlay }) => {
+describe.each(STACKS)('[SPEC-2301] $base — services Python de la bascule', ({ base, overlay }) => {
   const stack = readYaml(base);
   const python = readYaml(overlayFile(overlay));
   const api = service(python.doc, 'api-py');
