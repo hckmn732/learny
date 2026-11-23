@@ -25,6 +25,10 @@ export const queryKeys = {
   programme: (formationId: string) => ['formation', formationId, 'programme'] as const,
   module: (moduleId: string) => ['module', moduleId] as const,
   moduleCourse: (moduleId: string) => ['module', moduleId, 'course'] as const,
+  // SPEC-3302 ET-1 — the course of one chapter of a module: the selected chapter is part of the
+  // key, so opening another chapter reads its own page and keeps the previous one in the cache.
+  course: (moduleId: string, chapterId: string) =>
+    ['module', moduleId, 'course', chapterId] as const,
   agenda: (from: string, to: string, formationId: string | null) =>
     ['agenda', from, to, formationId] as const,
   // SPEC-3203 EF-7 — the three windows proposed by the planner for one slot; the sheet always

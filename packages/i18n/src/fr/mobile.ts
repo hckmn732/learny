@@ -610,6 +610,80 @@ export const mobile = {
       contributionsInProgress: 'Apports en cours',
     },
   },
+  // SPEC-3302 — écran Cours : en-tête, sommaire, sections, source, version et fin de chapitre.
+  // Les libellés identiques au web (lecture, question éclair, « À retenir », « Ne pas confondre »,
+  // résumé, signalement, quiz) restent importés de `fr.course` ; cet espace ne porte que le
+  // chrome et les états propres au mobile.
+  cours: {
+    header: {
+      back: 'Retour au programme',
+      openToc: 'Ouvrir le sommaire',
+      badge: (position: number, total: number) =>
+        `Chapitre ${String(position)} sur ${String(total)}`,
+      progressLabel: (percent: number) => `${String(percent)} % de ce chapitre lu`,
+    },
+    meta: {
+      reading: (minutes: number) => `${String(minutes)} min de lecture`,
+      contributions: (count: number) => (count === 1 ? '1 apport' : `${String(count)} apports`),
+      base: 'Cours de base · aucun apport',
+      updated: (day: string) => `mis à jour le ${day}`,
+    },
+    states: {
+      loading: 'Le tuteur rédige votre cours',
+      loadingBody: 'Les chapitres sont rédigés puis vérifiés source par source.',
+      emptyTitle: 'Le cours est en préparation',
+      emptyBody:
+        'Le tuteur rédige le cours du module. La génération se lance depuis le web ; cette page se rafraîchit toute seule ensuite.',
+      refresh: 'Rafraîchir',
+      errorTitle: 'Impossible de charger le cours.',
+      errorBody: 'Vérifiez votre connexion, puis réessayez.',
+      retry: 'Réessayer',
+      notFound: 'Chapitre introuvable.',
+    },
+    toc: {
+      title: 'Sommaire',
+      chapters: 'Chapitres',
+      sections: 'Sections',
+      read: 'Lu',
+      chapter: (position: number, title: string, percent: number) =>
+        `Chapitre ${String(position)}, ${title}, ${percent >= 100 ? 'lu' : `${String(percent)} % lu`}`,
+      section: (label: string) => `Aller à la section ${label}`,
+      close: 'Fermer le sommaire',
+    },
+    section: {
+      menuTitle: 'Cette section',
+      askTutor: 'Demander au tuteur sur ce passage',
+      report: 'Signaler une erreur',
+      editOnWeb: 'Corriger sur le web',
+      menuClose: 'Fermer le menu',
+      reported: 'Section signalée · exclue des nouveaux quiz jusqu’à sa correction.',
+      actionsLabel: (label: string) => `Actions de la section ${label}`,
+      noAction: 'Aucune action disponible sur cette section.',
+    },
+    source: {
+      title: 'Source',
+      open: 'Ouvrir la ressource',
+      unavailable: 'Source indisponible',
+      unavailableBody: 'Cette source a été supprimée ou n’est plus disponible.',
+      loading: 'Résolution de la source…',
+      error: 'La source n’a pas pu être ouverte.',
+      close: 'Fermer la source',
+      page: (page: number) => `p. ${String(page)}`,
+      minute: (minute: string) => `minute ${minute}`,
+      anchor: 'extrait',
+    },
+    version: {
+      notice: 'Une nouvelle version est disponible',
+      reload: 'Recharger',
+    },
+    offline: {
+      write: 'Le résumé et le signalement demandent une connexion.',
+    },
+    footer: {
+      askTutor: 'Demander au tuteur',
+      quiz: 'Ouvrir le quiz de validation',
+    },
+  },
 } as const;
 
 export type MobileMessages = typeof mobile;
