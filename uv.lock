@@ -794,6 +794,7 @@ source = { editable = "apps/api-py" }
 dependencies = [
     { name = "fastapi" },
     { name = "learny" },
+    { name = "learny-worker" },
     { name = "sentry-sdk", extra = ["fastapi"] },
     { name = "uvicorn", extra = ["standard"] },
 ]
@@ -802,6 +803,7 @@ dependencies = [
 requires-dist = [
     { name = "fastapi", specifier = ">=0.115" },
     { name = "learny", editable = "packages-py/learny" },
+    { name = "learny-worker", editable = "apps/worker-py" },
     { name = "sentry-sdk", extras = ["fastapi"], specifier = ">=2.14" },
     { name = "uvicorn", extras = ["standard"], specifier = ">=0.30" },
 ]

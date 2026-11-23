@@ -33,6 +33,22 @@ DISPATCH_BATCH = text(
     returning o.event_id, o.name, o.data, o.user_id, o.created_at
     """
 )
+# `JOBS_MODE=inline`: the same stamp, restricted to the events one request committed.
+DISPATCH_EVENTS = text(
+    """
+    with batch as (
+      select id from public.event_outbox
+      where dispatched_at is null and event_id = any(cast(:event_ids as text[]))
+      order by created_at
+      for update skip locked
+    )
+    update public.event_outbox o
+    set dispatched_at = now()
+    from batch
+    where o.id = batch.id
+    returning o.event_id, o.name, o.data, o.user_id, o.created_at
+    """
+)
 INSERT_DELIVERY = text(
     """
     insert into public.job_deliveries (event_id, consumer, run_after)
@@ -65,6 +81,35 @@ CLAIM = text(
         for update skip locked
       )
     returning d.event_id, d.consumer, d.attempts, o.name, o.data, o.user_id, o.created_at
+    """
+)
+# `JOBS_MODE=inline`: the pending deliveries of the given events, whatever their `run_after` (the
+# inline mode ignores the delays, like `packages/jobs/src/inline.ts`).
+CLAIM_EVENTS = text(
+    """
+    update public.job_deliveries d
+    set status = 'running', attempts = d.attempts + 1,
+        locked_until = now() + make_interval(secs => :lease_s)
+    from public.event_outbox o
+    where o.event_id = d.event_id
+      and (d.event_id, d.consumer) in (
+        select event_id, consumer from public.job_deliveries
+        where status = 'pending' and event_id = any(cast(:event_ids as text[]))
+        order by run_after
+        for update skip locked
+      )
+    returning d.event_id, d.consumer, d.attempts, o.name, o.data, o.user_id, o.created_at
+    """
+)
+# `JOBS_MODE=inline`: events still waiting for a dispatcher, or deliveries still pending/running.
+UNSETTLED = text(
+    """
+    select
+      (select count(*) from public.event_outbox
+        where dispatched_at is null and event_id = any(cast(:event_ids as text[])))
+      + (select count(*) from public.job_deliveries
+        where status in ('pending', 'running') and event_id = any(cast(:event_ids as text[])))
+      as total
     """
 )
 COMPLETE = text(
@@ -129,6 +174,14 @@ async def take_batch(tx: Any, limit: int) -> list[Event]:
     return [_event(row) for row in rows]
 
 
+async def take_events(tx: Any, event_ids: list[str]) -> list[Event]:
+    """Stamps and returns the given events when no dispatcher took them yet (inline mode)."""
+    if not event_ids:
+        return []
+    rows = (await tx.conn.execute(DISPATCH_EVENTS, {"event_ids": event_ids})).mappings().all()
+    return [_event(row) for row in rows]
+
+
 async def schedule_delivery(
     tx: Any,
     event: Event,
@@ -176,6 +229,22 @@ async def claim(
         .mappings()
         .all()
     )
+    return _claimed(rows)
+
+
+async def claim_events(tx: Any, event_ids: list[str], lease_seconds: int) -> list[ClaimedDelivery]:
+    """Claims the pending deliveries of the given events, due or not (inline mode)."""
+    if not event_ids:
+        return []
+    rows = (
+        (await tx.conn.execute(CLAIM_EVENTS, {"event_ids": event_ids, "lease_s": lease_seconds}))
+        .mappings()
+        .all()
+    )
+    return _claimed(rows)
+
+
+def _claimed(rows: Any) -> list[ClaimedDelivery]:
     claimed: list[ClaimedDelivery] = []
     for row in rows:
         claimed.append(
@@ -189,6 +258,12 @@ async def claim(
             )
         )
     return claimed
+
+
+async def unsettled(tx: Any, event_ids: list[str]) -> int:
+    """How many of the given events or of their deliveries are not finished yet (inline mode)."""
+    row = (await tx.conn.execute(UNSETTLED, {"event_ids": event_ids})).mappings().first()
+    return int(row["total"]) if row is not None else 0
 
 
 async def complete(tx: Any, delivery: Delivery) -> None:

@@ -39,11 +39,20 @@ class Dispatcher:
 
     async def dispatch_once(self) -> int:
         """Fans out one batch and returns the number of deliveries created."""
-        created = 0
         async with self._deps.db.service_tx() as tx:
-            events = await outbox.take_batch(tx, self._batch_size)
-            if not events:
-                return 0
+            created = await self._fan_out(tx, await outbox.take_batch(tx, self._batch_size))
+        if created:
+            self._logger.info("outbox dispatched", count=created)
+        return created
+
+    async def dispatch_events(self, event_ids: list[str]) -> int:
+        """Fans out the given events only (`JOBS_MODE=inline`, the API after its commit)."""
+        async with self._deps.db.service_tx() as tx:
+            return await self._fan_out(tx, await outbox.take_events(tx, event_ids))
+
+    async def _fan_out(self, tx: Any, events: list[Any]) -> int:
+        created = 0
+        if events:
             now = self._deps.clock.now()
             for event in events:
                 for consumer in self._subscribed(event.name):
@@ -62,8 +71,6 @@ class Dispatcher:
                     delay = consumer.run_after(event, self._deps.clock)
                     await outbox.schedule_delivery(tx, event, consumer.name, delay or now)
                     created += 1
-        if created:
-            self._logger.info("outbox dispatched", count=created)
         return created
 
     async def run(self, stop: asyncio.Event) -> None:

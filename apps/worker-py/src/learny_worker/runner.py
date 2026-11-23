@@ -22,6 +22,10 @@ from learny.shared.outbox.events import Delivery, Event
 from learny_worker.consumers import Consumer
 
 LEASE_MARGIN_SECONDS = 30
+# `JOBS_MODE=inline`: how long a request waits for the deliveries of its events, and how often it
+# looks again when another process holds them (the worker dispatcher took them first).
+INLINE_SETTLE_TIMEOUT_S = 30
+INLINE_SETTLE_POLL_S = 0.05
 DEFAULT_CONCURRENCY = 8
 DEFAULT_POLL_INTERVAL_MS = 500
 
@@ -67,6 +71,27 @@ class Runner:
             return_exceptions=False,
         )
         return len(claimed)
+
+    async def run_events(self, event_ids: list[str]) -> None:
+        """Runs the deliveries of the given events until none is pending or running (inline mode).
+
+        A failed attempt is rescheduled and claimed again at once (the delays are ignored), so the
+        loop ends with every delivery `done` or `failed`; deliveries another process holds are
+        awaited, at most `INLINE_SETTLE_TIMEOUT_S`.
+        """
+        loop = asyncio.get_running_loop()
+        deadline = loop.time() + INLINE_SETTLE_TIMEOUT_S
+        while True:
+            async with self._deps.db.service_tx() as tx:
+                claimed = await outbox.claim_events(tx, event_ids, self._max_lease())
+            if claimed:
+                await asyncio.gather(*(self._run(item.delivery, item.event) for item in claimed))
+                continue
+            async with self._deps.db.service_tx() as tx:
+                unsettled = await outbox.unsettled(tx, event_ids)
+            if unsettled == 0 or loop.time() >= deadline:
+                return
+            await asyncio.sleep(INLINE_SETTLE_POLL_S)
 
     async def execute(self, delivery: Delivery, event: Event) -> None:
         """Runs one already-claimed delivery (used by the integration tests of the crash path)."""
