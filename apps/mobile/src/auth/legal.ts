@@ -17,6 +17,14 @@ export interface LegalVersions {
 /** Codes of the problem that request a new acceptance. */
 const LEGAL_CODES: readonly string[] = ['LEGAL_ACCEPTANCE_REQUIRED', 'LEGAL_VERSIONS_CHANGED'];
 
+/**
+ * SPEC-3402 — a provider connection only learns the active versions from a refusal: it submits a
+ * placeholder pair to `POST /me/legal-acceptances`, which answers `CONFLICT` with the two active
+ * versions. Such a refusal is not a "new acceptance" request (`isLegalAcceptanceRequired` stays
+ * false) but it carries the pair the sheet must show.
+ */
+const VERSION_CONFLICT_CODE = 'CONFLICT';
+
 /** True when the answer asks the learner to accept a new version of the conditions. */
 export function isLegalAcceptanceRequired(error: unknown): boolean {
   return isAppError(error) && LEGAL_CODES.includes(error.code);
@@ -37,7 +45,8 @@ function versionOf(
  * the pair: the sheet then stays closed and the failure is displayed as is.
  */
 export function expectedLegalVersions(error: unknown): LegalVersions | null {
-  if (!isLegalAcceptanceRequired(error)) return null;
+  if (!isAppError(error)) return null;
+  if (!LEGAL_CODES.includes(error.code) && error.code !== VERSION_CONFLICT_CODE) return null;
   const errors = (error as { errors?: { code?: string; path: string; message: string }[] }).errors;
   if (errors === undefined) return null;
   const cguVersion = versionOf(errors, 'cguVersion');

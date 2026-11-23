@@ -25,7 +25,8 @@ import { readDemoCredentials } from '../../auth/demo-credentials';
 import { signInWithPassword } from '../../auth/email-auth';
 import { emailAuthClient } from '../../auth/native-auth';
 import { rememberPendingVerification } from '../../auth/pending-auth';
-import { radius, spacing, theme } from '../../theme';
+import { providerFor } from '../../auth/providers';
+import { radius, spacing, theme, touchTarget } from '../../theme';
 import { Button } from '../../ui/Button';
 import { Icon } from '../../ui/Icon';
 import { Segmented } from '../../ui/Segmented';
@@ -35,9 +36,11 @@ import { Checkbox } from './Checkbox';
 import { openLegalPage } from './legal-browser';
 import { LegalSheet } from './LegalSheet';
 import { MagicLinkSheet } from './MagicLinkSheet';
+import { ProviderButtons } from './ProviderButtons';
 import { StrengthMeter } from './StrengthMeter';
 import { TextField } from './TextField';
 import { useLegalGate } from './use-legal-gate';
+import { useProviderSignIn } from './useProviderSignIn';
 import {
   fieldErrorFromApi,
   validateLogin,
@@ -82,6 +85,28 @@ export function AuthScreen({ mode }: AuthScreenProps): ReactElement {
   // Test builds only: the credentials of the seeded account come from the build environment
   // (`EXPO_PUBLIC_SDD_DEMO_*`, never committed); the flow of CA-1 uses this button.
   const demo = readDemoCredentials();
+  // SPEC-3402 — Apple is displayed only when the platform supports it; Android reaches it by the
+  // web flow of Supabase, which has no availability test (ET-1). Google stays hidden without Apple
+  // (CA-1).
+  const providerSignIn = useProviderSignIn();
+  const [appleAvailable, setAppleAvailable] = useState(false);
+  useEffect(() => {
+    let cancelled = false;
+    void providerFor('apple')
+      .isAvailable()
+      .then((available) => {
+        if (!cancelled) setAppleAvailable(available);
+      })
+      .catch(() => {
+        if (!cancelled) setAppleAvailable(false);
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  // EF-5, CL-2 — one error zone for the password form and for the provider buttons.
+  const shownError = providerSignIn.error ?? globalError;
 
   const clearError = (field: AuthField): void => {
     setFieldErrors((previous) => {
@@ -337,10 +362,10 @@ export function AuthScreen({ mode }: AuthScreenProps): ReactElement {
             </View>
           ) : null}
 
-          {globalError === null ? null : (
+          {shownError === null ? null : (
             <View accessibilityLiveRegion="polite" testID="auth-error">
               <Text tone="danger" variant="bodySmall">
-                {globalError}
+                {shownError}
               </Text>
             </View>
           )}
@@ -366,16 +391,31 @@ export function AuthScreen({ mode }: AuthScreenProps): ReactElement {
             <View style={styles.dividerLine} />
           </View>
 
-          <Button
-            block
+          {/* SPEC-3402 EF-1 — Apple first on iOS, Google first on Android; Google never appears
+              without Apple (CA-1). A provider window disables both buttons (CL-4). */}
+          <ProviderButtons
+            appleAvailable={appleAvailable}
+            busy={providerSignIn.busy}
             disabled={submitting}
-            label={a.submit.loginMagic}
+            onSelect={(provider) => {
+              void providerSignIn.signIn(provider);
+            }}
+            platform={Platform.OS === 'ios' ? 'ios' : 'android'}
+          />
+
+          <Pressable
+            accessibilityRole="button"
+            disabled={submitting}
             onPress={() => {
               setMagicOpen(true);
             }}
+            style={styles.magicLink}
             testID="auth-magic-link"
-            variant="outline"
-          />
+          >
+            <Text tone="indigo" variant="button">
+              {a.submit.loginMagic}
+            </Text>
+          </Pressable>
 
           {signup ? null : (
             <Text align="center" style={styles.legal} tone="muted" variant="caption">
@@ -395,12 +435,27 @@ export function AuthScreen({ mode }: AuthScreenProps): ReactElement {
         visible={magicOpen}
       />
 
+      {/* SPEC-3402 — two refusals open the same sheet: a guarded action (`legalGate`) and the
+          first provider connection (`providerSignIn`). The provider connection keeps the gate
+          held until the acceptance is recorded (CA-2). */}
       <LegalSheet
-        onAccepted={legalGate.accepted}
-        onClose={legalGate.dismiss}
+        onAccepted={() => {
+          if (providerSignIn.legalVersions !== null) {
+            void providerSignIn.legalAccepted();
+            return;
+          }
+          legalGate.accepted();
+        }}
+        onClose={() => {
+          if (providerSignIn.legalVersions !== null) {
+            providerSignIn.legalDismissed();
+            return;
+          }
+          legalGate.dismiss();
+        }}
         testID="auth-legal-sheet"
-        versions={legalGate.versions}
-        visible={legalGate.versions !== null}
+        versions={providerSignIn.legalVersions ?? legalGate.versions}
+        visible={providerSignIn.legalVersions !== null || legalGate.versions !== null}
       />
     </View>
   );
@@ -429,6 +484,14 @@ const styles = StyleSheet.create({
     marginVertical: spacing.lg,
   },
   legal: { marginTop: spacing.lg },
+  // SPEC-3402 EF-1 — the magic link stays available under the providers, as a light link so the
+  // provider zone keeps the proportions of the mockup (CA-4).
+  magicLink: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginTop: spacing.sm,
+    minHeight: touchTarget.height,
+  },
   submit: { marginTop: spacing.lg },
   fields: { gap: spacing.lg, marginTop: spacing.xl },
   flex: { flex: 1 },

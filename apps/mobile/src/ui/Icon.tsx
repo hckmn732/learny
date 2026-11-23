@@ -33,6 +33,9 @@ export function Icon({
       viewBox="0 0 24 24"
       fill="none"
       stroke={color}
+      // SPEC-3402 — `currentColor` of a filled mark (the Apple logo) follows the colour of the
+      // component, so the same icon is white on the black button and ink elsewhere.
+      color={color}
       strokeWidth={filled ? 0 : 1.8}
       strokeLinecap="round"
       strokeLinejoin="round"

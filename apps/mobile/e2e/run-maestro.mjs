@@ -358,6 +358,21 @@ async function main() {
     return 2;
   }
 
+  // SPEC-3402 — the simulated provider needs a first connection: the campaign account is created
+  // (or recreated) without any legal acceptance just before the flows (ET-3, CA-2). Same idea as
+  // `prepare-demo-user.mjs`, which completes the seeded account for the password flows.
+  if (spec === 'SPEC-3402') {
+    const prepared = run(process.execPath, [path.join(HERE, 'prepare-oauth-user.mjs')], {
+      env: process.env,
+    });
+    const detail = `${prepared.stdout}${prepared.stderr}`.trim().split('\n').pop() ?? '';
+    if (prepared.status !== 0) {
+      console.error(`✖ compte du fournisseur simulé non préparé : ${detail}`);
+      return 2;
+    }
+    console.log(`✔ ${detail}`);
+  }
+
   const outDir = path.join(ROOT, 'test-results', 'sdd', spec);
   // Only the files this campaign owns are replaced: `validate.mjs` writes the unit and integration
   // reports of the same specification into this directory before running the campaign.
