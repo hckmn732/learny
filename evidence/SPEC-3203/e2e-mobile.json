@@ -1,0 +1,56 @@
+{
+  "spec": "SPEC-3203",
+  "platform": "android",
+  "transport": "local",
+  "device": {
+    "platform": "android",
+    "model": "sdk_gphone64_x86_64",
+    "apiLevel": "35",
+    "size": "Physical size: 1080x2400"
+  },
+  "tags": [
+    "SPEC-3203"
+  ],
+  "startedAt": "2026-11-23T14:33:05.355Z",
+  "finishedAt": "2026-11-23T14:33:51.950Z",
+  "passed": 1,
+  "failed": 0,
+  "videos": 1,
+  "campaignVideo": "artifacts/campagne/campagne.mp4",
+  "visual": 0,
+  "junitCases": 1,
+  "flows": [
+    {
+      "file": "apps/mobile/e2e/flows/SPEC-3203-agenda.yaml",
+      "name": "SPEC-3203 agenda",
+      "tags": [
+        "SPEC-3203",
+        "visual"
+      ],
+      "status": "passed",
+      "durationSec": 40.475,
+      "message": null,
+      "videos": [],
+      "screenshots": [
+        "artifacts/spec-3203-agenda/SPEC-3203-agenda-jour.png",
+        "artifacts/spec-3203-agenda/SPEC-3203-agenda-mois.png"
+      ],
+      "visual": {
+        "flow": "SPEC-3203 agenda",
+        "status": "failed",
+        "diffRatio": 0.2151,
+        "capture": "/root/wt/SPEC-3203/test-results/sdd/SPEC-3203/artifacts/spec-3203-agenda/SPEC-3203-agenda-jour.png",
+        "baseline": "/root/wt/SPEC-3203/apps/mobile/e2e/visual/baselines/SPEC-3203-agenda.png",
+        "diff": "/root/wt/SPEC-3203/test-results/sdd/SPEC-3203/artifacts/spec-3203-agenda/SPEC-3203-agenda.diff.png"
+      }
+    }
+  ],
+  "visualChecks": [
+    {
+      "flow": "SPEC-3203 agenda",
+      "status": "failed",
+      "diffRatio": 0.2151
+    }
+  ],
+  "unattributed": []
+}
