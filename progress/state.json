@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-11-22T22:55:34.519Z",
+  "updatedAt": "2026-11-23T00:53:30.026Z",
   "specs": {
     "SPEC-001": {
       "status": "done",
@@ -6873,14 +6873,50 @@
       }
     },
     "SPEC-3101": {
-      "status": "pending",
+      "status": "done",
       "attempts": 0,
-      "startedAt": null,
-      "completedAt": null,
-      "branch": null,
-      "commit": null,
+      "startedAt": "2026-11-22T22:57:39.931Z",
+      "completedAt": "2026-11-23T00:53:30.024Z",
+      "branch": "spec/SPEC-3101-connexion-inscription-et-lien-magique",
+      "commit": "8aa06376",
       "lastError": null,
-      "validations": {}
+      "validations": {
+        "lint": {
+          "status": "passed",
+          "at": "2026-11-23T00:49:21.727Z",
+          "details": ""
+        },
+        "typecheck": {
+          "status": "passed",
+          "at": "2026-11-23T00:49:29.453Z",
+          "details": ""
+        },
+        "unit": {
+          "status": "passed",
+          "at": "2026-11-23T00:06:27.017Z",
+          "details": "35 Vitest + 18 Jest test(s) [SPEC-3101] réussi(s), 0 échec(s)"
+        },
+        "integration": {
+          "status": "passed",
+          "at": "2026-11-23T00:14:59.032Z",
+          "details": "4 test(s) [SPEC-3101] réussi(s), 0 échec(s)"
+        },
+        "e2e": {
+          "status": "passed",
+          "at": "2026-11-23T00:51:22.799Z",
+          "details": "2 flux réussi(s), 0 échec(s), 1 vidéo(s)"
+        },
+        "visual": {
+          "status": "passed",
+          "at": "2026-11-23T00:51:22.799Z",
+          "details": "1 flux @visual réussi(s) (mode mockup)"
+        },
+        "acceptance": {
+          "status": "passed",
+          "at": "2026-11-23T00:51:22.811Z",
+          "details": "6/6 critères ✅"
+        }
+      }
     },
     "SPEC-3102": {
       "status": "pending",

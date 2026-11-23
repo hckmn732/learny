@@ -36,6 +36,7 @@ import { attributeArtifacts, flowSlug, screenshotsForFlow, videosForFlow } from 
 import { parseFlowHeader } from './flows.mjs';
 import { junitProblem, parseJunit } from './maestro-junit.mjs';
 import { compareFlows } from './visual/compare.mjs';
+import { maskRectsFor } from './visual/masks.mjs';
 
 export { parseFlowHeader } from './flows.mjs';
 export { junitProblem, parseJunit } from './maestro-junit.mjs';
@@ -591,13 +592,25 @@ async function main() {
     pendingComparisons.push({ flow, capture, baseline });
   }
 
-  const compared = compareFlows(
-    pendingComparisons.map((entry) => ({
-      flow: entry.flow.name,
-      capture: fs.readFileSync(entry.capture),
-      baseline: fs.readFileSync(entry.baseline),
-    })),
-  );
+  // ADR-3003 § 4 — un flux peut déclarer un cadrage (`e2e/visual/masks/<flux>.json`) : la zone
+  // masquée sort de la comparaison, le seuil de 12 % ne bouge pas. Sans fichier, comportement
+  // inchangé (zones natives seulement).
+  const compared = pendingComparisons.map((entry) => {
+    const baselineBuffer = fs.readFileSync(entry.baseline);
+    const reference = PNG.sync.read(baselineBuffer);
+    const masks = maskRectsFor(entry.flow.name, reference.width, reference.height);
+    const [result] = compareFlows(
+      [
+        {
+          flow: entry.flow.name,
+          capture: fs.readFileSync(entry.capture),
+          baseline: baselineBuffer,
+        },
+      ],
+      masks === null ? {} : { masks },
+    );
+    return result;
+  });
   pendingComparisons.forEach((entry, index) => {
     const result = compared[index];
     const diffPath = path.join(
