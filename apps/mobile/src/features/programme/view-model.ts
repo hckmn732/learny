@@ -42,9 +42,13 @@ export interface ModuleView {
   readonly meta: string;
   readonly locked: boolean;
   readonly unlockLabel: string | null;
+  /** Position of the module whose quiz unlocks this one, null when not locked (BR-FOR-08). */
+  readonly unlockAfterPosition: number | null;
   readonly quizOn: string;
   readonly quizKind: 'quiz' | 'exam';
   readonly quizLabel: string;
+  /** Web page of the module; null for a locked module (no active link reaches it). */
+  readonly href: string | null;
   readonly chapters: readonly ChapterView[];
   readonly expandedByDefault: boolean;
   readonly score: number | null;
@@ -268,9 +272,11 @@ export function buildProgrammeView(input: BuildProgrammeInput): ProgrammeView {
         module.status === 'locked'
           ? t.module.unlock(module.unlockAfterPosition ?? Math.max(1, module.position - 1))
           : null,
+      unlockAfterPosition: module.status === 'locked' ? module.unlockAfterPosition : null,
       quizOn: module.quizOn,
       quizKind: module.quizKind,
       quizLabel: module.quizKind === 'exam' ? t.module.exam : t.module.quiz,
+      href: module.href,
       chapters,
       expandedByDefault: module.status === 'open',
       score: scoreLabel(module.score),

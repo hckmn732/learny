@@ -311,6 +311,10 @@ export const mobile = {
       calendar: 'Calendrier',
     },
     importProgramme: 'Importer votre programme',
+    card: {
+      modules: (position: number, total: number) =>
+        `Module ${String(position)} sur ${String(total)}`,
+    },
     module: {
       status: {
         open: 'En cours',
@@ -331,6 +335,7 @@ export const mobile = {
       quiz: 'Quiz de validation',
       exam: 'Examen blanc',
       chapters: (count: number) => (count === 1 ? '1 chapitre' : `${String(count)} chapitres`),
+      detail: 'Ouvrir le module',
     },
     chapter: {
       validated: 'Validé',
