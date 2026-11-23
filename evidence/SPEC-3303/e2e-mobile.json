@@ -1,0 +1,68 @@
+{
+  "spec": "SPEC-3303",
+  "platform": "android",
+  "transport": "local",
+  "device": {
+    "platform": "android",
+    "model": "sdk_gphone64_x86_64",
+    "apiLevel": "35",
+    "size": "Physical size: 1080x2400"
+  },
+  "tags": [
+    "SPEC-3303"
+  ],
+  "startedAt": "2026-11-23T18:56:47.113Z",
+  "finishedAt": "2026-11-23T18:58:00.114Z",
+  "passed": 2,
+  "failed": 0,
+  "videos": 1,
+  "campaignVideo": "artifacts/campagne/campagne.mp4",
+  "visual": 1,
+  "junitCases": 2,
+  "flows": [
+    {
+      "file": "apps/mobile/e2e/flows/SPEC-3303-contexte.yaml",
+      "name": "SPEC-3303 contexte",
+      "tags": [
+        "SPEC-3303"
+      ],
+      "status": "passed",
+      "durationSec": 26.814,
+      "message": null,
+      "videos": [],
+      "screenshots": [],
+      "visual": null
+    },
+    {
+      "file": "apps/mobile/e2e/flows/SPEC-3303-question.yaml",
+      "name": "SPEC-3303 tuteur",
+      "tags": [
+        "SPEC-3303",
+        "visual"
+      ],
+      "status": "passed",
+      "durationSec": 42.434,
+      "message": null,
+      "videos": [],
+      "screenshots": [
+        "artifacts/spec-3303-tuteur/SPEC-3303-tuteur.png"
+      ],
+      "visual": {
+        "flow": "SPEC-3303 tuteur",
+        "status": "passed",
+        "diffRatio": 0.0001,
+        "capture": "/root/wt/SPEC-3303/test-results/sdd/SPEC-3303/artifacts/spec-3303-tuteur/SPEC-3303-tuteur.png",
+        "baseline": "/root/wt/SPEC-3303/apps/mobile/e2e/visual/baselines/SPEC-3303-question.png",
+        "diff": "/root/wt/SPEC-3303/test-results/sdd/SPEC-3303/artifacts/spec-3303-tuteur/SPEC-3303-question.diff.png"
+      }
+    }
+  ],
+  "visualChecks": [
+    {
+      "flow": "SPEC-3303 tuteur",
+      "status": "passed",
+      "diffRatio": 0.0001
+    }
+  ],
+  "unattributed": []
+}

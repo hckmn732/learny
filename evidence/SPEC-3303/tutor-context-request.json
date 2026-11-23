@@ -1,0 +1,15 @@
+{
+  "spec": "SPEC-3303",
+  "capturedAt": "2026-11-11T12:20:00.000Z",
+  "note": "Corps de la requête SSE envoyée à POST /api/v1/conversations/:id/messages : le chapitre retiré part à false.",
+  "body": {
+    "text": "Et la date de saisie ?",
+    "context": {
+      "include": {
+        "formation": true,
+        "chapter": false,
+        "profile": false
+      }
+    }
+  }
+}

@@ -274,3 +274,5 @@ Origine : **Validée** = décision prise avec le porteur du projet ; **Déduite*
 | [ADR-3015](ADR-3015-outillage-e2e-mobile-jobs-asynchrones-et-artefacts-par-flux.md) | Outillage e2e mobile : jobs asynchrones et artefacts par flux | Déduite | ADR-3004, ADR-3012, SPEC-3001, SPEC-3002, SPEC-3003 |
 | [ADR-3016](ADR-3016-checkpoint-mobile-agregation-des-preuves-de-campagne.md) | Checkpoint d'une phase mobile : agrégation des preuves de campagne | Déduite | ADR-3001, ADR-3004, ADR-3012, ADR-3015 |
 | [ADR-3018](ADR-3018-environnement-mobile-sur-une-vm-unique-avec-emulateur-local.md) | Environnement mobile sur une VM unique avec émulateur local | Validée | ADR-3004, ADR-3012, ADR-3015, ADR-3016, SPEC-3001 |
+| [ADR-3020](ADR-3020-feuille-du-tuteur-mobile-sans-post-tutor-cards.md) | Feuille du tuteur mobile sans POST /tutor/cards | Déduite | SPEC-3303, SPEC-717, ADR-0193, ADR-3010, ADR-3018 |
+| [ADR-3021](ADR-3021-conformite-visuelle-du-tuteur-mobile-ligne-de-base-versionnee.md) | Conformité visuelle du tuteur : ligne de base versionnée, pas superposition à l'export | Déduite | SPEC-3303, ADR-3003, ADR-3019 |
