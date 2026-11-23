@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-11-23T01:24:33.790Z",
+  "updatedAt": "2026-11-23T02:24:05.146Z",
   "specs": {
     "SPEC-001": {
       "status": "done",
@@ -7207,13 +7207,13 @@
       }
     },
     "SPEC-2302": {
-      "status": "pending",
-      "attempts": 0,
-      "startedAt": null,
+      "status": "in_progress",
+      "attempts": 1,
+      "startedAt": "2026-11-23T01:39:40.000Z",
       "completedAt": null,
-      "branch": null,
+      "branch": "spec/SPEC-2302-retrait-backend-typescript",
       "commit": null,
-      "lastError": null,
+      "lastError": "retrait du TypeScript impossible : 16 entrees encore relayees (15 demos dev.sdd.spec-* + home.get) faute de cas d'usage Python (bricks.create/getPublicBrick, resolveModel, buildTutorDemo, searchWeb, runNativeClientScenario, fixtures d'ingestion) ; apps/api ne peut pas etre supprime tant qu'une entree est ts",
       "validations": {}
     },
     "SPEC-2207": {

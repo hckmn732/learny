@@ -7,7 +7,16 @@ same handlers with the development guard, so a call is served exactly like `devR
 
 from typing import Any
 
-from learny_api.dev_demos import notifications, personal_data, push, sdd, sdd_actions, sdd_state
+from learny_api.dev_demos import (
+    notifications,
+    personal_data,
+    push,
+    sdd,
+    sdd_actions,
+    sdd_config,
+    sdd_records,
+    sdd_state,
+)
 from learny_api.pipeline import Call, handler
 from learny_api.special import (
     dev_echo,
@@ -237,3 +246,58 @@ async def dev_spec_505_delete(call: Call) -> dict[str, Any]:
 @handler("dev.sdd.spec-506.run")
 async def dev_spec_506_run(call: Call) -> dict[str, Any]:
     return await sdd_actions.spec_506(call)
+
+
+@handler("dev.sdd.spec-103.demo")
+async def dev_spec_103_demo(call: Call) -> dict[str, Any]:
+    return await sdd_records.spec_103(call)
+
+
+@handler("dev.sdd.spec-104.demo")
+async def dev_spec_104_demo(call: Call) -> dict[str, Any]:
+    return await sdd_records.spec_104(call)
+
+
+@handler("dev.sdd.spec-105.demo")
+async def dev_spec_105_demo(call: Call) -> dict[str, Any]:
+    return await sdd_records.spec_105(call)
+
+
+@handler("dev.sdd.spec-106.demo")
+async def dev_spec_106_demo(call: Call) -> dict[str, Any]:
+    return await sdd_records.spec_106(call)
+
+
+@handler("dev.sdd.spec-107.demo")
+async def dev_spec_107_demo(call: Call) -> dict[str, Any]:
+    return await sdd_records.spec_107(call)
+
+
+@handler("dev.sdd.spec-108.demo")
+async def dev_spec_108_demo(call: Call) -> dict[str, Any]:
+    return await sdd_records.spec_108(call)
+
+
+@handler("dev.sdd.spec-111.demo")
+async def dev_spec_111_demo(call: Call) -> dict[str, Any]:
+    return await sdd_records.spec_111(call)
+
+
+@handler("dev.sdd.spec-112.demo")
+async def dev_spec_112_demo(call: Call) -> dict[str, Any]:
+    return await sdd_records.spec_112(call)
+
+
+@handler("dev.sdd.spec-113.demo")
+async def dev_spec_113_demo(call: Call) -> dict[str, Any]:
+    return await sdd_records.spec_113(call)
+
+
+@handler("dev.sdd.spec-115.demo")
+async def dev_spec_115_demo(call: Call) -> dict[str, Any]:
+    return await sdd_records.spec_115(call)
+
+
+@handler("dev.sdd.spec-009.demo")
+async def dev_spec_009_demo(call: Call) -> dict[str, Any]:
+    return await sdd_config.spec_009(call)
