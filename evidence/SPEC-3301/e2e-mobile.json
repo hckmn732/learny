@@ -1,0 +1,59 @@
+{
+  "spec": "SPEC-3301",
+  "platform": "android",
+  "transport": "local",
+  "device": {
+    "platform": "android",
+    "model": "sdk_gphone64_x86_64",
+    "apiLevel": "35",
+    "size": "Physical size: 1080x2400"
+  },
+  "tags": [
+    "SPEC-3301"
+  ],
+  "startedAt": "2026-11-23T14:11:52.845Z",
+  "finishedAt": "2026-11-23T14:12:28.713Z",
+  "passed": 1,
+  "failed": 0,
+  "videos": 1,
+  "campaignVideo": "artifacts/campagne/campagne.mp4",
+  "visual": 1,
+  "junitCases": 1,
+  "flows": [
+    {
+      "file": "apps/mobile/e2e/flows/SPEC-3301-briques.yaml",
+      "name": "SPEC-3301 briques",
+      "tags": [
+        "SPEC-3301",
+        "visual"
+      ],
+      "status": "passed",
+      "durationSec": 32.026,
+      "message": null,
+      "videos": [],
+      "screenshots": [
+        "artifacts/spec-3301-briques/SPEC-3301-association.png",
+        "artifacts/spec-3301-briques/SPEC-3301-briques.png",
+        "artifacts/spec-3301-briques/SPEC-3301-carte-recto.png",
+        "artifacts/spec-3301-briques/SPEC-3301-carte-verso.png",
+        "artifacts/spec-3301-briques/SPEC-3301-corrige.png"
+      ],
+      "visual": {
+        "flow": "SPEC-3301 briques",
+        "status": "passed",
+        "diffRatio": 0.0502,
+        "capture": "/root/wt/SPEC-3301/test-results/sdd/SPEC-3301/artifacts/spec-3301-briques/SPEC-3301-association.png",
+        "baseline": "/root/wt/SPEC-3301/apps/mobile/e2e/visual/baselines/SPEC-3301-briques.png",
+        "diff": "/root/wt/SPEC-3301/test-results/sdd/SPEC-3301/artifacts/spec-3301-briques/SPEC-3301-briques.diff.png"
+      }
+    }
+  ],
+  "visualChecks": [
+    {
+      "flow": "SPEC-3301 briques",
+      "status": "passed",
+      "diffRatio": 0.0502
+    }
+  ],
+  "unattributed": []
+}
