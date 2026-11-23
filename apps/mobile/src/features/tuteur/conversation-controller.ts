@@ -210,6 +210,9 @@ export class ConversationController {
   private lastFollowUp: FollowUpDto['key'] | undefined;
   private closed = false;
 
+  /** One question in flight at most, even if the two presses happen in the same tick (CL-2). */
+  private sending = false;
+
   /** True once the sheet is closed: no later answer may append a bubble (ET-2). */
   private isClosed(): boolean {
     return this.closed;
@@ -316,7 +319,18 @@ export class ConversationController {
    */
   async send(text: string, followUp?: FollowUpDto['key']): Promise<void> {
     const question = text.trim();
-    if (this.closed || question === '' || this.snapshot.busy) return;
+    if (this.isClosed() || question === '' || this.sending) return;
+    // Synchronous reservation: two presses in the same tick never start two requests (CL-2).
+    this.sending = true;
+    try {
+      await this.runSend(question, followUp);
+    } finally {
+      this.sending = false;
+    }
+  }
+
+  /** Body of `send`, once the double press is refused. */
+  private async runSend(question: string, followUp?: FollowUpDto['key']): Promise<void> {
     if (!this.isReady()) {
       await this.load();
       if (!this.isReady()) return;
@@ -470,7 +484,15 @@ export class ConversationController {
     try {
       const dto = await this.deps.client.answerSelfTest(conversationId, answer);
       this.set({
-        messages: [...this.snapshot.messages, toView(dto.message)],
+        messages: [
+          // The question is answered: every pending question of the thread closes (BR-TUT-04).
+          ...this.snapshot.messages.map((message) =>
+            message.selfTest?.status === 'pending'
+              ? { ...message, selfTest: { ...message.selfTest, status: 'answered' as const } }
+              : message,
+          ),
+          toView(dto.message),
+        ],
         selfTestPending: false,
       });
     } catch (error) {

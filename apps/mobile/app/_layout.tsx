@@ -104,6 +104,10 @@ export default function RootLayout() {
               name="compte"
               options={{ presentation: 'transparentModal', animation: 'fade' }}
             />
+            <Stack.Screen
+              name="tuteur"
+              options={{ presentation: 'transparentModal', animation: 'fade' }}
+            />
           </Stack>
         </SafeAreaProvider>
       </AppQueryProvider>
