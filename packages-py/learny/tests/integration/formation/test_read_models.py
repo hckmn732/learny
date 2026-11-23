@@ -46,6 +46,24 @@ async def test_snippet_is_plain_text_and_bounded() -> None:
     assert snippet["highlights"]
 
 
+@pytest.mark.parametrize(
+    ("query", "message"),
+    [
+        ("a", "Saisissez au moins 2 caract\u00e8res."),
+        ("  a  ", "Saisissez au moins 2 caract\u00e8res."),
+        ("\n\t", "Saisissez au moins 2 caract\u00e8res."),
+        ("x" * 101, "Recherche limit\u00e9e \u00e0 100 caract\u00e8res."),
+    ],
+)
+async def test_search_refusals_use_the_messages_of_the_interface(query: str, message: str) -> None:
+    # EF-1: SEARCH_TOO_SHORT_MESSAGE / SEARCH_TOO_LONG_MESSAGE of `packages/contracts`, never the
+    # generic text of the validation library. The query is checked before any database access.
+    with pytest.raises(AppError) as raised:
+        await search_service.search_user_content(cast(Any, None), cast(Any, None), query, 5)
+    assert raised.value.code == "VALIDATION_FAILED"
+    assert raised.value.extra["errors"] == [{"path": "query.q", "message": message}]
+
+
 async def test_notion_graph_lists_nodes_links_and_stats(database: Database) -> None:
     async def run(tx: Any) -> Any:
         alice = await create_user(tx.conn, "Alice")

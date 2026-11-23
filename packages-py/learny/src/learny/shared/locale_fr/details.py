@@ -221,8 +221,9 @@ PROGRAMME_IMPORT_MESSAGE = (
 )
 PROGRAMME_IMPORT_SOURCE = "programme-collé"
 PROGRAMME_IMPORT_TITLE = "Programme importé par l’apprenant"
-SEARCH_TOO_SHORT = "Trop petit : une chaîne de 2 caractères au minimum est attendue"
-SEARCH_TOO_LONG = "Trop grand : une chaîne de 100 caractères au maximum est attendue"
+# packages/contracts/src/search.ts — SEARCH_TOO_SHORT_MESSAGE / SEARCH_TOO_LONG_MESSAGE (EF-1).
+SEARCH_TOO_SHORT = "Saisissez au moins 2 caractères."
+SEARCH_TOO_LONG = "Recherche limitée à 100 caractères."
 MODULE_LABEL = "Module {position} · {title}"
 ELLIPSIS = "…"
 WEB_SEARCH_UNAVAILABLE = "Recherche web indisponible : la proposition repose sur le cadrage seul."
