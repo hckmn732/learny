@@ -124,7 +124,11 @@ export default function ModuleRoute() {
                     key={chapter.id}
                     chapter={chapter}
                     onPress={() => {
-                      void openOnWeb(chapter.courseHref);
+                      // SPEC-3302 EF-1 — the native course screen replaces the web page of a chapter.
+                      router.push({
+                        pathname: '/cours/[courseId]',
+                        params: { courseId: moduleId, chapitre: chapter.id },
+                      });
                     }}
                   />
                 ))}
