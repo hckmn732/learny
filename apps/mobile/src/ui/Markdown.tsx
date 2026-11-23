@@ -170,6 +170,7 @@ function Inlines({
                   openLink(node.url, onLinkPress);
                 }}
                 style={styles.link}
+                testID={`markdown-link-${String(index)}`}
               >
                 <Inlines nodes={node.children} onLinkPress={onLinkPress} />
               </Run>

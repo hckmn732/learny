@@ -1,0 +1,67 @@
+# SPEC-3301 — galerie de revue des treize briques et parcours des jeux (CA-4, CA-5).
+#
+# La galerie est ouverte par son lien profond, sans défilement au premier écran : la capture
+# `takeScreenshot: SPEC-3301-briques` montre la question à choix non répondue, comparée à la ligne
+# de base versionnée `e2e/visual/baselines/SPEC-3301-briques.png`. Les trois autres captures
+# (question corrigée, carte de rappel révélée, association jouée) documentent les états de
+# `brickExamples` demandés par le § 10 ; un seul flux `@visual` par spécification (leçon 6 du
+# BRIEF), donc une seule comparaison automatique.
+appId: fr.learny.app
+name: SPEC-3301 briques
+tags:
+  - SPEC-3301
+  - visual
+---
+- launchApp:
+    clearState: true
+- assertVisible:
+    id: sdd-title
+- openLink: learny:///_dev/bricks
+- assertVisible:
+    id: bricks-gallery
+- assertVisible:
+    id: gallery-brick-choice_question
+- assertVisible:
+    id: brick-choice_question
+- assertVisible:
+    id: brick-option-0
+- assertVisible:
+    id: brick-consigne
+- takeScreenshot: SPEC-3301-briques
+# Question à choix corrigée (EF-2) : le sélecteur de mode est en haut de la galerie.
+- tapOn:
+    id: bricks-mode-corrected
+- assertVisible:
+    id: brick-feedback
+- takeScreenshot: SPEC-3301-corrige
+- tapOn:
+    id: bricks-mode-read
+# Carte de rappel : recto puis verso (EF-6).
+- swipe:
+    direction: UP
+    duration: 400
+- swipe:
+    direction: UP
+    duration: 400
+- assertVisible:
+    id: gallery-brick-recall_card
+- takeScreenshot: SPEC-3301-carte-recto
+- tapOn:
+    id: brick-reveal
+- takeScreenshot: SPEC-3301-carte-verso
+# Association par appuis successifs (CA-4) : une notion puis une définition.
+- swipe:
+    direction: UP
+    duration: 400
+- swipe:
+    direction: UP
+    duration: 400
+- assertVisible:
+    id: gallery-brick-matching
+- tapOn:
+    id: brick-item-a
+- tapOn:
+    id: brick-item-r1
+- assertVisible:
+    id: brick-placed-a
+- takeScreenshot: SPEC-3301-association
