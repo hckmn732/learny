@@ -406,11 +406,7 @@ async def undo_automation_action(deps: EngagementDeps, actor: Actor, action_id: 
         )
     # ADR-0191 section 3 - the proposal comes back right after the undo, on a suffixed dedupe key;
     # the undone row stays in the journal (BR-AUT-12). A failing proposal never cancels the undo.
-    if (
-        definition is not None
-        and definition.repropose_after_undo
-        and current.status == "applied"
-    ):
+    if definition is not None and definition.repropose_after_undo and current.status == "applied":
         await _repropose_after_undo(deps, actor, current, definition, now, time_zone, tone)
     return action_to_dto(row)
 
