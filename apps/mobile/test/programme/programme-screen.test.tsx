@@ -93,6 +93,11 @@ describe('[SPEC-3202] onglet Programme', () => {
 
   it('reprend le chapitre 2 dans l’écran Cours natif (CA-2, SPEC-3302 EF-1)', async () => {
     await renderScreen();
+    // La reprise dépend de la progression de lecture (`/modules/:mid/course`) : attendre que le
+    // chapitre en cours soit annoncé évite de lire la première rangée avant la réponse du serveur.
+    await waitFor(() => {
+      expect(screen.getByText('8 min')).toBeTruthy();
+    });
     await fireEvent.press(screen.getByTestId('programme-resume'));
     // SPEC-3302 EF-1 — la reprise ouvre l'écran Cours empilé, avec le chapitre transmis.
     expect(mockRouter.push).toHaveBeenCalledWith({
