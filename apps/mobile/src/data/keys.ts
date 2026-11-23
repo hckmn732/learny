@@ -26,7 +26,6 @@ export const queryKeys = {
     ['agenda', from, to, formationId] as const,
   // SPEC-3203 EF-7 — the three windows proposed by the planner for one slot; the sheet always
   // re-reads them after a conflict (CL-1), hence the dedicated key.
-  slotAlternatives: (slotId: string) => ['slots', slotId, 'alternatives'] as const,
   offlinePack: (day: string) => ['offline', 'pack', day] as const,
   tutor: (conversationId: string) => ['tutor', conversationId] as const,
   sdd: {
