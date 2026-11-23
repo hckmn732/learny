@@ -16,7 +16,8 @@ selon ADR-3003 § 4 et ADR-3019.
 
 | Comparaison | Écart | Résultat |
 |---|---|---|
-| Capture vs `android-04-cours.png` (maquette) | **8,10 %** (824 × 1830) | ✅ ≤ 12 % |
+| Capture vs `android-04-cours.png` (maquette), campagne officielle | **7,27 %** (824 × 1830) | ✅ ≤ 12 % |
+| Re-mesure du même jour avec `compare.mjs` | 8,10 % | ✅ ≤ 12 % |
 
 Rapport et image de différence : `evidence/SPEC-3302/visual/comparaison-maquette.txt` et
 `evidence/SPEC-3302/visual/diff-maquette-android-04-cours.png`.

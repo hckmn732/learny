@@ -61,7 +61,7 @@ API 35 local (ADR-3018), horloge figée à `2026-11-11T12:20:00Z`, IA simulée (
   d'idempotence, verdict, message et points manquants affichés ; « refuse un résumé vide » ;
   « conserve le texte en brouillon quand le tuteur est indisponible »), intégration (« envoie un
   résumé et reçoit le retour du tuteur simulé » : `status: 'corrected'`, `feedback` structuré).
-- ✅ **CA-5** — L'écran est conforme à la maquette : **écart mesuré 8,10 %** contre
+- ✅ **CA-5** — L'écran est conforme à la maquette : **écart mesuré 7,27 %** (`e2e-mobile.json` → `visualChecks[0].diffRatio`) et 8,10 % à la re-mesure manuelle, contre
   `design/app-mobile/exports/screens/android-04-cours.png` (seuil 12 %, `visual.md`, image de
   différence dans `evidence/SPEC-3302/visual/`). Preuve : Jest (« applique les jetons de la maquette
   au chrome de l'écran » : barre citron, titre en grande taille, étiquette module en capitales
@@ -81,7 +81,7 @@ API 35 local (ADR-3018), horloge figée à `2026-11-11T12:20:00Z`, IA simulée (
 | unit | ✅ | 11 Vitest + 27 Jest `[SPEC-3302]`, 0 échec ; les deux fichiers préexistants hors périmètre sont ignorés par le harnais (écart 14) |
 | integration | ✅ | 5 tests `[SPEC-3302]` (pile locale, API 3001) |
 | e2e | ✅ | 1 flux réussi, 0 échec, 1 vidéo |
-| visual | ✅ | 1 flux `@visual`, écart **8,10 %** (seuil 12 %) |
+| visual | ✅ | 1 flux `@visual`, écart **7,27 %** (seuil 12 %) |
 | acceptance | ✅ | 5/5 critères ✅ |
 
 ## Écarts assumés
@@ -98,7 +98,7 @@ API 35 local (ADR-3018), horloge figée à `2026-11-11T12:20:00Z`, IA simulée (
    d'écran de quiz natifs (livrés par SPEC-3303 et SPEC-3304, qui recâbleront ces entrées) ; c'est
    le renvoi prévu par ADR-3002 § 3. Le libellé accessible « Ouvrir le quiz de validation » et les
    `testID` `course-ask-tutor`, `course-open-quiz` sont en place.
-4. **CA-5, comparaison pixel** : 8,10 % d'écart contre l'export Android de la maquette (≤ 12 %). Le
+4. **CA-5, comparaison pixel** : 7,27 % d'écart mesuré par la campagne (8,10 % à la re-mesure du même jour) contre l'export Android de la maquette (≤ 12 %). Le
    reste vient du **contenu** : le chapitre 2 du jeu de démonstration (SPEC-115) contient une section
    « Présentation », une question éclair, un « Ne pas confondre » et « À retenir », alors que la
    maquette dessine un cours rédigé (en-tête de pièce, cartes de champ), et la maquette montre 50 %
