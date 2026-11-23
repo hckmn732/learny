@@ -52,6 +52,8 @@ EXAM_DEADLINE_GRACE_SECONDS = 5
 LONG_JOB_TIMEOUT_S = 900
 INGESTION_TIMEOUT_S = 600
 GENERATION_TIMEOUT_S = 600
+# Hotfix QA: the bank of a just generated course is produced in the same run (`timeouts.finish`).
+QUESTION_BANK_PREPARE_TIMEOUT_S = 1800
 GRADING_TIMEOUT_S = 300
 NIGHTLY_DELETION_TIMEOUT_S = 900
 HOURLY_NOTIFICATION_ATTEMPTS = 2
@@ -308,13 +310,19 @@ async def tutor_generate_course(deps: Any, event: Event) -> None:
 
 
 async def tutor_prepare_question_bank(deps: Any, event: Event) -> None:
-    """`prepare-question-bank`: one bank job per notion and format of the generated course."""
+    """`prepare-question-bank`: one bank job per notion and format of the generated course.
+
+    Hotfix QA: the validation quiz needs its bank right after the course, not after the nightly
+    batch; the queued jobs of the learner are generated now (the nightly run stays the fallback).
+    """
+    user_id = _text_of(event.data, "userId")
     await tutor.prepare_question_bank(
         deps,
-        _text_of(event.data, "userId"),
+        user_id,
         _text_of(event.data, "courseId"),
         _text_of(event.data, "moduleId"),
     )
+    await tutor.process_question_bank_jobs(deps, limit=QUESTION_BANK_NIGHTLY_LIMIT, user_id=user_id)
 
 
 async def learning_plan_programme(deps: Any, event: Event) -> None:
@@ -557,7 +565,7 @@ CONSUMERS: tuple[Consumer, ...] = (
         name="tutor.prepare_question_bank",
         on="course/generated",
         run=tutor_prepare_question_bank,
-        timeout_s=GENERATION_TIMEOUT_S,
+        timeout_s=QUESTION_BANK_PREPARE_TIMEOUT_S,
         validate=payload_validator(userId=UUID, courseId=UUID, moduleId=UUID),
         tags={"context": "tutor"},
     ),

@@ -62,7 +62,7 @@ SELECT_MODULES = text(
 )
 SELECT_CHAPTERS = text(
     """
-    select c.id::text as id, c.module_id::text as module_id, c.position
+    select c.id::text as id, c.module_id::text as module_id, c.position, c.title
     from public.chapters c
     join public.modules m on m.id = c.module_id
     where m.formation_id = cast(:formation_id as uuid)
@@ -132,9 +132,11 @@ def planner_modules(
     """One planner module per stored module, in position order, with its chapters."""
     by_module: dict[str, list[dict[str, Any]]] = {}
     for chapter in chapters:
-        by_module.setdefault(str(chapter["module_id"]), []).append(
-            {"chapterId": str(chapter["id"]), "position": int(chapter["position"])}
-        )
+        planned: dict[str, Any] = {"chapterId": str(chapter["id"]), "position": int(chapter["position"])}
+        # Hotfix QA (SPEC-704): the lesson slots are titled with the chapter, not its id.
+        if chapter.get("title") is not None:
+            planned["title"] = str(chapter["title"])
+        by_module.setdefault(str(chapter["module_id"]), []).append(planned)
     planner: list[dict[str, Any]] = []
     for module in modules:
         entry: dict[str, Any] = {
