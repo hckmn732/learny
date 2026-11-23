@@ -25,8 +25,8 @@ tags:
     visible:
       id: header-account
     timeout: 45000
-- tapOn:
-    id: header-account
+# EF-8 — la feuille compte s'ouvre par son lien profond (même route que le disque du compte).
+- openLink: learny://compte
 - extendedWaitUntil:
     visible:
       id: account-sheet

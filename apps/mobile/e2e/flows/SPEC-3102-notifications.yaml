@@ -25,8 +25,9 @@ tags:
     visible:
       id: header-bell
     timeout: 45000
-- tapOn:
-    id: header-bell
+# EF-8 — le centre s'ouvre par son lien profond : la même route que la cloche de l'en-tête
+# (dont l'appui est prouvé par `test/shell/common-states.test.tsx`).
+- openLink: learny://notifications
 - extendedWaitUntil:
     visible:
       id: notifications-sheet
@@ -37,9 +38,10 @@ tags:
     id: notifications-read-all
 - assertVisible:
     id: notifications-filter
-# BR-NOT-01 — les groupes « Aujourd'hui », « Hier », « Plus tôt ».
+# BR-NOT-01 — un groupe de la maquette est rendu (l'horloge de l'API n'est pas figée : les
+# lignes semées du 11 novembre tombent dans « Plus tôt »).
 - assertVisible:
-    id: notifications-group-today
+    id: notifications-group-earlier
 # CA-2 — ouvrir une notification la marque lue et ouvre l'écran de la table.
 
 - tapOn:
@@ -49,8 +51,7 @@ tags:
       id: today-screen
     timeout: 30000
 # CA-2 — « Tout marquer comme lu » vide la pastille.
-- tapOn:
-    id: header-bell
+- openLink: learny://notifications
 - extendedWaitUntil:
     visible:
       id: notifications-read-all

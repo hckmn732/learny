@@ -39,9 +39,6 @@ const SETTINGS: DevNotifySettings = {
   maxPerDay: 8,
 };
 
-/** The three unread rows of the mockup, in the order the pastille counts them. */
-const MOCKUP_ROWS = ['validation_soon', 'course_ready', 'session_to_reschedule'] as const;
-
 async function signedInClient() {
   if (ANON_KEY === '') {
     throw new Error(
@@ -117,25 +114,14 @@ describe('[SPEC-3102] centre de notifications contre la pile locale', () => {
     expect(again.unreadCount).toBe(read.unreadCount);
   });
 
-  it('marque tout lu d’un coup, puis rend l’état de la maquette à la campagne (CA-2)', async () => {
+  it('marque tout lu d’un coup et laisse la boîte vide (CA-2)', async () => {
     const readAll = await client.api.notificationsReadAll({});
     expect(readAll.unreadCount).toBe(0);
+
     const unread = await client.api.notificationsList({ query: { filter: 'unread', limit: 50 } });
     expect(unread.items).toHaveLength(0);
 
-    // La campagne Maestro attend trois non lues : on les recrée par la route de démonstration.
-    for (const [index, type] of MOCKUP_ROWS.entries()) {
-      await client.api.devNotify({
-        body: {
-          type,
-          tone: 'vous',
-          at: '2026-11-11T12:20:00.000Z',
-          settings: SETTINGS,
-          dedupeKey: `spec-3102-integration-${String(index)}-${type}`,
-        },
-      });
-    }
-    const restored = await client.api.notificationsUnreadCount({});
-    expect(restored.count).toBe(MOCKUP_ROWS.length);
+    const count = await client.api.notificationsUnreadCount({});
+    expect(count.count).toBe(0);
   });
 });
