@@ -1,7 +1,7 @@
 import { createHmac } from 'node:crypto';
 
 import { ROUTES } from '@learny/contracts';
-import { clock } from '@learny/core';
+import { clock, systemClock } from '@learny/core';
 import { Card, CardHeader, ScrollableTable } from '@learny/ui';
 
 interface Scenario {
@@ -19,8 +19,37 @@ function base64url(value: string): string {
   return Buffer.from(value).toString('base64url');
 }
 
-function signDemoToken(secret: string, issuer: string, expired = false): string {
-  const now = Math.floor(clock.now().getTime() / 1000);
+interface DemoTokenTimes {
+  /** `iat` of a live token: before both clocks, so that neither sees a future issue. */
+  issuedAt: number;
+  /** `exp` of a live token: after both clocks, the Auth server reading the real one. */
+  expiresAt: number;
+  /** `exp` of the deliberately expired token, before the API's injected clock. */
+  expiredAt: number;
+}
+
+/**
+ * A session cookie is checked by the Auth server (`GET /auth/v1/user` compares `exp` with the real
+ * clock) while the API checks the same token with its injected clock (`CLOCK_FIXED_AT`, frozen at
+ * 2026-11-11T12:20:00Z in tests, ADR-0047). A live demonstration token must satisfy both, so it is
+ * minted from the latest of the two instants; the expired one is minted from the injected clock,
+ * which is the clock that has to refuse it.
+ */
+function demoTokenTimes(): DemoTokenTimes {
+  const injected = Math.floor(clock.now().getTime() / 1000);
+  const real = Math.floor(systemClock.now().getTime() / 1000);
+  return {
+    issuedAt: Math.min(injected, real) - 5,
+    expiresAt: Math.max(injected, real) + 3600,
+    expiredAt: injected - 1,
+  };
+}
+
+function signDemoToken(
+  secret: string,
+  issuer: string,
+  times: { issuedAt: number; expiresAt: number },
+): string {
   const header = base64url(JSON.stringify({ alg: 'HS256', typ: 'JWT' }));
   const payload = base64url(
     JSON.stringify({
@@ -28,8 +57,8 @@ function signDemoToken(secret: string, issuer: string, expired = false): string 
       aud: 'authenticated',
       iss: issuer,
       email: DEMO_EMAIL,
-      iat: now - 5,
-      exp: expired ? now - 1 : now + 3600,
+      iat: times.issuedAt,
+      exp: times.expiresAt,
       role: 'authenticated',
     }),
   );
@@ -38,13 +67,18 @@ function signDemoToken(secret: string, issuer: string, expired = false): string 
   return `${unsigned}.${signature}`;
 }
 
-function demoCookie(supabaseUrl: string, accessToken: string, issuedAt: number): string {
+function demoCookie(
+  supabaseUrl: string,
+  accessToken: string,
+  issuedAt: number,
+  expiresAt: number,
+): string {
   const ref = new URL(supabaseUrl).hostname.split('.')[0] ?? '127';
   const session = {
     access_token: accessToken,
     token_type: 'bearer',
-    expires_in: 3600,
-    expires_at: issuedAt + 3600,
+    expires_in: expiresAt - issuedAt,
+    expires_at: expiresAt,
     refresh_token: 'learny-test-only-demo-refresh-token-never-used',
     user: {
       id: DEMO_USER,
@@ -90,11 +124,11 @@ export default async function Spec1102Demo() {
   if (supabaseUrl === undefined || secret === undefined || proxySecret === undefined) {
     scenarios = (
       [
-      ['Cookie de démonstration', 200],
-      ['Bearer de démonstration', 200],
-      ['Bearer expiré', 401],
-      ['Mutation relayée avec secret', 200],
-      ['Mutation relayée sans secret', 403],
+        ['Cookie de démonstration', 200],
+        ['Bearer de démonstration', 200],
+        ['Bearer expiré', 401],
+        ['Mutation relayée avec secret', 200],
+        ['Mutation relayée sans secret', 403],
       ] as const
     ).map(([name, expected]) => ({
       name,
@@ -103,9 +137,13 @@ export default async function Spec1102Demo() {
       code: 'SERVICE_UNAVAILABLE',
     }));
   } else {
-    const token = signDemoToken(secret, issuer);
-    const expired = signDemoToken(secret, issuer, true);
-    const cookie = demoCookie(supabaseUrl, token, Math.floor(clock.now().getTime() / 1000));
+    const times = demoTokenTimes();
+    const token = signDemoToken(secret, issuer, times);
+    const expired = signDemoToken(secret, issuer, {
+      issuedAt: times.issuedAt,
+      expiresAt: times.expiredAt,
+    });
+    const cookie = demoCookie(supabaseUrl, token, times.issuedAt, times.expiresAt);
     scenarios = await Promise.all([
       observe('Cookie de démonstration', 200, () =>
         fetch(new URL(ROUTES.meGet.path, apiOrigin), {

@@ -5,7 +5,14 @@ from typing import Any
 import pytest
 from factories.db_support import rolled_back
 from factories.formation_support import create_message, formation_deps
-from factories.identity_support import actor_for, create_formation, create_user, one
+from factories.identity_support import (
+    actor_for,
+    assign_task,
+    create_credential,
+    create_formation,
+    create_user,
+    one,
+)
 from learny.formation.application import cadrage as cadrage_service
 from learny.formation.application import programme as service
 from learny.shared.db.uow import Database
@@ -22,9 +29,16 @@ from sqlalchemy import text
 pytestmark = pytest.mark.spec("SPEC-2201")
 
 
+async def grant_tutor_model(conn: Any, user_id: str) -> None:
+    """SPEC-709: the tutor runs only on the model the learner chose for its task."""
+    credential = await create_credential(conn, user_id, ["gpt-test"])
+    await assign_task(conn, user_id, "tutor", credential, "gpt-test")
+
+
 async def test_create_formation_plays_the_first_scoping_turn(database: Database) -> None:
     async def run(tx: Any) -> Any:
         alice = await create_user(tx.conn, "Alice")
+        await grant_tutor_model(tx.conn, alice)
         deps = formation_deps(tx)
         created = await cadrage_service.create_formation(
             deps, actor_for(alice), {"title": "SAP S/4HANA Finance"}
@@ -41,6 +55,20 @@ async def test_create_formation_plays_the_first_scoping_turn(database: Database)
     assert parsed.cadrage.error is None
 
 
+async def test_a_tutor_without_model_makes_the_creation_unavailable(database: Database) -> None:
+    async def run(tx: Any) -> Any:
+        alice = await create_user(tx.conn, "Alice")
+        deps = formation_deps(tx)
+        return await cadrage_service.create_formation(deps, actor_for(alice), {"title": "Sans clé"})
+
+    created = await rolled_back(database, run)
+    parsed = FormationsCreateOutput.model_validate(created)
+    assert parsed.formation.status == "cadrage"
+    assert parsed.cadrage.error is not None
+    assert parsed.cadrage.error.code == "AI_UNAVAILABLE"
+    assert parsed.cadrage.messages == []
+
+
 async def test_learner_message_is_stored_and_answered(database: Database) -> None:
     async def run(tx: Any) -> Any:
         alice = await create_user(tx.conn, "Alice")
@@ -55,6 +83,7 @@ async def test_learner_message_is_stored_and_answered(database: Database) -> Non
             suggestions=[{"label": "Finance", "value": "finance", "multi": False}],
             position=1,
         )
+        await grant_tutor_model(tx.conn, alice)
         deps = formation_deps(tx)
         state = await cadrage_service.post_cadrage_message(
             deps, actor_for(alice), formation_id, {"content": "Le module FI"}

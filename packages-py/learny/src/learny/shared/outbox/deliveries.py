@@ -95,6 +95,7 @@ CLAIM_EVENTS = text(
       and (d.event_id, d.consumer) in (
         select event_id, consumer from public.job_deliveries
         where status = 'pending' and event_id = any(cast(:event_ids as text[]))
+          and not (consumer = any(cast(:exclude as text[])))
         order by run_after
         for update skip locked
       )
@@ -108,7 +109,8 @@ UNSETTLED = text(
       (select count(*) from public.event_outbox
         where dispatched_at is null and event_id = any(cast(:event_ids as text[])))
       + (select count(*) from public.job_deliveries
-        where status in ('pending', 'running') and event_id = any(cast(:event_ids as text[])))
+        where status in ('pending', 'running') and event_id = any(cast(:event_ids as text[]))
+          and not (consumer = any(cast(:exclude as text[]))))
       as total
     """
 )
@@ -232,12 +234,22 @@ async def claim(
     return _claimed(rows)
 
 
-async def claim_events(tx: Any, event_ids: list[str], lease_seconds: int) -> list[ClaimedDelivery]:
+async def claim_events(
+    tx: Any,
+    event_ids: list[str],
+    lease_seconds: int,
+    exclude: tuple[str, ...] = (),
+) -> list[ClaimedDelivery]:
     """Claims the pending deliveries of the given events, due or not (inline mode)."""
     if not event_ids:
         return []
     rows = (
-        (await tx.conn.execute(CLAIM_EVENTS, {"event_ids": event_ids, "lease_s": lease_seconds}))
+        (
+            await tx.conn.execute(
+                CLAIM_EVENTS,
+                {"event_ids": event_ids, "lease_s": lease_seconds, "exclude": list(exclude)},
+            )
+        )
         .mappings()
         .all()
     )
@@ -260,9 +272,13 @@ def _claimed(rows: Any) -> list[ClaimedDelivery]:
     return claimed
 
 
-async def unsettled(tx: Any, event_ids: list[str]) -> int:
+async def unsettled(tx: Any, event_ids: list[str], exclude: tuple[str, ...] = ()) -> int:
     """How many of the given events or of their deliveries are not finished yet (inline mode)."""
-    row = (await tx.conn.execute(UNSETTLED, {"event_ids": event_ids})).mappings().first()
+    row = (
+        (await tx.conn.execute(UNSETTLED, {"event_ids": event_ids, "exclude": list(exclude)}))
+        .mappings()
+        .first()
+    )
     return int(row["total"]) if row is not None else 0
 
 

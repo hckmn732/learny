@@ -20,6 +20,7 @@ from learny.assessments.domain.bricks.schema import parse_payload
 from learny.assessments.infrastructure import queries
 from learny.engagement import public as engagement
 from learny.identity.domain.actor import Actor
+from learny.platform.llm.resolve import resolve_task_model
 from learny.platform.llm.tasks import AiTask
 from learny.platform.llm.types import StepInput, SystemPart
 from learny.shared.errors import AppError
@@ -133,6 +134,10 @@ async def default_open_answer_grader(
     item: Mapping[str, Any],
 ) -> OpenGrade:
     """The structured tutor correction through the gateway (`LLM_MODE=mock` in tests)."""
+    # SPEC-504 / BR-IA-02: the platform provides no model, so the job resolves the learner's own
+    # qualified `tutor` model first; without it the correction stays pending (CL-6).
+    async with deps.db.service_tx() as tx:
+        await resolve_task_model(tx, str(context.get("userId") or ""), TUTOR_TASK)
     generated = await deps.llm.object(
         TUTOR_TASK,
         texts.OPEN_GRADE_PROMPT_ID,
@@ -210,6 +215,7 @@ async def grade_open_answers(
     for answer in open_answers:
         item = items[answer["position"] - 1]
         incoming = {
+            "userId": user_id,
             "brickVersionId": str(answer["brick_version_id"]),
             "notionLabel": item.get("notionLabel") or "Notion",
             "type": "open_question",

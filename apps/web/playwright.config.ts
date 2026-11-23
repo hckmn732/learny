@@ -47,6 +47,11 @@ const FACADE_PORT = PORT + 1;
 const API_PORT = PORT + 12;
 const HONO_URL = `http://127.0.0.1:${String(API_PORT)}`;
 const API_INTERNAL_URL = `http://127.0.0.1:${String(FACADE_PORT)}`;
+// The SPEC-301 test starts a second web server from its own process: the child inherits
+// `process.env`, so the relay target and the proxy secret must be exported here, not only in
+// the `webServer` block (the health route relays to the API since SPEC-1203).
+process.env.API_INTERNAL_URL ??= API_INTERNAL_URL;
+process.env.API_PROXY_SECRET ??= 'learny-test-only-api-proxy-secret-value';
 // SPEC-2102: the Python worker is the fourth process of the stack; its health server proves it is
 // alive before the end-to-end test emits an event. A dedicated port, like the other three.
 const WORKER_PORT = PORT + 3;
@@ -194,6 +199,9 @@ export default defineConfig({
         LEARNY_API_ROLE: 'api',
         JOBS_MODE: 'inline',
         TRUST_PROXY: 'true',
+        // ADR-0336 - la pile de QA coupe le limiteur : l'horloge figée empêche la recharge des
+        // seaux et le compte de démonstration partagé resterait bloqué pour toute la campagne.
+        RATE_LIMIT_MODE: 'off',
       },
     },
     {
@@ -233,6 +241,8 @@ export default defineConfig({
         // P21 plan step 6: the facade runs the consumers of the events a request commits before it
         // answers, as Hono's inline jobs did; the worker still runs the crons and anything else.
         JOBS_MODE: 'inline',
+        // ADR-0336 - QA stack: the frozen clock never refills the buckets (see the Hono block).
+        RATE_LIMIT_MODE: 'off',
       },
     },
     {
