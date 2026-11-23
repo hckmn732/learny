@@ -30,6 +30,9 @@ export const queryKeys = {
   // SPEC-3203 EF-7 — the three windows proposed by the planner for one slot; the sheet always
   // re-reads them after a conflict (CL-1), hence the dedicated key.
   offlinePack: (day: string) => ['offline', 'pack', day] as const,
+  // SPEC-3305 EF-1 — session du jour d'une formation, relue après chaque réponse (ET-3).
+  globalQuizToday: (formationId: string) => ['global-quiz', formationId, 'today'] as const,
+  warmupDetail: (activityId: string) => ['warmup', activityId] as const,
   tutor: (conversationId: string) => ['tutor', conversationId] as const,
   sdd: {
     health: (apiUrl: string) => ['sdd', 'health', apiUrl] as const,
