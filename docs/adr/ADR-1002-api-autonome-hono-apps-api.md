@@ -1,6 +1,6 @@
 # ADR-1002 — API autonome en Hono (`apps/api`)
 
-- **Statut** : Acceptée — amende ADR-0017
+- **Statut** : Remplacée par ADR-2001 / ADR-2006
 - **Origine** : Validée (décision prise avec le porteur du projet, 2026-11-18)
 - **Date** : 2026-11-18
 - **Liens** : ADR-1001, ADR-0017, ADR-0251, ADR-0258, SPEC-1003, SPEC-1004, SPEC-1101, SPEC-1103

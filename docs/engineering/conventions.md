@@ -2,11 +2,18 @@
 
 Normatif pour tout le code du dépôt. Les outils qui les imposent sont installés par SPEC-001 et SPEC-002.
 
+> **Périmètre.** Ce document régit le **TypeScript** : `apps/web`, la piste mobile, `packages/contracts`
+> et ses dérivés, `packages/db` (schéma, migrations) et l'outillage. Le **backend Python** a son
+> propre canevas normatif, `docs/architecture/python-backend/00-conventions.md` (ADR-2011) : code,
+> commentaires, journaux et tests en anglais, ruff + mypy strict, Pydantic pour la frontière HTTP,
+> SQL explicite en SQLAlchemy Core, pytest, import-linter. En cas de doute sur une règle Python,
+> c'est ce canevas qui prime, pas les règles TS ci-dessous.
+
 ## 1. Langages et versions (ADR-0003)
 
 - Node.js 24 LTS (`.nvmrc`, `engines`), pnpm 10 (`packageManager`), TypeScript ≥ 5.9 en mode `strict` + `noUncheckedIndexedAccess` + `exactOptionalPropertyTypes`.
 - Modules ES partout (`"type": "module"`), résolution `bundler`.
-- Versions des dépendances : dernière version stable disponible au moment de l'installation, figées par `pnpm-lock.yaml`. Majeures minimales : Next.js 15, React 19, Tailwind CSS 4, Drizzle ORM 0.44, Zod 4 (repli 3.25 si incompatibilité documentée en ADR), Vitest 3, Playwright 1.50, Inngest SDK 3, AI SDK 5, ts-fsrs 5, Supabase CLI 2. Toute dérogation est consignée par un ADR.
+- Versions des dépendances : dernière version stable disponible au moment de l'installation, figées par `pnpm-lock.yaml`. Majeures minimales : Next.js 15, React 19, Tailwind CSS 4, Drizzle ORM 0.44, Zod 4 (repli 3.25 si incompatibilité documentée en ADR), Vitest 3, Playwright 1.50, Supabase CLI 2. Côté Python (ADR-2002) : Python 3.13, uv, FastAPI, Pydantic 2, SQLAlchemy 2 Core, psycopg 3, pytest 8, ruff, mypy ; Inngest et l'AI SDK JavaScript ne sont plus utilisés (retirés par SPEC-2302). Toute dérogation est consignée par un ADR.
 
 ## 2. Style
 
