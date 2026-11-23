@@ -63,8 +63,35 @@ android-06-session.png`, lue avec les corrections d'ADR-3003 § 2 (« Réviser �
 
 ## Mesures
 
-_(complétées après la campagne de comparaison)_
+- Ligne de base versionnée (ADR-3003 § 4) : comparaison de la capture du flux `@visual` à
+  `apps/mobile/e2e/visual/baselines/SPEC-3305-a-session.png` → **écart 0,00 %** (`diffRatio: 0`,
+  seuil 12 %). Masque du flux `spec-3305-session.json` limité à la barre d'onglets native ; barre
+  d'état couverte par le masque natif par défaut (haut 5 %).
+- Superposition à l'export statique `design/app-mobile/exports/screens/android-06-session.png`
+  (chrome système masqué : haut 5 %, bas 7 %) → **écart 10,29 %** (≤ 12 %), différence versionnée
+  `evidence/SPEC-3305/visual/mockup-diff.png`. Les écarts structurels assumés (ADR-3022) sont le
+  rail des jeux ajouté au-dessus de la carte, les quatre auto-évaluations d'ADR-3003 § 2 à la place
+  des deux boutons de l'échauffement, et les données de démonstration (cinq jeux, encadré à 15 min).
+
 
 ## Validations
 
-_(complétées après `node tools/sdd/validate.mjs SPEC-3305 --skip-build`)_
+`node tools/sdd/validate.mjs SPEC-3305 --skip-build --skip-campaign --only e2e,visual` (source
+`.env.local`, `NODE_ENV=test`, émulateur local, campagne du même worktree réutilisée car vieille de
+moins de 20 minutes) :
+
+- lint : ✔ (turbo ; les messages « parseForESLint » sur `node_modules/react-native` sont
+  pré-existants et non bloquants)
+- typecheck : ✔ (653 fichiers source)
+- build : non exécuté (`--skip-build`, échec web pré-existant documenté par SPEC-3001)
+- unit : ✔ 16 Vitest `[SPEC-3305]` (`session-state.test.ts`, `pack-spec3305.test.ts`,
+  `sync.test.ts`) + Jest mobile 257 tests / 0 échec (dont 20 `[SPEC-3305]`) ; les 2 échecs Vitest
+  pré-existants hors périmètre mobile (`packages/config/src/commit-rules.test.ts`,
+  `apps/web/test/unit/bundle-split.test.ts`) restent tolérés, sans affaiblissement
+- integration : ✔ 5 tests `[SPEC-3305]` (`review.int.test.ts`)
+- e2e : ✔ 3 flux réussis, 0 échec, 1 vidéo (`SPEC-3305-a-session`, `-b-parcours`, `-c-echauffement`)
+- visual : ✔ 1 flux `@visual` réussi, 1 comparaison (écart 0,00 %)
+- acceptance : ✔ 5/5 critères ✅
+
+Preuves : `evidence/SPEC-3305/` (`e2e-mobile.json`, `e2e-mobile.xml`, `jest.json`, `unit.json`,
+`integration.json`, `video/campagne.mp4`, `visual/`, `screenshots/`, `checks.json`, `summary.md`).
