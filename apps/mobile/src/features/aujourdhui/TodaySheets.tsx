@@ -56,7 +56,7 @@ export function StreakSheet({
           <View
             key={day.date}
             testID={`streak-cell-${String(index)}`}
-            accessibilityLabel={`${formatShortDay(`${day.date}T12:00:00.000Z`, 'UTC')} : ${day.status}`}
+            accessibilityLabel={`${day.date} : ${day.status}`}
             style={[
               styles.cell,
               day.status === 'done' ? styles.cellDone : null,

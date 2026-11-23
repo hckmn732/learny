@@ -98,7 +98,14 @@ export interface HeroModel {
 
 /** EF-2 — the card « Votre séance » of the highlighted slot, or null on an empty day (EF-9). */
 export function heroOf(home: HomeDto, now: Date): HeroModel | null {
-  const slot = highlightedSlot(home.today.slots, now);
+  // CL-2 — a session that already started stays the hero until it ends, even though the next
+  // planned slot is nearer: `highlightedSlot` ignores the past, so it is asked second.
+  const at = now.getTime();
+  const ongoing = home.today.slots.find(
+    (slot) =>
+      slot.status === 'planned' && Date.parse(slot.startsAt) <= at && at < Date.parse(slot.endsAt),
+  );
+  const slot = ongoing ?? highlightedSlot(home.today.slots, now);
   if (slot === undefined) return null;
 
   const formation = home.formations.ongoing.find((row) => row.id === slot.formationId);
