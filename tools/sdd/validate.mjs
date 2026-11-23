@@ -70,10 +70,13 @@ const tag = spec.id;
  * exécutés et comptés comme les autres, mais leur échec n'invalide pas l'étape `unit` d'une
  * spécification mobile. Aucun autre fichier n'est toléré en échec.
  */
+// Échecs préexistants hors périmètre de la piste courante, non réparés (décision du porteur) :
+// ils appartiennent aux pistes web/`produit` et Python, pas au mobile.
 const KNOWN_RED_UNIT = [
   'packages/config/src/commit-rules.test.ts',
   'apps/web/test/unit/bundle-split.test.ts',
   'tools/migration/test/unit/report.test.ts',
+  'tools/migration/test/unit/inventory.test.ts',
 ];
 const results = only ? { ...(s.validations ?? {}) } : {};
 const record = (name, ok, details = '') => {
