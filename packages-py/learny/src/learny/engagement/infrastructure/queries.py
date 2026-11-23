@@ -1650,3 +1650,313 @@ async def list_validation_reminders(tx: Tx, user_id: str) -> list[ReminderRow]:
 async def list_reminder_owners(tx: Tx, *, limit: int) -> list[str]:
     result = await tx.conn.execute(LIST_REMINDER_OWNERS, {"limit": limit})
     return [str(row["user_id"]) for row in result.mappings()]
+
+
+# --- sprints before a milestone (SPEC-719, BR-AUT-08, ADR-0190) --------------------------------
+#
+# Copied from `automatisme-8-sprint-avant-un-jalon.ts` with `${x}` turned into a bound `:x`
+# parameter. Widths and guards are the TypeScript ones: the same lookback of the busy agenda, the
+# same `status in ('planned', 'done', 'missed')`, the same `order by` and the same unique dedupe
+# index (`automation_actions_dedupe_uq`) that turns a replay into a no-op (EF-4).
+
+SELECT_PLANNING_RHYTHM = text(
+    "select p.timezone, p.tutor_tone::text as tutor_tone, sp.hours_per_day, sp.study_days, "
+    "sp.preferred_slots::text[] as preferred_slots "
+    "from public.profiles p "
+    "left join public.study_preferences sp on sp.user_id = p.id "
+    "where p.id = cast(:user_id as uuid)"
+)
+
+SELECT_OWNED_FORMATION = text(
+    "select id::text as id from public.formations "
+    "where id = cast(:formation_id as uuid) and owner_id = cast(:owner_id as uuid)"
+)
+
+SELECT_FORMATION_SLOT = text(
+    "select id::text as id, kind::text as kind, status::text as status "
+    "from public.schedule_slots "
+    "where id = cast(:slot_id as uuid) and formation_id = cast(:formation_id as uuid)"
+)
+
+SELECT_UPCOMING_MILESTONES = text(
+    "select ss.id::text as id, ss.formation_id::text as formation_id, "
+    "ss.module_id::text as module_id, ss.kind::text as kind, ss.title, ss.starts_at, "
+    "m.title as module_title "
+    "from public.schedule_slots ss "
+    "join public.formations f on f.id = ss.formation_id "
+    "left join public.modules m on m.id = ss.module_id "
+    "where ss.user_id = cast(:user_id as uuid) "
+    "and ss.kind in ('validation_quiz', 'mock_exam') "
+    "and f.status = 'active' "
+    "and (cast(:formation_id as uuid) is null or f.id = cast(:formation_id as uuid)) "
+    "and (cast(:exam_slot_id as uuid) is null or ss.id = cast(:exam_slot_id as uuid)) "
+    "and ss.status = 'planned' "
+    "and ss.starts_at > cast(:now as timestamptz) "
+    "order by ss.starts_at asc"
+)
+
+SELECT_PLANNER_SLOTS = text(
+    "select id::text as id, formation_id::text as formation_id, module_id::text as module_id, "
+    "kind::text as kind, title, starts_at, ends_at, status::text as status, "
+    "created_by::text as created_by, moved_from_id::text as moved_from_id "
+    "from public.schedule_slots "
+    "where user_id = cast(:user_id as uuid) "
+    "and status in ('planned', 'done', 'missed') "
+    "and ends_at >= cast(:since as timestamptz)"
+)
+
+SELECT_WEAKEST_NOTIONS = text(
+    "select n.id::text as notion_id, n.label, ns.mastery::float8 as mastery "
+    "from public.notions n "
+    "join public.notion_states ns on ns.notion_id = n.id "
+    "and ns.user_id = cast(:user_id as uuid) "
+    "where n.formation_id = cast(:formation_id as uuid) "
+    "and (cast(:module_id as uuid) is null or n.module_id = cast(:module_id as uuid)) "
+    "order by ns.mastery asc, n.id asc"
+)
+
+INSERT_AUTOMATION_ACTION = text(
+    "insert into public.automation_actions "
+    "(user_id, formation_id, automation, kind, summary, payload, undo_payload, requires_consent, "
+    "created_at) values (cast(:user_id as uuid), cast(:formation_id as uuid), "
+    "cast(:automation as public.automation_key), :kind, :summary, cast(:payload as jsonb), "
+    "cast(:undo_payload as jsonb), cast(:requires_consent as boolean), cast(:now as timestamptz)) "
+    "on conflict (user_id, automation, (payload ->> 'dedupeKey')) where payload ? 'dedupeKey' "
+    "do nothing "
+    "returning id::text as id, user_id::text as user_id, formation_id::text as formation_id, "
+    "automation::text as automation, kind, summary, payload, undo_payload, requires_consent, "
+    "status::text as status, decided_at, created_at"
+)
+
+SELECT_SPRINT_PLANS = text(
+    "select id::text as id, summary, payload from public.automation_actions "
+    "where user_id = cast(:user_id as uuid) "
+    "and automation = 'sprint' and kind = 'sprint_planned' "
+    "and (payload ->> 'examSlotId') in "
+    "(select jsonb_array_elements_text(cast(:exam_slot_ids as jsonb))) "
+    "order by created_at desc"
+)
+
+SELECT_MILESTONE_DATES = text(
+    "select ss.id::text as id, ss.starts_at from public.schedule_slots ss "
+    "where ss.user_id = cast(:user_id as uuid) "
+    "and ss.formation_id = cast(:formation_id as uuid) "
+    "and ss.kind in ('validation_quiz', 'mock_exam') "
+    "and (cast(:exam_slot_id as uuid) is null or ss.id = cast(:exam_slot_id as uuid))"
+)
+
+SELECT_SPRINT_SLOT_IDS = text(
+    "select id::text as id, planner_key from public.schedule_slots "
+    "where user_id = cast(:user_id as uuid) "
+    "and kind = 'sprint' "
+    "and planner_key like :pattern"
+)
+
+
+@dataclass(frozen=True, slots=True)
+class PlanningRhythmRow:
+    """Learner zone, tone and study rhythm; the study-preference columns may be missing."""
+
+    timezone: str
+    tutor_tone: str
+    hours_per_day: int | None
+    study_days: list[int] | None
+    preferred_slots: list[str] | None
+
+
+@dataclass(frozen=True, slots=True)
+class FormationSlotRow:
+    """One `schedule_slots` row of a formation, as the ownership check needs it."""
+
+    id: str
+    kind: str
+    status: str
+
+
+@dataclass(frozen=True, slots=True)
+class SprintMilestoneRow:
+    """One upcoming validation quiz or mock exam, with its module title."""
+
+    id: str
+    formation_id: str
+    module_id: str | None
+    kind: str
+    title: str
+    starts_at: datetime
+    module_title: str | None
+
+
+@dataclass(frozen=True, slots=True)
+class SprintPlanRow:
+    """One applied `sprint_planned` action, newest first."""
+
+    id: str
+    summary: str
+    payload: Mapping[str, Any]
+
+
+async def read_planning_rhythm(tx: Tx, user_id: str) -> PlanningRhythmRow | None:
+    """`readProfile`: the zone and the rhythm, or `None` when the profile is missing."""
+    result = await tx.conn.execute(SELECT_PLANNING_RHYTHM, {"user_id": user_id})
+    row = result.mappings().first()
+    if row is None:
+        return None
+    days = row["study_days"]
+    slots = row["preferred_slots"]
+    return PlanningRhythmRow(
+        timezone=str(row["timezone"]),
+        tutor_tone=str(row["tutor_tone"]),
+        hours_per_day=None if row["hours_per_day"] is None else int(row["hours_per_day"]),
+        study_days=None if days is None else [int(day) for day in days],
+        preferred_slots=None if slots is None else [str(slot) for slot in slots],
+    )
+
+
+async def read_owned_formation(tx: Tx, *, formation_id: str, owner_id: str) -> bool:
+    """CL-1 - the formation exists under RLS for this owner; a foreign one is simply absent."""
+    result = await tx.conn.execute(
+        SELECT_OWNED_FORMATION, {"formation_id": formation_id, "owner_id": owner_id}
+    )
+    return result.mappings().first() is not None
+
+
+async def read_formation_slot(tx: Tx, *, slot_id: str, formation_id: str) -> FormationSlotRow | None:
+    """The slot of that formation, or `None`: the formation identifier is part of the guard."""
+    result = await tx.conn.execute(SELECT_FORMATION_SLOT, {"slot_id": slot_id, "formation_id": formation_id})
+    row = result.mappings().first()
+    if row is None:
+        return None
+    return FormationSlotRow(id=str(row["id"]), kind=str(row["kind"]), status=str(row["status"]))
+
+
+async def list_upcoming_milestones(
+    tx: Tx, *, user_id: str, formation_id: str, exam_slot_id: str | None, now: datetime
+) -> list[SprintMilestoneRow]:
+    """`readMilestones`: the planned validation quizzes and mock exams of the future."""
+    result = await tx.conn.execute(
+        SELECT_UPCOMING_MILESTONES,
+        {
+            "user_id": user_id,
+            "formation_id": formation_id,
+            "exam_slot_id": exam_slot_id,
+            "now": now,
+        },
+    )
+    return [
+        SprintMilestoneRow(
+            id=str(row["id"]),
+            formation_id=str(row["formation_id"]),
+            module_id=None if row["module_id"] is None else str(row["module_id"]),
+            kind=str(row["kind"]),
+            title=str(row["title"]),
+            starts_at=row["starts_at"],
+            module_title=None if row["module_title"] is None else str(row["module_title"]),
+        )
+        for row in result.mappings()
+    ]
+
+
+async def list_planner_slots(tx: Tx, *, user_id: str, since: datetime) -> list[dict[str, Any]]:
+    """`readSlots`: the busy agenda the planner of SPEC-407 sees, in its own vocabulary."""
+    result = await tx.conn.execute(SELECT_PLANNER_SLOTS, {"user_id": user_id, "since": since})
+    slots: list[dict[str, Any]] = []
+    for row in result.mappings():
+        creator = str(row["created_by"])
+        slots.append(
+            {
+                "slotId": str(row["id"]),
+                "formationId": None if row["formation_id"] is None else str(row["formation_id"]),
+                "moduleId": None if row["module_id"] is None else str(row["module_id"]),
+                "kind": str(row["kind"]),
+                "title": str(row["title"]),
+                "startsAt": to_iso(row["starts_at"]),
+                "endsAt": to_iso(row["ends_at"]),
+                "status": str(row["status"]),
+                "createdBy": creator if creator in ("automation", "learner") else "planner",
+                "movedFromId": None if row["moved_from_id"] is None else str(row["moved_from_id"]),
+            }
+        )
+    return slots
+
+
+async def list_weakest_notions(
+    tx: Tx, *, user_id: str, formation_id: str, module_id: str | None
+) -> list[dict[str, Any]]:
+    """`readWeakestNotions`: every studied notion of the formation, mastery ascending."""
+    result = await tx.conn.execute(
+        SELECT_WEAKEST_NOTIONS,
+        {"user_id": user_id, "formation_id": formation_id, "module_id": module_id},
+    )
+    return [
+        {
+            "notionId": str(row["notion_id"]),
+            "label": str(row["label"]),
+            "mastery": float(row["mastery"]),
+        }
+        for row in result.mappings()
+    ]
+
+
+async def insert_automation_action(
+    tx: Tx,
+    *,
+    user_id: str,
+    formation_id: str | None,
+    automation: str,
+    kind: str,
+    summary: str,
+    payload: Mapping[str, Any],
+    requires_consent: bool,
+    now: datetime,
+    undo_payload: Mapping[str, Any] | None = None,
+) -> AutomationActionRow | None:
+    """`createAutomationActionQuiet`: `None` when the dedupe key already exists (EF-4)."""
+    result = await tx.conn.execute(
+        INSERT_AUTOMATION_ACTION,
+        {
+            "user_id": user_id,
+            "formation_id": formation_id,
+            "automation": automation,
+            "kind": kind,
+            "summary": summary,
+            "payload": json.dumps(dict(payload), ensure_ascii=False),
+            "undo_payload": None
+            if undo_payload is None
+            else json.dumps(dict(undo_payload), ensure_ascii=False),
+            "requires_consent": requires_consent,
+            "now": now,
+        },
+    )
+    row = result.mappings().first()
+    return None if row is None else _automation_action(row)
+
+
+async def list_sprint_plans(tx: Tx, *, user_id: str, exam_slot_ids: list[str]) -> list[SprintPlanRow]:
+    """`plansFor`: the `sprint_planned` rows of those milestones, newest first."""
+    result = await tx.conn.execute(
+        SELECT_SPRINT_PLANS,
+        {"user_id": user_id, "exam_slot_ids": json.dumps(exam_slot_ids)},
+    )
+    return [
+        SprintPlanRow(id=str(row["id"]), summary=str(row["summary"]), payload=row["payload"])
+        for row in result.mappings()
+    ]
+
+
+async def list_milestone_dates(
+    tx: Tx, *, user_id: str, formation_id: str, exam_slot_id: str | None
+) -> list[tuple[str, datetime]]:
+    """The identifiers and start instants of the milestones, for the expected local exam dates."""
+    result = await tx.conn.execute(
+        SELECT_MILESTONE_DATES,
+        {"user_id": user_id, "formation_id": formation_id, "exam_slot_id": exam_slot_id},
+    )
+    return [(str(row["id"]), row["starts_at"]) for row in result.mappings()]
+
+
+async def list_sprint_slot_ids(tx: Tx, *, user_id: str, pattern: str) -> dict[str, str]:
+    """The identifiers of the sprint slots of one milestone, keyed by their stable planner key."""
+    result = await tx.conn.execute(SELECT_SPRINT_SLOT_IDS, {"user_id": user_id, "pattern": pattern})
+    return {
+        str(row["planner_key"]): str(row["id"]) for row in result.mappings() if row["planner_key"] is not None
+    }

@@ -84,6 +84,7 @@ from learny.engagement.application.settings import (
     quiet_hours_of,
     update_notification_settings,
 )
+from learny.engagement.application.sprints import plan_sprints_before_milestones
 from learny.engagement.application.subscriptions import (
     list_push_subscriptions,
     remove_push_subscription,
@@ -158,6 +159,7 @@ __all__ = [
     "notification_settings_to_dto",
     "notify",
     "plan_daily_digests",
+    "plan_sprints_before_milestones",
     "preview_email",
     "previous_civil_day",
     "profile_timezone",
