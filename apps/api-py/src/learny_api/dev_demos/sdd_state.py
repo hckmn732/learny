@@ -64,7 +64,8 @@ SELECT_102_PROFILE = text(
     "where id = cast(:user_id as uuid)"
 )
 SELECT_102_STUDY = text(
-    "select hours_per_day, study_days, preferred_slots from public.study_preferences "
+    "select hours_per_day, study_days, preferred_slots::text[] as preferred_slots "
+    "from public.study_preferences "
     "where user_id = cast(:user_id as uuid)"
 )
 SELECT_102_NOTIFICATIONS = text(
