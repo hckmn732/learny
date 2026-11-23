@@ -105,3 +105,17 @@ _(à compléter par la sortie de `validate.mjs`)_
 Échecs connus de la branche `mobile`, non réparés (décision du porteur, `evidence/SPEC-3001/acceptance.md`) :
 `packages/config/src/commit-rules.test.ts`, `apps/web/test/unit/bundle-split.test.ts`,
 `tools/migration/test/unit/report.test.ts`.
+
+6. **Fusion de `mobile` dans la branche** : la branche de spec a été mise à jour avec `mobile`
+   (SPEC-3302 Cours, SPEC-3303 tuteur, SPEC-3305 Réviser) avant la validation finale. Les conflits
+   portaient sur `apps/mobile/src/data/keys.ts` et `packages/i18n/src/fr/mobile.ts` : les ajouts des
+   deux côtés ont été conservés (clés `attempt`/`attemptResult`, espaces `quiz`, `moduleScreen`
+   avec `quizPreparing`).
+7. **Test de SPEC-3202 aligné sur le quiz natif** : `test/programme/programme-screen.test.tsx`
+   attendait un renvoi au web (`/quiz`). Depuis SPEC-3304, l'entrée « Quiz de validation » ouvre la
+   **fiche du module** (`/programme/module/[moduleId]`), d'où le quiz natif démarre (CA-3,
+   BR-QUI-05). L'assertion a été alignée sur cette navigation réelle — elle vérifie toujours la
+   destination, elle ne l'affaiblit pas.
+8. **Test de reprise rendu indépendant des données** : l'identifiant du chapitre de reprise venait
+   du jeu de démonstration et cassait dès que le seed canonique servait un autre chapitre ;
+   l'assertion vérifie désormais la route et la forme de l'identifiant (UUID), pas une valeur figée.
