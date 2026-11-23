@@ -298,6 +298,82 @@ export const mobile = {
     time: (value: string) => `Reçue à ${value}`,
     unreadDot: 'Non lue',
   },
+  // SPEC-3203 — agenda jour, semaine et mois, déplacement et replanification. Les libellés
+  // identiques au web (titre, vues, « Ouvrir », totaux) sont importés de `fr.agenda` par l'écran ;
+  // cet espace ne porte que les libellés propres au mobile (canevas § 2).
+  agenda: {
+    legendAction: 'Légende',
+    filterLabel: 'Formation affichée',
+    filterAll: 'Toutes les formations',
+    viewsLabel: 'Affichage',
+    viewJour: 'Jour',
+    viewSemaine: 'Semaine',
+    viewMois: 'Mois',
+    weekDaysLabel: 'Jours de la semaine',
+    dayLabel: (day: string, count: number) =>
+      count === 0
+        ? `${day}, aucune activité`
+        : `${day}, ${String(count)} activité${count > 1 ? 's' : ''}`,
+    now: 'Maintenant',
+    status: {
+      done: 'Fait',
+      todo: 'Faire',
+      soon: (minutes: number) => `Dans ${String(minutes)} min`,
+      upcoming: 'À venir',
+      missed: 'Manqué',
+    },
+    periodLabel: 'Période affichée',
+    previousPeriod: 'Période précédente',
+    nextPeriod: 'Période suivante',
+    today: 'Aujourd’hui',
+    weekRange: (from: string, to: string) => `Semaine du ${from} au ${to}`,
+    monthCaption: (month: string) => `Mois de ${month}`,
+    monthOpen: 'Voir la journée',
+    monthLegendActivity: 'Activité',
+    monthLegendSelection: 'Sélection',
+    monthCount: (count: number) => `${String(count)} activité${count > 1 ? 's' : ''}`,
+    weekEmptyDay: 'Aucune activité',
+    weekCount: (count: number) => `${String(count)} activité${count > 1 ? 's' : ''}`,
+    weekRowLabel: (day: string, count: number) =>
+      count === 0
+        ? `${day}, aucune activité`
+        : `${day}, ${String(count)} activité${count > 1 ? 's' : ''}`,
+    dayEmpty: 'Aucune activité prévue ce jour-là.',
+    emptyTitle: (formation: string) => `Aucune activité pour ${formation} sur cette période`,
+    emptyBody: 'Le tuteur n’a rien planifié sur cette formation cette période.',
+    emptyAction: 'Changer de filtre',
+    globalEmptyTitle: 'Aucune activité prévue',
+    globalEmptyBody: 'Le tuteur n’a rien planifié sur cette période.',
+    detailEmpty: 'Aucune activité sélectionnée.',
+    replan: 'Replanifier',
+    replanOffline: 'Replanification indisponible hors ligne.',
+    movedToast: 'Activité replanifiée.',
+    conflictToast: 'Ce créneau vient de changer. Nouvelles propositions ci-dessous.',
+    loadError: 'L’agenda n’a pas pu être chargé.',
+    loadRetry: 'Réessayer',
+    replanSheet: {
+      title: 'Replanifier l’activité',
+      loading: 'Recherche des créneaux…',
+      optionsLabel: 'Créneaux proposés',
+      momentMatin: 'Matin',
+      momentApresMidi: 'Après-midi',
+      momentSoir: 'Soir',
+      reasonsLabel: 'Pourquoi ce créneau',
+      optionLabel: (day: string, time: string) => `${day} · ${time}`,
+      choose: 'Choisir ce créneau',
+      confirmTitle: (day: string, time: string) => `Replanifier au ${day} · ${time} ?`,
+      confirmText: 'Seule cette activité sera replanifiée ; les marges seront recalculées.',
+      confirm: 'Confirmer la replanification',
+      cancel: 'Annuler',
+      emptyTitle: 'Aucun créneau disponible',
+      emptyBody:
+        'Aucun créneau compatible ne tient dans vos disponibilités. Ajustez votre rythme sur le web.',
+      emptyAction: 'Continuer sur le web',
+      errorTitle: 'Les créneaux n’ont pas pu être chargés.',
+      retry: 'Réessayer',
+      notMovable: 'Cette activité ne peut plus être déplacée.',
+    },
+  },
 } as const;
 
 export type MobileMessages = typeof mobile;
