@@ -152,15 +152,36 @@ def fixtures_for_task(registry: Sequence[RegisteredFixture], task: AiTask) -> tu
 
 
 def canonical_json(value: Any) -> str:
-    """Recursively sorts object keys so two equivalent inputs always serialise identically."""
-    return json.dumps(_sorted(value), separators=(",", ":"), ensure_ascii=False)
+    """Recursively sorts object keys so two equivalent inputs always serialise identically.
+
+    Binary parts (an image sent to the vision model) serialise like `JSON.stringify` of a
+    `Uint8Array`: an object of index keys, in ascending numeric order (JavaScript always lists
+    integer keys first, whatever the sort). The fragment is spliced in place of a placeholder, so no
+    per-byte mapping is ever built.
+    """
+    binaries: list[bytes] = []
+    text = json.dumps(_sorted(value, binaries), separators=(",", ":"), ensure_ascii=False)
+    for index, data in enumerate(binaries):
+        text = text.replace(json.dumps(_binary_placeholder(index)), _binary_fragment(data), 1)
+    return text
 
 
-def _sorted(value: Any) -> Any:
-    if isinstance(value, list):
-        return [_sorted(item) for item in value]
+def _binary_placeholder(index: int) -> str:
+    return f"\u0000learny-binary-{index}\u0000"
+
+
+def _binary_fragment(data: bytes) -> str:
+    return "{" + ",".join(f'"{index}":{byte}' for index, byte in enumerate(data)) + "}"
+
+
+def _sorted(value: Any, binaries: list[bytes]) -> Any:
+    if isinstance(value, (bytes, bytearray, memoryview)):
+        binaries.append(bytes(value))
+        return _binary_placeholder(len(binaries) - 1)
+    if isinstance(value, list | tuple):
+        return [_sorted(item, binaries) for item in value]
     if isinstance(value, Mapping):
-        return {key: _sorted(value[key]) for key in sorted(value)}
+        return {key: _sorted(value[key], binaries) for key in sorted(value)}
     return value
 
 
