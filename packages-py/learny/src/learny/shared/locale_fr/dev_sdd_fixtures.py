@@ -145,3 +145,63 @@ KEY_ID_MISSING = "Identifiant de clé manquant."
 
 # SPEC-002 - the `file` a scanned secret is reported under (`scanText(text, 'saisie')`).
 SECRET_SCAN_SOURCE = "saisie"
+
+# SPEC-103 / SPEC-2302 - the programme factory of the demonstration pages (port of
+# `packages/db/src/testing/programme.ts`).
+PROGRAMME_TITLE = "Formation de démonstration"
+MODULE_TITLE = "Partie {position}"
+CHAPTER_TITLE = "Chapitre {module}.{chapter}"
+NOTION_LABEL = "Notion {module}.{chapter}.{notion}"
+NOTION_DEFINITION = "Définition courte {position}"
+COURSE_SECTION_ANCHOR = "section-{chapter}-{position}"
+COURSE_SECTION_TITLE = "Section {position}"
+COURSE_SECTION_CONTENT = "Contenu de la section {position}."
+
+# SPEC-103 - the programme tree and the constraint probes of the formations page.
+SPEC103_CL3_MESSAGE = "Réorganisation en transaction acceptée"
+SPEC103_INCONSISTENT_NOTION = "Notion incohérente"
+SPEC103_FIRST_NOTION_LABEL = "Écriture de régularisation"
+SPEC103_FIRST_NOTION_DEFINITION = "Passage d'écriture comptable"
+SPEC103_SECOND_NOTION_LABEL = "Équilibre d’une pièce"
+SPEC103_SECOND_NOTION_DEFINITION = "Débit et crédit"
+SPEC103_FTS_QUERY = "ecriture"
+
+# SPEC-104 - the note, its three passages and the limit probes of the resources page.
+SPEC104_NOTE = "Clés de comptabilisation : 40 = débit, 50 = crédit ? À vérifier"
+SPEC104_RESOURCE_TITLE = "Clés de comptabilisation"
+SPEC104_PASSAGES = ("Clés de comptabilisation", "40 = débit, 50 = crédit", "? À vérifier")
+SPEC104_QUERY = "clé débit"
+SPEC104_LONG_NOTE_TITLE = "Note trop longue"
+SPEC104_LONG_PDF_TITLE = "Guide trop long"
+SPEC104_PDF_FILE = "guide.pdf"
+SPEC104_PENDING_TITLE = "Suggestion sans URL"
+SPEC104_FILLER_TITLE = "Contribution {index}"
+SPEC104_FILLER_CONTENT = "Contenu {index}"
+SPEC104_EXTRA_TITLE = "Contribution de trop"
+SPEC104_EXTRA_CONTENT = "Contenu de trop"
+
+# SPEC-105 - the two course versions, the corrected section, the citation and the discussion.
+SPEC105_SOURCE_LABEL = "Guide FI, p. 4"
+SPEC105_DELETED_SOURCE = "source supprimée"
+SPEC105_SECTION_ANCHOR = "en-tete-de-piece"
+SPEC105_SECTION_TITLE = "L’en-tête de pièce"
+SPEC105_SECTION_CONTENT = "L’en-tête de pièce regroupe les informations communes à toutes les écritures."
+SPEC105_SECTION_EDIT = "L’en-tête de pièce précise la date, le journal et la pièce."
+SPEC105_SECTION_EDIT_LAST = "L’en-tête de pièce précise la date, le journal, la pièce et le libellé."
+SPEC105_RESOURCE_TITLE = "Guide FI"
+SPEC105_RESOURCE_TEXT = "Clés de comptabilisation : 40 = débit, 50 = crédit ?"
+SPEC105_CHUNK_TEXT = "Clés de comptabilisation"
+SPEC105_CONVERSATION_TITLE = "Comment lire une clé ?"
+SPEC105_QUESTION = "Comment reconnaître une clé de comptabilisation ?"
+SPEC105_ANSWER = "La clé se lit dans le plan comptable : le premier chiffre indique la classe."
+
+# SPEC-106 - the thirteen bricks, the three versions of the activity and the graded attempt.
+SPEC106_STATEMENT = "Énoncé {version}"
+SPEC106_CORRECTED_STATEMENT = "Énoncé 1 corrigé"
+SPEC106_EXPLANATION = "Compte fournisseur."
+SPEC106_PARTIAL_EXPLANATION = "Réponse juste mais incomplète."
+SPEC106_CRITERION_COMMENT = "Compte fournisseur identifié."
+SPEC106_RESPONSE = "La clé 401 est un compte fournisseur."
+
+# SPEC-107 - the second learner of the isolation probe.
+SPEC107_FOREIGN_FORMATION = "Formation privée"

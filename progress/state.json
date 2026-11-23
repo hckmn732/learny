@@ -7207,11 +7207,11 @@
       }
     },
     "SPEC-2302": {
-      "status": "pending",
+      "status": "in_progress",
       "attempts": 0,
-      "startedAt": null,
+      "startedAt": "2026-11-23T01:39:40.000Z",
       "completedAt": null,
-      "branch": null,
+      "branch": "spec/SPEC-2302-retrait-backend-typescript",
       "commit": null,
       "lastError": null,
       "validations": {}

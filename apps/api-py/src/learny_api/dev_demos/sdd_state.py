@@ -20,7 +20,7 @@ from sqlalchemy.exc import DBAPIError
 from starlette.responses import Response
 
 from learny_api.dev_demos.guard import require_dev
-from learny_api.dev_demos.support import demo_email, new_user, rolled_back
+from learny_api.dev_demos.support import demo_email, new_user, rolled_back, sqlstate_of
 from learny_api.pipeline import Call
 
 SET_CLAIMS = text(
@@ -161,20 +161,6 @@ def nothing() -> Response:
     return Response(content=b"null", media_type="application/json")
 
 
-def _sqlstate_of(error: BaseException) -> str:
-    """The SQLSTATE of a refused probe, or `unknown` (port of `errorCode`)."""
-    current: BaseException | None = error
-    for _ in range(8):
-        if current is None:
-            break
-        for candidate in (current, getattr(current, "orig", None), getattr(current, "cause", None)):
-            code = getattr(candidate, "sqlstate", None) or getattr(candidate, "pgcode", None)
-            if isinstance(code, str) and len(code) == 5:
-                return code
-        current = current.__cause__ or current.__context__
-    return "unknown"
-
-
 async def _sqlstate(conn: Any, name: str, statement: Any, params: dict[str, Any]) -> str:
     """Runs one probe inside a savepoint and returns its SQLSTATE (`00000` when accepted)."""
     await conn.execute(text(f"savepoint {name}"))
@@ -182,7 +168,7 @@ async def _sqlstate(conn: Any, name: str, statement: Any, params: dict[str, Any]
         await conn.execute(statement, params)
     except DBAPIError as error:
         await conn.execute(text(f"rollback to savepoint {name}"))
-        return _sqlstate_of(error)
+        return sqlstate_of(error)
     finally:
         await conn.execute(text(f"release savepoint {name}"))
     return "00000"
