@@ -496,6 +496,120 @@ export const mobile = {
       gapsWeb: 'Voir mes lacunes sur le web',
     },
   },
+  programme: {
+    title: 'Programme',
+    formationFallback: 'Formation',
+    switcherLabel: 'Changer de formation',
+    newFormation: 'Nouvelle formation',
+    progressLabel: 'Progression de la formation',
+    views: {
+      label: 'Vue du programme',
+      modules: 'Modules',
+      calendar: 'Calendrier',
+    },
+    importProgramme: 'Importer votre programme',
+    card: {
+      modules: (position: number, total: number) =>
+        `Module ${String(position)} sur ${String(total)}`,
+    },
+    module: {
+      status: {
+        open: 'En cours',
+        validated: 'Validé',
+        locked: 'Verrouillé',
+      },
+      openMeta: (chapters: number, threshold: number) =>
+        `${String(chapters)} chapitres · quiz à ${String(threshold)} %`,
+      validatedMeta: (chapters: number, score: number | null) =>
+        score === null
+          ? `${String(chapters)} chapitres validés`
+          : `${String(chapters)} chapitres terminés · ${String(score)} %`,
+      lockedMeta: (chapters: number, previous: number) =>
+        `${String(chapters)} chapitres · après le module ${String(previous)}`,
+      unlock: (position: number) =>
+        `Se débloque quand le quiz du module ${String(position)} est validé.`,
+      toggle: (position: number, title: string) => `Module ${String(position)}, ${title}`,
+      quiz: 'Quiz de validation',
+      exam: 'Examen blanc',
+      chapters: (count: number) => (count === 1 ? '1 chapitre' : `${String(count)} chapitres`),
+      detail: 'Ouvrir le module',
+    },
+    chapter: {
+      validated: 'Validé',
+      minutes: (count: number) => `${String(count)} min`,
+      current: 'En cours',
+      upcoming: 'À venir',
+      open: (title: string) => `Ouvrir le chapitre ${title}`,
+    },
+    resume: (position: number) => `Reprendre le chapitre ${String(position)}`,
+    calendar: {
+      title: 'Calendrier de la formation',
+      sessionsLegend: 'Séance',
+      todayLegend: 'Aujourd’hui',
+      todayChip: 'Aujourd’hui',
+      nextSession: 'Prochaine séance',
+      openQuiz: 'Ouvrir le quiz',
+      moduleLabel: (position: number, title: string) => `Module ${String(position)} · ${title}`,
+      empty: 'Aucune séance planifiée',
+    },
+    switcher: {
+      title: 'Changer de formation',
+      current: 'Formation courante',
+      active: 'Active',
+      paused: 'En pause',
+      resumeOnWeb: 'Reprendre sur le web',
+      offline: 'Le changement de formation est indisponible hors ligne.',
+      empty: 'Aucune autre formation',
+    },
+    web: {
+      createTitle: 'Nouvelle formation',
+      createBody:
+        'La création d’une formation se fait sur le web : le tuteur vous guide en cinq questions, puis prépare votre programme.',
+      importTitle: 'Importer votre programme',
+      importBody:
+        'Collez un texte ou déposez un fichier : le tuteur le structure en programme. Vous le relisez et le validez sur le web.',
+      continue: 'Continuer sur le web',
+    },
+    locked: {
+      title: (position: number) => `Module ${String(position)} verrouillé`,
+      body: (position: number) =>
+        `Se débloque quand le quiz du module ${String(position)} est validé.`,
+      close: 'Compris',
+    },
+    banner: {
+      pausedTitle: 'Formation en pause',
+      pausedBody: 'Reprenez la formation sur le web pour relancer votre planning.',
+      pausedAction: 'Reprendre sur le web',
+      completedTitle: 'Formation terminée',
+      completedBody: 'Tous les modules sont validés. Le bilan complet vous attend sur le web.',
+      completedAction: 'Voir le bilan sur le web',
+    },
+    proposal: {
+      title: 'Programme à valider sur le web',
+      body: 'Votre tuteur a préparé votre programme. Relisez-le et validez-le sur le web pour commencer.',
+      action: 'Continuer sur le web',
+    },
+    states: {
+      loading: 'Chargement du programme',
+      errorTitle: 'Impossible de charger le programme.',
+      errorBody: 'Vérifiez votre connexion, puis réessayez.',
+      noFormationTitle: 'Aucune formation active',
+      noFormationBody:
+        'Créez votre première formation sur le web : le tuteur prépare ensuite votre programme.',
+      noFormationAction: 'Créer une formation sur le web',
+      skeleton: 'Chargement du programme',
+    },
+    moduleScreen: {
+      title: 'Module',
+      back: 'Retour au programme',
+      chapters: 'Chapitres',
+      apports: 'Voir les apports sur le web',
+      quiz: 'Ouvrir le quiz sur le web',
+      unavailable: 'Module introuvable.',
+      contributionsDone: 'Apports terminés',
+      contributionsInProgress: 'Apports en cours',
+    },
+  },
 } as const;
 
 export type MobileMessages = typeof mobile;

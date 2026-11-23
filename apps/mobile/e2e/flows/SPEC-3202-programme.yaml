@@ -1,0 +1,133 @@
+# SPEC-3202 — programme, modules, chapitres et reprise (CA-1, CA-2, CA-3, CA-4).
+#
+# Unique flux `@visual` de la spécification (ADR-3015 § 5) : il capture la vue Modules de l'onglet
+# Programme dans l'état de la maquette du 11 novembre 2026 (formation SAP à 38 %, module 3 déplié,
+# module 4 verrouillé, module 2 validé), comparée à la référence
+# `design/app-mobile/exports/screens/android-03-programme.png` (ADR-3003 § 4).
+#
+# Précautions Maestro 2.12.1 : matcher `text` ancré et accents abîmés en transit, donc les
+# assertions de texte restent ASCII et les nœuds vérifiés portent un `id`.
+appId: fr.learny.app
+name: SPEC-3202 programme
+tags:
+  - SPEC-3202
+  - visual
+---
+- launchApp:
+    clearState: true
+# Page d'accueil des builds SDD : l'application est prête à recevoir le lien profond.
+- extendedWaitUntil:
+    visible:
+      id: sdd-health
+    timeout: 30000
+- openLink: learny://connexion?demo=1
+# La restauration de session peut précéder la publication du jeton : si la garde d'onboarding a
+# déjà échoué (API redémarrée pendant la campagne), on réessaie une fois avant d'attendre les onglets.
+- waitForAnimationToEnd:
+    timeout: 5000
+- runFlow:
+    when:
+      visible:
+        id: onboarding-error
+    commands:
+      - tapOn:
+          id: onboarding-error-retry
+- extendedWaitUntil:
+    visible:
+      id: tab-programme
+    timeout: 60000
+- tapOn:
+    id: tab-programme
+- extendedWaitUntil:
+    visible:
+      id: programme-screen
+    timeout: 20000
+- extendedWaitUntil:
+    visible:
+      id: programme-formation-card
+    timeout: 20000
+# CA-1 — les valeurs de démonstration de la carte formation et du module 3.
+- assertVisible:
+    text: '29 %'
+- assertVisible:
+    text: 'Module 3 sur 7.*'
+- assertVisible:
+    id: module-3
+- assertVisible:
+    id: programme-segmented
+- assertVisible:
+    id: programme-import
+# CA-1 — le module 2 validé est présent au-dessus du module en cours.
+- assertVisible:
+    id: module-2
+# Le module 3 déplié place la reprise et le module 4 sous la barre d'onglets : un défilement borné
+# (Maestro 2.12.1, `scrollUntilVisible` peu fiable sur les longues listes) les amène à l'écran, puis
+# un défilement inverse ramène en haut pour la capture de l'état de la maquette (CA-5).
+- swipe:
+    start: 50%, 80%
+    end: 50%, 50%
+    duration: 500
+- extendedWaitUntil:
+    visible:
+      id: programme-resume
+    timeout: 10000
+- extendedWaitUntil:
+    visible:
+      id: module-4
+    timeout: 10000
+# CA-2 — un module verrouillé ouvre sa fiche de déblocage, sans chapitres.
+- tapOn:
+    id: module-4-toggle
+- extendedWaitUntil:
+    visible:
+      id: programme-locked
+    timeout: 10000
+- assertVisible:
+    text: 'Compris'
+- tapOn:
+    text: 'Compris'
+- swipe:
+    start: 50%, 40%
+    end: 50%, 85%
+    duration: 500
+- extendedWaitUntil:
+    visible:
+      id: programme-formation-card
+    timeout: 10000
+# CA-3 — le sélecteur de formation liste l'active et la formation en pause.
+- tapOn:
+    id: programme-formation-card
+- extendedWaitUntil:
+    visible:
+      id: formation-switcher
+    timeout: 10000
+- assertVisible:
+    text: 'SAP S/4HANA Finance'
+- tapOn:
+    id: formation-switcher-close
+# CA-4 — l'import renvoie au web, sans écriture du programme.
+- tapOn:
+    id: programme-import
+- extendedWaitUntil:
+    visible:
+      id: programme-web-import
+    timeout: 10000
+- assertVisible:
+    text: 'Continuer sur le web'
+- tapOn:
+    id: programme-web-import-close
+# CA-5 — état de la maquette : vue Modules, module 3 déplié, retour en haut de la liste.
+- assertVisible:
+    id: programme-formation-card
+- assertVisible:
+    id: module-3
+- takeScreenshot: SPEC-3202-programme
+# EF-6 — la vue Calendrier reste accessible et affiche la grille.
+- tapOn:
+    id: programme-segmented-calendrier
+- extendedWaitUntil:
+    visible:
+      id: programme-calendar
+    timeout: 10000
+- assertVisible:
+    text: 'Calendrier de la formation'

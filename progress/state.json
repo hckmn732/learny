@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-11-23T15:41:04.058Z",
+  "updatedAt": "2026-11-23T16:57:04.031Z",
   "specs": {
     "SPEC-001": {
       "status": "done",
@@ -7011,14 +7011,50 @@
       }
     },
     "SPEC-3202": {
-      "status": "pending",
+      "status": "done",
       "attempts": 0,
-      "startedAt": null,
-      "completedAt": null,
-      "branch": null,
-      "commit": null,
+      "startedAt": "2026-11-23T16:13:10.725Z",
+      "completedAt": "2026-11-23T16:57:04.029Z",
+      "branch": "spec/SPEC-3202-programme-modules-et-chapitres",
+      "commit": "83edcc17",
       "lastError": null,
-      "validations": {}
+      "validations": {
+        "lint": {
+          "status": "passed",
+          "at": "2026-11-23T16:56:51.665Z",
+          "details": ""
+        },
+        "typecheck": {
+          "status": "passed",
+          "at": "2026-11-23T16:56:57.468Z",
+          "details": ""
+        },
+        "unit": {
+          "status": "passed",
+          "at": "2026-11-23T16:55:04.160Z",
+          "details": "10 Vitest + 18 Jest test(s) [SPEC-3202] réussi(s), 0 échec(s)"
+        },
+        "integration": {
+          "status": "passed",
+          "at": "2026-11-23T16:32:56.305Z",
+          "details": "3 test(s) réussi(s), 0 échec(s)"
+        },
+        "e2e": {
+          "status": "passed",
+          "at": "2026-11-23T16:33:46.213Z",
+          "details": "1 flux réussi(s), 0 échec(s), 1 vidéo(s)"
+        },
+        "visual": {
+          "status": "passed",
+          "at": "2026-11-23T16:33:46.213Z",
+          "details": "1 flux @visual réussi(s) (mode mockup)"
+        },
+        "acceptance": {
+          "status": "passed",
+          "at": "2026-11-23T16:56:58.014Z",
+          "details": "5/5 critères ✅"
+        }
+      }
     },
     "SPEC-3203": {
       "status": "done",

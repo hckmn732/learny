@@ -20,8 +20,11 @@ export const queryKeys = {
   gaps: (formationId: string) => ['gaps', formationId] as const,
   slotAlternatives: (slotId: string) => ['slots', slotId, 'alternatives'] as const,
   formations: () => ['formations'] as const,
+  sidebar: () => ['me', 'sidebar'] as const,
   formation: (formationId: string) => ['formation', formationId] as const,
   programme: (formationId: string) => ['formation', formationId, 'programme'] as const,
+  module: (moduleId: string) => ['module', moduleId] as const,
+  moduleCourse: (moduleId: string) => ['module', moduleId, 'course'] as const,
   agenda: (from: string, to: string, formationId: string | null) =>
     ['agenda', from, to, formationId] as const,
   // SPEC-3203 EF-7 — the three windows proposed by the planner for one slot; the sheet always
