@@ -1,8 +1,11 @@
-// Query keys of the mobile application (SPEC-3003 EF-4; canevas § 4).
+// Query keys of the mobile application (SPEC-3003 EF-4, SPEC-3201 ET-1; canevas § 4).
 //
 // One key per route, declared here and nowhere else: the cache is keyed by user (the persister
 // buster), so a key never carries the user id. `['formation', id, 'programme']` mirrors the canvas
 // example and keeps the invalidation of a formation precise (`queryKeys.formation(id)`).
+// The four keys of the Aujourd'hui screen are the ones of SPEC-3201 ET-1: `['home']`, `['streak']`,
+// `['automation-actions']` and `['warmups', 'today']`; the two detail reads of its sheets stay
+// under their own prefix so that a mutation can invalidate them separately.
 export const queryKeys = {
   me: () => ['me'] as const,
   profile: () => ['me', 'profile'] as const,
@@ -11,6 +14,11 @@ export const queryKeys = {
   unreadCount: () => ['notifications', 'unread-count'] as const,
   notifications: (filter: string) => ['notifications', 'list', filter] as const,
   home: () => ['home'] as const,
+  streak: () => ['streak'] as const,
+  automationActions: () => ['automation-actions'] as const,
+  warmupsToday: () => ['warmups', 'today'] as const,
+  gaps: (formationId: string) => ['gaps', formationId] as const,
+  slotAlternatives: (slotId: string) => ['slots', slotId, 'alternatives'] as const,
   formations: () => ['formations'] as const,
   formation: (formationId: string) => ['formation', formationId] as const,
   programme: (formationId: string) => ['formation', formationId, 'programme'] as const,

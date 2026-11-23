@@ -20,6 +20,7 @@
     "@learny/bricks": "workspace:*",
     "@learny/contracts": "workspace:*",
     "@learny/core": "workspace:*",
+    "@learny/domain": "workspace:*",
     "@learny/i18n": "workspace:*",
     "@learny/ui": "workspace:*",
     "@react-native-community/netinfo": "12.0.1",

@@ -88,6 +88,12 @@ export interface TypeScale {
   readonly largeTitle: TypeToken;
   /** Section title (20 pt / 20 sp). */
   readonly sectionTitle: TypeToken;
+  /** Title of the session card of Aujourd'hui (26 pt / 24 sp, `app.css` `.hero-title`). */
+  readonly heroTitle: TypeToken;
+  /** Hour of the session card, in the display face (15 pt, `app.css` `.hero-time`). */
+  readonly heroTime: TypeToken;
+  /** Detail line of the session card (13 pt, `app.css` `.hero-meta`). */
+  readonly heroMeta: TypeToken;
   /** Row or card title (16 pt). */
   readonly title: TypeToken;
   /** Running text (16 pt / 16 sp). */
@@ -126,6 +132,9 @@ export const typeScale = {
     eyebrow: { fontSize: 13, lineHeight: 18, fontFamily: 'bodyMedium', letterSpacing: 0 },
     largeTitle: { fontSize: 34, lineHeight: 36, fontFamily: 'display', letterSpacing: -1.2 },
     sectionTitle: { fontSize: 20, lineHeight: 24, fontFamily: 'display', letterSpacing: -0.4 },
+    heroTitle: { fontSize: 26, lineHeight: 29, fontFamily: 'display', letterSpacing: -0.78 },
+    heroTime: { fontSize: 15, lineHeight: 18, fontFamily: 'displayMedium', letterSpacing: 0 },
+    heroMeta: { fontSize: 13, lineHeight: 18, fontFamily: 'body', letterSpacing: 0 },
     title: { fontSize: 16, lineHeight: 21, fontFamily: 'bodySemiBold', letterSpacing: 0 },
     body: { fontSize: 16, lineHeight: 23, fontFamily: 'body', letterSpacing: 0 },
     bodySmall: { fontSize: 14, lineHeight: 21, fontFamily: 'body', letterSpacing: 0 },
@@ -157,6 +166,9 @@ export const typeScale = {
       fontFamily: 'displayMedium',
       letterSpacing: -0.1,
     },
+    heroTitle: { fontSize: 24, lineHeight: 26, fontFamily: 'displayMedium', letterSpacing: -0.48 },
+    heroTime: { fontSize: 15, lineHeight: 18, fontFamily: 'displayMedium', letterSpacing: 0 },
+    heroMeta: { fontSize: 13, lineHeight: 18, fontFamily: 'body', letterSpacing: 0 },
     title: { fontSize: 16, lineHeight: 21, fontFamily: 'body', letterSpacing: 0 },
     body: { fontSize: 16, lineHeight: 24, fontFamily: 'body', letterSpacing: 0 },
     bodySmall: { fontSize: 14, lineHeight: 21, fontFamily: 'body', letterSpacing: 0 },

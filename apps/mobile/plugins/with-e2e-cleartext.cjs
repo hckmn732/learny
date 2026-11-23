@@ -1,3 +1,4 @@
+/* global require, module -- greffon CommonJS de configuration Expo (ADR-3018). */
 // Config plugin Expo — autorise le HTTP en clair pour les builds e2e uniquement (ADR-3018).
 //
 // Depuis ADR-3018, l'émulateur Android tourne sur la VM de développement et joint l'API locale
