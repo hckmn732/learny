@@ -180,6 +180,7 @@ async def test_notify_is_idempotent_on_the_dedupe_key(database: Database) -> Non
 
 async def test_the_daily_cap_counts_distinct_notifications(database: Database) -> None:
     async def run(tx: Any) -> None:
+        await without_other_deliveries(tx)
         user = await create_user(tx.conn, "Omar", timezone="Europe/Paris")
         await set_settings(tx, user, max_per_day=3, channel_push=False)
         deps = engagement_deps(tx)
@@ -378,6 +379,13 @@ async def test_delivering_twice_sends_once(database: Database) -> None:
     await rolled_back(database, run)
 
 
+async def without_other_deliveries(tx: Any) -> None:
+    """These cases count the journal and the due sends of the whole database: the shared local stack
+    also holds the demonstration dataset (deferred and capped sends), so the journal is emptied inside
+    the rolled-back transaction of the test. Nothing outlives the test."""
+    await tx.conn.execute(text("delete from public.notification_deliveries"))
+
+
 async def delivery_id_of(tx: Any, notification_id: str, channel: str) -> str:
     """The identifier of one journal line of a notification."""
     result = await tx.conn.execute(
@@ -392,6 +400,7 @@ async def delivery_id_of(tx: Any, notification_id: str, channel: str) -> str:
 
 async def test_deliver_due_deliveries_sends_a_deferred_message(database: Database) -> None:
     async def run(tx: Any) -> None:
+        await without_other_deliveries(tx)
         user = await create_user(tx.conn, "Wanda", timezone="Europe/Paris")
         await set_settings(tx, user, quiet_start="12:00", quiet_end="14:00", channel_push=False)
         early = engagement_deps(tx)
@@ -413,6 +422,7 @@ async def test_deliver_due_deliveries_sends_a_deferred_message(database: Databas
 
 async def test_a_read_notification_abandons_its_deferred_send(database: Database) -> None:
     async def run(tx: Any) -> None:
+        await without_other_deliveries(tx)
         user = await create_user(tx.conn, "Xavier", timezone="Europe/Paris")
         await set_settings(tx, user, quiet_start="12:00", quiet_end="14:00", channel_push=False)
         early = engagement_deps(tx)
