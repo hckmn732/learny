@@ -9,26 +9,11 @@ import {
   supabaseLocalEnv,
   type TestSession,
 } from '@learny/testing/supabase';
-import { expectScreenshotBaseline, expectTokens } from '@learny/testing/visual';
 
 // Same-origin mutations from the API request context (SPEC-208 origin guard).
 const ORIGIN = 'http://127.0.0.1:3100';
 
 import { buildPdf } from '../../../../../packages/services/test/support/files';
-
-const SECTIONS = ['spec-206-limits', 'spec-206-cases', 'spec-206-deletion'];
-const TITLE = 'SPEC-206 — Envois privés';
-
-const EXPECTED: Record<string, string> = {
-  'pdf-limit': 'Accepté',
-  'pdf-too-many-pages': 'Refusé · UPLOAD_TOO_LARGE',
-  'image-limit': 'Accepté',
-  'image-too-large': 'Refusé · UPLOAD_TOO_LARGE',
-  'executable-as-png': 'Refusé · UNSUPPORTED_TYPE',
-  'note-too-long': 'Refusé · UPLOAD_TOO_LARGE',
-  'chapter-full': 'Refusé · QUOTA_EXCEEDED',
-  'quota-reached': 'Refusé · QUOTA_EXCEEDED',
-};
 
 let session: TestSession;
 
@@ -45,125 +30,6 @@ test.afterEach(async () => {
 
 test.afterAll(async () => {
   await closeDb();
-});
-
-test('inspecte les limites d’envoi @SPEC-206', async ({
-  page,
-  axeCheck,
-  captureEvidence,
-  consoleErrors,
-}) => {
-  await page.goto('/_dev/sdd/SPEC-206');
-
-  const title = page.getByTestId('sdd-title');
-  await expect(title).toHaveText(TITLE);
-  expect(await title.evaluate((element) => element.tagName)).toBe('H1');
-  const ids = await page
-    .locator('main > section[data-testid]')
-    .evaluateAll((elements) => elements.map((element) => element.getAttribute('data-testid')));
-  expect(ids).toEqual(SECTIONS);
-  await expect(page.getByRole('heading', { level: 2 })).toHaveText([
-    'Limites d’envoi',
-    'Essais simulés',
-    'Source supprimée',
-  ]);
-
-  // The four limit cards of BR-APP-02.
-  await expect(page.getByTestId('spec-206-limit-pdf')).toContainText('50 Mo · 500 pages');
-  await expect(page.getByTestId('spec-206-limit-image')).toContainText('10 Mo');
-  await expect(page.getByTestId('spec-206-limit-image')).toContainText('JPEG, PNG, WebP ou HEIC');
-  await expect(page.getByTestId('spec-206-limit-note')).toContainText('100 000 caractères');
-  await expect(page.getByTestId('spec-206-limit-quota')).toContainText(
-    '100 apports par chapitre · 2 Go par apprenant',
-  );
-
-  // CA-1 — the table shows the code the service answers for every simulated trial.
-  for (const name of Object.keys(EXPECTED)) {
-    await expect(page.getByTestId(`spec-206-result-${name}`)).toHaveText('Pas encore essayé');
-  }
-  await page.getByRole('button', { name: 'Lancer tous les essais' }).click();
-  for (const [name, expected] of Object.entries(EXPECTED)) {
-    await expect(page.getByTestId(`spec-206-result-${name}`)).toContainText(expected);
-  }
-  await expect(page.getByTestId('spec-206-result-pdf-limit')).toHaveAttribute(
-    'data-state',
-    'accepted',
-  );
-  await expect(page.getByTestId('spec-206-result-pdf-too-many-pages')).toContainText('500 pages');
-  await expect(page.getByTestId('spec-206-result-image-too-large')).toContainText('10 Mo');
-  await expect(page.getByTestId('spec-206-result-quota-reached')).toHaveAttribute(
-    'data-state',
-    'refused',
-  );
-  await expect(page.getByTestId('spec-206-result-note-too-long')).toContainText('100 000 caractères');
-
-  // Each row can be tried alone, from the keyboard.
-  const rowButton = page.getByRole('button', { name: 'Essayer : PDF de 50 Mo et 500 pages' });
-  await rowButton.focus();
-  await page.keyboard.press('Enter');
-  await expect(page.getByTestId('spec-206-announce')).toHaveText(
-    'PDF de 50 Mo et 500 pages : Accepté',
-  );
-
-  // CA-4 — a deleted source keeps its citation, labelled « source supprimée ».
-  await expect(page.getByTestId('spec-206-citation-label')).toHaveText('Guide FI, p. 4');
-  await page.getByRole('button', { name: 'Supprimer l’apport' }).click();
-  await expect(page.getByTestId('spec-206-citation-label')).toHaveText('source supprimée');
-  await expect(page.getByTestId('spec-206-citation')).toContainText(
-    'Clés de comptabilisation : 40 = débit, 50 = crédit',
-  );
-  await expect(page.getByTestId('spec-206-deletion-status')).toHaveText(
-    'Apport supprimé, citation conservée.',
-  );
-  await page.getByRole('button', { name: 'Rétablir l’exemple' }).click();
-  await expect(page.getByTestId('spec-206-citation-label')).toHaveText('Guide FI, p. 4');
-
-  await axeCheck();
-  await captureEvidence('spec-206-envois-prives');
-  expect(consoleErrors.filter((message) => !message.includes('status of 4'))).toEqual([]);
-});
-
-test('envois conformes @SPEC-206 @visual @mobile', async ({ page, axeCheck }) => {
-  await page.goto('/_dev/sdd/SPEC-206');
-  await expect(page.getByTestId('sdd-title')).toHaveText(TITLE);
-  const ids = await page
-    .locator('main > section[data-testid]')
-    .evaluateAll((elements) => elements.map((element) => element.getAttribute('data-testid')));
-  expect(ids).toEqual(SECTIONS);
-
-  await page.getByRole('button', { name: 'Lancer tous les essais' }).click();
-  for (const [name, expected] of Object.entries(EXPECTED)) {
-    await expect(page.getByTestId(`spec-206-result-${name}`)).toContainText(expected);
-  }
-  await page.getByRole('button', { name: 'Supprimer l’apport' }).click();
-  await expect(page.getByTestId('spec-206-citation-label')).toHaveText('source supprimée');
-
-  // Tokens of the base layout (SPEC-201 §10): page #F4F4F1, white cards, #E7E6E1 border, 24 px.
-  await expectTokens(page, {
-    body: { color: '#111113', 'background-color': '#F4F4F1' },
-    '[data-testid="spec-206-limits"]': {
-      'background-color': '#FFFFFF',
-      'border-top-color': '#E7E6E1',
-      'border-top-left-radius': '21.6px',
-    },
-    '[data-testid="spec-206-cases"]': {
-      'border-top-color': '#E7E6E1',
-      'border-top-left-radius': '21.6px',
-    },
-    '[data-testid="spec-206-deletion"]': { 'border-top-left-radius': '21.6px' },
-    '[data-testid="sdd-title"]': { color: '#111113' },
-  });
-  await expect(page.locator('body')).toHaveCSS('font-family', /Inter/);
-  await expect(page.getByTestId('sdd-title')).toHaveCSS('font-family', /Space[ _]Grotesk/);
-
-  // No horizontal scroll at any width: the table wraps instead of overflowing.
-  const overflow = await page.evaluate(
-    () => document.documentElement.scrollWidth - document.documentElement.clientWidth,
-  );
-  expect(overflow).toBeLessThanOrEqual(0);
-
-  await axeCheck();
-  await expectScreenshotBaseline(page, 'spec-206-demo.png', { fullPage: true });
 });
 
 test('parcourt les routes réelles : envoi, finalisation, lecture, suppression @SPEC-206', async ({

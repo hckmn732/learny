@@ -1,9 +1,8 @@
-// Read-only view of design/references/ for the SPEC-005 demo page.
+// Read-only view of design/references/ (SPEC-005).
 import fs from 'node:fs';
 import path from 'node:path';
 
 import type { ReferenceEntryMeta, ReferenceState } from './reference-types';
-import { findRepoRoot } from './sdd-status';
 
 interface ManifestEntry extends ReferenceEntryMeta {
   source: string;
@@ -79,5 +78,17 @@ export function readReferences(root = findRepoRoot()): ReferencesSnapshot {
     };
   } catch {
     return { ok: false };
+  }
+}
+
+/** Repository root: `SDD_ROOT`, else the first parent that holds `specs/catalog.json`. */
+export function findRepoRoot(start = process.cwd(), env = process.env): string | null {
+  if (env.SDD_ROOT) return path.resolve(env.SDD_ROOT);
+  let dir = path.resolve(start);
+  for (;;) {
+    if (fs.existsSync(path.join(dir, 'specs', 'catalog.json'))) return dir;
+    const parent = path.dirname(dir);
+    if (parent === dir) return null;
+    dir = parent;
   }
 }
