@@ -14,8 +14,8 @@ Deux invariants commandent tout le document :
 
 Fichiers de référence : `docker/compose.coolify.yml` et son inclusion `docker/compose.coolify-py.yml`
 (services `api-py`, `worker-py`, `migrate`),
-`tools/deploy/cutover.mjs` (production de `OWNERSHIP_OVERRIDES`), `apps/worker-py/src/learny_worker/drain.py`
-(contrôle du drain), `docs/operations/coolify.md` § 8 (variables et sondes).
+`tools/deploy/cutover.mjs` (production de `OWNERSHIP_OVERRIDES`), le module `learny_worker.drain` du
+paquet worker Python (contrôle du drain), `docs/operations/coolify.md` § 10 (variables et sondes).
 
 ## 0. Prérequis et notations
 
@@ -174,7 +174,7 @@ En local, sans Docker :
 uv run python -m learny_worker.drain --wait 30 --require-empty --json
 ```
 
-Preuve locale : `apps/worker-py/tests/integration/test_worker_cutover_rollback.py` (4 cas) montre
+Preuve locale : `test_worker_cutover_rollback.py` (4 cas, paquet worker Python) montre
 qu'un événement en attente bloque le drain, qu'un événement réparti sans livraison est signalé
 `orphaned`, et qu'après le drain le rejeu ne mute rien deux fois.
 
