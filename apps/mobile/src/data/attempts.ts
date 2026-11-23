@@ -51,6 +51,9 @@ export function useAttempt(attemptId: string | null): AttemptQuery {
     queryFn: () => requireApiClient().api.getQuizAttempt({ params: { aid: attemptId ?? '' } }),
     enabled: attemptId !== null,
     staleTime: 0,
+    // The attempt is never cached across mounts: reopening the quiz must rebuild the question
+    // machine from the server (CA-4), so the previous mount's copy is dropped at once.
+    gcTime: 0,
     refetchOnMount: 'always',
   });
   return {
