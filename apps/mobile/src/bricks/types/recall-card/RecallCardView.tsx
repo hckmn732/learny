@@ -3,7 +3,7 @@
 //
 // The buttons under the card belong to the parent screen (self-assessment of the global quiz,
 // « À revoir »/« Je savais » of the warm-up): the brick only exposes `actions`.
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Animated, Pressable, StyleSheet, View } from 'react-native';
 
 import { fr } from '@learny/i18n';
@@ -25,6 +25,13 @@ export function RecallCardView({ brick, correction, actions, testID }: NativeBri
   const [revealed, setRevealed] = useState(false);
   const reduceMotion = useReducedMotion();
   const [progress] = useState(() => new Animated.Value(0));
+  const animation = useRef<Animated.CompositeAnimation | null>(null);
+  useEffect(
+    () => () => {
+      animation.current?.stop();
+    },
+    [],
+  );
 
   if (!parsed.ok) return <InvalidCharge type="recall_card" testID={testID} />;
   const payload = parsed.payload;
@@ -33,11 +40,15 @@ export function RecallCardView({ brick, correction, actions, testID }: NativeBri
   function flip(): void {
     const next = !revealed;
     setRevealed(next);
-    Animated.timing(progress, {
+    // Une animation en vol est arrêtée avant d'en démarrer une autre : sans cela, le pilote natif
+    // cherche une vue déjà démontée (« Unable to locate attached view in the native tree »).
+    animation.current?.stop();
+    animation.current = Animated.timing(progress, {
       toValue: next ? 1 : 0,
       duration: transitionDuration(reduceMotion, FLIP_MS),
       useNativeDriver: true,
-    }).start();
+    });
+    animation.current.start();
   }
 
   const frontStyle = {
