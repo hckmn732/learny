@@ -1,12 +1,12 @@
 {
   "lint": {
     "status": "passed",
-    "at": "2026-11-23T00:13:35.687Z",
+    "at": "2026-11-23T00:35:52.548Z",
     "details": ""
   },
   "typecheck": {
     "status": "passed",
-    "at": "2026-11-23T00:14:57.790Z",
+    "at": "2026-11-23T00:35:56.205Z",
     "details": ""
   },
   "unit": {
@@ -20,18 +20,18 @@
     "details": "4 test(s) [SPEC-3101] réussi(s), 0 échec(s)"
   },
   "e2e": {
-    "status": "failed",
-    "at": "2026-11-23T00:10:24.727Z",
-    "details": "0 flux réussi(s), 2 échec(s), 0 vidéo(s)"
+    "status": "passed",
+    "at": "2026-11-23T00:37:47.978Z",
+    "details": "2 flux réussi(s), 0 échec(s), 1 vidéo(s)"
   },
   "visual": {
     "status": "failed",
-    "at": "2026-11-23T00:10:24.727Z",
+    "at": "2026-11-23T00:37:47.978Z",
     "details": "0 flux @visual réussi(s) (mode mockup)"
   },
   "acceptance": {
     "status": "passed",
-    "at": "2026-11-23T00:14:59.040Z",
+    "at": "2026-11-23T00:37:47.988Z",
     "details": "6/6 critères ✅"
   }
 }

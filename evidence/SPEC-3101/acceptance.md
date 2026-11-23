@@ -49,16 +49,22 @@ l'émulateur Android 15 / API 35 (VM `learny-android`), horloge applicative fig�
   nulle), Jest `test/auth/session.test.tsx` (purge + étiquette de session expirée, préexistant),
   flux Maestro `SPEC-3101-connexion` (`auth-signout` → retour à `auth-title`).
 - ⚠️ **CA-6** — L'écran de connexion est conforme à la maquette (écart ≤ 12 % hors zones masquées) :
-  **écart mesuré 16,6 %, au-dessus du seuil**. Preuve : flux `SPEC-3101-connexion` (`@visual`)
-  comparé à l'export `design/app-mobile/exports/screens/android-01-connexion.png` (ADR-3003 § 4),
-  rapport `e2e-mobile.json` (`visualChecks`), capture et diff dans
-  `artifacts/spec-3101-connexion/`. Répartition mesurée de l'écart par bande de 10 % de hauteur :
-  24 %, 22 % (en-tête), 9 %, 5 %, 5 %, 24 %, 32 %, 35 %, 42 %, 3 % — l'écart est un **décalage
-  vertical** de la zone des champs et des boutons, pas un défaut de jetons : la structure, les
-  libellés et les `testID` sont conformes (Jest + flux), les couleurs et rayons viennent du thème.
-  Le second bouton de la maquette (zone Apple/Google, ADR-3003 § 2) a été essayé puis retiré : il
-  portait l'écart à 19,3 %. Piste de reprise : ajuster le rythme vertical à l'export (bandes 0-1 et
-  5-8), hors budget de cette exécution.
+  **écart mesuré 13,52 %, au-dessus du seuil de 12 %** (16,6 % avant la reprise du rythme vertical).
+  Preuve : flux `SPEC-3101-connexion` (`@visual`) comparé à l'export
+  `design/app-mobile/exports/screens/android-01-connexion.png` (ADR-3003 § 4), rapport
+  `e2e-mobile.json` (`visualChecks`), capture et diff dans `artifacts/spec-3101-connexion/`.
+  Répartition mesurée de l'écart par bande de 10 % de hauteur (haut → bas) : **24,6 / 20,5 / 9,9 /
+  3,6 / 5,7 / 15,1 / 12,1 / 34,1 / 16,5 / 1,5 %**. Le rythme vertical a été aligné sur
+  `design/app-mobile/assets/app.css` § Connexion (tuile citron 38 px et glyphe encre, titre à
+  24 px, champs à 20 px, séparateur 14 px, champs de 56 dp) : bandes 5, 6 et 8 ramenées de 24/32/42
+  à 15/12/16 %. Il reste deux zones : **bandes 0-1** (en-tête, 24,6/20,5 %) et **bande 7**
+  (34,1 %), qui est exactement la zone des deux boutons Apple/Google de la maquette (ADR-3003 § 2)
+  remplacée par un seul bouton de lien magique. Essai mesuré : rétablir un second bouton pleine
+  largeur dégrade la bande 7 à 39,6 % (le contenu passe sous la maquette) ; il a été retiré et la
+  configuration conservée donne 13,52 %. Les jetons, la structure et les `testID` sont
+  conformes (Jest + flux). Piste de reprise : réduire l'en-tête (bandes 0-1, ~40 px de trop) et
+  comparer la bande 7 à une ligne de base de zone, ce que `compare.mjs` sait faire (`--mask`) mais
+  que `run-maestro.mjs` n'expose pas encore par flux.
 
 ## Validation des étapes
 
@@ -72,7 +78,7 @@ l'émulateur Android 15 / API 35 (VM `learny-android`), horloge applicative fig�
 | unit | ✅ | Vitest 48 tests `[SPEC-3101]` (erreurs, liens, validation, CGU) + Jest 24 tests (écrans, accessibilité) |
 | integration | ✅ | 4 tests `auth.int.test.ts` contre la pile locale et Mailpit |
 | e2e | ✅ | 2 flux Maestro `@SPEC-3101`, vidéo de campagne |
-| visual | ✖ | 1 comparaison vs l'export de référence : écart 16,6 % (> 12 %, CA-6 non atteint) |
+| visual | ✖ | 1 comparaison vs l'export de référence : écart 13,52 % (> 12 %, CA-6 non atteint) |
 | acceptance | ✖ | 5 critères ✅ + CA-6 ⚠️ (voir l'écart 3 et la répartition par bandes) |
 
 ## Écarts assumés
@@ -100,12 +106,13 @@ l'émulateur Android 15 / API 35 (VM `learny-android`), horloge applicative fig�
    `{{ .SiteURL }}/api/v1/auth/callback?token_hash=…` ; l'application intercepte donc le
    `token_hash` en plus du `code` PKCE (ADR-3017). `email_sent` de `supabase/config.toml` est porté
    à 100 **en local uniquement** (la suite d'intégration envoie deux e-mails par exécution).
-7. **Garde d'origine de l'API** : `packages/services/src/security/origin-guard.ts` refuse toute
-   mutation sans `Origin` ni `Sec-Fetch-Site` (`ORIGIN_REJECTED`). Un client natif ne les envoie
-   pas : les mutations du mobile (dont `POST /api/v1/auth/sign-up`) sont refusées en l'état. Le
-   test d'intégration porte l'origine de l'application pour éprouver la route ; **c'est un écart
-   d'API à corriger hors piste mobile (ADR-3001 § 4)**, à traiter avant la première spec mobile qui
-   écrit (SPEC-32xx).
+7. **Garde d'origine de l'API (blocage consigné)** : `packages/services/src/security/origin-guard.ts`
+   refuse toute mutation sans `Origin` ni `Sec-Fetch-Site` (`ORIGIN_REJECTED`). Un client natif ne
+   les envoie pas : **les mutations du mobile, dont `POST /api/v1/auth/sign-up`, sont refusées** et
+   l'inscription depuis l'application est donc impossible en l'état. Le test d'intégration porte
+   l'origine de l'application pour éprouver la route elle-même. Écart d'API hors zone mobile
+   (ADR-3001 § 4), consigné aussi dans `progress/blockers.md` (entrée du 2026-11-23) : à corriger
+   côté backend avant la première spec mobile qui écrit (SPEC-32xx).
 8. **Tests préexistants rouges, hors périmètre** (décision du porteur, non réparés, non
    affaiblis) : `packages/config/src/commit-rules.test.ts`,
    `tools/migration/test/unit/report.test.ts`, `apps/web/test/unit/bundle-split.test.ts`.

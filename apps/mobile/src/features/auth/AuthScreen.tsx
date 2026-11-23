@@ -205,7 +205,7 @@ export function AuthScreen({ mode }: AuthScreenProps): ReactElement {
         >
           <View style={styles.brand}>
             <View style={styles.brandTile}>
-              <Icon color={theme.colors.lime} name="logo" size={18} />
+              <Icon color={theme.colors.ink} name="logo" size={20} />
             </View>
             <Text variant="sectionTitle">{a.layout.label}</Text>
           </View>
@@ -345,16 +345,18 @@ export function AuthScreen({ mode }: AuthScreenProps): ReactElement {
             </View>
           )}
 
-          <Button
-            block
-            disabled={signup && !termsAccepted}
-            label={submitting ? busyLabel : submitLabel}
-            loading={submitting}
-            onPress={() => {
-              void submit();
-            }}
-            testID="auth-submit"
-          />
+          <View style={styles.submit}>
+            <Button
+              block
+              disabled={signup && !termsAccepted}
+              label={submitting ? busyLabel : submitLabel}
+              loading={submitting}
+              onPress={() => {
+                void submit();
+              }}
+              testID="auth-submit"
+            />
+          </View>
 
           <View style={styles.dividerRow}>
             <View style={styles.dividerLine} />
@@ -376,7 +378,7 @@ export function AuthScreen({ mode }: AuthScreenProps): ReactElement {
           />
 
           {signup ? null : (
-            <Text align="center" tone="muted" variant="caption">
+            <Text align="center" style={styles.legal} tone="muted" variant="caption">
               {`${a.account.termsBefore}${a.account.termsCgu}${a.account.termsAnd}${a.account.termsPrivacy}${a.account.termsAfter}`}
             </Text>
           )}
@@ -408,19 +410,35 @@ const styles = StyleSheet.create({
   brand: { alignItems: 'center', flexDirection: 'row', gap: spacing.md },
   brandTile: {
     alignItems: 'center',
-    backgroundColor: theme.colors.ink,
+    backgroundColor: theme.colors.lime,
     borderRadius: radius.control,
-    height: 32,
+    height: 38,
     justifyContent: 'center',
-    width: 32,
+    width: 38,
   },
-  content: { gap: spacing.xl, paddingHorizontal: spacing.xxl, paddingTop: spacing.xxxl },
+  content: {
+    paddingBottom: spacing.xxl,
+    paddingHorizontal: spacing.xxl,
+    paddingTop: spacing.xs,
+  },
   dividerLine: { backgroundColor: theme.colors.divider, flex: 1, height: 1 },
-  dividerRow: { alignItems: 'center', flexDirection: 'row', gap: spacing.md },
-  fields: { gap: spacing.lg },
+  dividerRow: {
+    alignItems: 'center',
+    flexDirection: 'row',
+    gap: spacing.md,
+    marginVertical: spacing.lg,
+  },
+  legal: { marginTop: spacing.lg },
+  submit: { marginTop: spacing.lg },
+  fields: { gap: spacing.lg, marginTop: spacing.xl },
   flex: { flex: 1 },
-  headings: { gap: spacing.sm },
-  hintRow: { alignItems: 'center', flexDirection: 'row', justifyContent: 'space-between' },
+  headings: { gap: spacing.md, marginTop: spacing.xxl },
+  hintRow: {
+    alignItems: 'center',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginTop: spacing.sm,
+  },
   legalLinks: {
     flexDirection: 'row',
     flexWrap: 'wrap',
@@ -428,5 +446,5 @@ const styles = StyleSheet.create({
     paddingLeft: spacing.xxxl,
   },
   root: { backgroundColor: theme.colors.canvas, flex: 1 },
-  terms: { gap: spacing.sm },
+  terms: { gap: spacing.sm, marginTop: spacing.md },
 });

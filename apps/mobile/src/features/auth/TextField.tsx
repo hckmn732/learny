@@ -9,7 +9,7 @@ import { Pressable, StyleSheet, TextInput, View, type KeyboardTypeOptions } from
 
 import { fr } from '@learny/i18n';
 
-import { radius, spacing, theme, touchTarget } from '../../theme';
+import { controls, radius, spacing, theme } from '../../theme';
 import { Text } from '../../ui/Text';
 
 export interface TextFieldProps {
@@ -129,7 +129,7 @@ const styles = StyleSheet.create({
     borderRadius: radius.control,
     borderWidth: 1,
     flexDirection: 'row',
-    minHeight: touchTarget.height,
+    minHeight: controls.row,
     paddingHorizontal: spacing.lg,
   },
   frameDisabled: { backgroundColor: theme.colors.surfaceSubtle, opacity: 0.7 },
