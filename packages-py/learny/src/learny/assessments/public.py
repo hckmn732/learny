@@ -3,7 +3,12 @@
 Other contexts and the apps import only this module; everything else stays internal.
 """
 
-from learny.assessments.application.bricks import correct_brick, report_brick
+from learny.assessments.application.bricks import (
+    correct_brick,
+    create_brick,
+    get_public_brick,
+    report_brick,
+)
 from learny.assessments.application.exam_attempts import (
     get_exam_attempt,
     get_exam_result,
@@ -54,6 +59,7 @@ __all__ = [
     "complete_remediation",
     "confirm_exam_format",
     "correct_brick",
+    "create_brick",
     "ensure_mock_exam_slots",
     "finalize_attempt",
     "get_attempt",
@@ -61,6 +67,7 @@ __all__ = [
     "get_exam_intro",
     "get_exam_result",
     "get_practice_exercise",
+    "get_public_brick",
     "get_quiz_result",
     "get_remediation",
     "grade_open_answers",

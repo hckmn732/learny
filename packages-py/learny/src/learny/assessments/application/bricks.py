@@ -7,11 +7,17 @@ activity; a correction resolves every open report and makes the brick active aga
 """
 
 import json
+import uuid
 from collections.abc import Mapping
 from typing import Any
 
 from learny.assessments.application.ports import AssessmentDeps
-from learny.assessments.domain.bricks.validate import BrickInvalid, validate_brick
+from learny.assessments.domain.bricks.public_brick import to_public_brick
+from learny.assessments.domain.bricks.validate import (
+    BrickInvalid,
+    parse_brick_payload,
+    validate_brick,
+)
 from learny.assessments.infrastructure import queries
 from learny.assessments.infrastructure.references import DbBrickReferenceResolver
 from learny.identity.domain.actor import Actor
@@ -53,6 +59,95 @@ def _expected_version(body: Mapping[str, Any]) -> int:
             errors=[{"path": "expectedVersion", "message": "Expected a positive integer."}],
         )
     return value
+
+
+def _created_by(value: Any) -> str:
+    """`createdBySchema`: the three origins a brick may declare."""
+    if value in ("tutor", "learner", "import"):
+        return str(value)
+    raise AppError(
+        "VALIDATION_FAILED",
+        texts.BRICK_DATA_INVALID,
+        errors=[{"path": "createdBy", "message": "Invalid enum value."}],
+    )
+
+
+async def create_brick(deps: AssessmentDeps, actor: Actor, draft: Mapping[str, Any]) -> dict[str, Any]:
+    """EF-1 - validates then inserts the brick and its version 1 in one user transaction."""
+    user_id = actor.user_id
+    created_by = _created_by(draft.get("createdBy"))
+    envelope = {
+        "type": draft.get("type"),
+        "formationId": draft.get("formationId"),
+        "purpose": draft.get("purpose"),
+        "notionIds": list(draft.get("notionIds") or []),
+        "origin": draft.get("origin"),
+        "payload": draft.get("payload"),
+    }
+    formation_id = str(envelope["formationId"])
+    async with deps.db.user_tx(actor) as tx:
+        if await queries.read_formation_owner(tx, user_id, formation_id) is None:
+            raise AppError("NOT_FOUND", texts.FORMATION_NOT_FOUND)
+        resolver = DbBrickReferenceResolver(tx, user_id, formation_id)
+        try:
+            valid = await validate_brick(envelope, resolver)
+        except BrickInvalid as error:
+            raise _brick_invalid(error) from error
+        brick_id = await queries.insert_brick(
+            tx,
+            owner_id=user_id,
+            formation_id=formation_id,
+            type_name=str(valid["type"]),
+            notion_ids=list(valid["notionIds"]),
+            purpose=str(valid["purpose"]),
+        )
+        if brick_id is None:
+            raise AppError("INTERNAL_ERROR", texts.BRICK_NOT_CREATED)
+        version_id = await queries.insert_brick_version(
+            tx,
+            brick_id=brick_id,
+            version=1,
+            payload=json.dumps(valid["payload"], ensure_ascii=False),
+            fingerprint=valid["fingerprint"],
+            origin=str(valid["origin"]),
+            created_by=created_by,
+        )
+        if version_id is None:
+            raise AppError("INTERNAL_ERROR", texts.BRICK_VERSION_NOT_CREATED)
+        return {
+            "brickId": brick_id,
+            "versionId": version_id,
+            "version": 1,
+            "fingerprint": valid["fingerprint"],
+        }
+
+
+async def get_public_brick(deps: AssessmentDeps, actor: Actor, version_id: str) -> dict[str, Any]:
+    """EF-6 - the public charge of one owned version, never a stored payload raw."""
+    user_id = actor.user_id
+    try:
+        uuid.UUID(version_id)
+    except (ValueError, AttributeError) as error:
+        raise AppError(
+            "VALIDATION_FAILED",
+            texts.BRICK_DATA_INVALID,
+            errors=[{"path": "versionId", "message": "Invalid uuid"}],
+        ) from error
+    async with deps.db.user_tx(actor) as tx:
+        row = await queries.read_public_brick(tx, user_id=user_id, version_id=version_id)
+        if row is None:
+            raise AppError("NOT_FOUND", texts.BRICK_VERSION_NOT_FOUND)
+        try:
+            payload = parse_brick_payload(str(row["type"]), row["payload"])
+        except BrickInvalid as error:
+            raise AppError("INTERNAL_ERROR", texts.BRICK_STORED_PAYLOAD_INVALID) from error
+        return to_public_brick(
+            brick_id=str(row["brick_id"]),
+            version_id=str(row["version_id"]),
+            type_name=str(row["type"]),
+            notion_ids=list(row["notion_ids"] or []),
+            payload=payload,
+        )
 
 
 async def correct_brick(
@@ -171,4 +266,4 @@ def _reason(body: Mapping[str, Any]) -> str:
     return reason
 
 
-__all__ = ["correct_brick", "report_brick"]
+__all__ = ["correct_brick", "create_brick", "get_public_brick", "report_brick"]
