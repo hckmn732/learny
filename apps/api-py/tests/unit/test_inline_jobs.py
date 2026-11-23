@@ -20,7 +20,7 @@ SCOPE: Scope = {"type": "http", "method": "POST", "path": "/api/v1/chapters/x/co
 
 class Journal:
     def __init__(self) -> None:
-        self.entries: list[tuple[str, Any]] = []
+        self.entries: list[tuple[Any, ...]] = []
 
     async def dispatch_events(self, event_ids: list[str]) -> int:
         self.entries.append(("dispatch", list(event_ids)))
