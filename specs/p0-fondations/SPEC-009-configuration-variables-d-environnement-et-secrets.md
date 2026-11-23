@@ -125,4 +125,4 @@ Décisions prises pendant l'implémentation (aucune sollicitation de l'utilisate
 
 - **2026-11-23, ADR-2037** — SPEC-709 : la plateforme ne fournit plus de modèle d'IA, `ANTHROPIC_API_KEY` n'est plus exigée en production (ET-3) ni attendue par la démonstration.
 - **2026-11-23, ADR-2037** — SPEC-1203 : le web ne valide que sa configuration publique (`parsePublicEnv`). CA-2 (refus d'un démarrage de production incomplet) est une responsabilité de l'API ; le test e2e de démarrage du web est retiré.
-- **2026-11-23, ADR-2038** — CA-2 est porté côté API Python : `learny.shared.config.ensure_production_configuration` refuse un démarrage de production incomplet (variables fournies par le compose Python, modes simulés, HTTPS) au démarrage de la façade et du worker, sans jamais révéler de valeur.
+- **2026-11-23, ADR-2040** — CA-2 est porté côté API Python : `learny.shared.config.ensure_production_configuration` refuse un démarrage de production incomplet (variables fournies par le compose Python, modes simulés, HTTPS) au démarrage de la façade et du worker, sans jamais révéler de valeur.

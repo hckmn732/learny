@@ -1,4 +1,4 @@
-"""[SPEC-009] Production environment is refused when incomplete (CA-2, ADR-2038)."""
+"""[SPEC-009] Production environment is refused when incomplete (CA-2, ADR-2040)."""
 
 import pytest
 from learny.shared.config import (

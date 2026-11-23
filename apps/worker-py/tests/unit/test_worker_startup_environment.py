@@ -1,4 +1,4 @@
-"""[SPEC-009] The worker refuses an incomplete production start (CA-2, ADR-2038)."""
+"""[SPEC-009] The worker refuses an incomplete production start (CA-2, ADR-2040)."""
 
 import pytest
 from learny.shared.config import PRODUCTION_REQUIRED_ENV, ConfigurationError

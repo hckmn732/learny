@@ -1,4 +1,4 @@
-# ADR-2038 — Démarrage de production refusé par l'API et le worker Python quand l'environnement est incomplet
+# ADR-2040 — Démarrage de production refusé par l'API et le worker Python quand l'environnement est incomplet
 
 - **Statut** : Acceptée
 - **Origine** : Déduite (pendant l'implémentation, sans sollicitation de l'utilisateur)
