@@ -3,14 +3,25 @@
 // Every entry point that is out of the mobile scope opens the corresponding web page in the
 // in-app browser (`expo-web-browser`), with the label « Continuer sur le web ». The base URL is
 // `EXPO_PUBLIC_WEB_URL`, validated at start-up with the other public variables (SPEC-3001 ET-5).
-import * as WebBrowser from 'expo-web-browser';
-
+//
+// The browser itself is injected (`src/lib/web-browser.ts` installs it at start-up): this module
+// stays free of any native import and its functions run unchanged in Node (Vitest).
 import { fr } from '@learny/i18n';
 
 import { configResult } from '../config';
 
 /** Label of every web hand-off (ADR-3002 § 3). */
 export const WEB_CONTINUE_LABEL: string = fr.mobile.shell.web.continue;
+
+/** Opens a URL in the in-app browser; installed once by `web-browser.ts`. */
+export type BrowserOpener = (url: string) => Promise<unknown>;
+
+let installedOpener: BrowserOpener | null = null;
+
+/** Installs the opener of the process (`null` removes it, for a test). */
+export function setWebOpener(opener: BrowserOpener | null): void {
+  installedOpener = opener;
+}
 
 /** Base of the web application, without a trailing slash; empty when the configuration is invalid. */
 export function webBaseUrl(): string {
@@ -26,16 +37,14 @@ export function webUrl(path: string, baseUrl: string): string {
   return `${baseUrl.replace(/\/+$/, '')}${path}`;
 }
 
-/** Opens `path` in the browser sheet; the injected opener keeps the unit tests free of native code. */
-export type BrowserOpener = (url: string) => Promise<unknown>;
-
+/** Opens `path` of the web application and answers the URL that was opened. */
 export async function openOnWeb(
   path: string,
   options: { readonly baseUrl?: string; readonly open?: BrowserOpener } = {},
 ): Promise<string> {
-  const baseUrl = options.baseUrl ?? webBaseUrl();
-  const url = webUrl(path, baseUrl);
-  const open = options.open ?? ((target: string) => WebBrowser.openBrowserAsync(target));
+  const url = webUrl(path, options.baseUrl ?? webBaseUrl());
+  const open = options.open ?? installedOpener;
+  if (open === null) throw new Error('Aucun navigateur installé : importer src/lib/web-browser.');
   await open(url);
   return url;
 }

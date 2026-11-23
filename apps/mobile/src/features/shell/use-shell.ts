@@ -31,7 +31,11 @@ export function useHeader(): HeaderQuery {
   const query = useQuery({
     queryKey: queryKeys.header(),
     queryFn: () => requireApiClient().api.headerGet({}),
-    retry: 1,
+    // A cold start can race the publication of the session token: the header retries instead of
+    // leaving the bell and the pastille empty for the whole session (CA-2).
+    retry: 3,
+    retryDelay: 1_000,
+    refetchOnMount: 'always',
   });
   return {
     status: statusOf(query),
@@ -60,9 +64,12 @@ export function useUnreadCount(
   const query = useQuery({
     queryKey: queryKeys.unreadCount(),
     queryFn: () => requireApiClient().api.notificationsUnreadCount({}),
-    refetchInterval: active ? UNREAD_POLL_MS : false,
+    // While the count is unknown (first start, failed request) the pastille is retried every
+    // three seconds; once known, the rule of ET-2 applies (60 s, only when visible).
+    refetchInterval: (query) =>
+      query.state.data === undefined ? 3_000 : active ? UNREAD_POLL_MS : false,
     refetchIntervalInBackground: false,
-    retry: 1,
+    retry: 2,
   });
   const count = Math.max(0, query.data?.count ?? options.initialCount ?? 0);
   return {

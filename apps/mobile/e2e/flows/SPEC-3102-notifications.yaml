@@ -1,0 +1,73 @@
+# SPEC-3102 — centre de notifications : ouverture, lecture, destination, tout lire (CA-2).
+#
+# Le flux n'est pas `@visual` : l'unique capture de la spécification est celle du flux de
+# navigation (ADR-3015 § 5). La ligne touchée est « Une séance à replacer », dont la table des
+# destinations d'ET-3 ouvre l'onglet Aujourd'hui : le flux vérifie ainsi le marquage lu, l'écran
+# prévu et la pastille, sans quitter l'application.
+appId: fr.learny.app
+name: SPEC-3102 notifications
+tags:
+  - SPEC-3102
+---
+- launchApp:
+    clearState: true
+- extendedWaitUntil:
+    visible:
+      id: sdd-health
+    timeout: 30000
+- openLink: learny://connexion?demo=1
+- extendedWaitUntil:
+    visible:
+      id: tab-aujourdhui
+    timeout: 60000
+# CA-2 — la cloche annonce les non lues et ouvre le centre.
+- extendedWaitUntil:
+    visible:
+      id: header-bell
+    timeout: 45000
+- tapOn:
+    id: header-bell
+- extendedWaitUntil:
+    visible:
+      id: notifications-sheet
+    timeout: 30000
+- assertVisible:
+    id: notifications-sheet-title
+- assertVisible:
+    id: notifications-read-all
+- assertVisible:
+    id: notifications-filter
+# BR-NOT-01 — les groupes « Aujourd'hui », « Hier », « Plus tôt ».
+- assertVisible:
+    id: notifications-group-today
+# CA-2 — ouvrir une notification la marque lue et ouvre l'écran de la table.
+
+- tapOn:
+    text: 'Une s.*ance.*replacer'
+- extendedWaitUntil:
+    visible:
+      id: today-screen
+    timeout: 30000
+# CA-2 — « Tout marquer comme lu » vide la pastille.
+- tapOn:
+    id: header-bell
+- extendedWaitUntil:
+    visible:
+      id: notifications-read-all
+    timeout: 30000
+- tapOn:
+    id: notifications-read-all
+- extendedWaitUntil:
+    visible:
+      id: notifications-sheet-subtitle
+    timeout: 30000
+- assertVisible:
+    text: 'Tout est lu'
+- tapOn:
+    id: notifications-sheet-close
+- extendedWaitUntil:
+    visible:
+      id: today-screen
+    timeout: 20000
+- assertVisible:
+    id: header-bell

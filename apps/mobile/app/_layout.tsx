@@ -21,6 +21,8 @@ import spaceGroteskMedium from '../assets/fonts/SpaceGrotesk-Medium.ttf';
 import spaceGroteskSemiBold from '../assets/fonts/SpaceGrotesk-SemiBold.ttf';
 // Installs the API client of the process before any screen renders (SPEC-3003 EF-2).
 import '../src/api/instance';
+// Installs the browser of the web hand-offs before any screen renders (SPEC-3102 EF-5).
+import '../src/lib/web-browser';
 import { SessionProvider } from '../src/auth/session';
 import { supabaseSessionPort } from '../src/auth/session-port';
 import { configResult } from '../src/config';

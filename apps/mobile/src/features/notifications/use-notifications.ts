@@ -36,9 +36,17 @@ export function useNotifications(filter: NotificationFilter): NotificationsQuery
   };
 }
 
-/** Republishes the unread count of a read answer and refreshes the pages (CA-2). */
+/**
+ * Republishes the unread count of a read answer (CA-2): the pastille of the header and the
+ * sub-title of the sheet read it immediately, the pages are refreshed from the server.
+ */
 function publish(client: QueryClient, unreadCount: number): void {
   client.setQueryData(queryKeys.unreadCount(), { count: unreadCount });
+  client.setQueryData(
+    queryKeys.header(),
+    (current: { unreadNotificationCount?: number } | undefined) =>
+      current === undefined ? undefined : { ...current, unreadNotificationCount: unreadCount },
+  );
   void client.invalidateQueries({ queryKey: ['notifications', 'list'] });
 }
 
