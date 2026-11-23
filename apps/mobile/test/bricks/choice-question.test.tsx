@@ -1,9 +1,11 @@
 // Jest + RNTL [SPEC-3301] — the choice question (EF-2, CA-3, BR-MEM-10).
 import { fireEvent, render, screen } from '@testing-library/react-native';
+import { StyleSheet, type ViewStyle } from 'react-native';
 
 import { BrickView } from '../../src/bricks';
 import { parsePublicPayload } from '../../src/bricks/public-schemas';
 import { showcaseFor } from '../../src/bricks/showcase';
+import { theme } from '../../src/theme';
 import { expectAccessible } from '../utils/expectAccessible';
 
 const entry = showcaseFor('choice_question');
@@ -37,6 +39,17 @@ describe('[SPEC-3301] question à choix', () => {
     expectAccessible(screen, 'brick-option-0', { role: 'radio' });
     await fireEvent.press(screen.getByTestId('brick-option-0'));
     expect(onResponse).toHaveBeenCalledWith({ optionIds: [charge().options[0]?.id] });
+  });
+
+  it('[SPEC-3301] les options portent le rayon 20 et la hauteur de rangée de la maquette (§ 10)', async () => {
+    await render(<BrickView brick={entry.brick} mode="play" />);
+    const style = StyleSheet.flatten(
+      screen.getByTestId('brick-option-0').props.style as never,
+    ) as ViewStyle;
+    expect(theme.radius.option).toBe(20);
+    expect(style.borderRadius).toBe(theme.radius.option);
+    expect(style.minHeight).toBe(theme.controls.row);
+    expect(style.minHeight).toBeGreaterThanOrEqual(56);
   });
 
   it('[SPEC-3301] en lecture une option ne répond pas (EF-1)', async () => {

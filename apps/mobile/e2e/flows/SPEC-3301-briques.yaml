@@ -1,10 +1,10 @@
 # SPEC-3301 — galerie de revue des treize briques et parcours des jeux (CA-4, CA-5).
 #
-# La galerie est ouverte par son lien profond, sans défilement au premier écran : la capture
-# `takeScreenshot: SPEC-3301-briques` montre la question à choix non répondue, comparée à la ligne
-# de base versionnée `e2e/visual/baselines/SPEC-3301-briques.png`. Les trois autres captures
-# (question corrigée, carte de rappel révélée, association jouée) documentent les états de
-# `brickExamples` demandés par le § 10 ; un seul flux `@visual` par spécification (leçon 6 du
+# La galerie est ouverte par son lien profond : la première capture
+# (`takeScreenshot: SPEC-3301-briques`) montre la question à choix non répondue en mode lecture et
+# est comparée à la ligne de base versionnée `e2e/visual/baselines/SPEC-3301-briques.png`. Les
+# autres captures (question corrigée, carte de rappel recto et verso, association jouée)
+# documentent les états demandés par le § 10 : un seul flux `@visual` par spécification (leçon 6 du
 # BRIEF), donc une seule comparaison automatique.
 appId: fr.learny.app
 name: SPEC-3301 briques
@@ -31,11 +31,21 @@ tags:
 # Question à choix corrigée (EF-2) : le sélecteur de mode est en haut de la galerie.
 - tapOn:
     id: bricks-mode-corrected
+- swipe:
+    direction: UP
+    duration: 400
 - assertVisible:
     id: brick-feedback
 - takeScreenshot: SPEC-3301-corrige
+# Retour en haut, puis mode jeu : les jeux ne répondent qu'en mode jeu (EF-1).
+- swipe:
+    direction: DOWN
+    duration: 400
+- swipe:
+    direction: DOWN
+    duration: 400
 - tapOn:
-    id: bricks-mode-read
+    id: bricks-mode-play
 # Carte de rappel : recto puis verso (EF-6).
 - swipe:
     direction: UP

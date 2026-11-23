@@ -23,7 +23,8 @@ describe('[SPEC-3301] registre natif des briques', () => {
     expect([...NATIVE_BRICK_TYPES, ...WEB_ONLY_BRICK_TYPES].sort()).toEqual(
       [...BRICK_TYPES].sort(),
     );
-    expect(NATIVE_BRICK_TYPES.filter((type) => WEB_ONLY_BRICK_TYPES.includes(type))).toEqual([]);
+    const webOnly: readonly string[] = WEB_ONLY_BRICK_TYPES;
+    expect(NATIVE_BRICK_TYPES.filter((type) => webOnly.includes(type))).toEqual([]);
   });
 
   it('[SPEC-3301] annonce le rendu de chaque type, sans contradiction (ET-1)', () => {
