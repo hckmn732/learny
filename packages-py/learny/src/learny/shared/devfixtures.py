@@ -269,8 +269,15 @@ async def create_course(
     )
 
 
-async def create_group(conn: Any, *, formation_id: str, owner_id: str, invite_code: str) -> str:
-    """Creates the group and binds it to the formation: `is_formation_member` reads that link."""
+async def create_group(
+    conn: Any,
+    *,
+    formation_id: str,
+    owner_id: str,
+    invite_code: str,
+    joined_at: str | None = None,
+) -> str:
+    """Creates the group, its owner membership and the formation link (SPEC-111 EF-1)."""
     group_id = await identifier(
         conn,
         """
@@ -281,6 +288,16 @@ async def create_group(conn: Any, *, formation_id: str, owner_id: str, invite_co
         formation=formation_id,
         owner=owner_id,
         code=invite_code,
+    )
+    await conn.execute(
+        text(
+            """
+            insert into public.group_members (group_id, user_id, role, member_status, joined_at)
+            values (cast(:group as uuid), cast(:owner as uuid), 'owner', 'active',
+                    coalesce(cast(:joined as timestamptz), now()))
+            """
+        ),
+        {"group": group_id, "owner": owner_id, "joined": joined_at},
     )
     await conn.execute(
         text(

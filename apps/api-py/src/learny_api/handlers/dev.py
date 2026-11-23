@@ -270,3 +270,28 @@ async def dev_spec_106_demo(call: Call) -> dict[str, Any]:
 @handler("dev.sdd.spec-107.demo")
 async def dev_spec_107_demo(call: Call) -> dict[str, Any]:
     return await sdd_records.spec_107(call)
+
+
+@handler("dev.sdd.spec-108.demo")
+async def dev_spec_108_demo(call: Call) -> dict[str, Any]:
+    return await sdd_records.spec_108(call)
+
+
+@handler("dev.sdd.spec-111.demo")
+async def dev_spec_111_demo(call: Call) -> dict[str, Any]:
+    return await sdd_records.spec_111(call)
+
+
+@handler("dev.sdd.spec-112.demo")
+async def dev_spec_112_demo(call: Call) -> dict[str, Any]:
+    return await sdd_records.spec_112(call)
+
+
+@handler("dev.sdd.spec-113.demo")
+async def dev_spec_113_demo(call: Call) -> dict[str, Any]:
+    return await sdd_records.spec_113(call)
+
+
+@handler("dev.sdd.spec-115.demo")
+async def dev_spec_115_demo(call: Call) -> dict[str, Any]:
+    return await sdd_records.spec_115(call)

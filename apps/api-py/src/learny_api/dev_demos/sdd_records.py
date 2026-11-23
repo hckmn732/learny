@@ -6,7 +6,10 @@ measures it and answers the shape of the TypeScript loader. The French texts liv
 `locale_fr/dev_sdd_fixtures.py`.
 """
 
+import hashlib
 import json
+import unicodedata
+import uuid
 from typing import Any
 
 from learny.assessments.domain.bricks.types import BRICK_TYPES
@@ -16,18 +19,22 @@ from learny.shared.devfixtures import (
     apply_review,
     create_activity,
     create_attempt,
+    create_course,
+    create_group,
     create_notion_state,
     create_programme,
     create_user,
     detect_gap,
     get_due_notion_states,
     get_review_history,
+    join_group,
     json_value,
     record_answer,
 )
 from learny.shared.locale_fr import dev_sdd_fixtures as fixture
 from learny.shared.time import to_iso
 from sqlalchemy import text
+from sqlalchemy.exc import DBAPIError
 
 from learny_api.dev_demos.guard import require_dev
 from learny_api.dev_demos.support import demo_email, probe, raised_code, rolled_back
@@ -1519,4 +1526,1478 @@ async def spec_107(call: Call) -> dict[str, Any]:
             "foreignStates": 0 if foreign_count is None else int(foreign_count["count"]),
             "foreignVisible": 1 if any(str(row["notion_id"]) == foreign_notion for row in due) else 0,
         },
+    }
+
+
+# --- SPEC-108 -----------------------------------------------------------------------------------
+
+INSERT_108_SLOT = text(
+    """
+    insert into public.schedule_slots (
+      user_id, formation_id, module_id, kind, title, starts_at, ends_at, created_by,
+      group_milestone
+    )
+    values (
+      cast(:user as uuid), cast(:formation as uuid), cast(:module as uuid),
+      cast(:kind as public.slot_kind), :title, cast(:starts as timestamptz),
+      cast(:ends as timestamptz), cast(:created_by as public.slot_creator), false
+    )
+    returning id::text as id
+    """
+)
+SELECT_108_SLOT_LOCKED = text(
+    """
+    select id::text as id, formation_id::text as formation_id, module_id::text as module_id,
+           kind::text as kind, title, meta, starts_at, ends_at, status::text as status,
+           activity_id::text as activity_id, created_by::text as created_by,
+           moved_from_id::text as moved_from_id, group_milestone
+    from public.schedule_slots
+    where id = cast(:slot as uuid) and user_id = cast(:user as uuid)
+    for update
+    """
+)
+UPDATE_108_SLOT_STATUS = text(
+    "update public.schedule_slots set status = cast(:status as public.slot_status) "
+    "where id = cast(:slot as uuid) and user_id = cast(:user as uuid) "
+    "returning id::text as id"
+)
+INSERT_108_SUCCESSOR = text(
+    """
+    insert into public.schedule_slots (
+      user_id, formation_id, module_id, kind, title, meta, starts_at, ends_at, status,
+      activity_id, created_by, moved_from_id, group_milestone
+    )
+    values (
+      cast(:user as uuid), cast(:formation as uuid), cast(:module as uuid),
+      cast(:kind as public.slot_kind), :title, :meta, cast(:starts as timestamptz),
+      cast(:ends as timestamptz), 'planned', cast(:activity as uuid),
+      cast(:created_by as public.slot_creator), cast(:origin as uuid), :group_milestone
+    )
+    returning id::text as id
+    """
+)
+SELECT_108_SLOTS = text(
+    """
+    select id::text as id, title, kind::text as kind, status::text as status,
+           created_by::text as created_by, starts_at, ends_at, moved_from_id::text as moved_from_id
+    from public.schedule_slots
+    where user_id = cast(:user as uuid)
+      and starts_at < cast(:to as timestamptz) and ends_at > cast(:from as timestamptz)
+    order by starts_at, id
+    """
+)
+SELECT_108_DAILY = text(
+    "select day::text as day, minutes, qualifying, sources from public.daily_activity "
+    "where user_id = cast(:user as uuid) and day = cast(:day as date)"
+)
+INSERT_108_DAILY = text(
+    """
+    insert into public.daily_activity (user_id, day, minutes, qualifying, sources)
+    values (cast(:user as uuid), cast(:day as date), :minutes, :qualifying,
+            cast(:sources as text[]))
+    """
+)
+UPDATE_108_DAILY = text(
+    """
+    update public.daily_activity set minutes = :minutes, qualifying = :qualifying,
+           sources = cast(:sources as text[])
+    where user_id = cast(:user as uuid) and day = cast(:day as date)
+    """
+)
+INSERT_108_MILESTONE = text(
+    """
+    insert into public.milestones (user_id, formation_id, key, ref_id, achieved_at)
+    values (cast(:user as uuid), cast(:formation as uuid),
+            cast(:key as public.milestone_key), cast(:ref as uuid),
+            cast(:achieved_at as timestamptz))
+    on conflict (user_id, key, ref_id) do nothing
+    """
+)
+SELECT_108_MILESTONES = text(
+    """
+    select key::text as key, ref_id::text as ref_id, achieved_at
+    from public.milestones
+    where user_id = cast(:user as uuid)
+    order by achieved_at desc, id desc
+    limit 20
+    """
+)
+INSERT_108_ACTION = text(
+    """
+    insert into public.automation_actions (
+      user_id, formation_id, automation, kind, summary, payload, undo_payload,
+      requires_consent, status, created_at
+    )
+    values (
+      cast(:user as uuid), cast(:formation as uuid),
+      cast(:automation as public.automation_key), :kind, :summary, cast(:payload as jsonb),
+      cast(:undo_payload as jsonb), :requires_consent, 'pending_consent',
+      cast(:created_at as timestamptz)
+    )
+    """
+)
+SELECT_108_ACTIONS = text(
+    """
+    select automation::text as automation, kind, summary, status::text as status,
+           requires_consent, created_at, payload
+    from public.automation_actions
+    where user_id = cast(:user as uuid)
+    order by created_at desc, id desc
+    limit 5
+    """
+)
+
+
+async def _create_slot_108(
+    conn: Any,
+    *,
+    user_id: str,
+    formation_id: str,
+    module_id: str,
+    kind: str,
+    title: str,
+    starts_at: str,
+    ends_at: str,
+    created_by: str,
+) -> str:
+    row = (
+        (
+            await conn.execute(
+                INSERT_108_SLOT,
+                {
+                    "user": user_id,
+                    "formation": formation_id,
+                    "module": module_id,
+                    "kind": kind,
+                    "title": title,
+                    "starts": starts_at,
+                    "ends": ends_at,
+                    "created_by": created_by,
+                },
+            )
+        )
+        .mappings()
+        .first()
+    )
+    if row is None:
+        raise LookupError("schedule slot not created")
+    return str(row["id"])
+
+
+async def _move_slot_108(conn: Any, *, user_id: str, slot_id: str, starts_at: str, ends_at: str) -> str:
+    origin = (
+        (await conn.execute(SELECT_108_SLOT_LOCKED, {"slot": slot_id, "user": user_id})).mappings().first()
+    )
+    if origin is None:
+        raise LookupError("schedule slot not found")
+    await conn.execute(UPDATE_108_SLOT_STATUS, {"slot": slot_id, "user": user_id, "status": "moved"})
+    row = (
+        (
+            await conn.execute(
+                INSERT_108_SUCCESSOR,
+                {
+                    "user": user_id,
+                    "formation": origin["formation_id"],
+                    "module": origin["module_id"],
+                    "kind": origin["kind"],
+                    "title": origin["title"],
+                    "meta": origin["meta"],
+                    "starts": starts_at,
+                    "ends": ends_at,
+                    "activity": origin["activity_id"],
+                    "created_by": "learner",
+                    "origin": slot_id,
+                    "group_milestone": origin["group_milestone"],
+                },
+            )
+        )
+        .mappings()
+        .first()
+    )
+    if row is None:
+        raise LookupError("moved schedule slot not created")
+    return str(row["id"])
+
+
+async def _set_slot_status_108(conn: Any, *, user_id: str, slot_id: str, status: str) -> None:
+    await conn.execute(UPDATE_108_SLOT_STATUS, {"slot": slot_id, "user": user_id, "status": status})
+
+
+async def _upsert_daily_108(
+    conn: Any,
+    *,
+    user_id: str,
+    day: str,
+    minutes: int,
+    qualifying: bool,
+    sources: list[str],
+) -> None:
+    """The upsert of `upsertDailyActivity`: a replay of known sources adds nothing (CL-5)."""
+    existing = (await conn.execute(SELECT_108_DAILY, {"user": user_id, "day": day})).mappings().first()
+    if existing is None:
+        await conn.execute(
+            INSERT_108_DAILY,
+            {
+                "user": user_id,
+                "day": day,
+                "minutes": minutes,
+                "qualifying": qualifying,
+                "sources": sources,
+            },
+        )
+        return
+    current_sources = list(existing["sources"])
+    replay = bool(sources) and all(source in current_sources for source in sources)
+    merged = sorted(set(current_sources) | set(sources))
+    await conn.execute(
+        UPDATE_108_DAILY,
+        {
+            "user": user_id,
+            "day": day,
+            "minutes": int(existing["minutes"]) + (0 if replay else minutes),
+            "qualifying": bool(existing["qualifying"]) or (not replay and qualifying),
+            "sources": merged,
+        },
+    )
+
+
+async def _record_milestone_108(
+    conn: Any, *, user_id: str, formation_id: str, key: str, ref_id: str | None, achieved_at: str
+) -> None:
+    await conn.execute(
+        INSERT_108_MILESTONE,
+        {
+            "user": user_id,
+            "formation": formation_id,
+            "key": key,
+            "ref": ref_id,
+            "achieved_at": achieved_at,
+        },
+    )
+
+
+async def spec_108(call: Call) -> dict[str, Any]:
+    """`devSddSpec108Demo`: five slots, a consent action, the daily activity and two milestones."""
+    require_dev(call.deps)
+    async with rolled_back(call.deps) as tx:
+        conn = tx.conn
+        user = await create_user(
+            conn, email=demo_email(call.deps.clock.now(), "spec-108-demo"), first_name="Alex"
+        )
+        programme = await create_programme(
+            conn, user.id, modules=1, chapters_per_module=1, notions_per_chapter=1
+        )
+        module_id = programme.module_ids[0]
+
+        origin_id = await _create_slot_108(
+            conn,
+            user_id=user.id,
+            formation_id=programme.formation_id,
+            module_id=module_id,
+            kind="course",
+            title=fixture.SPEC108_ORIGIN_TITLE,
+            starts_at="2026-11-11T17:00:00Z",
+            ends_at="2026-11-11T18:00:00Z",
+            created_by="planner",
+        )
+        successor_id = await _move_slot_108(
+            conn,
+            user_id=user.id,
+            slot_id=origin_id,
+            starts_at="2026-11-12T17:00:00Z",
+            ends_at="2026-11-12T18:00:00Z",
+        )
+        done_id = await _create_slot_108(
+            conn,
+            user_id=user.id,
+            formation_id=programme.formation_id,
+            module_id=module_id,
+            kind="validation_quiz",
+            title=fixture.SPEC108_DONE_TITLE,
+            starts_at="2026-11-10T17:00:00Z",
+            ends_at="2026-11-10T17:30:00Z",
+            created_by="planner",
+        )
+        await _set_slot_status_108(conn, user_id=user.id, slot_id=done_id, status="done")
+        missed_id = await _create_slot_108(
+            conn,
+            user_id=user.id,
+            formation_id=programme.formation_id,
+            module_id=module_id,
+            kind="exercise",
+            title=fixture.SPEC108_MISSED_TITLE,
+            starts_at="2026-11-09T17:00:00Z",
+            ends_at="2026-11-09T17:30:00Z",
+            created_by="planner",
+        )
+        await _set_slot_status_108(conn, user_id=user.id, slot_id=missed_id, status="missed")
+        cancelled_id = await _create_slot_108(
+            conn,
+            user_id=user.id,
+            formation_id=programme.formation_id,
+            module_id=module_id,
+            kind="revision",
+            title=fixture.SPEC108_CANCELLED_TITLE,
+            starts_at="2026-11-08T18:00:00Z",
+            ends_at="2026-11-08T18:30:00Z",
+            created_by="planner",
+        )
+        await _set_slot_status_108(conn, user_id=user.id, slot_id=cancelled_id, status="cancelled")
+
+        await _upsert_daily_108(
+            conn,
+            user_id=user.id,
+            day="2026-11-11",
+            minutes=30,
+            qualifying=True,
+            sources=["attempt:1"],
+        )
+        await _upsert_daily_108(
+            conn,
+            user_id=user.id,
+            day="2026-11-11",
+            minutes=15,
+            qualifying=True,
+            sources=["slot:2"],
+        )
+        await _record_milestone_108(
+            conn,
+            user_id=user.id,
+            formation_id=programme.formation_id,
+            key="module_validated",
+            ref_id=module_id,
+            achieved_at="2026-11-09T17:31:00Z",
+        )
+        await _record_milestone_108(
+            conn,
+            user_id=user.id,
+            formation_id=programme.formation_id,
+            key="streak_30",
+            ref_id=None,
+            achieved_at="2026-11-10T07:00:00Z",
+        )
+        await conn.execute(
+            INSERT_108_ACTION,
+            {
+                "user": user.id,
+                "formation": programme.formation_id,
+                "automation": "reprise",
+                "kind": "slot_rescheduled",
+                "summary": fixture.SPEC108_ACTION_SUMMARY,
+                "payload": json.dumps(
+                    {
+                        "slotId": successor_id,
+                        "from": "2026-11-11T17:00:00.000Z",
+                        "to": "2026-11-12T17:00:00.000Z",
+                    },
+                    ensure_ascii=False,
+                ),
+                "undo_payload": json.dumps({"slotId": successor_id}),
+                "requires_consent": True,
+                "created_at": FIXED,
+            },
+        )
+
+        slot_rows = (
+            (
+                await conn.execute(
+                    SELECT_108_SLOTS,
+                    {
+                        "user": user.id,
+                        "from": "2026-11-08T00:00:00Z",
+                        "to": "2026-11-14T00:00:00Z",
+                    },
+                )
+            )
+            .mappings()
+            .all()
+        )
+        daily_row = (
+            (await conn.execute(SELECT_108_DAILY, {"user": user.id, "day": "2026-11-11"})).mappings().first()
+        )
+        action_row = (await conn.execute(SELECT_108_ACTIONS, {"user": user.id})).mappings().first()
+        milestone_rows = (await conn.execute(SELECT_108_MILESTONES, {"user": user.id})).mappings().all()
+
+    starts_by_id = {str(row["id"]): to_iso(row["starts_at"]) for row in slot_rows}
+    if action_row is None:
+        raise LookupError("demonstration action missing")
+    return {
+        "slots": [
+            {
+                "id": str(row["id"]),
+                "title": str(row["title"]),
+                "kind": str(row["kind"]),
+                "status": str(row["status"]),
+                "createdBy": str(row["created_by"]),
+                "startsAt": to_iso(row["starts_at"]),
+                "endsAt": to_iso(row["ends_at"]),
+                "movedFromStartsAt": None
+                if row["moved_from_id"] is None
+                else starts_by_id.get(str(row["moved_from_id"])),
+            }
+            for row in slot_rows
+        ],
+        "action": {
+            "automation": str(action_row["automation"]),
+            "kind": str(action_row["kind"]),
+            "summary": str(action_row["summary"]),
+            "status": str(action_row["status"]),
+            "requiresConsent": action_row["requires_consent"] is True,
+            "createdAt": to_iso(action_row["created_at"]),
+            "payload": json_value(action_row["payload"]),
+        },
+        "daily": None
+        if daily_row is None
+        else {
+            "day": str(daily_row["day"]),
+            "minutes": int(daily_row["minutes"]),
+            "qualifying": daily_row["qualifying"] is True,
+            "sources": list(daily_row["sources"]),
+        },
+        "milestones": [
+            {
+                "key": str(row["key"]),
+                "refId": None if row["ref_id"] is None else str(row["ref_id"]),
+                "achievedAt": to_iso(row["achieved_at"]),
+            }
+            for row in milestone_rows
+        ],
+    }
+
+
+# --- SPEC-111 -----------------------------------------------------------------------------------
+
+SELECT_111_GROUP = text(
+    "select id::text as id, invite_code, max_members from public.groups where id = cast(:group as uuid)"
+)
+SELECT_111_PROGRESS = text(
+    """
+    select group_id::text as group_id, user_id::text as user_id, first_name,
+           current_module_position, validated_modules, streak_days
+    from public.group_member_progress
+    where group_id = cast(:group as uuid)
+    order by first_name nulls last, user_id
+    """
+)
+COUNT_111_ACTIVE = text("select public.count_active_formations(cast(:user as uuid)) as count")
+INSERT_111_MODULE_PROGRESS = text(
+    """
+    insert into public.module_progress (user_id, module_id, status, validated_at)
+    values (cast(:user as uuid), cast(:module as uuid),
+            cast(:status as public.module_status), cast(:validated_at as timestamptz))
+    """
+)
+UPDATE_111_STREAK = text("update public.profiles set streak_days = :streak where id = cast(:user as uuid)")
+SET_CLAIMS = text(
+    "select set_config('request.jwt.claims', :claims, true), set_config('request.jwt.claim.sub', :sub, true)"
+)
+
+
+def claims_of(user_id: str) -> str:
+    """The Supabase claims of a demonstration identity (`buildUserClaims`)."""
+    return json.dumps(
+        {"sub": user_id, "role": "authenticated", "aud": "authenticated", "email": ""},
+        ensure_ascii=False,
+        separators=(",", ":"),
+    )
+
+
+async def as_user_rows(
+    conn: Any, name: str, user_id: str, statement: Any, params: dict[str, Any] | None = None
+) -> list[Any] | None:
+    """Runs one read as `authenticated` inside a savepoint; `None` when the probe is refused."""
+    await conn.execute(text(f"savepoint {name}"))
+    try:
+        await conn.execute(SET_CLAIMS, {"claims": claims_of(user_id), "sub": user_id})
+        await conn.execute(text("set local role authenticated"))
+        result = await conn.execute(statement, params or {})
+        return list(result.mappings().all())
+    except DBAPIError:
+        return None
+    finally:
+        await conn.execute(text(f"rollback to savepoint {name}"))
+        await conn.execute(text(f"release savepoint {name}"))
+
+
+async def spec_111(call: Call) -> dict[str, Any]:
+    """`devSddSpec111Demo`: a group of three, the limited progress view and the active counter."""
+    require_dev(call.deps)
+    async with rolled_back(call.deps) as tx:
+        conn = tx.conn
+        owner = await create_user(
+            conn, email=demo_email(call.deps.clock.now(), "spec-111-owner"), first_name="Alice"
+        )
+        programme = await create_programme(
+            conn,
+            owner.id,
+            modules=2,
+            chapters_per_module=1,
+            notions_per_chapter=1,
+            title=fixture.SPEC111_PROGRAMME_TITLE,
+        )
+        first_module, second_module = programme.module_ids[0], programme.module_ids[1]
+        group_id = await create_group(
+            conn,
+            formation_id=programme.formation_id,
+            owner_id=owner.id,
+            invite_code=fixture.SPEC111_INVITE_CODE,
+        )
+        bob = await create_user(
+            conn, email=demo_email(call.deps.clock.now(), "spec-111-bob"), first_name="Bob"
+        )
+        carol = await create_user(
+            conn, email=demo_email(call.deps.clock.now(), "spec-111-carol"), first_name="Carol"
+        )
+        for member in (bob, carol):
+            await join_group(conn, group_id, member.id, joined_at=FIXED)
+
+        for user_id, module_id, status, validated_at in (
+            (owner.id, first_module, "validated", FIXED),
+            (owner.id, second_module, "open", None),
+            (bob.id, first_module, "validated", FIXED),
+        ):
+            await conn.execute(
+                INSERT_111_MODULE_PROGRESS,
+                {
+                    "user": user_id,
+                    "module": module_id,
+                    "status": status,
+                    "validated_at": validated_at,
+                },
+            )
+        await conn.execute(UPDATE_111_STREAK, {"user": bob.id, "streak": 7})
+        await conn.execute(UPDATE_111_STREAK, {"user": carol.id, "streak": 3})
+
+        progress_rows = await as_user_rows(
+            conn, "spec111_progress", owner.id, SELECT_111_PROGRESS, {"group": group_id}
+        )
+        group_row = (await conn.execute(SELECT_111_GROUP, {"group": group_id})).mappings().first()
+        active_row = (await conn.execute(COUNT_111_ACTIVE, {"user": owner.id})).mappings().first()
+    if group_row is None:
+        raise LookupError("demonstration group missing")
+    progress = [
+        {
+            "groupId": str(row["group_id"]),
+            "userId": str(row["user_id"]),
+            "firstName": None if row["first_name"] is None else str(row["first_name"]),
+            "currentModulePosition": int(row["current_module_position"]),
+            "validatedModules": int(row["validated_modules"]),
+            "streakDays": int(row["streak_days"]),
+        }
+        for row in (progress_rows or [])
+    ]
+    return {
+        "code": str(group_row["invite_code"]),
+        "capacity": {"used": len(progress), "max": int(group_row["max_members"])},
+        "progress": progress,
+        "activeCount": 0 if active_row is None else int(active_row["count"]),
+    }
+
+
+# --- SPEC-112 -----------------------------------------------------------------------------------
+
+SELECT_112_EXPORTS = text(
+    """
+    select id::text as id, status::text as status, size_bytes, created_at, expires_at, storage_path
+    from public.data_exports
+    where user_id = cast(:user as uuid)
+    order by created_at desc, id desc
+    limit 20
+    """
+)
+INSERT_112_EXPORT = text(
+    """
+    insert into public.data_exports (user_id, status, created_at)
+    values (cast(:user as uuid), 'queued', cast(:created_at as timestamptz))
+    returning id::text as id
+    """
+)
+COMPLETE_112_EXPORT = text(
+    """
+    update public.data_exports
+    set status = 'done', storage_path = :path, size_bytes = :size, expires_at = cast(:expires as timestamptz)
+    where id = cast(:export as uuid) and user_id = cast(:user as uuid)
+    """
+)
+INSERT_112_ACCEPTANCE = text(
+    """
+    insert into public.legal_acceptances (user_id, document, version, accepted_at)
+    values (cast(:user as uuid), cast(:document as public.legal_document), :version,
+            cast(:accepted_at as timestamptz))
+    on conflict (user_id, document, version) do nothing
+    """
+)
+SELECT_112_ACCEPTANCES = text(
+    """
+    select id::text as id, document::text as document, version, accepted_at
+    from public.legal_acceptances
+    where user_id = cast(:user as uuid)
+    order by accepted_at desc, id desc
+    """
+)
+INSERT_112_IDEMPOTENCY = text(
+    """
+    insert into public.idempotency_keys (user_id, key, route, request_hash, created_at)
+    values (cast(:user as uuid), :key, :route, :request_hash, cast(:created_at as timestamptz))
+    """
+)
+COMPLETE_112_IDEMPOTENCY = text(
+    """
+    update public.idempotency_keys
+    set status_code = :status_code, response = cast(:response as jsonb),
+        completed_at = cast(:completed_at as timestamptz)
+    where user_id = cast(:user as uuid) and key = :key
+    """
+)
+SELECT_112_IDEMPOTENCY = text(
+    """
+    select key, status_code, created_at, completed_at, response
+    from public.idempotency_keys
+    where user_id = cast(:user as uuid)
+    order by created_at desc
+    """
+)
+SELECT_112_SEARCH = text(
+    "select kind, id::text as id, title, snippet, href, rank from public.search_user_content(:query, :limit)"
+)
+SEARCH_KINDS = ("formation", "notion", "section")
+
+
+def normalize_query(value: str) -> str:
+    """`normalizeSearchQuery`: NFKC, collapsed whitespace, trim and a hard bound."""
+    normalized = unicodedata.normalize("NFKC", value)
+    collapsed = " ".join(normalized.split())
+    return collapsed.strip()[:100]
+
+
+def request_hash(method: str, route: str, body: Any) -> str:
+    """A stable SHA-256 fingerprint of one idempotent request (ADR-0120)."""
+    payload = json.dumps(
+        {"method": method, "route": route, "body": body},
+        ensure_ascii=False,
+        sort_keys=True,
+        separators=(",", ":"),
+    )
+    return hashlib.sha256(payload.encode("utf-8")).hexdigest()
+
+
+async def _create_export_112(conn: Any, *, user_id: str, created_at: str) -> str:
+    row = (
+        (await conn.execute(INSERT_112_EXPORT, {"user": user_id, "created_at": created_at}))
+        .mappings()
+        .first()
+    )
+    if row is None:
+        raise LookupError("data export not created")
+    return str(row["id"])
+
+
+async def _complete_export_112(
+    conn: Any,
+    *,
+    user_id: str,
+    export_id: str,
+    path: str,
+    size: int,
+    expires_at: str,
+) -> None:
+    await conn.execute(
+        COMPLETE_112_EXPORT,
+        {"export": export_id, "user": user_id, "path": path, "size": size, "expires": expires_at},
+    )
+
+
+async def _accept_112(conn: Any, *, user_id: str, document: str, version: str, accepted_at: str) -> None:
+    await conn.execute(
+        INSERT_112_ACCEPTANCE,
+        {
+            "user": user_id,
+            "document": document,
+            "version": version,
+            "accepted_at": accepted_at,
+        },
+    )
+
+
+async def _reserve_112(conn: Any, *, user_id: str, key: str, route: str, body: Any, created_at: str) -> None:
+    await conn.execute(
+        INSERT_112_IDEMPOTENCY,
+        {
+            "user": user_id,
+            "key": key,
+            "route": route,
+            "request_hash": request_hash("POST", route, body),
+            "created_at": created_at,
+        },
+    )
+
+
+async def _complete_112(
+    conn: Any, *, user_id: str, key: str, status_code: int, response: Any, completed_at: str
+) -> None:
+    await conn.execute(
+        COMPLETE_112_IDEMPOTENCY,
+        {
+            "user": user_id,
+            "key": key,
+            "status_code": status_code,
+            "response": json.dumps(response, ensure_ascii=False),
+            "completed_at": completed_at,
+        },
+    )
+
+
+def _downloadable_112(row: Any, now: str) -> bool:
+    """`isDataExportDownloadable`: done, stored and strictly unexpired."""
+    if str(row["status"]) != "done":
+        return False
+    path = row["storage_path"]
+    if path is None or path == "":
+        return False
+    if row["expires_at"] is None:
+        return False
+    return to_iso(row["expires_at"]) > now
+
+
+async def spec_112(call: Call) -> dict[str, Any]:
+    """`devSddSpec112Demo`: the private search, two exports, three acceptances and three keys."""
+    require_dev(call.deps)
+    async with rolled_back(call.deps) as tx:
+        conn = tx.conn
+        alex = await create_user(
+            conn, email=demo_email(call.deps.clock.now(), "spec-112-alex"), first_name="Alex"
+        )
+        programme = await create_programme(
+            conn,
+            alex.id,
+            modules=1,
+            chapters_per_module=1,
+            notions_per_chapter=2,
+            title=fixture.SPEC112_PROGRAMME_TITLE,
+        )
+        module_id = programme.module_ids[0]
+        chapter_id = programme.chapter_ids[0]
+        first_notion, second_notion = programme.notion_ids[0], programme.notion_ids[1]
+        await conn.execute(
+            text(
+                "update public.formations set description = :description where id = cast(:formation as uuid)"
+            ),
+            {"description": fixture.SPEC112_DESCRIPTION, "formation": programme.formation_id},
+        )
+        await conn.execute(
+            text(
+                "update public.notions set label = :label, short_definition = :definition "
+                "where id = cast(:notion as uuid)"
+            ),
+            {
+                "label": fixture.SPEC112_FIRST_NOTION_LABEL,
+                "definition": fixture.SPEC112_FIRST_NOTION_DEFINITION,
+                "notion": first_notion,
+            },
+        )
+        await conn.execute(
+            text(
+                "update public.notions set label = :label, short_definition = :definition "
+                "where id = cast(:notion as uuid)"
+            ),
+            {
+                "label": fixture.SPEC112_SECOND_NOTION_LABEL,
+                "definition": fixture.SPEC112_SECOND_NOTION_DEFINITION,
+                "notion": second_notion,
+            },
+        )
+        course = await create_course(conn, owner_id=alex.id, module_id=module_id)
+        section_id = course.section_ids[0]
+        await conn.execute(
+            text(
+                "update public.course_sections set title = :title, content_md = :content "
+                "where id = cast(:section as uuid)"
+            ),
+            {
+                "title": fixture.SPEC112_SECTION_TITLE,
+                "content": fixture.SPEC112_SECTION_CONTENT,
+                "section": section_id,
+            },
+        )
+
+        bob = await create_user(
+            conn, email=demo_email(call.deps.clock.now(), "spec-112-bob"), first_name="Bob"
+        )
+        foreign = await create_programme(
+            conn,
+            bob.id,
+            modules=1,
+            chapters_per_module=1,
+            notions_per_chapter=1,
+            title=fixture.SPEC112_FOREIGN_PROGRAMME_TITLE,
+        )
+        foreign_course = await create_course(conn, owner_id=bob.id, module_id=foreign.module_ids[0])
+        await conn.execute(
+            text(
+                "update public.course_sections set title = :title, content_md = :content "
+                "where id = cast(:section as uuid)"
+            ),
+            {
+                "title": fixture.SPEC112_FOREIGN_SECTION_TITLE,
+                "content": fixture.SPEC112_FOREIGN_SECTION_CONTENT,
+                "section": foreign_course.section_ids[0],
+            },
+        )
+
+        results = await as_user_rows(
+            conn,
+            "spec112_search",
+            alex.id,
+            SELECT_112_SEARCH,
+            {"query": normalize_query(fixture.SPEC112_QUERY), "limit": 20},
+        )
+        results = results or []
+
+        expired_id = await _create_export_112(conn, user_id=alex.id, created_at="2026-11-01T08:00:00Z")
+        await _complete_export_112(
+            conn,
+            user_id=alex.id,
+            export_id=expired_id,
+            path=f"exports/{alex.id}/2026-11-01.zip",
+            size=1_240_000,
+            expires_at="2026-11-08T08:00:00Z",
+        )
+        ready_id = await _create_export_112(conn, user_id=alex.id, created_at="2026-11-11T12:00:00Z")
+        await _complete_export_112(
+            conn,
+            user_id=alex.id,
+            export_id=ready_id,
+            path=f"exports/{alex.id}/2026-11-11.zip",
+            size=2_480_000,
+            expires_at="2026-11-18T12:00:00Z",
+        )
+        await _accept_112(
+            conn,
+            user_id=alex.id,
+            document="cgu",
+            version="1.2",
+            accepted_at="2026-10-01T09:00:00Z",
+        )
+        await _accept_112(
+            conn,
+            user_id=alex.id,
+            document="cgu",
+            version="1.2",
+            accepted_at="2026-10-02T09:00:00Z",
+        )
+        await _accept_112(
+            conn,
+            user_id=alex.id,
+            document="cgu",
+            version="1.3",
+            accepted_at="2026-11-01T09:00:00Z",
+        )
+        await _accept_112(
+            conn,
+            user_id=alex.id,
+            document="privacy",
+            version="3.0",
+            accepted_at="2026-11-01T09:05:00Z",
+        )
+
+        replay_key = "demo-export-ready-0001"
+        await _reserve_112(
+            conn,
+            user_id=alex.id,
+            key=replay_key,
+            route="/api/v1/exports",
+            body={"format": "zip"},
+            created_at="2026-11-11T12:00:00Z",
+        )
+        await _complete_112(
+            conn,
+            user_id=alex.id,
+            key=replay_key,
+            status_code=202,
+            response={"exportId": ready_id, "status": "queued"},
+            completed_at="2026-11-11T12:00:02Z",
+        )
+        running_key = "demo-export-running-02"
+        await _reserve_112(
+            conn,
+            user_id=alex.id,
+            key=running_key,
+            route="/api/v1/exports",
+            body={"format": "zip", "includeConversations": True},
+            created_at="2026-11-11T12:10:00Z",
+        )
+        reused_key = "demo-export-reused-003"
+        await _reserve_112(
+            conn,
+            user_id=alex.id,
+            key=reused_key,
+            route="/api/v1/exports",
+            body={"format": "json"},
+            created_at="2026-11-11T11:55:00Z",
+        )
+        await _complete_112(
+            conn,
+            user_id=alex.id,
+            key=reused_key,
+            status_code=422,
+            response=fixture.SPEC112_REUSED_RESPONSE,
+            completed_at="2026-11-11T11:55:00.500Z",
+        )
+
+        export_rows = (await conn.execute(SELECT_112_EXPORTS, {"user": alex.id})).mappings().all()
+        acceptance_rows = (await conn.execute(SELECT_112_ACCEPTANCES, {"user": alex.id})).mappings().all()
+        idempotency_rows = (await conn.execute(SELECT_112_IDEMPOTENCY, {"user": alex.id})).mappings().all()
+        _ = (chapter_id, fixture.SPEC112_FOREIGN_TITLE)
+
+    groups = []
+    for kind in SEARCH_KINDS:
+        items = [row for row in results if str(row["kind"]) == kind]
+        if items:
+            groups.append(
+                {
+                    "kind": kind,
+                    "items": [
+                        {
+                            "kind": str(row["kind"]),
+                            "id": str(row["id"]),
+                            "title": str(row["title"]),
+                            "snippet": "" if row["snippet"] is None else str(row["snippet"]),
+                            "href": str(row["href"]),
+                            "rank": float(row["rank"]),
+                        }
+                        for row in items
+                    ],
+                }
+            )
+    cgu = next(
+        (row for row in acceptance_rows if str(row["document"]) == "cgu"),
+        None,
+    )
+
+    def state_of(key: str, status_code: int) -> str:
+        if key == running_key or status_code == 0:
+            return "in_progress"
+        if status_code >= 400:
+            return "reused"
+        return "replayed"
+
+    return {
+        "query": fixture.SPEC112_QUERY,
+        "groups": groups,
+        "total": len(results),
+        "foreignTitle": fixture.SPEC112_FOREIGN_TITLE,
+        "foreignVisible": sum(
+            1 for row in results if str(row["title"]) == fixture.SPEC112_FOREIGN_SECTION_TITLE
+        ),
+        "exports": [
+            {
+                "id": str(row["id"]),
+                "status": str(row["status"]),
+                "sizeBytes": None if row["size_bytes"] is None else int(row["size_bytes"]),
+                "createdAt": to_iso(row["created_at"]),
+                "expiresAt": None if row["expires_at"] is None else to_iso(row["expires_at"]),
+                "downloadable": _downloadable_112(row, FIXED),
+            }
+            for row in export_rows
+        ],
+        "acceptances": [
+            {
+                "id": str(row["id"]),
+                "document": str(row["document"]),
+                "version": str(row["version"]),
+                "acceptedAt": to_iso(row["accepted_at"]),
+            }
+            for row in acceptance_rows
+        ],
+        "latestCgu": None if cgu is None else str(cgu["version"]),
+        "idempotency": [
+            {
+                "key": str(row["key"]),
+                "state": state_of(str(row["key"]), int(row["status_code"])),
+                "statusCode": int(row["status_code"]),
+                "createdAt": to_iso(row["created_at"]),
+                "completedAt": None if row["completed_at"] is None else to_iso(row["completed_at"]),
+                "response": json_value(row["response"]),
+            }
+            for row in idempotency_rows
+        ],
+    }
+
+
+# --- SPEC-113 -----------------------------------------------------------------------------------
+
+SELECT_113_TABLES = text(
+    """
+    select c.relrowsecurity as rls, c.relforcerowsecurity as forced
+    from pg_catalog.pg_class c
+    join pg_catalog.pg_namespace n on n.oid = c.relnamespace
+    where n.nspname = 'public' and c.relkind = 'r'
+    """
+)
+COUNT_113_POLICIES = text(
+    "select count(*)::int as count from pg_catalog.pg_policies where schemaname = 'public'"
+)
+
+
+READ_113: dict[tuple[str, str], Any] = {
+    ("formations", "id"): text(
+        "select count(*)::int as count from public.formations where id = cast(:value as uuid)"
+    ),
+    ("resources", "owner_id"): text(
+        "select count(*)::int as count from public.resources where owner_id = cast(:value as uuid)"
+    ),
+    ("module_progress", "user_id"): text(
+        "select count(*)::int as count from public.module_progress where user_id = cast(:value as uuid)"
+    ),
+    ("group_member_progress", "group_id"): text(
+        "select count(*)::int as count from public.group_member_progress "
+        "where group_id = cast(:value as uuid)"
+    ),
+    ("idempotency_keys", "user_id"): text(
+        "select count(*)::int as count from public.idempotency_keys where user_id = cast(:value as uuid)"
+    ),
+    ("study_preferences", "user_id"): text(
+        "select count(*)::int as count from public.study_preferences where user_id = cast(:value as uuid)"
+    ),
+}
+
+
+async def _read_as_113(conn: Any, name: str, user_id: str, table: str, column: str, value: str) -> bool:
+    """One RLS probe under the learner's JWT; an empty result proves the policy refused the row."""
+    rows = await as_user_rows(conn, name, user_id, READ_113[(table, column)], {"value": value})
+    return rows is not None and len(rows) > 0 and int(rows[0]["count"]) > 0
+
+
+async def _write_chapter_as_113(conn: Any, name: str, user_id: str, chapter_id: str) -> bool:
+    statement = text(
+        "update public.chapters set title = title where id = cast(:chapter as uuid) returning id::text as id"
+    )
+    rows = await as_user_rows(conn, name, user_id, statement, {"chapter": chapter_id})
+    return bool(rows)
+
+
+async def spec_113(call: Call) -> dict[str, Any]:
+    """`devSddSpec113Demo`: the policy catalogue and the matrix measured with three JWTs."""
+    require_dev(call.deps)
+    async with rolled_back(call.deps) as tx:
+        conn = tx.conn
+        alice = await create_user(
+            conn, email=demo_email(call.deps.clock.now(), "spec-113-alice"), first_name="Alice"
+        )
+        bob = await create_user(
+            conn, email=demo_email(call.deps.clock.now(), "spec-113-bob"), first_name="Bob"
+        )
+        carol = await create_user(
+            conn, email=demo_email(call.deps.clock.now(), "spec-113-carol"), first_name="Carol"
+        )
+        programme = await create_programme(
+            conn,
+            alice.id,
+            modules=2,
+            chapters_per_module=1,
+            notions_per_chapter=1,
+            title=fixture.SPEC113_PROGRAMME_TITLE,
+        )
+        module_id, chapter_id = programme.module_ids[0], programme.chapter_ids[0]
+        group_id = await create_group(
+            conn,
+            formation_id=programme.formation_id,
+            owner_id=alice.id,
+            invite_code=fixture.SPEC113_INVITE_CODE,
+        )
+        await join_group(conn, group_id, bob.id, joined_at=FIXED)
+        await conn.execute(
+            INSERT_111_MODULE_PROGRESS,
+            {"user": alice.id, "module": module_id, "status": "open", "validated_at": None},
+        )
+        await conn.execute(
+            text(
+                """
+                insert into public.resources (owner_id, formation_id, chapter_id, kind, title,
+                                              content_text)
+                values (cast(:owner as uuid), cast(:formation as uuid), cast(:chapter as uuid),
+                        'note', :title, :content)
+                """
+            ),
+            {
+                "owner": alice.id,
+                "formation": programme.formation_id,
+                "chapter": chapter_id,
+                "title": fixture.SPEC113_PRIVATE_RESOURCE_TITLE,
+                "content": fixture.SPEC113_PRIVATE_RESOURCE_CONTENT,
+            },
+        )
+        await conn.execute(
+            text(
+                "insert into public.idempotency_keys (user_id, key, route, request_hash) "
+                "values (cast(:user as uuid), 'demo-rls-0001', '/api/v1/rls', :hash)"
+            ),
+            {"user": alice.id, "hash": "a" * 64},
+        )
+
+        table_rows = (await conn.execute(SELECT_113_TABLES)).mappings().all()
+        policy_row = (await conn.execute(COUNT_113_POLICIES)).mappings().first()
+
+        matrix = [
+            {
+                "key": "programme-read",
+                "category": "shared-programme",
+                "cells": {
+                    "a": await _read_as_113(
+                        conn,
+                        "s113_prog_a",
+                        alice.id,
+                        "formations",
+                        "id",
+                        programme.formation_id,
+                    ),
+                    "b": await _read_as_113(
+                        conn,
+                        "s113_prog_b",
+                        bob.id,
+                        "formations",
+                        "id",
+                        programme.formation_id,
+                    ),
+                    "c": await _read_as_113(
+                        conn,
+                        "s113_prog_c",
+                        carol.id,
+                        "formations",
+                        "id",
+                        programme.formation_id,
+                    ),
+                },
+            },
+            {
+                "key": "programme-write",
+                "category": "shared-programme",
+                "cells": {
+                    "a": await _write_chapter_as_113(conn, "s113_write_a", alice.id, chapter_id),
+                    "b": await _write_chapter_as_113(conn, "s113_write_b", bob.id, chapter_id),
+                    "c": await _write_chapter_as_113(conn, "s113_write_c", carol.id, chapter_id),
+                },
+            },
+            {
+                "key": "resources-read",
+                "category": "personal",
+                "cells": {
+                    "a": await _read_as_113(conn, "s113_res_a", alice.id, "resources", "owner_id", alice.id),
+                    "b": await _read_as_113(conn, "s113_res_b", bob.id, "resources", "owner_id", alice.id),
+                    "c": await _read_as_113(conn, "s113_res_c", carol.id, "resources", "owner_id", alice.id),
+                },
+            },
+            {
+                "key": "progress-read",
+                "category": "personal",
+                "cells": {
+                    "a": await _read_as_113(
+                        conn, "s113_prog2_a", alice.id, "module_progress", "user_id", alice.id
+                    ),
+                    "b": await _read_as_113(
+                        conn, "s113_prog2_b", bob.id, "module_progress", "user_id", alice.id
+                    ),
+                    "c": await _read_as_113(
+                        conn, "s113_prog2_c", carol.id, "module_progress", "user_id", alice.id
+                    ),
+                },
+            },
+            {
+                "key": "projection-read",
+                "category": "shared-programme",
+                "cells": {
+                    "a": await _read_as_113(
+                        conn, "s113_view_a", alice.id, "group_member_progress", "group_id", group_id
+                    ),
+                    "b": await _read_as_113(
+                        conn, "s113_view_b", bob.id, "group_member_progress", "group_id", group_id
+                    ),
+                    "c": await _read_as_113(
+                        conn, "s113_view_c", carol.id, "group_member_progress", "group_id", group_id
+                    ),
+                },
+            },
+            {
+                "key": "service-read",
+                "category": "service",
+                "cells": {
+                    "a": await _read_as_113(
+                        conn, "s113_idem_a", alice.id, "idempotency_keys", "user_id", alice.id
+                    ),
+                    "b": await _read_as_113(
+                        conn, "s113_idem_b", bob.id, "idempotency_keys", "user_id", alice.id
+                    ),
+                    "c": await _read_as_113(
+                        conn, "s113_idem_c", carol.id, "idempotency_keys", "user_id", alice.id
+                    ),
+                },
+            },
+            {
+                "key": "settings-read",
+                "category": "personal",
+                "cells": {
+                    "a": await _read_as_113(
+                        conn, "s113_set_a", alice.id, "study_preferences", "user_id", alice.id
+                    ),
+                    "b": await _read_as_113(
+                        conn, "s113_set_b", bob.id, "study_preferences", "user_id", alice.id
+                    ),
+                    "c": await _read_as_113(
+                        conn, "s113_set_c", carol.id, "study_preferences", "user_id", alice.id
+                    ),
+                },
+            },
+        ]
+
+    return {
+        "tableCount": len(table_rows),
+        "rlsCount": sum(1 for row in table_rows if row["rls"] is True),
+        "forcedCount": sum(1 for row in table_rows if row["forced"] is True),
+        "policyCount": 0 if policy_row is None else int(policy_row["count"]),
+        "categories": [
+            {"category": category, "count": count} for category, count in fixture.SPEC113_CATEGORIES
+        ],
+        "matrix": matrix,
+    }
+
+
+# --- SPEC-115 -----------------------------------------------------------------------------------
+
+DEMO_NAMESPACE = uuid.uuid5(uuid.NAMESPACE_DNS, "learny-demo")
+
+
+def demo_id(*parts: str) -> str:
+    """`demoId`: the stable UUID v5 of one entity of the demonstration dataset."""
+    return str(uuid.uuid5(DEMO_NAMESPACE, ":".join(parts)))
+
+
+def demo_user_id(key: str) -> str:
+    return demo_id("user", key)
+
+
+def demo_formation_id(key: str) -> str:
+    return demo_id("formation", key)
+
+
+SELECT_115_PROFILE = text(
+    "select first_name, last_name, email, timezone, streak_days from public.profiles "
+    "where id = cast(:user as uuid)"
+)
+SELECT_115_FORMATIONS = text(
+    "select id::text as id, title, status::text as status from public.formations "
+    "where owner_id = cast(:user as uuid)"
+)
+SELECT_115_SAP = text(
+    """
+    select
+      (select count(*)::int from public.modules where formation_id = cast(:sap as uuid)) as modules,
+      (select count(*)::int from public.chapters where formation_id = cast(:sap as uuid)) as chapters,
+      (select count(*)::int from public.notions where formation_id = cast(:sap as uuid)) as notions
+    """
+)
+COUNT_115_MEMBERS = text(
+    "select count(*)::int as count from public.group_members "
+    "where group_id = cast(:group as uuid) and left_at is null"
+)
+SELECT_115_MEMBERS = text(
+    """
+    select p.first_name
+    from public.group_members m
+    join public.profiles p on p.id = m.user_id
+    where m.group_id = cast(:group as uuid) and m.left_at is null
+    order by m.role desc, m.joined_at
+    """
+)
+SELECT_115_SLOTS = text(
+    """
+    select
+      s.id::text as id,
+      to_char(s.starts_at at time zone 'Europe/Paris', 'HH24:MI') as start,
+      to_char(s.ends_at at time zone 'Europe/Paris', 'HH24:MI') as end,
+      s.title, s.meta, s.status::text as status, f.title as formation,
+      to_char((s.starts_at at time zone 'Europe/Paris')::date, 'YYYY-MM-DD') as day
+    from public.schedule_slots s
+    join public.formations f on f.id = s.formation_id
+    where s.user_id = cast(:user as uuid)
+      and s.formation_id in (cast(:sap as uuid), cast(:agile as uuid))
+      and (s.starts_at at time zone 'Europe/Paris')::date
+          between date '2026-11-09' and date '2026-11-13'
+    order by s.starts_at
+    """
+)
+COUNT_115_UNREAD = text(
+    "select count(*)::int as count from public.notifications "
+    "where user_id = cast(:user as uuid) and read_at is null"
+)
+
+
+def _check_115(key: str, expected: int, observed: int, source: dict[str, str]) -> dict[str, Any]:
+    return {
+        "key": key,
+        "label": fixture.SPEC115_CHECK_LABELS[key],
+        "expected": str(expected),
+        "observed": str(observed),
+        "ok": expected == observed,
+        "source": source,
+    }
+
+
+def _empty_115() -> dict[str, Any]:
+    return {
+        "present": False,
+        "profile": None,
+        "formations": {"activeOrProposed": 0, "completed": 0, "titles": []},
+        "sap": {"modules": 0, "chapters": 0, "notions": 0},
+        "group": {"members": 0, "names": []},
+        "agenda": {"days": [], "slots": 0, "unread": 0},
+        "checks": [],
+    }
+
+
+async def spec_115(call: Call) -> dict[str, Any]:
+    """`devSddSpec115Demo`: the demonstration dataset measured on the seeded database."""
+    require_dev(call.deps)
+    alex_id = demo_user_id("alex")
+    sap_id = demo_formation_id("sap")
+    agile_id = demo_formation_id("agile")
+    group_id = demo_id("group", "agile")
+    async with rolled_back(call.deps) as tx:
+        conn = tx.conn
+        profile = (await conn.execute(SELECT_115_PROFILE, {"user": alex_id})).mappings().first()
+        if profile is None:
+            return _empty_115()
+        formation_rows = (await conn.execute(SELECT_115_FORMATIONS, {"user": alex_id})).mappings().all()
+        display_order = {
+            title: index for index, (title, _status, _progress) in enumerate(fixture.SPEC115_FORMATIONS)
+        }
+        formations = sorted(formation_rows, key=lambda row: display_order.get(str(row["title"]), 99))
+        active = sum(1 for row in formations if str(row["status"]) in ("active", "programme_proposed"))
+        completed = sum(1 for row in formations if str(row["status"]) == "completed")
+        sap_row = (await conn.execute(SELECT_115_SAP, {"sap": sap_id})).mappings().first()
+        sap = (
+            {"modules": 0, "chapters": 0, "notions": 0}
+            if sap_row is None
+            else {
+                "modules": int(sap_row["modules"]),
+                "chapters": int(sap_row["chapters"]),
+                "notions": int(sap_row["notions"]),
+            }
+        )
+        member_count = (await conn.execute(COUNT_115_MEMBERS, {"group": group_id})).mappings().first()
+        member_rows = (await conn.execute(SELECT_115_MEMBERS, {"group": group_id})).mappings().all()
+        slot_rows = (
+            (
+                await conn.execute(
+                    SELECT_115_SLOTS,
+                    {"user": alex_id, "sap": sap_id, "agile": agile_id},
+                )
+            )
+            .mappings()
+            .all()
+        )
+        unread_row = (await conn.execute(COUNT_115_UNREAD, {"user": alex_id})).mappings().first()
+
+    members = 0 if member_count is None else int(member_count["count"])
+    unread = 0 if unread_row is None else int(unread_row["count"])
+    days = [
+        {
+            "date": day["date"],
+            "label": day["label"],
+            "slots": [
+                {
+                    "id": str(row["id"]),
+                    "start": str(row["start"]),
+                    "end": str(row["end"]),
+                    "title": str(row["title"]),
+                    "meta": None if row["meta"] is None else str(row["meta"]),
+                    "status": str(row["status"]),
+                    "formation": str(row["formation"]),
+                }
+                for row in slot_rows
+                if str(row["day"]) == day["date"]
+            ],
+        }
+        for day in fixture.SPEC115_AGENDA_DAYS
+    ]
+    progress_by_title = {title: progress for title, _status, progress in fixture.SPEC115_FORMATIONS}
+    return {
+        "present": True,
+        "profile": {
+            "fullName": f"{profile['first_name'] or ''} {profile['last_name'] or ''}".strip(),
+            "email": str(profile["email"]),
+            "timezone": str(profile["timezone"]),
+            "streakDays": int(profile["streak_days"]),
+        },
+        "formations": {
+            "activeOrProposed": active,
+            "completed": completed,
+            "titles": [
+                {
+                    "title": str(row["title"]),
+                    "status": str(row["status"]),
+                    "progress": progress_by_title.get(str(row["title"])),
+                }
+                for row in formations
+            ],
+        },
+        "sap": sap,
+        "group": {
+            "members": members,
+            "names": ["—" if row["first_name"] is None else str(row["first_name"]) for row in member_rows],
+        },
+        "agenda": {"days": days, "slots": len(slot_rows), "unread": unread},
+        "checks": [
+            _check_115(
+                "sap.modules",
+                fixture.SPEC115_EXPECTED_SAP_MODULES,
+                sap["modules"],
+                {"screen": "SCR-05", "file": "Programme.dc.html", "element": "Modules et chapitres"},
+            ),
+            _check_115(
+                "sap.notions",
+                fixture.SPEC115_EXPECTED_SAP_NOTIONS,
+                sap["notions"],
+                {"screen": "SCR-14", "file": "Carte.dc.html", "element": "const N"},
+            ),
+            _check_115(
+                "formations.active_or_proposed",
+                fixture.SPEC115_EXPECTED_ACTIVE,
+                active,
+                fixture.SPEC115_FORMATION_SOURCE,
+            ),
+            _check_115(
+                "formations.completed",
+                fixture.SPEC115_EXPECTED_COMPLETED,
+                completed,
+                fixture.SPEC115_FORMATION_SOURCE,
+            ),
+            _check_115(
+                "group.members",
+                fixture.SPEC115_EXPECTED_GROUP_MEMBERS,
+                members,
+                {"screen": "fixture", "file": "Main.dc.html", "element": "membres du groupe agile"},
+            ),
+            _check_115(
+                "agenda.slots",
+                fixture.SPEC115_EXPECTED_AGENDA_SLOTS,
+                len(slot_rows),
+                {"screen": "SCR-12", "file": "Agenda.dc.html", "element": "const week2"},
+            ),
+            _check_115(
+                "agenda.days",
+                fixture.SPEC115_EXPECTED_AGENDA_DAYS,
+                len({str(row["day"]) for row in slot_rows}),
+                {
+                    "screen": "SCR-12",
+                    "file": "Agenda.dc.html",
+                    "element": "semaine du 9 au 13 novembre",
+                },
+            ),
+            _check_115(
+                "notifications.unread",
+                fixture.SPEC115_EXPECTED_UNREAD,
+                unread,
+                fixture.SPEC115_NOTIFICATION_SOURCE,
+            ),
+        ],
     }
