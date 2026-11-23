@@ -98,6 +98,25 @@ describe('[SPEC-1201] relay', () => {
     expect(init?.body).toBeUndefined();
   });
 
+  it('relaie une redirection de l’API sans la suivre', async () => {
+    vi.stubEnv('API_INTERNAL_URL', 'http://127.0.0.1:4011');
+    const upstream = new Response(null, {
+      status: 302,
+      headers: { location: '/premiers-pas/profil', 'set-cookie': 'sb-session=1; Path=/' },
+    });
+    const fetchMock = vi.spyOn(globalThis, 'fetch').mockResolvedValue(upstream);
+
+    const response = await relayToApi(
+      new NextRequest('https://learny.example/api/v1/auth/callback?token_hash=t&type=signup'),
+    );
+    const init = fetchMock.mock.calls[0]?.[1];
+
+    expect(init?.redirect).toBe('manual');
+    expect(response.status).toBe(302);
+    expect(response.headers.get('location')).toBe('https://learny.example/premiers-pas/profil');
+    expect(response.headers.get('set-cookie')).toContain('sb-session=1');
+  });
+
   it('répond 502 API_UNAVAILABLE si l’API est inaccessible', async () => {
     vi.stubEnv('API_INTERNAL_URL', 'http://127.0.0.1:1');
     vi.spyOn(globalThis, 'fetch').mockRejectedValue(new TypeError('connection refused'));
