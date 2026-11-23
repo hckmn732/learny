@@ -35,6 +35,9 @@ const env = {
   // A test build always enables the SDD pages and freezes the clock (ADR-3004 § 7).
   EXPO_PUBLIC_ENABLE_SDD_PAGES: '1',
   EXPO_PUBLIC_CLOCK_FIXED_AT: process.env.EXPO_PUBLIC_CLOCK_FIXED_AT ?? '2026-11-11T12:20:00Z',
+  // ADR-3018 — le build e2e joint l'API locale de l'émulateur en HTTP (`10.0.2.2`) : le plugin de
+  // configuration n'autorise le trafic en clair que lorsque cette variable est posée.
+  LEARNY_E2E_CLEARTEXT: '1',
   ANDROID_HOME: process.env.ANDROID_HOME ?? '/opt/android-sdk',
   ANDROID_SDK_ROOT: process.env.ANDROID_SDK_ROOT ?? '/opt/android-sdk',
   CI: '1',
@@ -68,8 +71,16 @@ function run(command, args, cwd) {
   return result.status ?? 1;
 }
 
-if (!fs.existsSync(path.join(ANDROID_DIR, 'gradlew'))) {
-  console.log('• projet natif absent : expo prebuild');
+// `expo prebuild` est idempotent et rejoue les plugins de `app.config.ts` (dont celui du HTTP
+// local, ADR-3018). Il n'est relancé que si le projet natif manque ou si le manifeste ne porte pas
+// encore l'autorisation e2e : le rejouer à chaque build coûterait une recompilation native
+// complète (~15 min) pour rien. Aucune retouche manuelle de `android/` n'est jamais nécessaire.
+const MANIFEST = path.join(ANDROID_DIR, 'app', 'src', 'main', 'AndroidManifest.xml');
+const cleartextReady =
+  fs.existsSync(MANIFEST) &&
+  fs.readFileSync(MANIFEST, 'utf8').includes('android:usesCleartextTraffic="true"');
+if (!fs.existsSync(path.join(ANDROID_DIR, 'gradlew')) || !cleartextReady) {
+  console.log('• expo prebuild (configuration native à jour)');
   const prebuild = run('npx', ['expo', 'prebuild', '-p', 'android', '--no-install'], APP_DIR);
   if (prebuild !== 0) process.exit(prebuild);
 }

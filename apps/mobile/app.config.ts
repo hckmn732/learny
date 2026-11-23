@@ -92,6 +92,8 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
   },
   plugins: [
     'expo-router',
+    // ADR-3018 — HTTP local de l'émulateur (10.0.2.2) autorisé dans les seuls builds e2e.
+    './plugins/with-e2e-cleartext.cjs',
     // SPEC-3003 ET-1 — the encryption key of the session cache lives in the platform keychain:
     // the plugin keeps it out of the Android backups (`allowBackup` rules).
     'expo-secure-store',

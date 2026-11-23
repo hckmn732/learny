@@ -1,23 +1,20 @@
 #!/usr/bin/env node
-// Maestro runner of the mobile track (SPEC-3001 EF-5, CL-3, CL-4 ; ADR-3012, ADR-3015).
+// Maestro runner of the mobile track (SPEC-3001 EF-5, CL-3, CL-4 ; ADR-3018, ADR-3015).
 //
 // Usage (through `pnpm test:e2e:mobile`, précédé du préflight `tools/dev/mobile-preflight.mjs`) :
 //   node apps/mobile/e2e/run-maestro.mjs --tags SPEC-3001 [--platform android] [--apk <path>]
 //                                        [--flows <dir>] [--record-video]
 //
-// Steps: check (or start) the emulator, install the `e2e` build, freeze the status bar (canevas
-// § 5), run `maestro test --include-tags` in JUnit mode with `--test-output-dir`, keep the JUnit
-// report verbatim, associate every artifact with the flow that produced it, run the visual
+// Everything runs on the local machine (ADR-3018) : the emulator, `adb` and Maestro live on the
+// development VM next to the API. The dual-VM HTTP agent of ADR-3012 and its asynchronous job
+// contract (ADR-3015 § 1) are gone; the APK is installed from
+// `android/app/build/outputs/apk/release/`, without a public port or a signed URL.
+//
+// Steps: check (or start) the local emulator, install the `e2e` build, freeze the status bar
+// (canevas § 5), run `maestro test --include-tags` in JUnit mode with `--test-output-dir`, keep the
+// JUnit report verbatim, associate every artifact with the flow that produced it, run the visual
 // comparison of the flows tagged `visual` against `e2e/visual/baselines/`, then write
 // `test-results/sdd/<SPEC>/e2e-mobile.json` = `{ passed, failed, videos, visual, flows[] }`.
-//
-// Two transports, same contract:
-//   - local (default): `adb` and `maestro` are on this machine;
-//   - remote: `MOBILE_DEVICE_AGENT_URL` points at `e2e/device-agent.mjs` running on the machine
-//     that owns the emulator (the dual-VM setup of this project, ADR-3012). The campaign is an
-//     asynchronous job (ADR-3015 § 1) : `POST /maestro` rend un `jobId`, le lanceur scrute
-//     `GET /maestro/<jobId>` ; aucune requête ne dure plus de quelques secondes. The APK is pulled
-//     by the agent from `MOBILE_APK_URL`, a signed URL of the development machine.
 //
 // Le JUnit est la seule source du statut des flux (ADR-3015 § 3) : un rapport absent, vide ou sans
 // `<testcase>` fait échouer la campagne explicitement, et un flux sans cas est `missing`.
@@ -31,7 +28,6 @@ import { fileURLToPath } from 'node:url';
 
 import { PNG } from 'pngjs';
 
-import { AgentProtocolError, AgentTimeoutError, createAgentClient } from './agent-client.mjs';
 import { attributeArtifacts, flowSlug, screenshotsForFlow, videosForFlow } from './artifacts.mjs';
 import { parseFlowHeader } from './flows.mjs';
 import { junitProblem, parseJunit } from './maestro-junit.mjs';
@@ -96,17 +92,8 @@ function config(argv) {
     tags,
     platform: String(flags.platform ?? env.MOBILE_PLATFORM ?? 'android'),
     apk: path.resolve(ROOT, String(flags.apk ?? env.MOBILE_APK ?? DEFAULT_APK)),
-    apkUrl: env.MOBILE_APK_URL ?? null,
     flowsDir: path.resolve(ROOT, String(flags.flows ?? env.MOBILE_FLOWS ?? FLOWS_DIR)),
-    deviceAgentUrl: env.MOBILE_DEVICE_AGENT_URL ?? null,
-    deviceAgentToken: env.MOBILE_DEVICE_AGENT_TOKEN ?? null,
-    // Aucune requête HTTP ne dépasse ce délai (ADR-3015 § 1) ; le travail, lui, peut durer.
-    agentRequestTimeoutMs: Number(
-      env.MOBILE_DEVICE_AGENT_REQUEST_TIMEOUT_MS ?? env.MOBILE_DEVICE_AGENT_TIMEOUT_MS ?? 5_000,
-    ),
-    agentJobTimeoutMs: Number(env.MOBILE_DEVICE_AGENT_JOB_TIMEOUT_MS ?? 1_800_000),
-    agentPollIntervalMs: Number(env.MOBILE_DEVICE_AGENT_POLL_INTERVAL_MS ?? 2_000),
-    avd: env.MOBILE_AVD ?? 'agent37',
+    avd: env.MOBILE_AVD ?? 'learny',
     recordVideo: flags['record-video'] !== undefined || env.MOBILE_RECORD_VIDEO === '1',
   };
 }
@@ -143,14 +130,21 @@ function readFlows(dir) {
 }
 
 // ---------------------------------------------------------------------------------------------
-// Transports.
+// Appareil local (ADR-3018).
+
+/** `adb` du SDK Android, sans dépendre du PATH de l'appelant. */
+function adbBinary() {
+  if (process.env.ADB !== undefined) return process.env.ADB;
+  const sdk = process.env.ANDROID_SDK_ROOT ?? process.env.ANDROID_HOME ?? '/opt/android-sdk';
+  const candidate = path.join(sdk, 'platform-tools', 'adb');
+  return fs.existsSync(candidate) ? candidate : 'adb';
+}
 
 /** Runs adb and maestro on this machine. */
 class LocalDevice {
   constructor(cfg) {
     this.cfg = cfg;
-    this.adb = process.env.ADB ?? 'adb';
-    this.info_ = { platform: cfg.platform };
+    this.adb = adbBinary();
   }
 
   device() {
@@ -162,24 +156,25 @@ class LocalDevice {
     return line === undefined ? null : (line.split(/\s+/)[0] ?? null);
   }
 
+  /**
+   * Démarre l'émulateur local si nécessaire (`tools/dev/emulator-up.sh`, idempotent : création de
+   * l'AVD, démarrage à froid, attente de `sys.boot_completed`).
+   */
   ensure() {
     if (this.device() !== null) return { ok: true, detail: 'appareil connecté' };
-    const emulator = run('which', ['emulator']);
-    if (emulator.status !== 0) return { ok: false, detail: 'ni appareil adb ni binaire emulator' };
-
-    const child = spawn(
-      'emulator',
-      ['-avd', this.cfg.avd, '-no-window', '-no-audio', '-no-boot-anim', '-no-snapshot-save'],
-      { detached: true, stdio: 'ignore' },
-    );
-    child.unref();
-
-    const deadline = Date.now() + 240_000;
-    while (Date.now() < deadline) {
-      if (this.device() !== null) return { ok: true, detail: `AVD ${this.cfg.avd} démarré` };
-      Atomics.wait(new Int32Array(new SharedArrayBuffer(4)), 0, 0, 3_000);
+    const script = path.join(ROOT, 'tools', 'dev', 'emulator-up.sh');
+    if (!fs.existsSync(script)) {
+      return {
+        ok: false,
+        detail: `aucun appareil adb et script absent : ${path.relative(ROOT, script)}`,
+      };
     }
-    return { ok: false, detail: `AVD ${this.cfg.avd} non démarré en 240 s` };
+    console.log(`… démarrage de l’émulateur local (${path.relative(ROOT, script)})`);
+    run('bash', [script], { timeout: 900_000, stdio: 'inherit' });
+    if (this.device() === null) {
+      return { ok: false, detail: `AVD ${this.cfg.avd} indisponible après emulator-up.sh` };
+    }
+    return { ok: true, detail: `AVD ${this.cfg.avd} démarré` };
   }
 
   info() {
@@ -338,74 +333,6 @@ function collectOutputArtifacts(outputDir) {
   }));
 }
 
-/** Runs the same steps on the machine that owns the emulator (ADR-3012, ADR-3015 § 1). */
-class RemoteDevice {
-  constructor(cfg) {
-    this.cfg = cfg;
-    this.info_ = { platform: cfg.platform };
-    this.client = createAgentClient({
-      baseUrl: cfg.deviceAgentUrl,
-      token: cfg.deviceAgentToken,
-      requestTimeoutMs: cfg.agentRequestTimeoutMs,
-      pollIntervalMs: cfg.agentPollIntervalMs,
-      jobTimeoutMs: cfg.agentJobTimeoutMs,
-      log: (event) => logProgress(event),
-    });
-  }
-
-  async ensure() {
-    const result = await this.client.device();
-    this.info_ = result.device ?? this.info_;
-    return { ok: result.ok === true, detail: result.detail ?? '' };
-  }
-
-  info() {
-    return this.info_;
-  }
-
-  async install() {
-    const result = await this.client.install(this.cfg.apkUrl);
-    return { ok: result.ok === true, detail: result.detail ?? '' };
-  }
-
-  async freeze() {
-    const result = await this.client.freeze();
-    return { ok: result.ok === true, detail: result.detail ?? '' };
-  }
-
-  /** Soumet la campagne, scrute son statut, rend le rapport et les artefacts par flux. */
-  async campaign({ tags, flows, recordVideo }) {
-    const done = await this.client.runMaestro({
-      tags,
-      recordVideo,
-      flows: flows.map((flow) => ({ file: flow.file, name: flow.name, content: flow.content })),
-    });
-    return {
-      jobId: done.jobId,
-      status: done.status,
-      junit: done.junit ?? '',
-      stdout: done.stdout ?? '',
-      stderr: done.stderr ?? '',
-      error: done.error ?? null,
-      artifacts: (done.artifacts ?? []).map((artifact) => ({
-        flow: typeof artifact.flow === 'string' ? artifact.flow : null,
-        path: artifact.path ?? null,
-        name: artifact.name,
-        buffer: Buffer.from(artifact.base64 ?? '', 'base64'),
-      })),
-    };
-  }
-}
-
-/** Une ligne par changement d'état seulement : un travail de 3 min ne noie pas la sortie. */
-let lastProgressLine = '';
-function logProgress(event) {
-  const line = `${String(event.status ?? '')} ${String(event.progress ?? event.note ?? '')}`.trim();
-  if (line === lastProgressLine || line === '') return;
-  lastProgressLine = line;
-  console.log(`… ${line}`);
-}
-
 // ---------------------------------------------------------------------------------------------
 // Campaign.
 
@@ -440,7 +367,7 @@ async function main() {
   }
   fs.mkdirSync(path.join(outDir, 'artifacts'), { recursive: true });
 
-  const device = cfg.deviceAgentUrl === null ? new LocalDevice(cfg) : new RemoteDevice(cfg);
+  const device = new LocalDevice(cfg);
 
   const ready = await device.ensure();
   if (!ready.ok) {
@@ -449,25 +376,12 @@ async function main() {
   }
   console.log(`✔ émulateur : ${JSON.stringify(device.info())}`);
 
-  if (device instanceof LocalDevice) {
-    const installed = device.install(cfg.apk);
-    if (!installed.ok) {
-      console.error(`✖ installation impossible : ${installed.detail}`);
-      return 2;
-    }
-    console.log(`✔ APK installé : ${path.relative(ROOT, cfg.apk)}`);
-  } else {
-    if (cfg.apkUrl === null) {
-      console.error('✖ MOBILE_APK_URL est obligatoire en mode agent (URL signée de l’APK).');
-      return 2;
-    }
-    const installed = await device.install();
-    if (!installed.ok) {
-      console.error(`✖ installation impossible : ${installed.detail}`);
-      return 2;
-    }
-    console.log(`✔ APK installé depuis ${cfg.apkUrl}`);
+  const installed = device.install(cfg.apk);
+  if (!installed.ok) {
+    console.error(`✖ installation impossible : ${installed.detail}`);
+    return 2;
   }
+  console.log(`✔ APK installé : ${path.relative(ROOT, cfg.apk)}`);
 
   const frozen = await device.freeze();
   console.log(`${frozen.ok ? '✔' : '…'} ${frozen.detail}`);
@@ -478,42 +392,21 @@ async function main() {
   let junit = '';
   let artifacts = [];
   let campaignVideo = null;
-  let jobId = null;
   let transportError = null;
 
   try {
-    if (device instanceof RemoteDevice) {
-      const result = await device.campaign({
-        tags: cfg.tags,
-        flows: selected,
-        recordVideo: cfg.recordVideo,
-      });
-      jobId = result.jobId;
-      junit = result.junit;
-      artifacts = result.artifacts;
-      campaignVideo =
-        result.artifacts.find((artifact) => artifact.flow === null && artifact.buffer.length > 0) ??
-        null;
-      if (result.error !== null) transportError = result.error;
-      if (result.status !== 'done') {
-        if (result.stdout !== '') console.log(result.stdout);
-        if (result.stderr !== '') console.error(result.stderr);
-      }
-    } else {
-      if (cfg.recordVideo) device.startVideo(spec);
-      const result = device.maestro(cfg.tags, cfg.flowsDir, junitPath, outputDir);
-      if (cfg.recordVideo) campaignVideo = device.stopVideo(spec);
-      if (result.status !== 0) {
-        if (result.stdout !== '') console.log(result.stdout);
-        if (result.stderr !== '') console.error(result.stderr);
-      }
-      artifacts = result.artifacts;
-      junit = fs.existsSync(junitPath) ? fs.readFileSync(junitPath, 'utf8') : '';
+    if (cfg.recordVideo) device.startVideo(spec);
+    const result = device.maestro(cfg.tags, cfg.flowsDir, junitPath, outputDir);
+    if (cfg.recordVideo) campaignVideo = device.stopVideo(spec);
+    if (result.status !== 0) {
+      if (result.stdout !== '') console.log(result.stdout);
+      if (result.stderr !== '') console.error(result.stderr);
     }
+    artifacts = result.artifacts;
+    junit = fs.existsSync(junitPath) ? fs.readFileSync(junitPath, 'utf8') : '';
   } catch (error) {
-    const known = error instanceof AgentTimeoutError || error instanceof AgentProtocolError;
     const message = error instanceof Error ? error.message : String(error);
-    console.error(`✖ ${known ? message : `campagne interrompue : ${message}`}`);
+    console.error(`✖ campagne interrompue : ${message}`);
     transportError = message;
   }
 
@@ -661,8 +554,7 @@ async function main() {
   const report = {
     spec,
     platform: cfg.platform,
-    transport: cfg.deviceAgentUrl === null ? 'local' : 'agent',
-    jobId,
+    transport: 'local',
     device: device.info(),
     tags: cfg.tags,
     startedAt,
