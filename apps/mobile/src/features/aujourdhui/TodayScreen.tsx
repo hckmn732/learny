@@ -137,7 +137,7 @@ export function TodayScreen() {
               : action === 'decline'
                 ? t.toasts.declined
                 : t.toasts.undone;
-          notify(message, 'today-toast-action');
+          notify(message, `today-toast-${action}`);
         })
         .catch((cause: unknown) => {
           if (isConflict(cause)) {

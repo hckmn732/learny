@@ -1,0 +1,137 @@
+# SPEC-3201 — écran Aujourd'hui : séance, indicateurs, actions du tuteur, fiches et report (CA-1 à
+# CA-4), plus l'unique capture `@visual` de la spécification (ADR-3015 § 5, ADR-3003 § 4).
+#
+# Précautions Maestro 2.12.1 (runbook § 5) : matcher `text` ancré et accents abîmés en transit, donc
+# toutes les assertions portent sur des `id` ; `scrollUntilVisible` est évité, la section « À suivre »
+# est atteinte par un balayage borné puis l'application est relancée avant les mutations.
+# La capture est prise AVANT tout défilement et toute mutation : c'est l'état initial de la maquette,
+# horloge figée au 11 novembre 2026 à 13:20.
+appId: fr.learny.app
+name: SPEC-3201 aujourdhui
+tags:
+  - SPEC-3201
+  - visual
+---
+- launchApp:
+    clearState: true
+# Page d'accueil des builds SDD : l'application est prête à recevoir le lien profond.
+- extendedWaitUntil:
+    visible:
+      id: sdd-health
+    timeout: 30000
+- openLink: learny://connexion?demo=1
+- extendedWaitUntil:
+    visible:
+      id: tab-aujourdhui
+    timeout: 60000
+- extendedWaitUntil:
+    visible:
+      id: today-screen
+    timeout: 20000
+# CA-1 — la séance du jour, ses heures, les trois indicateurs et les actions du tuteur.
+- assertVisible:
+    id: today-hero
+- assertVisible:
+    id: today-hero-kicker
+- assertVisible:
+    id: today-hero-start
+- assertVisible:
+    id: today-hero-later
+- assertVisible:
+    id: stat-streak
+- assertVisible:
+    id: stat-retention
+- assertVisible:
+    id: stat-gaps
+- assertVisible:
+    id: tutor-actions
+# État initial de la maquette : capture unique de la spécification, avant tout défilement.
+- takeScreenshot: SPEC-3201-aujourdhui
+# EF-4 — les trois fiches s'ouvrent et se referment.
+- tapOn:
+    id: stat-streak
+- extendedWaitUntil:
+    visible:
+      id: streak-sheet
+    timeout: 10000
+- assertVisible:
+    id: streak-sheet-days
+- tapOn:
+    id: streak-sheet-close
+- tapOn:
+    id: stat-retention
+- extendedWaitUntil:
+    visible:
+      id: retention-sheet
+    timeout: 10000
+- tapOn:
+    id: retention-sheet-close
+- tapOn:
+    id: stat-gaps
+- extendedWaitUntil:
+    visible:
+      id: gaps-sheet
+    timeout: 10000
+- tapOn:
+    id: gaps-sheet-close
+# BR-AUT-12 — le journal des actions de la semaine s'ouvre depuis « Tout voir ».
+- tapOn:
+    id: tutor-see-all
+- extendedWaitUntil:
+    visible:
+      id: tutor-feed-sheet
+    timeout: 10000
+- tapOn:
+    id: tutor-feed-sheet-close
+# EF-2, EF-6 — la suite du jour est atteinte par un balayage borné (runbook § 5, leçon 7).
+- swipe:
+    direction: UP
+    duration: 400
+- assertVisible:
+    id: up-next
+# Retour à l'état initial avant les mutations : l'application est relancée sans effacer la session.
+- launchApp
+- extendedWaitUntil:
+    visible:
+      id: today-screen
+    timeout: 30000
+# CA-2 — « Commencer » ouvre le quiz de validation (web tant que SPEC-3304 n'est pas livrée).
+- tapOn:
+    id: today-hero-start
+- extendedWaitUntil:
+    visible:
+      id: today-toast-start
+    timeout: 15000
+- launchApp
+- extendedWaitUntil:
+    visible:
+      id: today-screen
+    timeout: 30000
+# CA-4 — accepter la reprise la retire des actions en attente, puis « Annuler » la défait.
+- tapOn:
+    id: tutor-accept-0
+- extendedWaitUntil:
+    visible:
+      id: today-toast-accept
+    timeout: 15000
+- assertNotVisible:
+    id: tutor-accept-0
+- tapOn:
+    id: tutor-undo-0
+- extendedWaitUntil:
+    visible:
+      id: today-toast-undo
+    timeout: 15000
+# CA-3 — « Plus tard » déplace la séance sur le premier créneau proposé par le serveur.
+- tapOn:
+    id: today-hero-later
+- extendedWaitUntil:
+    visible:
+      id: later-sheet
+    timeout: 15000
+- tapOn:
+    id: later-slot-0
+- extendedWaitUntil:
+    visible:
+      id: today-toast-moved
+    timeout: 20000

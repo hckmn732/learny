@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-11-23T03:16:55.513Z",
+  "updatedAt": "2026-11-23T03:21:32.767Z",
   "specs": {
     "SPEC-001": {
       "status": "done",
@@ -6965,11 +6965,11 @@
       }
     },
     "SPEC-3201": {
-      "status": "pending",
+      "status": "in_progress",
       "attempts": 0,
-      "startedAt": null,
+      "startedAt": "2026-11-23T03:21:32.767Z",
       "completedAt": null,
-      "branch": null,
+      "branch": "spec/SPEC-3201-ecran-aujourd-hui",
       "commit": null,
       "lastError": null,
       "validations": {}
