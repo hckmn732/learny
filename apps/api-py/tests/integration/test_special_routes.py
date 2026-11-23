@@ -4,6 +4,7 @@
 endpoints and the relay stream are retired by ADR-2041).
 """
 
+import json
 from collections.abc import AsyncIterator, Mapping
 from contextlib import asynccontextmanager
 from dataclasses import dataclass, field
@@ -173,3 +174,16 @@ def test_an_unavailable_database_answers_503_and_a_degraded_status() -> None:
     assert body["status"] == "degraded"
     assert body["database"] == "unavailable"
     assert body["components"] == {"database": "unavailable", "build": "ok"}
+
+
+# --- GET /health ---------------------------------------------------------------------------------
+
+
+def test_the_liveness_probe_answers_without_the_database() -> None:
+    _app, client = build_app(ENABLED, failing=True)
+    response = client.get("/health")
+
+    assert response.status_code == 200
+    assert json.loads(response.content) == {"status": "ok", "version": "1.4.2", "commit": "abcdef1"}
+    assert response.headers["cache-control"] == "no-store"
+    assert response.headers["content-type"] == "application/json; charset=utf-8"
