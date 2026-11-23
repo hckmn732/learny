@@ -1,0 +1,119 @@
+# SPEC-3203 — agenda jour, semaine et mois, filtre et replanification (CA-1 à CA-4).
+#
+# Unique flux de la spécification, et unique flux `@visual` : il capture la vue Jour du 11 novembre
+# (référence `design/app-mobile/exports/screens/android-07-agenda.png`, CA-5) puis l'état du mois.
+# Les identifiants de créneaux sont des UUID : les assertions portent sur les `testID` stables de
+# l'écran et sur les titres ASCII de la maquette (les accents ne survivent pas toujours au
+# transport, Maestro 2.12.1).
+appId: fr.learny.app
+name: SPEC-3203 agenda
+tags:
+  - SPEC-3203
+  - visual
+---
+- launchApp:
+    clearState: true
+- extendedWaitUntil:
+    visible:
+      id: sdd-health
+    timeout: 30000
+- openLink: learny://connexion?demo=1
+- extendedWaitUntil:
+    visible:
+      id: tab-aujourdhui
+    timeout: 60000
+- tapOn:
+    id: tab-agenda
+# CA-1 — la vue Jour du mercredi 11 novembre : quatre activités, la ligne de l'heure à 13:20.
+- extendedWaitUntil:
+    visible:
+      id: agenda-timeline
+    timeout: 30000
+- assertVisible:
+    text: 'Relecture ciblée'
+- assertVisible:
+    text: 'Quiz de validation'
+- assertVisible:
+    text: 'Quiz global'
+- assertVisible:
+    id: agenda-now-line
+- takeScreenshot: SPEC-3203-agenda-jour
+# CA-2 — la semaine et le mois, puis le retour à la vue Jour par un jour touché.
+- tapOn:
+    id: agenda-view-semaine
+- extendedWaitUntil:
+    visible:
+      id: agenda-week-list
+    timeout: 20000
+- tapOn:
+    id: agenda-week-day-2026-11-12
+- extendedWaitUntil:
+    visible:
+      id: agenda-timeline
+    timeout: 20000
+- tapOn:
+    id: agenda-view-mois
+- extendedWaitUntil:
+    visible:
+      id: agenda-month-grid
+    timeout: 20000
+- assertVisible:
+    id: agenda-month-2026-11-11
+- takeScreenshot: SPEC-3203-agenda-mois
+- tapOn:
+    id: agenda-month-2026-11-11
+- extendedWaitUntil:
+    visible:
+      id: agenda-timeline
+    timeout: 20000
+# CA-3 — le filtre par formation restreint l'agenda, une formation sans activité affiche l'état vide.
+- tapOn:
+    id: agenda-filter
+- extendedWaitUntil:
+    visible:
+      id: agenda-filter-all
+    timeout: 20000
+- tapOn:
+    text: 'Anglais professionnel B2'
+- extendedWaitUntil:
+    visible:
+      id: agenda-empty
+    timeout: 20000
+- tapOn:
+    text: 'Changer de filtre'
+- extendedWaitUntil:
+    visible:
+      id: agenda-filter-all
+    timeout: 20000
+- tapOn:
+    id: agenda-filter-all
+- extendedWaitUntil:
+    visible:
+      id: agenda-timeline
+    timeout: 20000
+# CA-4 — « Replanifier » propose trois créneaux, le déplacement est appliqué et annoncé.
+- swipe:
+    direction: UP
+    duration: 300
+- extendedWaitUntil:
+    visible:
+      id: replan
+    timeout: 20000
+- tapOn:
+    id: replan
+- extendedWaitUntil:
+    visible:
+      id: replan-option-0
+    timeout: 30000
+- assertVisible:
+    id: replan-option-2
+- tapOn:
+    id: replan-option-0
+- assertVisible:
+    id: replan-confirm-block
+- tapOn:
+    id: replan-confirm
+- extendedWaitUntil:
+    visible:
+      id: agenda-toast
+    timeout: 30000
