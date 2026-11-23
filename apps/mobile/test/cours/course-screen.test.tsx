@@ -4,9 +4,11 @@
 // and components, so the test proves the wiring of the course of the demonstration dataset.
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { fireEvent, render, screen, waitFor } from '@testing-library/react-native';
+import { StyleSheet } from 'react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 import { CourseScreen, type CourseScreenProps } from '../../src/features/cours/CourseScreen';
+import { theme } from '../../src/theme';
 import { me } from '../programme/fixtures';
 import { expectAccessible } from '../utils/expectAccessible';
 
@@ -162,6 +164,28 @@ describe('[SPEC-3302] écran de lecture du cours', () => {
       expect(screen.getByTestId('course-error')).toBeTruthy();
     });
     expect(screen.getByText('Réessayer')).toBeTruthy();
+  });
+
+  it('applique les jetons de la maquette au chrome de l’écran (CA-5)', async () => {
+    await renderScreen();
+    await waitArticle();
+    // The reading bar of the mockup is lime, full width, right under the bar.
+    const fill = StyleSheet.flatten(
+      screen.getByTestId('course-progress-fill').props.style as never,
+    ) as { backgroundColor?: string };
+    expect(fill.backgroundColor).toBe(theme.colors.lime);
+    // The title is the large title of the design system, the tag its uppercase indigo pill.
+    const title = StyleSheet.flatten(screen.getByTestId('course-title').props.style as never) as {
+      fontSize?: number;
+    };
+    expect(title.fontSize).toBe(theme.type.largeTitle.fontSize);
+    const tag = StyleSheet.flatten(
+      screen.getByTestId('course-module-tag').props.style as never,
+    ) as {
+      textTransform?: string;
+    };
+    expect(tag.textTransform).toBe('uppercase');
+    expect(screen.getByText('Comptabilité générale')).toBeTruthy();
   });
 
   it('annonce une nouvelle version du cours et la recharge (CL-2)', async () => {

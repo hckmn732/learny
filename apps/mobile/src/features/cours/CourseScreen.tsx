@@ -105,6 +105,7 @@ export function CourseScreen({
   const [activeSection, setActiveSection] = useState<CourseSectionDto | null>(null);
   const [citation, setCitation] = useState<CourseCitation | null>(null);
   const [reported, setReported] = useState(false);
+  const [summaryFailed, setSummaryFailed] = useState(false);
   const [reportFailed, setReportFailed] = useState(false);
   const [refreshing, setRefreshing] = useState(false);
 
@@ -209,7 +210,7 @@ export function CourseScreen({
         testID="course-header-content"
       >
         <View style={styles.tag}>
-          <Text style={styles.tagText} tone="indigoInk" variant="label">
+          <Text style={styles.tagText} testID="course-module-tag" tone="indigoInk" variant="label">
             {screen?.module.title ?? ''}
           </Text>
         </View>
@@ -232,11 +233,14 @@ export function CourseScreen({
       <View style={styles.foot}>
         {prompt === null ? null : (
           <ChapterSummaryForm
-            failed={false}
+            failed={summaryFailed}
             initial={course?.summary ?? null}
             online={online}
             onSubmit={(text) => {
-              void summary.submit(text).catch(() => undefined);
+              setSummaryFailed(false);
+              void summary.submit(text).catch(() => {
+                setSummaryFailed(true);
+              });
             }}
             pending={summary.pending}
             prompt={prompt.contentMd}
@@ -257,7 +261,7 @@ export function CourseScreen({
         <View style={styles.bottomSpace} />
       </View>
     ),
-    [course, onOpenChapter, onOpenWeb, online, prompt, screen, summary],
+    [course, onOpenChapter, onOpenWeb, online, prompt, screen, summary, summaryFailed],
   );
 
   const loading = query.status === 'loading' && screen === null;

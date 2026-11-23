@@ -144,10 +144,10 @@ export interface SectionActions {
   readonly editOnWeb: boolean;
 }
 
-/** Actions offered by the section menu (EF-5): nothing is offered offline except the passage. */
+/** Actions offered by the section menu (EF-5): the passage stays readable offline (CL-1). */
 export function sectionActions(section: CourseSection, online: boolean): SectionActions {
   return {
-    askTutor: online,
+    askTutor: true,
     report: online && !section.reported,
     editOnWeb: online,
   };
