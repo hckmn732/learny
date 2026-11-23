@@ -133,8 +133,13 @@ describe('[SPEC-3001] verdicts de la campagne mobile', () => {
     const summary = summarizeMaestro(maestroReport(), 'SPEC-3001');
 
     expect(mobileVisualVerdict(summary)).toBe(true);
-    expect(mobileVisualVerdict({ ...summary, visual: 0 })).toBe(false);
     expect(mobileVisualVerdict({ ...summary, failed: 1 })).toBe(false);
+    // ADR-3019 : sans aucun flux `@visual` déclaré, l'étape juge l'absence d'échec ; l'exemption
+    // est consignée par la spécification dans son `acceptance.md`.
+    expect(mobileVisualVerdict({ ...summary, visual: 0, flows: [{ status: 'passed', tags: ['SPEC-3001'] }] })).toBe(true);
+    expect(mobileVisualVerdict({ ...summary, visual: 0, failed: 1, flows: [{ status: 'failed', tags: ['SPEC-3001'] }] })).toBe(false);
+    // Un flux `@visual` déclaré mais non réussi reste un échec.
+    expect(mobileVisualVerdict({ ...summary, visual: 0, flows: [{ status: 'failed', tags: ['SPEC-3001', 'visual'] }] })).toBe(false);
   });
 });
 
