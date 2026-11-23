@@ -65,7 +65,7 @@ describe('[SPEC-3001] summarizeMaestro', () => {
 
     expect(summary).toMatchObject({ passed: 1, failed: 0, videos: 1, visual: 1 });
     expect(summary.flows).toEqual([
-      { name: 'SPEC-3001 demo', status: 'passed', videos: 1, visual: true },
+      { name: 'SPEC-3001 demo', status: 'passed', videos: 1, visual: true, tags: ['SPEC-3001', 'visual'] },
     ]);
   });
 
