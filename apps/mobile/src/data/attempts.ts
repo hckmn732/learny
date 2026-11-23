@@ -38,12 +38,20 @@ export interface AttemptQuery {
   readonly refresh: () => Promise<void>;
 }
 
-/** One attempt with its questions, as the server projects them (ET-2, CL-3). */
+/**
+ * One attempt with its questions, as the server projects them (ET-2, CL-3).
+ *
+ * The read is always fresh: reopening an attempt must resume on the first unanswered question
+ * (CA-4), so the cached copy of a previous mount is never trusted — `staleTime` is 0 and every
+ * mount refetches, exactly as the attempt state machine expects.
+ */
 export function useAttempt(attemptId: string | null): AttemptQuery {
   const query = useQuery({
     queryKey: queryKeys.attempt(attemptId ?? 'none'),
     queryFn: () => requireApiClient().api.getQuizAttempt({ params: { aid: attemptId ?? '' } }),
     enabled: attemptId !== null,
+    staleTime: 0,
+    refetchOnMount: 'always',
   });
   return {
     status: attemptId === null ? 'loading' : statusOf(query),
@@ -73,6 +81,8 @@ export function useAttemptResult(attemptId: string | null): AttemptResultQuery {
     queryKey: queryKeys.attemptResult(attemptId ?? 'none'),
     queryFn: () => requireApiClient().api.getQuizResult({ params: { aid: attemptId ?? '' } }),
     enabled: attemptId !== null,
+    staleTime: 0,
+    refetchOnMount: 'always',
     refetchInterval: (current) => {
       const value = current.state.data;
       if (value === undefined) return false;
