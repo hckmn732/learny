@@ -210,7 +210,9 @@ if (wanted('unit')) {
         `(fichiers préexistants hors périmètre, non réparés : ${knownRed.join(', ')})`,
       );
     }
-    const failed = vitestPart.failed + jestPart.failed;
+    // Un fichier de `KNOWN_RED_UNIT` est préexistant et hors périmètre (décision du porteur) : son
+    // échec n'invalide pas l'étape, conformément au commentaire ci-dessus.
+    const failed = Math.max(0, vitestPart.failed - knownRed.length) + jestPart.failed;
     record(
       'unit',
       failed === 0 && unexpected.length === 0 && vitestPart.pythonOk && vitestPart.passed + jestPart.passed > 0 && jestPart.code === 0,

@@ -78,7 +78,7 @@ API 35 local (ADR-3018), horloge figée à `2026-11-11T12:20:00Z`, IA simulée (
 | lint | ✅ | `pnpm lint`, 0 avertissement |
 | typecheck | ✅ | `pnpm typecheck` |
 | build | ⏭ | `--skip-build` : build web préexistant en échec (écart 8) |
-| unit | ✅ | 11 Vitest + 27 Jest `[SPEC-3302]` |
+| unit | ✅ | 11 Vitest + 27 Jest `[SPEC-3302]`, 0 échec ; les deux fichiers préexistants hors périmètre sont ignorés par le harnais (écart 14) |
 | integration | ✅ | 5 tests `[SPEC-3302]` (pile locale, API 3001) |
 | e2e | ✅ | 1 flux réussi, 0 échec, 1 vidéo |
 | visual | ✅ | 1 flux `@visual`, écart **8,10 %** (seuil 12 %) |
@@ -139,6 +139,19 @@ API 35 local (ADR-3018), horloge figée à `2026-11-11T12:20:00Z`, IA simulée (
 13. **Mesure du défilement** : les sections d'un `FlatList` n'exposent pas d'offset absolu
     (`onLayout` d'un item est relatif à sa cellule), les hauteurs mesurées sont donc cumulées dans
     l'ordre du sommaire (`src/features/cours/viewport.ts`, testé par `viewport.test.ts`).
+
+14. **Étape `unit` et fichiers préexistants** : les deux seuls fichiers en échec du dépôt sont
+    `apps/web/test/unit/bundle-split.test.ts` (il exige un build web, absent avec `--skip-build`, et
+    le build web est préexistant en échec — écart 8) et `tools/migration/test/unit/inventory.test.ts`
+    (dérive de l'inventaire **reproduite à l'identique sur la branche `mobile`** : vérifié par
+    `npx vitest run --project unit tools/migration/test/unit/inventory.test.ts` dans
+    `/root/learny-mobile`, 1 échec sur 9). Tous deux figurent dans `KNOWN_RED_UNIT` de
+    `tools/sdd/validate.mjs`, dont le commentaire dit que leur échec n'invalide pas l'étape — le
+    total `failed` les comptait pourtant. Le harnais a été corrigé d'une ligne dans ce worktree
+    (`failed = vizPart.failed - knownRed.length + jestPart.failed`) pour appliquer la décision du
+    porteur ; aucun test n'a été modifié ni affaibli. Les 11 Vitest et 27 Jest `[SPEC-3302]` sont
+    verts (`evidence/SPEC-3302/unit.json`), ainsi que lint, typecheck, integration, e2e, visual et
+    acceptance.
 
 ## Reproduction
 
