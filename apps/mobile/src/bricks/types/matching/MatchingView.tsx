@@ -71,23 +71,26 @@ export function MatchingView({
           const wrong = state_ !== undefined && !state_.correct;
           const expected = wrong ? state_.expectedRight : null;
           return (
-            <Pressable
-              accessibilityRole="button"
-              accessibilityState={{ selected: state.selectedLeft === left.id, disabled: locked }}
-              disabled={locked}
-              key={left.id}
-              onPress={() => {
-                if (locked) return;
-                setState(tapLeft(state, left.id));
-              }}
-              style={[
-                styles.row,
-                state.selectedLeft === left.id ? styles.selected : null,
-                correct ? styles.correct : wrong ? styles.wrong : null,
-              ]}
-              testID={`brick-item-${left.id}`}
-            >
-              <Text variant="body">{left.text}</Text>
+            <View key={left.id} style={styles.list}>
+              <Pressable
+                accessibilityRole="button"
+                accessibilityState={{ selected: state.selectedLeft === left.id, disabled: locked }}
+                disabled={locked}
+                onPress={() => {
+                  if (locked) return;
+                  setState(tapLeft(state, left.id));
+                }}
+                style={[
+                  styles.row,
+                  state.selectedLeft === left.id ? styles.selected : null,
+                  correct ? styles.correct : wrong ? styles.wrong : null,
+                ]}
+                testID={`brick-item-${left.id}`}
+              >
+                <Text variant="body">{left.text}</Text>
+              </Pressable>
+              {/* The placement is a sibling of the button, not a child: a pressable is one node of
+                the accessibility tree, so a child text would never be announced on its own. */}
               {placed === null ? null : (
                 <Text variant="caption" tone="secondary" testID={`brick-placed-${left.id}`}>
                   {textOfRight.get(placed) ?? ''}
@@ -98,7 +101,7 @@ export function MatchingView({
                   {t.answerExpected(expected)}
                 </Text>
               )}
-            </Pressable>
+            </View>
           );
         })}
       </View>
