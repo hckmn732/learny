@@ -1,6 +1,6 @@
 # ADR-3015 — Outillage e2e mobile : jobs asynchrones et artefacts par flux
 
-- **Statut** : Acceptée — complète ADR-3012 et ADR-3004
+- **Statut** : Acceptée — complète ADR-3012 et ADR-3004 ; § 1 (jobs asynchrones) remplacé par ADR-3018, § 2 à § 4 toujours en vigueur
 - **Origine** : Déduite (retours d'implémentation de SPEC-3001 à SPEC-3003)
 - **Date** : 2026-11-22
 - **Liens** : ADR-3004, ADR-3012, SPEC-3001, SPEC-3002, SPEC-3003, SPEC-3101
