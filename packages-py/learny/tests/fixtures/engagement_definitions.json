@@ -1,0 +1,975 @@
+{
+  "version": 1,
+  "generatedAt": "2026-11-11T12:20:00.000Z",
+  "cases": [
+    {
+      "key": "reprise",
+      "kind": "reprise_proposed",
+      "status": "pending_consent",
+      "tone": "tu",
+      "timeZone": "Europe/Paris",
+      "payload": {
+        "dedupeKey": "missed:slot:1",
+        "createdOn": "2026-11-11T12:20:00.000Z",
+        "formationId": "00000000-0000-4000-8000-000000000010",
+        "formationTitle": "Permis bateau",
+        "title": "Module 2 — Les bases",
+        "missedDate": "2026-11-10",
+        "missedSlotId": "00000000-0000-4000-8000-000000000020",
+        "proposed": {
+          "startsAt": "2026-11-12T17:00:00.000Z",
+          "endsAt": "2026-11-12T18:00:00.000Z",
+          "bufferSlotId": null,
+          "inBuffer": false
+        },
+        "alternatives": []
+      },
+      "createdAt": "2026-11-11T12:20:00.000Z",
+      "summary": "« Module 2 — Les bases » n’a pas été terminé mardi. Je propose de le reprendre jeudi à 18:00, dans un créneau libre de ton agenda."
+    },
+    {
+      "key": "reprise",
+      "kind": "reprise_proposed",
+      "status": "applied",
+      "tone": "vous",
+      "timeZone": "Europe/Paris",
+      "payload": {
+        "dedupeKey": "missed:slot:1",
+        "createdOn": "2026-11-11T12:20:00.000Z",
+        "formationId": "00000000-0000-4000-8000-000000000010",
+        "formationTitle": "Permis bateau",
+        "title": "Module 2 — Les bases",
+        "missedDate": "2026-11-10",
+        "missedSlotId": "00000000-0000-4000-8000-000000000020",
+        "proposed": {
+          "startsAt": "2026-11-12T17:00:00.000Z",
+          "endsAt": "2026-11-12T18:00:00.000Z",
+          "bufferSlotId": null,
+          "inBuffer": false
+        },
+        "alternatives": [],
+        "chosenStartsAt": "2026-11-12T17:00:00.000Z"
+      },
+      "createdAt": "2026-11-11T12:20:00.000Z",
+      "summary": "C’est noté : reprise de « Module 2 — Les bases » jeudi 18:00. Elle est dans votre agenda."
+    },
+    {
+      "key": "reprise",
+      "kind": "reprise_proposed",
+      "status": "undone",
+      "tone": "tu",
+      "timeZone": "Europe/Paris",
+      "payload": {
+        "dedupeKey": "missed:slot:1",
+        "createdOn": "2026-11-11T12:20:00.000Z",
+        "formationId": "00000000-0000-4000-8000-000000000010",
+        "formationTitle": "Permis bateau",
+        "title": "Module 2 — Les bases",
+        "missedDate": "2026-11-10",
+        "missedSlotId": "00000000-0000-4000-8000-000000000020",
+        "proposed": {
+          "startsAt": "2026-11-12T17:00:00.000Z",
+          "endsAt": "2026-11-12T18:00:00.000Z",
+          "bufferSlotId": null,
+          "inBuffer": false
+        },
+        "alternatives": []
+      },
+      "createdAt": "2026-11-11T12:20:00.000Z",
+      "summary": "Annulé : « Module 2 — Les bases » n’a pas été terminé mardi. Je propose de le reprendre jeudi à 18:00, dans un créneau libre de ton agenda."
+    },
+    {
+      "key": "reprise",
+      "kind": "reprise_proposed",
+      "status": "declined",
+      "tone": "vous",
+      "timeZone": "Europe/Paris",
+      "payload": {
+        "dedupeKey": "missed:slot:1",
+        "createdOn": "2026-11-11T12:20:00.000Z",
+        "formationId": "00000000-0000-4000-8000-000000000010",
+        "formationTitle": "Permis bateau",
+        "title": "Module 2 — Les bases",
+        "missedDate": "2026-11-10",
+        "missedSlotId": "00000000-0000-4000-8000-000000000020",
+        "proposed": {
+          "startsAt": "2026-11-12T17:00:00.000Z",
+          "endsAt": "2026-11-12T18:00:00.000Z",
+          "bufferSlotId": null,
+          "inBuffer": false
+        },
+        "alternatives": []
+      },
+      "createdAt": "2026-11-11T12:20:00.000Z",
+      "summary": "Refusé : « Module 2 — Les bases » n’a pas été terminé mardi. Je propose de le reprendre jeudi à 18:00, dans un créneau libre de votre agenda."
+    },
+    {
+      "key": "reprise",
+      "kind": "reprise_short_proposed",
+      "status": "pending_consent",
+      "tone": "tu",
+      "timeZone": "Europe/Paris",
+      "payload": {
+        "dedupeKey": "short:2026-11-11",
+        "createdOn": "2026-11-11T12:20:00.000Z",
+        "formationId": "00000000-0000-4000-8000-000000000010",
+        "formationTitle": "Permis bateau",
+        "inactiveDays": 3,
+        "proposed": {
+          "startsAt": "2026-11-11T18:00:00.000Z",
+          "endsAt": "2026-11-11T18:05:00.000Z"
+        },
+        "alternatives": []
+      },
+      "createdAt": "2026-11-11T12:20:00.000Z",
+      "summary": "Tu n’as pas étudié depuis 3 jours. Je te propose une reprise de 5 minutes mercredi à 19:00."
+    },
+    {
+      "key": "reprise",
+      "kind": "reprise_short_proposed",
+      "status": "applied",
+      "tone": "vous",
+      "timeZone": "Europe/Paris",
+      "payload": {
+        "dedupeKey": "short:2026-11-11",
+        "createdOn": "2026-11-11T12:20:00.000Z",
+        "formationId": "00000000-0000-4000-8000-000000000010",
+        "formationTitle": "Permis bateau",
+        "inactiveDays": 3,
+        "proposed": {
+          "startsAt": "2026-11-11T18:00:00.000Z",
+          "endsAt": "2026-11-11T18:05:00.000Z"
+        },
+        "alternatives": [],
+        "chosenStartsAt": "2026-11-11T18:00:00.000Z"
+      },
+      "createdAt": "2026-11-11T12:20:00.000Z",
+      "summary": "C’est noté : reprise de 5 minutes mercredi 19:00. Elle est dans votre agenda."
+    },
+    {
+      "key": "reprise",
+      "kind": "plan_change_proposed",
+      "status": "pending_consent",
+      "tone": "tu",
+      "timeZone": "Europe/Paris",
+      "payload": {
+        "dedupeKey": "plan:2026-11-11",
+        "createdOn": "2026-11-11T12:20:00.000Z",
+        "formationId": "00000000-0000-4000-8000-000000000010",
+        "formationTitle": "Permis bateau",
+        "reason": "no_room",
+        "inactiveDays": 5,
+        "options": [
+          {
+            "kind": "shift_end"
+          },
+          {
+            "kind": "lighten"
+          }
+        ]
+      },
+      "createdAt": "2026-11-11T12:20:00.000Z",
+      "summary": "Plus de place pour reprendre « Séance de travail » cette semaine : je propose d’alléger le programme ou de décaler la fin."
+    },
+    {
+      "key": "reprise",
+      "kind": "plan_change_proposed",
+      "status": "applied",
+      "tone": "vous",
+      "timeZone": "Europe/Paris",
+      "payload": {
+        "dedupeKey": "plan:2026-11-11",
+        "createdOn": "2026-11-11T12:20:00.000Z",
+        "formationId": "00000000-0000-4000-8000-000000000010",
+        "formationTitle": "Permis bateau",
+        "reason": "no_room",
+        "inactiveDays": 5,
+        "options": [
+          {
+            "kind": "shift_end"
+          },
+          {
+            "kind": "lighten"
+          }
+        ],
+        "chosenOption": "shift_end"
+      },
+      "createdAt": "2026-11-11T12:20:00.000Z",
+      "summary": "C’est noté : « Permis bateau », décaler la fin."
+    },
+    {
+      "key": "reprise",
+      "kind": "plan_change_proposed",
+      "status": "declined",
+      "tone": "tu",
+      "timeZone": "Europe/Paris",
+      "payload": {
+        "dedupeKey": "plan:2026-11-11",
+        "createdOn": "2026-11-11T12:20:00.000Z",
+        "formationId": "00000000-0000-4000-8000-000000000010",
+        "formationTitle": "Permis bateau",
+        "reason": "no_room",
+        "inactiveDays": 5,
+        "options": [
+          {
+            "kind": "shift_end"
+          },
+          {
+            "kind": "lighten"
+          }
+        ]
+      },
+      "createdAt": "2026-11-11T12:20:00.000Z",
+      "summary": "Refusé : Plus de place pour reprendre « Séance de travail » cette semaine : je propose d’alléger le programme ou de décaler la fin."
+    },
+    {
+      "key": "micro_seance",
+      "kind": "micro_session_proposed",
+      "status": "pending_consent",
+      "tone": "tu",
+      "timeZone": "Europe/Paris",
+      "payload": {
+        "dedupeKey": "micro:2026-11-11",
+        "date": "2026-11-11",
+        "hour": 20,
+        "durationMin": 5,
+        "formationId": "00000000-0000-4000-8000-000000000010",
+        "notionCount": 3
+      },
+      "createdAt": "2026-11-11T12:20:00.000Z",
+      "summary": "Micro-séance de 5 min proposée à 20:00 pour garder ta série."
+    },
+    {
+      "key": "micro_seance",
+      "kind": "micro_session_proposed",
+      "status": "consumed",
+      "tone": "vous",
+      "timeZone": "Europe/Paris",
+      "payload": {
+        "dedupeKey": "micro:2026-11-11",
+        "date": "2026-11-11",
+        "hour": 20,
+        "durationMin": 5,
+        "formationId": "00000000-0000-4000-8000-000000000010",
+        "notionCount": 3
+      },
+      "createdAt": "2026-11-11T12:20:00.000Z",
+      "summary": "Micro-séance de 5 min proposée et faite : série conservée."
+    },
+    {
+      "key": "micro_seance",
+      "kind": "micro_session_proposed",
+      "status": "expired",
+      "tone": "tu",
+      "timeZone": "Europe/Paris",
+      "payload": {
+        "dedupeKey": "micro:2026-11-11",
+        "date": "2026-11-11",
+        "hour": 20,
+        "durationMin": 5,
+        "formationId": "00000000-0000-4000-8000-000000000010",
+        "notionCount": 3
+      },
+      "createdAt": "2026-11-11T12:20:00.000Z",
+      "summary": "Micro-séance de 5 min proposée à 20:00, non faite."
+    },
+    {
+      "key": "micro_seance",
+      "kind": "micro_session_proposed",
+      "status": "undone",
+      "tone": "vous",
+      "timeZone": "Europe/Paris",
+      "payload": {
+        "dedupeKey": "micro:2026-11-11",
+        "date": "2026-11-11",
+        "hour": 20,
+        "durationMin": 5,
+        "formationId": "00000000-0000-4000-8000-000000000010",
+        "notionCount": 3
+      },
+      "createdAt": "2026-11-11T12:20:00.000Z",
+      "summary": "Annulé : micro-séance de 5 min du mercredi."
+    },
+    {
+      "key": "micro_seance",
+      "kind": "micro_session_proposed",
+      "status": "declined",
+      "tone": "tu",
+      "timeZone": "Europe/Paris",
+      "payload": {
+        "dedupeKey": "micro:2026-11-11",
+        "date": "2026-11-11",
+        "hour": 20,
+        "durationMin": 5,
+        "formationId": "00000000-0000-4000-8000-000000000010",
+        "notionCount": 3
+      },
+      "createdAt": "2026-11-11T12:20:00.000Z",
+      "summary": "Refusé : micro-séance de 5 min proposée à 20:00."
+    },
+    {
+      "key": "echauffement",
+      "kind": "warmup_added",
+      "status": "applied",
+      "tone": "tu",
+      "timeZone": "Europe/Paris",
+      "payload": {
+        "dedupeKey": "warmup:2026-11-11",
+        "date": "2026-11-11",
+        "count": 3,
+        "notionLabels": ["Amers", "Balises"],
+        "reviewNotionLabels": ["Amers"],
+        "knewCount": 2,
+        "reviewRemaining": false,
+        "formationId": "00000000-0000-4000-8000-000000000010",
+        "nextSession": {
+          "slotId": "00000000-0000-4000-8000-000000000030",
+          "kind": "course",
+          "startsAt": "2026-11-11T18:00:00.000Z",
+          "moduleId": "00000000-0000-4000-8000-000000000040",
+          "activityId": null
+        }
+      },
+      "createdAt": "2026-11-11T12:20:00.000Z",
+      "summary": "Échauffement ajouté avant ton cours de 19:00 : 3 questions sur Amers, Balises."
+    },
+    {
+      "key": "echauffement",
+      "kind": "warmup_added",
+      "status": "consumed",
+      "tone": "vous",
+      "timeZone": "Europe/Paris",
+      "payload": {
+        "dedupeKey": "warmup:2026-11-11",
+        "date": "2026-11-11",
+        "count": 3,
+        "notionLabels": ["Amers", "Balises"],
+        "reviewNotionLabels": ["Amers"],
+        "knewCount": 2,
+        "reviewRemaining": false,
+        "formationId": "00000000-0000-4000-8000-000000000010",
+        "nextSession": {
+          "slotId": "00000000-0000-4000-8000-000000000030",
+          "kind": "course",
+          "startsAt": "2026-11-11T18:00:00.000Z",
+          "moduleId": "00000000-0000-4000-8000-000000000040",
+          "activityId": null
+        }
+      },
+      "createdAt": "2026-11-11T12:20:00.000Z",
+      "summary": "Échauffement fait : 2 sur 3 ; 1 notion repasse dans le quiz global du soir."
+    },
+    {
+      "key": "echauffement",
+      "kind": "warmup_added",
+      "status": "expired",
+      "tone": "tu",
+      "timeZone": "Europe/Paris",
+      "payload": {
+        "dedupeKey": "warmup:2026-11-11",
+        "date": "2026-11-11",
+        "count": 3,
+        "notionLabels": ["Amers", "Balises"],
+        "reviewNotionLabels": ["Amers"],
+        "knewCount": 2,
+        "reviewRemaining": false,
+        "formationId": "00000000-0000-4000-8000-000000000010",
+        "nextSession": {
+          "slotId": "00000000-0000-4000-8000-000000000030",
+          "kind": "course",
+          "startsAt": "2026-11-11T18:00:00.000Z",
+          "moduleId": "00000000-0000-4000-8000-000000000040",
+          "activityId": null
+        }
+      },
+      "createdAt": "2026-11-11T12:20:00.000Z",
+      "summary": "Échauffement du mercredi 11 novembre non fait."
+    },
+    {
+      "key": "echauffement",
+      "kind": "warmup_added",
+      "status": "undone",
+      "tone": "vous",
+      "timeZone": "Europe/Paris",
+      "payload": {
+        "dedupeKey": "warmup:2026-11-11",
+        "date": "2026-11-11",
+        "count": 3,
+        "notionLabels": ["Amers", "Balises"],
+        "reviewNotionLabels": ["Amers"],
+        "knewCount": 2,
+        "reviewRemaining": false,
+        "formationId": "00000000-0000-4000-8000-000000000010",
+        "nextSession": {
+          "slotId": "00000000-0000-4000-8000-000000000030",
+          "kind": "course",
+          "startsAt": "2026-11-11T18:00:00.000Z",
+          "moduleId": "00000000-0000-4000-8000-000000000040",
+          "activityId": null
+        }
+      },
+      "createdAt": "2026-11-11T12:20:00.000Z",
+      "summary": "Annulé : échauffement du mercredi 11 novembre."
+    },
+    {
+      "key": "jeu_lacune",
+      "kind": "game_chosen",
+      "status": "applied",
+      "tone": "tu",
+      "timeZone": "Europe/Paris",
+      "payload": {
+        "dedupeKey": "game:1",
+        "notionId": "00000000-0000-4000-8000-000000000050",
+        "notionLabel": "Amers",
+        "nature": "forgetting",
+        "format": "recall_card",
+        "pendingGeneration": false
+      },
+      "createdAt": "2026-11-11T12:20:00.000Z",
+      "summary": "Lacune « Amers » : carte de rappel ajoutée au quiz global."
+    },
+    {
+      "key": "jeu_lacune",
+      "kind": "game_chosen",
+      "status": "undone",
+      "tone": "vous",
+      "timeZone": "Europe/Paris",
+      "payload": {
+        "dedupeKey": "game:1",
+        "notionId": "00000000-0000-4000-8000-000000000050",
+        "notionLabel": "Amers",
+        "nature": "forgetting",
+        "format": "recall_card",
+        "pendingGeneration": false
+      },
+      "createdAt": "2026-11-11T12:20:00.000Z",
+      "summary": "Annulé : carte de rappel de « Amers » retiré du quiz global."
+    },
+    {
+      "key": "jeu_lacune",
+      "kind": "exercise_scheduled",
+      "status": "applied",
+      "tone": "tu",
+      "timeZone": "Europe/Paris",
+      "payload": {
+        "dedupeKey": "game:2",
+        "notionId": "00000000-0000-4000-8000-000000000050",
+        "notionLabel": "Amers",
+        "nature": "application",
+        "startsAt": "2026-11-12T17:00:00.000Z",
+        "endsAt": "2026-11-12T17:15:00.000Z"
+      },
+      "createdAt": "2026-11-11T12:20:00.000Z",
+      "summary": "Lacune « Amers » : exercice pratique placé jeudi 18:00."
+    },
+    {
+      "key": "jeu_lacune",
+      "kind": "exercise_scheduled",
+      "status": "undone",
+      "tone": "vous",
+      "timeZone": "Europe/Paris",
+      "payload": {
+        "dedupeKey": "game:2",
+        "notionId": "00000000-0000-4000-8000-000000000050",
+        "notionLabel": "Amers",
+        "nature": "application",
+        "startsAt": "2026-11-12T17:00:00.000Z",
+        "endsAt": "2026-11-12T17:15:00.000Z"
+      },
+      "createdAt": "2026-11-11T12:20:00.000Z",
+      "summary": "Annulé : exercice pratique de « Amers »."
+    },
+    {
+      "key": "jeu_lacune",
+      "kind": "game_chosen",
+      "status": "expired",
+      "tone": "tu",
+      "timeZone": "Europe/Paris",
+      "payload": {
+        "dedupeKey": "game:1",
+        "notionId": "00000000-0000-4000-8000-000000000050",
+        "notionLabel": "Amers",
+        "nature": "application",
+        "format": "recall_card",
+        "pendingGeneration": false
+      },
+      "createdAt": "2026-11-11T12:20:00.000Z",
+      "summary": "Lacune « Amers » levée avant l’entraînement."
+    },
+    {
+      "key": "questions_cartes",
+      "kind": "card_created",
+      "status": "pending_consent",
+      "tone": "tu",
+      "timeZone": "Europe/Paris",
+      "payload": {
+        "dedupeKey": "game:1",
+        "notionId": "00000000-0000-4000-8000-000000000050",
+        "notionLabel": "Amers",
+        "nature": "forgetting",
+        "format": "recall_card",
+        "pendingGeneration": false,
+        "question": "Qu’est-ce qu’un amer ?",
+        "answer": "Un point remarquable.",
+        "sourceLabel": "Cours 2"
+      },
+      "createdAt": "2026-11-11T12:20:00.000Z",
+      "summary": "Une question sur « Amers » peut devenir une carte de rappel : acceptez pour l’ajouter au quiz global."
+    },
+    {
+      "key": "questions_cartes",
+      "kind": "card_created",
+      "status": "applied",
+      "tone": "vous",
+      "timeZone": "Europe/Paris",
+      "payload": {
+        "dedupeKey": "game:1",
+        "notionId": "00000000-0000-4000-8000-000000000050",
+        "notionLabel": "Amers",
+        "nature": "forgetting",
+        "format": "recall_card",
+        "pendingGeneration": false,
+        "brickId": "00000000-0000-4000-8000-000000000080"
+      },
+      "createdAt": "2026-11-11T12:20:00.000Z",
+      "summary": "Carte de rappel « Amers » ajoutée au quiz global."
+    },
+    {
+      "key": "questions_cartes",
+      "kind": "card_created",
+      "status": "declined",
+      "tone": "tu",
+      "timeZone": "Europe/Paris",
+      "payload": {
+        "dedupeKey": "game:1",
+        "notionId": "00000000-0000-4000-8000-000000000050",
+        "notionLabel": "Amers",
+        "nature": "forgetting",
+        "format": "recall_card",
+        "pendingGeneration": false
+      },
+      "createdAt": "2026-11-11T12:20:00.000Z",
+      "summary": "Refusé : la question sur « Amers » ne devient pas une carte."
+    },
+    {
+      "key": "questions_cartes",
+      "kind": "card_created",
+      "status": "undone",
+      "tone": "vous",
+      "timeZone": "Europe/Paris",
+      "payload": {
+        "dedupeKey": "game:1",
+        "notionId": "00000000-0000-4000-8000-000000000050",
+        "notionLabel": "Amers",
+        "nature": "forgetting",
+        "format": "recall_card",
+        "pendingGeneration": false
+      },
+      "createdAt": "2026-11-11T12:20:00.000Z",
+      "summary": "Annulé : carte de rappel « Amers » retirée des prochains tirages."
+    },
+    {
+      "key": "questions_cartes",
+      "kind": "card_created",
+      "status": "expired",
+      "tone": "tu",
+      "timeZone": "Europe/Paris",
+      "payload": {
+        "dedupeKey": "game:1",
+        "notionId": "00000000-0000-4000-8000-000000000050",
+        "notionLabel": "Amers",
+        "nature": "forgetting",
+        "format": "recall_card",
+        "pendingGeneration": false
+      },
+      "createdAt": "2026-11-11T12:20:00.000Z",
+      "summary": "Expiré : la question sur « Amers » ne devient pas une carte."
+    },
+    {
+      "key": "questions_cartes",
+      "kind": "card_created",
+      "status": "consumed",
+      "tone": "vous",
+      "timeZone": "Europe/Paris",
+      "payload": {
+        "dedupeKey": "game:1",
+        "notionId": "00000000-0000-4000-8000-000000000050",
+        "notionLabel": "Amers",
+        "nature": "forgetting",
+        "format": "recall_card",
+        "pendingGeneration": false
+      },
+      "createdAt": "2026-11-11T12:20:00.000Z",
+      "summary": "Carte de rappel « Amers » jouée."
+    },
+    {
+      "key": "plafond_quiz",
+      "kind": "quiz_smoothed",
+      "status": "applied",
+      "tone": "tu",
+      "timeZone": "Europe/Paris",
+      "payload": {
+        "dueCount": 22,
+        "deferredNotionIds": ["a", "b"],
+        "deferredTo": "2026-11-12",
+        "maxMinutes": 15,
+        "localDate": "2026-11-11"
+      },
+      "createdAt": "2026-11-11T12:20:00.000Z",
+      "summary": "22 notions étaient dues aujourd’hui : 2 sont reportées à jeudi pour rester sous 15 min."
+    },
+    {
+      "key": "plafond_quiz",
+      "kind": "quiz_smoothed",
+      "status": "undone",
+      "tone": "vous",
+      "timeZone": "Europe/Paris",
+      "payload": {
+        "dueCount": 22,
+        "deferredNotionIds": ["a"],
+        "deferredTo": "2026-11-12",
+        "maxMinutes": 15,
+        "localDate": "2026-11-11"
+      },
+      "createdAt": "2026-11-11T12:20:00.000Z",
+      "summary": "Annulé : le lissage du 11 nov. est retiré, toutes les notions dues restent aujourd’hui."
+    },
+    {
+      "key": "plafond_quiz",
+      "kind": "quiz_smoothed",
+      "status": "applied",
+      "tone": "tu",
+      "timeZone": "Europe/Paris",
+      "payload": {
+        "dueCount": 4,
+        "deferredNotionIds": [],
+        "deferredTo": "2026-11-12",
+        "maxMinutes": 15,
+        "localDate": "2026-11-11"
+      },
+      "createdAt": "2026-11-11T12:20:00.000Z",
+      "summary": "Aucune notion reportée : la journée tient sous 15 min."
+    },
+    {
+      "key": "sprint",
+      "kind": "sprint_planned",
+      "status": "pending_consent",
+      "tone": "tu",
+      "timeZone": "Europe/Paris",
+      "payload": {
+        "dedupeKey": "sprint:1",
+        "formationId": "00000000-0000-4000-8000-000000000010",
+        "examSlotId": "00000000-0000-4000-8000-000000000070",
+        "examTitle": "Examen blanc",
+        "examDate": "2026-11-20",
+        "moduleId": "00000000-0000-4000-8000-000000000040",
+        "durationMin": 30,
+        "notionLabels": ["Amers", "Balises"],
+        "targets": [
+          {
+            "label": "J-3",
+            "day": "2026-11-17",
+            "slotId": null,
+            "startsAt": "2026-11-17T17:00:00.000Z",
+            "endsAt": "2026-11-17T17:30:00.000Z",
+            "durationMin": 30
+          }
+        ],
+        "impossible": []
+      },
+      "createdAt": "2026-11-11T12:20:00.000Z",
+      "summary": "Tes sprints de 30 min avant « Examen blanc » : Mardi à 18:00 · notions ciblées : Amers, Balises."
+    },
+    {
+      "key": "sprint",
+      "kind": "sprint_planned",
+      "status": "undone",
+      "tone": "vous",
+      "timeZone": "Europe/Paris",
+      "payload": {
+        "dedupeKey": "sprint:1",
+        "formationId": "00000000-0000-4000-8000-000000000010",
+        "examSlotId": "00000000-0000-4000-8000-000000000070",
+        "examTitle": "Examen blanc",
+        "examDate": "2026-11-20",
+        "moduleId": "00000000-0000-4000-8000-000000000040",
+        "durationMin": 30,
+        "notionLabels": ["Amers", "Balises"],
+        "targets": [
+          {
+            "label": "J-3",
+            "day": "2026-11-17",
+            "slotId": null,
+            "startsAt": "2026-11-17T17:00:00.000Z",
+            "endsAt": "2026-11-17T17:30:00.000Z",
+            "durationMin": 30
+          }
+        ],
+        "impossible": []
+      },
+      "createdAt": "2026-11-11T12:20:00.000Z",
+      "summary": "Annulé : sprints avant « Examen blanc » retirés ; les créneaux déjà faits restent dans l’historique."
+    },
+    {
+      "key": "sprint",
+      "kind": "sprint_planned",
+      "status": "declined",
+      "tone": "tu",
+      "timeZone": "Europe/Paris",
+      "payload": {
+        "dedupeKey": "sprint:1",
+        "formationId": "00000000-0000-4000-8000-000000000010",
+        "examSlotId": "00000000-0000-4000-8000-000000000070",
+        "examTitle": "Examen blanc",
+        "examDate": "2026-11-20",
+        "moduleId": "00000000-0000-4000-8000-000000000040",
+        "durationMin": 30,
+        "notionLabels": ["Amers", "Balises"],
+        "targets": [
+          {
+            "label": "J-3",
+            "day": "2026-11-17",
+            "slotId": null,
+            "startsAt": "2026-11-17T17:00:00.000Z",
+            "endsAt": "2026-11-17T17:30:00.000Z",
+            "durationMin": 30
+          }
+        ],
+        "impossible": []
+      },
+      "createdAt": "2026-11-11T12:20:00.000Z",
+      "summary": "Refusé : Tes sprints de 30 min avant « Examen blanc » : Mardi à 18:00 · notions ciblées : Amers, Balises."
+    },
+    {
+      "key": "sprint",
+      "kind": "sprint_planned",
+      "status": "expired",
+      "tone": "vous",
+      "timeZone": "Europe/Paris",
+      "payload": {
+        "dedupeKey": "sprint:1",
+        "formationId": "00000000-0000-4000-8000-000000000010",
+        "examSlotId": "00000000-0000-4000-8000-000000000070",
+        "examTitle": "Examen blanc",
+        "examDate": "2026-11-20",
+        "moduleId": "00000000-0000-4000-8000-000000000040",
+        "durationMin": 30,
+        "notionLabels": ["Amers", "Balises"],
+        "targets": [
+          {
+            "label": "J-3",
+            "day": "2026-11-17",
+            "slotId": null,
+            "startsAt": "2026-11-17T17:00:00.000Z",
+            "endsAt": "2026-11-17T17:30:00.000Z",
+            "durationMin": 30
+          }
+        ],
+        "impossible": []
+      },
+      "createdAt": "2026-11-11T12:20:00.000Z",
+      "summary": "Expiré : Vos sprints de 30 min avant « Examen blanc » : Mardi à 18:00 · notions ciblées : Amers, Balises."
+    },
+    {
+      "key": "bilan",
+      "kind": "weekly_review",
+      "status": "applied",
+      "tone": "tu",
+      "timeZone": "Europe/Paris",
+      "payload": {
+        "dedupeKey": "weekly:2026-45",
+        "weekKey": "2026-W45",
+        "studyMinutes": 125,
+        "retention": {
+          "rate": 82
+        },
+        "atRiskCount": 2,
+        "reviewOn": "2026-11-11T12:20:00.000Z",
+        "plan": []
+      },
+      "createdAt": "2026-11-11T12:20:00.000Z",
+      "summary": "Bilan de la semaine (reçu mer. 13:20) : 2 h 5 d’étude, 82 % retenu à 1 mois, 2 notions à risque."
+    },
+    {
+      "key": "bilan",
+      "kind": "weekly_review",
+      "status": "declined",
+      "tone": "vous",
+      "timeZone": "Europe/Paris",
+      "payload": {
+        "dedupeKey": "weekly:2026-45",
+        "weekKey": "2026-W45",
+        "studyMinutes": 125,
+        "retention": {
+          "rate": 82
+        },
+        "atRiskCount": 2,
+        "reviewOn": "2026-11-11T12:20:00.000Z",
+        "plan": []
+      },
+      "createdAt": "2026-11-11T12:20:00.000Z",
+      "summary": "Refusé : Bilan de la semaine (reçu mer. 13:20) : 2 h 5 d’étude, 82 % retenu à 1 mois, 2 notions à risque."
+    },
+    {
+      "key": "bilan",
+      "kind": "weekly_review",
+      "status": "undone",
+      "tone": "tu",
+      "timeZone": "Europe/Paris",
+      "payload": {
+        "dedupeKey": "weekly:2026-45",
+        "weekKey": "2026-W45",
+        "studyMinutes": 125,
+        "retention": {
+          "rate": null
+        },
+        "atRiskCount": 2,
+        "reviewOn": "2026-11-11T12:20:00.000Z",
+        "plan": []
+      },
+      "createdAt": "2026-11-11T12:20:00.000Z",
+      "summary": "Annulé : Bilan de la semaine (reçu mer. 13:20) : 2 h 5 d’étude, rétention non disponible, 2 notions à risque."
+    },
+    {
+      "key": "bilan",
+      "kind": "weekly_review",
+      "status": "expired",
+      "tone": "vous",
+      "timeZone": "Europe/Paris",
+      "payload": {
+        "dedupeKey": "weekly:2026-45",
+        "weekKey": "2026-W45",
+        "studyMinutes": 125,
+        "retention": {
+          "rate": 82
+        },
+        "atRiskCount": 0,
+        "reviewOn": "2026-11-11T12:20:00.000Z",
+        "plan": []
+      },
+      "createdAt": "2026-11-11T12:20:00.000Z",
+      "summary": "Expiré : Bilan de la semaine (reçu mer. 13:20) : 2 h 5 d’étude, 82 % retenu à 1 mois, aucune notion à risque."
+    },
+    {
+      "key": "remediation",
+      "kind": "remediation_ready",
+      "status": "applied",
+      "tone": "tu",
+      "timeZone": "Europe/Paris",
+      "payload": {
+        "dedupeKey": "remediation:1",
+        "attemptId": "00000000-0000-4000-8000-000000000060",
+        "attemptNo": 1,
+        "moduleId": "00000000-0000-4000-8000-000000000040",
+        "moduleTitle": "Module 2",
+        "modulePosition": 2,
+        "formationId": "00000000-0000-4000-8000-000000000010",
+        "score": 40,
+        "remediationActivityId": null,
+        "paused": false,
+        "mode": "mandatory",
+        "plan": {
+          "retry": {
+            "startsAt": "2026-11-12T17:00:00.000Z",
+            "endsAt": "2026-11-12T18:00:00.000Z"
+          }
+        }
+      },
+      "createdAt": "2026-11-11T12:20:00.000Z",
+      "summary": "Quiz à 40 % : tentative 2 placée jeudi 18:00. La remédiation sera prête dès que l’IA sera disponible."
+    },
+    {
+      "key": "remediation",
+      "kind": "remediation_ready",
+      "status": "undone",
+      "tone": "vous",
+      "timeZone": "Europe/Paris",
+      "payload": {
+        "dedupeKey": "remediation:1",
+        "attemptId": "00000000-0000-4000-8000-000000000060",
+        "attemptNo": 1,
+        "moduleId": "00000000-0000-4000-8000-000000000040",
+        "moduleTitle": "Module 2",
+        "modulePosition": 2,
+        "formationId": "00000000-0000-4000-8000-000000000010",
+        "score": 40,
+        "remediationActivityId": null,
+        "paused": false,
+        "mode": "mandatory",
+        "plan": {
+          "retry": {
+            "startsAt": "2026-11-12T17:00:00.000Z",
+            "endsAt": "2026-11-12T18:00:00.000Z"
+          }
+        }
+      },
+      "createdAt": "2026-11-11T12:20:00.000Z",
+      "summary": "Annulé : délai et remédiation planifiée du quiz du module 2."
+    },
+    {
+      "key": "pause",
+      "kind": "pause_started",
+      "status": "applied",
+      "tone": "tu",
+      "timeZone": "Europe/Paris",
+      "payload": {
+        "endDate": "2026-11-18",
+        "pauseId": "p1"
+      },
+      "createdAt": "2026-11-11T12:20:00.000Z",
+      "summary": "Pause déclarée jusqu’au 2026-11-18. Ton planning est gelé et ta série reste intacte."
+    },
+    {
+      "key": "pause",
+      "kind": "pause_ended",
+      "status": "applied",
+      "tone": "vous",
+      "timeZone": "Europe/Paris",
+      "payload": {
+        "endDate": "2026-11-18",
+        "diagnosticEnabled": true
+      },
+      "createdAt": "2026-11-11T12:20:00.000Z",
+      "summary": "Pause terminée : un diagnostic de 10 minutes sur les notions à risque précède la reprise."
+    },
+    {
+      "key": "pause",
+      "kind": "pause_ended",
+      "status": "applied",
+      "tone": "tu",
+      "timeZone": "Europe/Paris",
+      "payload": {
+        "endDate": "2026-11-18",
+        "diagnosticEnabled": false
+      },
+      "createdAt": "2026-11-11T12:20:00.000Z",
+      "summary": "Pause terminée : ton planning reprend dès aujourd’hui."
+    },
+    {
+      "key": "pause",
+      "kind": "pause_ended",
+      "status": "undone",
+      "tone": "vous",
+      "timeZone": "Europe/Paris",
+      "payload": {
+        "endDate": "2026-11-18",
+        "diagnosticEnabled": false
+      },
+      "createdAt": "2026-11-11T12:20:00.000Z",
+      "summary": "Annulé : Pause terminée : votre planning reprend dès aujourd’hui."
+    },
+    {
+      "key": "pause",
+      "kind": "pause_ended",
+      "status": "declined",
+      "tone": "tu",
+      "timeZone": "Europe/Paris",
+      "payload": {
+        "endDate": "2026-11-18",
+        "diagnosticEnabled": true
+      },
+      "createdAt": "2026-11-11T12:20:00.000Z",
+      "summary": "Refusé : Pause terminée : un diagnostic de 10 minutes sur les notions à risque précède la reprise."
+    }
+  ]
+}

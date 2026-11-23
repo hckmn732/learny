@@ -6,6 +6,7 @@ import { MarkdownContent } from '@learny/bricks/view';
 import type { CourseSection } from '@learny/contracts';
 import { fr } from '@learny/i18n/fr/course';
 
+import { InlineCode } from './InlineCode';
 import { QuickQuestion } from './QuickQuestion';
 import { SourceLink } from './SourceLink';
 
@@ -55,11 +56,13 @@ function Comparison({
             key={`side-${String(index)}`}
           >
             <span className="font-display text-20 font-600">
-              {typeof side.title === 'string' ? side.title : ''}
+              {typeof side.title === 'string' ? <InlineCode text={side.title} /> : ''}
             </span>
-            <span className="text-15">{typeof side.body === 'string' ? side.body : ''}</span>
+            <span className="text-15">
+              {typeof side.body === 'string' ? <InlineCode text={side.body} /> : ''}
+            </span>
             <span className="text-14 text-orange-ink-strong">
-              {typeof side.example === 'string' ? side.example : ''}
+              {typeof side.example === 'string' ? <InlineCode text={side.example} /> : ''}
             </span>
           </div>
         ))}
@@ -109,7 +112,9 @@ function Takeaway({ section }: { section: CourseSection }) {
             >
               ✓
             </span>
-            <span>{point}</span>
+            <span>
+              <InlineCode text={point} />
+            </span>
           </li>
         ))}
       </ul>
@@ -133,7 +138,7 @@ function Takeaway({ section }: { section: CourseSection }) {
       ) : null}
       {mnemonic === null ? null : (
         <p className="m-0 rounded-16 bg-lime p-14 text-15 text-ink">
-          <strong>{t.mnemonic} :</strong> {mnemonic}
+          <strong>{t.mnemonic} :</strong> <InlineCode text={mnemonic} />
         </p>
       )}
     </section>

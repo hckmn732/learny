@@ -62,3 +62,14 @@ tools/perf/k6/out/
 
 # SPEC-804 — sorties locales de Lighthouse CI
 .lighthouseci/
+
+# Python (SPEC-2003) — venv, caches d'outils et artefacts locaux
+.venv/
+__pycache__/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+*.pyc
+
+# Les journaux de preuve de evidence/ sont versionnés (SPEC-2003).
+!evidence/**/*.log

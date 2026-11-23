@@ -45,7 +45,7 @@ Aucune règle `BR-*` n'est attribuée directement dans le catalogue. `product.ts
 
 - **ET-1** — `packages/config/src/env.ts` définit les schémas Zod `serverEnvSchema` et `publicEnvSchema`, ainsi que `parseServerEnv` et `parsePublicEnv`. L'appel de validation est centralisé au démarrage du web/worker ; aucun paquet ne relit directement `process.env` pour une variable métier en dehors de l'adaptateur de configuration.
 - **ET-2** — Les clés sont validées sur leur forme sans journalisation : URL HTTP locale ou HTTPS hors local, chaîne non vide pour les secrets, clé de chiffrement base64 correspondant à 32 octets, fuseau et région attendus. Les erreurs Zod sont converties en noms de variables et codes sûrs.
-- **ET-3** — En `production`, exiger `NEXT_PUBLIC_APP_URL` HTTPS, Supabase URL/anon/service, `DATABASE_URL`, `APP_ENCRYPTION_KEY`, Inngest event/signing, `ANTHROPIC_API_KEY` pour l'IA fournie, `VOYAGE_API_KEY`, `RESEND_API_KEY`, VAPID, Stripe, Sentry si activé, et les champs légaux. Les modes `mock` sont interdits en production pour IA, paiement, e-mail et push.
+- **ET-3** — En `production`, exiger `NEXT_PUBLIC_APP_URL` HTTPS, Supabase URL/anon/service, `DATABASE_URL`, `APP_ENCRYPTION_KEY`, Inngest event/signing, `VOYAGE_API_KEY`, `RESEND_API_KEY`, VAPID, Stripe, Sentry si activé, et les champs légaux. Les modes `mock` sont interdits en production pour IA, paiement, e-mail et push.
 - **ET-4** — `packages/config/src/product.ts` est organisé par domaine et exporte des objets `as const`. Les valeurs ne sont pas dispersées dans les composants, services ou jobs. `models.ts` et `pricing.ts` sont importables côté serveur ; aucun tarif ni secret ne dépend d'un appel réseau au chargement du module.
 - **ET-5** — `.env.example` reste versionné sans secret ; `.env.local` et toute variante réelle sont ignorés par Git. Les tests vérifient la liste des clés sans tenter de lire les valeurs confidentielles du poste.
 - **ET-6** — `packages/config/src/index.ts` expose les entrées sûres ; les exports serveur passent par une sous-entrée `@learny/config/server` pour empêcher leur import accidentel par un composant client. Le lint de frontière de SPEC-001 refuse l'import de cette sous-entrée côté client.
@@ -120,3 +120,8 @@ Décisions prises pendant l'implémentation (aucune sollicitation de l'utilisate
 - **ADR-0227** — politique de validation de l'environnement : listes de clés (serveur, publiques, outillage, standard), Sentry facultatif, erreurs réduites à des noms et codes sûrs, normalisation limitée aux énumérations, modes simulés interdits en production, `ENABLE_SDD_PAGES` activé par la seule chaîne `true`, `TZ` IANA.
 - **ADR-0228** — frontière client/serveur : sous-entrée `@learny/config/server`, adaptateur unique `apps/web/lib/server-env.ts`, lint `no-restricted-imports` et test de scan des sources, validation au démarrage (`instrumentation.ts`, `main()` du worker) ; le cas production de SPEC-006 vérifie désormais le refus de démarrage.
 - **ADR-0229** — tarifs : écriture de cache à 125 % de l'entrée et effort de réflexion par tâche, en complément d'ADR-0073.
+
+## Amendements
+
+- **2026-11-23, ADR-2037** — SPEC-709 : la plateforme ne fournit plus de modèle d'IA, `ANTHROPIC_API_KEY` n'est plus exigée en production (ET-3) ni attendue par la démonstration.
+- **2026-11-23, ADR-2037** — SPEC-1203 : le web ne valide que sa configuration publique (`parsePublicEnv`). CA-2 (refus d'un démarrage de production incomplet) est une responsabilité de l'API ; le test e2e de démarrage du web est retiré.

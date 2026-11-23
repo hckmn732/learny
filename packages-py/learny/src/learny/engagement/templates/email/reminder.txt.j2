@@ -1,0 +1,10 @@
+{% extends "layout.txt.j2" %}
+{% block content %}{{ title }}
+
+{{ body }}
+{% if formation_title %}
+{{ formation_title }}
+{% endif %}
+
+{{ cta_label }} : {{ cta_href }}
+{% endblock %}

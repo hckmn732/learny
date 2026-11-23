@@ -1,0 +1,533 @@
+[
+  {
+    "input": {
+      "correct": false,
+      "timeMs": 20000,
+      "format": "choice_question",
+      "history": [
+        {
+          "answeredAt": "2026-11-01T09:00:00.000Z",
+          "format": "choice_question",
+          "timeMs": 20000,
+          "answerId": "a1"
+        },
+        {
+          "answeredAt": "2026-11-02T09:00:00.000Z",
+          "format": "choice_question",
+          "timeMs": 10000,
+          "answerId": "a2"
+        },
+        {
+          "answeredAt": "2026-11-03T09:00:00.000Z",
+          "format": "choice_question",
+          "timeMs": 30000,
+          "answerId": "a3"
+        },
+        {
+          "answeredAt": "2026-11-03T09:00:00.000Z",
+          "format": "choice_question",
+          "timeMs": 0,
+          "answerId": "a4"
+        },
+        {
+          "answeredAt": "2026-11-04T09:00:00.000Z",
+          "format": "cloze",
+          "timeMs": 5000,
+          "answerId": "a5"
+        }
+      ],
+      "selfRating": null,
+      "settings": {
+        "medianWindow": 50,
+        "medianMinSamples": 5,
+        "defaultMedianMs": 20000,
+        "hardFactor": 2,
+        "easyFactor": 0.5
+      }
+    },
+    "output": {
+      "rating": "again",
+      "reason": "incorrect",
+      "medianMs": 20000
+    }
+  },
+  {
+    "input": {
+      "correct": true,
+      "timeMs": 40000,
+      "format": "choice_question",
+      "history": [
+        {
+          "answeredAt": "2026-11-01T09:00:00.000Z",
+          "format": "choice_question",
+          "timeMs": 20000,
+          "answerId": "a1"
+        },
+        {
+          "answeredAt": "2026-11-02T09:00:00.000Z",
+          "format": "choice_question",
+          "timeMs": 10000,
+          "answerId": "a2"
+        },
+        {
+          "answeredAt": "2026-11-03T09:00:00.000Z",
+          "format": "choice_question",
+          "timeMs": 30000,
+          "answerId": "a3"
+        },
+        {
+          "answeredAt": "2026-11-03T09:00:00.000Z",
+          "format": "choice_question",
+          "timeMs": 0,
+          "answerId": "a4"
+        },
+        {
+          "answeredAt": "2026-11-04T09:00:00.000Z",
+          "format": "cloze",
+          "timeMs": 5000,
+          "answerId": "a5"
+        }
+      ],
+      "selfRating": null,
+      "settings": {
+        "medianWindow": 50,
+        "medianMinSamples": 5,
+        "defaultMedianMs": 20000,
+        "hardFactor": 2,
+        "easyFactor": 0.5
+      }
+    },
+    "output": {
+      "rating": "good",
+      "reason": "within_median",
+      "medianMs": 20000
+    }
+  },
+  {
+    "input": {
+      "correct": true,
+      "timeMs": 40001,
+      "format": "choice_question",
+      "history": [
+        {
+          "answeredAt": "2026-11-01T09:00:00.000Z",
+          "format": "choice_question",
+          "timeMs": 20000,
+          "answerId": "a1"
+        },
+        {
+          "answeredAt": "2026-11-02T09:00:00.000Z",
+          "format": "choice_question",
+          "timeMs": 10000,
+          "answerId": "a2"
+        },
+        {
+          "answeredAt": "2026-11-03T09:00:00.000Z",
+          "format": "choice_question",
+          "timeMs": 30000,
+          "answerId": "a3"
+        },
+        {
+          "answeredAt": "2026-11-03T09:00:00.000Z",
+          "format": "choice_question",
+          "timeMs": 0,
+          "answerId": "a4"
+        },
+        {
+          "answeredAt": "2026-11-04T09:00:00.000Z",
+          "format": "cloze",
+          "timeMs": 5000,
+          "answerId": "a5"
+        }
+      ],
+      "selfRating": null,
+      "settings": {
+        "medianWindow": 50,
+        "medianMinSamples": 5,
+        "defaultMedianMs": 20000,
+        "hardFactor": 2,
+        "easyFactor": 0.5
+      }
+    },
+    "output": {
+      "rating": "hard",
+      "reason": "too_slow",
+      "medianMs": 20000
+    }
+  },
+  {
+    "input": {
+      "correct": true,
+      "timeMs": 10000,
+      "format": "choice_question",
+      "history": [
+        {
+          "answeredAt": "2026-11-01T09:00:00.000Z",
+          "format": "choice_question",
+          "timeMs": 20000,
+          "answerId": "a1"
+        },
+        {
+          "answeredAt": "2026-11-02T09:00:00.000Z",
+          "format": "choice_question",
+          "timeMs": 10000,
+          "answerId": "a2"
+        },
+        {
+          "answeredAt": "2026-11-03T09:00:00.000Z",
+          "format": "choice_question",
+          "timeMs": 30000,
+          "answerId": "a3"
+        },
+        {
+          "answeredAt": "2026-11-03T09:00:00.000Z",
+          "format": "choice_question",
+          "timeMs": 0,
+          "answerId": "a4"
+        },
+        {
+          "answeredAt": "2026-11-04T09:00:00.000Z",
+          "format": "cloze",
+          "timeMs": 5000,
+          "answerId": "a5"
+        }
+      ],
+      "selfRating": null,
+      "settings": {
+        "medianWindow": 50,
+        "medianMinSamples": 5,
+        "defaultMedianMs": 20000,
+        "hardFactor": 2,
+        "easyFactor": 0.5
+      }
+    },
+    "output": {
+      "rating": "good",
+      "reason": "within_median",
+      "medianMs": 20000
+    }
+  },
+  {
+    "input": {
+      "correct": true,
+      "timeMs": 9999,
+      "format": "choice_question",
+      "history": [
+        {
+          "answeredAt": "2026-11-01T09:00:00.000Z",
+          "format": "choice_question",
+          "timeMs": 20000,
+          "answerId": "a1"
+        },
+        {
+          "answeredAt": "2026-11-02T09:00:00.000Z",
+          "format": "choice_question",
+          "timeMs": 10000,
+          "answerId": "a2"
+        },
+        {
+          "answeredAt": "2026-11-03T09:00:00.000Z",
+          "format": "choice_question",
+          "timeMs": 30000,
+          "answerId": "a3"
+        },
+        {
+          "answeredAt": "2026-11-03T09:00:00.000Z",
+          "format": "choice_question",
+          "timeMs": 0,
+          "answerId": "a4"
+        },
+        {
+          "answeredAt": "2026-11-04T09:00:00.000Z",
+          "format": "cloze",
+          "timeMs": 5000,
+          "answerId": "a5"
+        }
+      ],
+      "selfRating": null,
+      "settings": {
+        "medianWindow": 50,
+        "medianMinSamples": 5,
+        "defaultMedianMs": 20000,
+        "hardFactor": 2,
+        "easyFactor": 0.5
+      }
+    },
+    "output": {
+      "rating": "easy",
+      "reason": "too_fast",
+      "medianMs": 20000
+    }
+  },
+  {
+    "input": {
+      "correct": true,
+      "timeMs": 20000,
+      "format": "choice_question",
+      "history": [
+        {
+          "answeredAt": "2026-11-01T09:00:00.000Z",
+          "format": "choice_question",
+          "timeMs": 20000,
+          "answerId": "a1"
+        },
+        {
+          "answeredAt": "2026-11-02T09:00:00.000Z",
+          "format": "choice_question",
+          "timeMs": 10000,
+          "answerId": "a2"
+        },
+        {
+          "answeredAt": "2026-11-03T09:00:00.000Z",
+          "format": "choice_question",
+          "timeMs": 30000,
+          "answerId": "a3"
+        },
+        {
+          "answeredAt": "2026-11-03T09:00:00.000Z",
+          "format": "choice_question",
+          "timeMs": 0,
+          "answerId": "a4"
+        },
+        {
+          "answeredAt": "2026-11-04T09:00:00.000Z",
+          "format": "cloze",
+          "timeMs": 5000,
+          "answerId": "a5"
+        }
+      ],
+      "selfRating": null,
+      "settings": {
+        "medianWindow": 50,
+        "medianMinSamples": 5,
+        "defaultMedianMs": 20000,
+        "hardFactor": 2,
+        "easyFactor": 0.5
+      }
+    },
+    "output": {
+      "rating": "good",
+      "reason": "within_median",
+      "medianMs": 20000
+    }
+  },
+  {
+    "input": {
+      "correct": true,
+      "timeMs": null,
+      "format": "choice_question",
+      "history": [
+        {
+          "answeredAt": "2026-11-01T09:00:00.000Z",
+          "format": "choice_question",
+          "timeMs": 20000,
+          "answerId": "a1"
+        },
+        {
+          "answeredAt": "2026-11-02T09:00:00.000Z",
+          "format": "choice_question",
+          "timeMs": 10000,
+          "answerId": "a2"
+        },
+        {
+          "answeredAt": "2026-11-03T09:00:00.000Z",
+          "format": "choice_question",
+          "timeMs": 30000,
+          "answerId": "a3"
+        },
+        {
+          "answeredAt": "2026-11-03T09:00:00.000Z",
+          "format": "choice_question",
+          "timeMs": 0,
+          "answerId": "a4"
+        },
+        {
+          "answeredAt": "2026-11-04T09:00:00.000Z",
+          "format": "cloze",
+          "timeMs": 5000,
+          "answerId": "a5"
+        }
+      ],
+      "selfRating": null,
+      "settings": {
+        "medianWindow": 50,
+        "medianMinSamples": 5,
+        "defaultMedianMs": 20000,
+        "hardFactor": 2,
+        "easyFactor": 0.5
+      }
+    },
+    "output": {
+      "rating": null,
+      "reason": "incomplete",
+      "medianMs": 20000
+    }
+  },
+  {
+    "input": {
+      "correct": null,
+      "timeMs": 20000,
+      "format": "choice_question",
+      "history": [
+        {
+          "answeredAt": "2026-11-01T09:00:00.000Z",
+          "format": "choice_question",
+          "timeMs": 20000,
+          "answerId": "a1"
+        },
+        {
+          "answeredAt": "2026-11-02T09:00:00.000Z",
+          "format": "choice_question",
+          "timeMs": 10000,
+          "answerId": "a2"
+        },
+        {
+          "answeredAt": "2026-11-03T09:00:00.000Z",
+          "format": "choice_question",
+          "timeMs": 30000,
+          "answerId": "a3"
+        },
+        {
+          "answeredAt": "2026-11-03T09:00:00.000Z",
+          "format": "choice_question",
+          "timeMs": 0,
+          "answerId": "a4"
+        },
+        {
+          "answeredAt": "2026-11-04T09:00:00.000Z",
+          "format": "cloze",
+          "timeMs": 5000,
+          "answerId": "a5"
+        }
+      ],
+      "selfRating": null,
+      "settings": {
+        "medianWindow": 50,
+        "medianMinSamples": 5,
+        "defaultMedianMs": 20000,
+        "hardFactor": 2,
+        "easyFactor": 0.5
+      }
+    },
+    "output": {
+      "rating": null,
+      "reason": "incomplete",
+      "medianMs": 20000
+    }
+  },
+  {
+    "input": {
+      "correct": null,
+      "timeMs": null,
+      "format": "recall_card",
+      "history": [],
+      "selfRating": "hard",
+      "settings": {
+        "medianWindow": 50,
+        "medianMinSamples": 5,
+        "defaultMedianMs": 20000,
+        "hardFactor": 2,
+        "easyFactor": 0.5
+      }
+    },
+    "output": {
+      "rating": "hard",
+      "reason": "self_rating",
+      "medianMs": 20000
+    }
+  },
+  {
+    "input": {
+      "correct": null,
+      "timeMs": null,
+      "format": "recall_card",
+      "history": [],
+      "selfRating": null,
+      "settings": {
+        "medianWindow": 50,
+        "medianMinSamples": 5,
+        "defaultMedianMs": 20000,
+        "hardFactor": 2,
+        "easyFactor": 0.5
+      }
+    },
+    "output": {
+      "rating": null,
+      "reason": "incomplete",
+      "medianMs": 20000
+    }
+  },
+  {
+    "input": {
+      "correct": true,
+      "timeMs": 5000,
+      "format": "cloze",
+      "history": [
+        {
+          "answeredAt": "2026-11-01T09:00:00.000Z",
+          "format": "choice_question",
+          "timeMs": 20000,
+          "answerId": "a1"
+        },
+        {
+          "answeredAt": "2026-11-02T09:00:00.000Z",
+          "format": "choice_question",
+          "timeMs": 10000,
+          "answerId": "a2"
+        },
+        {
+          "answeredAt": "2026-11-03T09:00:00.000Z",
+          "format": "choice_question",
+          "timeMs": 30000,
+          "answerId": "a3"
+        },
+        {
+          "answeredAt": "2026-11-03T09:00:00.000Z",
+          "format": "choice_question",
+          "timeMs": 0,
+          "answerId": "a4"
+        },
+        {
+          "answeredAt": "2026-11-04T09:00:00.000Z",
+          "format": "cloze",
+          "timeMs": 5000,
+          "answerId": "a5"
+        }
+      ],
+      "selfRating": null,
+      "settings": {
+        "medianWindow": 50,
+        "medianMinSamples": 5,
+        "defaultMedianMs": 20000,
+        "hardFactor": 2,
+        "easyFactor": 0.5
+      }
+    },
+    "output": {
+      "rating": "easy",
+      "reason": "too_fast",
+      "medianMs": 20000
+    }
+  },
+  {
+    "input": {
+      "correct": true,
+      "timeMs": 5000,
+      "format": "cloze",
+      "history": [],
+      "selfRating": null,
+      "settings": {
+        "medianWindow": 50,
+        "medianMinSamples": 5,
+        "defaultMedianMs": 20000,
+        "hardFactor": 2,
+        "easyFactor": 0.5
+      }
+    },
+    "output": {
+      "rating": "easy",
+      "reason": "too_fast",
+      "medianMs": 20000
+    }
+  }
+]

@@ -1,0 +1,995 @@
+{
+  "inputs": {
+    "params": {
+      "notionCostSec": 60,
+      "sessionOverheadSec": 60,
+      "formatSeconds": {
+        "recall_card": 30,
+        "choice_question": 45,
+        "cloze": 45,
+        "ordering": 60,
+        "matching": 40,
+        "categorization": 40,
+        "open_question": 90
+      },
+      "maintenanceMaxMinutes": 5
+    },
+    "base": {
+      "formationId": "f1",
+      "date": "2026-11-11",
+      "dueNotions": [
+        {
+          "notionId": "n1",
+          "moduleId": "m1",
+          "modulePosition": 1,
+          "moduleStatus": "validated",
+          "evaluated": true,
+          "dueAt": "2026-11-09T08:00:00.000Z"
+        },
+        {
+          "notionId": "n2",
+          "moduleId": "m1",
+          "modulePosition": 1,
+          "moduleStatus": "validated",
+          "evaluated": true,
+          "dueAt": "2026-11-10T08:00:00.000Z"
+        },
+        {
+          "notionId": "n3",
+          "moduleId": "m2",
+          "modulePosition": 2,
+          "moduleStatus": "validated",
+          "evaluated": true,
+          "dueAt": "2026-11-11T08:00:00.000Z"
+        },
+        {
+          "notionId": "n4",
+          "moduleId": "m2",
+          "modulePosition": 2,
+          "moduleStatus": "open",
+          "evaluated": false,
+          "dueAt": "2026-11-08T08:00:00.000Z"
+        },
+        {
+          "notionId": "n5",
+          "moduleId": "m3",
+          "modulePosition": 3,
+          "moduleStatus": "open",
+          "evaluated": true,
+          "dueAt": "2026-11-07T08:00:00.000Z"
+        },
+        {
+          "notionId": "n6",
+          "moduleId": "m1",
+          "modulePosition": 1,
+          "moduleStatus": "locked",
+          "evaluated": false,
+          "dueAt": "2026-11-06T08:00:00.000Z"
+        },
+        {
+          "notionId": "n1",
+          "moduleId": "m2",
+          "modulePosition": 2,
+          "moduleStatus": "validated",
+          "evaluated": true,
+          "dueAt": "2026-11-05T08:00:00.000Z"
+        }
+      ],
+      "gaps": [
+        {
+          "notionId": "n1",
+          "nature": "forgetting"
+        },
+        {
+          "notionId": "n1",
+          "nature": "confusion"
+        }
+      ],
+      "bank": [
+        {
+          "notionId": "n1",
+          "formats": ["recall_card", "choice_question", "cloze"]
+        },
+        {
+          "notionId": "n2",
+          "formats": ["choice_question", "open_question"]
+        },
+        {
+          "notionId": "n3",
+          "formats": ["matching"]
+        },
+        {
+          "notionId": "n5",
+          "formats": ["recall_card"]
+        },
+        {
+          "notionId": "n6",
+          "formats": ["recall_card", "choice_question"]
+        }
+      ],
+      "lastFormats": [
+        {
+          "notionId": "n1",
+          "format": "recall_card"
+        },
+        {
+          "notionId": "n2",
+          "format": "cloze"
+        },
+        {
+          "notionId": "n3",
+          "format": "matching"
+        }
+      ],
+      "capMinutes": 15,
+      "mode": "full",
+      "seed": "graine-2026-11-11"
+    },
+    "variants": [
+      {
+        "name": "full",
+        "extra": {}
+      },
+      {
+        "name": "micro",
+        "extra": {
+          "capMinutes": 3,
+          "mode": "micro"
+        }
+      },
+      {
+        "name": "maintenance",
+        "extra": {
+          "capMinutes": 30,
+          "mode": "maintenance"
+        }
+      },
+      {
+        "name": "cards",
+        "extra": {
+          "preference": "cards"
+        }
+      },
+      {
+        "name": "matching",
+        "extra": {
+          "preference": "matching_categorization"
+        }
+      },
+      {
+        "name": "forced",
+        "extra": {
+          "forcedFormats": [
+            {
+              "notionId": "n2",
+              "format": "open_question"
+            }
+          ]
+        }
+      },
+      {
+        "name": "forced-unavailable",
+        "extra": {
+          "forcedFormats": [
+            {
+              "notionId": "n2",
+              "format": "matching"
+            }
+          ]
+        }
+      },
+      {
+        "name": "retention",
+        "extra": {
+          "targetRetention": 0.85
+        }
+      }
+    ],
+    "smoothing": {
+      "maxMinutes": 5,
+      "targetRetention": 0.9
+    },
+    "picks": [
+      {
+        "preference": "vary",
+        "available": ["recall_card", "choice_question", "cloze"],
+        "seed": "seed-1",
+        "lastFormat": null
+      },
+      {
+        "preference": "cards",
+        "available": ["recall_card", "choice_question"],
+        "seed": "seed-2",
+        "lastFormat": null
+      },
+      {
+        "preference": "matching_categorization",
+        "available": ["matching", "categorization", "cloze"],
+        "seed": "seed-3",
+        "lastFormat": null
+      },
+      {
+        "preference": "vary",
+        "available": ["recall_card", "choice_question"],
+        "seed": "seed-4",
+        "lastFormat": "recall_card"
+      },
+      {
+        "preference": "vary",
+        "available": ["recall_card"],
+        "seed": "seed-5",
+        "lastFormat": "recall_card"
+      },
+      {
+        "preference": "vary",
+        "available": [],
+        "seed": "seed-6",
+        "lastFormat": null
+      }
+    ],
+    "gapFormats": [
+      {
+        "nature": "forgetting",
+        "available": ["recall_card", "cloze"]
+      },
+      {
+        "nature": "forgetting",
+        "available": ["cloze"]
+      },
+      {
+        "nature": "confusion",
+        "available": ["matching", "categorization"]
+      },
+      {
+        "nature": "confusion",
+        "available": ["matching"],
+        "lastPairFormat": "categorization"
+      },
+      {
+        "nature": "confusion",
+        "available": ["choice_question"]
+      },
+      {
+        "nature": "confusion",
+        "available": ["cloze"]
+      },
+      {
+        "nature": "application",
+        "available": ["open_question"]
+      },
+      {
+        "nature": "misunderstanding",
+        "available": ["recall_card"]
+      }
+    ],
+    "interleave": [
+      {
+        "notionId": "n1",
+        "moduleId": "m1"
+      },
+      {
+        "notionId": "n2",
+        "moduleId": "m1"
+      },
+      {
+        "notionId": "n3",
+        "moduleId": "m2"
+      },
+      {
+        "notionId": "n4",
+        "moduleId": "m3"
+      }
+    ],
+    "reintroduce": {
+      "current": ["a", "b"],
+      "deferred": ["b", "c"]
+    }
+  },
+  "output": {
+    "sessions": [
+      {
+        "name": "full",
+        "output": {
+          "formationId": "f1",
+          "date": "2026-11-11",
+          "mode": "full",
+          "seed": "graine-2026-11-11",
+          "requestedCapMinutes": 15,
+          "capMinutes": 15,
+          "targetRetention": 0.9,
+          "items": [
+            {
+              "notionId": "n5",
+              "moduleId": "m3",
+              "modulePosition": 3,
+              "format": "recall_card",
+              "gapNature": null,
+              "selectionReason": "due",
+              "formatReason": "only_format",
+              "variantRequested": false,
+              "estimatedSeconds": 30
+            },
+            {
+              "notionId": "n2",
+              "moduleId": "m1",
+              "modulePosition": 1,
+              "format": "open_question",
+              "gapNature": null,
+              "selectionReason": "due",
+              "formatReason": "varied",
+              "variantRequested": false,
+              "estimatedSeconds": 90
+            },
+            {
+              "notionId": "n3",
+              "moduleId": "m2",
+              "modulePosition": 2,
+              "format": "matching",
+              "gapNature": null,
+              "selectionReason": "due",
+              "formatReason": "bank_constraint",
+              "variantRequested": true,
+              "estimatedSeconds": 40
+            }
+          ],
+          "deferred": [
+            {
+              "notionId": "n1",
+              "moduleId": "m1",
+              "dueAt": "2026-11-05T08:00:00.000Z",
+              "reason": "awaiting_variant",
+              "proposedFor": "2026-11-12"
+            },
+            {
+              "notionId": "n6",
+              "moduleId": "m1",
+              "dueAt": "2026-11-06T08:00:00.000Z",
+              "reason": "module_not_eligible",
+              "proposedFor": null
+            },
+            {
+              "notionId": "n4",
+              "moduleId": "m2",
+              "dueAt": "2026-11-08T08:00:00.000Z",
+              "reason": "module_not_eligible",
+              "proposedFor": null
+            }
+          ],
+          "exhausted": [
+            {
+              "notionId": "n1",
+              "moduleId": "m1",
+              "reason": "imposed_format_unavailable",
+              "requiredFormats": ["matching", "categorization"],
+              "availableFormats": ["choice_question", "cloze", "recall_card"]
+            }
+          ],
+          "estimatedMinutes": 4
+        }
+      },
+      {
+        "name": "micro",
+        "output": {
+          "formationId": "f1",
+          "date": "2026-11-11",
+          "mode": "micro",
+          "seed": "graine-2026-11-11",
+          "requestedCapMinutes": 3,
+          "capMinutes": 3,
+          "targetRetention": 0.9,
+          "items": [
+            {
+              "notionId": "n5",
+              "moduleId": "m3",
+              "modulePosition": 3,
+              "format": "recall_card",
+              "gapNature": null,
+              "selectionReason": "due",
+              "formatReason": "only_format",
+              "variantRequested": false,
+              "estimatedSeconds": 30
+            },
+            {
+              "notionId": "n2",
+              "moduleId": "m1",
+              "modulePosition": 1,
+              "format": "open_question",
+              "gapNature": null,
+              "selectionReason": "due",
+              "formatReason": "varied",
+              "variantRequested": false,
+              "estimatedSeconds": 90
+            }
+          ],
+          "deferred": [
+            {
+              "notionId": "n1",
+              "moduleId": "m1",
+              "dueAt": "2026-11-05T08:00:00.000Z",
+              "reason": "awaiting_variant",
+              "proposedFor": "2026-11-12"
+            },
+            {
+              "notionId": "n6",
+              "moduleId": "m1",
+              "dueAt": "2026-11-06T08:00:00.000Z",
+              "reason": "module_not_eligible",
+              "proposedFor": null
+            },
+            {
+              "notionId": "n4",
+              "moduleId": "m2",
+              "dueAt": "2026-11-08T08:00:00.000Z",
+              "reason": "module_not_eligible",
+              "proposedFor": null
+            },
+            {
+              "notionId": "n3",
+              "moduleId": "m2",
+              "dueAt": "2026-11-11T08:00:00.000Z",
+              "reason": "cap",
+              "proposedFor": "2026-11-12"
+            }
+          ],
+          "exhausted": [
+            {
+              "notionId": "n1",
+              "moduleId": "m1",
+              "reason": "imposed_format_unavailable",
+              "requiredFormats": ["matching", "categorization"],
+              "availableFormats": ["choice_question", "cloze", "recall_card"]
+            }
+          ],
+          "estimatedMinutes": 3
+        }
+      },
+      {
+        "name": "maintenance",
+        "output": {
+          "formationId": "f1",
+          "date": "2026-11-11",
+          "mode": "maintenance",
+          "seed": "graine-2026-11-11",
+          "requestedCapMinutes": 30,
+          "capMinutes": 5,
+          "targetRetention": 0.9,
+          "items": [
+            {
+              "notionId": "n2",
+              "moduleId": "m1",
+              "modulePosition": 1,
+              "format": "open_question",
+              "gapNature": null,
+              "selectionReason": "due",
+              "formatReason": "varied",
+              "variantRequested": false,
+              "estimatedSeconds": 90
+            },
+            {
+              "notionId": "n3",
+              "moduleId": "m2",
+              "modulePosition": 2,
+              "format": "matching",
+              "gapNature": null,
+              "selectionReason": "due",
+              "formatReason": "bank_constraint",
+              "variantRequested": true,
+              "estimatedSeconds": 40
+            }
+          ],
+          "deferred": [
+            {
+              "notionId": "n1",
+              "moduleId": "m1",
+              "dueAt": "2026-11-05T08:00:00.000Z",
+              "reason": "awaiting_variant",
+              "proposedFor": "2026-11-12"
+            },
+            {
+              "notionId": "n6",
+              "moduleId": "m1",
+              "dueAt": "2026-11-06T08:00:00.000Z",
+              "reason": "module_not_eligible",
+              "proposedFor": null
+            },
+            {
+              "notionId": "n5",
+              "moduleId": "m3",
+              "dueAt": "2026-11-07T08:00:00.000Z",
+              "reason": "maintenance_validated_only",
+              "proposedFor": null
+            },
+            {
+              "notionId": "n4",
+              "moduleId": "m2",
+              "dueAt": "2026-11-08T08:00:00.000Z",
+              "reason": "module_not_eligible",
+              "proposedFor": null
+            }
+          ],
+          "exhausted": [
+            {
+              "notionId": "n1",
+              "moduleId": "m1",
+              "reason": "imposed_format_unavailable",
+              "requiredFormats": ["matching", "categorization"],
+              "availableFormats": ["choice_question", "cloze", "recall_card"]
+            }
+          ],
+          "estimatedMinutes": 4
+        }
+      },
+      {
+        "name": "cards",
+        "output": {
+          "formationId": "f1",
+          "date": "2026-11-11",
+          "mode": "full",
+          "seed": "graine-2026-11-11",
+          "requestedCapMinutes": 15,
+          "capMinutes": 15,
+          "targetRetention": 0.9,
+          "items": [
+            {
+              "notionId": "n5",
+              "moduleId": "m3",
+              "modulePosition": 3,
+              "format": "recall_card",
+              "gapNature": null,
+              "selectionReason": "due",
+              "formatReason": "preference",
+              "variantRequested": false,
+              "estimatedSeconds": 30
+            },
+            {
+              "notionId": "n2",
+              "moduleId": "m1",
+              "modulePosition": 1,
+              "format": "open_question",
+              "gapNature": null,
+              "selectionReason": "due",
+              "formatReason": "varied",
+              "variantRequested": false,
+              "estimatedSeconds": 90
+            },
+            {
+              "notionId": "n3",
+              "moduleId": "m2",
+              "modulePosition": 2,
+              "format": "matching",
+              "gapNature": null,
+              "selectionReason": "due",
+              "formatReason": "bank_constraint",
+              "variantRequested": true,
+              "estimatedSeconds": 40
+            }
+          ],
+          "deferred": [
+            {
+              "notionId": "n1",
+              "moduleId": "m1",
+              "dueAt": "2026-11-05T08:00:00.000Z",
+              "reason": "awaiting_variant",
+              "proposedFor": "2026-11-12"
+            },
+            {
+              "notionId": "n6",
+              "moduleId": "m1",
+              "dueAt": "2026-11-06T08:00:00.000Z",
+              "reason": "module_not_eligible",
+              "proposedFor": null
+            },
+            {
+              "notionId": "n4",
+              "moduleId": "m2",
+              "dueAt": "2026-11-08T08:00:00.000Z",
+              "reason": "module_not_eligible",
+              "proposedFor": null
+            }
+          ],
+          "exhausted": [
+            {
+              "notionId": "n1",
+              "moduleId": "m1",
+              "reason": "imposed_format_unavailable",
+              "requiredFormats": ["matching", "categorization"],
+              "availableFormats": ["choice_question", "cloze", "recall_card"]
+            }
+          ],
+          "estimatedMinutes": 4
+        }
+      },
+      {
+        "name": "matching",
+        "output": {
+          "formationId": "f1",
+          "date": "2026-11-11",
+          "mode": "full",
+          "seed": "graine-2026-11-11",
+          "requestedCapMinutes": 15,
+          "capMinutes": 15,
+          "targetRetention": 0.9,
+          "items": [
+            {
+              "notionId": "n5",
+              "moduleId": "m3",
+              "modulePosition": 3,
+              "format": "recall_card",
+              "gapNature": null,
+              "selectionReason": "due",
+              "formatReason": "only_format",
+              "variantRequested": false,
+              "estimatedSeconds": 30
+            },
+            {
+              "notionId": "n2",
+              "moduleId": "m1",
+              "modulePosition": 1,
+              "format": "open_question",
+              "gapNature": null,
+              "selectionReason": "due",
+              "formatReason": "varied",
+              "variantRequested": false,
+              "estimatedSeconds": 90
+            },
+            {
+              "notionId": "n3",
+              "moduleId": "m2",
+              "modulePosition": 2,
+              "format": "matching",
+              "gapNature": null,
+              "selectionReason": "due",
+              "formatReason": "bank_constraint",
+              "variantRequested": true,
+              "estimatedSeconds": 40
+            }
+          ],
+          "deferred": [
+            {
+              "notionId": "n1",
+              "moduleId": "m1",
+              "dueAt": "2026-11-05T08:00:00.000Z",
+              "reason": "awaiting_variant",
+              "proposedFor": "2026-11-12"
+            },
+            {
+              "notionId": "n6",
+              "moduleId": "m1",
+              "dueAt": "2026-11-06T08:00:00.000Z",
+              "reason": "module_not_eligible",
+              "proposedFor": null
+            },
+            {
+              "notionId": "n4",
+              "moduleId": "m2",
+              "dueAt": "2026-11-08T08:00:00.000Z",
+              "reason": "module_not_eligible",
+              "proposedFor": null
+            }
+          ],
+          "exhausted": [
+            {
+              "notionId": "n1",
+              "moduleId": "m1",
+              "reason": "imposed_format_unavailable",
+              "requiredFormats": ["matching", "categorization"],
+              "availableFormats": ["choice_question", "cloze", "recall_card"]
+            }
+          ],
+          "estimatedMinutes": 4
+        }
+      },
+      {
+        "name": "forced",
+        "output": {
+          "formationId": "f1",
+          "date": "2026-11-11",
+          "mode": "full",
+          "seed": "graine-2026-11-11",
+          "requestedCapMinutes": 15,
+          "capMinutes": 15,
+          "targetRetention": 0.9,
+          "items": [
+            {
+              "notionId": "n5",
+              "moduleId": "m3",
+              "modulePosition": 3,
+              "format": "recall_card",
+              "gapNature": null,
+              "selectionReason": "due",
+              "formatReason": "only_format",
+              "variantRequested": false,
+              "estimatedSeconds": 30
+            },
+            {
+              "notionId": "n2",
+              "moduleId": "m1",
+              "modulePosition": 1,
+              "format": "open_question",
+              "gapNature": null,
+              "selectionReason": "due",
+              "formatReason": "gap_nature",
+              "variantRequested": false,
+              "estimatedSeconds": 90
+            },
+            {
+              "notionId": "n3",
+              "moduleId": "m2",
+              "modulePosition": 2,
+              "format": "matching",
+              "gapNature": null,
+              "selectionReason": "due",
+              "formatReason": "bank_constraint",
+              "variantRequested": true,
+              "estimatedSeconds": 40
+            }
+          ],
+          "deferred": [
+            {
+              "notionId": "n1",
+              "moduleId": "m1",
+              "dueAt": "2026-11-05T08:00:00.000Z",
+              "reason": "awaiting_variant",
+              "proposedFor": "2026-11-12"
+            },
+            {
+              "notionId": "n6",
+              "moduleId": "m1",
+              "dueAt": "2026-11-06T08:00:00.000Z",
+              "reason": "module_not_eligible",
+              "proposedFor": null
+            },
+            {
+              "notionId": "n4",
+              "moduleId": "m2",
+              "dueAt": "2026-11-08T08:00:00.000Z",
+              "reason": "module_not_eligible",
+              "proposedFor": null
+            }
+          ],
+          "exhausted": [
+            {
+              "notionId": "n1",
+              "moduleId": "m1",
+              "reason": "imposed_format_unavailable",
+              "requiredFormats": ["matching", "categorization"],
+              "availableFormats": ["choice_question", "cloze", "recall_card"]
+            }
+          ],
+          "estimatedMinutes": 4
+        }
+      },
+      {
+        "name": "forced-unavailable",
+        "output": {
+          "formationId": "f1",
+          "date": "2026-11-11",
+          "mode": "full",
+          "seed": "graine-2026-11-11",
+          "requestedCapMinutes": 15,
+          "capMinutes": 15,
+          "targetRetention": 0.9,
+          "items": [
+            {
+              "notionId": "n5",
+              "moduleId": "m3",
+              "modulePosition": 3,
+              "format": "recall_card",
+              "gapNature": null,
+              "selectionReason": "due",
+              "formatReason": "only_format",
+              "variantRequested": false,
+              "estimatedSeconds": 30
+            },
+            {
+              "notionId": "n3",
+              "moduleId": "m2",
+              "modulePosition": 2,
+              "format": "matching",
+              "gapNature": null,
+              "selectionReason": "due",
+              "formatReason": "bank_constraint",
+              "variantRequested": true,
+              "estimatedSeconds": 40
+            }
+          ],
+          "deferred": [
+            {
+              "notionId": "n1",
+              "moduleId": "m1",
+              "dueAt": "2026-11-05T08:00:00.000Z",
+              "reason": "awaiting_variant",
+              "proposedFor": "2026-11-12"
+            },
+            {
+              "notionId": "n6",
+              "moduleId": "m1",
+              "dueAt": "2026-11-06T08:00:00.000Z",
+              "reason": "module_not_eligible",
+              "proposedFor": null
+            },
+            {
+              "notionId": "n4",
+              "moduleId": "m2",
+              "dueAt": "2026-11-08T08:00:00.000Z",
+              "reason": "module_not_eligible",
+              "proposedFor": null
+            },
+            {
+              "notionId": "n2",
+              "moduleId": "m1",
+              "dueAt": "2026-11-10T08:00:00.000Z",
+              "reason": "awaiting_variant",
+              "proposedFor": "2026-11-12"
+            }
+          ],
+          "exhausted": [
+            {
+              "notionId": "n1",
+              "moduleId": "m1",
+              "reason": "imposed_format_unavailable",
+              "requiredFormats": ["matching", "categorization"],
+              "availableFormats": ["choice_question", "cloze", "recall_card"]
+            },
+            {
+              "notionId": "n2",
+              "moduleId": "m1",
+              "reason": "imposed_format_unavailable",
+              "requiredFormats": ["matching"],
+              "availableFormats": ["choice_question", "open_question"]
+            }
+          ],
+          "estimatedMinutes": 3
+        }
+      },
+      {
+        "name": "retention",
+        "output": {
+          "formationId": "f1",
+          "date": "2026-11-11",
+          "mode": "full",
+          "seed": "graine-2026-11-11",
+          "requestedCapMinutes": 15,
+          "capMinutes": 15,
+          "targetRetention": 0.85,
+          "items": [
+            {
+              "notionId": "n5",
+              "moduleId": "m3",
+              "modulePosition": 3,
+              "format": "recall_card",
+              "gapNature": null,
+              "selectionReason": "due",
+              "formatReason": "only_format",
+              "variantRequested": false,
+              "estimatedSeconds": 30
+            },
+            {
+              "notionId": "n2",
+              "moduleId": "m1",
+              "modulePosition": 1,
+              "format": "open_question",
+              "gapNature": null,
+              "selectionReason": "due",
+              "formatReason": "varied",
+              "variantRequested": false,
+              "estimatedSeconds": 90
+            },
+            {
+              "notionId": "n3",
+              "moduleId": "m2",
+              "modulePosition": 2,
+              "format": "matching",
+              "gapNature": null,
+              "selectionReason": "due",
+              "formatReason": "bank_constraint",
+              "variantRequested": true,
+              "estimatedSeconds": 40
+            }
+          ],
+          "deferred": [
+            {
+              "notionId": "n1",
+              "moduleId": "m1",
+              "dueAt": "2026-11-05T08:00:00.000Z",
+              "reason": "awaiting_variant",
+              "proposedFor": "2026-11-12"
+            },
+            {
+              "notionId": "n6",
+              "moduleId": "m1",
+              "dueAt": "2026-11-06T08:00:00.000Z",
+              "reason": "module_not_eligible",
+              "proposedFor": null
+            },
+            {
+              "notionId": "n4",
+              "moduleId": "m2",
+              "dueAt": "2026-11-08T08:00:00.000Z",
+              "reason": "module_not_eligible",
+              "proposedFor": null
+            }
+          ],
+          "exhausted": [
+            {
+              "notionId": "n1",
+              "moduleId": "m1",
+              "reason": "imposed_format_unavailable",
+              "requiredFormats": ["matching", "categorization"],
+              "availableFormats": ["choice_question", "cloze", "recall_card"]
+            }
+          ],
+          "estimatedMinutes": 4
+        }
+      }
+    ],
+    "smoothed": {
+      "selected": ["n5", "n2", "n3"],
+      "deferred": [
+        {
+          "notionId": "n1",
+          "reason": "awaiting_variant",
+          "proposedFor": "2026-11-12"
+        },
+        {
+          "notionId": "n6",
+          "reason": "module_not_eligible",
+          "proposedFor": null
+        },
+        {
+          "notionId": "n4",
+          "reason": "module_not_eligible",
+          "proposedFor": null
+        }
+      ],
+      "estimatedMinutes": 4,
+      "maxMinutes": 5,
+      "targetRetention": 0.9,
+      "deferredReason": null
+    },
+    "reintroduced": ["a", "b", "c"],
+    "interleaved": ["n1", "n3", "n2", "n4"],
+    "picks": [
+      "recall_card",
+      "recall_card",
+      "categorization",
+      "choice_question",
+      "recall_card",
+      null
+    ],
+    "gapFormats": [
+      {
+        "format": "recall_card",
+        "pendingGeneration": false
+      },
+      {
+        "format": null,
+        "pendingGeneration": false
+      },
+      {
+        "format": "categorization",
+        "pendingGeneration": false
+      },
+      {
+        "format": "matching",
+        "pendingGeneration": false
+      },
+      {
+        "format": "choice_question",
+        "pendingGeneration": true
+      },
+      {
+        "format": null,
+        "pendingGeneration": true
+      },
+      {
+        "format": null,
+        "pendingGeneration": false
+      },
+      {
+        "format": null,
+        "pendingGeneration": false
+      }
+    ]
+  }
+}

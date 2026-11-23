@@ -1,0 +1,2191 @@
+{
+  "inputs": {
+    "params": {
+      "defaultSize": 12,
+      "minSize": 10,
+      "maxSize": 20,
+      "openShare": 0.3,
+      "minOpen": 1,
+      "gapWeight": 3,
+      "weakWeight": 2,
+      "baseWeight": 1,
+      "totalPoints": 100,
+      "masteryThreshold": 80
+    },
+    "paramsSmall": {
+      "defaultSize": 4,
+      "minSize": 2,
+      "maxSize": 8,
+      "openShare": 0.5,
+      "minOpen": 1,
+      "gapWeight": 3,
+      "weakWeight": 2,
+      "baseWeight": 1,
+      "totalPoints": 100,
+      "masteryThreshold": 80
+    },
+    "notions": [
+      {
+        "notionId": "n1",
+        "moduleId": "m1",
+        "chapterId": "c1",
+        "modulePosition": 1,
+        "position": 0,
+        "label": "Notion 1",
+        "mastery": 30
+      },
+      {
+        "notionId": "n2",
+        "moduleId": "m1",
+        "chapterId": "c1",
+        "modulePosition": 1,
+        "position": 1,
+        "label": "Notion 2",
+        "mastery": 55
+      },
+      {
+        "notionId": "n3",
+        "moduleId": "m1",
+        "chapterId": "c1",
+        "modulePosition": 1,
+        "position": 2,
+        "label": "Notion 3",
+        "mastery": 90
+      },
+      {
+        "notionId": "n4",
+        "moduleId": "m1",
+        "chapterId": "c1",
+        "modulePosition": 2,
+        "position": 0,
+        "label": "Notion 4",
+        "mastery": null
+      },
+      {
+        "notionId": "n5",
+        "moduleId": "m1",
+        "chapterId": "c1",
+        "modulePosition": 2,
+        "position": 1,
+        "label": "Notion 5",
+        "mastery": 10
+      },
+      {
+        "notionId": "n6",
+        "moduleId": "m1",
+        "chapterId": "c1",
+        "modulePosition": 3,
+        "position": 0,
+        "label": "Notion 6",
+        "mastery": 75
+      },
+      {
+        "notionId": "n7",
+        "moduleId": "m1",
+        "chapterId": "c1",
+        "modulePosition": 3,
+        "position": 1,
+        "label": "Notion 7",
+        "mastery": 100
+      },
+      {
+        "notionId": "n8",
+        "moduleId": "m1",
+        "chapterId": "c1",
+        "modulePosition": 4,
+        "position": 0,
+        "label": "Notion 8",
+        "mastery": 20
+      }
+    ],
+    "bank": [
+      {
+        "brickId": "a",
+        "brickVersionId": "a-v1",
+        "notionIds": ["n1"],
+        "format": "choice_question",
+        "status": "active",
+        "valid": true,
+        "ownedByLearner": true,
+        "fingerprint": "6161616161616161616161616161616161616161616161616161616161616161"
+      },
+      {
+        "brickId": "b",
+        "brickVersionId": "b-v1",
+        "notionIds": ["n1"],
+        "format": "open_question",
+        "status": "active",
+        "valid": true,
+        "ownedByLearner": true,
+        "fingerprint": "6262626262626262626262626262626262626262626262626262626262626262"
+      },
+      {
+        "brickId": "c",
+        "brickVersionId": "c-v1",
+        "notionIds": ["n2"],
+        "format": "choice_question",
+        "status": "active",
+        "valid": true,
+        "ownedByLearner": true,
+        "fingerprint": "6363636363636363636363636363636363636363636363636363636363636363"
+      },
+      {
+        "brickId": "d",
+        "brickVersionId": "d-v1",
+        "notionIds": ["n2"],
+        "format": "cloze",
+        "status": "active",
+        "valid": true,
+        "ownedByLearner": true,
+        "fingerprint": "6464646464646464646464646464646464646464646464646464646464646464"
+      },
+      {
+        "brickId": "e",
+        "brickVersionId": "e-v1",
+        "notionIds": ["n3"],
+        "format": "choice_question",
+        "status": "active",
+        "valid": true,
+        "ownedByLearner": true,
+        "fingerprint": "6565656565656565656565656565656565656565656565656565656565656565"
+      },
+      {
+        "brickId": "f",
+        "brickVersionId": "f-v1",
+        "notionIds": ["n3"],
+        "format": "matching",
+        "status": "active",
+        "valid": true,
+        "ownedByLearner": true,
+        "fingerprint": "6666666666666666666666666666666666666666666666666666666666666666"
+      },
+      {
+        "brickId": "g",
+        "brickVersionId": "g-v1",
+        "notionIds": ["n4"],
+        "format": "open_question",
+        "status": "active",
+        "valid": true,
+        "ownedByLearner": true,
+        "fingerprint": "6767676767676767676767676767676767676767676767676767676767676767"
+      },
+      {
+        "brickId": "h",
+        "brickVersionId": "h-v1",
+        "notionIds": ["n4"],
+        "format": "choice_question",
+        "status": "active",
+        "valid": true,
+        "ownedByLearner": true,
+        "fingerprint": "6868686868686868686868686868686868686868686868686868686868686868"
+      },
+      {
+        "brickId": "i",
+        "brickVersionId": "i-v1",
+        "notionIds": ["n5"],
+        "format": "cloze",
+        "status": "active",
+        "valid": true,
+        "ownedByLearner": true,
+        "fingerprint": "6969696969696969696969696969696969696969696969696969696969696969"
+      },
+      {
+        "brickId": "j",
+        "brickVersionId": "j-v1",
+        "notionIds": ["n6"],
+        "format": "choice_question",
+        "status": "active",
+        "valid": true,
+        "ownedByLearner": true,
+        "fingerprint": "6a6a6a6a6a6a6a6a6a6a6a6a6a6a6a6a6a6a6a6a6a6a6a6a6a6a6a6a6a6a6a6a"
+      },
+      {
+        "brickId": "k",
+        "brickVersionId": "k-v1",
+        "notionIds": ["n6"],
+        "format": "open_question",
+        "status": "active",
+        "valid": true,
+        "ownedByLearner": true,
+        "fingerprint": "6b6b6b6b6b6b6b6b6b6b6b6b6b6b6b6b6b6b6b6b6b6b6b6b6b6b6b6b6b6b6b6b"
+      },
+      {
+        "brickId": "l",
+        "brickVersionId": "l-v1",
+        "notionIds": ["n7"],
+        "format": "matching",
+        "status": "active",
+        "valid": true,
+        "ownedByLearner": true,
+        "fingerprint": "6c6c6c6c6c6c6c6c6c6c6c6c6c6c6c6c6c6c6c6c6c6c6c6c6c6c6c6c6c6c6c6c"
+      },
+      {
+        "brickId": "m",
+        "brickVersionId": "m-v1",
+        "notionIds": ["n8"],
+        "format": "choice_question",
+        "status": "active",
+        "valid": true,
+        "ownedByLearner": true,
+        "fingerprint": "6d6d6d6d6d6d6d6d6d6d6d6d6d6d6d6d6d6d6d6d6d6d6d6d6d6d6d6d6d6d6d6d"
+      },
+      {
+        "brickId": "n",
+        "brickVersionId": "n-v1",
+        "notionIds": ["n1", "n2"],
+        "format": "choice_question",
+        "status": "active",
+        "valid": true,
+        "ownedByLearner": true,
+        "fingerprint": "6e6e6e6e6e6e6e6e6e6e6e6e6e6e6e6e6e6e6e6e6e6e6e6e6e6e6e6e6e6e6e6e"
+      },
+      {
+        "brickId": "o",
+        "brickVersionId": "o-v1",
+        "notionIds": ["n2", "n3"],
+        "format": "ordering",
+        "status": "active",
+        "valid": true,
+        "ownedByLearner": true,
+        "fingerprint": "6f6f6f6f6f6f6f6f6f6f6f6f6f6f6f6f6f6f6f6f6f6f6f6f6f6f6f6f6f6f6f6f"
+      },
+      {
+        "brickId": "p",
+        "brickVersionId": "p-v1",
+        "notionIds": ["n1"],
+        "format": "choice_question",
+        "status": "retired",
+        "valid": true,
+        "ownedByLearner": true,
+        "fingerprint": "7070707070707070707070707070707070707070707070707070707070707070"
+      },
+      {
+        "brickId": "q",
+        "brickVersionId": "q-v1",
+        "notionIds": ["n2"],
+        "format": "choice_question",
+        "status": "active",
+        "valid": false,
+        "ownedByLearner": true,
+        "fingerprint": "7171717171717171717171717171717171717171717171717171717171717171"
+      },
+      {
+        "brickId": "r",
+        "brickVersionId": "r-v1",
+        "notionIds": ["n3"],
+        "format": "choice_question",
+        "status": "active",
+        "valid": true,
+        "ownedByLearner": false,
+        "fingerprint": "7272727272727272727272727272727272727272727272727272727272727272"
+      },
+      {
+        "brickId": "s",
+        "brickVersionId": "s-v1",
+        "notionIds": ["n4"],
+        "format": "choice_question",
+        "status": "active",
+        "valid": true,
+        "ownedByLearner": true,
+        "fingerprint": "7373737373737373737373737373737373737373737373737373737373737373"
+      },
+      {
+        "brickId": "t",
+        "brickVersionId": "t-v1",
+        "notionIds": ["n1"],
+        "format": "choice_question",
+        "status": "active",
+        "valid": true,
+        "ownedByLearner": true,
+        "fingerprint": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+      },
+      {
+        "brickId": "u",
+        "brickVersionId": "u-v1",
+        "notionIds": ["n2"],
+        "format": "choice_question",
+        "status": "active",
+        "valid": true,
+        "ownedByLearner": true,
+        "fingerprint": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+      }
+    ],
+    "gaps": [
+      {
+        "notionId": "n5",
+        "nature": "confusion"
+      },
+      {
+        "notionId": "n5",
+        "nature": "forgetting"
+      },
+      {
+        "notionId": "n8",
+        "nature": "application"
+      }
+    ],
+    "seen": ["bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"],
+    "variants": [
+      {
+        "name": "default",
+        "params": {
+          "defaultSize": 12,
+          "minSize": 10,
+          "maxSize": 20,
+          "openShare": 0.3,
+          "minOpen": 1,
+          "gapWeight": 3,
+          "weakWeight": 2,
+          "baseWeight": 1,
+          "totalPoints": 100,
+          "masteryThreshold": 80
+        },
+        "targetCount": null,
+        "seen": []
+      },
+      {
+        "name": "seen",
+        "params": {
+          "defaultSize": 12,
+          "minSize": 10,
+          "maxSize": 20,
+          "openShare": 0.3,
+          "minOpen": 1,
+          "gapWeight": 3,
+          "weakWeight": 2,
+          "baseWeight": 1,
+          "totalPoints": 100,
+          "masteryThreshold": 80
+        },
+        "targetCount": null,
+        "seen": ["bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"]
+      },
+      {
+        "name": "small-open",
+        "params": {
+          "defaultSize": 4,
+          "minSize": 2,
+          "maxSize": 8,
+          "openShare": 0.5,
+          "minOpen": 1,
+          "gapWeight": 3,
+          "weakWeight": 2,
+          "baseWeight": 1,
+          "totalPoints": 100,
+          "masteryThreshold": 80
+        },
+        "targetCount": 4,
+        "seen": []
+      },
+      {
+        "name": "full-bank",
+        "params": {
+          "defaultSize": 4,
+          "minSize": 2,
+          "maxSize": 8,
+          "openShare": 0.5,
+          "minOpen": 1,
+          "gapWeight": 3,
+          "weakWeight": 2,
+          "baseWeight": 1,
+          "totalPoints": 100,
+          "masteryThreshold": 80
+        },
+        "targetCount": 8,
+        "seen": []
+      },
+      {
+        "name": "bank-exhausted",
+        "params": {
+          "defaultSize": 20,
+          "minSize": 10,
+          "maxSize": 20,
+          "openShare": 0.3,
+          "minOpen": 1,
+          "gapWeight": 3,
+          "weakWeight": 2,
+          "baseWeight": 1,
+          "totalPoints": 100,
+          "masteryThreshold": 80
+        },
+        "targetCount": 20,
+        "seen": []
+      },
+      {
+        "name": "no-gap",
+        "params": {
+          "defaultSize": 4,
+          "minSize": 2,
+          "maxSize": 8,
+          "openShare": 0.5,
+          "minOpen": 1,
+          "gapWeight": 3,
+          "weakWeight": 2,
+          "baseWeight": 1,
+          "totalPoints": 100,
+          "masteryThreshold": 80
+        },
+        "targetCount": 2,
+        "seen": [],
+        "gaps": []
+      },
+      {
+        "name": "other-seed",
+        "params": {
+          "defaultSize": 12,
+          "minSize": 10,
+          "maxSize": 20,
+          "openShare": 0.3,
+          "minOpen": 1,
+          "gapWeight": 3,
+          "weakWeight": 2,
+          "baseWeight": 1,
+          "totalPoints": 100,
+          "masteryThreshold": 80
+        },
+        "targetCount": 12,
+        "seen": [],
+        "seed": "autre-graine"
+      },
+      {
+        "name": "shuffled-input",
+        "params": {
+          "defaultSize": 12,
+          "minSize": 10,
+          "maxSize": 20,
+          "openShare": 0.3,
+          "minOpen": 1,
+          "gapWeight": 3,
+          "weakWeight": 2,
+          "baseWeight": 1,
+          "totalPoints": 100,
+          "masteryThreshold": 80
+        },
+        "targetCount": 12,
+        "seen": [],
+        "reverse": true
+      }
+    ],
+    "seed": "graine-validation"
+  },
+  "output": [
+    {
+      "name": "default",
+      "output": {
+        "questions": [
+          {
+            "brickId": "i",
+            "brickVersionId": "i-v1",
+            "notionId": "n5",
+            "notionIds": ["n5"],
+            "format": "cloze",
+            "share": "choice",
+            "fingerprint": "6969696969696969696969696969696969696969696969696969696969696969",
+            "points": 8.33
+          },
+          {
+            "brickId": "m",
+            "brickVersionId": "m-v1",
+            "notionId": "n8",
+            "notionIds": ["n8"],
+            "format": "choice_question",
+            "share": "choice",
+            "fingerprint": "6d6d6d6d6d6d6d6d6d6d6d6d6d6d6d6d6d6d6d6d6d6d6d6d6d6d6d6d6d6d6d6d",
+            "points": 8.33
+          },
+          {
+            "brickId": "a",
+            "brickVersionId": "a-v1",
+            "notionId": "n1",
+            "notionIds": ["n1"],
+            "format": "choice_question",
+            "share": "choice",
+            "fingerprint": "6161616161616161616161616161616161616161616161616161616161616161",
+            "points": 8.33
+          },
+          {
+            "brickId": "c",
+            "brickVersionId": "c-v1",
+            "notionId": "n2",
+            "notionIds": ["n2"],
+            "format": "choice_question",
+            "share": "choice",
+            "fingerprint": "6363636363636363636363636363636363636363636363636363636363636363",
+            "points": 8.33
+          },
+          {
+            "brickId": "j",
+            "brickVersionId": "j-v1",
+            "notionId": "n6",
+            "notionIds": ["n6"],
+            "format": "choice_question",
+            "share": "choice",
+            "fingerprint": "6a6a6a6a6a6a6a6a6a6a6a6a6a6a6a6a6a6a6a6a6a6a6a6a6a6a6a6a6a6a6a6a",
+            "points": 8.33
+          },
+          {
+            "brickId": "e",
+            "brickVersionId": "e-v1",
+            "notionId": "n3",
+            "notionIds": ["n3"],
+            "format": "choice_question",
+            "share": "choice",
+            "fingerprint": "6565656565656565656565656565656565656565656565656565656565656565",
+            "points": 8.33
+          },
+          {
+            "brickId": "l",
+            "brickVersionId": "l-v1",
+            "notionId": "n7",
+            "notionIds": ["n7"],
+            "format": "matching",
+            "share": "choice",
+            "fingerprint": "6c6c6c6c6c6c6c6c6c6c6c6c6c6c6c6c6c6c6c6c6c6c6c6c6c6c6c6c6c6c6c6c",
+            "points": 8.33
+          },
+          {
+            "brickId": "h",
+            "brickVersionId": "h-v1",
+            "notionId": "n4",
+            "notionIds": ["n4"],
+            "format": "choice_question",
+            "share": "choice",
+            "fingerprint": "6868686868686868686868686868686868686868686868686868686868686868",
+            "points": 8.33
+          },
+          {
+            "brickId": "n",
+            "brickVersionId": "n-v1",
+            "notionId": "n1",
+            "notionIds": ["n1", "n2"],
+            "format": "choice_question",
+            "share": "choice",
+            "fingerprint": "6e6e6e6e6e6e6e6e6e6e6e6e6e6e6e6e6e6e6e6e6e6e6e6e6e6e6e6e6e6e6e6e",
+            "points": 8.33
+          },
+          {
+            "brickId": "b",
+            "brickVersionId": "b-v1",
+            "notionId": "n1",
+            "notionIds": ["n1"],
+            "format": "open_question",
+            "share": "open",
+            "fingerprint": "6262626262626262626262626262626262626262626262626262626262626262",
+            "points": 8.33
+          },
+          {
+            "brickId": "k",
+            "brickVersionId": "k-v1",
+            "notionId": "n6",
+            "notionIds": ["n6"],
+            "format": "open_question",
+            "share": "open",
+            "fingerprint": "6b6b6b6b6b6b6b6b6b6b6b6b6b6b6b6b6b6b6b6b6b6b6b6b6b6b6b6b6b6b6b6b",
+            "points": 8.33
+          },
+          {
+            "brickId": "g",
+            "brickVersionId": "g-v1",
+            "notionId": "n4",
+            "notionIds": ["n4"],
+            "format": "open_question",
+            "share": "open",
+            "fingerprint": "6767676767676767676767676767676767676767676767676767676767676767",
+            "points": 8.37
+          }
+        ],
+        "exhausted": [
+          {
+            "notionId": "n5",
+            "reason": "bank_exhausted",
+            "requested": 2,
+            "selected": 1,
+            "formats": ["open", "choice"]
+          },
+          {
+            "notionId": "n8",
+            "reason": "bank_exhausted",
+            "requested": 2,
+            "selected": 1,
+            "formats": ["open", "choice"]
+          }
+        ],
+        "uncoveredNotionIds": [],
+        "exhaustedFormats": ["open"],
+        "coverageLimited": false,
+        "minimumReached": true,
+        "targetCount": 12,
+        "size": 12,
+        "pointsTotal": 100,
+        "plan": [
+          {
+            "notionId": "n5",
+            "priority": 0,
+            "gap": true,
+            "mastery": 10,
+            "weight": 3,
+            "quota": 2,
+            "selected": 1
+          },
+          {
+            "notionId": "n8",
+            "priority": 1,
+            "gap": true,
+            "mastery": 20,
+            "weight": 3,
+            "quota": 2,
+            "selected": 1
+          },
+          {
+            "notionId": "n1",
+            "priority": 2,
+            "gap": false,
+            "mastery": 30,
+            "weight": 2,
+            "quota": 2,
+            "selected": 3
+          },
+          {
+            "notionId": "n2",
+            "priority": 3,
+            "gap": false,
+            "mastery": 55,
+            "weight": 2,
+            "quota": 2,
+            "selected": 2
+          },
+          {
+            "notionId": "n6",
+            "priority": 4,
+            "gap": false,
+            "mastery": 75,
+            "weight": 2,
+            "quota": 1,
+            "selected": 2
+          },
+          {
+            "notionId": "n3",
+            "priority": 5,
+            "gap": false,
+            "mastery": 90,
+            "weight": 1,
+            "quota": 1,
+            "selected": 1
+          },
+          {
+            "notionId": "n7",
+            "priority": 6,
+            "gap": false,
+            "mastery": 100,
+            "weight": 1,
+            "quota": 1,
+            "selected": 1
+          },
+          {
+            "notionId": "n4",
+            "priority": 7,
+            "gap": false,
+            "mastery": null,
+            "weight": 1,
+            "quota": 1,
+            "selected": 2
+          }
+        ],
+        "diagnostics": {
+          "bankSize": 21,
+          "eligible": 17,
+          "seenExcluded": 0,
+          "unseen": 17,
+          "duplicateFingerprints": 1,
+          "unique": 16
+        },
+        "seed": "graine-validation"
+      }
+    },
+    {
+      "name": "seen",
+      "output": {
+        "questions": [
+          {
+            "brickId": "i",
+            "brickVersionId": "i-v1",
+            "notionId": "n5",
+            "notionIds": ["n5"],
+            "format": "cloze",
+            "share": "choice",
+            "fingerprint": "6969696969696969696969696969696969696969696969696969696969696969",
+            "points": 8.33
+          },
+          {
+            "brickId": "m",
+            "brickVersionId": "m-v1",
+            "notionId": "n8",
+            "notionIds": ["n8"],
+            "format": "choice_question",
+            "share": "choice",
+            "fingerprint": "6d6d6d6d6d6d6d6d6d6d6d6d6d6d6d6d6d6d6d6d6d6d6d6d6d6d6d6d6d6d6d6d",
+            "points": 8.33
+          },
+          {
+            "brickId": "a",
+            "brickVersionId": "a-v1",
+            "notionId": "n1",
+            "notionIds": ["n1"],
+            "format": "choice_question",
+            "share": "choice",
+            "fingerprint": "6161616161616161616161616161616161616161616161616161616161616161",
+            "points": 8.33
+          },
+          {
+            "brickId": "c",
+            "brickVersionId": "c-v1",
+            "notionId": "n2",
+            "notionIds": ["n2"],
+            "format": "choice_question",
+            "share": "choice",
+            "fingerprint": "6363636363636363636363636363636363636363636363636363636363636363",
+            "points": 8.33
+          },
+          {
+            "brickId": "j",
+            "brickVersionId": "j-v1",
+            "notionId": "n6",
+            "notionIds": ["n6"],
+            "format": "choice_question",
+            "share": "choice",
+            "fingerprint": "6a6a6a6a6a6a6a6a6a6a6a6a6a6a6a6a6a6a6a6a6a6a6a6a6a6a6a6a6a6a6a6a",
+            "points": 8.33
+          },
+          {
+            "brickId": "e",
+            "brickVersionId": "e-v1",
+            "notionId": "n3",
+            "notionIds": ["n3"],
+            "format": "choice_question",
+            "share": "choice",
+            "fingerprint": "6565656565656565656565656565656565656565656565656565656565656565",
+            "points": 8.33
+          },
+          {
+            "brickId": "l",
+            "brickVersionId": "l-v1",
+            "notionId": "n7",
+            "notionIds": ["n7"],
+            "format": "matching",
+            "share": "choice",
+            "fingerprint": "6c6c6c6c6c6c6c6c6c6c6c6c6c6c6c6c6c6c6c6c6c6c6c6c6c6c6c6c6c6c6c6c",
+            "points": 8.33
+          },
+          {
+            "brickId": "h",
+            "brickVersionId": "h-v1",
+            "notionId": "n4",
+            "notionIds": ["n4"],
+            "format": "choice_question",
+            "share": "choice",
+            "fingerprint": "6868686868686868686868686868686868686868686868686868686868686868",
+            "points": 8.33
+          },
+          {
+            "brickId": "n",
+            "brickVersionId": "n-v1",
+            "notionId": "n1",
+            "notionIds": ["n1", "n2"],
+            "format": "choice_question",
+            "share": "choice",
+            "fingerprint": "6e6e6e6e6e6e6e6e6e6e6e6e6e6e6e6e6e6e6e6e6e6e6e6e6e6e6e6e6e6e6e6e",
+            "points": 8.33
+          },
+          {
+            "brickId": "b",
+            "brickVersionId": "b-v1",
+            "notionId": "n1",
+            "notionIds": ["n1"],
+            "format": "open_question",
+            "share": "open",
+            "fingerprint": "6262626262626262626262626262626262626262626262626262626262626262",
+            "points": 8.33
+          },
+          {
+            "brickId": "k",
+            "brickVersionId": "k-v1",
+            "notionId": "n6",
+            "notionIds": ["n6"],
+            "format": "open_question",
+            "share": "open",
+            "fingerprint": "6b6b6b6b6b6b6b6b6b6b6b6b6b6b6b6b6b6b6b6b6b6b6b6b6b6b6b6b6b6b6b6b",
+            "points": 8.33
+          },
+          {
+            "brickId": "g",
+            "brickVersionId": "g-v1",
+            "notionId": "n4",
+            "notionIds": ["n4"],
+            "format": "open_question",
+            "share": "open",
+            "fingerprint": "6767676767676767676767676767676767676767676767676767676767676767",
+            "points": 8.37
+          }
+        ],
+        "exhausted": [
+          {
+            "notionId": "n5",
+            "reason": "bank_exhausted",
+            "requested": 2,
+            "selected": 1,
+            "formats": ["open", "choice"]
+          },
+          {
+            "notionId": "n8",
+            "reason": "bank_exhausted",
+            "requested": 2,
+            "selected": 1,
+            "formats": ["open", "choice"]
+          }
+        ],
+        "uncoveredNotionIds": [],
+        "exhaustedFormats": ["open"],
+        "coverageLimited": false,
+        "minimumReached": true,
+        "targetCount": 12,
+        "size": 12,
+        "pointsTotal": 100,
+        "plan": [
+          {
+            "notionId": "n5",
+            "priority": 0,
+            "gap": true,
+            "mastery": 10,
+            "weight": 3,
+            "quota": 2,
+            "selected": 1
+          },
+          {
+            "notionId": "n8",
+            "priority": 1,
+            "gap": true,
+            "mastery": 20,
+            "weight": 3,
+            "quota": 2,
+            "selected": 1
+          },
+          {
+            "notionId": "n1",
+            "priority": 2,
+            "gap": false,
+            "mastery": 30,
+            "weight": 2,
+            "quota": 2,
+            "selected": 3
+          },
+          {
+            "notionId": "n2",
+            "priority": 3,
+            "gap": false,
+            "mastery": 55,
+            "weight": 2,
+            "quota": 2,
+            "selected": 2
+          },
+          {
+            "notionId": "n6",
+            "priority": 4,
+            "gap": false,
+            "mastery": 75,
+            "weight": 2,
+            "quota": 1,
+            "selected": 2
+          },
+          {
+            "notionId": "n3",
+            "priority": 5,
+            "gap": false,
+            "mastery": 90,
+            "weight": 1,
+            "quota": 1,
+            "selected": 1
+          },
+          {
+            "notionId": "n7",
+            "priority": 6,
+            "gap": false,
+            "mastery": 100,
+            "weight": 1,
+            "quota": 1,
+            "selected": 1
+          },
+          {
+            "notionId": "n4",
+            "priority": 7,
+            "gap": false,
+            "mastery": null,
+            "weight": 1,
+            "quota": 1,
+            "selected": 2
+          }
+        ],
+        "diagnostics": {
+          "bankSize": 21,
+          "eligible": 17,
+          "seenExcluded": 0,
+          "unseen": 17,
+          "duplicateFingerprints": 1,
+          "unique": 16
+        },
+        "seed": "graine-validation"
+      }
+    },
+    {
+      "name": "small-open",
+      "output": {
+        "questions": [
+          {
+            "brickId": "i",
+            "brickVersionId": "i-v1",
+            "notionId": "n5",
+            "notionIds": ["n5"],
+            "format": "cloze",
+            "share": "choice",
+            "fingerprint": "6969696969696969696969696969696969696969696969696969696969696969",
+            "points": 25
+          },
+          {
+            "brickId": "m",
+            "brickVersionId": "m-v1",
+            "notionId": "n8",
+            "notionIds": ["n8"],
+            "format": "choice_question",
+            "share": "choice",
+            "fingerprint": "6d6d6d6d6d6d6d6d6d6d6d6d6d6d6d6d6d6d6d6d6d6d6d6d6d6d6d6d6d6d6d6d",
+            "points": 25
+          },
+          {
+            "brickId": "t",
+            "brickVersionId": "t-v1",
+            "notionId": "n1",
+            "notionIds": ["n1"],
+            "format": "choice_question",
+            "share": "choice",
+            "fingerprint": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+            "points": 25
+          },
+          {
+            "brickId": "c",
+            "brickVersionId": "c-v1",
+            "notionId": "n2",
+            "notionIds": ["n2"],
+            "format": "choice_question",
+            "share": "choice",
+            "fingerprint": "6363636363636363636363636363636363636363636363636363636363636363",
+            "points": 25
+          }
+        ],
+        "exhausted": [
+          {
+            "notionId": "n6",
+            "reason": "capacity",
+            "requested": 0,
+            "selected": 0,
+            "formats": []
+          },
+          {
+            "notionId": "n3",
+            "reason": "capacity",
+            "requested": 0,
+            "selected": 0,
+            "formats": []
+          },
+          {
+            "notionId": "n7",
+            "reason": "capacity",
+            "requested": 0,
+            "selected": 0,
+            "formats": []
+          },
+          {
+            "notionId": "n4",
+            "reason": "capacity",
+            "requested": 0,
+            "selected": 0,
+            "formats": []
+          }
+        ],
+        "uncoveredNotionIds": ["n6", "n3", "n7", "n4"],
+        "exhaustedFormats": ["open"],
+        "coverageLimited": true,
+        "minimumReached": true,
+        "targetCount": 4,
+        "size": 4,
+        "pointsTotal": 100,
+        "plan": [
+          {
+            "notionId": "n5",
+            "priority": 0,
+            "gap": true,
+            "mastery": 10,
+            "weight": 3,
+            "quota": 1,
+            "selected": 1
+          },
+          {
+            "notionId": "n8",
+            "priority": 1,
+            "gap": true,
+            "mastery": 20,
+            "weight": 3,
+            "quota": 1,
+            "selected": 1
+          },
+          {
+            "notionId": "n1",
+            "priority": 2,
+            "gap": false,
+            "mastery": 30,
+            "weight": 2,
+            "quota": 1,
+            "selected": 1
+          },
+          {
+            "notionId": "n2",
+            "priority": 3,
+            "gap": false,
+            "mastery": 55,
+            "weight": 2,
+            "quota": 1,
+            "selected": 1
+          },
+          {
+            "notionId": "n6",
+            "priority": 4,
+            "gap": false,
+            "mastery": 75,
+            "weight": 2,
+            "quota": 0,
+            "selected": 0
+          },
+          {
+            "notionId": "n3",
+            "priority": 5,
+            "gap": false,
+            "mastery": 90,
+            "weight": 1,
+            "quota": 0,
+            "selected": 0
+          },
+          {
+            "notionId": "n7",
+            "priority": 6,
+            "gap": false,
+            "mastery": 100,
+            "weight": 1,
+            "quota": 0,
+            "selected": 0
+          },
+          {
+            "notionId": "n4",
+            "priority": 7,
+            "gap": false,
+            "mastery": null,
+            "weight": 1,
+            "quota": 0,
+            "selected": 0
+          }
+        ],
+        "diagnostics": {
+          "bankSize": 21,
+          "eligible": 17,
+          "seenExcluded": 0,
+          "unseen": 17,
+          "duplicateFingerprints": 1,
+          "unique": 16
+        },
+        "seed": "graine-validation"
+      }
+    },
+    {
+      "name": "full-bank",
+      "output": {
+        "questions": [
+          {
+            "brickId": "i",
+            "brickVersionId": "i-v1",
+            "notionId": "n5",
+            "notionIds": ["n5"],
+            "format": "cloze",
+            "share": "choice",
+            "fingerprint": "6969696969696969696969696969696969696969696969696969696969696969",
+            "points": 12.5
+          },
+          {
+            "brickId": "m",
+            "brickVersionId": "m-v1",
+            "notionId": "n8",
+            "notionIds": ["n8"],
+            "format": "choice_question",
+            "share": "choice",
+            "fingerprint": "6d6d6d6d6d6d6d6d6d6d6d6d6d6d6d6d6d6d6d6d6d6d6d6d6d6d6d6d6d6d6d6d",
+            "points": 12.5
+          },
+          {
+            "brickId": "n",
+            "brickVersionId": "n-v1",
+            "notionId": "n2",
+            "notionIds": ["n1", "n2"],
+            "format": "choice_question",
+            "share": "choice",
+            "fingerprint": "6e6e6e6e6e6e6e6e6e6e6e6e6e6e6e6e6e6e6e6e6e6e6e6e6e6e6e6e6e6e6e6e",
+            "points": 12.5
+          },
+          {
+            "brickId": "j",
+            "brickVersionId": "j-v1",
+            "notionId": "n6",
+            "notionIds": ["n6"],
+            "format": "choice_question",
+            "share": "choice",
+            "fingerprint": "6a6a6a6a6a6a6a6a6a6a6a6a6a6a6a6a6a6a6a6a6a6a6a6a6a6a6a6a6a6a6a6a",
+            "points": 12.5
+          },
+          {
+            "brickId": "e",
+            "brickVersionId": "e-v1",
+            "notionId": "n3",
+            "notionIds": ["n3"],
+            "format": "choice_question",
+            "share": "choice",
+            "fingerprint": "6565656565656565656565656565656565656565656565656565656565656565",
+            "points": 12.5
+          },
+          {
+            "brickId": "l",
+            "brickVersionId": "l-v1",
+            "notionId": "n7",
+            "notionIds": ["n7"],
+            "format": "matching",
+            "share": "choice",
+            "fingerprint": "6c6c6c6c6c6c6c6c6c6c6c6c6c6c6c6c6c6c6c6c6c6c6c6c6c6c6c6c6c6c6c6c",
+            "points": 12.5
+          },
+          {
+            "brickId": "h",
+            "brickVersionId": "h-v1",
+            "notionId": "n4",
+            "notionIds": ["n4"],
+            "format": "choice_question",
+            "share": "choice",
+            "fingerprint": "6868686868686868686868686868686868686868686868686868686868686868",
+            "points": 12.5
+          },
+          {
+            "brickId": "b",
+            "brickVersionId": "b-v1",
+            "notionId": "n1",
+            "notionIds": ["n1"],
+            "format": "open_question",
+            "share": "open",
+            "fingerprint": "6262626262626262626262626262626262626262626262626262626262626262",
+            "points": 12.5
+          }
+        ],
+        "exhausted": [],
+        "uncoveredNotionIds": [],
+        "exhaustedFormats": ["open"],
+        "coverageLimited": false,
+        "minimumReached": true,
+        "targetCount": 8,
+        "size": 8,
+        "pointsTotal": 100,
+        "plan": [
+          {
+            "notionId": "n5",
+            "priority": 0,
+            "gap": true,
+            "mastery": 10,
+            "weight": 3,
+            "quota": 1,
+            "selected": 1
+          },
+          {
+            "notionId": "n8",
+            "priority": 1,
+            "gap": true,
+            "mastery": 20,
+            "weight": 3,
+            "quota": 1,
+            "selected": 1
+          },
+          {
+            "notionId": "n1",
+            "priority": 2,
+            "gap": false,
+            "mastery": 30,
+            "weight": 2,
+            "quota": 1,
+            "selected": 2
+          },
+          {
+            "notionId": "n2",
+            "priority": 3,
+            "gap": false,
+            "mastery": 55,
+            "weight": 2,
+            "quota": 1,
+            "selected": 1
+          },
+          {
+            "notionId": "n6",
+            "priority": 4,
+            "gap": false,
+            "mastery": 75,
+            "weight": 2,
+            "quota": 1,
+            "selected": 1
+          },
+          {
+            "notionId": "n3",
+            "priority": 5,
+            "gap": false,
+            "mastery": 90,
+            "weight": 1,
+            "quota": 1,
+            "selected": 1
+          },
+          {
+            "notionId": "n7",
+            "priority": 6,
+            "gap": false,
+            "mastery": 100,
+            "weight": 1,
+            "quota": 1,
+            "selected": 1
+          },
+          {
+            "notionId": "n4",
+            "priority": 7,
+            "gap": false,
+            "mastery": null,
+            "weight": 1,
+            "quota": 1,
+            "selected": 1
+          }
+        ],
+        "diagnostics": {
+          "bankSize": 21,
+          "eligible": 17,
+          "seenExcluded": 0,
+          "unseen": 17,
+          "duplicateFingerprints": 1,
+          "unique": 16
+        },
+        "seed": "graine-validation"
+      }
+    },
+    {
+      "name": "bank-exhausted",
+      "output": {
+        "questions": [
+          {
+            "brickId": "i",
+            "brickVersionId": "i-v1",
+            "notionId": "n5",
+            "notionIds": ["n5"],
+            "format": "cloze",
+            "share": "choice",
+            "fingerprint": "6969696969696969696969696969696969696969696969696969696969696969",
+            "points": 6.25
+          },
+          {
+            "brickId": "m",
+            "brickVersionId": "m-v1",
+            "notionId": "n8",
+            "notionIds": ["n8"],
+            "format": "choice_question",
+            "share": "choice",
+            "fingerprint": "6d6d6d6d6d6d6d6d6d6d6d6d6d6d6d6d6d6d6d6d6d6d6d6d6d6d6d6d6d6d6d6d",
+            "points": 6.25
+          },
+          {
+            "brickId": "t",
+            "brickVersionId": "t-v1",
+            "notionId": "n1",
+            "notionIds": ["n1"],
+            "format": "choice_question",
+            "share": "choice",
+            "fingerprint": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+            "points": 6.25
+          },
+          {
+            "brickId": "c",
+            "brickVersionId": "c-v1",
+            "notionId": "n2",
+            "notionIds": ["n2"],
+            "format": "choice_question",
+            "share": "choice",
+            "fingerprint": "6363636363636363636363636363636363636363636363636363636363636363",
+            "points": 6.25
+          },
+          {
+            "brickId": "j",
+            "brickVersionId": "j-v1",
+            "notionId": "n6",
+            "notionIds": ["n6"],
+            "format": "choice_question",
+            "share": "choice",
+            "fingerprint": "6a6a6a6a6a6a6a6a6a6a6a6a6a6a6a6a6a6a6a6a6a6a6a6a6a6a6a6a6a6a6a6a",
+            "points": 6.25
+          },
+          {
+            "brickId": "f",
+            "brickVersionId": "f-v1",
+            "notionId": "n3",
+            "notionIds": ["n3"],
+            "format": "matching",
+            "share": "choice",
+            "fingerprint": "6666666666666666666666666666666666666666666666666666666666666666",
+            "points": 6.25
+          },
+          {
+            "brickId": "l",
+            "brickVersionId": "l-v1",
+            "notionId": "n7",
+            "notionIds": ["n7"],
+            "format": "matching",
+            "share": "choice",
+            "fingerprint": "6c6c6c6c6c6c6c6c6c6c6c6c6c6c6c6c6c6c6c6c6c6c6c6c6c6c6c6c6c6c6c6c",
+            "points": 6.25
+          },
+          {
+            "brickId": "h",
+            "brickVersionId": "h-v1",
+            "notionId": "n4",
+            "notionIds": ["n4"],
+            "format": "choice_question",
+            "share": "choice",
+            "fingerprint": "6868686868686868686868686868686868686868686868686868686868686868",
+            "points": 6.25
+          },
+          {
+            "brickId": "a",
+            "brickVersionId": "a-v1",
+            "notionId": "n1",
+            "notionIds": ["n1"],
+            "format": "choice_question",
+            "share": "choice",
+            "fingerprint": "6161616161616161616161616161616161616161616161616161616161616161",
+            "points": 6.25
+          },
+          {
+            "brickId": "d",
+            "brickVersionId": "d-v1",
+            "notionId": "n2",
+            "notionIds": ["n2"],
+            "format": "cloze",
+            "share": "choice",
+            "fingerprint": "6464646464646464646464646464646464646464646464646464646464646464",
+            "points": 6.25
+          },
+          {
+            "brickId": "e",
+            "brickVersionId": "e-v1",
+            "notionId": "n3",
+            "notionIds": ["n3"],
+            "format": "choice_question",
+            "share": "choice",
+            "fingerprint": "6565656565656565656565656565656565656565656565656565656565656565",
+            "points": 6.25
+          },
+          {
+            "brickId": "s",
+            "brickVersionId": "s-v1",
+            "notionId": "n4",
+            "notionIds": ["n4"],
+            "format": "choice_question",
+            "share": "choice",
+            "fingerprint": "7373737373737373737373737373737373737373737373737373737373737373",
+            "points": 6.25
+          },
+          {
+            "brickId": "n",
+            "brickVersionId": "n-v1",
+            "notionId": "n1",
+            "notionIds": ["n1", "n2"],
+            "format": "choice_question",
+            "share": "choice",
+            "fingerprint": "6e6e6e6e6e6e6e6e6e6e6e6e6e6e6e6e6e6e6e6e6e6e6e6e6e6e6e6e6e6e6e6e",
+            "points": 6.25
+          },
+          {
+            "brickId": "b",
+            "brickVersionId": "b-v1",
+            "notionId": "n1",
+            "notionIds": ["n1"],
+            "format": "open_question",
+            "share": "open",
+            "fingerprint": "6262626262626262626262626262626262626262626262626262626262626262",
+            "points": 6.25
+          },
+          {
+            "brickId": "k",
+            "brickVersionId": "k-v1",
+            "notionId": "n6",
+            "notionIds": ["n6"],
+            "format": "open_question",
+            "share": "open",
+            "fingerprint": "6b6b6b6b6b6b6b6b6b6b6b6b6b6b6b6b6b6b6b6b6b6b6b6b6b6b6b6b6b6b6b6b",
+            "points": 6.25
+          },
+          {
+            "brickId": "g",
+            "brickVersionId": "g-v1",
+            "notionId": "n4",
+            "notionIds": ["n4"],
+            "format": "open_question",
+            "share": "open",
+            "fingerprint": "6767676767676767676767676767676767676767676767676767676767676767",
+            "points": 6.25
+          }
+        ],
+        "exhausted": [
+          {
+            "notionId": "n5",
+            "reason": "bank_exhausted",
+            "requested": 3,
+            "selected": 1,
+            "formats": ["open", "choice"]
+          },
+          {
+            "notionId": "n8",
+            "reason": "bank_exhausted",
+            "requested": 3,
+            "selected": 1,
+            "formats": ["open", "choice"]
+          },
+          {
+            "notionId": "n7",
+            "reason": "bank_exhausted",
+            "requested": 2,
+            "selected": 1,
+            "formats": ["choice", "open"]
+          }
+        ],
+        "uncoveredNotionIds": [],
+        "exhaustedFormats": ["open", "choice"],
+        "coverageLimited": false,
+        "minimumReached": true,
+        "targetCount": 20,
+        "size": 16,
+        "pointsTotal": 100,
+        "plan": [
+          {
+            "notionId": "n5",
+            "priority": 0,
+            "gap": true,
+            "mastery": 10,
+            "weight": 3,
+            "quota": 3,
+            "selected": 1
+          },
+          {
+            "notionId": "n8",
+            "priority": 1,
+            "gap": true,
+            "mastery": 20,
+            "weight": 3,
+            "quota": 3,
+            "selected": 1
+          },
+          {
+            "notionId": "n1",
+            "priority": 2,
+            "gap": false,
+            "mastery": 30,
+            "weight": 2,
+            "quota": 3,
+            "selected": 4
+          },
+          {
+            "notionId": "n2",
+            "priority": 3,
+            "gap": false,
+            "mastery": 55,
+            "weight": 2,
+            "quota": 3,
+            "selected": 3
+          },
+          {
+            "notionId": "n6",
+            "priority": 4,
+            "gap": false,
+            "mastery": 75,
+            "weight": 2,
+            "quota": 2,
+            "selected": 2
+          },
+          {
+            "notionId": "n3",
+            "priority": 5,
+            "gap": false,
+            "mastery": 90,
+            "weight": 1,
+            "quota": 2,
+            "selected": 2
+          },
+          {
+            "notionId": "n7",
+            "priority": 6,
+            "gap": false,
+            "mastery": 100,
+            "weight": 1,
+            "quota": 2,
+            "selected": 1
+          },
+          {
+            "notionId": "n4",
+            "priority": 7,
+            "gap": false,
+            "mastery": null,
+            "weight": 1,
+            "quota": 2,
+            "selected": 3
+          }
+        ],
+        "diagnostics": {
+          "bankSize": 21,
+          "eligible": 17,
+          "seenExcluded": 0,
+          "unseen": 17,
+          "duplicateFingerprints": 1,
+          "unique": 16
+        },
+        "seed": "graine-validation"
+      }
+    },
+    {
+      "name": "no-gap",
+      "output": {
+        "questions": [
+          {
+            "brickId": "i",
+            "brickVersionId": "i-v1",
+            "notionId": "n5",
+            "notionIds": ["n5"],
+            "format": "cloze",
+            "share": "choice",
+            "fingerprint": "6969696969696969696969696969696969696969696969696969696969696969",
+            "points": 50
+          },
+          {
+            "brickId": "m",
+            "brickVersionId": "m-v1",
+            "notionId": "n8",
+            "notionIds": ["n8"],
+            "format": "choice_question",
+            "share": "choice",
+            "fingerprint": "6d6d6d6d6d6d6d6d6d6d6d6d6d6d6d6d6d6d6d6d6d6d6d6d6d6d6d6d6d6d6d6d",
+            "points": 50
+          }
+        ],
+        "exhausted": [
+          {
+            "notionId": "n1",
+            "reason": "capacity",
+            "requested": 0,
+            "selected": 0,
+            "formats": []
+          },
+          {
+            "notionId": "n2",
+            "reason": "capacity",
+            "requested": 0,
+            "selected": 0,
+            "formats": []
+          },
+          {
+            "notionId": "n6",
+            "reason": "capacity",
+            "requested": 0,
+            "selected": 0,
+            "formats": []
+          },
+          {
+            "notionId": "n3",
+            "reason": "capacity",
+            "requested": 0,
+            "selected": 0,
+            "formats": []
+          },
+          {
+            "notionId": "n7",
+            "reason": "capacity",
+            "requested": 0,
+            "selected": 0,
+            "formats": []
+          },
+          {
+            "notionId": "n4",
+            "reason": "capacity",
+            "requested": 0,
+            "selected": 0,
+            "formats": []
+          }
+        ],
+        "uncoveredNotionIds": ["n1", "n2", "n6", "n3", "n7", "n4"],
+        "exhaustedFormats": ["open"],
+        "coverageLimited": true,
+        "minimumReached": true,
+        "targetCount": 2,
+        "size": 2,
+        "pointsTotal": 100,
+        "plan": [
+          {
+            "notionId": "n5",
+            "priority": 0,
+            "gap": false,
+            "mastery": 10,
+            "weight": 2,
+            "quota": 1,
+            "selected": 1
+          },
+          {
+            "notionId": "n8",
+            "priority": 1,
+            "gap": false,
+            "mastery": 20,
+            "weight": 2,
+            "quota": 1,
+            "selected": 1
+          },
+          {
+            "notionId": "n1",
+            "priority": 2,
+            "gap": false,
+            "mastery": 30,
+            "weight": 2,
+            "quota": 0,
+            "selected": 0
+          },
+          {
+            "notionId": "n2",
+            "priority": 3,
+            "gap": false,
+            "mastery": 55,
+            "weight": 2,
+            "quota": 0,
+            "selected": 0
+          },
+          {
+            "notionId": "n6",
+            "priority": 4,
+            "gap": false,
+            "mastery": 75,
+            "weight": 2,
+            "quota": 0,
+            "selected": 0
+          },
+          {
+            "notionId": "n3",
+            "priority": 5,
+            "gap": false,
+            "mastery": 90,
+            "weight": 1,
+            "quota": 0,
+            "selected": 0
+          },
+          {
+            "notionId": "n7",
+            "priority": 6,
+            "gap": false,
+            "mastery": 100,
+            "weight": 1,
+            "quota": 0,
+            "selected": 0
+          },
+          {
+            "notionId": "n4",
+            "priority": 7,
+            "gap": false,
+            "mastery": null,
+            "weight": 1,
+            "quota": 0,
+            "selected": 0
+          }
+        ],
+        "diagnostics": {
+          "bankSize": 21,
+          "eligible": 17,
+          "seenExcluded": 0,
+          "unseen": 17,
+          "duplicateFingerprints": 1,
+          "unique": 16
+        },
+        "seed": "graine-validation"
+      }
+    },
+    {
+      "name": "other-seed",
+      "output": {
+        "questions": [
+          {
+            "brickId": "i",
+            "brickVersionId": "i-v1",
+            "notionId": "n5",
+            "notionIds": ["n5"],
+            "format": "cloze",
+            "share": "choice",
+            "fingerprint": "6969696969696969696969696969696969696969696969696969696969696969",
+            "points": 8.33
+          },
+          {
+            "brickId": "m",
+            "brickVersionId": "m-v1",
+            "notionId": "n8",
+            "notionIds": ["n8"],
+            "format": "choice_question",
+            "share": "choice",
+            "fingerprint": "6d6d6d6d6d6d6d6d6d6d6d6d6d6d6d6d6d6d6d6d6d6d6d6d6d6d6d6d6d6d6d6d",
+            "points": 8.33
+          },
+          {
+            "brickId": "n",
+            "brickVersionId": "n-v1",
+            "notionId": "n1",
+            "notionIds": ["n1", "n2"],
+            "format": "choice_question",
+            "share": "choice",
+            "fingerprint": "6e6e6e6e6e6e6e6e6e6e6e6e6e6e6e6e6e6e6e6e6e6e6e6e6e6e6e6e6e6e6e6e",
+            "points": 8.33
+          },
+          {
+            "brickId": "d",
+            "brickVersionId": "d-v1",
+            "notionId": "n2",
+            "notionIds": ["n2"],
+            "format": "cloze",
+            "share": "choice",
+            "fingerprint": "6464646464646464646464646464646464646464646464646464646464646464",
+            "points": 8.33
+          },
+          {
+            "brickId": "j",
+            "brickVersionId": "j-v1",
+            "notionId": "n6",
+            "notionIds": ["n6"],
+            "format": "choice_question",
+            "share": "choice",
+            "fingerprint": "6a6a6a6a6a6a6a6a6a6a6a6a6a6a6a6a6a6a6a6a6a6a6a6a6a6a6a6a6a6a6a6a",
+            "points": 8.33
+          },
+          {
+            "brickId": "e",
+            "brickVersionId": "e-v1",
+            "notionId": "n3",
+            "notionIds": ["n3"],
+            "format": "choice_question",
+            "share": "choice",
+            "fingerprint": "6565656565656565656565656565656565656565656565656565656565656565",
+            "points": 8.33
+          },
+          {
+            "brickId": "l",
+            "brickVersionId": "l-v1",
+            "notionId": "n7",
+            "notionIds": ["n7"],
+            "format": "matching",
+            "share": "choice",
+            "fingerprint": "6c6c6c6c6c6c6c6c6c6c6c6c6c6c6c6c6c6c6c6c6c6c6c6c6c6c6c6c6c6c6c6c",
+            "points": 8.33
+          },
+          {
+            "brickId": "s",
+            "brickVersionId": "s-v1",
+            "notionId": "n4",
+            "notionIds": ["n4"],
+            "format": "choice_question",
+            "share": "choice",
+            "fingerprint": "7373737373737373737373737373737373737373737373737373737373737373",
+            "points": 8.33
+          },
+          {
+            "brickId": "c",
+            "brickVersionId": "c-v1",
+            "notionId": "n2",
+            "notionIds": ["n2"],
+            "format": "choice_question",
+            "share": "choice",
+            "fingerprint": "6363636363636363636363636363636363636363636363636363636363636363",
+            "points": 8.33
+          },
+          {
+            "brickId": "b",
+            "brickVersionId": "b-v1",
+            "notionId": "n1",
+            "notionIds": ["n1"],
+            "format": "open_question",
+            "share": "open",
+            "fingerprint": "6262626262626262626262626262626262626262626262626262626262626262",
+            "points": 8.33
+          },
+          {
+            "brickId": "k",
+            "brickVersionId": "k-v1",
+            "notionId": "n6",
+            "notionIds": ["n6"],
+            "format": "open_question",
+            "share": "open",
+            "fingerprint": "6b6b6b6b6b6b6b6b6b6b6b6b6b6b6b6b6b6b6b6b6b6b6b6b6b6b6b6b6b6b6b6b",
+            "points": 8.33
+          },
+          {
+            "brickId": "g",
+            "brickVersionId": "g-v1",
+            "notionId": "n4",
+            "notionIds": ["n4"],
+            "format": "open_question",
+            "share": "open",
+            "fingerprint": "6767676767676767676767676767676767676767676767676767676767676767",
+            "points": 8.37
+          }
+        ],
+        "exhausted": [
+          {
+            "notionId": "n5",
+            "reason": "bank_exhausted",
+            "requested": 2,
+            "selected": 1,
+            "formats": ["open", "choice"]
+          },
+          {
+            "notionId": "n8",
+            "reason": "bank_exhausted",
+            "requested": 2,
+            "selected": 1,
+            "formats": ["open", "choice"]
+          }
+        ],
+        "uncoveredNotionIds": [],
+        "exhaustedFormats": ["open"],
+        "coverageLimited": false,
+        "minimumReached": true,
+        "targetCount": 12,
+        "size": 12,
+        "pointsTotal": 100,
+        "plan": [
+          {
+            "notionId": "n5",
+            "priority": 0,
+            "gap": true,
+            "mastery": 10,
+            "weight": 3,
+            "quota": 2,
+            "selected": 1
+          },
+          {
+            "notionId": "n8",
+            "priority": 1,
+            "gap": true,
+            "mastery": 20,
+            "weight": 3,
+            "quota": 2,
+            "selected": 1
+          },
+          {
+            "notionId": "n1",
+            "priority": 2,
+            "gap": false,
+            "mastery": 30,
+            "weight": 2,
+            "quota": 2,
+            "selected": 2
+          },
+          {
+            "notionId": "n2",
+            "priority": 3,
+            "gap": false,
+            "mastery": 55,
+            "weight": 2,
+            "quota": 2,
+            "selected": 3
+          },
+          {
+            "notionId": "n6",
+            "priority": 4,
+            "gap": false,
+            "mastery": 75,
+            "weight": 2,
+            "quota": 1,
+            "selected": 2
+          },
+          {
+            "notionId": "n3",
+            "priority": 5,
+            "gap": false,
+            "mastery": 90,
+            "weight": 1,
+            "quota": 1,
+            "selected": 1
+          },
+          {
+            "notionId": "n7",
+            "priority": 6,
+            "gap": false,
+            "mastery": 100,
+            "weight": 1,
+            "quota": 1,
+            "selected": 1
+          },
+          {
+            "notionId": "n4",
+            "priority": 7,
+            "gap": false,
+            "mastery": null,
+            "weight": 1,
+            "quota": 1,
+            "selected": 2
+          }
+        ],
+        "diagnostics": {
+          "bankSize": 21,
+          "eligible": 17,
+          "seenExcluded": 0,
+          "unseen": 17,
+          "duplicateFingerprints": 1,
+          "unique": 16
+        },
+        "seed": "autre-graine"
+      }
+    },
+    {
+      "name": "shuffled-input",
+      "output": {
+        "questions": [
+          {
+            "brickId": "i",
+            "brickVersionId": "i-v1",
+            "notionId": "n5",
+            "notionIds": ["n5"],
+            "format": "cloze",
+            "share": "choice",
+            "fingerprint": "6969696969696969696969696969696969696969696969696969696969696969",
+            "points": 8.33
+          },
+          {
+            "brickId": "m",
+            "brickVersionId": "m-v1",
+            "notionId": "n8",
+            "notionIds": ["n8"],
+            "format": "choice_question",
+            "share": "choice",
+            "fingerprint": "6d6d6d6d6d6d6d6d6d6d6d6d6d6d6d6d6d6d6d6d6d6d6d6d6d6d6d6d6d6d6d6d",
+            "points": 8.33
+          },
+          {
+            "brickId": "a",
+            "brickVersionId": "a-v1",
+            "notionId": "n1",
+            "notionIds": ["n1"],
+            "format": "choice_question",
+            "share": "choice",
+            "fingerprint": "6161616161616161616161616161616161616161616161616161616161616161",
+            "points": 8.33
+          },
+          {
+            "brickId": "c",
+            "brickVersionId": "c-v1",
+            "notionId": "n2",
+            "notionIds": ["n2"],
+            "format": "choice_question",
+            "share": "choice",
+            "fingerprint": "6363636363636363636363636363636363636363636363636363636363636363",
+            "points": 8.33
+          },
+          {
+            "brickId": "j",
+            "brickVersionId": "j-v1",
+            "notionId": "n6",
+            "notionIds": ["n6"],
+            "format": "choice_question",
+            "share": "choice",
+            "fingerprint": "6a6a6a6a6a6a6a6a6a6a6a6a6a6a6a6a6a6a6a6a6a6a6a6a6a6a6a6a6a6a6a6a",
+            "points": 8.33
+          },
+          {
+            "brickId": "e",
+            "brickVersionId": "e-v1",
+            "notionId": "n3",
+            "notionIds": ["n3"],
+            "format": "choice_question",
+            "share": "choice",
+            "fingerprint": "6565656565656565656565656565656565656565656565656565656565656565",
+            "points": 8.33
+          },
+          {
+            "brickId": "l",
+            "brickVersionId": "l-v1",
+            "notionId": "n7",
+            "notionIds": ["n7"],
+            "format": "matching",
+            "share": "choice",
+            "fingerprint": "6c6c6c6c6c6c6c6c6c6c6c6c6c6c6c6c6c6c6c6c6c6c6c6c6c6c6c6c6c6c6c6c",
+            "points": 8.33
+          },
+          {
+            "brickId": "h",
+            "brickVersionId": "h-v1",
+            "notionId": "n4",
+            "notionIds": ["n4"],
+            "format": "choice_question",
+            "share": "choice",
+            "fingerprint": "6868686868686868686868686868686868686868686868686868686868686868",
+            "points": 8.33
+          },
+          {
+            "brickId": "n",
+            "brickVersionId": "n-v1",
+            "notionId": "n1",
+            "notionIds": ["n1", "n2"],
+            "format": "choice_question",
+            "share": "choice",
+            "fingerprint": "6e6e6e6e6e6e6e6e6e6e6e6e6e6e6e6e6e6e6e6e6e6e6e6e6e6e6e6e6e6e6e6e",
+            "points": 8.33
+          },
+          {
+            "brickId": "b",
+            "brickVersionId": "b-v1",
+            "notionId": "n1",
+            "notionIds": ["n1"],
+            "format": "open_question",
+            "share": "open",
+            "fingerprint": "6262626262626262626262626262626262626262626262626262626262626262",
+            "points": 8.33
+          },
+          {
+            "brickId": "k",
+            "brickVersionId": "k-v1",
+            "notionId": "n6",
+            "notionIds": ["n6"],
+            "format": "open_question",
+            "share": "open",
+            "fingerprint": "6b6b6b6b6b6b6b6b6b6b6b6b6b6b6b6b6b6b6b6b6b6b6b6b6b6b6b6b6b6b6b6b",
+            "points": 8.33
+          },
+          {
+            "brickId": "g",
+            "brickVersionId": "g-v1",
+            "notionId": "n4",
+            "notionIds": ["n4"],
+            "format": "open_question",
+            "share": "open",
+            "fingerprint": "6767676767676767676767676767676767676767676767676767676767676767",
+            "points": 8.37
+          }
+        ],
+        "exhausted": [
+          {
+            "notionId": "n5",
+            "reason": "bank_exhausted",
+            "requested": 2,
+            "selected": 1,
+            "formats": ["open", "choice"]
+          },
+          {
+            "notionId": "n8",
+            "reason": "bank_exhausted",
+            "requested": 2,
+            "selected": 1,
+            "formats": ["open", "choice"]
+          }
+        ],
+        "uncoveredNotionIds": [],
+        "exhaustedFormats": ["open"],
+        "coverageLimited": false,
+        "minimumReached": true,
+        "targetCount": 12,
+        "size": 12,
+        "pointsTotal": 100,
+        "plan": [
+          {
+            "notionId": "n5",
+            "priority": 0,
+            "gap": true,
+            "mastery": 10,
+            "weight": 3,
+            "quota": 2,
+            "selected": 1
+          },
+          {
+            "notionId": "n8",
+            "priority": 1,
+            "gap": true,
+            "mastery": 20,
+            "weight": 3,
+            "quota": 2,
+            "selected": 1
+          },
+          {
+            "notionId": "n1",
+            "priority": 2,
+            "gap": false,
+            "mastery": 30,
+            "weight": 2,
+            "quota": 2,
+            "selected": 3
+          },
+          {
+            "notionId": "n2",
+            "priority": 3,
+            "gap": false,
+            "mastery": 55,
+            "weight": 2,
+            "quota": 2,
+            "selected": 2
+          },
+          {
+            "notionId": "n6",
+            "priority": 4,
+            "gap": false,
+            "mastery": 75,
+            "weight": 2,
+            "quota": 1,
+            "selected": 2
+          },
+          {
+            "notionId": "n3",
+            "priority": 5,
+            "gap": false,
+            "mastery": 90,
+            "weight": 1,
+            "quota": 1,
+            "selected": 1
+          },
+          {
+            "notionId": "n7",
+            "priority": 6,
+            "gap": false,
+            "mastery": 100,
+            "weight": 1,
+            "quota": 1,
+            "selected": 1
+          },
+          {
+            "notionId": "n4",
+            "priority": 7,
+            "gap": false,
+            "mastery": null,
+            "weight": 1,
+            "quota": 1,
+            "selected": 2
+          }
+        ],
+        "diagnostics": {
+          "bankSize": 21,
+          "eligible": 17,
+          "seenExcluded": 0,
+          "unseen": 17,
+          "duplicateFingerprints": 1,
+          "unique": 16
+        },
+        "seed": "graine-validation"
+      }
+    }
+  ]
+}

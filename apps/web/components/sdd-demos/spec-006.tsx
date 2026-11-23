@@ -1,7 +1,7 @@
 import { fr } from '@learny/i18n/fr/sdd';
 
 import { sddDemos } from '../../app/%5Fdev/sdd/registry';
-import { getHealth, type DatabaseQuery } from '../../lib/health';
+import { getHealth, readApiHealth, type DatabaseQuery } from '../../lib/health';
 import { sddPagesEnabled } from '../../lib/sdd-pages';
 import { DemoSection } from '../sdd/demo-shell';
 
@@ -37,7 +37,8 @@ function flagLabel(flag: string | undefined): string {
 }
 
 export default async function Spec006Demo() {
-  const current = await getHealth();
+  // SPEC-1203: the current state is the API's; the simulated probes still exercise the logic.
+  const current = await readApiHealth();
   const simulated = await Promise.all(
     PROBES.map(async (p) => ({ id: p.id, ...(await getHealth({ query: p.query })) })),
   );

@@ -2,7 +2,7 @@ import { HOSTING_REGIONS, isEuRegion, type HostingService } from '@learny/config
 import { clock } from '@learny/core';
 import { fr } from '@learny/i18n/fr/sdd';
 
-import { getHealth } from '../../lib/health';
+import { readApiHealth } from '../../lib/health';
 import { DemoSection } from '../sdd/demo-shell';
 
 const WORKSPACE_PACKAGES = [
@@ -14,7 +14,7 @@ const WORKSPACE_PACKAGES = [
 const t = fr.sdd.spec001;
 
 export default async function Spec001Demo() {
-  const { body: health } = await getHealth();
+  const { body: health } = await readApiHealth();
   const services = Object.keys(HOSTING_REGIONS) as HostingService[];
 
   return (

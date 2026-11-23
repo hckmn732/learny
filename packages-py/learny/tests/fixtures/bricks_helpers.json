@@ -1,0 +1,1444 @@
+{
+  "numbers": [
+    {
+      "input": "1 234,56",
+      "value": 1234.56
+    },
+    {
+      "input": "1.234,56",
+      "value": 1234.56
+    },
+    {
+      "input": "1234.56",
+      "value": 1234.56
+    },
+    {
+      "input": "1234,56",
+      "value": 1234.56
+    },
+    {
+      "input": "12,5",
+      "value": 12.5
+    },
+    {
+      "input": "-3",
+      "value": -3
+    },
+    {
+      "input": "+3",
+      "value": 3
+    },
+    {
+      "input": "abc",
+      "value": null
+    },
+    {
+      "input": "",
+      "value": null
+    },
+    {
+      "input": "   ",
+      "value": null
+    },
+    {
+      "input": "1,2,3",
+      "value": null
+    },
+    {
+      "input": "1.2.3",
+      "value": null
+    },
+    {
+      "input": "1,2.3",
+      "value": 12.3
+    },
+    {
+      "input": "1.234.567,89",
+      "value": 1234567.89
+    },
+    {
+      "input": " 42 ",
+      "value": 42
+    },
+    {
+      "input": "0",
+      "value": 0
+    },
+    {
+      "input": "0,00",
+      "value": 0
+    },
+    {
+      "input": "1e3",
+      "value": null
+    },
+    {
+      "input": "1 234",
+      "value": 1234
+    },
+    {
+      "input": "12 345,60",
+      "value": 12345.6
+    }
+  ],
+  "formatted": [
+    {
+      "input": 0,
+      "output": "0"
+    },
+    {
+      "input": 1,
+      "output": "1"
+    },
+    {
+      "input": 1.5,
+      "output": "1,5"
+    },
+    {
+      "input": 1234.5,
+      "output": "1 234,5"
+    },
+    {
+      "input": 1234.567,
+      "output": "1 234,57"
+    },
+    {
+      "input": -1234.5,
+      "output": "-1 234,5"
+    },
+    {
+      "input": 1234567.891,
+      "output": "1 234 567,89"
+    },
+    {
+      "input": 0.005,
+      "output": "0,01"
+    },
+    {
+      "input": 99.999,
+      "output": "100"
+    },
+    {
+      "input": 0.30000000000000004,
+      "output": "0,3"
+    }
+  ],
+  "tableChecks": [
+    {
+      "name": "empty",
+      "production": {
+        "kind": "table",
+        "fields": [
+          {
+            "key": "libelle",
+            "label": "Libellé",
+            "type": "text"
+          }
+        ],
+        "columns": [
+          {
+            "key": "debit",
+            "label": "Débit",
+            "type": "number"
+          },
+          {
+            "key": "credit",
+            "label": "Crédit",
+            "type": "number"
+          },
+          {
+            "key": "sens",
+            "label": "Sens",
+            "type": "select",
+            "options": [
+              {
+                "value": "D",
+                "label": "Débit"
+              },
+              {
+                "value": "C",
+                "label": "Crédit"
+              }
+            ]
+          }
+        ],
+        "minRows": 1,
+        "maxRows": 5,
+        "initialRows": 2,
+        "checks": [
+          {
+            "type": "sum_equal",
+            "numberColumn": "debit",
+            "groupColumn": "sens",
+            "left": ["Débit"],
+            "right": ["Crédit"],
+            "leftLabel": "Débit",
+            "rightLabel": "Crédit",
+            "sideColumnLabel": "Sens"
+          }
+        ]
+      },
+      "values": {
+        "fields": {},
+        "rows": [
+          {
+            "sens": "Débit",
+            "debit": ""
+          }
+        ]
+      },
+      "output": [
+        {
+          "index": 0,
+          "leftSum": 0,
+          "rightSum": 0,
+          "difference": 0,
+          "state": "empty",
+          "label": "Pas encore de montant",
+          "sideByRow": ["Débit"]
+        }
+      ]
+    },
+    {
+      "name": "balanced",
+      "production": {
+        "kind": "table",
+        "fields": [
+          {
+            "key": "libelle",
+            "label": "Libellé",
+            "type": "text"
+          }
+        ],
+        "columns": [
+          {
+            "key": "debit",
+            "label": "Débit",
+            "type": "number"
+          },
+          {
+            "key": "credit",
+            "label": "Crédit",
+            "type": "number"
+          },
+          {
+            "key": "sens",
+            "label": "Sens",
+            "type": "select",
+            "options": [
+              {
+                "value": "D",
+                "label": "Débit"
+              },
+              {
+                "value": "C",
+                "label": "Crédit"
+              }
+            ]
+          }
+        ],
+        "minRows": 1,
+        "maxRows": 5,
+        "initialRows": 2,
+        "checks": [
+          {
+            "type": "sum_equal",
+            "numberColumn": "debit",
+            "groupColumn": "sens",
+            "left": ["Débit"],
+            "right": ["Crédit"],
+            "leftLabel": "Débit",
+            "rightLabel": "Crédit",
+            "sideColumnLabel": "Sens"
+          }
+        ]
+      },
+      "values": {
+        "fields": {
+          "libelle": "Cloture"
+        },
+        "rows": [
+          {
+            "sens": "Débit",
+            "debit": "1 234,56"
+          }
+        ]
+      },
+      "output": [
+        {
+          "index": 0,
+          "leftSum": 1234.56,
+          "rightSum": 0,
+          "difference": 1234.56,
+          "state": "unbalanced",
+          "label": "Écart : 1 234,56 €",
+          "sideByRow": ["Débit"]
+        }
+      ]
+    },
+    {
+      "name": "unbalanced",
+      "production": {
+        "kind": "table",
+        "fields": [
+          {
+            "key": "libelle",
+            "label": "Libellé",
+            "type": "text"
+          }
+        ],
+        "columns": [
+          {
+            "key": "debit",
+            "label": "Débit",
+            "type": "number"
+          },
+          {
+            "key": "credit",
+            "label": "Crédit",
+            "type": "number"
+          },
+          {
+            "key": "sens",
+            "label": "Sens",
+            "type": "select",
+            "options": [
+              {
+                "value": "D",
+                "label": "Débit"
+              },
+              {
+                "value": "C",
+                "label": "Crédit"
+              }
+            ]
+          }
+        ],
+        "minRows": 1,
+        "maxRows": 5,
+        "initialRows": 2,
+        "checks": [
+          {
+            "type": "sum_equal",
+            "numberColumn": "debit",
+            "groupColumn": "sens",
+            "left": ["Débit"],
+            "right": ["Crédit"],
+            "leftLabel": "Débit",
+            "rightLabel": "Crédit",
+            "sideColumnLabel": "Sens"
+          }
+        ]
+      },
+      "values": {
+        "fields": {},
+        "rows": [
+          {
+            "sens": "Débit",
+            "debit": "1 000,50"
+          },
+          {
+            "sens": "Crédit",
+            "debit": "900"
+          }
+        ],
+        "explanation": "Ecart assume"
+      },
+      "output": [
+        {
+          "index": 0,
+          "leftSum": 1000.5,
+          "rightSum": 900,
+          "difference": 100.5,
+          "state": "unbalanced",
+          "label": "Écart : 100,5 €",
+          "sideByRow": ["Débit", "Crédit"]
+        }
+      ]
+    },
+    {
+      "name": "unknown-group",
+      "production": {
+        "kind": "table",
+        "fields": [
+          {
+            "key": "libelle",
+            "label": "Libellé",
+            "type": "text"
+          }
+        ],
+        "columns": [
+          {
+            "key": "debit",
+            "label": "Débit",
+            "type": "number"
+          },
+          {
+            "key": "credit",
+            "label": "Crédit",
+            "type": "number"
+          },
+          {
+            "key": "sens",
+            "label": "Sens",
+            "type": "select",
+            "options": [
+              {
+                "value": "D",
+                "label": "Débit"
+              },
+              {
+                "value": "C",
+                "label": "Crédit"
+              }
+            ]
+          }
+        ],
+        "minRows": 1,
+        "maxRows": 5,
+        "initialRows": 2,
+        "checks": [
+          {
+            "type": "sum_equal",
+            "numberColumn": "debit",
+            "groupColumn": "sens",
+            "left": ["Débit"],
+            "right": ["Crédit"],
+            "leftLabel": "Débit",
+            "rightLabel": "Crédit",
+            "sideColumnLabel": "Sens"
+          }
+        ]
+      },
+      "values": {
+        "fields": {},
+        "rows": [
+          {
+            "sens": "Inconnu",
+            "debit": "100"
+          }
+        ]
+      },
+      "output": [
+        {
+          "index": 0,
+          "leftSum": 0,
+          "rightSum": 0,
+          "difference": 0,
+          "state": "empty",
+          "label": "Pas encore de montant",
+          "sideByRow": [null]
+        }
+      ]
+    }
+  ],
+  "remaining": [
+    {
+      "input": 0,
+      "output": "00:00"
+    },
+    {
+      "input": 1,
+      "output": "00:01"
+    },
+    {
+      "input": 999,
+      "output": "00:01"
+    },
+    {
+      "input": 1000,
+      "output": "00:01"
+    },
+    {
+      "input": 59000,
+      "output": "00:59"
+    },
+    {
+      "input": 60000,
+      "output": "01:00"
+    },
+    {
+      "input": 3599000,
+      "output": "59:59"
+    },
+    {
+      "input": 3600000,
+      "output": "1:00:00"
+    },
+    {
+      "input": 86400000,
+      "output": "24:00:00"
+    },
+    {
+      "input": -5,
+      "output": "00:00"
+    }
+  ],
+  "timer": [
+    {
+      "name": "fresh",
+      "startedAt": 1794399600000,
+      "durationSec": 3600,
+      "warnAtSec": 300,
+      "now": 1794399600000,
+      "output": {
+        "remainingMs": 3600000,
+        "display": "1:00:00",
+        "warning": false,
+        "expired": false
+      }
+    },
+    {
+      "name": "running",
+      "startedAt": 1794399600000,
+      "durationSec": 3600,
+      "warnAtSec": 300,
+      "now": 1794399720000,
+      "output": {
+        "remainingMs": 3480000,
+        "display": "58:00",
+        "warning": false,
+        "expired": false
+      }
+    },
+    {
+      "name": "warning",
+      "startedAt": 1794399600000,
+      "durationSec": 3600,
+      "warnAtSec": 300,
+      "now": 1794403000000,
+      "output": {
+        "remainingMs": 200000,
+        "display": "03:20",
+        "warning": true,
+        "expired": false
+      }
+    },
+    {
+      "name": "exact-warning",
+      "startedAt": 1794399600000,
+      "durationSec": 3600,
+      "warnAtSec": 300,
+      "now": 1794402900000,
+      "output": {
+        "remainingMs": 300000,
+        "display": "05:00",
+        "warning": false,
+        "expired": false
+      }
+    },
+    {
+      "name": "expired",
+      "startedAt": 1794399600000,
+      "durationSec": 600,
+      "warnAtSec": 60,
+      "now": 1794400300000,
+      "output": {
+        "remainingMs": 0,
+        "display": "00:00",
+        "warning": false,
+        "expired": true
+      }
+    },
+    {
+      "name": "clock-set-back",
+      "startedAt": 1794399600000,
+      "durationSec": 600,
+      "warnAtSec": 60,
+      "now": 1794399100000,
+      "output": {
+        "remainingMs": 600000,
+        "display": "10:00",
+        "warning": false,
+        "expired": false
+      }
+    },
+    {
+      "name": "long",
+      "startedAt": 1794399600000,
+      "durationSec": 14400,
+      "warnAtSec": 600,
+      "now": 1794399700000,
+      "output": {
+        "remainingMs": 14300000,
+        "display": "3:58:20",
+        "warning": false,
+        "expired": false
+      }
+    }
+  ],
+  "activities": [
+    {
+      "name": "equal-three",
+      "items": [
+        {
+          "brickId": "cccccccc-cccc-4ccc-8ccc-cccccccccccc",
+          "score": 1
+        },
+        {
+          "brickId": "dddddddd-dddd-4ddd-8ddd-dddddddddddd",
+          "score": 0.5
+        },
+        {
+          "brickId": "eeeeeeee-eeee-4eee-8eee-eeeeeeeeeeee",
+          "score": 0
+        }
+      ],
+      "scoring": {
+        "total": 20,
+        "threshold": 12,
+        "mode": "weighted",
+        "weights": [
+          {
+            "brickId": "cccccccc-cccc-4ccc-8ccc-cccccccccccc",
+            "points": 5
+          },
+          {
+            "brickId": "dddddddd-dddd-4ddd-8ddd-dddddddddddd",
+            "points": 15
+          }
+        ],
+        "display": "points",
+        "sources": []
+      },
+      "ok": false,
+      "code": "SCORING_ITEM_UNKNOWN",
+      "brickId": "eeeeeeee-eeee-4eee-8eee-eeeeeeeeeeee"
+    },
+    {
+      "name": "weighted",
+      "items": [
+        {
+          "brickId": "cccccccc-cccc-4ccc-8ccc-cccccccccccc",
+          "score": 1
+        },
+        {
+          "brickId": "dddddddd-dddd-4ddd-8ddd-dddddddddddd",
+          "score": 0.5
+        }
+      ],
+      "scoring": {
+        "total": 20,
+        "threshold": 12,
+        "mode": "weighted",
+        "weights": [
+          {
+            "brickId": "cccccccc-cccc-4ccc-8ccc-cccccccccccc",
+            "points": 5
+          },
+          {
+            "brickId": "dddddddd-dddd-4ddd-8ddd-dddddddddddd",
+            "points": 15
+          }
+        ],
+        "display": "points",
+        "sources": []
+      },
+      "ok": true,
+      "output": {
+        "points": 12.5,
+        "percent": 63,
+        "passed": true,
+        "perItem": [
+          {
+            "brickId": "cccccccc-cccc-4ccc-8ccc-cccccccccccc",
+            "points": 5,
+            "max": 5
+          },
+          {
+            "brickId": "dddddddd-dddd-4ddd-8ddd-dddddddddddd",
+            "points": 7.5,
+            "max": 15
+          }
+        ]
+      }
+    },
+    {
+      "name": "out-of-range",
+      "items": [
+        {
+          "brickId": "cccccccc-cccc-4ccc-8ccc-cccccccccccc",
+          "score": 4
+        },
+        {
+          "brickId": "dddddddd-dddd-4ddd-8ddd-dddddddddddd",
+          "score": -2
+        }
+      ],
+      "scoring": {
+        "total": 20,
+        "threshold": 12,
+        "mode": "equal",
+        "weights": [
+          {
+            "brickId": "cccccccc-cccc-4ccc-8ccc-cccccccccccc",
+            "points": 5
+          },
+          {
+            "brickId": "dddddddd-dddd-4ddd-8ddd-dddddddddddd",
+            "points": 15
+          }
+        ],
+        "display": "points",
+        "sources": []
+      },
+      "ok": true,
+      "output": {
+        "points": 10,
+        "percent": 50,
+        "passed": false,
+        "perItem": [
+          {
+            "brickId": "cccccccc-cccc-4ccc-8ccc-cccccccccccc",
+            "points": 10,
+            "max": 10
+          },
+          {
+            "brickId": "dddddddd-dddd-4ddd-8ddd-dddddddddddd",
+            "points": 0,
+            "max": 10
+          }
+        ]
+      }
+    },
+    {
+      "name": "no-item",
+      "items": [],
+      "scoring": {
+        "total": 20,
+        "threshold": 12,
+        "mode": "weighted",
+        "weights": [
+          {
+            "brickId": "cccccccc-cccc-4ccc-8ccc-cccccccccccc",
+            "points": 5
+          },
+          {
+            "brickId": "dddddddd-dddd-4ddd-8ddd-dddddddddddd",
+            "points": 15
+          }
+        ],
+        "display": "points",
+        "sources": []
+      },
+      "ok": true,
+      "output": {
+        "points": 0,
+        "percent": 0,
+        "passed": false,
+        "perItem": []
+      }
+    },
+    {
+      "name": "zero-total",
+      "items": [
+        {
+          "brickId": "cccccccc-cccc-4ccc-8ccc-cccccccccccc",
+          "score": 1
+        }
+      ],
+      "scoring": {
+        "total": 1,
+        "threshold": 0,
+        "mode": "equal",
+        "weights": [
+          {
+            "brickId": "cccccccc-cccc-4ccc-8ccc-cccccccccccc",
+            "points": 5
+          },
+          {
+            "brickId": "dddddddd-dddd-4ddd-8ddd-dddddddddddd",
+            "points": 15
+          }
+        ],
+        "display": "points",
+        "sources": []
+      },
+      "ok": true,
+      "output": {
+        "points": 1,
+        "percent": 100,
+        "passed": true,
+        "perItem": [
+          {
+            "brickId": "cccccccc-cccc-4ccc-8ccc-cccccccccccc",
+            "points": 1,
+            "max": 1
+          }
+        ]
+      }
+    }
+  ],
+  "exercises": [
+    {
+      "name": "all-ok",
+      "criteria": [
+        {
+          "key": "exactitude",
+          "ok": true
+        },
+        {
+          "key": "justification",
+          "ok": true
+        },
+        {
+          "key": "presentation",
+          "ok": true
+        }
+      ],
+      "hintsUsed": 0,
+      "brick": {
+        "criteria": [
+          {
+            "key": "exactitude",
+            "label": "Exactitude des montants",
+            "points": 4,
+            "description": "Montants justes."
+          },
+          {
+            "key": "justification",
+            "label": "Justification des lignes",
+            "points": 3,
+            "description": "Une phrase par ligne."
+          },
+          {
+            "key": "presentation",
+            "label": "Présentation du tableau",
+            "points": 3,
+            "description": "Tableau lisible et complet."
+          }
+        ],
+        "hints": ["Commencez par les frais bancaires, absents du relevé."],
+        "passPoints": 8
+      },
+      "output": {
+        "points": 10,
+        "max": 10,
+        "passed": true,
+        "verdict": "Réussi"
+      }
+    },
+    {
+      "name": "half-ok",
+      "criteria": [
+        {
+          "key": "exactitude",
+          "ok": true
+        },
+        {
+          "key": "justification",
+          "ok": false
+        },
+        {
+          "key": "presentation",
+          "ok": false
+        }
+      ],
+      "hintsUsed": 0,
+      "brick": {
+        "criteria": [
+          {
+            "key": "exactitude",
+            "label": "Exactitude des montants",
+            "points": 4,
+            "description": "Montants justes."
+          },
+          {
+            "key": "justification",
+            "label": "Justification des lignes",
+            "points": 3,
+            "description": "Une phrase par ligne."
+          },
+          {
+            "key": "presentation",
+            "label": "Présentation du tableau",
+            "points": 3,
+            "description": "Tableau lisible et complet."
+          }
+        ],
+        "hints": ["Commencez par les frais bancaires, absents du relevé."],
+        "passPoints": 8
+      },
+      "output": {
+        "points": 4,
+        "max": 10,
+        "passed": false,
+        "verdict": "À retravailler"
+      }
+    },
+    {
+      "name": "none-ok",
+      "criteria": [
+        {
+          "key": "exactitude",
+          "ok": false
+        },
+        {
+          "key": "justification",
+          "ok": false
+        },
+        {
+          "key": "presentation",
+          "ok": false
+        }
+      ],
+      "hintsUsed": 0,
+      "brick": {
+        "criteria": [
+          {
+            "key": "exactitude",
+            "label": "Exactitude des montants",
+            "points": 4,
+            "description": "Montants justes."
+          },
+          {
+            "key": "justification",
+            "label": "Justification des lignes",
+            "points": 3,
+            "description": "Une phrase par ligne."
+          },
+          {
+            "key": "presentation",
+            "label": "Présentation du tableau",
+            "points": 3,
+            "description": "Tableau lisible et complet."
+          }
+        ],
+        "hints": ["Commencez par les frais bancaires, absents du relevé."],
+        "passPoints": 8
+      },
+      "output": {
+        "points": 0,
+        "max": 10,
+        "passed": false,
+        "verdict": "À retravailler"
+      }
+    },
+    {
+      "name": "one-hint",
+      "criteria": [
+        {
+          "key": "exactitude",
+          "ok": true
+        },
+        {
+          "key": "justification",
+          "ok": true
+        },
+        {
+          "key": "presentation",
+          "ok": true
+        }
+      ],
+      "hintsUsed": 1,
+      "brick": {
+        "criteria": [
+          {
+            "key": "exactitude",
+            "label": "Exactitude des montants",
+            "points": 4,
+            "description": "Montants justes."
+          },
+          {
+            "key": "justification",
+            "label": "Justification des lignes",
+            "points": 3,
+            "description": "Une phrase par ligne."
+          },
+          {
+            "key": "presentation",
+            "label": "Présentation du tableau",
+            "points": 3,
+            "description": "Tableau lisible et complet."
+          }
+        ],
+        "hints": ["Commencez par les frais bancaires, absents du relevé."],
+        "passPoints": 8
+      },
+      "output": {
+        "points": 9,
+        "max": 10,
+        "passed": true,
+        "verdict": "Réussi"
+      }
+    },
+    {
+      "name": "many-hints",
+      "criteria": [
+        {
+          "key": "exactitude",
+          "ok": true
+        },
+        {
+          "key": "justification",
+          "ok": true
+        },
+        {
+          "key": "presentation",
+          "ok": true
+        }
+      ],
+      "hintsUsed": 99,
+      "brick": {
+        "criteria": [
+          {
+            "key": "exactitude",
+            "label": "Exactitude des montants",
+            "points": 4,
+            "description": "Montants justes."
+          },
+          {
+            "key": "justification",
+            "label": "Justification des lignes",
+            "points": 3,
+            "description": "Une phrase par ligne."
+          },
+          {
+            "key": "presentation",
+            "label": "Présentation du tableau",
+            "points": 3,
+            "description": "Tableau lisible et complet."
+          }
+        ],
+        "hints": ["Commencez par les frais bancaires, absents du relevé."],
+        "passPoints": 8
+      },
+      "output": {
+        "points": 9,
+        "max": 10,
+        "passed": true,
+        "verdict": "Réussi"
+      }
+    },
+    {
+      "name": "negative-hints",
+      "criteria": [
+        {
+          "key": "exactitude",
+          "ok": true
+        },
+        {
+          "key": "justification",
+          "ok": true
+        },
+        {
+          "key": "presentation",
+          "ok": true
+        }
+      ],
+      "hintsUsed": -4,
+      "brick": {
+        "criteria": [
+          {
+            "key": "exactitude",
+            "label": "Exactitude des montants",
+            "points": 4,
+            "description": "Montants justes."
+          },
+          {
+            "key": "justification",
+            "label": "Justification des lignes",
+            "points": 3,
+            "description": "Une phrase par ligne."
+          },
+          {
+            "key": "presentation",
+            "label": "Présentation du tableau",
+            "points": 3,
+            "description": "Tableau lisible et complet."
+          }
+        ],
+        "hints": ["Commencez par les frais bancaires, absents du relevé."],
+        "passPoints": 8
+      },
+      "output": {
+        "points": 10,
+        "max": 10,
+        "passed": true,
+        "verdict": "Réussi"
+      }
+    },
+    {
+      "name": "fraction-hints",
+      "criteria": [
+        {
+          "key": "exactitude",
+          "ok": true
+        },
+        {
+          "key": "justification",
+          "ok": true
+        },
+        {
+          "key": "presentation",
+          "ok": true
+        }
+      ],
+      "hintsUsed": 1.9,
+      "brick": {
+        "criteria": [
+          {
+            "key": "exactitude",
+            "label": "Exactitude des montants",
+            "points": 4,
+            "description": "Montants justes."
+          },
+          {
+            "key": "justification",
+            "label": "Justification des lignes",
+            "points": 3,
+            "description": "Une phrase par ligne."
+          },
+          {
+            "key": "presentation",
+            "label": "Présentation du tableau",
+            "points": 3,
+            "description": "Tableau lisible et complet."
+          }
+        ],
+        "hints": ["Commencez par les frais bancaires, absents du relevé."],
+        "passPoints": 8
+      },
+      "output": {
+        "points": 9,
+        "max": 10,
+        "passed": true,
+        "verdict": "Réussi"
+      }
+    },
+    {
+      "name": "unknown-criterion",
+      "criteria": [
+        {
+          "key": "exactitude",
+          "ok": true
+        },
+        {
+          "key": "justification",
+          "ok": true
+        },
+        {
+          "key": "presentation",
+          "ok": true
+        },
+        {
+          "key": "inconnu",
+          "ok": true
+        }
+      ],
+      "hintsUsed": 0,
+      "brick": {
+        "criteria": [
+          {
+            "key": "exactitude",
+            "label": "Exactitude des montants",
+            "points": 4,
+            "description": "Montants justes."
+          },
+          {
+            "key": "justification",
+            "label": "Justification des lignes",
+            "points": 3,
+            "description": "Une phrase par ligne."
+          },
+          {
+            "key": "presentation",
+            "label": "Présentation du tableau",
+            "points": 3,
+            "description": "Tableau lisible et complet."
+          }
+        ],
+        "hints": ["Commencez par les frais bancaires, absents du relevé."],
+        "passPoints": 8
+      },
+      "output": {
+        "points": 10,
+        "max": 10,
+        "passed": true,
+        "verdict": "Réussi"
+      }
+    }
+  ],
+  "responses": [
+    {
+      "name": "table-ok",
+      "production": {
+        "kind": "table",
+        "fields": [
+          {
+            "key": "libelle",
+            "label": "Libellé",
+            "type": "text"
+          }
+        ],
+        "columns": [
+          {
+            "key": "debit",
+            "label": "Débit",
+            "type": "number"
+          },
+          {
+            "key": "credit",
+            "label": "Crédit",
+            "type": "number"
+          },
+          {
+            "key": "sens",
+            "label": "Sens",
+            "type": "select",
+            "options": [
+              {
+                "value": "D",
+                "label": "Débit"
+              },
+              {
+                "value": "C",
+                "label": "Crédit"
+              }
+            ]
+          }
+        ],
+        "minRows": 1,
+        "maxRows": 5,
+        "initialRows": 2,
+        "checks": [
+          {
+            "type": "sum_equal",
+            "numberColumn": "debit",
+            "groupColumn": "sens",
+            "left": ["Débit"],
+            "right": ["Crédit"],
+            "leftLabel": "Débit",
+            "rightLabel": "Crédit",
+            "sideColumnLabel": "Sens"
+          }
+        ]
+      },
+      "response": {
+        "fields": {
+          "libelle": "Cloture"
+        },
+        "rows": [
+          {
+            "debit": "2026"
+          },
+          {
+            "credit": "2026"
+          },
+          {
+            "sens": "2026"
+          }
+        ],
+        "explanation": "Justification"
+      },
+      "ok": true,
+      "output": {
+        "fields": {
+          "libelle": "Cloture"
+        },
+        "rows": [
+          {
+            "debit": "2026"
+          },
+          {
+            "credit": "2026"
+          },
+          {
+            "sens": "2026"
+          }
+        ],
+        "explanation": "Justification"
+      }
+    },
+    {
+      "name": "table-too-few-rows",
+      "production": {
+        "kind": "table",
+        "fields": [
+          {
+            "key": "libelle",
+            "label": "Libellé",
+            "type": "text"
+          }
+        ],
+        "columns": [
+          {
+            "key": "debit",
+            "label": "Débit",
+            "type": "number"
+          },
+          {
+            "key": "credit",
+            "label": "Crédit",
+            "type": "number"
+          },
+          {
+            "key": "sens",
+            "label": "Sens",
+            "type": "select",
+            "options": [
+              {
+                "value": "D",
+                "label": "Débit"
+              },
+              {
+                "value": "C",
+                "label": "Crédit"
+              }
+            ]
+          }
+        ],
+        "minRows": 1,
+        "maxRows": 5,
+        "initialRows": 2,
+        "checks": [
+          {
+            "type": "sum_equal",
+            "numberColumn": "debit",
+            "groupColumn": "sens",
+            "left": ["Débit"],
+            "right": ["Crédit"],
+            "leftLabel": "Débit",
+            "rightLabel": "Crédit",
+            "sideColumnLabel": "Sens"
+          }
+        ]
+      },
+      "response": {
+        "fields": {},
+        "rows": []
+      },
+      "ok": false,
+      "paths": ["response.rows"]
+    },
+    {
+      "name": "table-unknown-key",
+      "production": {
+        "kind": "table",
+        "fields": [
+          {
+            "key": "libelle",
+            "label": "Libellé",
+            "type": "text"
+          }
+        ],
+        "columns": [
+          {
+            "key": "debit",
+            "label": "Débit",
+            "type": "number"
+          },
+          {
+            "key": "credit",
+            "label": "Crédit",
+            "type": "number"
+          },
+          {
+            "key": "sens",
+            "label": "Sens",
+            "type": "select",
+            "options": [
+              {
+                "value": "D",
+                "label": "Débit"
+              },
+              {
+                "value": "C",
+                "label": "Crédit"
+              }
+            ]
+          }
+        ],
+        "minRows": 1,
+        "maxRows": 5,
+        "initialRows": 2,
+        "checks": [
+          {
+            "type": "sum_equal",
+            "numberColumn": "debit",
+            "groupColumn": "sens",
+            "left": ["Débit"],
+            "right": ["Crédit"],
+            "leftLabel": "Débit",
+            "rightLabel": "Crédit",
+            "sideColumnLabel": "Sens"
+          }
+        ]
+      },
+      "response": {
+        "fields": {},
+        "rows": [],
+        "extra": true
+      },
+      "ok": false,
+      "paths": ["response"]
+    },
+    {
+      "name": "text-ok",
+      "production": {
+        "kind": "text",
+        "minChars": 3,
+        "maxChars": 50
+      },
+      "response": {
+        "text": "Une synthese."
+      },
+      "ok": true,
+      "output": {
+        "text": "Une synthese."
+      }
+    },
+    {
+      "name": "text-too-short",
+      "production": {
+        "kind": "text",
+        "minChars": 20,
+        "maxChars": 50
+      },
+      "response": {
+        "text": "Court"
+      },
+      "ok": false,
+      "paths": ["response.text"]
+    },
+    {
+      "name": "file-ok",
+      "production": {
+        "kind": "file",
+        "accept": ["application/pdf"],
+        "maxSizeMb": 10
+      },
+      "response": {
+        "resourceId": "aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa"
+      },
+      "ok": true,
+      "output": {
+        "resourceId": "aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa"
+      }
+    },
+    {
+      "name": "link-ok",
+      "production": {
+        "kind": "link"
+      },
+      "response": {
+        "url": "https://example.test/preuve"
+      },
+      "ok": true,
+      "output": {
+        "url": "https://example.test/preuve"
+      }
+    },
+    {
+      "name": "link-not-https",
+      "production": {
+        "kind": "link"
+      },
+      "response": {
+        "url": "http://example.test/preuve"
+      },
+      "ok": false,
+      "paths": ["response.url"]
+    }
+  ]
+}

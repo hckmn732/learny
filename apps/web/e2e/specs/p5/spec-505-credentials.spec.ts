@@ -6,12 +6,20 @@ const TITLE = 'SPEC-505 · Clés personnelles';
 const REGIONS = ['cred-form-card', 'cred-list', 'cred-storage', 'cred-raw-card'];
 const SECRET = 'sk-test-0000000000a91F'; // learny-test-only
 
+// SPEC-709: the platform provides no model, so the demonstration account already owns its demo
+// model; the scenario adds and removes its own OpenAI key next to it.
+function openAiItem(page: import('@playwright/test').Page) {
+  return page.getByTestId('cred-item').filter({
+    has: page.getByTestId('cred-title').filter({ hasText: 'OpenAI' }),
+  });
+}
+
 async function addOpenAiKey(page: import('@playwright/test').Page, secret: string): Promise<void> {
   await page.getByTestId('cred-provider').selectOption('openai');
   await page.getByTestId('cred-model').fill('gpt-5-mini');
   await page.getByTestId('cred-key').fill(secret);
   await page.getByTestId('cred-submit').click();
-  await expect(page.getByTestId('cred-item')).toHaveCount(1, { timeout: 20_000 });
+  await expect(openAiItem(page)).toHaveCount(1, { timeout: 20_000 });
 }
 
 test('ajouter et supprimer une clé personnelle @SPEC-505', async ({
@@ -37,10 +45,11 @@ test('ajouter et supprimer une clé personnelle @SPEC-505', async ({
 
   // CA-8 — add a key: masked card, « Hors UE » badge and storage panel.
   await addOpenAiKey(page, SECRET);
-  await expect(page.getByTestId('cred-title')).toHaveText('OpenAI');
-  await expect(page.getByTestId('cred-status')).toHaveText('Non testé');
-  await expect(page.getByTestId('cred-masked')).toHaveText('sk-••••••••a91F');
-  await expect(page.getByTestId('cred-outside-eu')).toHaveText('Hors UE');
+  const openAi = openAiItem(page);
+  await expect(openAi.getByTestId('cred-title')).toHaveText('OpenAI');
+  await expect(openAi.getByTestId('cred-status')).toHaveText('Non testé');
+  await expect(openAi.getByTestId('cred-masked')).toHaveText('sk-••••••••a91F');
+  await expect(openAi.getByTestId('cred-outside-eu')).toHaveText('Hors UE');
   await expect(page.getByTestId('cred-storage-bytes')).toHaveText(/\d+ octets/);
   await expect(page.getByTestId('cred-storage-iv')).toHaveText(/^[0-9a-f]{16}$/);
 
@@ -54,12 +63,11 @@ test('ajouter et supprimer une clé personnelle @SPEC-505', async ({
   await axeCheck();
 
   // CA-8 — delete with the confirmation dialog.
-  await page.getByTestId('cred-delete').click();
+  await openAi.getByTestId('cred-delete').click();
   await expect(page.getByRole('alertdialog')).toBeVisible();
   await page.getByTestId('ui-alert-dialog-confirm').click();
-  await expect(page.getByTestId('cred-empty')).toBeVisible();
-  await expect(page.getByTestId('cred-item')).toHaveCount(0);
-  await expect(page.getByTestId('cred-raw-json')).toHaveText('{}');
+  await expect(openAiItem(page)).toHaveCount(0);
+  await expect(page.getByTestId('cred-raw-json')).not.toContainText('a91F');
 
   expect(consoleErrors).toEqual([]);
 });

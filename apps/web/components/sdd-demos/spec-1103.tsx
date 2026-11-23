@@ -4,38 +4,21 @@ import { readApiDeploymentTopologies } from '../../lib/api-deployment-topology';
 
 interface ApiSnapshot {
   status: string;
-  functionIds: string[];
 }
 
-function functionId(value: unknown): string | null {
-  if (typeof value === 'string') return value;
-  if (value === null || typeof value !== 'object') return null;
-  const record = value as Record<string, unknown>;
-  for (const key of ['id', 'name', 'slug']) {
-    if (typeof record[key] === 'string') return record[key];
-  }
-  return null;
-}
-
+// SPEC-2207 retired Inngest: the jobs run in the Python worker, so the API exposes no function
+// registry any more and the demonstration only reports the health of the API process.
 async function readApiSnapshot(): Promise<ApiSnapshot> {
   const origin = process.env.API_INTERNAL_URL ?? 'http://127.0.0.1:3001';
-  const [health, registry] = await Promise.allSettled([
-    fetch(new URL('/health', origin), { cache: 'no-store' }),
-    fetch(new URL('/api/inngest', origin), { cache: 'no-store' }),
-  ]);
   let status = 'indisponible';
-  if (health.status === 'fulfilled') {
-    const body = (await health.value.json().catch(() => null)) as Partial<ApiSnapshot> | null;
-    status = health.value.ok && body?.status === 'ok' ? 'ok' : 'erreur';
+  try {
+    const health = await fetch(new URL('/health', origin), { cache: 'no-store' });
+    const body = (await health.json().catch(() => null)) as Partial<ApiSnapshot> | null;
+    status = health.ok && body?.status === 'ok' ? 'ok' : 'erreur';
+  } catch {
+    // The API is unreachable: the status stays « indisponible ».
   }
-  let functionIds: string[] = [];
-  if (registry.status === 'fulfilled' && registry.value.ok) {
-    const body = (await registry.value.json().catch(() => null)) as {
-      functions?: unknown[];
-    } | null;
-    functionIds = (body?.functions ?? []).map(functionId).filter((id): id is string => id !== null);
-  }
-  return { status, functionIds };
+  return { status };
 }
 
 export default async function Spec1103Demo() {
@@ -83,17 +66,6 @@ export default async function Spec1103Demo() {
             {snapshot.status}
           </dd>
         </dl>
-      </Card>
-
-      <Card className="mt-4" data-testid="spec-1103-functions" labelledBy="spec-1103-functions-title">
-        <CardHeader title="Fonctions Inngest" titleId="spec-1103-functions-title" />
-        <ul className="mt-4 columns-1 list-disc space-y-1 pl-5 md:columns-2">
-          {snapshot.functionIds.map((id) => (
-            <li className="break-inside-avoid font-mono text-sm" key={id}>
-              {id}
-            </li>
-          ))}
-        </ul>
       </Card>
     </>
   );

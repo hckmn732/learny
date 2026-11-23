@@ -1,0 +1,9 @@
+{% extends "layout.html.j2" %}
+{% from "_macros.html.j2" import h1, para, muted, cta %}
+{% block content %}
+{{ h1(title) }}
+{{ para(body) }}
+{% if formation_title %}{{ muted(formation_title) }}
+{% endif %}
+{{ cta(cta_href, cta_label) }}
+{% endblock %}

@@ -316,6 +316,10 @@ export const EVENTS = {
     localDate: CivilDate,
     localWeekday: z.number().int().min(1).max(7),
   }),
+  // ADR-2014 - internal event of the daily digest (SPEC-2207): the planning half of the job emits
+  // one per due learner instead of sleeping inside one function (`step.sleepUntil` is not ported).
+  // Never sent by a client, never relayed: it is written and consumed by the Python worker.
+  'job/daily-digest': z.object({ userId: Uuid, at: IsoDateTime }),
   'sdd/demo-requested': z.object({
     runId: Uuid,
     failOnceAt: z.enum(['none', 'step-2']),

@@ -100,4 +100,5 @@ Définition commune de `docs/engineering/testing.md` §7 : lint, typecheck, buil
 
 - ADR applicables : ADR-1001, ADR-2001, ADR-2005, ADR-2008, ADR-2011, ADR-2004, ADR-2012.
 - ADR-2004. Le choix précis du générateur est consigné par ADR déduit si plusieurs options sont équivalentes.
+- ADR-2017 — apps/api/openapi.json reste inchangé ; l égalité sémantique avec api/openapi.yaml enrichi est prouvée par tools/contract/compat.mjs.
 - Hors périmètre : refonte visuelle ou fonctionnelle, changement de schéma sans ADR, clients mobiles, specs gelées par ADR-2001.

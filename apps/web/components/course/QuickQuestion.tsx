@@ -5,6 +5,8 @@ import { useState } from 'react';
 import type { CourseSection } from '@learny/contracts';
 import { fr } from '@learny/i18n/fr/course';
 
+import { InlineCode } from './InlineCode';
+
 const t = fr.course;
 
 /** BR-COU-05 — flash question with its answer hidden behind the reveal button. */
@@ -26,10 +28,12 @@ export function QuickQuestion({ section }: { section: CourseSection }) {
       >
         {t.quickQuestion}
       </h2>
-      <p className="m-0 font-display text-20 font-600 text-ink">{question}</p>
+      <p className="m-0 font-display text-20 font-600 text-ink">
+        <InlineCode text={question} />
+      </p>
       {shown ? (
         <p className="m-0 rounded-14 bg-surface p-12 text-15" data-testid="course-answer">
-          {answer}
+          <InlineCode text={answer} />
         </p>
       ) : null}
       <button

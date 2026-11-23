@@ -37,7 +37,7 @@ Aucune règle `BR-*`.
 - **EF-4** — La CI construit, analyse (lint, typecheck) et teste `apps/api`, construit l'image `api` et exécute `tools/docker/check-selfhost.mjs` mis à jour.
 - **EF-5** — `deploy.yml` : déploie `learny-api` **avant** `learny-web` (prévisualisation et production), transmet `API_INTERNAL_URL` du déploiement API au déploiement web ; la prévisualisation est réactivée pour `migration` ; la production reste limitée aux tags `v*` de `main` (inchangé).
 - **EF-6** — `tools/deploy/check.mjs` vérifie `apps/api/vercel.json` (région `fra1` unique, comme le web) et la présence de `API_INTERNAL_URL` et `API_PROXY_SECRET` dans les environnements gérés.
-- **EF-7** — La page `/_dev/sdd/SPEC-1103` affiche la topologie lue dans les fichiers compose (services et dépendances), le rôle courant de l'API, la liste des fonctions Inngest servies et la santé de l'API.
+- **EF-7** — La page `/_dev/sdd/SPEC-1103` affiche la topologie lue dans les fichiers compose (services et dépendances), le rôle courant de l'API et la santé de l'API.
 
 ## 6. Exigences techniques
 
@@ -70,7 +70,7 @@ Aucune règle `BR-*`.
 
 ## 10. Interface et conformité visuelle
 
-Mode `demo`. `/_dev/sdd/SPEC-1103` : `h1` « Déploiement de l'API » ; liste `data-testid="spec-1103-topology"` (services compose et dépendances) ; carte `spec-1103-role` (Rôle, Santé) ; liste `spec-1103-functions` (identifiants des fonctions Inngest). Contrôles : jetons, structure, axe, captures desktop et mobile ≤ 1 %.
+Mode `demo`. `/_dev/sdd/SPEC-1103` : `h1` « Déploiement de l'API » ; liste `data-testid="spec-1103-topology"` (services compose et dépendances) ; carte `spec-1103-role` (Rôle, Santé). Contrôles : jetons, structure, axe, captures desktop et mobile ≤ 1 %.
 
 ## 11. Critères d'acceptation
 
@@ -78,7 +78,7 @@ Mode `demo`. `/_dev/sdd/SPEC-1103` : `h1` « Déploiement de l'API » ; liste `d
 - **CA-2** — L'image `api` se construit et son `HEALTHCHECK` passe dans `docker compose -f docker/compose.selfhost.yml up` (contrôle `pnpm docker:check:selfhost`).
 - **CA-3** — `node tools/ci/check-workflows.mjs` et `node tools/deploy/check.mjs --dry-run` passent ; le flux de déploiement ordonne API puis web.
 - **CA-4** — Aucun secret n'est présent dans les fichiers compose, Dockerfile ou workflows (contrôle `secret-patterns`).
-- **CA-5** — La démonstration affiche la topologie, le rôle `all`, les fonctions Inngest et une santé `ok`.
+- **CA-5** — La démonstration affiche la topologie, le rôle `all` et une santé `ok`.
 
 ## 12. Plan de tests
 
@@ -107,3 +107,7 @@ Conditions communes, plus : un environnement auto-hébergé se lance avec `api` 
 ## 15. Décisions et hypothèses
 
 ADR-1002 (rôles, image, projet Vercel), ADR-0017 amendé, ADR-0329/0330 (piles Coolify). Hypothèse : les secrets des environnements gérés sont ajoutés par le porteur du projet ; leur absence est un blocage externe, jamais contourné. Aucune question ouverte.
+
+## Amendements
+
+- **2026-11-23, ADR-2037** — SPEC-2207 a retiré Inngest (worker Python sur outbox, ADR-2014) : l'API n'expose plus de registre de fonctions et la démonstration ne les liste plus.

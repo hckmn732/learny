@@ -1,0 +1,95 @@
+
+[tool.uv]
+package = false
+
+[tool.uv.workspace]
+members = ["packages-py/learny", "apps/api-py", "apps/worker-py"]
+
+[dependency-groups]
+dev = [
+  "pytest>=8.3",
+  "pytest-asyncio>=0.24",
+  "pytest-cov>=6.0",
+  "hypothesis>=6.112",
+  "ruff>=0.8",
+  "mypy>=1.13",
+  "import-linter>=2.1",
+  "types-PyYAML>=6.0",
+  "datamodel-code-generator>=0.31",
+]
+
+[tool.ruff]
+target-version = "py313"
+exclude = [
+  "node_modules", ".next", ".venv", "dist", "test-results", "coverage", "docs", "evidence", "design",
+  # Generated from api/openapi.yaml (ADR-2012): never edited, formatted or linted by hand.
+  "apps/api-py/src/learny_api/generated",
+]
+line-length = 110
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "B", "UP", "S", "DTZ", "ASYNC", "RUF", "SIM", "PT", "TID"]
+ignore = ["S101"] # plain asserts are the single assertion style of the test suite
+
+[tool.ruff.lint.per-file-ignores]
+# Les tests utilisent des jetons et des cles factices : ce ne sont pas des secrets.
+# Les tests rejouent les textes francais vus par l utilisateur, apostrophe courbe comprise.
+"**/tests/**" = ["S105", "S106", "RUF001", "RUF002", "RUF003"]
+# Les textes francais vus par l utilisateur sont copies mot pour mot du TypeScript : leur
+# typographie (apostrophe courbe, espaces insecables) est normative et non une ambiguite.
+"**/locale_fr/*.py" = ["RUF001", "RUF002", "RUF003", "S105", "S106"]
+# La copie d un programme compose un `values` de paires d identifiants : seuls des fragments
+# litteraux et des parametres lies sont concatenes, jamais une valeur issue d une requete.
+"packages-py/learny/src/learny/formation/infrastructure/copy_programme.py" = ["S608"]
+# The system clock is the one legitimate use of datetime.now(): every other module goes through it.
+"packages-py/learny/src/learny/shared/clock.py" = ["TID251"]
+
+[tool.ruff.lint.flake8-tidy-imports.banned-api]
+"datetime.datetime.now".msg = "use deps.clock.now()"
+"datetime.datetime.utcnow".msg = "use deps.clock.now()"
+"time.time".msg = "use deps.clock"
+"random".msg = "use learny.shared.prng"
+
+[tool.mypy]
+python_version = "3.13"
+strict = true
+plugins = ["pydantic.mypy"]
+mypy_path = [
+  "packages-py/learny/src",
+  "packages-py/learny/tests",
+  "apps/api-py/src",
+  "apps/worker-py/src",
+  "apps/worker-py/tests",
+]
+exclude = ["generated/", "conftest.py"]
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+asyncio_default_fixture_loop_scope = "function"
+markers = ["spec(id): SDD spec id"]
+testpaths = ["packages-py", "apps/api-py", "apps/worker-py"]
+pythonpath = ["packages-py/learny/src", "apps/api-py/src", "apps/worker-py/src"]
+
+[tool.importlinter]
+root_packages = ["learny", "learny_api", "learny_worker"]
+
+[[tool.importlinter.contracts]]
+name = "Nobody imports views or apps"
+type = "forbidden"
+source_modules = ["learny.shared", "learny.platform"]
+forbidden_modules = ["learny.views", "learny_api", "learny_worker"]
+
+[[tool.importlinter.contracts]]
+name = "Billing and privacy domains are pure"
+type = "forbidden"
+source_modules = ["learny.billing.domain", "learny.privacy.domain"]
+forbidden_modules = [
+  "learny.billing.application",
+  "learny.billing.infrastructure",
+  "learny.privacy.application",
+  "learny.privacy.infrastructure",
+  "learny.platform",
+  "learny.views",
+  "learny_api",
+  "learny_worker",
+]

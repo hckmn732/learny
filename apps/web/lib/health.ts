@@ -82,6 +82,35 @@ export async function getHealth(options: HealthOptions = {}): Promise<HealthResu
   return { httpStatus: database === 'unavailable' ? 503 : 200, body };
 }
 
+const DEFAULT_API_INTERNAL_URL = 'http://127.0.0.1:3001';
+
+/**
+ * SPEC-1203 — the web is a pure client without database access: the health it shows is the API's,
+ * read on its public route. An unreachable API is reported as `unavailable`, never as `ok`.
+ */
+export async function readApiHealth(
+  fetcher: typeof fetch = fetch,
+  env: Record<string, string | undefined> = process.env,
+): Promise<HealthResult> {
+  const origin = env.API_INTERNAL_URL ?? DEFAULT_API_INTERNAL_URL;
+  try {
+    const response = await fetcher(new URL('/api/v1/health', origin), { cache: 'no-store' });
+    const body = HealthResponse.parse(await response.json());
+    return { httpStatus: response.status === 503 ? 503 : 200, body };
+  } catch {
+    const build = buildInfo(env);
+    return {
+      httpStatus: 503,
+      body: HealthResponse.parse({
+        status: 'degraded',
+        ...build,
+        database: 'unavailable',
+        components: { database: 'unavailable', build: buildStatus(build) },
+      }),
+    };
+  }
+}
+
 export function buildStatus(build: { version: string; commit: string }): ComponentStatus {
   return build.version === 'dev' || build.commit === 'unknown' ? 'not_configured' : 'ok';
 }

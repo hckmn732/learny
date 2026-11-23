@@ -1,0 +1,545 @@
+{
+  "config": [
+    {
+      "env": {},
+      "mode": "mock",
+      "appUrl": "http://localhost:3000",
+      "priceId": null,
+      "secretKey": null,
+      "webhookSecret": null
+    },
+    {
+      "env": {
+        "APP_ENV": "local"
+      },
+      "mode": "mock",
+      "appUrl": "http://localhost:3000",
+      "priceId": null,
+      "secretKey": null,
+      "webhookSecret": null
+    },
+    {
+      "env": {
+        "APP_ENV": "test"
+      },
+      "mode": "mock",
+      "appUrl": "http://localhost:3000",
+      "priceId": null,
+      "secretKey": null,
+      "webhookSecret": null
+    },
+    {
+      "env": {
+        "APP_ENV": "preview"
+      },
+      "mode": "test",
+      "appUrl": "http://localhost:3000",
+      "priceId": null,
+      "secretKey": null,
+      "webhookSecret": null
+    },
+    {
+      "env": {
+        "APP_ENV": "production"
+      },
+      "mode": "live",
+      "appUrl": "http://localhost:3000",
+      "priceId": null,
+      "secretKey": null,
+      "webhookSecret": null
+    },
+    {
+      "env": {
+        "APP_ENV": "production",
+        "STRIPE_MODE": "live"
+      },
+      "mode": "live",
+      "appUrl": "http://localhost:3000",
+      "priceId": null,
+      "secretKey": null,
+      "webhookSecret": null
+    },
+    {
+      "env": {
+        "STRIPE_MODE": "test"
+      },
+      "mode": "test",
+      "appUrl": "http://localhost:3000",
+      "priceId": null,
+      "secretKey": null,
+      "webhookSecret": null
+    },
+    {
+      "env": {
+        "STRIPE_MODE": "nonsense",
+        "APP_ENV": "preview"
+      },
+      "mode": "test",
+      "appUrl": "http://localhost:3000",
+      "priceId": null,
+      "secretKey": null,
+      "webhookSecret": null
+    },
+    {
+      "env": {
+        "STRIPE_MODE": "test",
+        "NEXT_PUBLIC_APP_URL": "https://learny.example///"
+      },
+      "mode": "test",
+      "appUrl": "https://learny.example",
+      "priceId": null,
+      "secretKey": null,
+      "webhookSecret": null
+    },
+    {
+      "env": {
+        "STRIPE_MODE": "test",
+        "NEXT_PUBLIC_APP_URL": "  ",
+        "STRIPE_PRICE_ID": "  "
+      },
+      "mode": "test",
+      "appUrl": "http://localhost:3000",
+      "priceId": null,
+      "secretKey": null,
+      "webhookSecret": null
+    },
+    {
+      "env": {
+        "STRIPE_MODE": "test",
+        "STRIPE_SECRET_KEY": " sk_test_1 ",
+        "STRIPE_WEBHOOK_SECRET": "whsec_1",
+        "STRIPE_PRICE_ID": "price_1"
+      },
+      "mode": "test",
+      "appUrl": "http://localhost:3000",
+      "priceId": "price_1",
+      "secretKey": "sk_test_1",
+      "webhookSecret": "whsec_1"
+    }
+  ],
+  "refusedConfig": [
+    {
+      "env": {
+        "APP_ENV": "production",
+        "STRIPE_MODE": "mock"
+      },
+      "code": "INTERNAL_ERROR"
+    }
+  ],
+  "statuses": [
+    {
+      "stripe": "active",
+      "mapped": "active",
+      "known": true
+    },
+    {
+      "stripe": "trialing",
+      "mapped": "active",
+      "known": true
+    },
+    {
+      "stripe": "past_due",
+      "mapped": "past_due",
+      "known": true
+    },
+    {
+      "stripe": "unpaid",
+      "mapped": "past_due",
+      "known": true
+    },
+    {
+      "stripe": "paused",
+      "mapped": "past_due",
+      "known": true
+    },
+    {
+      "stripe": "canceled",
+      "mapped": "canceled",
+      "known": true
+    },
+    {
+      "stripe": "incomplete_expired",
+      "mapped": "canceled",
+      "known": true
+    },
+    {
+      "stripe": "incomplete",
+      "mapped": "incomplete",
+      "known": true
+    },
+    {
+      "stripe": "something_new",
+      "mapped": "incomplete",
+      "known": false
+    },
+    {
+      "stripe": "",
+      "mapped": "incomplete",
+      "known": false
+    }
+  ],
+  "masks": [
+    {
+      "id": "cus_1AbCdEfGh2345",
+      "masked": "cus_…2345"
+    },
+    {
+      "id": "sub_mock_12",
+      "masked": "sub_…k_12"
+    },
+    {
+      "id": "",
+      "masked": "—"
+    },
+    {
+      "id": null,
+      "masked": "—"
+    },
+    {
+      "id": "abcdefghij_99",
+      "masked": "…j_99"
+    },
+    {
+      "id": "_x",
+      "masked": "…_x"
+    }
+  ],
+  "signatures": {
+    "secret": "learny-vectors-billing-privacy-000000",
+    "payload": "{\"id\":\"evt_1\",\"type\":\"x\",\"created\":1,\"data\":{\"object\":{}}}",
+    "header": "t=1794399600,v1=33e6fe53229d7452e6153c34c2715ac190cf4b7b10a38beca181d02913a68caa",
+    "verifications": [
+      {
+        "header": "t=1794399600,v1=33e6fe53229d7452e6153c34c2715ac190cf4b7b10a38beca181d02913a68caa",
+        "now": "2026-11-11T12:20:00.000Z",
+        "body": "{\"id\":\"evt_1\",\"type\":\"x\",\"created\":1,\"data\":{\"object\":{}}}",
+        "code": null
+      },
+      {
+        "header": "t=1794399600,v1=33e6fe53229d7452e6153c34c2715ac190cf4b7b10a38beca181d02913a68caa",
+        "now": "2026-11-11T12:25:00.000Z",
+        "body": "{\"id\":\"evt_1\",\"type\":\"x\",\"created\":1,\"data\":{\"object\":{}}}",
+        "code": null
+      },
+      {
+        "header": "t=1794399600,v1=33e6fe53229d7452e6153c34c2715ac190cf4b7b10a38beca181d02913a68caa",
+        "now": "2026-11-11T12:25:01.000Z",
+        "body": "{\"id\":\"evt_1\",\"type\":\"x\",\"created\":1,\"data\":{\"object\":{}}}",
+        "code": "INVALID_SIGNATURE"
+      },
+      {
+        "header": null,
+        "now": "2026-11-11T12:20:00.000Z",
+        "body": "{\"id\":\"evt_1\",\"type\":\"x\",\"created\":1,\"data\":{\"object\":{}}}",
+        "code": "INVALID_SIGNATURE"
+      },
+      {
+        "header": "",
+        "now": "2026-11-11T12:20:00.000Z",
+        "body": "{\"id\":\"evt_1\",\"type\":\"x\",\"created\":1,\"data\":{\"object\":{}}}",
+        "code": "INVALID_SIGNATURE"
+      },
+      {
+        "header": "v1=abcd",
+        "now": "2026-11-11T12:20:00.000Z",
+        "body": "{\"id\":\"evt_1\",\"type\":\"x\",\"created\":1,\"data\":{\"object\":{}}}",
+        "code": "INVALID_SIGNATURE"
+      },
+      {
+        "header": "garbage",
+        "now": "2026-11-11T12:20:00.000Z",
+        "body": "{\"id\":\"evt_1\",\"type\":\"x\",\"created\":1,\"data\":{\"object\":{}}}",
+        "code": "INVALID_SIGNATURE"
+      },
+      {
+        "header": "t=1794399600,v1=33e6fe53229d7452e6153c34c2715ac190cf4b7b10a38beca181d02913a68caa",
+        "now": "2026-11-11T12:20:00.000Z",
+        "body": "{\"id\":\"evt_1\",\"type\":\"x\",\"created\":1,\"data\":{\"object\":{}}} ",
+        "code": "INVALID_SIGNATURE"
+      },
+      {
+        "header": "t=1794399600,v1=33e6fe53229d7452e6153c34c2715ac190cf4b7b10a38beca181d02913a68caa,v1=00",
+        "now": "2026-11-11T12:20:00.000Z",
+        "body": "{\"id\":\"evt_1\",\"type\":\"x\",\"created\":1,\"data\":{\"object\":{}}}",
+        "code": null
+      }
+    ]
+  },
+  "events": [
+    {
+      "raw": {
+        "id": "evt_a",
+        "type": "checkout.session.completed",
+        "created": 5,
+        "data": {
+          "object": {
+            "customer": "cus_a",
+            "subscription": "sub_a",
+            "metadata": {
+              "userId": "11111111-1111-4111-8111-111111111111"
+            }
+          }
+        }
+      },
+      "normalized": {
+        "id": "evt_a",
+        "type": "checkout.session.completed",
+        "created": 5,
+        "userId": "11111111-1111-4111-8111-111111111111",
+        "customerId": "cus_a",
+        "subscriptionId": "sub_a"
+      },
+      "code": null
+    },
+    {
+      "raw": {
+        "id": "evt_b",
+        "type": "customer.subscription.deleted",
+        "created": 6,
+        "data": {
+          "object": {
+            "id": "sub_b",
+            "customer": {
+              "id": "cus_b"
+            },
+            "metadata": {
+              "userId": "11111111-1111-4111-8111-111111111111"
+            }
+          }
+        }
+      },
+      "normalized": {
+        "id": "evt_b",
+        "type": "customer.subscription.deleted",
+        "created": 6,
+        "userId": "11111111-1111-4111-8111-111111111111",
+        "customerId": "cus_b",
+        "subscriptionId": "sub_b"
+      },
+      "code": null
+    },
+    {
+      "raw": {
+        "id": "evt_c",
+        "type": "invoice.payment_failed",
+        "created": 7,
+        "data": {
+          "object": {
+            "customer": "cus_c",
+            "subscription": "sub_c",
+            "subscription_details": {
+              "metadata": {
+                "userId": "11111111-1111-4111-8111-111111111111"
+              }
+            }
+          }
+        }
+      },
+      "normalized": {
+        "id": "evt_c",
+        "type": "invoice.payment_failed",
+        "created": 7,
+        "userId": "11111111-1111-4111-8111-111111111111",
+        "customerId": "cus_c",
+        "subscriptionId": "sub_c"
+      },
+      "code": null
+    },
+    {
+      "raw": {
+        "id": "evt_d",
+        "type": "customer.subscription.updated",
+        "created": 8,
+        "data": {
+          "object": {
+            "id": "sub_d",
+            "customer": "cus_d",
+            "client_reference_id": "11111111-1111-4111-8111-111111111111",
+            "metadata": {}
+          }
+        }
+      },
+      "normalized": {
+        "id": "evt_d",
+        "type": "customer.subscription.updated",
+        "created": 8,
+        "userId": "11111111-1111-4111-8111-111111111111",
+        "customerId": "cus_d",
+        "subscriptionId": "sub_d"
+      },
+      "code": null
+    },
+    {
+      "raw": {
+        "id": "evt_e",
+        "type": "customer.created",
+        "created": 9,
+        "data": {
+          "object": {
+            "id": "cus_e"
+          }
+        }
+      },
+      "normalized": {
+        "id": "evt_e",
+        "type": "customer.created",
+        "created": 9,
+        "userId": null,
+        "customerId": null,
+        "subscriptionId": null
+      },
+      "code": null
+    },
+    {
+      "raw": {
+        "type": "x",
+        "created": 1
+      },
+      "normalized": null,
+      "code": "INVALID_SIGNATURE"
+    },
+    {
+      "raw": {
+        "id": "evt_f",
+        "type": "",
+        "created": 1
+      },
+      "normalized": null,
+      "code": "INVALID_SIGNATURE"
+    },
+    {
+      "raw": {
+        "id": "evt_g",
+        "type": "x"
+      },
+      "normalized": null,
+      "code": "INVALID_SIGNATURE"
+    },
+    {
+      "raw": {
+        "id": "evt_h",
+        "type": "x",
+        "created": "soon"
+      },
+      "normalized": null,
+      "code": "INVALID_SIGNATURE"
+    },
+    {
+      "raw": {
+        "id": "evt_i",
+        "type": "x",
+        "created": 10,
+        "data": {
+          "object": "string"
+        }
+      },
+      "normalized": {
+        "id": "evt_i",
+        "type": "x",
+        "created": 10,
+        "userId": null,
+        "customerId": null,
+        "subscriptionId": null
+      },
+      "code": null
+    }
+  ],
+  "paths": [
+    {
+      "value": "/",
+      "safe": true
+    },
+    {
+      "value": "/parametres#ia",
+      "safe": true
+    },
+    {
+      "value": "/formations/42?tab=a",
+      "safe": true
+    },
+    {
+      "value": "/_dev/sdd/SPEC-210",
+      "safe": true
+    },
+    {
+      "value": "",
+      "safe": false
+    },
+    {
+      "value": "parametres",
+      "safe": false
+    },
+    {
+      "value": "https://evil.example/x",
+      "safe": false
+    },
+    {
+      "value": "//evil.example",
+      "safe": false
+    },
+    {
+      "value": "/\\evil.example",
+      "safe": false
+    },
+    {
+      "value": "javascript:alert(1)",
+      "safe": false
+    },
+    {
+      "value": "/a b",
+      "safe": false
+    },
+    {
+      "value": "/a\nb",
+      "safe": false
+    },
+    {
+      "value": "/aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "safe": false
+    },
+    {
+      "value": "/ok",
+      "safe": true
+    }
+  ],
+  "urls": [
+    {
+      "path": "/ok",
+      "appUrl": "https://learny.test",
+      "field": "successPath",
+      "url": "https://learny.test/ok",
+      "code": null
+    },
+    {
+      "path": "/parametres#abonnement",
+      "appUrl": "https://learny.test/",
+      "field": "successPath",
+      "url": "https://learny.test/parametres#abonnement",
+      "code": null
+    },
+    {
+      "path": "https://evil.example",
+      "appUrl": "https://learny.test",
+      "field": "cancelPath",
+      "url": null,
+      "code": "VALIDATION_FAILED",
+      "errors": null
+    },
+    {
+      "path": "//evil.example",
+      "appUrl": "https://learny.test",
+      "field": "cancelPath",
+      "url": null,
+      "code": "VALIDATION_FAILED",
+      "errors": null
+    },
+    {
+      "path": "x",
+      "appUrl": "https://learny.test",
+      "field": "cancelPath",
+      "url": null,
+      "code": "VALIDATION_FAILED",
+      "errors": null
+    }
+  ]
+}

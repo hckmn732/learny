@@ -16,6 +16,12 @@
 # obligatoire manque ; la liste reprend PRODUCTION_REQUIRED_KEYS (packages/config), que
 # l'application revérifie au démarrage. Ne jamais supprimer les volumes : ils portent les données.
 
+# SPEC-2301 — la pile de production gagne les services Python `api-py` et `worker-py`
+# (ADR-2007), déclarés dans un fichier inclus pour ne pas changer le rendu de la page
+# `/_dev/sdd/SPEC-1103` (ligne de base visuelle d'une autre spécification, ADR-1001).
+include:
+  - path: ./compose.coolify-py.yml
+
 x-logging: &logging
   driver: json-file
   options:
