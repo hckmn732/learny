@@ -169,41 +169,6 @@ export default defineConfig({
       },
     },
     {
-      // The upstream must be healthy before the facade is probed: Playwright starts
-      // the servers in this order and waits for each readiness URL in turn (SPEC-2003).
-      command: 'pnpm --filter @learny/api dev',
-      url: `${HONO_URL}/health`,
-      reuseExistingServer:
-        process.env.PLAYWRIGHT_REUSE_SERVER === '1' ||
-        (!process.env.CI && process.env.PLAYWRIGHT_REUSE_SERVER !== '0'),
-      timeout: 120000,
-      env: {
-        ...TEST_SERVER_ENV,
-        // Playwright replaces the environment of the command: the database and the Supabase keys
-        // must be repeated here or the health probe reports `degraded` (SPEC-2003).
-        DATABASE_URL:
-          process.env.DATABASE_URL ?? 'postgresql://postgres:postgres@127.0.0.1:54322/postgres',
-        NEXT_PUBLIC_SUPABASE_URL: process.env.NEXT_PUBLIC_SUPABASE_URL ?? 'http://127.0.0.1:54321',
-        NEXT_PUBLIC_SUPABASE_ANON_KEY: process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ?? '',
-        SUPABASE_SERVICE_ROLE_KEY: process.env.SUPABASE_SERVICE_ROLE_KEY ?? '',
-        SUPABASE_JWT_SECRET: process.env.SUPABASE_JWT_SECRET ?? '',
-        PORT: String(API_PORT),
-        API_PORT: String(API_PORT),
-        APP_ENCRYPTION_KEY: TEST_ENCRYPTION_KEY,
-        ENABLE_SDD_PAGES: 'true',
-        APP_ENV: 'test',
-        API_PROXY_SECRET: 'learny-test-only-api-proxy-secret-value',
-        // SPEC-2207: the Python worker runs every consumer and cron of the table, so Hono no
-        // longer mounts `/api/inngest` (ADR-2014, flip procedure step 2 of the P22 plan).
-        LEARNY_API_ROLE: 'api',
-        JOBS_MODE: 'inline',
-        TRUST_PROXY: 'true',
-        // ADR-0336 - la pile de QA coupe le limiteur : l'horloge figée empêche la recharge des
-        // seaux et le compte de démonstration partagé resterait bloqué pour toute la campagne.
-        RATE_LIMIT_MODE: 'off',
-      },
-    },
-    {
       // SPEC-2003: the web only talks to the facade; every operation is still relayed to Hono.
       command: `uv run uvicorn learny_api.main:app --host 127.0.0.1 --port ${String(FACADE_PORT)}`,
       url: `${API_INTERNAL_URL}/health`,

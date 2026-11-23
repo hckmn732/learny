@@ -63,19 +63,13 @@ describe('[SPEC-009] config boundary', () => {
     expect(offenders).toEqual([]);
   });
 
-  it('keeps the server entry out of apps/web and a single adapter in the server package (ET-6, SPEC-1004)', () => {
-    // SPEC-1004 ET-1 moved the adapter to @learny/api-routes/src/deps/env.ts: apps/web must no
-    // longer reach the server entry at all (stronger invariant than a single file name).
+  it('keeps the server entry out of apps/web (ET-6, SPEC-1004)', () => {
+    // The former adapter lived in the removed TypeScript server package (SPEC-2302): apps/web
+    // must not reach the server configuration entry at all, which is the stronger invariant.
     const importers = [...contents]
       .filter(([, source]) => source.includes(`from '${SERVER_ENTRY}'`))
       .map(([file]) => relative(file));
     expect(importers).toEqual([]);
-
-    const packageRoot = path.resolve(WEB_ROOT, '../../packages/api-routes/src');
-    const adapters = sources(packageRoot)
-      .filter((file) => fs.readFileSync(file, 'utf8').includes(`from '${SERVER_ENTRY}'`))
-      .map((file) => path.relative(packageRoot, file).replaceAll('\\', '/'));
-    expect(adapters).toEqual(['deps/env.ts']);
   });
 
   it('exposes no server symbol through the package root (EF-2)', () => {
