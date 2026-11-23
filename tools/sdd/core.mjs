@@ -339,7 +339,7 @@ export function summarizeMaestro(report, tag) {
     out.videos += videos;
     const isVisual = tags.includes('visual');
     if (isVisual && flow.visual?.status === 'passed') out.visual += 1;
-    out.flows.push({ name: String(flow.name ?? ''), status, videos, visual: isVisual });
+    out.flows.push({ name: String(flow.name ?? ''), status, videos, visual: isVisual, tags });
   }
   // Vidéo de campagne (ADR-3015 § 2) : unique pour la campagne, elle ne se rattache à aucun flux.
   if (report?.campaignVideo) out.videos += 1;
