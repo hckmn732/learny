@@ -1,11 +1,13 @@
 # Preuves — SPEC-3201 : Écran Aujourd'hui
 
-- Date : 2026-11-23T14:51:57.192Z
-- Commit : 48f9fddb
+- Date : 2026-11-23T15:22:31.950Z
+- Commit : 007b68fa
 - Spécification : `specs/p32-mobile-quotidien/SPEC-3201-ecran-aujourd-hui.md`
 
 ## Rapports
 
+- `unit.json`
+- `integration.json`
 - `e2e.xml`
 - `checks.json` (résultat des validations), `acceptance.md` (critères d'acceptation)
 
