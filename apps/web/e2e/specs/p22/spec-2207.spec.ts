@@ -8,8 +8,6 @@ import { expect, test } from '@learny/testing/playwright';
 import { createTestSession, deleteTestSession } from '@learny/testing/supabase';
 
 const DEFAULT_ORIGIN = 'http://127.0.0.1:3100';
-const DEMO = '/_dev/sdd/SPEC-2207';
-const TITLE = 'Bascule des jobs, des crons et des démonstrations en Python';
 // ADR-0047: the stack runs on the frozen instant; the pipeline stamps it on every step.
 const FIXED_NOW = '2026-11-11T12:20:00.000Z';
 const STEP_NAMES = ['step-1-prepare', 'step-2-process', 'step-3-finish'];
@@ -84,53 +82,3 @@ test('un événement de démonstration est consommé par le worker Python @SPEC-
   }
 });
 
-test('conformité visuelle de la bascule @SPEC-2207 @visual', async ({
-  page,
-  axeCheck,
-  captureEvidence,
-}) => {
-  await page.goto(DEMO);
-  await expect(page.getByRole('heading', { level: 1 })).toHaveText(TITLE);
-
-  // CA-1 — the four tables of the ownership file, read by the page itself.
-  const scope = page.getByTestId('spec-2207-scope');
-  await expect(scope).toContainText('Opérations servies par Python');
-  await expect(scope).toContainText('201 / 217');
-  await expect(scope).toContainText('Routes spéciales servies par Python');
-  await expect(scope).toContainText('29 / 32');
-  await expect(scope).toContainText('Consommateurs Python');
-  await expect(scope).toContainText('23 / 23');
-  await expect(scope).toContainText('Crons Python');
-  await expect(scope).toContainText('2 / 2');
-  await expect(page.getByTestId('spec-2207-scope-deferred')).toContainText(
-    '19 entrées restent relayées',
-  );
-
-  // CA-1 — every consumer and both crons are Python, and the page says why the rest is relayed.
-  await expect(page.getByTestId('spec-2207-consumers').locator('li')).toHaveCount(23);
-  await expect(page.getByTestId('spec-2207-consumers')).toContainText('devtools.demo_job');
-  await expect(page.getByTestId('spec-2207-consumers')).toContainText('tutor.generate_course');
-  await expect(page.getByTestId('spec-2207-crons').locator('li')).toHaveCount(2);
-  await expect(page.getByTestId('spec-2207-crons')).toContainText('cron/hourly-tick');
-  await expect(page.getByTestId('spec-2207-crons')).toContainText('cron/nightly');
-  const deferred = page.getByTestId('spec-2207-deferred');
-  await expect(deferred.locator('span')).toHaveCount(19);
-  await expect(deferred).toContainText('pas encore porté');
-  await expect(deferred).toContainText('agrégat de dix-huit lectures');
-  await expect(deferred).toContainText('commitlint');
-  await expect(deferred).toContainText('planSprintsBeforeMilestones');
-
-  // CA-2, CA-3 — the proofs, and the guarantees the worker holds.
-  await expect(page.getByTestId('spec-2207-parity')).toContainText('échanges de cookies');
-  await expect(page.getByTestId('spec-2207-parity')).toContainText('octet pour octet');
-  await expect(page.getByTestId('spec-2207-parity')).toContainText('sdd/demo-requested');
-  await expect(page.getByTestId('spec-2207-guarantees')).toContainText('Un seul écrivain');
-  await expect(page.getByTestId('spec-2207-guarantees')).toContainText('Idempotence');
-  await expect(page.getByTestId('spec-2207-guarantees')).toContainText('Horloge injectable');
-
-  await axeCheck();
-  await captureEvidence('spec-2207-desktop');
-  await page.setViewportSize({ width: 390, height: 844 });
-  await axeCheck();
-  await captureEvidence('spec-2207-mobile');
-});

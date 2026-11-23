@@ -19,7 +19,6 @@ pytestmark = pytest.mark.spec("SPEC-2207")
 ROUTE_IDS = (
     "dev.stripe.checkoutCancel",
     "dev.stripe.checkoutPay",
-    "dev.stripe.events",
     "dev.stripe.simulate",
 )
 ENABLED = {"APP_ENV": "test", "ENABLE_SDD_PAGES": "true"}
@@ -97,22 +96,6 @@ async def test_another_learners_session_is_not_found(
 
     assert response.status_code == 404
     assert response.json()["detail"] == fr.SESSION_NOT_FOUND
-
-
-async def test_the_events_history_lists_the_delivered_webhook(
-    app: tuple[Any, Any], gateway: MockStripeGateway, monkeypatch: pytest.MonkeyPatch
-) -> None:
-    _app, client = app
-    allow_authentication(monkeypatch)
-    session = await _open_session(gateway, "22222222-2222-4222-8222-222222222222")
-    client.post("/api/v1/dev/sdd/stripe/checkout/pay", json={"sessionId": session.id})
-
-    response = client.get("/api/v1/dev/sdd/stripe/events")
-
-    assert response.status_code == 200
-    items = response.json()["items"]
-    assert len(items) == 1
-    assert items[0]["type"] == "checkout.session.completed"
 
 
 async def test_the_replay_delivers_the_last_webhook_again(

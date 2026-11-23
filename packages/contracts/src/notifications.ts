@@ -239,17 +239,4 @@ export const notificationRoutes = {
 } as const;
 
 /** EF-8 — demonstration route: notify the signed-in learner with simulated settings and clock. */
-export const devNotify = defineRoute({
-  id: 'dev.notify',
-  method: 'POST',
-  path: '/api/v1/dev/sdd/notify',
-  auth: 'user',
-  body: DevNotifyInput,
-  output: DevNotifyOutput,
-  successStatus: 201,
-  idempotent: true,
-  summary: 'Route de démonstration : routage unifié d’une notification (SPEC-209).',
-  errors: ['VALIDATION_FAILED', 'NOT_FOUND', 'IDEMPOTENCY_IN_PROGRESS'],
-});
 
-export const notificationsDevRoutes = { devNotify } as const;

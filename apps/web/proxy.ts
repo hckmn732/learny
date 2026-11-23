@@ -1,8 +1,8 @@
 // Page proxy of apps/web (Next 16 name of the middleware).
 //
-// 1. SDD demonstration pages (SPEC-006, EF-3): a network-level guard. The root loading.tsx makes
-//    pages stream, and a streamed page can no longer change its status: the 404 is decided here,
-//    before rendering. The pages keep their own guard as a second line of defense.
+// 1. Simulated Stripe pages (SPEC-210 EF-7, ADR-2041): a network-level guard. The root
+//    loading.tsx makes pages stream, and a streamed page can no longer change its status: the 404
+//    is decided here, before rendering. The pages keep their own guard as a second line of defense.
 // 2. Formation pages (SPEC-615 ET-1, CL-1): the same streaming constraint applies to a formation
 //    of another learner. A fast access read decides the 404 before the loading skeleton starts; the
 //    page service repeats the check under RLS as the second line of defense.
@@ -14,7 +14,6 @@ import { NextResponse, type NextRequest } from 'next/server';
 import { ApiError } from '@learny/api-client';
 import { clock } from '@learny/core';
 
-import { sddDemos } from './app/%5Fdev/sdd/registry';
 import { relayToApi } from './lib/api/relay';
 import { serverApi } from './lib/api/server-client';
 import {
@@ -23,7 +22,7 @@ import {
   readOnboardingTicket,
 } from './lib/onboarding-ticket';
 import { decideRoute, isApiPath } from './lib/route-guard';
-import { findSddDemo, sddPagesEnabled } from './lib/sdd-pages';
+import { sddPagesEnabled } from './lib/sdd-pages';
 import { buildContentSecurityPolicy, createCspNonce } from './lib/security/csp';
 import {
   applySecurityHeaders,
@@ -40,39 +39,13 @@ const FORMATION_PATH = /^\/formations\/([^/]+)(?:\/|$)/;
 
 function sddGuard(request: NextRequest, requestHeaders: Headers): NextResponse {
   const segments = request.nextUrl.pathname.split('/').filter(Boolean);
-  const specId = segments[2];
-  // SPEC-301 EF-11: the validated SDD URL answers a real 307 before the streamed root loading
-  // page starts (a redirect rendered by the page would be a 200 with a client-side navigation).
-  if (sddPagesEnabled(process.env) && request.nextUrl.pathname === '/_dev/sdd/SPEC-301') {
-    return NextResponse.redirect(new URL('/_dev/ui/jetons', request.url), 307);
-  }
-  // SPEC-005 reference images live at /_dev/sdd/reference/<manifest file>; the route itself
-  // checks that the file is listed in the manifest before serving it.
-  const reference =
-    segments.length === 4 &&
-    segments[2] === 'reference' &&
-    /^SCR-\d{2}-[a-z0-9-]+-(?:desktop|mobile)\.png$/.test(segments[3] ?? '');
-  // SPEC-210 EF-7 — the simulated Stripe pages: /_dev/stripe/checkout and /_dev/stripe/portal.
+  // SPEC-210 EF-7 — the simulated Stripe pages: /_dev/stripe/checkout and /_dev/stripe/portal are
+  // the only pages left under /_dev (the demonstration pages and galleries are retired, ADR-2041).
   const stripePage =
     segments[1] === 'stripe' &&
     segments.length === 3 &&
     (segments[2] === 'checkout' || segments[2] === 'portal');
-  // SPEC-301 — the design-system gallery lives under /_dev/ui (not /_dev/sdd).
-  const uiGallery = segments[1] === 'ui' && segments.length <= 3;
-  // SPEC-503 — the brick gallery and its four reproduction pages.
-  const bricksGallery = segments[1] === 'bricks' && segments.length <= 3;
-  const allowed =
-    sddPagesEnabled(process.env) &&
-    (stripePage ||
-      uiGallery ||
-      bricksGallery ||
-      (segments[1] === 'sdd' &&
-        (reference ||
-          (segments.length <= 3 &&
-            (specId === undefined ||
-              // SPEC-301 redirects its validated SDD URL to the design-system gallery.
-              specId === 'SPEC-301' ||
-              findSddDemo(specId, sddDemos) !== undefined)))));
+  const allowed = sddPagesEnabled(process.env) && stripePage;
   if (allowed) return NextResponse.next({ request: { headers: requestHeaders } });
   return NextResponse.rewrite(new URL(NOT_FOUND_PATH, request.url), {
     status: 404,

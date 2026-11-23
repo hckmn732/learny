@@ -13,6 +13,8 @@ import {
 } from '@learny/testing/visual';
 import { colors } from '@learny/ui/tokens';
 
+import { mockupReference } from '../../support/mockup-reference';
+
 const ACCUEIL = '/accueil';
 const NOW = '2026-11-11T12:20:00Z';
 const REFERENCE_WIDTH = 1600;
@@ -431,7 +433,7 @@ test('Panneau des notifications : conformité @SPEC-306 @visual', async ({
   const referencePage = await page.context().newPage();
   await referencePage.setViewportSize({ width: 1440, height: 900 });
   await referencePage.setContent(
-    `<img id="ref" src="${new URL('/_dev/sdd/reference/SCR-03-base-desktop.png', page.url()).toString()}" width="${String(
+    `<img id="ref" src="${mockupReference('SCR-03-base-desktop.png')}" width="${String(
       Math.round(REFERENCE_WIDTH * SCALE),
     )}" height="${String(
       Math.round(REFERENCE_HEIGHT * SCALE),
@@ -482,10 +484,7 @@ test('Panneau des notifications : conformité @SPEC-306 @visual', async ({
     width: Math.round(panelBox.width),
     height: Math.round(panelBox.height),
   });
-  const panelReferenceUrl = new URL(
-    '/_dev/sdd/reference/SCR-03-notifications-desktop.png',
-    page.url(),
-  ).toString();
+  const panelReferenceUrl = mockupReference('SCR-03-notifications-desktop.png');
   await panelReferencePage.setContent(
     `<div id="ref" style="width:${String(panelBox.width)}px;height:${String(panelBox.height)}px;background-image:url('${panelReferenceUrl}');background-repeat:no-repeat;background-size:${String(REFERENCE_WIDTH * SCALE * scaleX)}px ${String(REFERENCE_HEIGHT * SCALE * scaleY)}px;background-position:${String(-REFERENCE_PANEL.x * SCALE * scaleX)}px ${String(-REFERENCE_PANEL.y * SCALE * scaleY)}px"></div><img id="ref-img" src="${panelReferenceUrl}" alt="" style="position:absolute;width:1px;height:1px;opacity:0">`,
   );

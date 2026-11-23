@@ -13,6 +13,8 @@ import {
 } from '@learny/testing/visual';
 import { colors } from '@learny/ui/tokens';
 
+import { mockupReference } from '../../support/mockup-reference';
+
 const ACCUEIL = '/accueil';
 const NOW = '2026-11-11T12:20:00Z';
 const REFERENCE_WIDTH = 1600;
@@ -113,10 +115,6 @@ async function seedHeader(userId: string): Promise<void> {
       `);
     }
   });
-}
-
-function mockupReferenceUrl(pageUrl: string): string {
-  return new URL('/_dev/sdd/reference/SCR-03-base-desktop.png', pageUrl).toString();
 }
 
 test('Coquille : en-tête figé et menu Mon compte @SPEC-305', async ({
@@ -343,7 +341,7 @@ test('Coquille : en-tête figé et menu Mon compte @SPEC-305 @visual', async ({
   const referencePage = await page.context().newPage();
   await referencePage.setViewportSize({ width: 1440, height: 900 });
   await referencePage.setContent(
-    `<img id="ref" src="${mockupReferenceUrl(page.url())}" width="${String(
+    `<img id="ref" src="${mockupReference('SCR-03-base-desktop.png')}" width="${String(
       Math.round(REFERENCE_WIDTH * SCALE),
     )}" height="${String(
       Math.round(REFERENCE_HEIGHT * SCALE),

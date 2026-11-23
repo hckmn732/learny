@@ -7,7 +7,8 @@ import { SPECIAL_HANDLERS } from './special';
 import { SPECIAL_ROUTE_MANIFEST } from './special/manifest';
 import { ROUTE_IMPLEMENTATIONS } from './tables';
 
-const SPECIAL_COUNT = 32;
+// ADR-2041: the SDD demonstration and tooling routes are retired (32 -> 11).
+const SPECIAL_COUNT = 11;
 
 describe('[SPEC-1004] route coverage', () => {
   it('couvre chaque route du registre, sans doublon (CA-1)', () => {

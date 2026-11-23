@@ -54,8 +54,8 @@ describe('[SPEC-1302] permanent coupling check', () => {
     expect(scripts.sort()).toEqual(['inventory.mjs', 'report.mjs']);
   });
 
-  it('counts the 217 real routes and ignores the factory definitions (CA-5)', () => {
-    expect(countRegistryRoutes(ROOT)).toBe(217);
+  it('counts the 156 real routes and ignores the factory definitions (CA-5)', () => {
+    expect(countRegistryRoutes(ROOT)).toBe(156);
   });
 
   it('contains no reference to the removed worker application outside historical material', () => {

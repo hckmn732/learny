@@ -4,7 +4,6 @@ import { randomBytes } from 'node:crypto';
 import { expect, test } from '@learny/testing/playwright';
 import { createTestSession, deleteTestSession, supabaseLocalEnv } from '@learny/testing/supabase';
 
-const DEMO = '/_dev/sdd/SPEC-2101';
 
 interface BearerSession {
   userId: string;
@@ -77,23 +76,3 @@ test('résout l’identité par cookie et par Bearer via la façade @SPEC-2101',
   }
 });
 
-test('conformité visuelle de la connexion PostgreSQL et RLS @SPEC-2101 @visual', async ({
-  page,
-  axeCheck,
-  captureEvidence,
-}) => {
-  await page.goto(DEMO);
-  await expect(page.getByRole('heading', { level: 1 })).toHaveText(
-    'Connexion PostgreSQL, identité, RLS et Storage',
-  );
-  await expect(page.getByTestId('spec-2101-rls')).toContainText('59');
-  await expect(page.getByTestId('spec-2101-service')).toContainText('6 tables de service');
-  await expect(page.getByTestId('spec-2101-identity')).toContainText('LEGAL_ACCEPTANCE_REQUIRED');
-  await expect(page.getByTestId('spec-2101-guards')).toContainText('Retry-After');
-  await expect(page.getByTestId('spec-2101-storage')).toContainText('600 s');
-  await axeCheck();
-  await captureEvidence('spec-2101-desktop');
-  await page.setViewportSize({ width: 390, height: 844 });
-  await axeCheck();
-  await captureEvidence('spec-2101-mobile');
-});

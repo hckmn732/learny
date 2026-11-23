@@ -6,9 +6,9 @@ import { ESLint } from 'eslint';
 import tseslint from 'typescript-eslint';
 import { describe, expect, it } from 'vitest';
 
-import { DEMO_LOCAL_ENV, DEMO_SECRET_KEYS } from '../../lib/sdd-config-demo';
 import { sddPagesEnabled } from '../../lib/sdd-pages';
 
+import { DEMO_LOCAL_ENV, DEMO_SECRET_KEYS } from './config-fixtures';
 import {
   configurationErrorNames,
   getPublicEnv,

@@ -11,7 +11,6 @@ import { expect, test } from '@learny/testing/playwright';
 import { createTestSession, deleteTestSession } from '@learny/testing/supabase';
 
 const DEFAULT_ORIGIN = 'http://127.0.0.1:3100';
-const DEMO = '/_dev/sdd/SPEC-2204';
 const MODEL = 'gpt-5-mini';
 // A dummy key: the mock adapter never opens a socket, and the assertions check that no fragment
 // of it beyond the last four characters ever leaves the server.
@@ -372,44 +371,3 @@ test('sert les conversations, le flux SSE et les clés personnelles depuis Pytho
   }
 });
 
-test('conformité visuelle du domaine tuteur @SPEC-2204 @visual', async ({
-  page,
-  axeCheck,
-  captureEvidence,
-}) => {
-  await page.goto(DEMO);
-  await expect(page.getByRole('heading', { level: 1 })).toHaveText(
-    'Domaine tutor, conversations et flux SSE en Python',
-  );
-  await expect(page.getByTestId('spec-2204-scope')).toContainText('Opérations du périmètre');
-  await expect(page.getByTestId('spec-2204-scope')).toContainText('12');
-  await expect(page.getByTestId('spec-2204-scope')).toContainText('Servies par Python');
-  await expect(page.getByTestId('spec-2204-scope')).toContainText('Encore relayées à Hono');
-  await expect(page.getByTestId('spec-2204-operations').locator('li')).toHaveCount(12);
-  await expect(page.getByTestId('spec-2204-operations')).toContainText('conversations.messages');
-  await expect(page.getByTestId('spec-2204-operations')).toContainText('me.ai.credentials.qualify');
-  await expect(page.getByTestId('spec-2204-context')).toContainText('4 000 tokens');
-  await expect(page.getByTestId('spec-2204-context')).toContainText('Sources citées');
-  await expect(page.getByTestId('spec-2204-stream-events').locator('li')).toHaveCount(7);
-  await expect(page.getByTestId('spec-2204-stream-events')).toContainText('text-delta');
-  await expect(page.getByTestId('spec-2204-stream-events')).toContainText('data-follow-ups');
-  await expect(page.getByTestId('spec-2204-stream-latency')).toContainText('50,0 ms');
-  await expect(page.getByTestId('spec-2204-stream-latency')).toContainText('500 ms');
-  await expect(page.getByTestId('spec-2204-stream')).toContainText(
-    'x-vercel-ai-ui-message-stream: v1',
-  );
-  await expect(page.getByTestId('spec-2204-stream')).toContainText('data: [DONE]');
-  await expect(page.getByTestId('spec-2204-providers').locator('li')).toHaveCount(6);
-  await expect(page.getByTestId('spec-2204-providers')).toContainText('openai_compatible');
-  await expect(page.getByTestId('spec-2204-byok')).toContainText('AES-256-GCM');
-  await expect(page.getByTestId('spec-2204-byok')).toContainText('keyMasked');
-  await expect(page.getByTestId('spec-2204-byok')).toContainText('STRUCTURED_UNRELIABLE');
-  await expect(page.getByTestId('spec-2204-guarantees')).toContainText('Parité contractuelle');
-  await expect(page.getByTestId('spec-2204-guarantees')).toContainText('2 scénarios');
-  await expect(page.getByTestId('spec-2204-guarantees')).toContainText('RLS');
-  await axeCheck();
-  await captureEvidence('spec-2204-desktop');
-  await page.setViewportSize({ width: 390, height: 844 });
-  await axeCheck();
-  await captureEvidence('spec-2204-mobile');
-});

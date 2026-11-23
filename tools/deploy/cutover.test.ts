@@ -169,8 +169,8 @@ describe('[SPEC-2301] progressive cutover planner', () => {
       // The real file, through the same parser the tool uses.
       readFileSync(`${ROOT}/api/ownership.yaml`, 'utf8'),
     );
-    expect(Object.keys(ownership.operations)).toHaveLength(217);
-    expect(tables.inventory).toHaveLength(217);
+    expect(Object.keys(ownership.operations)).toHaveLength(156);
+    expect(tables.inventory).toHaveLength(156);
     for (const operation of tables.inventory) {
       expect(ownership.operations[operation.id]).toBeDefined();
       expect(typeof isRead(operation)).toBe('boolean');

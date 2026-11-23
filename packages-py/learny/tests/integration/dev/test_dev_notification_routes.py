@@ -18,7 +18,7 @@ from sqlalchemy import text
 
 pytestmark = pytest.mark.spec("SPEC-2207")
 
-ROUTE_IDS = ("dev.notify", "dev.notificationsGenerate", "dev.pushSend")
+ROUTE_IDS = ("dev.notificationsGenerate",)
 ENABLED = {"APP_ENV": "test", "ENABLE_SDD_PAGES": "true"}
 JSON_ACCEPT = {"accept": "application/json"}
 MOCK_ENDPOINT = "https://push.mock.learny.app/spec-2207-push/success"
@@ -77,44 +77,6 @@ async def seeded_profile(database: Database) -> Any:
     return row
 
 
-async def test_the_notify_demo_renders_and_restores_the_account(
-    app: tuple[Any, Any], database: Database, monkeypatch: pytest.MonkeyPatch
-) -> None:
-    _app, client = app
-    row = await seeded_profile(database)
-    async with database.service_tx() as tx:
-        # the dedupe key is stable, so a previous run of the suite must not replay it.
-        await tx.conn.execute(
-            text(
-                "delete from public.notifications where user_id = cast(:user_id as uuid) "
-                "and dedupe_key = 'demo:notify:1'"
-            ),
-            {"user_id": str(row["id"])},
-        )
-    allow_authentication(monkeypatch, str(row["id"]))
-
-    response = client.post(
-        "/api/v1/dev/sdd/notify",
-        json={
-            "at": "2026-11-11T12:20:00Z",
-            "type": "course_ready",
-            "tone": "tu",
-            "settings": SETTINGS,
-            "dedupeKey": "demo:notify:1",
-        },
-        headers={"idempotency-key": "demo-notify-1", **JSON_ACCEPT},
-    )
-
-    assert response.status_code == 201
-    body = response.json()
-    assert body["notification"]["type"] == "course_ready"
-    assert body["notification"]["title"]
-    assert body["notification"]["createdAt"] == "2026-11-11T12:20:00.000Z"
-    assert body["created"] is True
-    assert body["deliveries"]
-    assert body["digest"]["heldMaxPerDay"] == 5
-
-
 async def test_the_generation_demo_produces_the_producers_and_the_reminder(
     app: tuple[Any, Any], database: Database, monkeypatch: pytest.MonkeyPatch
 ) -> None:
@@ -168,61 +130,9 @@ async def test_the_generation_demo_honours_the_requested_types(
     assert body["reminder"] is None
 
 
-async def test_the_push_demo_sends_to_the_mock_subscription(
-    app: tuple[Any, Any], database: Database, monkeypatch: pytest.MonkeyPatch
-) -> None:
-    _app, client = app
-    row = await seeded_profile(database)
-    user_id = str(row["id"])
-    async with database.service_tx() as tx:
-        # only the subscription of this demonstration may receive the message.
-        await tx.conn.execute(
-            text(
-                "delete from public.push_subscriptions "
-                "where user_id = cast(:user_id as uuid) or endpoint = :endpoint"
-            ),
-            {"user_id": user_id, "endpoint": MOCK_ENDPOINT},
-        )
-        await tx.conn.execute(
-            text(
-                "insert into public.push_subscriptions "
-                "(user_id, endpoint, p256dh, auth, user_agent) values "
-                "(cast(:user_id as uuid), :endpoint, :p256dh, :auth, null) "
-                "on conflict (endpoint) do nothing"
-            ),
-            {
-                "user_id": user_id,
-                "endpoint": MOCK_ENDPOINT,
-                "p256dh": "BOr0000000000000000000000000000000000000000000000000000000000",
-                "auth": "auth0000000000000000000",
-            },
-        )
-    allow_authentication(monkeypatch, user_id)
-
-    response = client.post("/api/v1/dev/sdd/push/send", headers=JSON_ACCEPT)
-
-    assert response.status_code == 201
-    body = response.json()
-    assert body["delivery"]["status"] == "sent"
-    assert body["delivery"]["sentAt"] == "2026-11-11T12:20:00.000Z"
-    assert body["payload"]["tag"] == body["notificationId"]
-    assert body["attempts"] == [
-        {"outcome": "success", "statusCode": 201, "removed": False, "failureCount": 0}
-    ]
-    assert body["remainingSubscriptions"] == 1
-
-
-@pytest.mark.parametrize(
-    "path",
-    [
-        "/api/v1/dev/sdd/notify",
-        "/api/v1/dev/sdd/notifications/generate",
-        "/api/v1/dev/sdd/push/send",
-    ],
-)
-async def test_the_guard_refuses_the_demonstration_in_production(path: str) -> None:
+async def test_the_guard_refuses_the_generation_in_production() -> None:
     _app, client = build_dev_app(ROUTE_IDS, DevDeps(), {"APP_ENV": "production", "ENABLE_SDD_PAGES": "true"})
-    response = client.post(path, json={}, headers=JSON_ACCEPT)
+    response = client.post("/api/v1/dev/sdd/notifications/generate", json={}, headers=JSON_ACCEPT)
 
     assert response.status_code == 404
     assert response.json()["detail"] == RESOURCE_NOT_FOUND

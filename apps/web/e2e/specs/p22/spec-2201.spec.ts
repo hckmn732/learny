@@ -3,7 +3,6 @@ import { expect, test } from '@learny/testing/playwright';
 import { createTestSession, deleteTestSession } from '@learny/testing/supabase';
 
 const ORIGIN = 'http://127.0.0.1:3100';
-const DEMO = '/_dev/sdd/SPEC-2201';
 
 test('sert les opérations formation basculées depuis Python @SPEC-2201', async ({ request }) => {
   const session = await createTestSession();
@@ -56,23 +55,3 @@ test('sert les opérations formation basculées depuis Python @SPEC-2201', async
   }
 });
 
-test('conformité visuelle des domaines identity et formation @SPEC-2201 @visual', async ({
-  page,
-  axeCheck,
-  captureEvidence,
-}) => {
-  await page.goto(DEMO);
-  await expect(page.getByRole('heading', { level: 1 })).toHaveText(
-    'Domaines identity et formation en Python',
-  );
-  await expect(page.getByTestId('spec-2201-flipped')).toContainText('Formation en Python');
-  await expect(page.getByTestId('spec-2201-operations')).toContainText('programme.validate');
-  await expect(page.getByTestId('spec-2201-operations')).toContainText('notionGraph.get');
-  await expect(page.getByTestId('spec-2201-deferred')).toContainText('ADR-2022');
-  await expect(page.getByTestId('spec-2201-deferred')).toContainText('ADR-2024');
-  await axeCheck();
-  await captureEvidence('spec-2201-desktop');
-  await page.setViewportSize({ width: 390, height: 844 });
-  await axeCheck();
-  await captureEvidence('spec-2201-mobile');
-});

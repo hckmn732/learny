@@ -3,6 +3,8 @@ import { describe, expect, it, vi } from 'vitest';
 import { ROUTES } from '@learny/contracts';
 
 import { ApiError, api, callApi } from './client';
+import { devEcho, devItems } from './test-routes';
+
 
 function json(body: unknown, status: number, headers: Record<string, string> = {}): Response {
   return new Response(JSON.stringify(body), {
@@ -35,11 +37,21 @@ describe('[SPEC-201] client typé', () => {
         json({ items: [{ id: 'item-57', label: 'item-57', position: 57 }], nextCursor: null }, 200),
       ),
     );
-    const page = await api.devItems({ query: { limit: 5, cursor: 'a b' } }, { fetch: fetchMock });
+    const page = await callApi(devItems, { query: { limit: 5, cursor: 'a b' } }, { fetch: fetchMock });
     expect(page.items[0]?.position).toBe(57);
     const [url, init] = fetchMock.mock.calls[0] ?? [];
     expect(url).toBe('/api/v1/dev/sdd/items?limit=5&cursor=a+b');
     expect(init).toMatchObject({ method: 'GET', credentials: 'same-origin' });
+  });
+
+  it('resolves a registry route through the api proxy', async () => {
+    const fetchMock = vi.fn<typeof fetch>(() =>
+      Promise.resolve(json({ status: 'ok' }, 200)),
+    );
+    await api.health({}, { fetch: fetchMock }).catch(() => undefined);
+    const [url, init] = fetchMock.mock.calls[0] ?? [];
+    expect(url).toBe(ROUTES.health.path);
+    expect(init).toMatchObject({ method: 'GET' });
   });
 
   it('throws an ApiError with status, code, detail, requestId and errors', async () => {
@@ -59,7 +71,7 @@ describe('[SPEC-201] client typé', () => {
         ),
       ),
     );
-    const error = await caught(api.devEcho({ body: { message: '' } }, { fetch: fetchMock }));
+    const error = await caught(callApi(devEcho, { body: { message: '' } }, { fetch: fetchMock }));
     expect(error).toMatchObject({
       status: 400,
       code: 'VALIDATION_FAILED',
@@ -70,7 +82,7 @@ describe('[SPEC-201] client typé', () => {
   });
 
   it('answers 204 with undefined', async () => {
-    const route = { ...ROUTES.devItems, output: null, successStatus: 204 as const };
+    const route = { ...devItems, output: null, successStatus: 204 as const };
     const fetchMock = vi.fn<typeof fetch>(() =>
       Promise.resolve(new Response(null, { status: 204 })),
     );
@@ -79,7 +91,7 @@ describe('[SPEC-201] client typé', () => {
 
   it('refuses an answer that breaks the contract', async () => {
     const fetchMock = vi.fn<typeof fetch>(() => Promise.resolve(json({ items: 'nope' }, 200)));
-    expect(await caught(api.devItems({ query: {} }, { fetch: fetchMock }))).toMatchObject({
+    expect(await caught(callApi(devItems, { query: {} }, { fetch: fetchMock }))).toMatchObject({
       code: 'INVALID_RESPONSE',
     });
   });
@@ -88,7 +100,7 @@ describe('[SPEC-201] client typé', () => {
     const fetchMock = vi.fn<typeof fetch>(() =>
       Promise.resolve(json({ message: 'hi', receivedAt: 'x', counter: 1 }, 201)),
     );
-    await api.devEcho({ body: { message: 'hi' } }, { fetch: fetchMock });
+    await callApi(devEcho, { body: { message: 'hi' } }, { fetch: fetchMock });
     const init = fetchMock.mock.calls[0]?.[1];
     const headers = init?.headers as Record<string, string>;
     expect(headers['Idempotency-Key']).toMatch(/^[0-9a-f-]{36}$/);
@@ -100,7 +112,7 @@ describe('[SPEC-201] client typé', () => {
     const fetchMock = vi.fn<typeof fetch>(() =>
       Promise.resolve(json({ items: [], nextCursor: null }, 200)),
     );
-    await api.devItems({ query: {} }, { fetch: fetchMock });
+    await callApi(devItems, { query: {} }, { fetch: fetchMock });
     const headers = fetchMock.mock.calls[0]?.[1]?.headers as Record<string, string>;
     expect(headers['Idempotency-Key']).toBeUndefined();
   });
@@ -110,7 +122,7 @@ describe('[SPEC-201] client typé', () => {
       .fn<typeof fetch>()
       .mockRejectedValueOnce(new TypeError('network down'))
       .mockResolvedValueOnce(json({ message: 'hi', receivedAt: 'x', counter: 1 }, 201));
-    const result = await api.devEcho({ body: { message: 'hi' } }, { fetch: fetchMock });
+    const result = await callApi(devEcho, { body: { message: 'hi' } }, { fetch: fetchMock });
     expect(result.counter).toBe(1);
     expect(fetchMock).toHaveBeenCalledTimes(2);
     const keys = fetchMock.mock.calls.map(
@@ -121,14 +133,14 @@ describe('[SPEC-201] client typé', () => {
 
   it('reports NETWORK_ERROR with status 0 once the retries are exhausted', async () => {
     const fetchMock = vi.fn<typeof fetch>(() => Promise.reject(new TypeError('down')));
-    const error = await caught(api.devEcho({ body: { message: 'hi' } }, { fetch: fetchMock }));
+    const error = await caught(callApi(devEcho, { body: { message: 'hi' } }, { fetch: fetchMock }));
     expect(error).toMatchObject({ status: 0, code: 'NETWORK_ERROR' });
     expect(fetchMock).toHaveBeenCalledTimes(3);
   });
 
   it('never retries a read on a network failure', async () => {
     const fetchMock = vi.fn<typeof fetch>(() => Promise.reject(new TypeError('down')));
-    await caught(api.devItems({ query: {} }, { fetch: fetchMock }));
+    await caught(callApi(devItems, { query: {} }, { fetch: fetchMock }));
     expect(fetchMock).toHaveBeenCalledTimes(1);
   });
 
@@ -136,7 +148,7 @@ describe('[SPEC-201] client typé', () => {
     const fetchMock = vi.fn<typeof fetch>(() =>
       Promise.resolve(json({ message: 'hi', receivedAt: 'x', counter: 1 }, 201)),
     );
-    await api.devEcho(
+    await callApi(devEcho, 
       { body: { message: 'hi' } },
       { fetch: fetchMock, idempotencyKey: 'my-fixed-key-1' },
     );

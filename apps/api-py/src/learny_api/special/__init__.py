@@ -19,7 +19,7 @@ from starlette.responses import Response
 from learny_api import pipeline
 from learny_api.generated.routes import ROUTES_BY_ID, RouteSpec
 from learny_api.pipeline import PipelineContext, special_path
-from learny_api.special import auth_callback, relay_stream, sdd_tools
+from learny_api.special import auth_callback
 from learny_api.special.guards import dev_routes_enabled, not_found_problem, sdd_pages_enabled
 
 if TYPE_CHECKING:
@@ -29,31 +29,14 @@ if TYPE_CHECKING:
 # development guard of `devRoute` wraps their pipeline, so they are installed here, not by
 # `pipeline.install`.
 DEVELOPMENT_ROUTE_IDS: tuple[str, ...] = (
-    "dev.cron.hourlyTick",
-    "dev.echo",
     "dev.email.outbox",
     "dev.email.outbox.purge",
-    "dev.email.preview",
-    "dev.email.send",
     "dev.events.demo.run",
     "dev.events.demo.start",
-    "dev.events.outbox",
-    "dev.items",
     "dev.notificationsGenerate",
-    "dev.notify",
-    "dev.personal-data.deletion.cancel",
-    "dev.personal-data.deletion.schedule",
-    "dev.personal-data.execute",
-    "dev.personal-data.export",
-    "dev.pushSend",
-    "dev.rateLimit.burst",
-    "dev.rateLimit.origin",
-    "dev.rateLimit.purge",
     "dev.stripe.checkoutCancel",
     "dev.stripe.checkoutPay",
-    "dev.stripe.events",
     "dev.stripe.simulate",
-    "dev.uploadSimulation",
 )
 
 # SPEC-2207 - the special routes of the inventory that traverse the whole pipeline without a
@@ -66,8 +49,6 @@ def install(app: FastAPI, context: PipelineContext, ownership: "Ownership") -> l
     """Registers every `py`-owned special route; returns the installed route ids and keys."""
     installed = _install_guarded_developments(app, context, ownership)
     installed += _install_ungated(app, context, ownership)
-    installed += sdd_tools.install(app, context, ownership)
-    installed += relay_stream.install(app, context, ownership)
     installed += auth_callback.install(app, context, ownership)
     return installed
 

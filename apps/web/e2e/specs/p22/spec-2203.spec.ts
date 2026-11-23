@@ -8,7 +8,6 @@ import { expect, test } from '@learny/testing/playwright';
 import { createTestSession, deleteTestSession } from '@learny/testing/supabase';
 
 const DEFAULT_ORIGIN = 'http://127.0.0.1:3100';
-const DEMO = '/_dev/sdd/SPEC-2203';
 // A syntactically valid identifier that exists for nobody: the response must not reveal whether a
 // row exists, and an entry of another learner answers exactly the same way.
 const ABSENT_ID = '00000000-0000-4000-8000-000000000000';
@@ -185,35 +184,3 @@ test('sert les opérations content depuis Python @SPEC-2203', async ({ request, 
   }
 });
 
-test('conformité visuelle du domaine contenu, recherche et ingestion @SPEC-2203 @visual', async ({
-  page,
-  axeCheck,
-  captureEvidence,
-}) => {
-  await page.goto(DEMO);
-  await expect(page.getByRole('heading', { level: 1 })).toHaveText(
-    'Domaine contenu, recherche et ingestion en Python',
-  );
-  await expect(page.getByTestId('spec-2203-scope')).toContainText('Opérations du périmètre');
-  await expect(page.getByTestId('spec-2203-scope')).toContainText('18');
-  await expect(page.getByTestId('spec-2203-scope')).toContainText('Servies par Python');
-  await expect(page.getByTestId('spec-2203-scope')).toContainText('Encore relayées à Hono');
-  await expect(page.getByTestId('spec-2203-operations').locator('li')).toHaveCount(18);
-  await expect(page.getByTestId('spec-2203-operations')).toContainText('modules.screen');
-  await expect(page.getByTestId('spec-2203-ingestion')).toContainText('note');
-  await expect(page.getByTestId('spec-2203-ingestion')).toContainText('youtube');
-  await expect(page.getByTestId('spec-2203-ingestion')).toContainText('safe_fetch');
-  await expect(page.getByTestId('spec-2203-ingestion')).toContainText('process_resource');
-  await expect(page.getByTestId('spec-2203-retrieval')).toContainText('search_user_content');
-  await expect(page.getByTestId('spec-2203-retrieval')).toContainText('voyage-4-lite');
-  await expect(page.getByTestId('spec-2203-retrieval')).toContainText('Tavily');
-  await expect(page.getByTestId('spec-2203-guarantees')).toContainText('RLS');
-  await expect(page.getByTestId('spec-2203-guarantees')).toContainText(
-    'Un seul effet par événement',
-  );
-  await axeCheck();
-  await captureEvidence('spec-2203-desktop');
-  await page.setViewportSize({ width: 390, height: 844 });
-  await axeCheck();
-  await captureEvidence('spec-2203-mobile');
-});

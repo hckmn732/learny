@@ -12,8 +12,7 @@ import { bricksImplementations } from './implementations/bricks';
 import { cadrageImplementations } from './implementations/cadrage';
 import { courseImplementations } from './implementations/course';
 import { courseReadingImplementations } from './implementations/course-reading';
-import { devImplementations } from './implementations/dev';
-import { devSddImplementations } from './implementations/dev-sdd';
+import { devStripeSessionImplementations } from './implementations/dev-stripe-session';
 import { emailImplementations } from './implementations/email';
 import { exercisesImplementations } from './implementations/exercises';
 import { finalReviewImplementations } from './implementations/final-review';
@@ -58,8 +57,7 @@ export const ROUTE_IMPLEMENTATIONS = {
   ...resourcesImplementations,
   ...uploadsImplementations,
   ...courseReadingImplementations,
-  ...devImplementations,
-  ...devSddImplementations,
+  ...devStripeSessionImplementations,
   ...tutorChatImplementations,
   ...emailImplementations,
   ...exercisesImplementations,

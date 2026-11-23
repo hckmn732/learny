@@ -3,7 +3,6 @@ import { expect, test } from '@learny/testing/playwright';
 import { createTestSession, deleteTestSession } from '@learny/testing/supabase';
 
 const DEFAULT_ORIGIN = 'http://127.0.0.1:3100';
-const DEMO = '/_dev/sdd/SPEC-2202';
 // A syntactically valid identifier that exists for nobody: the response must not reveal whether a
 // row exists (CL-1), and the entry is still answered once (CL-2).
 const ABSENT_ID = '00000000-0000-4000-8000-000000000000';
@@ -100,32 +99,3 @@ test('sert les opérations learning et assessments depuis Python @SPEC-2202', as
   }
 });
 
-test('conformité visuelle des domaines learning et assessments @SPEC-2202 @visual', async ({
-  page,
-  axeCheck,
-  captureEvidence,
-}) => {
-  await page.goto(DEMO);
-  await expect(page.getByRole('heading', { level: 1 })).toHaveText(
-    'Domaines learning et assessments en Python',
-  );
-  await expect(page.getByTestId('spec-2202-scope')).toContainText('Learning en Python');
-  await expect(page.getByTestId('spec-2202-scope')).toContainText('Assessments en Python');
-  await expect(page.getByTestId('spec-2202-scope')).toContainText('41');
-  await expect(page.getByTestId('spec-2202-scope')).toContainText('Encore relayées à Hono');
-  await expect(page.getByTestId('spec-2202-operations').locator('li')).toHaveCount(41);
-  await expect(page.getByTestId('spec-2202-operations')).toContainText('offline.sync');
-  await expect(page.getByTestId('spec-2202-engine')).toContainText('FSRS 5.4.2');
-  await expect(page.getByTestId('spec-2202-engine')).toContainText('Planificateur');
-  await expect(page.getByTestId('spec-2202-guarantees')).toContainText('Parité contractuelle');
-  await expect(page.getByTestId('spec-2202-guarantees')).toContainText(
-    'Un seul effet par événement',
-  );
-  await expect(page.getByTestId('spec-2202-debts')).toContainText('module-unlock');
-  await expect(page.getByTestId('spec-2202-debts')).toContainText('SPEC-2207');
-  await axeCheck();
-  await captureEvidence('spec-2202-desktop');
-  await page.setViewportSize({ width: 390, height: 844 });
-  await axeCheck();
-  await captureEvidence('spec-2202-mobile');
-});

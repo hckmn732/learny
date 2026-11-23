@@ -112,7 +112,7 @@ describe('[SPEC-2002] exported contract', () => {
     expect(result.valid).toBe(true);
   });
 
-  it('describes the 217 operations with the x-learny policy and named schemas (CA-1)', () => {
+  it('describes the 156 operations with the x-learny policy and named schemas (CA-1)', () => {
     const document = loadDocument(OPENAPI) as {
       paths: Record<string, Record<string, { 'x-learny'?: { id: string } }>>;
       components: { schemas: Record<string, unknown> };
@@ -127,8 +127,8 @@ describe('[SPEC-2002] exported contract', () => {
         if (operation['x-learny']?.id !== undefined) withPolicy += 1;
       }
     }
-    expect(operations).toBe(217);
-    expect(withPolicy).toBe(217);
+    expect(operations).toBe(156);
+    expect(withPolicy).toBe(156);
     for (const name of ['AgendaGetOutput', 'AgendaGetQuery', 'AuthSignInBody']) {
       expect(document.components.schemas[name], name).toBeDefined();
     }
