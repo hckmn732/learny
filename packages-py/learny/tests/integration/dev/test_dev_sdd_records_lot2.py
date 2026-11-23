@@ -184,6 +184,8 @@ async def test_the_seed_page_measures_the_demonstration_dataset(database: Databa
             "agenda.days",
             "notifications.unread",
         ]
+        # CA-1 - every count of the seeded dataset matches the fixture (48 SAP notions, ...).
+        assert [check["key"] for check in body["checks"] if not check["ok"]] == []
     else:
         assert body == {
             "present": False,

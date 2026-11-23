@@ -41,13 +41,14 @@ def build(app_env: str = "test") -> tuple[Any, Any]:
     return build_dev_app((), DevDeps(settings=settings(app_env)), ENABLED, pipeline_ids=ROUTE_IDS)
 
 
-async def test_the_job_page_shows_the_demo_consumer() -> None:
+async def test_the_job_page_shows_the_job_of_the_shared_registry() -> None:
+    # SPEC-007: the TypeScript registry identifier, not the name of the Python consumer.
     _app, client = build()
 
     response = client.get(PATHS["dev.sdd.spec-007.demo"], headers=JSON_ACCEPT)
 
     assert response.status_code == 200
-    assert response.json() == {"ids": "devtools.demo_job", "retries": 3}
+    assert response.json() == {"ids": "sdd-demo-job", "retries": 3}
 
 
 async def test_the_coverage_page_lists_the_special_handlers() -> None:

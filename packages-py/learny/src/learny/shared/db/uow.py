@@ -4,13 +4,17 @@ A transaction is bound to one connection. For a user transaction the Supabase JW
 locally, so the row-level security policies see the same `auth.uid()` as the TypeScript backend,
 then the connection switches to the `authenticated` role. A service transaction keeps the owner
 role and bypasses RLS; its callers are restricted by `privileged.PRIVILEGED_CALLERS`.
+
+`collect_committed_events` lets the API run the consumers of the events a request committed before
+it answers (`JOBS_MODE=inline`, tests only), like `withTransaction` of `packages/jobs` does.
 """
 
 import hashlib
 import json
 import uuid
-from collections.abc import AsyncIterator, Mapping
-from contextlib import asynccontextmanager
+from collections.abc import AsyncIterator, Iterator, Mapping
+from contextlib import asynccontextmanager, contextmanager
+from contextvars import ContextVar
 from dataclasses import dataclass, field
 from typing import Any
 
@@ -29,6 +33,26 @@ ENQUEUE_EVENT = text(
     "select public.enqueue_event("
     "cast(:event_id as text), cast(:name as text), cast(:data as jsonb), cast(:user_id as uuid))"
 )
+
+# The identifiers of the events committed while a collector is active (none outside inline mode).
+_COMMITTED_EVENTS: ContextVar[list[str] | None] = ContextVar("learny_committed_events", default=None)
+
+
+@contextmanager
+def collect_committed_events() -> Iterator[list[str]]:
+    """Collects the identifiers of the events written by the transactions that commit inside."""
+    collected: list[str] = []
+    token = _COMMITTED_EVENTS.set(collected)
+    try:
+        yield collected
+    finally:
+        _COMMITTED_EVENTS.reset(token)
+
+
+def _committed(tx: "Tx") -> None:
+    collected = _COMMITTED_EVENTS.get()
+    if collected is not None:
+        collected.extend(tx.events)
 
 
 def claims_json(actor: Actor) -> str:
@@ -115,13 +139,17 @@ class Database:
                 {"claims": claims_json(actor), "sub": actor.user_id},
             )
             await connection.execute(text("set local role authenticated"))
-            yield Tx(conn=connection, actor=actor)
+            tx = Tx(conn=connection, actor=actor)
+            yield tx
+        _committed(tx)
 
     @asynccontextmanager
     async def service_tx(self) -> AsyncIterator[Tx]:
         """Transaction as the owner role, bypassing RLS (restricted callers)."""
         async with self._engine.begin() as connection:
-            yield Tx(conn=connection, actor=None)
+            tx = Tx(conn=connection, actor=None)
+            yield tx
+        _committed(tx)
 
     @property
     def engine(self) -> AsyncEngine:

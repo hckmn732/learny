@@ -19,6 +19,7 @@ from learny_api import handlers, pipeline, relay, special  # noqa: F401 - handle
 from learny_api.contract_files import api_dir
 from learny_api.contract_files import inventory_file as _inventory_file
 from learny_api.contract_files import ownership_file as _ownership_file
+from learny_api.inline_jobs import InlineJobsMiddleware, inline_jobs_options
 from learny_api.ownership import (
     Ownership,
     apply_overrides,
@@ -93,6 +94,10 @@ def create_app(
     app.state.settings = resolved
     app.state.ownership = resolved_ownership
     app.state.pipeline = resolved_context
+    # Tests only: the events a request commits run before it answers (JOBS_MODE=inline).
+    inline_jobs = inline_jobs_options(resolved, resolved_context.deps, resolved_ownership)
+    if inline_jobs is not None:
+        app.add_middleware(InlineJobsMiddleware, **inline_jobs)
 
     # Special routes first: a development route must refuse before any authentication, and the
     # catch-all relay below only sees what is still `ts` (SPEC-2207).

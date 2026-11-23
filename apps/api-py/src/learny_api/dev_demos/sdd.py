@@ -44,8 +44,10 @@ async def stripe_session(call: Call) -> dict[str, Any]:
     return {"sessionId": str(session_id) if session is not None and session.status == "open" else None}
 
 
-# The demonstration job of the worker (SPEC-203): the page shows it and its retry budget.
-DEMO_JOB_ID = "devtools.demo_job"
+# The demonstration job of the worker (SPEC-203): the page shows it and its retry budget. The page
+# keeps the job identifier of the TypeScript registry (`DEMO_JOB_ID` of `@learny/jobs`), whatever the
+# name of the Python consumer that runs it (`devtools.demo_job`).
+DEMO_JOB_ID = "sdd-demo-job"
 DEMO_JOB_RETRIES = 3
 
 

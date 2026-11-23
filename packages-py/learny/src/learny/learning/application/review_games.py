@@ -141,7 +141,7 @@ def _split_matching(
 ) -> list[dict[str, Any]]:
     if correction.get("kind") != "matching":
         return _split_whole_item(context)
-    ok_by_pair = {str(pair["pairId"]): bool(pair["correct"]) for pair in correction["pairs"]}
+    ok_by_pair = {str(pair["leftId"]): bool(pair["ok"]) for pair in correction["pairs"]}
     pairs = list(payload.get("pairs") or [])
     pair_notions = [str(pair["notionId"]) for pair in pairs]
     results: list[dict[str, Any]] = []

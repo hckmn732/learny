@@ -215,6 +215,9 @@ export default defineConfig({
         // SPEC-2207: the demonstration routes are served by the Python facade, so it needs the
         // same development flag as the web and Hono or `devOnly` answers 404 to every page.
         ENABLE_SDD_PAGES: 'true',
+        // P21 plan step 6: the facade runs the consumers of the events a request commits before it
+        // answers, as Hono's inline jobs did; the worker still runs the crons and anything else.
+        JOBS_MODE: 'inline',
       },
     },
     {
