@@ -6,10 +6,8 @@ fallback for everything else.
 """
 
 import json
-import os
 from collections.abc import AsyncIterator
 from contextlib import asynccontextmanager
-from pathlib import Path
 
 from fastapi import FastAPI, Request
 from learny.shared.config import Settings
@@ -17,7 +15,10 @@ from learny.shared.deps import build_deps
 from learny.shared.errors import AppError, ErrorEntry, load_catalog, to_problem
 from starlette.responses import JSONResponse, Response
 
-from learny_api import handlers, pipeline, relay  # noqa: F401 - handlers registers @handler roles
+from learny_api import handlers, pipeline, relay, special  # noqa: F401 - handlers registers roles
+from learny_api.contract_files import api_dir
+from learny_api.contract_files import inventory_file as _inventory_file
+from learny_api.contract_files import ownership_file as _ownership_file
 from learny_api.ownership import (
     Ownership,
     load_ownership,
@@ -27,30 +28,6 @@ from learny_api.ownership import (
 )
 
 CATALOG: dict[str, ErrorEntry] = {}
-ROOT = Path(__file__).resolve().parents[4]
-
-
-def _api_dir() -> Path:
-    """Directory holding the generated contract artefacts.
-
-    In a source checkout it is `<repo>/api`. In the container the library is installed in
-    site-packages, so `PY_API_DIR=/app/api` names it explicitly (SPEC-2003).
-    """
-    override = os.environ.get("PY_API_DIR")
-    if override:
-        return Path(override)
-    for candidate in (ROOT / "api", Path.cwd() / "api"):
-        if (candidate / "ownership.yaml").exists():
-            return candidate
-    return ROOT / "api"
-
-
-def _ownership_file() -> Path:
-    return _api_dir() / "ownership.yaml"
-
-
-def _inventory_file() -> Path:
-    return _api_dir() / "inventory.json"
 
 
 def _load_contract_entries() -> tuple[list[str], list[str]]:
@@ -107,7 +84,7 @@ def create_app(
     """
     resolved = settings or Settings()
     global CATALOG
-    CATALOG = load_catalog(_api_dir() / "errors.json")
+    CATALOG = load_catalog(api_dir() / "errors.json")
     resolved_ownership = ownership or load_ownership_checked(resolved)
     resolved_context = context or pipeline.build_context(build_deps(resolved), resolved, CATALOG)
 
@@ -123,7 +100,9 @@ def create_app(
     app.state.ownership = resolved_ownership
     app.state.pipeline = resolved_context
 
-    # Python-owned operations first: the catch-all relay below only sees what is still `ts`.
+    # Special routes first: a development route must refuse before any authentication, and the
+    # catch-all relay below only sees what is still `ts` (SPEC-2207).
+    special.install(app, resolved_context, resolved_ownership)
     pipeline.install(app, resolved_context, resolved_ownership)
 
     @app.api_route(

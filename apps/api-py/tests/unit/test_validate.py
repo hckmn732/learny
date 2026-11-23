@@ -9,6 +9,7 @@ from typing import Any, Literal
 
 import pytest
 from learny.shared.errors import AppError
+from learny.shared.locale_fr import engagement as push_texts
 from learny.shared.locale_fr import validation
 from learny.shared.locale_fr.details import INVALID_JSON_BODY, INVITATION_CODE_FORMAT
 from learny_api.validate import (
@@ -265,6 +266,23 @@ def test_a_blank_legal_version_is_a_validation_failure() -> None:
     problem = refinement_issue("me.legal.accept", {"cguVersion": " ", "privacyVersion": "2026-11-11"})
 
     assert problem["errors"][0]["path"] == "body.cguVersion"
+
+
+def test_push_subscription_requires_a_public_https_endpoint() -> None:
+    problem = refinement_issue(
+        "pushSubscriptions.upsert",
+        {"endpoint": "http://127.0.0.1/push", "keys": {"p256dh": "a", "auth": "b"}},
+    )
+
+    assert problem["errors"] == [{"path": "body.endpoint", "message": push_texts.PUSH_ENDPOINT_INVALID}]
+
+
+def test_a_public_push_endpoint_passes_the_refinement() -> None:
+    apply_refinement(
+        "pushSubscriptions.upsert",
+        {"endpoint": "https://fcm.googleapis.com/fcm/send/abc", "keys": {}},
+        status=400,
+    )
 
 
 def test_a_route_without_refinement_is_left_untouched() -> None:

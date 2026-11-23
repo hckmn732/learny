@@ -4,6 +4,18 @@ Other contexts and the apps import only this module; everything else stays inter
 """
 
 from learny.identity.application.ai_models import assign_task_model
+from learny.identity.application.auth import (
+    INVALID_LINK_DESTINATION,
+    NEXT_COOKIE,
+    AuthRequest,
+    complete_verification,
+    expire_cookie,
+    request_magic_link,
+    resend_link,
+    sign_in,
+    sign_out,
+    sign_up,
+)
 from learny.identity.application.authenticate import (
     AuthDeps,
     assert_fresh,
@@ -19,8 +31,17 @@ from learny.identity.application.onboarding import advance_onboarding, get_onboa
 from learny.identity.application.ports import IdentityDeps
 from learny.identity.application.preferences import get_preferences, update_preferences
 from learny.identity.application.profile import get_settings_state, update_settings_profile
+from learny.identity.application.purge_security import purge_rows_in_tx, purge_security_rows
 from learny.identity.application.sidebar import get_sidebar, read_sidebar, update_sidebar
 from learny.identity.domain.actor import Actor, Transport
+from learny.identity.domain.destination import (
+    DEFAULT_DESTINATION,
+    PROFILE_DELETION_DESTINATION,
+    is_safe_next_path,
+    onboarding_destination,
+    resolve_post_auth_destination,
+)
+from learny.identity.infrastructure.auth_cookies import is_local_host
 from learny.identity.infrastructure.gotrue import (
     GoTrueClient,
     GoTrueError,
@@ -32,8 +53,13 @@ from learny.identity.infrastructure.jwt import JwtVerifier
 from learny.identity.infrastructure.supabase_cookies import access_token_from_cookies
 
 __all__ = [
+    "DEFAULT_DESTINATION",
+    "INVALID_LINK_DESTINATION",
+    "NEXT_COOKIE",
+    "PROFILE_DELETION_DESTINATION",
     "Actor",
     "AuthDeps",
+    "AuthRequest",
     "GoTrueClient",
     "GoTrueError",
     "GoTrueSession",
@@ -49,17 +75,30 @@ __all__ = [
     "assign_task_model",
     "authenticate",
     "bearer_token",
+    "complete_verification",
     "expected_versions",
+    "expire_cookie",
     "get_me",
     "get_onboarding_state",
     "get_preferences",
     "get_settings_state",
     "get_sidebar",
     "is_legal_exempt",
+    "is_local_host",
+    "is_safe_next_path",
     "map_gotrue_error",
+    "onboarding_destination",
     "parse_cookie_header",
+    "purge_rows_in_tx",
+    "purge_security_rows",
     "read_me",
     "read_sidebar",
+    "request_magic_link",
+    "resend_link",
+    "resolve_post_auth_destination",
+    "sign_in",
+    "sign_out",
+    "sign_up",
     "update_preferences",
     "update_profile",
     "update_settings_profile",

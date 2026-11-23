@@ -13,10 +13,30 @@ PRIVILEGED_CALLERS: Final = MappingProxyType(
     {
         # The unit of work itself defines `service_tx`; it holds no business call.
         "learny.shared.db.uow": "defines the service transaction",
+        # SPEC-2207 - the demonstration pipeline writes synthetic runs of `sdd_demo_runs`, a
+        # table without policy for learners (SPEC-203 ET-7, ADR-2014).
+        "learny.shared.devtools": "synthetic demonstration runs of the pipeline",
         # `rate_limits` has no policy for learners (SPEC-208 ET-4).
         "learny_api.guards.rate_limit": "token buckets of the request pipeline",
         # `idempotency_keys` is a service-only table (SPEC-112 EF-3, ADR-0120).
         "learny_api.guards.idempotency": "idempotency reservations and replays",
+        # SPEC-2207 - the personal-data demonstration seeds a programme, schedules the deletion
+        # of a throwaway account and creates its own export row with the owner role (EF-9).
+        "learny_api.dev_demos.personal_data": "demo programme, throwaway deletion and export row",
+        # SPEC-2207 - the notification demonstration simulates settings and tone then restores
+        # them, and the push demonstration writes the notification row of the caller (EF-8).
+        "learny_api.dev_demos.notifications": "simulated settings and tone of the demonstration",
+        "learny_api.dev_demos.push": "notification row of the push demonstration",
+        # SPEC-2207 - the rate-limit demonstration owns synthetic buckets and rows it deletes.
+        # SPEC-2207 - the SDD demonstration pages build their fixture in a transaction that is
+        # always rolled back and read the seeded account of the credential page (EF-9).
+        "learny_api.dev_demos.sdd_state": "rolled-back demo fixtures and the seeded account",
+        # SPEC-2207 - the action pages call the real use cases on the seeded account and read
+        # the throwaway account of the qualification run with the owner role.
+        "learny_api.dev_demos.sdd_actions": "seeded demo account and throwaway qualification user",
+        "learny_api.special.dev_rate_limit": "synthetic buckets and rows of the demonstration",
+        # SPEC-2207 - the jobs demonstration reads the factory users and the outbox counts.
+        "learny_api.special.dev_events": "factory users and outbox counts of the demonstration",
         # The smoothing journal of the daily quiz is an automation proposal (SPEC-718 ET-4).
         "learny.learning.application.review": "quiz smoothing automation journal row",
         # Storage objects and export archives are signed or written with the service role.
@@ -58,6 +78,9 @@ PRIVILEGED_CALLERS: Final = MappingProxyType(
         # SPEC-2205 - the hourly tick expires the pending actions of every learner, on rows the
         # authenticated role of one learner may not update (CL-3, SPEC-711).
         "learny.engagement.application.automations": "hourly tick expires the pending actions",
+        # SPEC-2207 - the local-tick fan-out reads the profiles of every active learner with the
+        # owner role, exactly like the TypeScript `ctx.sdb` of `cron-hourly-tick` (SPEC-203 ET-5).
+        "learny.engagement.application.local_ticks": "hourly fan-out of the local ticks",
         # SPEC-2205 - the pause journals its own action with the service role, exactly like the
         # TypeScript `recordPauseAction` (the RLS policy reserves inserts to that role).
         "learny.engagement.application.pause": "pause journal row written after the commit",
@@ -81,6 +104,32 @@ PRIVILEGED_CALLERS: Final = MappingProxyType(
         "learny_worker.dispatcher": "outbox fan-out into job deliveries",
         "learny_worker.runner": "claims, completion and backoff of the deliveries",
         "learny_worker.scheduler": "cron ticks written to the outbox",
+        # SPEC-2207 - the planner of the daily digests writes one `job/daily-digest` per due
+        # learner in a service transaction, like the TypeScript `step.sendEvent` of the job.
+        "learny_worker.consumers": "internal job/daily-digest events of the planned digests",
         "learny_worker.health": "readiness probe of the worker",
+        # SPEC-2207 - the nightly cleanup deletes the delivered rows of every learner, which the
+        # authenticated role of one learner may not do (SPEC-203 ET-6, ADR-0122).
+        "learny.shared.outbox.purge": "nightly cleanup of the delivered outbox rows",
+        # SPEC-2207 - the hourly purge deletes the expired security rows of the whole instance;
+        # `rate_limits` and `idempotency_keys` are service-only tables (SPEC-208 EF-7, ADR-0258).
+        "learny.identity.application.purge_security": "hourly purge of the expired security rows",
+        # SPEC-2207 - the first verification reads `auth.users` and writes the legal acceptances
+        # and the terms of the account with the owner role, exactly like `serviceDb()` in
+        # `packages/services/src/auth/finalize.ts` (SPEC-202 EF-10, ET-4).
+        "learny.identity.application.auth": "legal acceptances of the first verification",
+        # SPEC-2207 - the nightly purge deletes the receipts of every learner, which the
+        # authenticated role of one learner may not do (SPEC-801 ET-6, ADR-0200).
+        "learny.assessments.application.offline_purge": "nightly purge of the offline receipts",
+        # SPEC-2207 - the initial planning writes the slots of the formation owner after the
+        # programme validation, exactly like the TypeScript `ctx.sdb` of the job (SPEC-605 EF-4).
+        "learny.learning.application.plan_programme": "initial planning of a validated programme",
+        # SPEC-2207 - the unlock writes the `module_validated` milestone, a system-managed row
+        # read-only for the authenticated role (SPEC-408 policy, SPEC-612 EF-7).
+        "learny.formation.application.unlock_module": "module validation milestone row",
+        # SPEC-2207 - the bank jobs read and write the jobs, the bricks and their versions with
+        # the owner role, exactly like the TypeScript `store: ctx.sdb.transaction` of the job
+        # (SPEC-513 ET-2).
+        "learny.tutor.application.question_bank": "question bank jobs, bricks and versions",
     }
 )

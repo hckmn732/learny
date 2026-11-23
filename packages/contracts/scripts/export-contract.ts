@@ -4,7 +4,7 @@
 //   - `api/openapi.yaml`      OpenAPI 3.1 with `x-learny` policy per operation and named component
 //                             schemas (`<RouteIdPascal>Params|Query|Body|Output`);
 //   - `api/errors.json`       error catalog (`code -> {status, title, type}`);
-//   - `api/events.schema.json` the 49 outbox event payloads.
+//   - `api/events.schema.json` the outbox event payloads.
 //
 // `--check` regenerates in memory and exits 1 on any drift (EF-3, CL-2).
 import { mkdirSync, readFileSync, writeFileSync } from 'node:fs';

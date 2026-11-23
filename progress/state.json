@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-11-22T16:46:23.103Z",
+  "updatedAt": "2026-11-23T00:10:15.730Z",
   "specs": {
     "SPEC-001": {
       "status": "done",
@@ -7176,14 +7176,55 @@
       "validations": {}
     },
     "SPEC-2207": {
-      "status": "pending",
+      "status": "done",
       "attempts": 0,
-      "startedAt": null,
-      "completedAt": null,
-      "branch": null,
-      "commit": null,
+      "startedAt": "2026-11-22T17:52:00.000Z",
+      "completedAt": "2026-11-23T00:10:15.725Z",
+      "branch": "spec/SPEC-2207-bascule-jobs-crons-demos",
+      "commit": "226eea68",
       "lastError": null,
-      "validations": {}
+      "validations": {
+        "lint": {
+          "status": "passed",
+          "at": "2026-11-23T00:01:07.109Z",
+          "details": ""
+        },
+        "typecheck": {
+          "status": "passed",
+          "at": "2026-11-23T00:01:22.630Z",
+          "details": ""
+        },
+        "build": {
+          "status": "passed",
+          "at": "2026-11-22T23:51:11.095Z",
+          "details": ""
+        },
+        "unit": {
+          "status": "passed",
+          "at": "2026-11-22T23:53:14.953Z",
+          "details": "0 test(s) réussi(s), 0 échec(s) ; pytest : 207 réussi(s), 0 échec(s)"
+        },
+        "integration": {
+          "status": "passed",
+          "at": "2026-11-22T23:59:50.593Z",
+          "details": "0 test(s) réussi(s), 0 échec(s) ; pytest : 162 réussi(s), 0 échec(s)"
+        },
+        "e2e": {
+          "status": "passed",
+          "at": "2026-11-23T00:02:41.077Z",
+          "details": "2 réussi(s), 0 échec(s), 4 vidéo(s)"
+        },
+        "visual": {
+          "status": "passed",
+          "at": "2026-11-23T00:02:41.078Z",
+          "details": "1 test(s) @visual réussi(s) (mode demo)"
+        },
+        "acceptance": {
+          "status": "passed",
+          "at": "2026-11-23T00:02:41.105Z",
+          "details": "3/3 critères ✅"
+        }
+      }
     }
   },
   "checkpoints": {

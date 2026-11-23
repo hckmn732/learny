@@ -465,6 +465,17 @@ ARCHIVE_FORMATION = text(
     """
 )
 
+RESUME_FORMATION = text(
+    """
+    update public.formations
+       set status = 'active',
+           paused_at = null,
+           updated_at = cast(:now as timestamptz)
+     where id = cast(:formation_id as uuid)
+       and owner_id = cast(:user_id as uuid)
+    """
+)
+
 CANCEL_FUTURE_SLOTS = text(
     """
     update public.schedule_slots
@@ -522,6 +533,15 @@ SET_CURRENT_FORMATION = text(
     update public.profiles
        set current_formation_id = cast(:formation_id as uuid)
      where id = cast(:user_id as uuid)
+    """
+)
+
+SET_CURRENT_FORMATION_IF_NULL = text(
+    """
+    update public.profiles
+       set current_formation_id = cast(:formation_id as uuid)
+     where id = cast(:user_id as uuid)
+       and current_formation_id is null
     """
 )
 
@@ -628,6 +648,11 @@ async def archive_formation(tx: Tx, user_id: str, formation_id: str, now: dateti
     await tx.conn.execute(ARCHIVE_FORMATION, {"user_id": user_id, "formation_id": formation_id, "now": now})
 
 
+async def resume_formation(tx: Tx, user_id: str, formation_id: str, now: datetime) -> None:
+    """One transition of the resume: the formation becomes active and loses its pause date."""
+    await tx.conn.execute(RESUME_FORMATION, {"user_id": user_id, "formation_id": formation_id, "now": now})
+
+
 async def cancel_future_slots(tx: Tx, user_id: str, formation_id: str, now: datetime) -> None:
     """ADR-0016 - a pause freezes every future planned slot; started slots stay readable."""
     await tx.conn.execute(CANCEL_FUTURE_SLOTS, {"user_id": user_id, "formation_id": formation_id, "now": now})
@@ -664,6 +689,11 @@ async def read_formation_status(tx: Tx, user_id: str, formation_id: str) -> str 
 async def set_current_formation(tx: Tx, user_id: str, formation_id: str) -> None:
     """ADR-0075 - the current formation is stored server-side, never in the browser."""
     await tx.conn.execute(SET_CURRENT_FORMATION, {"user_id": user_id, "formation_id": formation_id})
+
+
+async def set_current_formation_if_null(tx: Tx, user_id: str, formation_id: str) -> None:
+    """A resume fills the current formation only when the learner has none (SPEC-618 EF-2)."""
+    await tx.conn.execute(SET_CURRENT_FORMATION_IF_NULL, {"user_id": user_id, "formation_id": formation_id})
 
 
 # --------------------------------------------------------------------------------------------------

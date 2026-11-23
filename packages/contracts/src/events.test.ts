@@ -156,13 +156,14 @@ const VALID: Record<EventName, Record<string, unknown>> = {
     localDate: DAY,
     localWeekday: 3,
   },
+  'job/daily-digest': { userId: U1, at: AT },
   'sdd/demo-requested': { runId: U1, failOnceAt: 'step-2' },
 };
 
 describe('[SPEC-203] catalogue des événements', () => {
   it('décrit un exemple valide pour chacun des événements du catalogue', () => {
     expect(Object.keys(VALID).sort()).toEqual([...EVENT_NAMES_LIST].sort());
-    expect(EVENT_NAMES_LIST).toHaveLength(49);
+    expect(EVENT_NAMES_LIST).toHaveLength(50);
   });
 
   it.each(EVENT_NAMES_LIST)('%s accepte son exemple valide', (name) => {

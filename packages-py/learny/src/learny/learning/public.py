@@ -16,12 +16,15 @@ from learny.learning.application.final_review import (
     set_maintenance,
 )
 from learny.learning.application.gaps import course_target, list_gaps, training_target
+from learny.learning.application.plan_programme import plan_programme
 from learny.learning.application.planning import (
     apply_replan,
     get_replan_options,
     get_slot_alternatives,
     move_slot,
     reconcile_plan_slots,
+    replan_formation_in_tx,
+    replan_user_in_tx,
     slot_version_of,
 )
 from learny.learning.application.ports import (
@@ -71,9 +74,12 @@ __all__ = [
     "move_slot",
     "next_milestone_of",
     "plan_notion_reviews",
+    "plan_programme",
     "previous_state_of",
     "reconcile_milestones",
     "reconcile_plan_slots",
+    "replan_formation_in_tx",
+    "replan_user_in_tx",
     "set_maintenance",
     "slot_href",
     "slot_label",

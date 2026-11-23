@@ -168,9 +168,10 @@ async def test_an_invalid_bearer_never_falls_back_to_the_cookie() -> None:
     assert verifier.calls == [("invalid", "bearer")]
 
 
-async def test_a_cookie_refused_by_the_auth_server_is_unauthenticated() -> None:
-    with pytest.raises(AppError, match="UNAUTHENTICATED"):
-        await authenticate(deps(), {"cookie": f"{BASE}={cookie_value('stale-token')}"})
+async def test_a_cookie_refused_by_the_auth_server_is_anonymous() -> None:
+    # `supabaseSessionResolver` answers `null` on a refused session: a public route still runs
+    # (the sign-out of CL-10) and a protected one answers its own 401.
+    assert await authenticate(deps(), {"cookie": f"{BASE}={cookie_value('stale-token')}"}) is None
 
 
 async def test_an_unavailable_jwks_falls_back_to_the_auth_server() -> None:

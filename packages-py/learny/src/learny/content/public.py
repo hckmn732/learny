@@ -6,6 +6,7 @@ Other contexts and the apps import only this module; everything else stays inter
 from learny.content.application.chapters import chapter_counts, complete_chapter
 from learny.content.application.citations import get_citation_source
 from learny.content.application.course import get_module_course
+from learny.content.application.dev_uploads import simulate_upload
 from learny.content.application.generate import generate_course_now
 from learny.content.application.ingestion import (
     IngestionPorts,
@@ -93,6 +94,7 @@ __all__ = [
     "report_course_section",
     "retry_resource",
     "select_context",
+    "simulate_upload",
     "submit_chapter_summary",
     "suspend_bricks_for_notions",
     "text_overlap_ratio",

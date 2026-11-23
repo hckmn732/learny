@@ -22,10 +22,15 @@ class Settings(BaseSettings):
     app_env: str = "local"
     # The facade relays every operation to Hono until the ownership table flips an entry.
     py_hono_upstream_url: str = "http://127.0.0.1:3102"
+    # Raw value of the development guard (SPEC-201 ET-7): only "true" and "1" open the routes.
+    enable_sdd_pages: str | None = None
     ownership_overrides: str | None = None
     sentry_dsn: str | None = None
     commit: str = "unknown"
     version: str = "dev"
+    # Build metadata of the health probe (SPEC-006 EF-1): the names the deployment already sets.
+    git_commit: str | None = None
+    app_version: str | None = None
 
     # PostgreSQL (SPEC-2101).
     database_url: str = "postgresql://postgres:postgres@127.0.0.1:54322/postgres"
@@ -97,6 +102,11 @@ class Settings(BaseSettings):
             "STRIPE_PRICE_ID": self.stripe_price_id,
             "NEXT_PUBLIC_APP_URL": self.next_public_app_url,
         }
+
+    @property
+    def database_configured(self) -> bool:
+        """`DATABASE_URL` explicitly set: without it the probe answers `not_configured`."""
+        return "database_url" in self.model_fields_set
 
     @property
     def is_test(self) -> bool:

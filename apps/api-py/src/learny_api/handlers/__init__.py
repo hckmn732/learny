@@ -6,10 +6,13 @@ must happen before `pipeline.install` registers the `py`-owned routes of `api/ow
 
 from learny_api.handlers import (
     assessments,
+    auth,
     billing,
     content,
+    dev,
     engagement,
     formation,
+    health,
     identity,
     learning,
     privacy,
@@ -18,10 +21,13 @@ from learny_api.handlers import (
 
 __all__ = [
     "assessments",
+    "auth",
     "billing",
     "content",
+    "dev",
     "engagement",
     "formation",
+    "health",
     "identity",
     "learning",
     "privacy",

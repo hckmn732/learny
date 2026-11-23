@@ -53,7 +53,7 @@ INSERT_DELIVERY = text(
     "insert into public.notification_deliveries "
     "(notification_id, channel, status, scheduled_for, sent_at, error) "
     "values (cast(:notification_id as uuid), cast(:channel as delivery_channel), "
-    "cast(:status as delivery_status), :scheduled_for, null, :error) "
+    "cast(:status as delivery_status), :scheduled_for, :sent_at, :error) "
     "on conflict (notification_id, channel) do nothing "
     "returning id, notification_id, channel, status, scheduled_for, sent_at, error"
 )
@@ -453,6 +453,7 @@ async def insert_delivery(
     status: str,
     scheduled_for: datetime | None,
     error: str | None,
+    sent_at: datetime | None = None,
 ) -> DeliveryRow:
     result = await tx.conn.execute(
         INSERT_DELIVERY,
@@ -461,6 +462,7 @@ async def insert_delivery(
             "channel": channel,
             "status": status,
             "scheduled_for": scheduled_for,
+            "sent_at": sent_at,
             "error": error,
         },
     )

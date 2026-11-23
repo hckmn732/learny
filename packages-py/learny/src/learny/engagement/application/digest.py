@@ -115,6 +115,26 @@ async def send_daily_digest(
     }
 
 
+async def send_daily_digest_at(
+    deps: EngagementDeps,
+    *,
+    user_id: str,
+    at: datetime,
+) -> dict[str, Any]:
+    """Job entry point of `job/daily-digest`: the profile zone is read here, then sent once.
+
+    ADR-2014 - the planning half emits this internal event instead of sleeping inside one function;
+    the payload carries `{userId, at}` only, so the zone comes from the profile. A profile deleted
+    between the plan and the send has nothing to notify: the job succeeds without a notification,
+    like `sendDailyDigest` when the profile is gone.
+    """
+    async with deps.db.service_tx() as tx:
+        time_zone = await queries.read_profile_timezone(tx, user_id)
+    if time_zone is None:
+        return {"notificationId": None, "created": False, "heldCount": 0}
+    return await send_daily_digest(deps, user_id=user_id, at=at, time_zone=time_zone)
+
+
 async def plan_daily_digests(deps: EngagementDeps, tick: datetime) -> list[dict[str, str]]:
     """The planning half of the job: the learners due in the window, and their instant."""
     plans: list[dict[str, str]] = []
@@ -173,4 +193,10 @@ async def held_block(
     }
 
 
-__all__ = ["build_digest_data", "held_block", "plan_daily_digests", "send_daily_digest"]
+__all__ = [
+    "build_digest_data",
+    "held_block",
+    "plan_daily_digests",
+    "send_daily_digest",
+    "send_daily_digest_at",
+]

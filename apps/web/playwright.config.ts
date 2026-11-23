@@ -183,6 +183,9 @@ export default defineConfig({
         ENABLE_SDD_PAGES: 'true',
         APP_ENV: 'test',
         API_PROXY_SECRET: 'learny-test-only-api-proxy-secret-value',
+        // SPEC-2207: the Python worker runs every consumer and cron of the table, so Hono no
+        // longer mounts `/api/inngest` (ADR-2014, flip procedure step 2 of the P22 plan).
+        LEARNY_API_ROLE: 'api',
         JOBS_MODE: 'inline',
         TRUST_PROXY: 'true',
       },
@@ -209,6 +212,9 @@ export default defineConfig({
         // explicitly. `STRIPE_MODE=mock` needs no key and opens no socket (`build_stripe_gateway`);
         // the webhook tolerance and the error codes are those of ADR-2031.
         STRIPE_MODE: 'mock',
+        // SPEC-2207: the demonstration routes are served by the Python facade, so it needs the
+        // same development flag as the web and Hono or `devOnly` answers 404 to every page.
+        ENABLE_SDD_PAGES: 'true',
       },
     },
     {

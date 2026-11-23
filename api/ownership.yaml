@@ -4,12 +4,12 @@
 
 operations:
   'agenda.get': py
-  'auth.callback': ts
-  'auth.magicLink': ts
-  'auth.resend': ts
-  'auth.signIn': ts
-  'auth.signOut': ts
-  'auth.signUp': ts
+  'auth.callback': py
+  'auth.magicLink': py
+  'auth.resend': py
+  'auth.signIn': py
+  'auth.signOut': py
+  'auth.signUp': py
   'billing.checkout': py
   'billing.portal': py
   'billing.subscription': py
@@ -31,60 +31,60 @@ operations:
   'courses.conversations.create': py
   'courses.conversations.list': py
   'courses.progress': py
-  'dev.cron.hourlyTick': ts
-  'dev.echo': ts
-  'dev.email.outbox': ts
-  'dev.email.outbox.purge': ts
-  'dev.email.preview': ts
-  'dev.email.send': ts
-  'dev.events.demo.run': ts
-  'dev.events.demo.start': ts
-  'dev.events.outbox': ts
-  'dev.items': ts
-  'dev.notificationsGenerate': ts
-  'dev.notify': ts
-  'dev.personal-data.deletion.cancel': ts
-  'dev.personal-data.deletion.schedule': ts
-  'dev.personal-data.execute': ts
-  'dev.personal-data.export': ts
-  'dev.pushSend': ts
-  'dev.rateLimit.burst': ts
-  'dev.rateLimit.origin': ts
-  'dev.rateLimit.purge': ts
-  'dev.sdd.spec-007.demo': ts
+  'dev.cron.hourlyTick': py
+  'dev.echo': py
+  'dev.email.outbox': py
+  'dev.email.outbox.purge': py
+  'dev.email.preview': py
+  'dev.email.send': py
+  'dev.events.demo.run': py
+  'dev.events.demo.start': py
+  'dev.events.outbox': py
+  'dev.items': py
+  'dev.notificationsGenerate': py
+  'dev.notify': py
+  'dev.personal-data.deletion.cancel': py
+  'dev.personal-data.deletion.schedule': py
+  'dev.personal-data.execute': py
+  'dev.personal-data.export': py
+  'dev.pushSend': py
+  'dev.rateLimit.burst': py
+  'dev.rateLimit.origin': py
+  'dev.rateLimit.purge': py
+  'dev.sdd.spec-007.demo': py
   'dev.sdd.spec-009.demo': ts
-  'dev.sdd.spec-1004.demo': ts
-  'dev.sdd.spec-101.demo': ts
-  'dev.sdd.spec-102.create': ts
-  'dev.sdd.spec-102.demo': ts
-  'dev.sdd.spec-102.remove': ts
+  'dev.sdd.spec-1004.demo': py
+  'dev.sdd.spec-101.demo': py
+  'dev.sdd.spec-102.create': py
+  'dev.sdd.spec-102.demo': py
+  'dev.sdd.spec-102.remove': py
   'dev.sdd.spec-103.demo': ts
   'dev.sdd.spec-104.demo': ts
   'dev.sdd.spec-105.demo': ts
   'dev.sdd.spec-106.demo': ts
   'dev.sdd.spec-107.demo': ts
   'dev.sdd.spec-108.demo': ts
-  'dev.sdd.spec-109.demo': ts
-  'dev.sdd.spec-110.demo': ts
+  'dev.sdd.spec-109.demo': py
+  'dev.sdd.spec-110.demo': py
   'dev.sdd.spec-111.demo': ts
   'dev.sdd.spec-112.demo': ts
   'dev.sdd.spec-113.demo': ts
-  'dev.sdd.spec-114.demo': ts
+  'dev.sdd.spec-114.demo': py
   'dev.sdd.spec-115.demo': ts
-  'dev.sdd.spec-1203.demo': ts
+  'dev.sdd.spec-1203.demo': py
   'dev.sdd.spec-1301.demo': ts
-  'dev.sdd.spec-202.demo': ts
+  'dev.sdd.spec-202.demo': py
   'dev.sdd.spec-411.demo': ts
   'dev.sdd.spec-501.correct': ts
   'dev.sdd.spec-501.create': ts
-  'dev.sdd.spec-501.demo': ts
+  'dev.sdd.spec-501.demo': py
   'dev.sdd.spec-501.report': ts
   'dev.sdd.spec-504.call': ts
   'dev.sdd.spec-504.demo': ts
-  'dev.sdd.spec-505.create': ts
-  'dev.sdd.spec-505.delete': ts
-  'dev.sdd.spec-505.demo': ts
-  'dev.sdd.spec-506.run': ts
+  'dev.sdd.spec-505.create': py
+  'dev.sdd.spec-505.delete': py
+  'dev.sdd.spec-505.demo': py
+  'dev.sdd.spec-506.run': py
   'dev.sdd.spec-508.demo': ts
   'dev.sdd.spec-509.demo': ts
   'dev.sdd.spec-510.demo': ts
@@ -93,14 +93,14 @@ operations:
   'dev.sdd.spec-512.demo': ts
   'dev.sdd.spec-512.suggest': ts
   'dev.sdd.spec-711.demo': ts
-  'dev.sdd.stripe.session': ts
-  'dev.sddApiCoverage': ts
-  'dev.sddAuthProxy': ts
-  'dev.stripe.checkoutCancel': ts
-  'dev.stripe.checkoutPay': ts
-  'dev.stripe.events': ts
-  'dev.stripe.simulate': ts
-  'dev.uploadSimulation': ts
+  'dev.sdd.stripe.session': py
+  'dev.sddApiCoverage': py
+  'dev.sddAuthProxy': py
+  'dev.stripe.checkoutCancel': py
+  'dev.stripe.checkoutPay': py
+  'dev.stripe.events': py
+  'dev.stripe.simulate': py
+  'dev.uploadSimulation': py
   'email.unsubscribe': py
   'email.unsubscribe.page': py
   'exam.answers.save': py
@@ -128,14 +128,14 @@ operations:
   'formations.pause': py
   'formations.replan': py
   'formations.replan-options': py
-  'formations.resume': ts
+  'formations.resume': py
   'formations.update': py
   'gaps.list': py
   'groups.leave': py
   'groups.members.remove': py
   'groups.rotateCode': py
   'header.get': py
-  'health.get': ts
+  'health.get': py
   'home.get': ts
   'invitations.accept': py
   'invitations.get': py
@@ -222,42 +222,65 @@ operations:
   'warmups.today.get': py
 
 special:
-  'DELETE /api/v1/dev/sdd/email/outbox': ts
-  'DELETE /api/v1/dev/sdd/personal-data/deletion': ts
-  'GET /api/v1/auth/callback': ts
-  'GET /api/v1/dev/sdd/email/outbox': ts
-  'GET /api/v1/dev/sdd/email/preview': ts
-  'GET /api/v1/dev/sdd/events/demo/:runId': ts
-  'GET /api/v1/dev/sdd/events/outbox': ts
-  'GET /api/v1/dev/sdd/items': ts
-  'GET /api/v1/dev/sdd/relay-stream': ts
-  'GET /api/v1/dev/sdd/stripe/events': ts
-  'GET /api/v1/health': ts
+  'DELETE /api/v1/dev/sdd/email/outbox': py
+  'DELETE /api/v1/dev/sdd/personal-data/deletion': py
+  'GET /api/v1/auth/callback': py
+  'GET /api/v1/dev/sdd/email/outbox': py
+  'GET /api/v1/dev/sdd/email/preview': py
+  'GET /api/v1/dev/sdd/events/demo/:runId': py
+  'GET /api/v1/dev/sdd/events/outbox': py
+  'GET /api/v1/dev/sdd/items': py
+  'GET /api/v1/dev/sdd/relay-stream': py
+  'GET /api/v1/dev/sdd/stripe/events': py
+  'GET /api/v1/health': py
   'POST /api/v1/_dev/commit-check': ts
   'POST /api/v1/_dev/demo-job': ts
-  'POST /api/v1/_dev/secret-scan': ts
-  'POST /api/v1/dev/sdd/cron/hourly-tick': ts
-  'POST /api/v1/dev/sdd/echo': ts
-  'POST /api/v1/dev/sdd/email/send': ts
-  'POST /api/v1/dev/sdd/events/demo': ts
-  'POST /api/v1/dev/sdd/notifications/generate': ts
-  'POST /api/v1/dev/sdd/notify': ts
-  'POST /api/v1/dev/sdd/personal-data/deletion': ts
-  'POST /api/v1/dev/sdd/personal-data/execute': ts
-  'POST /api/v1/dev/sdd/personal-data/export': ts
-  'POST /api/v1/dev/sdd/push/send': ts
-  'POST /api/v1/dev/sdd/rate-limit/burst': ts
-  'POST /api/v1/dev/sdd/rate-limit/origin': ts
-  'POST /api/v1/dev/sdd/rate-limit/purge': ts
-  'POST /api/v1/dev/sdd/stripe/checkout/cancel': ts
-  'POST /api/v1/dev/sdd/stripe/checkout/pay': ts
-  'POST /api/v1/dev/sdd/stripe/simulate': ts
-  'POST /api/v1/dev/sdd/uploads': ts
+  'POST /api/v1/_dev/secret-scan': py
+  'POST /api/v1/dev/sdd/cron/hourly-tick': py
+  'POST /api/v1/dev/sdd/echo': py
+  'POST /api/v1/dev/sdd/email/send': py
+  'POST /api/v1/dev/sdd/events/demo': py
+  'POST /api/v1/dev/sdd/notifications/generate': py
+  'POST /api/v1/dev/sdd/notify': py
+  'POST /api/v1/dev/sdd/personal-data/deletion': py
+  'POST /api/v1/dev/sdd/personal-data/execute': py
+  'POST /api/v1/dev/sdd/personal-data/export': py
+  'POST /api/v1/dev/sdd/push/send': py
+  'POST /api/v1/dev/sdd/rate-limit/burst': py
+  'POST /api/v1/dev/sdd/rate-limit/origin': py
+  'POST /api/v1/dev/sdd/rate-limit/purge': py
+  'POST /api/v1/dev/sdd/stripe/checkout/cancel': py
+  'POST /api/v1/dev/sdd/stripe/checkout/pay': py
+  'POST /api/v1/dev/sdd/stripe/simulate': py
+  'POST /api/v1/dev/sdd/uploads': py
   'POST /api/v1/formations/:fid/sprints': ts
 
 consumers:
+  # SPEC-2207: every consumer of the P22 table is wired to the Python worker (ADR-2032 closed).
+  'assessments.grade_quiz': py
+  'assessments.purge_offline_receipts': py
+  'assessments.submit_exam_at_deadline': py
+  'content.process_resource': py
   'devtools.demo_job': py
+  'engagement.deliver_due_deliveries': py
+  'engagement.deliver_notification': py
+  'engagement.plan_daily_digests': py
+  'engagement.send_daily_digest': py
+  'engagement.send_welcome_email': py
+  'engagement.sync_validation_quiz_reminders': py
+  'formation.unlock_module': py
+  'identity.purge_security_rows': py
+  'learning.plan_programme': py
+  'privacy.purge_exports': py
+  'privacy.run_account_deletions': py
+  'privacy.run_data_export': py
+  'shared.purge_outbox': py
+  'tutor.prepare_question_bank': py
+  'tutor.prepare_remediation': py
+  'tutor.prepare_requested_remediation': py
+  'tutor.process_question_bank_jobs': py
+  'tutor.generate_course': py
 
 crons:
-  'cron/hourly-tick': ts
-  'cron/nightly': ts
+  'cron/hourly-tick': py
+  'cron/nightly': py

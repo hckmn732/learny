@@ -83,6 +83,7 @@ STORAGE_FILE_NOT_FOUND = "Fichier introuvable."
 STORAGE_TOKEN_MISSING = "Jeton d’accès absent."
 STORAGE_UPLOAD_SECRET_MISSING = "Signature d’envoi indisponible : secret JWT Supabase absent."
 STORAGE_READ_URL_UNAVAILABLE = "URL de lecture indisponible."
+STORAGE_UPLOAD_URL_UNAVAILABLE = "URL d’envoi indisponible."
 STORAGE_UNAVAILABLE = "Stockage indisponible ({status})."
 STORAGE_INVALID_FILE_NAME = "Nom de fichier invalide."
 STORAGE_EMPTY_FILE_NAME = "Nom de fichier vide."
@@ -137,6 +138,11 @@ FORMATION_CANNOT_ARCHIVE = "Cette formation ne peut pas être archivée."
 FORMATION_CANNOT_RESUME = "Cette formation ne peut pas être reprise."
 FORMATION_CANNOT_ACTIVATE = "Seule une formation active peut devenir la formation courante."
 FORMATION_CHANGED = "Cette formation a changé entre-temps. Rechargez la liste."
+FORMATION_PAUSE_CHOICE_REQUIRED = "Choisissez une formation à mettre en pause."
+FORMATION_PAUSE_CHOICE_STALE = (
+    "La formation choisie n’est plus active. Rechargez la liste et choisissez à nouveau."
+)
+INVALID_REQUEST_TITLE = "Requête invalide"
 FORMATION_NOT_CREATED = "Formation non créée."
 FORMATION_ONLY_ACTIVE_COPY = "Seule une formation active peut être copiée."
 FORMATION_COPY_MISSING = "La copie individuelle n’a pas pu être créée."
@@ -224,3 +230,19 @@ PROGRAMME_PROPOSAL_VERSION_TITLE = "Version {version} de la proposition"
 
 # packages/services/src/resources/storage.ts — the Storage JWT secret is missing.
 STORAGE_ACCESS_SECRET_MISSING = "Accès au stockage indisponible : secret JWT absent."
+
+# --------------------------------------------------------------------------------------------------
+# Job use cases of SPEC-2207, copied verbatim from the TypeScript services they replace.
+# --------------------------------------------------------------------------------------------------
+USER_ID_INVALID = "Identifiant utilisateur invalide."
+MODULE_NOT_FOUND = "Module introuvable."
+
+# packages/http/src/dev-guard.ts (SPEC-201 ET-7, CL-10, ported by SPEC-2207).
+RESOURCE_NOT_FOUND = "Ressource introuvable."
+
+# packages/services/src/dev/echo.ts (SPEC-201): demonstration payloads.
+DEV_ECHO_FORMATION_LIMIT = (
+    "Vous avez déjà trois formations actives : archivez-en une pour en créer une autre."
+)
+CURSOR_INVALID = "Le curseur de pagination est illisible."
+CURSOR_INVALID_ITEM = "Curseur invalide."

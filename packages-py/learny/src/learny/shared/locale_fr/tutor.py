@@ -102,3 +102,46 @@ OPEN_QUESTION_CRITERION = "Idée essentielle de {label}"
 OPEN_QUESTION_MODEL_ANSWER = "Une réponse juste mobilise {label} et l’explique dans le contexte du chapitre."
 OPEN_QUESTION_EXPLANATION = "La question vérifie la compréhension de {label}, sans récitation."
 OPEN_QUESTION_OBJECTIVE = "Vérifier {label}"
+
+# --- question banks (packages/tutor/src/services/question-bank.ts, SPEC-513) -----------------------
+
+QUESTION_BANK_PARAMS_INVALID = "Les param\u00e8tres de la banque sont invalides."
+QUESTION_BANK_COURSE_MISSING = "Aucune version de cours priv\u00e9e n\u2019est disponible."
+QUESTION_BANK_COURSE_NOT_READY = "La version du cours n\u2019est pas encore pr\u00eate."
+QUESTION_BANK_NOTION_NOT_FOUND = "Notion introuvable dans ce cours."
+QUESTION_BANK_NOTION_FALLBACK = "Notion li\u00e9e"
+QUESTION_BANK_JOB_NOT_CREATED = "Job de banque non cr\u00e9\u00e9."
+QUESTION_BANK_BRICK_NOT_CREATED = "Brique de banque non cr\u00e9\u00e9e."
+QUESTION_BANK_CONTEXT_UNAVAILABLE = "Le contexte du cours n\u2019a pas pu \u00eatre pr\u00e9par\u00e9."
+QUESTION_BANK_MODULE_MISMATCH = "Le module ne correspond pas \u00e0 la version du cours."
+QUESTION_BANK_QUESTION_FALLBACK = "Question de banque"
+
+# --- course generation (packages/tutor/src/course/{generate,run}.ts, SPEC-608, SPEC-2207) ---------
+
+COURSE_GENERATION_FAILED = "La g\u00e9n\u00e9ration du cours a \u00e9chou\u00e9."
+COURSE_MODULE_NOT_FOUND = "Module introuvable."
+COURSE_EMPTY_MODULE = "Ce module ne contient aucun chapitre."
+COURSE_GENERATION_KEY_INVALID = "La cl\u00e9 de g\u00e9n\u00e9ration est invalide."
+COURSE_REQUEST_INVALID = "La demande de g\u00e9n\u00e9ration est invalide."
+COURSE_OTHER_CHAPTER = "Le tuteur a r\u00e9pondu pour un autre chapitre."
+COURSE_NOTION_OUTSIDE_CHAPTER = "Le tuteur a cit\u00e9 une notion hors du chapitre."
+COURSE_UNKNOWN_NOTION_LINK = "Le tuteur a cr\u00e9\u00e9 un lien vers une notion inconnue."
+COURSE_SELF_LINK = "Le tuteur a reli\u00e9 une notion \u00e0 elle-m\u00eame."
+COURSE_UNKNOWN_CHAPTER = "Le cours cite un chapitre inconnu."
+COURSE_VERSION_NOT_CREATED = "La version du cours n\u2019a pas pu \u00eatre cr\u00e9\u00e9e."
+COURSE_SECTION_NOT_CREATED = "Une section du cours n\u2019a pas pu \u00eatre cr\u00e9\u00e9e."
+COURSE_CITATION_INVALID = "Une citation du cours ne correspond pas \u00e0 un passage pr\u00eat du chapitre."
+COURSE_CITATION_SOURCE_DELETED = "Une source du cours a chang\u00e9 pendant sa r\u00e9daction."
+COURSE_TASK_FAILED = "Le tuteur n\u2019a pas pu r\u00e9diger le cours de ce chapitre."
+COURSE_INVALID_OUTPUT = "Sortie invalide apr\u00e8s deux corrections."
+COURSE_LINK_RATIONALE = "Lien propos\u00e9 par le cours g\u00e9n\u00e9r\u00e9."
+COURSE_NOTIFICATION_TASK_LABEL = "La r\u00e9daction du cours"
+
+COURSE_MESSAGE_BASE = (
+    "R\u00e9dige le cours de base du chapitre \u00ab {title} \u00bb. Aucun apport n\u2019est "
+    "disponible : signale-le et propose des ressources."
+)
+COURSE_MESSAGE_SOURCED = (
+    "R\u00e9dige le chapitre \u00ab {title} \u00bb \u00e0 partir des apports fournis. Chaque "
+    "passage sourc\u00e9 cite son chunkId."
+)

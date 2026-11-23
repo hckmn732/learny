@@ -10,6 +10,7 @@ from learny.assessments.application.exam_attempts import (
     start_exam_attempt,
     submit_exam,
 )
+from learny.assessments.application.exam_deadline import submit_exam_at_deadline
 from learny.assessments.application.exam_format import (
     confirm_exam_format,
     ensure_mock_exam_slots,
@@ -23,7 +24,10 @@ from learny.assessments.application.exercises import (
     start_exercise_attempt,
     submit_exercise,
 )
+from learny.assessments.application.grade_open import grade_open_answers
+from learny.assessments.application.grade_quiz import grade_quiz
 from learny.assessments.application.offline import build_pack
+from learny.assessments.application.offline_purge import purge_offline_receipts
 from learny.assessments.application.offline_sync import sync_offline_answers
 from learny.assessments.application.ports import (
     AssessmentDeps,
@@ -59,8 +63,11 @@ __all__ = [
     "get_practice_exercise",
     "get_quiz_result",
     "get_remediation",
+    "grade_open_answers",
+    "grade_quiz",
     "mark_exam_question",
     "prepare_remediation",
+    "purge_offline_receipts",
     "report_brick",
     "request_exercise_hint",
     "request_remediation_preparation",
@@ -72,6 +79,7 @@ __all__ = [
     "start_validation_attempt",
     "submit_attempt",
     "submit_exam",
+    "submit_exam_at_deadline",
     "submit_exercise",
     "sync_offline_answers",
 ]

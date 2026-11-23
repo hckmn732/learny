@@ -1,0 +1,2823 @@
+{
+  "version": 1,
+  "generatedAt": "2026-11-22",
+  "sectionKinds": {
+    "markdown": "text",
+    "quick_question": "flash_question",
+    "comparison": "dont_confuse",
+    "tutor_addition": "tutor_completed",
+    "takeaway": "retain",
+    "summary_prompt": "summary_prompt"
+  },
+  "mediaKinds": {
+    "pdf": "pdf",
+    "audio": "audio",
+    "video": "video",
+    "youtube": "video",
+    "web": "web",
+    "note": "note",
+    "image": "image"
+  },
+  "anchors": [
+    {
+      "chapterPosition": 1,
+      "sections": [
+        {
+          "kind": "markdown",
+          "title": "L’en-tête de pièce"
+        },
+        {
+          "kind": "takeaway"
+        },
+        {
+          "kind": "quick_question"
+        },
+        {
+          "kind": "comparison"
+        },
+        {
+          "kind": "summary_prompt"
+        },
+        {
+          "kind": "tutor_addition"
+        }
+      ],
+      "expected": [
+        "ch-1-l-en-tete-de-piece",
+        "ch-1-a-retenir",
+        "ch-1-question-eclair",
+        "ch-1-ne-pas-confondre",
+        "ch-1-resume",
+        "ch-1-section-6"
+      ]
+    },
+    {
+      "chapterPosition": 12,
+      "sections": [
+        {
+          "kind": "markdown"
+        },
+        {
+          "kind": "markdown"
+        }
+      ],
+      "expected": [
+        "ch-12-section-1",
+        "ch-12-section-2"
+      ]
+    },
+    {
+      "chapterPosition": 2,
+      "sections": [
+        {
+          "kind": "markdown",
+          "title": "Grille de saisie"
+        },
+        {
+          "kind": "markdown",
+          "title": "Grille de saisie"
+        }
+      ],
+      "expected": [
+        "ch-2-grille-de-saisie",
+        "ch-2-grille-de-saisie-2"
+      ]
+    },
+    {
+      "chapterPosition": 3,
+      "sections": [
+        {
+          "kind": "markdown",
+          "title": "  Écritures — débit/crédit  "
+        }
+      ],
+      "expected": [
+        "ch-3-ecritures-debit-credit"
+      ]
+    }
+  ],
+  "sections": [
+    {
+      "name": "markdown",
+      "section": {
+        "kind": "markdown",
+        "title": "T",
+        "contentMd": "# Corps",
+        "sourceChunkIds": [
+          "4f5a6b7c-8d9e-4f0a-9b1c-2d3e4f5a6b80"
+        ],
+        "notionIds": [
+          "6a9d2c4b-1e7f-4b3a-8c5d-9e0f1a2b3c03"
+        ]
+      },
+      "data": null,
+      "content": "# Corps"
+    },
+    {
+      "name": "quick-question",
+      "section": {
+        "kind": "quick_question",
+        "question": "Q ?",
+        "answer": "R",
+        "sourceChunkIds": [],
+        "notionIds": []
+      },
+      "data": {
+        "question": "Q ?",
+        "answer": "R"
+      },
+      "content": null
+    },
+    {
+      "name": "comparison",
+      "section": {
+        "kind": "comparison",
+        "left": {
+          "title": "L",
+          "body": "B",
+          "example": "E"
+        },
+        "right": {
+          "title": "R",
+          "body": "B",
+          "example": "E"
+        },
+        "sourceChunkIds": [],
+        "notionIds": []
+      },
+      "data": {
+        "left": {
+          "title": "L",
+          "body": "B",
+          "example": "E"
+        },
+        "right": {
+          "title": "R",
+          "body": "B",
+          "example": "E"
+        }
+      },
+      "content": null
+    },
+    {
+      "name": "tutor-addition",
+      "section": {
+        "kind": "tutor_addition",
+        "contentMd": "X",
+        "notionIds": [
+          "6a9d2c4b-1e7f-4b3a-8c5d-9e0f1a2b3c03"
+        ]
+      },
+      "data": null,
+      "content": "X"
+    },
+    {
+      "name": "takeaway-with-diagram",
+      "section": {
+        "kind": "takeaway",
+        "points": [
+          "A",
+          "B",
+          "C"
+        ],
+        "diagram": {
+          "blocks": [
+            {
+              "id": "a",
+              "label": "A"
+            }
+          ],
+          "arrows": []
+        },
+        "mnemonic": "ABC",
+        "sourceChunkIds": [],
+        "notionIds": [
+          "6a9d2c4b-1e7f-4b3a-8c5d-9e0f1a2b3c03"
+        ]
+      },
+      "data": {
+        "points": [
+          "A",
+          "B",
+          "C"
+        ],
+        "diagram": {
+          "blocks": [
+            {
+              "id": "a",
+              "label": "A"
+            }
+          ],
+          "arrows": []
+        },
+        "mnemonic": "ABC"
+      },
+      "content": null
+    },
+    {
+      "name": "takeaway-plain",
+      "section": {
+        "kind": "takeaway",
+        "points": [
+          "A",
+          "B",
+          "C"
+        ],
+        "sourceChunkIds": [],
+        "notionIds": []
+      },
+      "data": {
+        "points": [
+          "A",
+          "B",
+          "C"
+        ]
+      },
+      "content": null
+    },
+    {
+      "name": "summary-prompt",
+      "section": {
+        "kind": "summary_prompt",
+        "title": "R",
+        "prompt": "P",
+        "notionIds": []
+      },
+      "data": null,
+      "content": "P"
+    },
+    {
+      "name": "summary-prompt-empty",
+      "section": {
+        "kind": "summary_prompt",
+        "notionIds": []
+      },
+      "data": null,
+      "content": null
+    }
+  ],
+  "media": [
+    {
+      "resourceKind": "pdf",
+      "resourceMime": "application/pdf",
+      "expected": "pdf"
+    },
+    {
+      "resourceKind": "audio",
+      "resourceMime": null,
+      "expected": "audio"
+    },
+    {
+      "resourceKind": "youtube",
+      "resourceMime": null,
+      "expected": "video"
+    },
+    {
+      "resourceKind": "note",
+      "resourceMime": null,
+      "expected": "note"
+    },
+    {
+      "resourceKind": "image",
+      "resourceMime": null,
+      "expected": "image"
+    },
+    {
+      "resourceKind": "web",
+      "resourceMime": null,
+      "expected": "web"
+    },
+    {
+      "resourceKind": "video",
+      "resourceMime": null,
+      "expected": "video"
+    },
+    {
+      "resourceKind": "exam_guide",
+      "resourceMime": "application/pdf",
+      "expected": "pdf"
+    },
+    {
+      "resourceKind": "exam_guide",
+      "resourceMime": null,
+      "expected": "web"
+    },
+    {
+      "resourceKind": "other",
+      "resourceMime": null,
+      "expected": "web"
+    }
+  ],
+  "documents": [
+    {
+      "name": "single",
+      "chunks": [
+        {
+          "chunkId": "4f5a6b7c-8d9e-4f0a-9b1c-2d3e4f5a6b80",
+          "ownerId": "owner",
+          "chapterId": "9f1d4c7b-2a3e-4d5f-8b6a-1c2d3e4f5a6b",
+          "resourceId": "resource",
+          "resourceTitle": "Guide utilisateur FI — saisie.pdf",
+          "resourceKind": "pdf",
+          "resourceStatus": "ready",
+          "resourceDeleted": false,
+          "resourceMime": "application/pdf",
+          "text": "Toute écriture comptable est une pièce.",
+          "location": {
+            "page": 2,
+            "charStart": 0,
+            "charEnd": 40
+          }
+        }
+      ],
+      "expected": [
+        {
+          "source": "Guide utilisateur FI — saisie.pdf",
+          "chunkId": "4f5a6b7c-8d9e-4f0a-9b1c-2d3e4f5a6b80",
+          "title": "Guide utilisateur FI — saisie.pdf",
+          "text": "Toute écriture comptable est une pièce."
+        }
+      ]
+    },
+    {
+      "name": "two",
+      "chunks": [
+        {
+          "chunkId": "4f5a6b7c-8d9e-4f0a-9b1c-2d3e4f5a6b80",
+          "ownerId": "owner",
+          "chapterId": "9f1d4c7b-2a3e-4d5f-8b6a-1c2d3e4f5a6b",
+          "resourceId": "resource",
+          "resourceTitle": "Guide utilisateur FI — saisie.pdf",
+          "resourceKind": "pdf",
+          "resourceStatus": "ready",
+          "resourceDeleted": false,
+          "resourceMime": "application/pdf",
+          "text": "Toute écriture comptable est une pièce.",
+          "location": {
+            "page": 2,
+            "charStart": 0,
+            "charEnd": 40
+          }
+        },
+        {
+          "chunkId": "4f5a6b7c-8d9e-4f0a-9b1c-2d3e4f5a6b80",
+          "ownerId": "owner",
+          "chapterId": "9f1d4c7b-2a3e-4d5f-8b6a-1c2d3e4f5a6b",
+          "resourceId": "resource",
+          "resourceTitle": "Note",
+          "resourceKind": "note",
+          "resourceStatus": "ready",
+          "resourceDeleted": false,
+          "resourceMime": null,
+          "text": "Toute écriture comptable est une pièce.",
+          "location": {
+            "page": 2,
+            "charStart": 0,
+            "charEnd": 40
+          }
+        }
+      ],
+      "expected": [
+        {
+          "source": "Guide utilisateur FI — saisie.pdf",
+          "chunkId": "4f5a6b7c-8d9e-4f0a-9b1c-2d3e4f5a6b80",
+          "title": "Guide utilisateur FI — saisie.pdf",
+          "text": "Toute écriture comptable est une pièce."
+        },
+        {
+          "source": "Note",
+          "chunkId": "4f5a6b7c-8d9e-4f0a-9b1c-2d3e4f5a6b80",
+          "title": "Note",
+          "text": "Toute écriture comptable est une pièce."
+        }
+      ]
+    },
+    {
+      "name": "title-200",
+      "chunks": [
+        {
+          "chunkId": "4f5a6b7c-8d9e-4f0a-9b1c-2d3e4f5a6b80",
+          "ownerId": "owner",
+          "chapterId": "9f1d4c7b-2a3e-4d5f-8b6a-1c2d3e4f5a6b",
+          "resourceId": "resource",
+          "resourceTitle": "TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT",
+          "resourceKind": "pdf",
+          "resourceStatus": "ready",
+          "resourceDeleted": false,
+          "resourceMime": "application/pdf",
+          "text": "Toute écriture comptable est une pièce.",
+          "location": {
+            "page": 2,
+            "charStart": 0,
+            "charEnd": 40
+          }
+        }
+      ],
+      "expected": [
+        {
+          "source": "TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT",
+          "chunkId": "4f5a6b7c-8d9e-4f0a-9b1c-2d3e4f5a6b80",
+          "title": "TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT",
+          "text": "Toute écriture comptable est une pièce."
+        }
+      ]
+    },
+    {
+      "name": "title-short",
+      "chunks": [
+        {
+          "chunkId": "4f5a6b7c-8d9e-4f0a-9b1c-2d3e4f5a6b80",
+          "ownerId": "owner",
+          "chapterId": "9f1d4c7b-2a3e-4d5f-8b6a-1c2d3e4f5a6b",
+          "resourceId": "resource",
+          "resourceTitle": "Note",
+          "resourceKind": "pdf",
+          "resourceStatus": "ready",
+          "resourceDeleted": false,
+          "resourceMime": "application/pdf",
+          "text": "Toute écriture comptable est une pièce.",
+          "location": {
+            "page": 2,
+            "charStart": 0,
+            "charEnd": 40
+          }
+        }
+      ],
+      "expected": [
+        {
+          "source": "Note",
+          "chunkId": "4f5a6b7c-8d9e-4f0a-9b1c-2d3e4f5a6b80",
+          "title": "Note",
+          "text": "Toute écriture comptable est une pièce."
+        }
+      ]
+    },
+    {
+      "name": "exam-guide",
+      "chunks": [
+        {
+          "chunkId": "4f5a6b7c-8d9e-4f0a-9b1c-2d3e4f5a6b80",
+          "ownerId": "owner",
+          "chapterId": "9f1d4c7b-2a3e-4d5f-8b6a-1c2d3e4f5a6b",
+          "resourceId": "resource",
+          "resourceTitle": "Guide utilisateur FI — saisie.pdf",
+          "resourceKind": "exam_guide",
+          "resourceStatus": "ready",
+          "resourceDeleted": false,
+          "resourceMime": "application/pdf",
+          "text": "Toute écriture comptable est une pièce.",
+          "location": {
+            "page": 2,
+            "charStart": 0,
+            "charEnd": 40
+          }
+        }
+      ],
+      "expected": [
+        {
+          "source": "Guide utilisateur FI — saisie.pdf",
+          "chunkId": "4f5a6b7c-8d9e-4f0a-9b1c-2d3e4f5a6b80",
+          "title": "Guide utilisateur FI — saisie.pdf",
+          "text": "Toute écriture comptable est une pièce."
+        }
+      ]
+    },
+    {
+      "name": "exam-guide-web",
+      "chunks": [
+        {
+          "chunkId": "4f5a6b7c-8d9e-4f0a-9b1c-2d3e4f5a6b80",
+          "ownerId": "owner",
+          "chapterId": "9f1d4c7b-2a3e-4d5f-8b6a-1c2d3e4f5a6b",
+          "resourceId": "resource",
+          "resourceTitle": "Guide utilisateur FI — saisie.pdf",
+          "resourceKind": "exam_guide",
+          "resourceStatus": "ready",
+          "resourceDeleted": false,
+          "resourceMime": null,
+          "text": "Toute écriture comptable est une pièce.",
+          "location": {
+            "page": 2,
+            "charStart": 0,
+            "charEnd": 40
+          }
+        }
+      ],
+      "expected": [
+        {
+          "source": "Guide utilisateur FI — saisie.pdf",
+          "chunkId": "4f5a6b7c-8d9e-4f0a-9b1c-2d3e4f5a6b80",
+          "title": "Guide utilisateur FI — saisie.pdf",
+          "text": "Toute écriture comptable est une pièce."
+        }
+      ]
+    },
+    {
+      "name": "empty",
+      "chunks": [],
+      "expected": []
+    }
+  ],
+  "budgets": [
+    {
+      "name": "five-of-six",
+      "count": 6,
+      "chars": 19000,
+      "expected": [
+        "00000000-0000-4000-8000-000000000000",
+        "00000000-0000-4000-8000-000000000001",
+        "00000000-0000-4000-8000-000000000002",
+        "00000000-0000-4000-8000-000000000003",
+        "00000000-0000-4000-8000-000000000004"
+      ]
+    },
+    {
+      "name": "two",
+      "count": 2,
+      "chars": 19000,
+      "expected": [
+        "00000000-0000-4000-8000-000000000000",
+        "00000000-0000-4000-8000-000000000001"
+      ]
+    },
+    {
+      "name": "none",
+      "count": 0,
+      "chars": 19000,
+      "expected": []
+    }
+  ],
+  "drafts": [
+    {
+      "name": "sourced",
+      "input": {
+        "chapterId": "9f1d4c7b-2a3e-4d5f-8b6a-1c2d3e4f5a6b",
+        "title": "Saisie des pièces comptables",
+        "baseCourse": false,
+        "sourceChunkIds": [
+          "4f5a6b7c-8d9e-4f0a-9b1c-2d3e4f5a6b80"
+        ],
+        "notionIds": [
+          "6a9d2c4b-1e7f-4b3a-8c5d-9e0f1a2b3c03"
+        ],
+        "links": [],
+        "resourceSuggestions": [],
+        "sections": [
+          {
+            "kind": "markdown",
+            "contentMd": "Toute écriture comptable dans SAP S/4HANA est enregistrée sous forme de pièce. Une pièce réunit un en-tête, qui décrit l’opération, et des postes, qui portent les montants au débit et au crédit.",
+            "sourceChunkIds": [
+              "4f5a6b7c-8d9e-4f0a-9b1c-2d3e4f5a6b80"
+            ],
+            "notionIds": [
+              "6a9d2c4b-1e7f-4b3a-8c5d-9e0f1a2b3c03"
+            ]
+          },
+          {
+            "kind": "quick_question",
+            "question": "Où le sens débit ou crédit est-il indiqué : dans l’en-tête ou dans chaque poste ?",
+            "answer": "Dans chaque poste, grâce à la clé de comptabilisation. La suite du chapitre explique comment.",
+            "sourceChunkIds": [],
+            "notionIds": []
+          },
+          {
+            "kind": "markdown",
+            "title": "L’en-tête de pièce",
+            "contentMd": "## L’en-tête de pièce\n\n- La **date de pièce**, celle du document d’origine, et la **date comptable**, qui fixe la période.\n- Le **type de pièce**, qui classe toute l’opération : par exemple SA pour une écriture de comptabilité générale.\n- La **société** et la **devise**.",
+            "sourceChunkIds": [
+              "4f5a6b7c-8d9e-4f0a-9b1c-2d3e4f5a6b80"
+            ],
+            "notionIds": [
+              "6a9d2c4b-1e7f-4b3a-8c5d-9e0f1a2b3c03"
+            ]
+          },
+          {
+            "kind": "markdown",
+            "title": "Les postes et les clés de comptabilisation",
+            "contentMd": "Chaque poste porte une clé de comptabilisation, qui indique le sens de l’écriture et le type de compte concerné.\n\n| Clé | Sens | Type de compte |\n|---|---|---|\n| 40 | Débit | Compte général |\n| 50 | Crédit | Compte général |",
+            "sourceChunkIds": [
+              "4f5a6b7c-8d9e-4f0a-9b1c-2d3e4f5a6b80"
+            ],
+            "notionIds": [
+              "6a9d2c4b-1e7f-4b3a-8c5d-9e0f1a2b3c03"
+            ]
+          },
+          {
+            "kind": "comparison",
+            "title": "Ne pas confondre",
+            "left": {
+              "title": "Type de pièce",
+              "body": "Classe toute la pièce.",
+              "example": "Exemple : SA"
+            },
+            "right": {
+              "title": "Clé de comptabilisation",
+              "body": "Agit poste par poste.",
+              "example": "Exemples : 40, 50"
+            },
+            "sourceChunkIds": [],
+            "notionIds": [
+              "6a9d2c4b-1e7f-4b3a-8c5d-9e0f1a2b3c03"
+            ]
+          },
+          {
+            "kind": "tutor_addition",
+            "contentMd": "Une pièce n’est enregistrée que si le total des débits est égal au total des crédits.",
+            "notionIds": [
+              "6a9d2c4b-1e7f-4b3a-8c5d-9e0f1a2b3c03"
+            ]
+          },
+          {
+            "kind": "takeaway",
+            "title": "À retenir",
+            "points": [
+              "Une pièce = un en-tête + des postes.",
+              "Le type de pièce classe la pièce ; la clé de comptabilisation agit sur chaque poste.",
+              "Clé 40 = débit, clé 50 = crédit, sur un compte général.",
+              "Une pièce n’est enregistrée que si elle est équilibrée."
+            ],
+            "diagram": {
+              "blocks": [
+                {
+                  "id": "piece",
+                  "label": "Pièce comptable"
+                },
+                {
+                  "id": "entete",
+                  "label": "En-tête"
+                },
+                {
+                  "id": "postes",
+                  "label": "Postes"
+                }
+              ],
+              "arrows": [
+                {
+                  "from": "piece",
+                  "to": "entete"
+                },
+                {
+                  "from": "piece",
+                  "to": "postes"
+                }
+              ]
+            },
+            "mnemonic": "4 vient avant 5, comme le débit avant le crédit.",
+            "sourceChunkIds": [],
+            "notionIds": [
+              "6a9d2c4b-1e7f-4b3a-8c5d-9e0f1a2b3c03"
+            ]
+          },
+          {
+            "kind": "summary_prompt",
+            "title": "Résumez ce chapitre avec vos mots",
+            "prompt": "Trois ou quatre phrases suffisent. Le tuteur vous dira ce qui manque.",
+            "notionIds": []
+          }
+        ]
+      },
+      "ok": true,
+      "value": {
+        "chapterId": "9f1d4c7b-2a3e-4d5f-8b6a-1c2d3e4f5a6b",
+        "title": "Saisie des pièces comptables",
+        "baseCourse": false,
+        "sections": [
+          {
+            "kind": "markdown",
+            "contentMd": "Toute écriture comptable dans SAP S/4HANA est enregistrée sous forme de pièce. Une pièce réunit un en-tête, qui décrit l’opération, et des postes, qui portent les montants au débit et au crédit.",
+            "sourceChunkIds": [
+              "4f5a6b7c-8d9e-4f0a-9b1c-2d3e4f5a6b80"
+            ],
+            "notionIds": [
+              "6a9d2c4b-1e7f-4b3a-8c5d-9e0f1a2b3c03"
+            ]
+          },
+          {
+            "kind": "quick_question",
+            "question": "Où le sens débit ou crédit est-il indiqué : dans l’en-tête ou dans chaque poste ?",
+            "answer": "Dans chaque poste, grâce à la clé de comptabilisation. La suite du chapitre explique comment.",
+            "sourceChunkIds": [],
+            "notionIds": []
+          },
+          {
+            "kind": "markdown",
+            "title": "L’en-tête de pièce",
+            "contentMd": "## L’en-tête de pièce\n\n- La **date de pièce**, celle du document d’origine, et la **date comptable**, qui fixe la période.\n- Le **type de pièce**, qui classe toute l’opération : par exemple SA pour une écriture de comptabilité générale.\n- La **société** et la **devise**.",
+            "sourceChunkIds": [
+              "4f5a6b7c-8d9e-4f0a-9b1c-2d3e4f5a6b80"
+            ],
+            "notionIds": [
+              "6a9d2c4b-1e7f-4b3a-8c5d-9e0f1a2b3c03"
+            ]
+          },
+          {
+            "kind": "markdown",
+            "title": "Les postes et les clés de comptabilisation",
+            "contentMd": "Chaque poste porte une clé de comptabilisation, qui indique le sens de l’écriture et le type de compte concerné.\n\n| Clé | Sens | Type de compte |\n|---|---|---|\n| 40 | Débit | Compte général |\n| 50 | Crédit | Compte général |",
+            "sourceChunkIds": [
+              "4f5a6b7c-8d9e-4f0a-9b1c-2d3e4f5a6b80"
+            ],
+            "notionIds": [
+              "6a9d2c4b-1e7f-4b3a-8c5d-9e0f1a2b3c03"
+            ]
+          },
+          {
+            "kind": "comparison",
+            "title": "Ne pas confondre",
+            "left": {
+              "title": "Type de pièce",
+              "body": "Classe toute la pièce.",
+              "example": "Exemple : SA"
+            },
+            "right": {
+              "title": "Clé de comptabilisation",
+              "body": "Agit poste par poste.",
+              "example": "Exemples : 40, 50"
+            },
+            "sourceChunkIds": [],
+            "notionIds": [
+              "6a9d2c4b-1e7f-4b3a-8c5d-9e0f1a2b3c03"
+            ]
+          },
+          {
+            "kind": "tutor_addition",
+            "contentMd": "Une pièce n’est enregistrée que si le total des débits est égal au total des crédits.",
+            "notionIds": [
+              "6a9d2c4b-1e7f-4b3a-8c5d-9e0f1a2b3c03"
+            ]
+          },
+          {
+            "kind": "takeaway",
+            "title": "À retenir",
+            "points": [
+              "Une pièce = un en-tête + des postes.",
+              "Le type de pièce classe la pièce ; la clé de comptabilisation agit sur chaque poste.",
+              "Clé 40 = débit, clé 50 = crédit, sur un compte général.",
+              "Une pièce n’est enregistrée que si elle est équilibrée."
+            ],
+            "diagram": {
+              "blocks": [
+                {
+                  "id": "piece",
+                  "label": "Pièce comptable"
+                },
+                {
+                  "id": "entete",
+                  "label": "En-tête"
+                },
+                {
+                  "id": "postes",
+                  "label": "Postes"
+                }
+              ],
+              "arrows": [
+                {
+                  "from": "piece",
+                  "to": "entete"
+                },
+                {
+                  "from": "piece",
+                  "to": "postes"
+                }
+              ]
+            },
+            "mnemonic": "4 vient avant 5, comme le débit avant le crédit.",
+            "sourceChunkIds": [],
+            "notionIds": [
+              "6a9d2c4b-1e7f-4b3a-8c5d-9e0f1a2b3c03"
+            ]
+          },
+          {
+            "kind": "summary_prompt",
+            "title": "Résumez ce chapitre avec vos mots",
+            "prompt": "Trois ou quatre phrases suffisent. Le tuteur vous dira ce qui manque.",
+            "notionIds": []
+          }
+        ],
+        "sourceChunkIds": [
+          "4f5a6b7c-8d9e-4f0a-9b1c-2d3e4f5a6b80"
+        ],
+        "notionIds": [
+          "6a9d2c4b-1e7f-4b3a-8c5d-9e0f1a2b3c03"
+        ],
+        "links": [],
+        "resourceSuggestions": []
+      }
+    },
+    {
+      "name": "base",
+      "input": {
+        "chapterId": "9f1d4c7b-2a3e-4d5f-8b6a-1c2d3e4f5a6b",
+        "title": "Cours de base",
+        "baseCourse": true,
+        "sourceChunkIds": [],
+        "notionIds": [
+          "6a9d2c4b-1e7f-4b3a-8c5d-9e0f1a2b3c03"
+        ],
+        "links": [],
+        "resourceSuggestions": [
+          {
+            "title": "Guide officiel de la notion",
+            "url": "https://example.com/guide-notion",
+            "reason": "Une référence courte pour vérifier les bases avant de déposer vos apports."
+          },
+          {
+            "title": "Fiche de synthèse",
+            "url": "https://example.com/synthese-notion",
+            "reason": "Un résumé en une page pour compléter ce cours de base."
+          }
+        ],
+        "sections": [
+          {
+            "kind": "tutor_addition",
+            "title": "Ce que le tuteur peut déjà expliquer",
+            "contentMd": "Aucun apport n’a encore été déposé pour ce chapitre. Le tuteur présente donc les bases : repérez les notions du programme, notez vos questions et déposez vos ressources pour obtenir un cours sourcé.",
+            "notionIds": [
+              "6a9d2c4b-1e7f-4b3a-8c5d-9e0f1a2b3c03"
+            ]
+          },
+          {
+            "kind": "quick_question",
+            "question": "Que faut-il déposer pour que ce cours cite vos sources ?",
+            "answer": "Une note, un PDF, une page web ou une image dans ce chapitre : le tuteur les lira et les citera.",
+            "sourceChunkIds": [],
+            "notionIds": []
+          },
+          {
+            "kind": "takeaway",
+            "title": "À retenir",
+            "points": [
+              "Ce chapitre n’a pas encore d’apport.",
+              "Le cours de base est rédigé par le tuteur et signalé comme tel.",
+              "Déposez une ressource pour obtenir un cours sourcé."
+            ],
+            "mnemonic": "Zéro apport, zéro citation : le tuteur signale son complément.",
+            "sourceChunkIds": [],
+            "notionIds": [
+              "6a9d2c4b-1e7f-4b3a-8c5d-9e0f1a2b3c03"
+            ]
+          },
+          {
+            "kind": "summary_prompt",
+            "title": "Résumez ce chapitre avec vos mots",
+            "prompt": "Trois ou quatre phrases suffisent. Le tuteur vous dira ce qui manque.",
+            "notionIds": []
+          }
+        ]
+      },
+      "ok": true,
+      "value": {
+        "chapterId": "9f1d4c7b-2a3e-4d5f-8b6a-1c2d3e4f5a6b",
+        "title": "Cours de base",
+        "baseCourse": true,
+        "sections": [
+          {
+            "kind": "tutor_addition",
+            "title": "Ce que le tuteur peut déjà expliquer",
+            "contentMd": "Aucun apport n’a encore été déposé pour ce chapitre. Le tuteur présente donc les bases : repérez les notions du programme, notez vos questions et déposez vos ressources pour obtenir un cours sourcé.",
+            "notionIds": [
+              "6a9d2c4b-1e7f-4b3a-8c5d-9e0f1a2b3c03"
+            ]
+          },
+          {
+            "kind": "quick_question",
+            "question": "Que faut-il déposer pour que ce cours cite vos sources ?",
+            "answer": "Une note, un PDF, une page web ou une image dans ce chapitre : le tuteur les lira et les citera.",
+            "sourceChunkIds": [],
+            "notionIds": []
+          },
+          {
+            "kind": "takeaway",
+            "title": "À retenir",
+            "points": [
+              "Ce chapitre n’a pas encore d’apport.",
+              "Le cours de base est rédigé par le tuteur et signalé comme tel.",
+              "Déposez une ressource pour obtenir un cours sourcé."
+            ],
+            "mnemonic": "Zéro apport, zéro citation : le tuteur signale son complément.",
+            "sourceChunkIds": [],
+            "notionIds": [
+              "6a9d2c4b-1e7f-4b3a-8c5d-9e0f1a2b3c03"
+            ]
+          },
+          {
+            "kind": "summary_prompt",
+            "title": "Résumez ce chapitre avec vos mots",
+            "prompt": "Trois ou quatre phrases suffisent. Le tuteur vous dira ce qui manque.",
+            "notionIds": []
+          }
+        ],
+        "sourceChunkIds": [],
+        "notionIds": [
+          "6a9d2c4b-1e7f-4b3a-8c5d-9e0f1a2b3c03"
+        ],
+        "links": [],
+        "resourceSuggestions": [
+          {
+            "title": "Guide officiel de la notion",
+            "url": "https://example.com/guide-notion",
+            "reason": "Une référence courte pour vérifier les bases avant de déposer vos apports."
+          },
+          {
+            "title": "Fiche de synthèse",
+            "url": "https://example.com/synthese-notion",
+            "reason": "Un résumé en une page pour compléter ce cours de base."
+          }
+        ]
+      }
+    },
+    {
+      "name": "invalid-0",
+      "input": {
+        "chapterId": "{{chapterId}}",
+        "title": "Chapitre invalide",
+        "baseCourse": false,
+        "sourceChunkIds": [
+          "{{chunkId}}"
+        ],
+        "notionIds": [
+          "{{notionId}}"
+        ],
+        "links": [],
+        "resourceSuggestions": [],
+        "sections": [
+          {
+            "kind": "takeaway",
+            "points": [
+              "Un seul point",
+              "Un second point"
+            ],
+            "sourceChunkIds": [],
+            "notionIds": []
+          }
+        ]
+      },
+      "ok": false,
+      "value": null
+    },
+    {
+      "name": "invalid-1",
+      "input": {
+        "chapterId": "{{chapterId}}",
+        "title": "Chapitre invalide",
+        "baseCourse": false,
+        "sourceChunkIds": [
+          "{{chunkId}}"
+        ],
+        "notionIds": [
+          "{{notionId}}"
+        ],
+        "links": [],
+        "resourceSuggestions": [],
+        "sections": [
+          {
+            "kind": "takeaway",
+            "points": [
+              "Un seul point",
+              "Un second point"
+            ],
+            "sourceChunkIds": [],
+            "notionIds": []
+          }
+        ]
+      },
+      "ok": false,
+      "value": null
+    },
+    {
+      "name": "invalid-2",
+      "input": {
+        "chapterId": "{{chapterId}}",
+        "title": "Chapitre invalide",
+        "baseCourse": false,
+        "sourceChunkIds": [
+          "{{chunkId}}"
+        ],
+        "notionIds": [
+          "{{notionId}}"
+        ],
+        "links": [],
+        "resourceSuggestions": [],
+        "sections": [
+          {
+            "kind": "takeaway",
+            "points": [
+              "Un seul point",
+              "Un second point"
+            ],
+            "sourceChunkIds": [],
+            "notionIds": []
+          }
+        ]
+      },
+      "ok": false,
+      "value": null
+    },
+    {
+      "name": "minimal",
+      "input": {
+        "chapterId": "9f1d4c7b-2a3e-4d5f-8b6a-1c2d3e4f5a6b",
+        "title": " Saisie des pièces ",
+        "baseCourse": false,
+        "sections": [
+          {
+            "kind": "markdown",
+            "title": "  La pièce comptable  ",
+            "contentMd": "Toute écriture est une pièce. ",
+            "sourceChunkIds": [
+              "4f5a6b7c-8d9e-4f0a-9b1c-2d3e4f5a6b80"
+            ],
+            "notionIds": [
+              "6a9d2c4b-1e7f-4b3a-8c5d-9e0f1a2b3c03"
+            ]
+          },
+          {
+            "kind": "takeaway",
+            "title": "À retenir",
+            "points": [
+              "Une pièce a un en-tête.",
+              "Chaque poste porte une clé.",
+              "Le débit égale le crédit."
+            ],
+            "sourceChunkIds": [
+              "4f5a6b7c-8d9e-4f0a-9b1c-2d3e4f5a6b80"
+            ],
+            "notionIds": [
+              "6a9d2c4b-1e7f-4b3a-8c5d-9e0f1a2b3c03"
+            ]
+          }
+        ],
+        "sourceChunkIds": [
+          "4f5a6b7c-8d9e-4f0a-9b1c-2d3e4f5a6b80"
+        ],
+        "notionIds": [
+          "6a9d2c4b-1e7f-4b3a-8c5d-9e0f1a2b3c03"
+        ]
+      },
+      "ok": true,
+      "value": {
+        "chapterId": "9f1d4c7b-2a3e-4d5f-8b6a-1c2d3e4f5a6b",
+        "title": "Saisie des pièces",
+        "baseCourse": false,
+        "sections": [
+          {
+            "kind": "markdown",
+            "title": "La pièce comptable",
+            "contentMd": "Toute écriture est une pièce.",
+            "sourceChunkIds": [
+              "4f5a6b7c-8d9e-4f0a-9b1c-2d3e4f5a6b80"
+            ],
+            "notionIds": [
+              "6a9d2c4b-1e7f-4b3a-8c5d-9e0f1a2b3c03"
+            ]
+          },
+          {
+            "kind": "takeaway",
+            "title": "À retenir",
+            "points": [
+              "Une pièce a un en-tête.",
+              "Chaque poste porte une clé.",
+              "Le débit égale le crédit."
+            ],
+            "sourceChunkIds": [
+              "4f5a6b7c-8d9e-4f0a-9b1c-2d3e4f5a6b80"
+            ],
+            "notionIds": [
+              "6a9d2c4b-1e7f-4b3a-8c5d-9e0f1a2b3c03"
+            ]
+          }
+        ],
+        "sourceChunkIds": [
+          "4f5a6b7c-8d9e-4f0a-9b1c-2d3e4f5a6b80"
+        ],
+        "notionIds": [
+          "6a9d2c4b-1e7f-4b3a-8c5d-9e0f1a2b3c03"
+        ],
+        "links": [],
+        "resourceSuggestions": []
+      }
+    },
+    {
+      "name": "trimmed",
+      "input": {
+        "chapterId": "9f1d4c7b-2a3e-4d5f-8b6a-1c2d3e4f5a6b",
+        "title": "  Titre  ",
+        "baseCourse": false,
+        "sections": [
+          {
+            "kind": "markdown",
+            "title": "  La pièce comptable  ",
+            "contentMd": "Toute écriture est une pièce. ",
+            "sourceChunkIds": [
+              "4f5a6b7c-8d9e-4f0a-9b1c-2d3e4f5a6b80"
+            ],
+            "notionIds": [
+              "6a9d2c4b-1e7f-4b3a-8c5d-9e0f1a2b3c03"
+            ]
+          },
+          {
+            "kind": "takeaway",
+            "title": "À retenir",
+            "points": [
+              "Une pièce a un en-tête.",
+              "Chaque poste porte une clé.",
+              "Le débit égale le crédit."
+            ],
+            "sourceChunkIds": [
+              "4f5a6b7c-8d9e-4f0a-9b1c-2d3e4f5a6b80"
+            ],
+            "notionIds": [
+              "6a9d2c4b-1e7f-4b3a-8c5d-9e0f1a2b3c03"
+            ]
+          }
+        ],
+        "sourceChunkIds": [
+          "4f5a6b7c-8d9e-4f0a-9b1c-2d3e4f5a6b80"
+        ],
+        "notionIds": [
+          "6a9d2c4b-1e7f-4b3a-8c5d-9e0f1a2b3c03"
+        ]
+      },
+      "ok": true,
+      "value": {
+        "chapterId": "9f1d4c7b-2a3e-4d5f-8b6a-1c2d3e4f5a6b",
+        "title": "Titre",
+        "baseCourse": false,
+        "sections": [
+          {
+            "kind": "markdown",
+            "title": "La pièce comptable",
+            "contentMd": "Toute écriture est une pièce.",
+            "sourceChunkIds": [
+              "4f5a6b7c-8d9e-4f0a-9b1c-2d3e4f5a6b80"
+            ],
+            "notionIds": [
+              "6a9d2c4b-1e7f-4b3a-8c5d-9e0f1a2b3c03"
+            ]
+          },
+          {
+            "kind": "takeaway",
+            "title": "À retenir",
+            "points": [
+              "Une pièce a un en-tête.",
+              "Chaque poste porte une clé.",
+              "Le débit égale le crédit."
+            ],
+            "sourceChunkIds": [
+              "4f5a6b7c-8d9e-4f0a-9b1c-2d3e4f5a6b80"
+            ],
+            "notionIds": [
+              "6a9d2c4b-1e7f-4b3a-8c5d-9e0f1a2b3c03"
+            ]
+          }
+        ],
+        "sourceChunkIds": [
+          "4f5a6b7c-8d9e-4f0a-9b1c-2d3e4f5a6b80"
+        ],
+        "notionIds": [
+          "6a9d2c4b-1e7f-4b3a-8c5d-9e0f1a2b3c03"
+        ],
+        "links": [],
+        "resourceSuggestions": []
+      }
+    },
+    {
+      "name": "base-chapter",
+      "input": {
+        "chapterId": "1c2d3e4f-5a6b-4c7d-8e9f-0a1b2c3d4e5f",
+        "title": "Cours de base",
+        "baseCourse": true,
+        "sections": [
+          {
+            "kind": "tutor_addition",
+            "contentMd": "Aucun apport.",
+            "notionIds": [
+              "2d3e4f5a-6b7c-4d8e-9f0a-1b2c3d4e5f60"
+            ]
+          },
+          {
+            "kind": "takeaway",
+            "points": [
+              "A",
+              "B",
+              "C"
+            ],
+            "notionIds": [
+              "2d3e4f5a-6b7c-4d8e-9f0a-1b2c3d4e5f60"
+            ]
+          }
+        ],
+        "sourceChunkIds": [],
+        "notionIds": [
+          "2d3e4f5a-6b7c-4d8e-9f0a-1b2c3d4e5f60"
+        ],
+        "resourceSuggestions": [
+          {
+            "title": "Guide",
+            "url": "https://example.com/guide",
+            "reason": "Les bases."
+          }
+        ]
+      },
+      "ok": true,
+      "value": {
+        "chapterId": "1c2d3e4f-5a6b-4c7d-8e9f-0a1b2c3d4e5f",
+        "title": "Cours de base",
+        "baseCourse": true,
+        "sections": [
+          {
+            "kind": "tutor_addition",
+            "contentMd": "Aucun apport.",
+            "notionIds": [
+              "2d3e4f5a-6b7c-4d8e-9f0a-1b2c3d4e5f60"
+            ]
+          },
+          {
+            "kind": "takeaway",
+            "points": [
+              "A",
+              "B",
+              "C"
+            ],
+            "sourceChunkIds": [],
+            "notionIds": [
+              "2d3e4f5a-6b7c-4d8e-9f0a-1b2c3d4e5f60"
+            ]
+          }
+        ],
+        "sourceChunkIds": [],
+        "notionIds": [
+          "2d3e4f5a-6b7c-4d8e-9f0a-1b2c3d4e5f60"
+        ],
+        "links": [],
+        "resourceSuggestions": [
+          {
+            "title": "Guide",
+            "url": "https://example.com/guide",
+            "reason": "Les bases."
+          }
+        ]
+      }
+    },
+    {
+      "name": "no-takeaway",
+      "input": {
+        "chapterId": "9f1d4c7b-2a3e-4d5f-8b6a-1c2d3e4f5a6b",
+        "title": " Saisie des pièces ",
+        "baseCourse": false,
+        "sections": [
+          {
+            "kind": "markdown",
+            "contentMd": "X",
+            "sourceChunkIds": [
+              "4f5a6b7c-8d9e-4f0a-9b1c-2d3e4f5a6b80"
+            ],
+            "notionIds": [
+              "6a9d2c4b-1e7f-4b3a-8c5d-9e0f1a2b3c03"
+            ]
+          }
+        ],
+        "sourceChunkIds": [
+          "4f5a6b7c-8d9e-4f0a-9b1c-2d3e4f5a6b80"
+        ],
+        "notionIds": [
+          "6a9d2c4b-1e7f-4b3a-8c5d-9e0f1a2b3c03"
+        ]
+      },
+      "ok": false,
+      "value": null
+    },
+    {
+      "name": "two-takeaways",
+      "input": {
+        "chapterId": "9f1d4c7b-2a3e-4d5f-8b6a-1c2d3e4f5a6b",
+        "title": " Saisie des pièces ",
+        "baseCourse": false,
+        "sections": [
+          {
+            "kind": "takeaway",
+            "points": [
+              "A",
+              "B",
+              "C"
+            ],
+            "notionIds": [
+              "6a9d2c4b-1e7f-4b3a-8c5d-9e0f1a2b3c03"
+            ]
+          },
+          {
+            "kind": "takeaway",
+            "points": [
+              "A",
+              "B",
+              "C"
+            ],
+            "notionIds": [
+              "6a9d2c4b-1e7f-4b3a-8c5d-9e0f1a2b3c03"
+            ]
+          }
+        ],
+        "sourceChunkIds": [
+          "4f5a6b7c-8d9e-4f0a-9b1c-2d3e4f5a6b80"
+        ],
+        "notionIds": [
+          "6a9d2c4b-1e7f-4b3a-8c5d-9e0f1a2b3c03"
+        ]
+      },
+      "ok": false,
+      "value": null
+    },
+    {
+      "name": "after-takeaway",
+      "input": {
+        "chapterId": "9f1d4c7b-2a3e-4d5f-8b6a-1c2d3e4f5a6b",
+        "title": " Saisie des pièces ",
+        "baseCourse": false,
+        "sections": [
+          {
+            "kind": "takeaway",
+            "points": [
+              "A",
+              "B",
+              "C"
+            ],
+            "notionIds": [
+              "6a9d2c4b-1e7f-4b3a-8c5d-9e0f1a2b3c03"
+            ]
+          },
+          {
+            "kind": "tutor_addition",
+            "contentMd": "Trop tard.",
+            "notionIds": [
+              "6a9d2c4b-1e7f-4b3a-8c5d-9e0f1a2b3c03"
+            ]
+          }
+        ],
+        "sourceChunkIds": [
+          "4f5a6b7c-8d9e-4f0a-9b1c-2d3e4f5a6b80"
+        ],
+        "notionIds": [
+          "6a9d2c4b-1e7f-4b3a-8c5d-9e0f1a2b3c03"
+        ]
+      },
+      "ok": false,
+      "value": null
+    },
+    {
+      "name": "two-quick-questions",
+      "input": {
+        "chapterId": "9f1d4c7b-2a3e-4d5f-8b6a-1c2d3e4f5a6b",
+        "title": " Saisie des pièces ",
+        "baseCourse": false,
+        "sections": [
+          {
+            "kind": "quick_question",
+            "question": "Q1 ?",
+            "answer": "R1",
+            "notionIds": [
+              "6a9d2c4b-1e7f-4b3a-8c5d-9e0f1a2b3c03"
+            ]
+          },
+          {
+            "kind": "quick_question",
+            "question": "Q2 ?",
+            "answer": "R2",
+            "notionIds": [
+              "6a9d2c4b-1e7f-4b3a-8c5d-9e0f1a2b3c03"
+            ]
+          },
+          {
+            "kind": "takeaway",
+            "points": [
+              "A",
+              "B",
+              "C"
+            ],
+            "notionIds": [
+              "6a9d2c4b-1e7f-4b3a-8c5d-9e0f1a2b3c03"
+            ]
+          }
+        ],
+        "sourceChunkIds": [
+          "4f5a6b7c-8d9e-4f0a-9b1c-2d3e4f5a6b80"
+        ],
+        "notionIds": [
+          "6a9d2c4b-1e7f-4b3a-8c5d-9e0f1a2b3c03"
+        ]
+      },
+      "ok": false,
+      "value": null
+    },
+    {
+      "name": "source-union-mismatch",
+      "input": {
+        "chapterId": "9f1d4c7b-2a3e-4d5f-8b6a-1c2d3e4f5a6b",
+        "title": " Saisie des pièces ",
+        "baseCourse": false,
+        "sections": [
+          {
+            "kind": "markdown",
+            "contentMd": "X",
+            "sourceChunkIds": [
+              "4f5a6b7c-8d9e-4f0a-9b1c-2d3e4f5a6b80"
+            ],
+            "notionIds": [
+              "6a9d2c4b-1e7f-4b3a-8c5d-9e0f1a2b3c03"
+            ]
+          },
+          {
+            "kind": "takeaway",
+            "points": [
+              "A",
+              "B",
+              "C"
+            ],
+            "notionIds": [
+              "6a9d2c4b-1e7f-4b3a-8c5d-9e0f1a2b3c03"
+            ]
+          }
+        ],
+        "sourceChunkIds": [],
+        "notionIds": [
+          "6a9d2c4b-1e7f-4b3a-8c5d-9e0f1a2b3c03"
+        ]
+      },
+      "ok": false,
+      "value": null
+    },
+    {
+      "name": "notion-union-mismatch",
+      "input": {
+        "chapterId": "9f1d4c7b-2a3e-4d5f-8b6a-1c2d3e4f5a6b",
+        "title": " Saisie des pièces ",
+        "baseCourse": false,
+        "sections": [
+          {
+            "kind": "markdown",
+            "contentMd": "X",
+            "sourceChunkIds": [
+              "4f5a6b7c-8d9e-4f0a-9b1c-2d3e4f5a6b80"
+            ],
+            "notionIds": [
+              "6a9d2c4b-1e7f-4b3a-8c5d-9e0f1a2b3c03"
+            ]
+          },
+          {
+            "kind": "takeaway",
+            "points": [
+              "A",
+              "B",
+              "C"
+            ],
+            "notionIds": [
+              "6a9d2c4b-1e7f-4b3a-8c5d-9e0f1a2b3c03"
+            ]
+          }
+        ],
+        "sourceChunkIds": [
+          "4f5a6b7c-8d9e-4f0a-9b1c-2d3e4f5a6b80"
+        ],
+        "notionIds": [
+          "6a9d2c4b-1e7f-4b3a-8c5d-9e0f1a2b3c03",
+          "2d3e4f5a-6b7c-4d8e-9f0a-1b2c3d4e5f60"
+        ]
+      },
+      "ok": false,
+      "value": null
+    },
+    {
+      "name": "base-with-sources",
+      "input": {
+        "chapterId": "1c2d3e4f-5a6b-4c7d-8e9f-0a1b2c3d4e5f",
+        "title": "Cours de base",
+        "baseCourse": true,
+        "sections": [
+          {
+            "kind": "markdown",
+            "contentMd": "X",
+            "sourceChunkIds": [
+              "4f5a6b7c-8d9e-4f0a-9b1c-2d3e4f5a6b80"
+            ],
+            "notionIds": [
+              "2d3e4f5a-6b7c-4d8e-9f0a-1b2c3d4e5f60"
+            ]
+          },
+          {
+            "kind": "takeaway",
+            "points": [
+              "A",
+              "B",
+              "C"
+            ],
+            "sourceChunkIds": [
+              "4f5a6b7c-8d9e-4f0a-9b1c-2d3e4f5a6b80"
+            ],
+            "notionIds": [
+              "2d3e4f5a-6b7c-4d8e-9f0a-1b2c3d4e5f60"
+            ]
+          }
+        ],
+        "sourceChunkIds": [
+          "4f5a6b7c-8d9e-4f0a-9b1c-2d3e4f5a6b80"
+        ],
+        "notionIds": [
+          "2d3e4f5a-6b7c-4d8e-9f0a-1b2c3d4e5f60"
+        ],
+        "resourceSuggestions": [
+          {
+            "title": "Guide",
+            "url": "https://example.com/guide",
+            "reason": "Les bases."
+          }
+        ]
+      },
+      "ok": false,
+      "value": null
+    },
+    {
+      "name": "sourced-without-source",
+      "input": {
+        "chapterId": "9f1d4c7b-2a3e-4d5f-8b6a-1c2d3e4f5a6b",
+        "title": " Saisie des pièces ",
+        "baseCourse": false,
+        "sections": [
+          {
+            "kind": "tutor_addition",
+            "contentMd": "X",
+            "notionIds": [
+              "6a9d2c4b-1e7f-4b3a-8c5d-9e0f1a2b3c03"
+            ]
+          },
+          {
+            "kind": "takeaway",
+            "points": [
+              "A",
+              "B",
+              "C"
+            ],
+            "notionIds": [
+              "6a9d2c4b-1e7f-4b3a-8c5d-9e0f1a2b3c03"
+            ]
+          }
+        ],
+        "sourceChunkIds": [],
+        "notionIds": [
+          "6a9d2c4b-1e7f-4b3a-8c5d-9e0f1a2b3c03"
+        ]
+      },
+      "ok": false,
+      "value": null
+    },
+    {
+      "name": "base-without-suggestion",
+      "input": {
+        "chapterId": "1c2d3e4f-5a6b-4c7d-8e9f-0a1b2c3d4e5f",
+        "title": "Cours de base",
+        "baseCourse": true,
+        "sections": [
+          {
+            "kind": "tutor_addition",
+            "contentMd": "Aucun apport.",
+            "notionIds": [
+              "2d3e4f5a-6b7c-4d8e-9f0a-1b2c3d4e5f60"
+            ]
+          },
+          {
+            "kind": "takeaway",
+            "points": [
+              "A",
+              "B",
+              "C"
+            ],
+            "notionIds": [
+              "2d3e4f5a-6b7c-4d8e-9f0a-1b2c3d4e5f60"
+            ]
+          }
+        ],
+        "sourceChunkIds": [],
+        "notionIds": [
+          "2d3e4f5a-6b7c-4d8e-9f0a-1b2c3d4e5f60"
+        ],
+        "resourceSuggestions": []
+      },
+      "ok": false,
+      "value": null
+    },
+    {
+      "name": "sourced-with-suggestion",
+      "input": {
+        "chapterId": "9f1d4c7b-2a3e-4d5f-8b6a-1c2d3e4f5a6b",
+        "title": " Saisie des pièces ",
+        "baseCourse": false,
+        "sections": [
+          {
+            "kind": "markdown",
+            "title": "  La pièce comptable  ",
+            "contentMd": "Toute écriture est une pièce. ",
+            "sourceChunkIds": [
+              "4f5a6b7c-8d9e-4f0a-9b1c-2d3e4f5a6b80"
+            ],
+            "notionIds": [
+              "6a9d2c4b-1e7f-4b3a-8c5d-9e0f1a2b3c03"
+            ]
+          },
+          {
+            "kind": "takeaway",
+            "title": "À retenir",
+            "points": [
+              "Une pièce a un en-tête.",
+              "Chaque poste porte une clé.",
+              "Le débit égale le crédit."
+            ],
+            "sourceChunkIds": [
+              "4f5a6b7c-8d9e-4f0a-9b1c-2d3e4f5a6b80"
+            ],
+            "notionIds": [
+              "6a9d2c4b-1e7f-4b3a-8c5d-9e0f1a2b3c03"
+            ]
+          }
+        ],
+        "sourceChunkIds": [
+          "4f5a6b7c-8d9e-4f0a-9b1c-2d3e4f5a6b80"
+        ],
+        "notionIds": [
+          "6a9d2c4b-1e7f-4b3a-8c5d-9e0f1a2b3c03"
+        ],
+        "resourceSuggestions": [
+          {
+            "title": "Guide",
+            "url": "https://example.com/g",
+            "reason": "r"
+          }
+        ]
+      },
+      "ok": false,
+      "value": null
+    },
+    {
+      "name": "unknown-field",
+      "input": {
+        "chapterId": "9f1d4c7b-2a3e-4d5f-8b6a-1c2d3e4f5a6b",
+        "title": " Saisie des pièces ",
+        "baseCourse": false,
+        "sections": [
+          {
+            "kind": "markdown",
+            "title": "  La pièce comptable  ",
+            "contentMd": "Toute écriture est une pièce. ",
+            "sourceChunkIds": [
+              "4f5a6b7c-8d9e-4f0a-9b1c-2d3e4f5a6b80"
+            ],
+            "notionIds": [
+              "6a9d2c4b-1e7f-4b3a-8c5d-9e0f1a2b3c03"
+            ]
+          },
+          {
+            "kind": "takeaway",
+            "title": "À retenir",
+            "points": [
+              "Une pièce a un en-tête.",
+              "Chaque poste porte une clé.",
+              "Le débit égale le crédit."
+            ],
+            "sourceChunkIds": [
+              "4f5a6b7c-8d9e-4f0a-9b1c-2d3e4f5a6b80"
+            ],
+            "notionIds": [
+              "6a9d2c4b-1e7f-4b3a-8c5d-9e0f1a2b3c03"
+            ]
+          }
+        ],
+        "sourceChunkIds": [
+          "4f5a6b7c-8d9e-4f0a-9b1c-2d3e4f5a6b80"
+        ],
+        "notionIds": [
+          "6a9d2c4b-1e7f-4b3a-8c5d-9e0f1a2b3c03"
+        ],
+        "unexpected": true
+      },
+      "ok": false,
+      "value": null
+    },
+    {
+      "name": "bad-uuid",
+      "input": {
+        "chapterId": "not-a-uuid",
+        "title": " Saisie des pièces ",
+        "baseCourse": false,
+        "sections": [
+          {
+            "kind": "markdown",
+            "title": "  La pièce comptable  ",
+            "contentMd": "Toute écriture est une pièce. ",
+            "sourceChunkIds": [
+              "4f5a6b7c-8d9e-4f0a-9b1c-2d3e4f5a6b80"
+            ],
+            "notionIds": [
+              "6a9d2c4b-1e7f-4b3a-8c5d-9e0f1a2b3c03"
+            ]
+          },
+          {
+            "kind": "takeaway",
+            "title": "À retenir",
+            "points": [
+              "Une pièce a un en-tête.",
+              "Chaque poste porte une clé.",
+              "Le débit égale le crédit."
+            ],
+            "sourceChunkIds": [
+              "4f5a6b7c-8d9e-4f0a-9b1c-2d3e4f5a6b80"
+            ],
+            "notionIds": [
+              "6a9d2c4b-1e7f-4b3a-8c5d-9e0f1a2b3c03"
+            ]
+          }
+        ],
+        "sourceChunkIds": [
+          "4f5a6b7c-8d9e-4f0a-9b1c-2d3e4f5a6b80"
+        ],
+        "notionIds": [
+          "6a9d2c4b-1e7f-4b3a-8c5d-9e0f1a2b3c03"
+        ]
+      },
+      "ok": false,
+      "value": null
+    },
+    {
+      "name": "missing-chapter-id",
+      "input": {
+        "title": " Saisie des pièces ",
+        "baseCourse": false,
+        "sections": [
+          {
+            "kind": "markdown",
+            "title": "  La pièce comptable  ",
+            "contentMd": "Toute écriture est une pièce. ",
+            "sourceChunkIds": [
+              "4f5a6b7c-8d9e-4f0a-9b1c-2d3e4f5a6b80"
+            ],
+            "notionIds": [
+              "6a9d2c4b-1e7f-4b3a-8c5d-9e0f1a2b3c03"
+            ]
+          },
+          {
+            "kind": "takeaway",
+            "title": "À retenir",
+            "points": [
+              "Une pièce a un en-tête.",
+              "Chaque poste porte une clé.",
+              "Le débit égale le crédit."
+            ],
+            "sourceChunkIds": [
+              "4f5a6b7c-8d9e-4f0a-9b1c-2d3e4f5a6b80"
+            ],
+            "notionIds": [
+              "6a9d2c4b-1e7f-4b3a-8c5d-9e0f1a2b3c03"
+            ]
+          }
+        ],
+        "sourceChunkIds": [
+          "4f5a6b7c-8d9e-4f0a-9b1c-2d3e4f5a6b80"
+        ],
+        "notionIds": [
+          "6a9d2c4b-1e7f-4b3a-8c5d-9e0f1a2b3c03"
+        ]
+      },
+      "ok": false,
+      "value": null
+    },
+    {
+      "name": "empty-sections",
+      "input": {
+        "chapterId": "9f1d4c7b-2a3e-4d5f-8b6a-1c2d3e4f5a6b",
+        "title": " Saisie des pièces ",
+        "baseCourse": false,
+        "sections": [],
+        "sourceChunkIds": [],
+        "notionIds": []
+      },
+      "ok": false,
+      "value": null
+    },
+    {
+      "name": "two-points",
+      "input": {
+        "chapterId": "9f1d4c7b-2a3e-4d5f-8b6a-1c2d3e4f5a6b",
+        "title": " Saisie des pièces ",
+        "baseCourse": false,
+        "sections": [
+          {
+            "kind": "takeaway",
+            "points": [
+              "A",
+              "B"
+            ],
+            "notionIds": [
+              "6a9d2c4b-1e7f-4b3a-8c5d-9e0f1a2b3c03"
+            ]
+          }
+        ],
+        "sourceChunkIds": [
+          "4f5a6b7c-8d9e-4f0a-9b1c-2d3e4f5a6b80"
+        ],
+        "notionIds": [
+          "6a9d2c4b-1e7f-4b3a-8c5d-9e0f1a2b3c03"
+        ]
+      },
+      "ok": false,
+      "value": null
+    },
+    {
+      "name": "eight-points",
+      "input": {
+        "chapterId": "9f1d4c7b-2a3e-4d5f-8b6a-1c2d3e4f5a6b",
+        "title": " Saisie des pièces ",
+        "baseCourse": false,
+        "sections": [
+          {
+            "kind": "takeaway",
+            "points": [
+              "A",
+              "B",
+              "C",
+              "D",
+              "E",
+              "F",
+              "G",
+              "H"
+            ],
+            "notionIds": [
+              "6a9d2c4b-1e7f-4b3a-8c5d-9e0f1a2b3c03"
+            ]
+          }
+        ],
+        "sourceChunkIds": [
+          "4f5a6b7c-8d9e-4f0a-9b1c-2d3e4f5a6b80"
+        ],
+        "notionIds": [
+          "6a9d2c4b-1e7f-4b3a-8c5d-9e0f1a2b3c03"
+        ]
+      },
+      "ok": false,
+      "value": null
+    },
+    {
+      "name": "diagram",
+      "input": {
+        "chapterId": "9f1d4c7b-2a3e-4d5f-8b6a-1c2d3e4f5a6b",
+        "title": " Saisie des pièces ",
+        "baseCourse": false,
+        "sections": [
+          {
+            "kind": "takeaway",
+            "points": [
+              "A",
+              "B",
+              "C"
+            ],
+            "diagram": {
+              "blocks": [
+                {
+                  "id": "a",
+                  "label": "Pièce"
+                },
+                {
+                  "id": "b",
+                  "label": "Poste"
+                }
+              ],
+              "arrows": [
+                {
+                  "from": "a",
+                  "to": "b",
+                  "label": "contient"
+                }
+              ]
+            },
+            "mnemonic": "Pièce, poste, clé.",
+            "sourceChunkIds": [
+              "4f5a6b7c-8d9e-4f0a-9b1c-2d3e4f5a6b80"
+            ],
+            "notionIds": [
+              "6a9d2c4b-1e7f-4b3a-8c5d-9e0f1a2b3c03"
+            ]
+          }
+        ],
+        "sourceChunkIds": [
+          "4f5a6b7c-8d9e-4f0a-9b1c-2d3e4f5a6b80"
+        ],
+        "notionIds": [
+          "6a9d2c4b-1e7f-4b3a-8c5d-9e0f1a2b3c03"
+        ]
+      },
+      "ok": true,
+      "value": {
+        "chapterId": "9f1d4c7b-2a3e-4d5f-8b6a-1c2d3e4f5a6b",
+        "title": "Saisie des pièces",
+        "baseCourse": false,
+        "sections": [
+          {
+            "kind": "takeaway",
+            "points": [
+              "A",
+              "B",
+              "C"
+            ],
+            "diagram": {
+              "blocks": [
+                {
+                  "id": "a",
+                  "label": "Pièce"
+                },
+                {
+                  "id": "b",
+                  "label": "Poste"
+                }
+              ],
+              "arrows": [
+                {
+                  "from": "a",
+                  "to": "b",
+                  "label": "contient"
+                }
+              ]
+            },
+            "mnemonic": "Pièce, poste, clé.",
+            "sourceChunkIds": [
+              "4f5a6b7c-8d9e-4f0a-9b1c-2d3e4f5a6b80"
+            ],
+            "notionIds": [
+              "6a9d2c4b-1e7f-4b3a-8c5d-9e0f1a2b3c03"
+            ]
+          }
+        ],
+        "sourceChunkIds": [
+          "4f5a6b7c-8d9e-4f0a-9b1c-2d3e4f5a6b80"
+        ],
+        "notionIds": [
+          "6a9d2c4b-1e7f-4b3a-8c5d-9e0f1a2b3c03"
+        ],
+        "links": [],
+        "resourceSuggestions": []
+      }
+    },
+    {
+      "name": "diagram-unknown-block",
+      "input": {
+        "chapterId": "9f1d4c7b-2a3e-4d5f-8b6a-1c2d3e4f5a6b",
+        "title": " Saisie des pièces ",
+        "baseCourse": false,
+        "sections": [
+          {
+            "kind": "takeaway",
+            "points": [
+              "A",
+              "B",
+              "C"
+            ],
+            "diagram": {
+              "blocks": [
+                {
+                  "id": "a",
+                  "label": "Pièce"
+                }
+              ],
+              "arrows": [
+                {
+                  "from": "a",
+                  "to": "b"
+                }
+              ]
+            },
+            "notionIds": [
+              "6a9d2c4b-1e7f-4b3a-8c5d-9e0f1a2b3c03"
+            ]
+          }
+        ],
+        "sourceChunkIds": [
+          "4f5a6b7c-8d9e-4f0a-9b1c-2d3e4f5a6b80"
+        ],
+        "notionIds": [
+          "6a9d2c4b-1e7f-4b3a-8c5d-9e0f1a2b3c03"
+        ]
+      },
+      "ok": false,
+      "value": null
+    },
+    {
+      "name": "summary-prompt",
+      "input": {
+        "chapterId": "9f1d4c7b-2a3e-4d5f-8b6a-1c2d3e4f5a6b",
+        "title": " Saisie des pièces ",
+        "baseCourse": false,
+        "sections": [
+          {
+            "kind": "markdown",
+            "contentMd": "X",
+            "sourceChunkIds": [
+              "4f5a6b7c-8d9e-4f0a-9b1c-2d3e4f5a6b80"
+            ],
+            "notionIds": [
+              "6a9d2c4b-1e7f-4b3a-8c5d-9e0f1a2b3c03"
+            ]
+          },
+          {
+            "kind": "takeaway",
+            "points": [
+              "A",
+              "B",
+              "C"
+            ],
+            "sourceChunkIds": [
+              "4f5a6b7c-8d9e-4f0a-9b1c-2d3e4f5a6b80"
+            ],
+            "notionIds": [
+              "6a9d2c4b-1e7f-4b3a-8c5d-9e0f1a2b3c03"
+            ]
+          },
+          {
+            "kind": "summary_prompt",
+            "title": "Résumez",
+            "prompt": "Trois phrases.",
+            "notionIds": []
+          }
+        ],
+        "sourceChunkIds": [
+          "4f5a6b7c-8d9e-4f0a-9b1c-2d3e4f5a6b80"
+        ],
+        "notionIds": [
+          "6a9d2c4b-1e7f-4b3a-8c5d-9e0f1a2b3c03"
+        ]
+      },
+      "ok": true,
+      "value": {
+        "chapterId": "9f1d4c7b-2a3e-4d5f-8b6a-1c2d3e4f5a6b",
+        "title": "Saisie des pièces",
+        "baseCourse": false,
+        "sections": [
+          {
+            "kind": "markdown",
+            "contentMd": "X",
+            "sourceChunkIds": [
+              "4f5a6b7c-8d9e-4f0a-9b1c-2d3e4f5a6b80"
+            ],
+            "notionIds": [
+              "6a9d2c4b-1e7f-4b3a-8c5d-9e0f1a2b3c03"
+            ]
+          },
+          {
+            "kind": "takeaway",
+            "points": [
+              "A",
+              "B",
+              "C"
+            ],
+            "sourceChunkIds": [
+              "4f5a6b7c-8d9e-4f0a-9b1c-2d3e4f5a6b80"
+            ],
+            "notionIds": [
+              "6a9d2c4b-1e7f-4b3a-8c5d-9e0f1a2b3c03"
+            ]
+          },
+          {
+            "kind": "summary_prompt",
+            "title": "Résumez",
+            "prompt": "Trois phrases.",
+            "notionIds": []
+          }
+        ],
+        "sourceChunkIds": [
+          "4f5a6b7c-8d9e-4f0a-9b1c-2d3e4f5a6b80"
+        ],
+        "notionIds": [
+          "6a9d2c4b-1e7f-4b3a-8c5d-9e0f1a2b3c03"
+        ],
+        "links": [],
+        "resourceSuggestions": []
+      }
+    },
+    {
+      "name": "comparison",
+      "input": {
+        "chapterId": "9f1d4c7b-2a3e-4d5f-8b6a-1c2d3e4f5a6b",
+        "title": " Saisie des pièces ",
+        "baseCourse": false,
+        "sections": [
+          {
+            "kind": "comparison",
+            "left": {
+              "title": "Type",
+              "body": "Classe la pièce.",
+              "example": "SA"
+            },
+            "right": {
+              "title": "Clé",
+              "body": "Agit poste par poste.",
+              "example": "40"
+            },
+            "sourceChunkIds": [
+              "4f5a6b7c-8d9e-4f0a-9b1c-2d3e4f5a6b80"
+            ],
+            "notionIds": [
+              "6a9d2c4b-1e7f-4b3a-8c5d-9e0f1a2b3c03"
+            ]
+          },
+          {
+            "kind": "takeaway",
+            "points": [
+              "A",
+              "B",
+              "C"
+            ],
+            "notionIds": [
+              "6a9d2c4b-1e7f-4b3a-8c5d-9e0f1a2b3c03"
+            ]
+          }
+        ],
+        "sourceChunkIds": [
+          "4f5a6b7c-8d9e-4f0a-9b1c-2d3e4f5a6b80"
+        ],
+        "notionIds": [
+          "6a9d2c4b-1e7f-4b3a-8c5d-9e0f1a2b3c03"
+        ]
+      },
+      "ok": true,
+      "value": {
+        "chapterId": "9f1d4c7b-2a3e-4d5f-8b6a-1c2d3e4f5a6b",
+        "title": "Saisie des pièces",
+        "baseCourse": false,
+        "sections": [
+          {
+            "kind": "comparison",
+            "left": {
+              "title": "Type",
+              "body": "Classe la pièce.",
+              "example": "SA"
+            },
+            "right": {
+              "title": "Clé",
+              "body": "Agit poste par poste.",
+              "example": "40"
+            },
+            "sourceChunkIds": [
+              "4f5a6b7c-8d9e-4f0a-9b1c-2d3e4f5a6b80"
+            ],
+            "notionIds": [
+              "6a9d2c4b-1e7f-4b3a-8c5d-9e0f1a2b3c03"
+            ]
+          },
+          {
+            "kind": "takeaway",
+            "points": [
+              "A",
+              "B",
+              "C"
+            ],
+            "sourceChunkIds": [],
+            "notionIds": [
+              "6a9d2c4b-1e7f-4b3a-8c5d-9e0f1a2b3c03"
+            ]
+          }
+        ],
+        "sourceChunkIds": [
+          "4f5a6b7c-8d9e-4f0a-9b1c-2d3e4f5a6b80"
+        ],
+        "notionIds": [
+          "6a9d2c4b-1e7f-4b3a-8c5d-9e0f1a2b3c03"
+        ],
+        "links": [],
+        "resourceSuggestions": []
+      }
+    },
+    {
+      "name": "link",
+      "input": {
+        "chapterId": "9f1d4c7b-2a3e-4d5f-8b6a-1c2d3e4f5a6b",
+        "title": " Saisie des pièces ",
+        "baseCourse": false,
+        "sections": [
+          {
+            "kind": "markdown",
+            "title": "  La pièce comptable  ",
+            "contentMd": "Toute écriture est une pièce. ",
+            "sourceChunkIds": [
+              "4f5a6b7c-8d9e-4f0a-9b1c-2d3e4f5a6b80"
+            ],
+            "notionIds": [
+              "6a9d2c4b-1e7f-4b3a-8c5d-9e0f1a2b3c03"
+            ]
+          },
+          {
+            "kind": "takeaway",
+            "title": "À retenir",
+            "points": [
+              "Une pièce a un en-tête.",
+              "Chaque poste porte une clé.",
+              "Le débit égale le crédit."
+            ],
+            "sourceChunkIds": [
+              "4f5a6b7c-8d9e-4f0a-9b1c-2d3e4f5a6b80"
+            ],
+            "notionIds": [
+              "6a9d2c4b-1e7f-4b3a-8c5d-9e0f1a2b3c03"
+            ]
+          }
+        ],
+        "sourceChunkIds": [
+          "4f5a6b7c-8d9e-4f0a-9b1c-2d3e4f5a6b80"
+        ],
+        "notionIds": [
+          "6a9d2c4b-1e7f-4b3a-8c5d-9e0f1a2b3c03"
+        ],
+        "links": [
+          {
+            "fromNotionId": "6a9d2c4b-1e7f-4b3a-8c5d-9e0f1a2b3c03",
+            "toNotionId": "2d3e4f5a-6b7c-4d8e-9f0a-1b2c3d4e5f60",
+            "kind": "confusion"
+          }
+        ]
+      },
+      "ok": true,
+      "value": {
+        "chapterId": "9f1d4c7b-2a3e-4d5f-8b6a-1c2d3e4f5a6b",
+        "title": "Saisie des pièces",
+        "baseCourse": false,
+        "sections": [
+          {
+            "kind": "markdown",
+            "title": "La pièce comptable",
+            "contentMd": "Toute écriture est une pièce.",
+            "sourceChunkIds": [
+              "4f5a6b7c-8d9e-4f0a-9b1c-2d3e4f5a6b80"
+            ],
+            "notionIds": [
+              "6a9d2c4b-1e7f-4b3a-8c5d-9e0f1a2b3c03"
+            ]
+          },
+          {
+            "kind": "takeaway",
+            "title": "À retenir",
+            "points": [
+              "Une pièce a un en-tête.",
+              "Chaque poste porte une clé.",
+              "Le débit égale le crédit."
+            ],
+            "sourceChunkIds": [
+              "4f5a6b7c-8d9e-4f0a-9b1c-2d3e4f5a6b80"
+            ],
+            "notionIds": [
+              "6a9d2c4b-1e7f-4b3a-8c5d-9e0f1a2b3c03"
+            ]
+          }
+        ],
+        "sourceChunkIds": [
+          "4f5a6b7c-8d9e-4f0a-9b1c-2d3e4f5a6b80"
+        ],
+        "notionIds": [
+          "6a9d2c4b-1e7f-4b3a-8c5d-9e0f1a2b3c03"
+        ],
+        "links": [
+          {
+            "fromNotionId": "6a9d2c4b-1e7f-4b3a-8c5d-9e0f1a2b3c03",
+            "toNotionId": "2d3e4f5a-6b7c-4d8e-9f0a-1b2c3d4e5f60",
+            "kind": "confusion"
+          }
+        ],
+        "resourceSuggestions": []
+      }
+    },
+    {
+      "name": "unknown-link-kind",
+      "input": {
+        "chapterId": "9f1d4c7b-2a3e-4d5f-8b6a-1c2d3e4f5a6b",
+        "title": " Saisie des pièces ",
+        "baseCourse": false,
+        "sections": [
+          {
+            "kind": "markdown",
+            "title": "  La pièce comptable  ",
+            "contentMd": "Toute écriture est une pièce. ",
+            "sourceChunkIds": [
+              "4f5a6b7c-8d9e-4f0a-9b1c-2d3e4f5a6b80"
+            ],
+            "notionIds": [
+              "6a9d2c4b-1e7f-4b3a-8c5d-9e0f1a2b3c03"
+            ]
+          },
+          {
+            "kind": "takeaway",
+            "title": "À retenir",
+            "points": [
+              "Une pièce a un en-tête.",
+              "Chaque poste porte une clé.",
+              "Le débit égale le crédit."
+            ],
+            "sourceChunkIds": [
+              "4f5a6b7c-8d9e-4f0a-9b1c-2d3e4f5a6b80"
+            ],
+            "notionIds": [
+              "6a9d2c4b-1e7f-4b3a-8c5d-9e0f1a2b3c03"
+            ]
+          }
+        ],
+        "sourceChunkIds": [
+          "4f5a6b7c-8d9e-4f0a-9b1c-2d3e4f5a6b80"
+        ],
+        "notionIds": [
+          "6a9d2c4b-1e7f-4b3a-8c5d-9e0f1a2b3c03"
+        ],
+        "links": [
+          {
+            "fromNotionId": "6a9d2c4b-1e7f-4b3a-8c5d-9e0f1a2b3c03",
+            "toNotionId": "2d3e4f5a-6b7c-4d8e-9f0a-1b2c3d4e5f60",
+            "kind": "tutor"
+          }
+        ]
+      },
+      "ok": false,
+      "value": null
+    }
+  ],
+  "courses": [
+    {
+      "name": "one",
+      "input": {
+        "chapters": [
+          {
+            "chapterId": "9f1d4c7b-2a3e-4d5f-8b6a-1c2d3e4f5a6b",
+            "title": " Saisie des pièces ",
+            "baseCourse": false,
+            "sections": [
+              {
+                "kind": "markdown",
+                "title": "  La pièce comptable  ",
+                "contentMd": "Toute écriture est une pièce. ",
+                "sourceChunkIds": [
+                  "4f5a6b7c-8d9e-4f0a-9b1c-2d3e4f5a6b80"
+                ],
+                "notionIds": [
+                  "6a9d2c4b-1e7f-4b3a-8c5d-9e0f1a2b3c03"
+                ]
+              },
+              {
+                "kind": "takeaway",
+                "title": "À retenir",
+                "points": [
+                  "Une pièce a un en-tête.",
+                  "Chaque poste porte une clé.",
+                  "Le débit égale le crédit."
+                ],
+                "sourceChunkIds": [
+                  "4f5a6b7c-8d9e-4f0a-9b1c-2d3e4f5a6b80"
+                ],
+                "notionIds": [
+                  "6a9d2c4b-1e7f-4b3a-8c5d-9e0f1a2b3c03"
+                ]
+              }
+            ],
+            "sourceChunkIds": [
+              "4f5a6b7c-8d9e-4f0a-9b1c-2d3e4f5a6b80"
+            ],
+            "notionIds": [
+              "6a9d2c4b-1e7f-4b3a-8c5d-9e0f1a2b3c03"
+            ]
+          }
+        ]
+      },
+      "ok": true,
+      "value": {
+        "chapters": [
+          {
+            "chapterId": "9f1d4c7b-2a3e-4d5f-8b6a-1c2d3e4f5a6b",
+            "title": "Saisie des pièces",
+            "baseCourse": false,
+            "sections": [
+              {
+                "kind": "markdown",
+                "title": "La pièce comptable",
+                "contentMd": "Toute écriture est une pièce.",
+                "sourceChunkIds": [
+                  "4f5a6b7c-8d9e-4f0a-9b1c-2d3e4f5a6b80"
+                ],
+                "notionIds": [
+                  "6a9d2c4b-1e7f-4b3a-8c5d-9e0f1a2b3c03"
+                ]
+              },
+              {
+                "kind": "takeaway",
+                "title": "À retenir",
+                "points": [
+                  "Une pièce a un en-tête.",
+                  "Chaque poste porte une clé.",
+                  "Le débit égale le crédit."
+                ],
+                "sourceChunkIds": [
+                  "4f5a6b7c-8d9e-4f0a-9b1c-2d3e4f5a6b80"
+                ],
+                "notionIds": [
+                  "6a9d2c4b-1e7f-4b3a-8c5d-9e0f1a2b3c03"
+                ]
+              }
+            ],
+            "sourceChunkIds": [
+              "4f5a6b7c-8d9e-4f0a-9b1c-2d3e4f5a6b80"
+            ],
+            "notionIds": [
+              "6a9d2c4b-1e7f-4b3a-8c5d-9e0f1a2b3c03"
+            ],
+            "links": [],
+            "resourceSuggestions": []
+          }
+        ]
+      }
+    },
+    {
+      "name": "two",
+      "input": {
+        "chapters": [
+          {
+            "chapterId": "9f1d4c7b-2a3e-4d5f-8b6a-1c2d3e4f5a6b",
+            "title": " Saisie des pièces ",
+            "baseCourse": false,
+            "sections": [
+              {
+                "kind": "markdown",
+                "title": "  La pièce comptable  ",
+                "contentMd": "Toute écriture est une pièce. ",
+                "sourceChunkIds": [
+                  "4f5a6b7c-8d9e-4f0a-9b1c-2d3e4f5a6b80"
+                ],
+                "notionIds": [
+                  "6a9d2c4b-1e7f-4b3a-8c5d-9e0f1a2b3c03"
+                ]
+              },
+              {
+                "kind": "takeaway",
+                "title": "À retenir",
+                "points": [
+                  "Une pièce a un en-tête.",
+                  "Chaque poste porte une clé.",
+                  "Le débit égale le crédit."
+                ],
+                "sourceChunkIds": [
+                  "4f5a6b7c-8d9e-4f0a-9b1c-2d3e4f5a6b80"
+                ],
+                "notionIds": [
+                  "6a9d2c4b-1e7f-4b3a-8c5d-9e0f1a2b3c03"
+                ]
+              }
+            ],
+            "sourceChunkIds": [
+              "4f5a6b7c-8d9e-4f0a-9b1c-2d3e4f5a6b80"
+            ],
+            "notionIds": [
+              "6a9d2c4b-1e7f-4b3a-8c5d-9e0f1a2b3c03"
+            ]
+          },
+          {
+            "chapterId": "1c2d3e4f-5a6b-4c7d-8e9f-0a1b2c3d4e5f",
+            "title": "Cours de base",
+            "baseCourse": true,
+            "sections": [
+              {
+                "kind": "tutor_addition",
+                "contentMd": "Aucun apport.",
+                "notionIds": [
+                  "2d3e4f5a-6b7c-4d8e-9f0a-1b2c3d4e5f60"
+                ]
+              },
+              {
+                "kind": "takeaway",
+                "points": [
+                  "A",
+                  "B",
+                  "C"
+                ],
+                "notionIds": [
+                  "2d3e4f5a-6b7c-4d8e-9f0a-1b2c3d4e5f60"
+                ]
+              }
+            ],
+            "sourceChunkIds": [],
+            "notionIds": [
+              "2d3e4f5a-6b7c-4d8e-9f0a-1b2c3d4e5f60"
+            ],
+            "resourceSuggestions": [
+              {
+                "title": "Guide",
+                "url": "https://example.com/guide",
+                "reason": "Les bases."
+              }
+            ]
+          }
+        ]
+      },
+      "ok": true,
+      "value": {
+        "chapters": [
+          {
+            "chapterId": "9f1d4c7b-2a3e-4d5f-8b6a-1c2d3e4f5a6b",
+            "title": "Saisie des pièces",
+            "baseCourse": false,
+            "sections": [
+              {
+                "kind": "markdown",
+                "title": "La pièce comptable",
+                "contentMd": "Toute écriture est une pièce.",
+                "sourceChunkIds": [
+                  "4f5a6b7c-8d9e-4f0a-9b1c-2d3e4f5a6b80"
+                ],
+                "notionIds": [
+                  "6a9d2c4b-1e7f-4b3a-8c5d-9e0f1a2b3c03"
+                ]
+              },
+              {
+                "kind": "takeaway",
+                "title": "À retenir",
+                "points": [
+                  "Une pièce a un en-tête.",
+                  "Chaque poste porte une clé.",
+                  "Le débit égale le crédit."
+                ],
+                "sourceChunkIds": [
+                  "4f5a6b7c-8d9e-4f0a-9b1c-2d3e4f5a6b80"
+                ],
+                "notionIds": [
+                  "6a9d2c4b-1e7f-4b3a-8c5d-9e0f1a2b3c03"
+                ]
+              }
+            ],
+            "sourceChunkIds": [
+              "4f5a6b7c-8d9e-4f0a-9b1c-2d3e4f5a6b80"
+            ],
+            "notionIds": [
+              "6a9d2c4b-1e7f-4b3a-8c5d-9e0f1a2b3c03"
+            ],
+            "links": [],
+            "resourceSuggestions": []
+          },
+          {
+            "chapterId": "1c2d3e4f-5a6b-4c7d-8e9f-0a1b2c3d4e5f",
+            "title": "Cours de base",
+            "baseCourse": true,
+            "sections": [
+              {
+                "kind": "tutor_addition",
+                "contentMd": "Aucun apport.",
+                "notionIds": [
+                  "2d3e4f5a-6b7c-4d8e-9f0a-1b2c3d4e5f60"
+                ]
+              },
+              {
+                "kind": "takeaway",
+                "points": [
+                  "A",
+                  "B",
+                  "C"
+                ],
+                "sourceChunkIds": [],
+                "notionIds": [
+                  "2d3e4f5a-6b7c-4d8e-9f0a-1b2c3d4e5f60"
+                ]
+              }
+            ],
+            "sourceChunkIds": [],
+            "notionIds": [
+              "2d3e4f5a-6b7c-4d8e-9f0a-1b2c3d4e5f60"
+            ],
+            "links": [],
+            "resourceSuggestions": [
+              {
+                "title": "Guide",
+                "url": "https://example.com/guide",
+                "reason": "Les bases."
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "name": "none",
+      "input": {
+        "chapters": []
+      },
+      "ok": false,
+      "value": null
+    },
+    {
+      "name": "unknown-field",
+      "input": {
+        "chapters": [
+          {
+            "chapterId": "9f1d4c7b-2a3e-4d5f-8b6a-1c2d3e4f5a6b",
+            "title": " Saisie des pièces ",
+            "baseCourse": false,
+            "sections": [
+              {
+                "kind": "markdown",
+                "title": "  La pièce comptable  ",
+                "contentMd": "Toute écriture est une pièce. ",
+                "sourceChunkIds": [
+                  "4f5a6b7c-8d9e-4f0a-9b1c-2d3e4f5a6b80"
+                ],
+                "notionIds": [
+                  "6a9d2c4b-1e7f-4b3a-8c5d-9e0f1a2b3c03"
+                ]
+              },
+              {
+                "kind": "takeaway",
+                "title": "À retenir",
+                "points": [
+                  "Une pièce a un en-tête.",
+                  "Chaque poste porte une clé.",
+                  "Le débit égale le crédit."
+                ],
+                "sourceChunkIds": [
+                  "4f5a6b7c-8d9e-4f0a-9b1c-2d3e4f5a6b80"
+                ],
+                "notionIds": [
+                  "6a9d2c4b-1e7f-4b3a-8c5d-9e0f1a2b3c03"
+                ]
+              }
+            ],
+            "sourceChunkIds": [
+              "4f5a6b7c-8d9e-4f0a-9b1c-2d3e4f5a6b80"
+            ],
+            "notionIds": [
+              "6a9d2c4b-1e7f-4b3a-8c5d-9e0f1a2b3c03"
+            ]
+          }
+        ],
+        "extra": 1
+      },
+      "ok": false,
+      "value": null
+    }
+  ],
+  "links": [
+    {
+      "fromNotionId": "6a9d2c4b-1e7f-4b3a-8c5d-9e0f1a2b3c03",
+      "toNotionId": "2d3e4f5a-6b7c-4d8e-9f0a-1b2c3d4e5f60",
+      "kind": "confusion",
+      "expected": [
+        "2d3e4f5a-6b7c-4d8e-9f0a-1b2c3d4e5f60",
+        "6a9d2c4b-1e7f-4b3a-8c5d-9e0f1a2b3c03"
+      ]
+    },
+    {
+      "fromNotionId": "2d3e4f5a-6b7c-4d8e-9f0a-1b2c3d4e5f60",
+      "toNotionId": "6a9d2c4b-1e7f-4b3a-8c5d-9e0f1a2b3c03",
+      "kind": "confusion",
+      "expected": [
+        "2d3e4f5a-6b7c-4d8e-9f0a-1b2c3d4e5f60",
+        "6a9d2c4b-1e7f-4b3a-8c5d-9e0f1a2b3c03"
+      ]
+    },
+    {
+      "fromNotionId": "6a9d2c4b-1e7f-4b3a-8c5d-9e0f1a2b3c03",
+      "toNotionId": "2d3e4f5a-6b7c-4d8e-9f0a-1b2c3d4e5f60",
+      "kind": "prerequisite",
+      "expected": [
+        "6a9d2c4b-1e7f-4b3a-8c5d-9e0f1a2b3c03",
+        "2d3e4f5a-6b7c-4d8e-9f0a-1b2c3d4e5f60"
+      ]
+    }
+  ],
+  "slices": [
+    {
+      "text": "abcdef",
+      "limit": 3,
+      "expected": "abc"
+    },
+    {
+      "text": "abcdef",
+      "limit": 0,
+      "expected": ""
+    },
+    {
+      "text": "abcdef",
+      "limit": 99,
+      "expected": "abcdef"
+    },
+    {
+      "text": "L’en-tête de pièce, résumé",
+      "limit": 10,
+      "expected": "L’en-tête "
+    },
+    {
+      "text": "Résumé — débit/crédit",
+      "limit": 12,
+      "expected": "Résumé — déb"
+    },
+    {
+      "text": "A😀BC",
+      "limit": 1,
+      "expected": "A"
+    },
+    {
+      "text": "A😀BC",
+      "limit": 3,
+      "expected": "A😀"
+    },
+    {
+      "text": "",
+      "limit": 4,
+      "expected": ""
+    }
+  ],
+  "placeholders": [
+    {
+      "name": "chapter-and-notion",
+      "input": {
+        "chapterId": "{{chapterId}}",
+        "title": "{{chapterTitle}}",
+        "notions": [
+          "{{notionId}}",
+          "{{notionId:2}}",
+          "{{notionId:9}}"
+        ],
+        "chunks": [
+          "{{chunkId}}",
+          "{{chunkId:2}}"
+        ],
+        "unknown": "{{unknownValue}}"
+      },
+      "values": {
+        "chapterId": "9f1d4c7b-2a3e-4d5f-8b6a-1c2d3e4f5a6b",
+        "chapterTitle": "Saisie",
+        "moduleTitle": "Comptabilité",
+        "formationTitle": "SAP",
+        "notions": [
+          {
+            "id": "6a9d2c4b-1e7f-4b3a-8c5d-9e0f1a2b3c03"
+          },
+          {
+            "id": "2d3e4f5a-6b7c-4d8e-9f0a-1b2c3d4e5f60"
+          }
+        ],
+        "documents": [
+          {
+            "chunkId": "4f5a6b7c-8d9e-4f0a-9b1c-2d3e4f5a6b80"
+          }
+        ]
+      },
+      "expected": {
+        "chapterId": "9f1d4c7b-2a3e-4d5f-8b6a-1c2d3e4f5a6b",
+        "title": "Saisie",
+        "notions": [
+          "6a9d2c4b-1e7f-4b3a-8c5d-9e0f1a2b3c03",
+          "2d3e4f5a-6b7c-4d8e-9f0a-1b2c3d4e5f60",
+          "{{notionId:9}}"
+        ],
+        "chunks": [
+          "4f5a6b7c-8d9e-4f0a-9b1c-2d3e4f5a6b80",
+          "{{chunkId:2}}"
+        ],
+        "unknown": "{{unknownValue}}"
+      }
+    }
+  ],
+  "scenarios": [
+    {
+      "name": "sourced",
+      "explicit": null,
+      "forced": null,
+      "passages": 1,
+      "expected": "course-sourced"
+    },
+    {
+      "name": "base",
+      "explicit": null,
+      "forced": null,
+      "passages": 0,
+      "expected": "course-base"
+    },
+    {
+      "name": "explicit",
+      "explicit": "course-invalid",
+      "forced": null,
+      "passages": 1,
+      "expected": "course-invalid"
+    },
+    {
+      "name": "forced-wins",
+      "explicit": "course-invalid",
+      "forced": "course-base",
+      "passages": 1,
+      "expected": "course-base"
+    },
+    {
+      "name": "forced-absent",
+      "explicit": "course-base",
+      "forced": null,
+      "passages": 1,
+      "expected": "course-base"
+    }
+  ],
+  "identifiers": {
+    "generated": "course-generated:9f1d4c7b-2a3e-4d5f-8b6a-1c2d3e4f5a6b",
+    "ready": "course-ready:9f1d4c7b-2a3e-4d5f-8b6a-1c2d3e4f5a6b",
+    "failed": "course-failed:1c2d3e4f-5a6b-4c7d-8e9f-0a1b2c3d4e5f:3"
+  }
+}

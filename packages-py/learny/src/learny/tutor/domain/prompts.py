@@ -16,7 +16,7 @@ TUTOR_CHAT_PROMPT_ID = "tutor-chat.tutor-chat"
 SELF_TEST_QUESTION_PROMPT_ID = "self-test-question.self-test-question"
 SELF_TEST_GRADE_PROMPT_ID = "self-test-grade.self-test-grade"
 
-PROMPT_FILES: tuple[str, ...] = ("tutor-chat", "self-test-question", "self-test-grade")
+PROMPT_FILES: tuple[str, ...] = ("tutor-chat", "self-test-question", "self-test-grade", "course")
 _FRONT_MATTER_VERSION = re.compile(r"^version:\s*(\d+)\s*$", re.MULTILINE)
 
 

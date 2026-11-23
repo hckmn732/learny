@@ -250,3 +250,7 @@ Origine : **Validée** = décision prise avec le porteur du projet ; **Déduite*
 | [ADR-2029](ADR-2029-session-de-fixtures-dans-llmgateway-pour-la-batterie-de-comp.md) | Session de fixtures dans LlmGateway pour la batterie de compatibilite | Déduite | SPEC-2204, ADR-0048, ADR-0153 |
 | [ADR-2030](ADR-2030-validation-stricte-des-corps-en-mode-json-pour-les-enums.md) | Validation stricte des corps en mode JSON pour les enums | Déduite | SPEC-2204, SPEC-2201, ADR-2012 |
 | [ADR-2031](ADR-2031-verification-de-la-signature-stripe-a-horloge-injectee.md) | Vérification de la signature Stripe à horloge injectée | Déduite | SPEC-2206, ADR-0047, ADR-2015, ADR-0215 |
+| [ADR-2032](ADR-2032-consommateur-generate-course-laisse-en-typescript-faute-de-c.md) | Consommateur generate-course laisse en TypeScript faute de cas d'usage Python | Déduite | SPEC-2207, SPEC-2204, ADR-2006, ADR-2014 |
+| [ADR-2033](ADR-2033-extraction-mecanique-de-deux-regles-pures-du-pipeline-de-c.md) | Extraction mécanique de deux règles pures du pipeline de cours pour l'oracle | Déduite | SPEC-2207, SPEC-608, ADR-2008, ADR-2026 |
+| [ADR-2034](ADR-2034-auth-et-reprise-de-formation-portees-les-adr-2022-et-20.md) | Auth et reprise de formation portées en Python, ADR-2022 et ADR-2024 levées | Déduite | SPEC-2207, SPEC-202, SPEC-618, ADR-2008, ADR-2011, ADR-2022, ADR-2023, ADR-2024 |
+| [ADR-2035](ADR-2035-bascule-spec-2207-livree-avec-trente-entrees-relayees.md) | Bascule SPEC-2207 livrée avec trente entrées relayées | Déduite | SPEC-2207, ADR-2019, ADR-2023 |

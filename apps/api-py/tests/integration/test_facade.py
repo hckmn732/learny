@@ -55,7 +55,8 @@ def test_a_missing_upstream_returns_the_api_unavailable_problem() -> None:
 
     app, client = build_app()
     install_transport(app, handler)
-    response = client.get("/api/v1/health")
+    # Any path the facade does not serve itself: the catch-all relay reports the failure.
+    response = client.get("/api/v1/unknown")
     assert response.status_code == 502
     body = response.json()
     assert body["code"] == "API_UNAVAILABLE"
@@ -81,4 +82,5 @@ def test_the_contract_artefacts_are_loaded_from_the_repository() -> None:
     assert "operations:" in ownership
     assert (ROOT / "api" / "errors.json").exists()
     app, _client = build_app()
-    assert app.state.ownership.operations["health.get"] == "ts"
+    assert app.state.ownership.operations["health.get"] == "py"
+    assert app.state.ownership.special["GET /api/v1/health"] == "py"

@@ -23,6 +23,7 @@ from learny.engagement.domain.automations.pause import (
     validate_pause_end_date,
 )
 from learny.identity.domain.actor import Actor
+from learny.learning.application.planning import replan_formation_in_tx
 from learny.learning.domain.global_quiz import build_daily_session
 from learny.learning.domain.params import ENGINE
 from learny.learning.infrastructure.queries import upsert_daily_activity
@@ -364,25 +365,6 @@ async def _build_diagnostic_plan(
     }
 
 
-async def replan_formation_after_resume(tx: Any, user_id: str, formation_id: str, now: datetime) -> None:
-    """EF-2 of SPEC-618 - a resumed formation is replanned from its resume day, in place.
-
-    The planner of SPEC-407 and the slot reconciliation of SPEC-411 are reused as they are: the
-    pause service never duplicates a planning rule (ADR-2011 section 4).
-    """
-    from learny.learning.application.planning import (
-        _read_planning_context_tx,
-        plan_input_of,
-        reconcile_plan_slots,
-    )
-    from learny.learning.domain.planner import plan_schedule
-
-    actor = Actor(user_id=user_id, email="", email_confirmed=True, transport="bearer")
-    context = await _read_planning_context_tx(tx, actor, formation_id, now)
-    planned = plan_schedule(plan_input_of(context, now))
-    await reconcile_plan_slots(tx, user_id, formation_id, planned["slots"], now)
-
-
 async def _pause_formations(tx: Any, user_id: str, now: datetime) -> list[str]:
     await tx.conn.execute(LOCK_FORMATIONS, {"user_id": user_id})
     result = await tx.conn.execute(READ_ACTIVE_FORMATIONS, {"user_id": user_id})
@@ -411,7 +393,7 @@ async def _resume_formations(tx: Any, user_id: str, now: datetime, formation_ids
         await tx.conn.execute(
             RESUME_FORMATION, {"now": now, "formation_id": formation_id, "user_id": user_id}
         )
-        await replan_formation_after_resume(tx, user_id, formation_id, now)
+        await replan_formation_in_tx(tx, user_id, formation_id, now)
         resumed.append(formation_id)
     if resumed:
         await tx.conn.execute(SET_CURRENT_FORMATION, {"user_id": user_id, "formation_id": resumed[0]})

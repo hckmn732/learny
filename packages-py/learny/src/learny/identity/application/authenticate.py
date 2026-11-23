@@ -142,12 +142,15 @@ async def _bearer_actor(deps: AuthDeps, token: str) -> Actor:
         return _actor_of(user, "bearer")
 
 
-async def _cookie_actor(deps: AuthDeps, token: str) -> Actor:
-    """A cookie session is validated by the Auth server, like `getUser()` in TypeScript."""
+async def _cookie_actor(deps: AuthDeps, token: str) -> Actor | None:
+    """A cookie session is validated by the Auth server, like `getUser()` in TypeScript.
+
+    A refused cookie is an anonymous request, never an error: `supabaseSessionResolver` answers
+    `null`, so a public route (the sign-out, CL-10) still runs and a protected one answers its own
+    401. An invalid Bearer token, by contrast, never falls back (ET-3, CL-6).
+    """
     user = await deps.gotrue.get_user(token)
-    if user is None:
-        raise _unauthenticated()
-    return _actor_of(user, "cookie")
+    return None if user is None else _actor_of(user, "cookie")
 
 
 async def assert_fresh(deps: AuthDeps, actor: Actor, headers: Mapping[str, str]) -> Actor:
