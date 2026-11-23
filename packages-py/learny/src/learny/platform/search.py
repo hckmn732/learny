@@ -357,7 +357,7 @@ def fit_results_to_budget(
 
 
 def search_fixtures_directory() -> Path:
-    """`<packages/llm/fixtures>/search`, or `LLM_FIXTURES_DIR/search` in a container."""
+    """`<packages/llm/fixtures>/search`."""
     return fixtures_directory() / "search"
 
 

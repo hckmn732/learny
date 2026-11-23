@@ -5,7 +5,6 @@ container, no service locator and no module-level mutable state. Every capabilit
 selected from the settings, so a test can substitute one field without patching globals.
 """
 
-import os
 from collections.abc import Mapping
 from dataclasses import dataclass
 from typing import Any
@@ -28,7 +27,7 @@ from learny.platform.llm.mock import load_registry
 from learny.platform.storage import SupabaseStorage
 from learny.platform.stripe import StripeGateway, WebhookJournal, build_stripe_gateway
 from learny.shared.clock import Clock, SystemClock, from_env
-from learny.shared.config import PushMode, Settings
+from learny.shared.config import Settings
 from learny.shared.db.uow import Database
 
 JWKS_TIMEOUT_SECONDS = 10.0
@@ -68,7 +67,7 @@ def jwks_fetcher(settings: Settings) -> Any:
 
 def build_deps(settings: Settings) -> Deps:
     """Builds the bundle from the settings; the caller owns the lifecycle of the pools."""
-    clock = from_env({"CLOCK_FIXED_AT": os.environ.get("CLOCK_FIXED_AT", "")})
+    clock = from_env({"CLOCK_FIXED_AT": settings.fixed_instant or ""})
     email_config = build_email_config(settings)
     stripe = build_stripe_gateway(resolve_billing_config(settings.billing_env()), clock)
     # EF-8 - the simulated mode keeps the recent webhook outcomes in memory (dev routes, SPEC-2207).
@@ -95,17 +94,12 @@ def build_deps(settings: Settings) -> Deps:
 def build_push(settings: Settings, clock: Clock) -> PushTransport:
     """The browser push transport of the configuration (SPEC-2205).
 
-    `mock` outside production (the environment default of `envDefaults`), `live` only with the
-    three VAPID values: a production process without them fails at startup instead of silently
-    dropping every push.
+    `mock` outside production (derived from `APP_ENV`, ADR-2042), `live` only with the VAPID key:
+    the public key and the subject are derived from it and from `EMAIL_FROM`, so a production
+    process without the private key fails at startup instead of silently dropping every push.
     """
-    mode: PushMode = (
-        settings.push_mode
-        if settings.push_mode is not None
-        else ("mock" if settings.app_env in ("local", "test", "development", "") else "live")
-    )
     return create_push_transport(
-        mode,
+        settings.push_mode or "mock",
         clock=clock,
         ci=settings.ci,
         subject=settings.vapid_subject,
@@ -118,10 +112,10 @@ def build_llm(settings: Settings) -> LlmGateway:
     """The AI capability of the use cases (SPEC-2201).
 
     Only the deterministic mock adapter ships with this specification: the live providers land with
-    the spec that first needs them (SPEC-2204). A non-mock `LLM_MODE` therefore fails at startup
-    instead of silently serving simulated answers in production.
+    the spec that first needs them (SPEC-2204). A non-mock mode (derived from `APP_ENV`, ADR-2042)
+    therefore fails at startup instead of silently serving simulated answers in production.
     """
-    mode = os.environ.get("LLM_MODE", "mock")
-    if mode not in ("", "mock"):
+    mode = settings.llm_mode or "mock"
+    if mode != "mock":
         raise RuntimeError(f"LLM_MODE={mode} is not served yet: only the mock adapter ships")
     return MockGateway(load_registry())

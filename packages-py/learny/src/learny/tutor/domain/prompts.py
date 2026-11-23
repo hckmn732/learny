@@ -38,12 +38,7 @@ class BuiltPrompt:
 
 
 def prompts_directory() -> Path:
-    """`TUTOR_PROMPTS_DIR` when set, else the checkout's `packages/tutor/prompts`."""
-    import os
-
-    override = os.environ.get("TUTOR_PROMPTS_DIR")
-    if override:
-        return Path(override)
+    """The checkout's `packages/tutor/prompts` (ADR-2042: no environment override)."""
     return Path(__file__).resolve().parents[6] / "packages" / "tutor" / "prompts"
 
 

@@ -16,7 +16,7 @@ NO_CAPTIONS_VIDEO_ID = "noCaptions1"
 
 
 def youtube_fixtures_path() -> Path:
-    """`<packages/llm/fixtures>/youtube/captions.json`, or `LLM_FIXTURES_DIR` in a container."""
+    """`<packages/llm/fixtures>/youtube/captions.json`."""
     return fixtures_directory() / "youtube" / "captions.json"
 
 

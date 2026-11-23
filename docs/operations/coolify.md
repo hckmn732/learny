@@ -271,8 +271,8 @@ quel (ADR-2005).
 
 | Service | Rôle | Commande | Sonde | Port interne |
 |---|---|---|---|---|
-| `api-py` | façade FastAPI : opérations `py`, relais `ts` | `uvicorn learny_api.main:app --port 8000 --workers $PY_API_WORKERS` | `GET /health` | 8000 |
-| `worker-py` | outbox, livraisons, planificateur singleton | `python -m learny_worker` | `GET /health/live` et `/health/ready` sur `PY_WORKER_HEALTH_PORT` | 8081 (sondes locales au conteneur) |
+| `api-py` | façade FastAPI : opérations `py`, relais `ts` | `uvicorn learny_api.main:app --port 8000 --workers 2` | `GET /health` | 8000 |
+| `worker-py` | outbox, livraisons, planificateur singleton | `python -m learny_worker` | `GET /health/live` et `/health/ready` sur le port standard `PORT` | 8081 (sondes locales au conteneur) |
 
 - **Une image, deux commandes** : la CI construit `docker/api-py.Dockerfile` à chaque commit
   (`.github/workflows/ci.yml`), et Coolify construit la même image depuis le Compose ; aucun
@@ -281,14 +281,24 @@ quel (ADR-2005).
   (`deploy.resources.limits`), redémarrage `unless-stopped`, système de fichiers en lecture seule,
   `no-new-privileges`, toutes capacités Linux retirées.
 - **Budget de connexions** : le pooler doit accepter au moins
-  `répliques api × PY_API_WORKERS × DATABASE_POOL_MAX + répliques worker × DATABASE_POOL_MAX + Hono`.
-  Départs : `PY_API_WORKERS=2`, `PY_DATABASE_POOL_MAX=5` (soit 35 connexions avec un worker et Hono).
+  `répliques api × 2 processus × 5 connexions + répliques worker × 5 + Hono` : 2 processus uvicorn
+  et un pool de 5 connexions sont des constantes du code depuis ADR-2042 (soit 35 connexions avec un
+  worker et Hono).
 - **Migrations** : le job `migrate` reste un singleton (`restart: 'no'`, image cible `migrate`) et
   `api-py`/`worker-py` attendent `service_completed_successfully`. Pour Supabase géré, le job de
   release est verrouillé : `flock /tmp/learny-migrate.lock node tools/deploy/migrate.mjs --env staging`.
-- **Variables** : mêmes noms que le TypeScript, plus les variables `PY_*` (`PY_API_WORKERS`,
-  `PY_DATABASE_POOL_MAX`, `PY_WORKER_CONCURRENCY`, `PY_WORKER_HEALTH_PORT`, `PY_HONO_UPSTREAM_URL`)
-  et `OWNERSHIP_OVERRIDES`. **Aucune valeur de secret n'est écrite dans le dépôt** : la liste des
+- **Variables** (ADR-2042) : le backend Python ne lit que le contrat de
+  `learny.shared.config.ENVIRONMENT_VARIABLES` — `APP_ENV`, `NEXT_PUBLIC_APP_URL`, `DATABASE_URL`,
+  `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY`, `SUPABASE_SERVICE_ROLE_KEY`,
+  `SUPABASE_JWT_SECRET`, `APP_ENCRYPTION_KEY`, `API_PROXY_SECRET`, `EMAIL_LINK_SECRET`, `EMAIL_FROM`,
+  `RESEND_API_KEY`, `VAPID_PRIVATE_KEY`, `STRIPE_SECRET_KEY`, `STRIPE_WEBHOOK_SECRET`,
+  `STRIPE_PRICE_ID`, `VOYAGE_API_KEY`, `SEARCH_API_KEY` et les facultatives (rotation `*_PREVIOUS`,
+  `SMTP_HOST`, `ALLOW_LOCAL_MODELS`, `ENABLE_SDD_PAGES`, `CLOCK_FIXED_AT`, `GIT_COMMIT`,
+  `APP_VERSION`, `PY_HONO_UPSTREAM_URL` et `OWNERSHIP_OVERRIDES` jusqu'à SPEC-2302). Les modes
+  (IA, push, e-mail, jobs, limiteur) sont dérivés d'`APP_ENV`, le mode Stripe de la clé secrète
+  (`sk_live_` : live, autre : test), la clé du limiteur d'`APP_ENCRYPTION_KEY`, la clé publique
+  et le sujet VAPID de `VAPID_PRIVATE_KEY` et d'`EMAIL_FROM` ; le réglage du worker, la taille du
+  pool et le nombre de processus sont des constantes. **Aucune valeur de secret n'est écrite dans le dépôt** : la liste des
   noms est dans l'ancre `x-py-environment` des fichiers inclus (`docker/compose.coolify-py.yml`,
   `docker/compose.coolify-qa-py.yml`), les valeurs restent dans Coolify.
 - **Surcharge de propriété** : `OWNERSHIP_OVERRIDES` n'est jamais saisie à la main, elle est

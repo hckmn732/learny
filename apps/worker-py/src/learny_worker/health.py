@@ -1,6 +1,6 @@
 """Liveness and readiness of the worker (SPEC-2102, section 9 of the conventions).
 
-The worker exposes these two endpoints on `PY_WORKER_HEALTH_PORT` for Coolify only; they are not
+The worker exposes these two endpoints on the standard `PORT` for Coolify only; they are not
 part of the public contract. `ready` probes the database for two seconds.
 """
 

@@ -144,6 +144,7 @@ async def discover_credential_models(
         provider,
         api_key=api_key if isinstance(api_key, str) else None,
         base_url=base_url if isinstance(base_url, str) else None,
+        mode=deps.settings.llm_mode,
     )
     if not model_ids:
         raise AppError("AI_PROVIDER_ERROR", texts.PROVIDER_NO_MODELS, status=502)

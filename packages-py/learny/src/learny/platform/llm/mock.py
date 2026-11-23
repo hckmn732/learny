@@ -121,12 +121,7 @@ class RegisteredFixture(BaseModel):
 
 
 def fixtures_directory() -> Path:
-    """`LLM_FIXTURES_DIR` when set (container), else the checkout's `packages/llm/fixtures`."""
-    import os
-
-    override = os.environ.get("LLM_FIXTURES_DIR")
-    if override:
-        return Path(override)
+    """The checkout's `packages/llm/fixtures` (ADR-2042: no environment override)."""
     return Path(__file__).resolve().parents[6] / "packages" / "llm" / "fixtures"
 
 
