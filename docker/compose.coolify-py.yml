@@ -7,8 +7,8 @@
 # déploiement — le Compose résolu contient bien les deux services.
 #
 # Une image, deux commandes : `docker/api-py.Dockerfile` (SPEC-2003). Aucune valeur de secret
-# n'est écrite ici, seulement des noms de variables lues dans Coolify. La façade démarre en relais :
-# tout ce que `api/ownership.yaml` laisse à `ts` est renvoyé à Hono (`PY_HONO_UPSTREAM_URL`).
+# n'est écrite ici, seulement des noms de variables lues dans Coolify. La façade sert tout le
+# contrat : plus de relais ni de table d'ownership (SPEC-2302).
 
 # Contrat d'environnement du backend Python (ADR-2042) : seules ces variables sont lues ; les
 # modes (IA, e-mail, push, Stripe, jobs, limiteur) sont dérivés d'APP_ENV, le reste est constant.
@@ -34,12 +34,9 @@ x-py-environment: &py-environment
   STRIPE_SECRET_KEY: ${STRIPE_SECRET_KEY:?}
   STRIPE_WEBHOOK_SECRET: ${STRIPE_WEBHOOK_SECRET:?}
   STRIPE_PRICE_ID: ${STRIPE_PRICE_ID:?}
-  # Surcharge produite par `node tools/deploy/cutover.mjs`, jamais saisie à la main.
-  OWNERSHIP_OVERRIDES: ${OWNERSHIP_OVERRIDES:-}
 
 services:
-  # Façade Python : opérations `py`, relais `ts`. Le web ne pointe ici qu'à l'étape 1 de la bascule
-  # (`API_INTERNAL_URL=http://api-py:8000`) ; le retour à `http://api:3001` est le rollback immédiat.
+  # Façade Python : elle sert toutes les opérations du contrat (`API_INTERNAL_URL=http://api-py:8000`).
   api-py:
     build:
       context: ..
@@ -57,16 +54,12 @@ services:
     cap_drop: [ALL]
     environment:
       <<: *py-environment
-      # Position de repli : tout ce qui reste `ts` est relayé à Hono, en-têtes et corps inchangés.
-      PY_HONO_UPSTREAM_URL: http://api:3001
     expose:
       - '8000'
     depends_on:
       migrate:
         condition: service_completed_successfully
       db:
-        condition: service_healthy
-      api:
         condition: service_healthy
     healthcheck:
       test:

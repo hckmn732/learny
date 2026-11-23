@@ -85,7 +85,7 @@ def test_every_special_route_of_the_inventory_is_installed() -> None:
     special.install(app, context())
 
     found = {
-        (method, normalized(route.path))
+        (method, normalized(str(getattr(route, "path", ""))))
         for route in app.routes
         if str(getattr(route, "name", "")).startswith("special:")
         for method in (getattr(route, "methods", None) or ())
@@ -98,7 +98,13 @@ def test_no_special_route_is_installed_twice() -> None:
     app = FastAPI()
     special.install(app, context())
     routes = [route for route in app.routes if str(getattr(route, "name", "")).startswith("special:")]
-    keys = [(tuple(sorted(route.methods or ())), normalized(route.path)) for route in routes]
+    keys = [
+        (
+            tuple(sorted(getattr(route, "methods", None) or ())),
+            normalized(str(getattr(route, "path", ""))),
+        )
+        for route in routes
+    ]
 
     assert len(keys) == len(set(keys))
 
