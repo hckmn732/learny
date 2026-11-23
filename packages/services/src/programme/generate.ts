@@ -11,7 +11,7 @@ import { runProgrammeDraft, programmeScenario, type ProgrammeRunContext } from '
 import type { ServiceContext } from '../context';
 import { requireUser, toResult } from '../resources/result';
 
-import { normalizeDraft } from './rules';
+import { anchorProgrammeDates, normalizeDraft } from './rules';
 import { currentVersion, readFormation, readProfile, readProgrammeState } from './state';
 
 // Generation of one proposal (SPEC-605 EF-1, ET-4). The tutor call runs outside any transaction;
@@ -142,13 +142,14 @@ export function generateProposal(
         objectifs: prepare.formation.objectives,
         cadrage: cadrageSummary(prepare.formation.cadrage_profile),
         volumeHeures: prepare.formation.volume_hours,
+        dateDuJour: ctx.clock.now().toISOString().slice(0, 10),
         dateDebut: prepare.formation.start_date,
         dateFin: prepare.formation.end_date,
         sourcesWeb: sources,
       }),
     });
     if (!generated.ok) throw generated.error;
-    const payload = normalizeDraft(generated.value.draft);
+    const payload = anchorProgrammeDates(normalizeDraft(generated.value.draft), ctx.clock.now());
 
     await db.run(async (tx) => {
       await programmeLock(tx, formationId);

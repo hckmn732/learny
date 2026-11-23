@@ -9,7 +9,7 @@ import type { ServiceContext } from '../context';
 import { requireUser, toResult } from '../resources/result';
 
 import { programmeLock, tutorProfile } from './generate';
-import { normalizeDraft, parseProposalPayload } from './rules';
+import { anchorProgrammeDates, normalizeDraft, parseProposalPayload } from './rules';
 import {
   currentVersion,
   readFormation,
@@ -99,7 +99,7 @@ export function adjustProposal(
       );
       throw generated.error;
     }
-    const payload = normalizeDraft(generated.value.draft);
+    const payload = anchorProgrammeDates(normalizeDraft(generated.value.draft), ctx.clock.now());
 
     await db.run(async (tx) => {
       await programmeLock(tx, formationId);
