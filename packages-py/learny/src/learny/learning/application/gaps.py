@@ -55,7 +55,10 @@ def course_target(
 
 
 def _instant(value: Any, now: str) -> str:
-    return now if value is None else to_iso(parse_iso(value)) if not isinstance(value, str) else value
+    """`new Date(row.detected_at).toISOString()`: the driver returns a datetime, a text is parsed."""
+    if value is None:
+        return now
+    return to_iso(parse_iso(value) if isinstance(value, str) else value)
 
 
 def _iso_or_none(value: Any) -> str | None:
