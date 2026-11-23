@@ -6,14 +6,14 @@
 // visual test pins the sprint tokens on desktop and mobile.
 import { randomUUID } from 'node:crypto';
 
-import { closeDb, serviceDb, sql } from '@learny/db';
+import { closeDb, serviceDb, sql } from '@learny/testing/db';
 import {
   DEMO_USERS,
   demoFormationId,
   demoId,
   demoModuleId,
   demoUserId,
-} from '@learny/db/seed/fixtures';
+} from '@learny/testing/db-factories';
 import { expect, restoreDemoData, test } from '@learny/testing/playwright';
 import {
   createDemoSession,

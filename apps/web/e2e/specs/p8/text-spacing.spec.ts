@@ -1,13 +1,13 @@
 // SPEC-803 CL-4, CL-5, 1.4.4 and 1.4.12 — 200 % text zoom and the WCAG text-spacing bookmark must
 // not hide content or create horizontal scrolling on the home, the course and the quiz.
-import { closeDb, serviceDb, sql } from '@learny/db';
+import { closeDb, serviceDb, sql } from '@learny/testing/db';
 import {
   DEMO_USERS,
   demoChapterId,
   demoFormationId,
   demoModuleId,
   demoUserId,
-} from '@learny/db/seed/fixtures';
+} from '@learny/testing/db-factories';
 import { restoreDemoData, test } from '@learny/testing/playwright';
 import { createDemoSession, type TestSession } from '@learny/testing/supabase';
 import { expectNoClippedContent, expectNoHorizontalScroll } from '@learny/testing/touch-targets';

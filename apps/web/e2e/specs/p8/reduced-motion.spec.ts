@@ -2,8 +2,8 @@
 // on the tutor panel, the recall card, the navigation menu and the notion map.
 import type { Page } from '@playwright/test';
 
-import { closeDb } from '@learny/db';
-import { DEMO_USERS, demoFormationId, demoChapterId, demoModuleId, demoUserId } from '@learny/db/seed/fixtures';
+import { closeDb } from '@learny/testing/db';
+import { DEMO_USERS, demoFormationId, demoChapterId, demoModuleId, demoUserId } from '@learny/testing/db-factories';
 import { expect, restoreDemoData, test } from '@learny/testing/playwright';
 import { createDemoSession, type TestSession } from '@learny/testing/supabase';
 

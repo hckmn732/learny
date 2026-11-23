@@ -1,5 +1,5 @@
 // Group factory (SPEC-115 EF-6). The owner is also a member; extra members join in one call.
-import { sql, type DbTx } from '@learny/db';
+import { sql, type DbTx } from '../db';
 
 import {
   assertFormationAccess,

@@ -1,9 +1,9 @@
 import { fileURLToPath } from 'node:url';
 
-import { closeDb, serviceDb, sql } from '@learny/db';
-import { DEMO_NOTION_LINKS } from '@learny/db/seed/fixtures';
-import { createTestCourse, createTestProgramme } from '@learny/db/testing';
 import { createNotionState, createResource } from '@learny/testing';
+import { closeDb, serviceDb, sql } from '@learny/testing/db';
+import { createTestCourse, createTestProgramme } from '@learny/testing/db';
+import { DEMO_NOTION_LINKS } from '@learny/testing/db-factories';
 import { expect, test } from '@learny/testing/playwright';
 import { createTestSession, deleteTestSession, type TestSession } from '@learny/testing/supabase';
 import {

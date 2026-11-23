@@ -53,7 +53,7 @@ export function iconFor(value: unknown): string {
 
 /**
  * The only URL a click may open: an internal path resolved against this origin (CL-6). Same rule
- * as `safeNotificationUrl` of @learny/notifications: no scheme, no protocol-relative URL, no
+ * as the API's `safe_notification_url`: no scheme, no protocol-relative URL, no
  * backslash or whitespace, and the resolved origin must be this worker's origin.
  */
 export function safeNotificationUrl(origin: string, candidate: unknown): string | null {

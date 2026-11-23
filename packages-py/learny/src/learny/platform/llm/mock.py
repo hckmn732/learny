@@ -121,8 +121,8 @@ class RegisteredFixture(BaseModel):
 
 
 def fixtures_directory() -> Path:
-    """The checkout's `packages/llm/fixtures` (ADR-2042: no environment override)."""
-    return Path(__file__).resolve().parents[6] / "packages" / "llm" / "fixtures"
+    """The fixtures shipped with the package (ADR-2042: no environment override)."""
+    return Path(__file__).resolve().parent / "fixtures"
 
 
 def load_registry(directory: Path | None = None) -> tuple[RegisteredFixture, ...]:

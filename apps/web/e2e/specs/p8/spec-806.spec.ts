@@ -1,8 +1,8 @@
 import { randomUUID } from 'node:crypto';
 
 import { LEGAL_VERSIONS } from '@learny/config';
-import { closeDb, serviceDb, sql } from '@learny/db';
 import { extractAuthLink, linkOnOrigin, waitForMail } from '@learny/testing/auth';
+import { closeDb, serviceDb, sql } from '@learny/testing/db';
 import { expect, test } from '@learny/testing/playwright';
 import { expectScreenshotBaseline, expectTokens } from '@learny/testing/visual';
 

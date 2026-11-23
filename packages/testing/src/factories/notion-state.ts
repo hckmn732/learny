@@ -1,6 +1,6 @@
 // Notion-state factory (SPEC-115 EF-6). A state belongs to a user who can access the formation;
 // a confusion points to another notion of the same formation (SPEC-107 EF-2).
-import { sql, type DbTx } from '@learny/db';
+import { sql, type DbTx } from '../db';
 
 import { assertFormationAccess, insert, now } from './helpers';
 

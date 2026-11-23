@@ -2,8 +2,8 @@
 // dataset of SPEC-115 is used as-is; the module 3 is made late for this file only and restored
 // afterwards. The move is restored after the functional test so the visual baseline keeps the
 // seed agenda, and no option is applied without an explicit confirmation.
-import { closeDb, serviceDb, sql } from '@learny/db';
-import { DEMO_USERS, demoFormationId, demoUserId } from '@learny/db/seed/fixtures';
+import { closeDb, serviceDb, sql } from '@learny/testing/db';
+import { DEMO_USERS, demoFormationId, demoUserId } from '@learny/testing/db-factories';
 import { expect, restoreDemoData, test } from '@learny/testing/playwright';
 import { createDemoSession, type TestSession } from '@learny/testing/supabase';
 import {

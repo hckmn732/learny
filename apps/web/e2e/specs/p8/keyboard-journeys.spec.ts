@@ -6,8 +6,8 @@ import { randomBytes } from 'node:crypto';
 import type { Page } from '@playwright/test';
 import { createClient } from '@supabase/supabase-js';
 
-import { closeDb, serviceDb, sql } from '@learny/db';
-import { DEMO_USERS, demoFormationId, demoUserId } from '@learny/db/seed/fixtures';
+import { closeDb, serviceDb, sql } from '@learny/testing/db';
+import { DEMO_USERS, demoFormationId, demoUserId } from '@learny/testing/db-factories';
 import { expect, restoreDemoData, test } from '@learny/testing/playwright';
 import { createDemoSession, supabaseLocalEnv, type TestSession } from '@learny/testing/supabase';
 

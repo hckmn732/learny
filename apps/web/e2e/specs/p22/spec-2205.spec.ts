@@ -2,8 +2,8 @@
 // operations exercised here are the inbox counter, the settings of the notifications tab and the
 // read mutation: the parity recorder replays the two reads against the recorded Hono responses,
 // this test proves the same contract through the web and the facade with a real session.
-import { serviceDb } from '@learny/db';
 import { createNotification } from '@learny/testing';
+import { serviceDb } from '@learny/testing/db';
 import { expect, test } from '@learny/testing/playwright';
 import { createTestSession, deleteTestSession } from '@learny/testing/supabase';
 

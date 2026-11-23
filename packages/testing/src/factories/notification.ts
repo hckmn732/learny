@@ -1,6 +1,6 @@
 // Notification factory (SPEC-115 EF-6). A notification is personal; a formation, when provided,
 // must be accessible by the user.
-import { sql, type DbTx } from '@learny/db';
+import { sql, type DbTx } from '../db';
 
 import { assertFormationAccess, insert, now, suffix, type IdRow } from './helpers';
 

@@ -5,8 +5,8 @@ import { fileURLToPath } from 'node:url';
 
 import { test as base, expect, type Page, type TestInfo } from '@playwright/test';
 
-import { serviceDb, sql } from '@learny/db';
-import { demoUserId } from '@learny/db/seed/fixtures';
+import { serviceDb, sql } from '@learny/testing/db';
+import { demoUserId } from '@learny/testing/db-factories';
 
 import { blockingAxeViolations, formatAxeViolations, runAxe } from './axe';
 import { FIXED_TIME_ISO } from './clock';

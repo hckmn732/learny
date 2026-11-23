@@ -10,14 +10,11 @@ assertMockLlm(process.env);
 // Line coverage floors (docs/engineering/testing.md §1), enforced from the checkpoint where each
 // package exists: a glob that matches no file is ignored.
 const COVERAGE_FLOORS = {
-  'packages/learning-engine/src/**': { lines: 95 },
   'packages/bricks/src/**': { lines: 90 },
   'packages/core/src/**': { lines: 95 },
   'packages/contracts/src/**': { lines: 95 },
   'packages/config/src/**': { lines: 95 },
   'packages/ui/src/**': { lines: 95 },
-  'packages/llm/src/budget/**': { lines: 80 },
-  'packages/services/src/**': { lines: 70 },
 };
 
 export default defineConfig({
@@ -51,8 +48,6 @@ export default defineConfig({
           name: 'unit',
           include: [
             'packages/*/src/**/*.test.{ts,tsx}',
-            // SPEC-204: the e-mail templates live next to the preview server, outside src/.
-            'packages/notifications/emails/**/*.test.{ts,tsx}',
             'apps/*/src/**/*.test.{ts,tsx}',
             'apps/web/{app,components,lib}/**/*.test.{ts,tsx}',
             'apps/web/test/unit/**/*.test.ts',

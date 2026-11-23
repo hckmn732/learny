@@ -3,9 +3,9 @@ import { createElement } from 'react';
 import { afterAll, afterEach, describe, expect, it, vi } from 'vitest';
 
 import { AppError } from '@learny/core';
-import { closeDb, sql } from '@learny/db';
-import { asUser, withRollback } from '@learny/db/testing';
 import { createFormation, createUser } from '@learny/testing';
+import { closeDb, sql } from '@learny/testing/db';
+import { asUser, withRollback } from '@learny/testing/db';
 import { cleanup, renderComponent, screen } from '@learny/testing/render';
 
 import { ErrorView } from '../../components/system/error-view';

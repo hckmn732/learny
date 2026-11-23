@@ -5,8 +5,8 @@
 // `evidence/SPEC-2001/test-port-map.md`: the same contracts, through the Python backend.
 import { randomBytes } from 'node:crypto';
 
-import { serviceDb } from '@learny/db';
 import { createCourse, createFormation, createModule } from '@learny/testing';
+import { serviceDb } from '@learny/testing/db';
 import { expect, test } from '@learny/testing/playwright';
 import { createTestSession, deleteTestSession } from '@learny/testing/supabase';
 

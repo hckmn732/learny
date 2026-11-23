@@ -3,8 +3,8 @@
 import fs from 'node:fs';
 import { fileURLToPath } from 'node:url';
 
-import { closeDb, serviceDb, sql } from '@learny/db';
-import { DEMO_USERS, demoFormationId, demoUserId } from '@learny/db/seed/fixtures';
+import { closeDb, serviceDb, sql } from '@learny/testing/db';
+import { DEMO_USERS, demoFormationId, demoUserId } from '@learny/testing/db-factories';
 import { expect, test } from '@learny/testing/playwright';
 import { createDemoSession, type TestSession } from '@learny/testing/supabase';
 import {

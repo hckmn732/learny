@@ -1,5 +1,5 @@
 // SPEC-803 §10, CA-4 — token, structure and baseline checks of the public declaration.
-import { closeDb } from '@learny/db';
+import { closeDb } from '@learny/testing/db';
 import { expect, restoreDemoData, test } from '@learny/testing/playwright';
 import { expectScreenshotBaseline, expectTokens } from '@learny/testing/visual';
 

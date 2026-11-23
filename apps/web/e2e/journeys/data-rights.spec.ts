@@ -9,23 +9,17 @@ import fs from 'node:fs';
 
 import type { APIRequestContext } from '@playwright/test';
 
-import { closeDb, serviceDb, sql } from '@learny/db';
-import { FIXED_TIME_ISO } from '@learny/testing';
-import { memoryMail } from '@learny/testing/mail';
+import { closeDb, serviceDb, sql } from '@learny/testing/db';
 import { expect, test } from '@learny/testing/playwright';
 import { createTestSession, deleteTestSession, type TestSession } from '@learny/testing/supabase';
 
 import {
-  THIRTY_DAYS_MS,
-  authUserExists,
   readZip,
-  runNightlyDeletion,
   seedLearner,
   storedObjectExists,
   type SeededLearner,
 } from './support/data-rights';
 
-const ONE_MINUTE_MS = 60 * 1000;
 const J30_DATABASE = '2026-12-11 12:20:00+00';
 
 let learner: TestSession | null = null;
@@ -67,13 +61,6 @@ async function deletionScheduledFor(userId: string): Promise<string | null> {
     select deletion_scheduled_for::text as scheduled from public.profiles where id = ${userId}::uuid
   `);
   return rows[0]?.scheduled ?? null;
-}
-
-async function formationsOf(userId: string): Promise<number> {
-  const rows = await serviceDb().execute<{ n: number }>(sql`
-    select count(*)::int as n from public.formations where owner_id = ${userId}::uuid
-  `);
-  return rows[0]?.n ?? 0;
 }
 
 function expectNoWitnessData(files: Map<string, Buffer>, other: TestSession, seed: SeededLearner) {
@@ -271,60 +258,8 @@ test('données personnelles : export complet, annulation puis effacement à J+30
   await expect(page.getByRole('button', { name: 'Supprimer mon compte' })).toBeVisible();
   await axeCheck();
 
-  // SPEC-211 CL-7 — the nightly run at J+30 deletes nothing once the request is cancelled.
-  const cancelledRun = await runNightlyDeletion(learner.userId, FIXED_TIME_ISO, THIRTY_DAYS_MS);
-  expect(cancelledRun.deleted).toBe(false);
-  expect(await authUserExists(learner.userId)).toBe(true);
-  expect(await formationsOf(learner.userId)).toBe(1);
-
-  // A new request, then the nightly run: still pending one minute before J+30, erased at J+30.
-  await page.getByRole('button', { name: 'Supprimer mon compte' }).click();
-  await page
-    .getByRole('alertdialog', { name: 'Supprimer votre compte ?' })
-    .getByRole('button', { name: 'Supprimer mon compte' })
-    .click();
-  await expect(page.getByRole('status').filter({ hasText: /suppression/i })).toContainText(
-    /Suppression programmée le .*11 décembre 2026/,
-  );
-  expect(await deletionScheduledFor(learner.userId)).toBe(J30_DATABASE);
-  await captureEvidence('spec-807-donnees-suppression-programmee');
-
-  const early = await runNightlyDeletion(
-    learner.userId,
-    FIXED_TIME_ISO,
-    THIRTY_DAYS_MS - ONE_MINUTE_MS,
-  );
-  expect(early.deleted).toBe(false);
-  expect(await authUserExists(learner.userId)).toBe(true);
-  expect(memoryMail(learner.email)).toEqual([]);
-
-  const due = await runNightlyDeletion(learner.userId, FIXED_TIME_ISO, THIRTY_DAYS_MS);
-  expect(due.deleted).toBe(true);
-  expect(due.authStatus).toBe('supprimé');
-  expect(due.tables.length).toBeGreaterThan(10);
-  expect(due.tables.filter((row) => row.remaining !== 0)).toEqual([]);
-  expect(await authUserExists(learner.userId)).toBe(false);
-  expect(await formationsOf(learner.userId)).toBe(0);
-  expect(await storedObjectExists('resources', own.filePath)).toBe(false);
-  expect(await storedObjectExists('exports', exportPath)).toBe(false);
-  // `deletion_completed` goes to the address captured before the erasure, once.
-  expect(
-    memoryMail(learner.email).map(
-      (entry) => entry.message.tags.find((item) => item.name === 'template')?.value,
-    ),
-  ).toEqual(['deletion_completed']);
-
-  // The erased account no longer reaches the settings screen. The page already sits on
-  // `/parametres#profil` (same fragment): a `goto` to the identical URL is a same-document,
-  // no-network navigation in the engine, so the server round trip that re-checks the session
-  // needs a real cross-document navigation first.
-  await page.goto('/accueil');
-  await page.goto('/parametres#profil');
-  await expect(page).not.toHaveURL(/\/parametres/);
-  await expect(page).toHaveURL(/\/connexion/);
-
-  // The witness keeps all their data.
-  expect(await authUserExists(witness.userId)).toBe(true);
-  expect(await formationsOf(witness.userId)).toBe(1);
-  expect(await storedObjectExists('resources', other.filePath)).toBe(true);
+  // SPEC-211 CL-7 â€” the nightly erasure is a Python worker job now (ADR-2006): the whole
+  // itinerary (cancelled, one minute early, due) runs in
+  // packages-py/learny/tests/integration/privacy/test_personal_data.py with an injected clock.
+  // This journey keeps what the web owns: the request, the persisted deadline and the cancel.
 });

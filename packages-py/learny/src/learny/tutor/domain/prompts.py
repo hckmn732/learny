@@ -38,8 +38,8 @@ class BuiltPrompt:
 
 
 def prompts_directory() -> Path:
-    """The checkout's `packages/tutor/prompts` (ADR-2042: no environment override)."""
-    return Path(__file__).resolve().parents[6] / "packages" / "tutor" / "prompts"
+    """The versioned prompts shipped with the package (ADR-2042: no environment override)."""
+    return Path(__file__).resolve().parents[1] / "prompts"
 
 
 def parse_prompt(task: str, text: str) -> PromptSource:
