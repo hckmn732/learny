@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-11-23T02:24:05.146Z",
+  "updatedAt": "2026-11-23T04:38:27.608Z",
   "specs": {
     "SPEC-001": {
       "status": "done",
@@ -7362,22 +7362,23 @@
       "reason": "Suite e2e complete rouge sur main (SPEC-006) ; exception autorisee par le porteur du projet."
     },
     "CP-21": {
-      "status": "pending",
-      "at": null,
+      "status": "failed",
+      "at": "2026-11-23T04:38:27.000Z",
       "tag": null,
-      "report": null
+      "report": "evidence/checkpoints/CP-21/summary.md"
     },
     "CP-22": {
-      "status": "pending",
-      "at": null,
+      "status": "failed",
+      "at": "2026-11-23T04:38:27.000Z",
       "tag": null,
-      "report": null
+      "report": "evidence/checkpoints/CP-22/summary.md"
     },
     "CP-23": {
       "status": "pending",
       "at": null,
       "tag": null,
-      "report": null
+      "report": "evidence/checkpoints/CP-23/summary.md",
+      "reason": "non franchi : SPEC-2301 bloquee externe et SPEC-2302 incomplete (16 entrees relayees)"
     }
   },
   "anomalies": [
