@@ -1,0 +1,10 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<testsuites>
+  <testsuite name="Test Suite" device="learny" tests="1" failures="0" time="45.852" timestamp="2026-11-23T14:59:36">
+    <testcase id="SPEC-3203 agenda" name="SPEC-3203 agenda" classname="SPEC-3203 agenda" file="apps/mobile/e2e/flows/SPEC-3203-agenda.yaml" time="45.832" timestamp="2026-11-23T14:59:36" status="SUCCESS">
+      <properties>
+        <property name="tags" value="SPEC-3203"/>
+      </properties>
+    </testcase>
+  </testsuite>
+</testsuites>

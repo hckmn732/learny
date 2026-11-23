@@ -1,14 +1,7 @@
-// Agenda (SPEC-3102 EF-2; the real screen arrives with SPEC-3305).
-import { fr } from '@learny/i18n';
-
-import { PlaceholderTabScreen } from '../../../src/features/shell/PlaceholderTabScreen';
+// Agenda (SPEC-3203 EF-1 to EF-9): the screen lives in `src/features/agenda` so that its periods,
+// its statuses and its sheets are tested without the router.
+import { AgendaScreen } from '../../../src/features/agenda/AgendaScreen';
 
 export default function AgendaRoute() {
-  return (
-    <PlaceholderTabScreen
-      title={fr.mobile.shell.tabs.agenda}
-      icon="calendar"
-      testID="agenda-screen"
-    />
-  );
+  return <AgendaScreen />;
 }
