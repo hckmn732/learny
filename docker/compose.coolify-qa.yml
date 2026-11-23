@@ -94,11 +94,7 @@ x-app-environment: &app-environment
   VAPID_SUBJECT: ${VAPID_SUBJECT:-mailto:qa@learny.test}
 
   # Tâches de fond (Inngest de la pile).
-  JOBS_MODE: ${JOBS_MODE:-inngest}
-  INNGEST_EVENT_KEY: ${INNGEST_EVENT_KEY:?}
-  INNGEST_SIGNING_KEY: ${INNGEST_SIGNING_KEY:?}
-  INNGEST_BASE_URL: http://inngest:8288
-  INNGEST_DEV: ${INNGEST_DEV:-0}
+  JOBS_MODE: ${JOBS_MODE:-inline}
 
   # E-mails : par défaut tous capturés par Mailpit (smtp) ; resend exige RESEND_API_KEY.
   EMAIL_MODE: ${EMAIL_MODE:-smtp}
@@ -350,39 +346,6 @@ services:
     restart: unless-stopped
     logging: *logging
 
-  inngest:
-    build:
-      context: ..
-      dockerfile: docker/coolify-support.Dockerfile
-      target: inngest
-    command:
-      - inngest
-      - start
-      - --host
-      - 0.0.0.0
-      - --port
-      - '8288'
-      - --sdk-url
-      - http://api:3001/api/inngest
-      - --event-key
-      - ${INNGEST_EVENT_KEY:?}
-      - --signing-key
-      - ${INNGEST_SIGNING_KEY:?}
-      - --sqlite-dir
-      - /var/lib/inngest
-    expose:
-      - '8288'
-    volumes:
-      - inngest-data:/var/lib/inngest
-    healthcheck:
-      test: ['CMD', 'perl', '/healthcheck.pl']
-      interval: 5s
-      timeout: 5s
-      retries: 30
-      start_period: 15s
-    restart: unless-stopped
-    logging: *logging
-
   api:
     build:
       context: ..
@@ -412,8 +375,6 @@ services:
     expose:
       - '3001'
     depends_on:
-      inngest:
-        condition: service_healthy
       seed:
         condition: service_completed_successfully
     healthcheck:
@@ -466,8 +427,6 @@ services:
         condition: service_started
       storage:
         condition: service_healthy
-      inngest:
-        condition: service_healthy
       api:
         condition: service_healthy
     healthcheck:
@@ -482,4 +441,3 @@ services:
 volumes:
   db-data:
   storage-data:
-  inngest-data:

@@ -59,11 +59,7 @@ x-app-environment: &app-environment
   VOYAGE_API_KEY: ${VOYAGE_API_KEY:?}
   EMBEDDING_DIM: ${EMBEDDING_DIM:-1024}
   SEARCH_API_KEY: ${SEARCH_API_KEY:-}
-  JOBS_MODE: inngest
-  INNGEST_EVENT_KEY: ${INNGEST_EVENT_KEY:?}
-  INNGEST_SIGNING_KEY: ${INNGEST_SIGNING_KEY:?}
-  INNGEST_BASE_URL: http://inngest:8288
-  INNGEST_DEV: '0'
+  JOBS_MODE: inline
   EMAIL_MODE: ${EMAIL_MODE:-resend}
   EMAIL_FROM: ${EMAIL_FROM:?}
   RESEND_API_KEY: ${RESEND_API_KEY:?}
@@ -272,39 +268,6 @@ services:
     logging: *logging
 
   # Inngest auto-hébergé (SQLite). Son interface n'a pas d'authentification : aucun domaine public.
-  inngest:
-    build:
-      context: ..
-      dockerfile: docker/coolify-support.Dockerfile
-      target: inngest
-    command:
-      - inngest
-      - start
-      - --host
-      - 0.0.0.0
-      - --port
-      - '8288'
-      - --sdk-url
-      - http://api:3001/api/inngest
-      - --event-key
-      - ${INNGEST_EVENT_KEY:?}
-      - --signing-key
-      - ${INNGEST_SIGNING_KEY:?}
-      - --sqlite-dir
-      - /var/lib/inngest
-    expose:
-      - '8288'
-    volumes:
-      - inngest-data:/var/lib/inngest
-    healthcheck:
-      test: ['CMD', 'perl', '/healthcheck.pl']
-      interval: 5s
-      timeout: 5s
-      retries: 30
-      start_period: 15s
-    restart: unless-stopped
-    logging: *logging
-
   api:
     build:
       context: ..
@@ -328,8 +291,6 @@ services:
     expose:
       - '3001'
     depends_on:
-      inngest:
-        condition: service_healthy
       migrate:
         condition: service_completed_successfully
     healthcheck:
@@ -376,8 +337,6 @@ services:
         condition: service_started
       storage:
         condition: service_healthy
-      inngest:
-        condition: service_healthy
       api:
         condition: service_healthy
     healthcheck:
@@ -392,4 +351,3 @@ services:
 volumes:
   db-data:
   storage-data:
-  inngest-data:

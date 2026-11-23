@@ -50,7 +50,6 @@ if (query.status !== 0) {
   );
 }
 
-await httpCheck('inngest', `${urls.inngest}/health`);
 await httpCheck('mailpit', `${urls.mailpit}/api/v1/info`);
 await httpCheck('web', `${urls.web}/api/v1/health`);
 await httpCheck('api', `${urls.api}/health`);
@@ -73,7 +72,7 @@ if (failed.length > 0) {
     `✖ ${String(failed.length)} service(s) en échec : ${failed.map((result) => result.name).join(', ')}`,
   );
   console.error(
-    `  Ports attendus : Supabase ${String(STACK.supabaseApi)}/${String(STACK.postgres)}, Inngest ${String(STACK.inngest)}, Mailpit ${String(STACK.mailpitUi)}, web ${String(STACK.web)}, API ${String(STACK.api)}.`,
+    `  Ports attendus : Supabase ${String(STACK.supabaseApi)}/${String(STACK.postgres)}, Mailpit ${String(STACK.mailpitUi)}, web ${String(STACK.web)}, API ${String(STACK.api)}.`,
   );
   process.exit(1);
 }
