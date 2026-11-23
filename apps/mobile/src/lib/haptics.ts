@@ -20,3 +20,13 @@ export function selectionFeedback(): void {
 export function confirmationFeedback(): void {
   silently(async () => Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light));
 }
+
+/** Success feedback: a correct answer in the validation quiz (SPEC-3304 EF-8). */
+export function successFeedback(): void {
+  silently(async () => Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success));
+}
+
+/** Warning feedback: a wrong answer in the validation quiz (SPEC-3304 EF-8). */
+export function warningFeedback(): void {
+  silently(async () => Haptics.notificationAsync(Haptics.NotificationFeedbackType.Warning));
+}
