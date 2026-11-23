@@ -117,10 +117,11 @@ export function ModuleAccordion({
 
       {module.locked ? null : (
         <Animated.View
-          style={[styles.body, animated]}
+          style={[styles.body, height > 0 || !expanded ? animated : styles.bodyUnfolded]}
           testID={`module-${String(module.position)}-body`}
         >
           <View
+            testID={`module-${String(module.position)}-content`}
             onLayout={(event) => {
               setExpandedHeight(event.nativeEvent.layout.height, setHeight);
             }}
@@ -216,6 +217,10 @@ const styles = StyleSheet.create({
   line: { flexDirection: 'row', alignItems: 'center', gap: theme.spacing.sm },
   title: { flex: 1, minWidth: 0 },
   body: { overflow: 'hidden' },
+  // Before the first measurement the unfolded body keeps its natural height: inside a clipped
+  // zero-height parent the inner view lays out at 0, so `onLayout` would never report a height
+  // and the accordion could never unfold (EF-4). Once measured, the animated height takes over.
+  bodyUnfolded: { opacity: 1 },
   quizRow: {
     minHeight: 48,
     flexDirection: 'row',
