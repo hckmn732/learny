@@ -6,7 +6,7 @@
 // the query cache (keyed by the signed-in account, EF-4), then the safe area and the screens.
 import Constants from 'expo-constants';
 import { useFonts } from 'expo-font';
-import { Stack } from 'expo-router';
+import { Stack, type ErrorBoundaryProps } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
 import { StatusBar } from 'expo-status-bar';
 import { useEffect } from 'react';
@@ -28,8 +28,8 @@ import { AppQueryProvider } from '../src/data/providers';
 import { appQueryClient } from '../src/data/query-client';
 import { AuthGate } from '../src/features/auth/AuthGate';
 import { ConfigErrorPage } from '../src/features/sdd/ConfigErrorPage';
+import { AppErrorScreen } from '../src/features/shell/AppErrorScreen';
 import { startOfflineWiring } from '../src/offline/network-wiring';
-import { OfflineBanner } from '../src/offline/OfflineBanner';
 import { theme } from '../src/theme';
 
 void SplashScreen.preventAutoHideAsync();
@@ -86,17 +86,40 @@ export default function RootLayout() {
       <AppQueryProvider appVersion={appVersion()}>
         <SafeAreaProvider>
           <StatusBar style="dark" />
-          {/* SPEC-3003 EF-5 — the offline band stays above the screens; SPEC-3102 moves it into
-              the shell without changing its label. */}
-          <OfflineBanner />
+          {/* SPEC-3102 EF-6 — the offline band of SPEC-3003 now lives in the shell; the stack
+              declares the two modal sheets of the header (EF-3, EF-4). */}
           <Stack
             screenOptions={{
               headerShown: false,
               contentStyle: { backgroundColor: theme.colors.canvas },
             }}
-          />
+          >
+            <Stack.Screen
+              name="notifications"
+              options={{ presentation: 'transparentModal', animation: 'fade' }}
+            />
+            <Stack.Screen
+              name="compte"
+              options={{ presentation: 'transparentModal', animation: 'fade' }}
+            />
+          </Stack>
         </SafeAreaProvider>
       </AppQueryProvider>
     </SessionProvider>
+  );
+}
+
+/**
+ * Global boundary of the application (SPEC-3102 EF-6): a screen that throws shows
+ * « Une erreur inattendue est survenue » with « Relancer » instead of a blank page.
+ */
+export function ErrorBoundary(props: ErrorBoundaryProps) {
+  return (
+    <AppErrorScreen
+      error={props.error}
+      retry={() => {
+        void props.retry();
+      }}
+    />
   );
 }

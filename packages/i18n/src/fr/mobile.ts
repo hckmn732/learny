@@ -221,6 +221,83 @@ export const mobile = {
       },
     },
   },
+  // SPEC-3102 — coquille, onglets natifs, compte et centre de notifications. Les libellés
+  // identiques au web sont importés de `fr.shell` par les écrans (ADR-3002 § 4) ; cet espace ne
+  // porte que les libellés propres au mobile.
+  shell: {
+    tabs: {
+      today: 'Aujourd’hui',
+      programme: 'Programme',
+      revise: 'Réviser',
+      agenda: 'Agenda',
+      profile: 'Profil',
+      /** Announced label of a tab: its label, its rank and the number of tabs (ET-5). */
+      position: (label: string, index: number, total: number) =>
+        `${label}, onglet ${String(index)} sur ${String(total)}`,
+      barLabel: 'Navigation principale',
+    },
+    web: { continue: 'Continuer sur le web' },
+    header: {
+      loading: 'Chargement de l’en-tête…',
+      errorTitle: 'Impossible de charger votre compte.',
+      /** Announced text of the unread pastille (ET-5, CL-3). */
+      badge: (count: number) =>
+        count === 0
+          ? 'Aucune notification non lue'
+          : count === 1
+            ? '1 notification non lue'
+            : `${String(count)} notifications non lues`,
+    },
+    account: {
+      title: 'Mon compte',
+      subtitle: (formations: string) => `Apprenant · ${formations}`,
+      settingsHint: 'Rappels, sons et modèles d’IA',
+      pauseHint: 'Suspendre les rappels une semaine',
+      pauseUnavailable: 'La mise en pause arrive avec SPEC-3401.',
+      signOutTitle: 'Se déconnecter ?',
+      signOutConfirm: 'Se déconnecter',
+      cancel: 'Annuler',
+      loading: 'Chargement du compte…',
+      active: 'Actif',
+    },
+    states: {
+      placeholderTitle: 'Écran en préparation',
+      placeholderBody: 'Cet écran arrive avec une prochaine version de l’application.',
+      noFormationTitle: 'Aucune formation active',
+      noFormationBody:
+        'Créez votre première formation sur le web : le tuteur prépare ensuite votre programme.',
+      createFormation: 'Créer une formation sur le web',
+      loading: 'Chargement…',
+      unexpectedTitle: 'Une erreur inattendue est survenue',
+      unexpectedBody: 'Relancez l’application pour reprendre votre travail.',
+      relaunch: 'Relancer',
+      onboardingTitle: 'Terminez votre configuration sur le web',
+      onboardingBody:
+        'Votre tuteur a besoin de votre rythme, de votre objectif et de vos apports avant la première séance. La configuration se poursuit sur le web, puis vous revenez ici.',
+      onboardingContinue: 'Continuer sur le web',
+      onboardingDone: 'J’ai terminé',
+      onboardingChecking: 'Vérification de votre configuration…',
+      onboardingError: 'Impossible de vérifier votre configuration.',
+      onboardingDoneToast: 'Configuration terminée. Bienvenue dans Learny.',
+    },
+  },
+  notifications: {
+    /** Sub-title of the sheet, formatted like the mockup (« 3 non lues »). */
+    unreadLabel: (count: number) =>
+      count === 1 ? '1 non lue' : count === 0 ? 'Tout est lu' : `${String(count)} non lues`,
+    empty: 'Aucune notification',
+    emptyUnread: 'Aucune notification non lue',
+    emptyBody: 'Les prochains rappels arriveront ici.',
+    offlineReadOnly: 'Disponible une fois en ligne',
+    unavailable: 'Ce contenu n’est plus disponible.',
+    markedRead: 'Notification marquée comme lue.',
+    markedAllRead: 'Toutes les notifications sont lues.',
+    loadError: 'Impossible de charger les notifications.',
+    sheetLabel: 'Centre de notifications',
+    listLabel: 'Liste des notifications',
+    time: (value: string) => `Reçue à ${value}`,
+    unreadDot: 'Non lue',
+  },
 } as const;
 
 export type MobileMessages = typeof mobile;

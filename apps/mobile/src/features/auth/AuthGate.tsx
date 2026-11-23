@@ -10,6 +10,8 @@ import { useEffect } from 'react';
 import { useSession } from '../../auth/session';
 
 const SIGN_IN: Href = '/(auth)/connexion';
+/** Routes outside the `(app)` group that still require an open session (SPEC-3102 EF-4). */
+const PROTECTED_SEGMENTS: readonly string[] = ['(app)', 'terminer-sur-le-web'];
 const SHELL: Href = '/(app)/aujourdhui';
 
 /** Redirects to the sign-in screen when signed out inside the shell, and back once signed in. */
@@ -21,7 +23,9 @@ export function AuthGate(): null {
   useEffect(() => {
     if (status === 'loading') return;
     const group = segments[0];
-    if (status === 'signedOut' && group === '(app)') router.replace(SIGN_IN);
+    if (status === 'signedOut' && PROTECTED_SEGMENTS.some((segment) => segment === group)) {
+      router.replace(SIGN_IN);
+    }
     if (status === 'signedIn' && group === '(auth)') router.replace(SHELL);
   }, [router, segments, status]);
 

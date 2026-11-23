@@ -55,11 +55,98 @@ export function formatTime(instant: Date | string, timeZone: string = FALLBACK_T
 }
 
 /** `2026-11-11` in `timeZone`, the form the API expects (`from`/`to` of the agenda). */
-export function formatIsoDay(instant: Date | string, timeZone: string = FALLBACK_TIME_ZONE): string {
+export function formatIsoDay(
+  instant: Date | string,
+  timeZone: string = FALLBACK_TIME_ZONE,
+): string {
   return zonedParts(instant, timeZone).localDate;
 }
 
 /** Day of `instant` as read by the learner, with the zone of `/me` (BR-ACC-07). */
-export function formatUserDate(instant: Date | string, me: TimeZoneSource | null | undefined): string {
+export function formatUserDate(
+  instant: Date | string,
+  me: TimeZoneSource | null | undefined,
+): string {
   return formatDate(instant, userTimeZone(me));
+}
+
+/** French short weekday names, indexed from Sunday (0), as the `Date` API returns them. */
+const SHORT_WEEKDAYS = ['dim.', 'lun.', 'mar.', 'mer.', 'jeu.', 'ven.', 'sam.'] as const;
+
+/** French long weekday names, indexed from Sunday (0). */
+const LONG_WEEKDAYS = [
+  'dimanche',
+  'lundi',
+  'mardi',
+  'mercredi',
+  'jeudi',
+  'vendredi',
+  'samedi',
+] as const;
+
+/** French month names, indexed from January (1). */
+const MONTHS = [
+  'janvier',
+  'février',
+  'mars',
+  'avril',
+  'mai',
+  'juin',
+  'juillet',
+  'août',
+  'septembre',
+  'octobre',
+  'novembre',
+  'décembre',
+] as const;
+
+/** French abbreviated month names (`lun. 9 nov.`). */
+const SHORT_MONTHS = [
+  'janv.',
+  'févr.',
+  'mars',
+  'avr.',
+  'mai',
+  'juin',
+  'juil.',
+  'août',
+  'sept.',
+  'oct.',
+  'nov.',
+  'déc.',
+] as const;
+
+/** Weekday of a `YYYY-MM-DD` calendar day, 0 = Sunday, without reading the device zone. */
+export function weekdayOf(day: string): number {
+  const [year, month, date] = day.split('-').map((part) => Number(part));
+  return new Date(Date.UTC(year ?? 1970, (month ?? 1) - 1, date ?? 1)).getUTCDay();
+}
+
+/**
+ * `Mercredi 11 novembre` — the over-title of the native header (SPEC-3102 § 10), read in the zone
+ * of the learner (BR-ACC-07). The first letter is capitalised, as on the mockups.
+ */
+export function formatLongDay(
+  instant: Date | string,
+  timeZone: string = FALLBACK_TIME_ZONE,
+): string {
+  const parts = zonedParts(instant, timeZone);
+  const weekday = LONG_WEEKDAYS[weekdayOf(parts.localDate)] ?? '';
+  const month = MONTHS[parts.month - 1] ?? '';
+  const label = `${weekday} ${String(parts.day)} ${month}`;
+  return label.charAt(0).toUpperCase() + label.slice(1);
+}
+
+/**
+ * `lun. 9 nov.` — the short day of a notification of the « Plus tôt » group (BR-NOT-01, ET-5) ;
+ * today and yesterday rows show their hour instead.
+ */
+export function formatShortDay(
+  instant: Date | string,
+  timeZone: string = FALLBACK_TIME_ZONE,
+): string {
+  const parts = zonedParts(instant, timeZone);
+  const weekday = SHORT_WEEKDAYS[weekdayOf(parts.localDate)] ?? '';
+  const month = SHORT_MONTHS[parts.month - 1] ?? '';
+  return `${weekday} ${String(parts.day)} ${month}`;
 }
