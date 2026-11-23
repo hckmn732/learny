@@ -39,7 +39,12 @@ const steps = [
     : ['build', 'pnpm -s build'],
   ['unit+coverage', 'pnpm -s test:unit --coverage'],
   mobileTrack
-    ? ['integration (client mobile)', 'pnpm -s test:int apps/mobile/test/integration']
+    ? [
+        'integration (client mobile)',
+        // Les tests d'intégration mobiles lisent la clé anonyme Supabase et la pile locale :
+        // ils exigent `.env.local` sourcé et NODE_ENV=test (sinon Jest hérite de development).
+        "sh -c 'set -a; . ./.env.local; set +a; NODE_ENV=test pnpm -s test:int apps/mobile/test/integration'",
+      ]
     : ['integration', 'pnpm -s test:int'],
   mobileTrack
     ? ['e2e mobile (preuves de campagne)', `node tools/sdd/mobile-evidence.mjs ${specIds.join(' ')}`]

@@ -5,7 +5,7 @@
     "special": 32,
     "events": 50,
     "jobs": 22,
-    "gaps": 132
+    "gaps": 131
   },
   "operations": [
     {
@@ -191,8 +191,11 @@
         "apps/api/test/integration/auth-routes.test.ts",
         "apps/api/test/integration/coverage.test.ts",
         "apps/api/test/integration/relay-e2e.test.ts",
+        "apps/mobile/test/integration/agenda.int.test.ts",
         "apps/mobile/test/integration/auth.int.test.ts",
+        "apps/mobile/test/integration/home.int.test.ts",
         "apps/mobile/test/integration/notifications.int.test.ts",
+        "apps/mobile/test/integration/programme.int.test.ts",
         "apps/mobile/test/integration/session.int.test.ts",
         "packages/services/src/legal/accept.test.ts"
       ],
@@ -3561,8 +3564,10 @@
         "users"
       ],
       "events": [],
-      "tests": [],
-      "gap": true
+      "tests": [
+        "apps/mobile/test/integration/bricks.int.test.ts"
+      ],
+      "gap": false
     },
     {
       "key": "devSddSpec501Demo",
@@ -6621,6 +6626,7 @@
         "apps/api/test/integration/roles.test.ts",
         "apps/api/test/integration/web-health-routes.test.ts",
         "apps/mobile/src/api/health.test.ts",
+        "apps/mobile/test/integration/bricks.int.test.ts",
         "apps/mobile/test/integration/health.int.test.ts",
         "apps/web/e2e/specs/p0/spec-001.spec.ts",
         "apps/web/e2e/specs/p0/spec-003.spec.ts",
@@ -6686,6 +6692,7 @@
       ],
       "events": [],
       "tests": [
+        "apps/mobile/test/integration/home.int.test.ts",
         "apps/web/e2e/specs/p22/spec-2207.spec.ts"
       ],
       "gap": false
@@ -9737,6 +9744,7 @@
       "events": [],
       "tests": [
         "apps/api/test/integration/streak-milestones-route.test.ts",
+        "apps/mobile/test/integration/home.int.test.ts",
         "apps/web/e2e/specs/p22/spec-2202.spec.ts"
       ],
       "gap": false

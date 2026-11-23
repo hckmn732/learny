@@ -30,7 +30,15 @@ export function checkSpecEvidence(specId) {
   }
   if ((data.passed ?? 0) < 1) reasons.push(`${specId} : aucun flux Maestro réussi`);
   if ((data.failed ?? 0) > 0) reasons.push(`${specId} : ${String(data.failed)} flux Maestro en échec`);
-  if ((data.visual ?? 0) < 1) reasons.push(`${specId} : aucune comparaison visuelle`);
+  // ADR-3019 : une spécification peut déclarer la comparaison pixel non applicable (export de
+  // référence sans chrome système). Elle n'a alors aucun flux `@visual` : on exige seulement
+  // l'absence d'échec, et l'exemption est documentée dans son `acceptance.md`.
+  const visualFlows = (data.flows ?? []).filter((flow) => (flow.tags ?? []).includes('visual')).length;
+  if (visualFlows === 0) {
+    if ((data.failed ?? 0) > 0) reasons.push(`${specId} : campagne en échec sans flux @visual`);
+  } else if ((data.visual ?? 0) < 1) {
+    reasons.push(`${specId} : aucune comparaison visuelle`);
+  }
   const captures = (data.flows ?? []).flatMap((flow) => flow.screenshots ?? []);
   if (captures.length === 0) reasons.push(`${specId} : aucune capture`);
   if (!fs.existsSync(path.join(dir, 'acceptance.md'))) {
