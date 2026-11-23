@@ -1,9 +1,6 @@
 import { randomUUID } from 'node:crypto';
 import { fileURLToPath } from 'node:url';
 
-import { clock } from '@learny/core';
-import { createLogger } from '@learny/core/server';
-import { processResource } from '@learny/ingestion';
 import { closeDb, serviceDb, sql } from '@learny/testing/db';
 import { createTestProgramme } from '@learny/testing/db';
 import { expect, test } from '@learny/testing/playwright';
@@ -16,7 +13,8 @@ import {
 } from '@learny/testing/visual';
 import { colors } from '@learny/ui/tokens';
 
-import { buildPdf } from '../../../../../packages/services/test/support/files';
+import { buildPdf } from '../../support/files';
+
 
 const NOW = '2026-11-11T12:20:00Z';
 const REFERENCE = fileURLToPath(
@@ -249,7 +247,7 @@ test('dépose des apports et termine un chapitre @SPEC-607', async ({
 
 test('erreur et reprise d’un apport @SPEC-607', async ({ page, axeCheck, captureEvidence }) => {
   const seeded = await seedModule(session.userId);
-  const failed = await serviceDb().execute<{ id: string }>(sql`
+  await serviceDb().execute<{ id: string }>(sql`
     insert into public.resources (
       owner_id, formation_id, chapter_id, kind, title, content_text, status, error_code, error_message
     )
@@ -260,7 +258,6 @@ test('erreur et reprise d’un apport @SPEC-607', async ({ page, axeCheck, captu
     )
     returning id::text as id
   `);
-  const resourceId = failed[0]?.id ?? '';
   await openModule(page, seeded);
   await expect(page.getByText('Échec', { exact: true })).toBeVisible();
   await expect(page.getByText('Le contenu n’a pas pu être analysé.')).toBeVisible();
@@ -270,16 +267,6 @@ test('erreur et reprise d’un apport @SPEC-607', async ({ page, axeCheck, captu
   });
   await expect(page.getByText('Le contenu n’a pas pu être analysé.')).toHaveCount(0);
 
-  // The mock ingestion finishes the retry; the poller (3 s) or a reload shows the ready state.
-  await processResource(
-    {
-      sdb: serviceDb(),
-      clock,
-      logger: createLogger({ level: 'silent' }),
-      requestId: 'e2e-spec-607',
-    },
-    resourceId,
-  );
   await page.reload();
   await expect(page.getByTestId('resource-status').last()).toHaveText('Analysé', { timeout: 30_000 });
   await expect(page.getByRole('button', { name: 'Réessayer' })).toHaveCount(0);

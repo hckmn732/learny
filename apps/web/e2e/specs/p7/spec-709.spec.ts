@@ -1,4 +1,5 @@
-import { closeDb, aiCredentials, serviceDb, sql } from '@learny/testing/db';
+import { aiCredentials } from '@learny/db/schema';
+import { closeDb, serviceDb, sql } from '@learny/testing/db';
 import { DEMO_USERS, demoUserId } from '@learny/testing/db-factories';
 import { expect, test } from '@learny/testing/playwright';
 import {

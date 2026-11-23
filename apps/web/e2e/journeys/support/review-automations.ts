@@ -14,8 +14,7 @@ import type { BrowserContext, Page } from '@playwright/test';
 import { activeLegalVersions } from '@learny/config';
 import { createBrick, createNotionState, createScheduleSlot } from '@learny/testing';
 import { FIXED_TIME_ISO } from '@learny/testing/clock';
-import { serviceDb, sql, type DbTx } from '@learny/testing/db';
-import { createTestProgramme } from '@learny/testing/db';
+import { createTestProgramme, serviceDb, sql, type DbTx } from '@learny/testing/db';
 import { createTestSession, deleteTestSession, type TestSession } from '@learny/testing/supabase';
 
 export const NOW_ISO = FIXED_TIME_ISO;

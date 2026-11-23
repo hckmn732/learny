@@ -7,7 +7,7 @@ import { closeDb } from '@learny/testing/db';
 import { expect, test } from '@learny/testing/playwright';
 import { supabaseLocalEnv } from '@learny/testing/supabase';
 
-import { buildPdf } from '../../../../packages/services/test/support/files';
+import { buildPdf } from '../support/files';
 
 import {
   accessTokenOf,

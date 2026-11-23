@@ -20,11 +20,12 @@
 import fs from 'node:fs';
 
 import { LEGAL_VERSIONS } from '@learny/config';
-import { buildTextPdf } from '@learny/ingestion/fixtures';
 import { makeModuleWithBank } from '@learny/testing';
 import { extractAuthLink, linkOnOrigin, waitForMail } from '@learny/testing/auth';
 import { closeDb, serviceDb, sql } from '@learny/testing/db';
 import { expect, test } from '@learny/testing/playwright';
+
+import { buildTextPdf } from '../support/pdf';
 
 import {
   CADRAGE,

@@ -13,7 +13,7 @@ import {
 // Same-origin mutations from the API request context (SPEC-208 origin guard).
 const ORIGIN = 'http://127.0.0.1:3100';
 
-import { buildPdf } from '../../../../../packages/services/test/support/files';
+import { buildPdf } from '../../support/files';
 
 let session: TestSession;
 
