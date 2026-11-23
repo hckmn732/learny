@@ -165,7 +165,7 @@ beforeAll(async () => {
   // Real, observed image builds (EF-1, ET-1, CA-1).
   for (const [dockerfile, image, log] of [
     ['docker/web.Dockerfile', WEB_IMAGE, 'build-web.txt'],
-    ['docker/api.Dockerfile', API_IMAGE, 'build-api.txt'],
+    ['docker/api-py.Dockerfile', API_IMAGE, 'build-api.txt'],
   ] as const) {
     const args = ['build', '-f', dockerfile, '-t', image];
     for (const [key, value] of Object.entries(BUILD_ARGS))
@@ -203,7 +203,7 @@ afterAll(() => {
 describe.skipIf(process.env.RUN_SELFHOST === '0')('[SPEC-012] selfhost stack', () => {
   test('construit deux images non root, sans fichier .env et avec le même commit', () => {
     const web = serviceImageInfo(PROJECT, envFile, env, 'web');
-    const api = serviceImageInfo(PROJECT, envFile, env, 'api');
+    const api = serviceImageInfo(PROJECT, envFile, env, 'api-py');
     expect(web?.labels['org.opencontainers.image.revision']).toBe(GIT_COMMIT);
     expect(api?.labels['org.opencontainers.image.revision']).toBe(GIT_COMMIT);
     expect(web?.labels['org.opencontainers.image.version']).toBe(APP_VERSION);
@@ -255,11 +255,7 @@ describe.skipIf(process.env.RUN_SELFHOST === '0')('[SPEC-012] selfhost stack', (
     const volumes = projectVolumes(PROJECT);
     writeEvidence('volumes.txt', volumes.join('\n'));
     expect(volumes).toEqual(
-      expect.arrayContaining([
-        `${PROJECT}_db-data`,
-        `${PROJECT}_storage-data`,
-        `${PROJECT}_inngest-data`,
-      ]),
+      expect.arrayContaining([`${PROJECT}_db-data`, `${PROJECT}_storage-data`]),
     );
     writeEvidence(
       'stack.json',

@@ -1,7 +1,8 @@
 """Harness of the development-route integration tests (SPEC-2207).
 
-Builds a facade that serves only the development routes under test, with a real `Database` when the
-test needs one, so the nominal answer and the development guard are checked on the real pipeline.
+Builds the real facade over a fake dependency bundle, with a real `Database` when the test needs
+one, so the nominal answer and the development guard are checked on the real pipeline (SPEC-2302
+removed the ownership table that used to restrict the installed routes).
 """
 
 from collections.abc import Mapping
@@ -13,15 +14,14 @@ from typing import Any
 from fastapi import FastAPI
 from fastapi.testclient import TestClient
 from learny.shared.errors import ErrorEntry, load_catalog
-from learny.shared.ownership import Ownership, special_key
 from learny_api import (
     handlers,  # noqa: F401 - registers the @handler roles
     pipeline,
 )
-from learny_api.generated.routes import ROUTES_BY_ID
 from learny_api.guards.idempotency import IdempotencyStart
 from learny_api.guards.rate_limit import RateLimitDecision
 from learny_api.pipeline import PipelineContext
+from learny_api.special import DEVELOPMENT_ROUTE_IDS
 from learny_api.special import install as install_special
 from starlette.requests import Request
 
@@ -94,25 +94,13 @@ class DevDeps:
     llm: Any = None
 
 
-def ownership_of(route_ids: tuple[str, ...], pipeline_ids: tuple[str, ...] = ()) -> Ownership:
-    """`route_ids` are served by the special registry, `pipeline_ids` by the pipeline."""
-    return Ownership(
-        operations={route_id: "py" for route_id in (*route_ids, *pipeline_ids)},
-        special={
-            special_key(ROUTES_BY_ID[route_id].method, ROUTES_BY_ID[route_id].path): "py"
-            for route_id in route_ids
-        },
-        consumers={},
-        crons={},
-    )
-
-
 def build_dev_app(
     route_ids: tuple[str, ...],
     deps: DevDeps,
     env: Mapping[str, str | None],
-    pipeline_ids: tuple[str, ...] = (),
 ) -> tuple[FastAPI, TestClient]:
+    """The real facade over `deps`; `route_ids` are the development routes under test."""
+    assert set(route_ids) <= set(DEVELOPMENT_ROUTE_IDS), route_ids
     context = PipelineContext(
         deps=deps,  # type: ignore[arg-type]
         catalog=CATALOG,
@@ -120,12 +108,11 @@ def build_dev_app(
         origin_guard=OriginGuard(),  # type: ignore[arg-type]
         rate_limiter=RateLimiter(),
         idempotency=Idempotency(),  # type: ignore[arg-type]
-        handlers={route_id: pipeline.HANDLERS[route_id] for route_id in (*route_ids, *pipeline_ids)},
+        handlers=dict(pipeline.HANDLERS),
     )
-    ownership = ownership_of(route_ids, pipeline_ids)
     app = FastAPI()
-    install_special(app, context, ownership)
-    pipeline.install(app, context, ownership)
+    install_special(app, context)
+    pipeline.install(app, context)
     return app, TestClient(app)
 
 

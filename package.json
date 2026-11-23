@@ -22,7 +22,6 @@
     "db:seed:demo": "node tools/dev/db-seed-demo.mjs",
     "deploy:check": "node tools/deploy/check.mjs",
     "deploy:migrate": "node tools/deploy/migrate.mjs",
-    "deploy:sync": "node tools/deploy/sync-inngest.mjs",
     "design:references": "node tools/design/capture-references.mjs",
     "design:references:check": "node tools/design/check-references.mjs",
     "dev": "turbo run dev --filter=@learny/web",

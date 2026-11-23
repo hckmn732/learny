@@ -148,20 +148,11 @@ jobs:
           restore-keys: |
             turbo-${{ runner.os }}-${{ hashFiles('pnpm-lock.yaml') }}-
       - run: pnpm install --frozen-lockfile
-      - name: Analyser apps/api
-        run: |
-          pnpm --filter @learny/api lint
-          pnpm --filter @learny/api typecheck
-          pnpm --filter @learny/api build
       - run: pnpm lint
       - run: pnpm typecheck
       - run: pnpm build
-      - name: Construire l'image API et contrôler la pile auto-hébergée
-        run: |
-          docker build -f docker/api.Dockerfile \
-            --build-arg "GIT_COMMIT=${GITHUB_SHA}" \
-            -t "learny-api:${GITHUB_SHA}" .
-          node tools/docker/check-selfhost.mjs --static
+      - name: Contrôler la pile auto-hébergée
+        run: node tools/docker/check-selfhost.mjs --static
       # SPEC-2301, ADR-2007 : une seule image pour la façade et le worker Python, construite par
       # la CI ; Coolify construit la même image depuis docker/api-py.Dockerfile.
       - name: Construire l'image Python (façade et worker)
@@ -257,12 +248,11 @@ jobs:
           public.ecr.aws/supabase/postgrest:v16.5
           public.ecr.aws/supabase/storage-api:v1.84.19
           public.ecr.aws/supabase/kong:2.8.1
-          inngest/inngest:v1.52.0
           axllent/mailpit:v1.33.1"
           for image in $images; do
             source="$image"
             case "$image" in
-              inngest/*|axllent/*) source="mirror.gcr.io/$image" ;;
+              axllent/*) source="mirror.gcr.io/$image" ;;
             esac
             pulled=false
             for attempt in 1 2 3 4 5; do

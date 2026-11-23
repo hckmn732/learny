@@ -2,7 +2,7 @@
 
 `POST /api/v1/formations/:fid/sprints` is absent from `api/openapi.yaml`, so the facade declares it
 with a local `RouteSpec` and hands it to the shared pipeline. These tests pin the plumbing the
-pipeline gives for free: installation before the relay, authentication, the mandatory
+pipeline gives for free: installation before the generic routes, authentication, the mandatory
 `Idempotency-Key`, the strict body of the contract, the output validation and the replay.
 """
 
@@ -25,9 +25,8 @@ from learny_api import pipeline
 from learny_api.guards.idempotency import IdempotencyStart
 from learny_api.guards.rate_limit import RateLimitDecision
 from learny_api.main import create_app
-from learny_api.ownership import Ownership
 from learny_api.pipeline import Call, PipelineContext
-from learny_api.special.sprints import SPRINTS_KEY, SPRINTS_ROUTE_ID
+from learny_api.special.sprints import SPRINTS_ROUTE_ID
 from starlette.requests import Request
 
 pytestmark = pytest.mark.spec("SPEC-2302")
@@ -143,7 +142,6 @@ class Deps:
 def settings_for() -> Settings:
     return Settings(
         app_env="test",
-        py_hono_upstream_url="http://upstream",
         rate_limit_mode="off",
     )
 
@@ -163,10 +161,6 @@ def context_with(
     )
 
 
-def ownership() -> Ownership:
-    return Ownership(operations={}, special={SPRINTS_KEY: "py"}, consumers={}, crons={})
-
-
 def build_app(
     handlers: dict[str, Callable[[Call], Any]] | None = None,
     idempotency: Idempotency | None = None,
@@ -174,8 +168,7 @@ def build_app(
     store = idempotency or Idempotency()
     app = create_app(
         settings_for(),
-        ownership=ownership(),
-        context=context_with({} if handlers is None else handlers, store),
+        context=context_with({**pipeline.HANDLERS, **(handlers or {})}, store),
     )
 
     @asynccontextmanager
@@ -200,7 +193,7 @@ def refuse_authentication(monkeypatch: pytest.MonkeyPatch) -> None:
     monkeypatch.setattr(pipeline, "authenticate", refuse)
 
 
-def test_the_route_is_installed_before_the_relay_and_requires_a_session(
+def test_the_route_is_installed_before_the_generic_routes_and_requires_a_session(
     monkeypatch: pytest.MonkeyPatch,
 ) -> None:
     """`install` registers the route and injects its handler: an anonymous call answers 401."""

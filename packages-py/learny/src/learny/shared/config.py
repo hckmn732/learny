@@ -32,7 +32,7 @@ JobsMode = Literal["worker", "inline"]
 
 # ADR-2042 - the environment contract of the Python backend. Steady-state deployment variables
 # first, then the optional ones (key rotation, SMTP target of the simulated stacks, local models,
-# test and QA switches, build metadata, coexistence with Hono until SPEC-2302, standard `CI`).
+# test and QA switches, build metadata, standard `CI`).
 ENVIRONMENT_VARIABLES: tuple[str, ...] = (
     "APP_ENV",
     "NEXT_PUBLIC_APP_URL",
@@ -61,8 +61,6 @@ ENVIRONMENT_VARIABLES: tuple[str, ...] = (
     "CLOCK_FIXED_AT",
     "GIT_COMMIT",
     "APP_VERSION",
-    "PY_HONO_UPSTREAM_URL",
-    "OWNERSHIP_OVERRIDES",
     # Standard variables (ADR-0227): the CI marker and the listening port of the worker health.
     "CI",
     "PORT",
@@ -162,9 +160,6 @@ class Settings(BaseSettings):
     # Build metadata of the health probe (SPEC-006 EF-1): the names the deployment already sets.
     git_commit: str | None = None
     app_version: str | None = None
-    # Coexistence with Hono (ADR-2005): removed with the relay by SPEC-2302.
-    py_hono_upstream_url: str = "http://127.0.0.1:3102"
-    ownership_overrides: str | None = None
     ci: str | None = None
     port: int = 0
 

@@ -30,7 +30,6 @@ x-py-environment: &py-environment
   STRIPE_WEBHOOK_SECRET: ${STRIPE_WEBHOOK_SECRET:-}
   STRIPE_PRICE_ID: ${STRIPE_PRICE_ID:-}
   ENABLE_SDD_PAGES: ${ENABLE_SDD_PAGES:-true}
-  OWNERSHIP_OVERRIDES: ${OWNERSHIP_OVERRIDES:-}
 
 services:
   api-py:
@@ -50,15 +49,12 @@ services:
     cap_drop: [ALL]
     environment:
       <<: *py-environment
-      PY_HONO_UPSTREAM_URL: http://api:3001
     expose:
       - '8000'
     depends_on:
       seed:
         condition: service_completed_successfully
       db:
-        condition: service_healthy
-      api:
         condition: service_healthy
     healthcheck:
       test:

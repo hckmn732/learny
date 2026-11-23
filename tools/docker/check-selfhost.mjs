@@ -21,34 +21,20 @@ export const GUIDE_FILE = 'docs/operations/self-hosting.md';
 export const DOCKERIGNORE_FILE = '.dockerignore';
 export const STATUS_FILE = path.join(ROOT, '.sdd', 'tmp', 'selfhost-check.json');
 
-export const REQUIRED_SERVICES = [
-  'db',
-  'migrate',
-  'auth',
-  'rest',
-  'storage',
-  'inngest',
-  'kong',
-  'web',
-  'api',
-];
-export const HEALTHCHECKED_SERVICES = ['db', 'auth', 'storage', 'inngest', 'kong', 'web', 'api'];
+export const REQUIRED_SERVICES = ['db', 'migrate', 'auth', 'rest', 'storage', 'kong', 'web'];
+export const HEALTHCHECKED_SERVICES = ['db', 'auth', 'storage', 'kong', 'web'];
 export const EXPECTED_VOLUMES = {
   'db-data': '/var/lib/postgresql/data',
   'storage-data': '/var/lib/storage',
-  'inngest-data': '/var/lib/inngest',
 };
 /** Public host ports; every other service stays on the internal network (ET-3). */
-export const PUBLISHED_SERVICES = ['web', 'kong', 'inngest'];
+export const PUBLISHED_SERVICES = ['web', 'kong'];
 export const SECRET_BUILD_ARG_NAMES = [
   'POSTGRES_PASSWORD',
   'SUPABASE_JWT_SECRET',
   'SUPABASE_SERVICE_ROLE_KEY',
   'APP_ENCRYPTION_KEY',
-  'RATE_LIMIT_IP_SECRET',
   'EMAIL_LINK_SECRET',
-  'INNGEST_SIGNING_KEY',
-  'INNGEST_EVENT_KEY',
   'RESEND_API_KEY',
 ];
 
@@ -135,7 +121,7 @@ export function validateComposeDocument(doc, text) {
   if ((services.mailpit?.profiles ?? []).length === 0) {
     errors.push('service mailpit : doit rester optionnel via un profil');
   }
-  for (const name of ['web', 'api']) {
+  for (const name of ['web']) {
     const service = services[name];
     const user = String(service?.user ?? '');
     if (!/^(?:[1-9][0-9]*|[a-z][a-z0-9_-]*)(?::[0-9]+)?$/.test(user) || /^root(:|$)/.test(user)) {
@@ -154,18 +140,11 @@ export function validateComposeDocument(doc, text) {
     }
   }
   const webDeps = services.web?.depends_on ?? {};
-  for (const dep of ['db', 'auth', 'storage', 'inngest', 'migrate', 'api']) {
+  for (const dep of ['db', 'auth', 'storage', 'migrate']) {
     if (webDeps[dep] === undefined) errors.push(`web : dépendance ${dep} absente`);
   }
   if (webDeps.migrate?.condition !== 'service_completed_successfully') {
     errors.push('web : les migrations doivent se terminer avant le démarrage');
-  }
-  if (webDeps.api?.condition !== 'service_healthy') {
-    errors.push('web : l’API doit être saine avant le démarrage');
-  }
-  const appEnv = services.api?.environment ?? {};
-  for (const name of ['API_INTERNAL_URL', 'API_PROXY_SECRET', 'LEARNY_API_ROLE']) {
-    if (appEnv[name] === undefined) errors.push(`service api : ${name} absent`);
   }
   const volumes = doc.volumes ?? {};
   for (const volume of Object.keys(EXPECTED_VOLUMES)) {
@@ -179,14 +158,12 @@ export function validateComposeDocument(doc, text) {
       errors.push(`volume ${volume} non monté sur ${target}`);
     }
   }
-  for (const name of ['db', 'auth', 'storage', 'inngest']) {
+  for (const name of ['db', 'auth', 'storage']) {
     if (services[name]?.restart === 'no') errors.push(`service ${name} : restart no interdit`);
   }
   for (const name of requiredVariables(text)) {
     if (!text.includes(`\${${name}:?`)) errors.push(`variable ${name} : syntaxe :? absente`);
   }
-  if (!text.includes('INNGEST_SIGNING_KEY:?'))
-    errors.push('INNGEST_SIGNING_KEY doit être obligatoire');
   return errors;
 }
 
@@ -206,7 +183,7 @@ export function validateResolvedConfig(config) {
       errors.push(`config résolue : ${name} sans contrôle de santé`);
     }
   }
-  for (const name of ['web', 'api']) {
+  for (const name of ['web', 'api-py', 'worker-py']) {
     const user = String(services[name]?.user ?? '');
     if (user === '' || /^0(:|$)/.test(user) || /^root(:|$)/.test(user)) {
       errors.push(`config résolue : ${name} ne doit pas tourner en root`);
@@ -225,10 +202,6 @@ export function validateResolvedConfig(config) {
   }
   for (const name of ['API_INTERNAL_URL', 'API_PROXY_SECRET']) {
     if (webEnv[name] === undefined) errors.push(`config résolue : web sans ${name}`);
-  }
-  const apiEnv = services.api?.environment ?? {};
-  if (apiEnv.LEARNY_API_ROLE !== 'all') {
-    errors.push('config résolue : LEARNY_API_ROLE doit valoir all');
   }
   for (const name of ['db', 'auth', 'rest', 'storage']) {
     if ((services[name]?.ports ?? []).length > 0) {
@@ -396,7 +369,7 @@ export function composeUp(project, envFile, env, { build = true } = {}) {
       env,
       stdio: 'inherit',
     });
-    run('docker', composeCommand(project, envFile, ['logs', '--tail', '80', 'api', 'web']), {
+    run('docker', composeCommand(project, envFile, ['logs', '--tail', '80', 'web', 'api-py']), {
       env,
       stdio: 'inherit',
     });
@@ -545,13 +518,23 @@ export async function probeStack(project, envFile, env, webPort) {
     probes.push({ name: 'web', target: '/api/v1/health', ok: false, detail: String(error) });
   }
   const execProbes = [
-    ['api', ['exec', '-T', 'api', 'node', '/app/healthcheck-api.mjs'], '/health'],
+    [
+      'api-py',
+      [
+        'exec',
+        '-T',
+        'api-py',
+        'python',
+        '-c',
+        "import sys, urllib.request; sys.exit(0 if urllib.request.urlopen('http://127.0.0.1:8000/health', timeout=3).status == 200 else 1)",
+      ],
+      '/health',
+    ],
     [
       'postgres',
       ['exec', '-T', 'db', 'pg_isready', '-U', 'postgres', '-d', 'postgres'],
       'pg_isready',
     ],
-    ['inngest', ['exec', '-T', 'inngest', 'perl', '/healthcheck.pl'], '/health'],
   ];
   for (const [name, args, target] of execProbes) {
     const result = run('docker', composeCommand(project, envFile, args), { env });
@@ -578,7 +561,6 @@ export async function collectStatus({ project, envFile, env, webPort }) {
     image: service.Image ?? '',
   }));
   const webInfo = serviceImageInfo(project, envFile, env, 'web');
-  const apiInfo = serviceImageInfo(project, envFile, env, 'api');
   const images = [
     {
       name: 'web',
@@ -586,13 +568,6 @@ export async function collectStatus({ project, envFile, env, webPort }) {
       version: webInfo?.labels['org.opencontainers.image.version'] ?? 'Non vérifié',
       commit: webInfo?.labels['org.opencontainers.image.revision'] ?? 'Non vérifié',
       user: webInfo?.user ?? 'Non vérifié',
-    },
-    {
-      name: 'api',
-      tag: apiInfo?.image ?? env.LEARNY_API_IMAGE ?? 'Non vérifié',
-      version: apiInfo?.labels['org.opencontainers.image.version'] ?? 'Non vérifié',
-      commit: apiInfo?.labels['org.opencontainers.image.revision'] ?? 'Non vérifié',
-      user: apiInfo?.user ?? 'Non vérifié',
     },
   ];
   const probes = await probeStack(project, envFile, env, webPort);
@@ -637,9 +612,7 @@ async function main() {
   }
   if (doc !== null) errors.push(...validateComposeDocument(doc, composeText));
   errors.push(...validateDockerfile(readFile('docker/web.Dockerfile')));
-  errors.push(...validateDockerfile(readFile('docker/api.Dockerfile')));
   errors.push(...validateDockerignore(readFile(DOCKERIGNORE_FILE)));
-  errors.push(...validateDockerignore(readFile('docker/api.Dockerfile.dockerignore')));
   errors.push(...validateGuide(readFile(GUIDE_FILE)));
 
   let env = {};

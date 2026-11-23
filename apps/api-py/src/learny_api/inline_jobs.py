@@ -12,8 +12,7 @@ from typing import Any
 
 from learny.shared.config import Settings
 from learny.shared.db.uow import collect_committed_events
-from learny.shared.ownership import Ownership
-from learny_worker.consumers import active_consumers
+from learny_worker.consumers import CONSUMERS
 from learny_worker.dispatcher import Dispatcher
 from learny_worker.inline import run_committed
 from learny_worker.runner import Runner
@@ -62,15 +61,15 @@ class InlineJobsMiddleware:
             await self._app(scope, receive, send_after_jobs)
 
 
-def inline_jobs_options(settings: Settings, deps: Any, ownership: Ownership) -> dict[str, Any] | None:
+def inline_jobs_options(settings: Settings, deps: Any) -> dict[str, Any] | None:
     """The middleware options when `JOBS_MODE=inline`, None otherwise; refused in production."""
     if settings.jobs_mode != INLINE_MODE:
         return None
     if settings.is_production:
         raise RuntimeError("JOBS_MODE=inline is forbidden in production")
-    consumers = active_consumers(ownership)
+    consumers = CONSUMERS
     return {
-        "dispatcher": Dispatcher(deps, ownership, consumers=consumers),
+        "dispatcher": Dispatcher(deps, consumers=consumers),
         "runner": Runner(deps, consumers),
         "exclude": WORKER_ONLY_CONSUMERS,
     }

@@ -22,7 +22,6 @@ from starlette.responses import Response
 from learny_api.generated.routes import RouteSpec
 from learny_api.pipeline import Call, PipelineContext, handle
 
-SPRINTS_KEY: Final = "POST /api/v1/formations/:fid/sprints"
 SPRINTS_ROUTE_ID: Final = "formations.sprints.plan"
 SPRINTS_PATH: Final = "/api/v1/formations/{fid}/sprints"
 
@@ -154,10 +153,8 @@ async def endpoint(request: Request, context: PipelineContext) -> Response:
     return await handle(SPRINTS_SPEC, request, context)
 
 
-def install(app: FastAPI, context: PipelineContext, ownership: Any) -> list[str]:
-    """Registers the `py`-owned sprint route; returns the installed special keys."""
-    if ownership.special.get(SPRINTS_KEY) != "py":
-        return []
+def install(app: FastAPI, context: PipelineContext) -> list[str]:
+    """Registers the sprint route; returns the installed route id."""
     # The route is not in the generated table, so `pipeline.install` cannot register its handler:
     # the context receives it here, and a test may pass its own guard bundle unchanged.
     resolved = (
@@ -170,9 +167,9 @@ def install(app: FastAPI, context: PipelineContext, ownership: Any) -> list[str]
         _handler(resolved),
         methods=["POST"],
         include_in_schema=False,
-        name="special:formationsSprintsPlan",
+        name=f"special:{SPRINTS_ROUTE_ID}",
     )
-    return [SPRINTS_KEY]
+    return [SPRINTS_ROUTE_ID]
 
 
 def _handler(context: PipelineContext) -> Any:
@@ -184,7 +181,6 @@ def _handler(context: PipelineContext) -> Any:
 
 
 __all__ = [
-    "SPRINTS_KEY",
     "SPRINTS_PATH",
     "SPRINTS_ROUTE_ID",
     "SPRINTS_SPEC",

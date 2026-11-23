@@ -1,5 +1,5 @@
 # Pile locale de développement (SPEC-008, ADR-0053, ADR-0054).
-# Supabase est lancé par la CLI ; ce fichier ne contient qu'Inngest et Mailpit.
+# Supabase est lancé par la CLI ; ce fichier ne contient que Mailpit.
 # Images épinglées, aucun secret, volumes nommés pour les données locales.
 name: learny-dev
 

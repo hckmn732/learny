@@ -1,7 +1,7 @@
 # Pile auto-hébergée de Learny (SPEC-012, ADR-0053, ADR-0227, ADR-0228).
 #
 # Elle n'est pas la production gérée de la V1 : c'est une option de déploiement complète
-# (web, api, Supabase auto-hébergé, Inngest auto-hébergé). Toutes les images tierces sont
+# (web et Supabase auto-hébergé). Toutes les images tierces sont
 # épinglées ; les secrets viennent de `.env.selfhost` (non versionné) et les substitutions
 # obligatoires échouent explicitement quand une valeur manque.
 #
@@ -21,7 +21,7 @@ x-app-environment: &app-environment
   LOG_LEVEL: ${LOG_LEVEL:-info}
   APP_VERSION: ${APP_VERSION:-dev}
   GIT_COMMIT: ${GIT_COMMIT:?GIT_COMMIT est obligatoire (git rev-parse HEAD)}
-  API_INTERNAL_URL: http://api:3001
+  API_INTERNAL_URL: http://api-py:8000
   API_PROXY_SECRET: ${API_PROXY_SECRET:?API_PROXY_SECRET est obligatoire}
   LEARNY_API_ROLE: all
   NEXT_PUBLIC_APP_URL: ${LEARNY_PUBLIC_APP_URL:?LEARNY_PUBLIC_APP_URL est obligatoire}
@@ -200,43 +200,6 @@ services:
     restart: unless-stopped
     logging: *logging
 
-  api:
-    image: ${LEARNY_API_IMAGE:-learny-api:dev}
-    build:
-      context: ..
-      dockerfile: docker/api.Dockerfile
-      args:
-        APP_VERSION: ${APP_VERSION:-dev}
-        GIT_COMMIT: ${GIT_COMMIT:?GIT_COMMIT est obligatoire (git rev-parse HEAD)}
-    user: '1000:1000'
-    read_only: true
-    tmpfs:
-      - /tmp:size=16m
-    security_opt:
-      - no-new-privileges:true
-    cap_drop: [ALL]
-    environment:
-      <<: *app-environment
-      PORT: '3001'
-      API_INTERNAL_URL: http://api:3001
-      API_PROXY_SECRET: ${API_PROXY_SECRET:?API_PROXY_SECRET est obligatoire}
-      API_PROXY_SECRET_PREVIOUS: ${API_PROXY_SECRET_PREVIOUS:-}
-      LEARNY_API_ROLE: all
-    expose:
-      - '3001'
-    depends_on:
-      migrate:
-        condition: service_completed_successfully
-    healthcheck:
-      test: ['CMD', 'node', '/app/healthcheck-api.mjs']
-      interval: 10s
-      timeout: 5s
-      retries: 6
-      start_period: 15s
-    networks: [backend, egress]
-    restart: unless-stopped
-    logging: *logging
-
   kong:
     image: public.ecr.aws/supabase/kong:2.8.1
     depends_on:
@@ -290,7 +253,7 @@ services:
     cap_drop: [ALL]
     environment:
       <<: *app-environment
-      API_INTERNAL_URL: http://api:3001
+      API_INTERNAL_URL: http://api-py:8000
       API_PROXY_SECRET: ${API_PROXY_SECRET:?API_PROXY_SECRET est obligatoire}
     ports:
       - '${LEARNY_WEB_PORT:-8080}:3000'
@@ -305,7 +268,7 @@ services:
         condition: service_started
       storage:
         condition: service_healthy
-      api:
+      api-py:
         condition: service_healthy
     healthcheck:
       test: ['CMD', 'node', '/app/healthcheck-web.mjs']
@@ -338,11 +301,136 @@ services:
     restart: unless-stopped
     logging: *logging
 
+  # Façade Python : elle sert tout le contrat de l'API (SPEC-2302) ; une seule image avec le worker.
+  api-py:
+    image: ${LEARNY_API_IMAGE:-learny-api-py:dev}
+    build:
+      context: ..
+      dockerfile: docker/api-py.Dockerfile
+      args:
+        GIT_COMMIT: ${GIT_COMMIT:?GIT_COMMIT est obligatoire (git rev-parse HEAD)}
+        APP_VERSION: ${APP_VERSION:-dev}
+    user: '1001:1001'
+    read_only: true
+    tmpfs:
+      - /tmp:size=32m
+    security_opt:
+      - no-new-privileges:true
+    cap_drop: [ALL]
+    environment:
+      APP_ENV: ${APP_ENV:-production}
+      APP_VERSION: ${APP_VERSION:-dev}
+      GIT_COMMIT: ${GIT_COMMIT:?GIT_COMMIT est obligatoire (git rev-parse HEAD)}
+      DATABASE_URL: postgresql://postgres:${POSTGRES_PASSWORD:?POSTGRES_PASSWORD est obligatoire}@db:5432/postgres
+      NEXT_PUBLIC_SUPABASE_URL: ${LEARNY_PUBLIC_SUPABASE_URL:?LEARNY_PUBLIC_SUPABASE_URL est obligatoire}
+      NEXT_PUBLIC_SUPABASE_ANON_KEY: ${NEXT_PUBLIC_SUPABASE_ANON_KEY:?NEXT_PUBLIC_SUPABASE_ANON_KEY est obligatoire}
+      SUPABASE_SERVICE_ROLE_KEY: ${SUPABASE_SERVICE_ROLE_KEY:?SUPABASE_SERVICE_ROLE_KEY est obligatoire}
+      SUPABASE_JWT_SECRET: ${SUPABASE_JWT_SECRET:?SUPABASE_JWT_SECRET est obligatoire}
+      NEXT_PUBLIC_APP_URL: ${LEARNY_PUBLIC_APP_URL:?LEARNY_PUBLIC_APP_URL est obligatoire}
+      API_PROXY_SECRET: ${API_PROXY_SECRET:?API_PROXY_SECRET est obligatoire}
+      API_PROXY_SECRET_PREVIOUS: ${API_PROXY_SECRET_PREVIOUS:-}
+      APP_ENCRYPTION_KEY: ${APP_ENCRYPTION_KEY:?APP_ENCRYPTION_KEY est obligatoire}
+      APP_ENCRYPTION_KEY_PREVIOUS: ${APP_ENCRYPTION_KEY_PREVIOUS:-}
+      EMAIL_FROM: ${EMAIL_FROM:-Learny <bonjour@learny.example>}
+      EMAIL_LINK_SECRET: ${EMAIL_LINK_SECRET:?EMAIL_LINK_SECRET est obligatoire}
+      SMTP_HOST: ${SMTP_HOST:-mailpit}
+      RESEND_API_KEY: ${RESEND_API_KEY:-}
+      VAPID_PRIVATE_KEY: ${VAPID_PRIVATE_KEY:-}
+      VOYAGE_API_KEY: ${VOYAGE_API_KEY:-}
+      SEARCH_API_KEY: ${SEARCH_API_KEY:-}
+      STRIPE_SECRET_KEY: ${STRIPE_SECRET_KEY:-}
+      STRIPE_WEBHOOK_SECRET: ${STRIPE_WEBHOOK_SECRET:-}
+      STRIPE_PRICE_ID: ${STRIPE_PRICE_ID:-}
+      SENTRY_DSN: ${SENTRY_DSN:-}
+    expose:
+      - '8000'
+    depends_on:
+      migrate:
+        condition: service_completed_successfully
+      db:
+        condition: service_healthy
+    healthcheck:
+      test:
+        - CMD-SHELL
+        - >-
+          python -c "import sys, urllib.request;
+          sys.exit(0 if urllib.request.urlopen('http://127.0.0.1:8000/health', timeout=3).status == 200 else 1)"
+      interval: 10s
+      timeout: 5s
+      retries: 12
+      start_period: 30s
+    networks: [backend, egress]
+    restart: unless-stopped
+    logging: *logging
+
+  # Worker Python : outbox, livraisons et planificateur singleton (ADR-2006).
+  worker-py:
+    image: ${LEARNY_API_IMAGE:-learny-api-py:dev}
+    build:
+      context: ..
+      dockerfile: docker/api-py.Dockerfile
+      args:
+        GIT_COMMIT: ${GIT_COMMIT:?GIT_COMMIT est obligatoire (git rev-parse HEAD)}
+        APP_VERSION: ${APP_VERSION:-dev}
+    command: ['python', '-m', 'learny_worker']
+    user: '1001:1001'
+    read_only: true
+    tmpfs:
+      - /tmp:size=32m
+    security_opt:
+      - no-new-privileges:true
+    cap_drop: [ALL]
+    environment:
+      APP_ENV: ${APP_ENV:-production}
+      APP_VERSION: ${APP_VERSION:-dev}
+      GIT_COMMIT: ${GIT_COMMIT:?GIT_COMMIT est obligatoire (git rev-parse HEAD)}
+      DATABASE_URL: postgresql://postgres:${POSTGRES_PASSWORD:?POSTGRES_PASSWORD est obligatoire}@db:5432/postgres
+      NEXT_PUBLIC_SUPABASE_URL: ${LEARNY_PUBLIC_SUPABASE_URL:?LEARNY_PUBLIC_SUPABASE_URL est obligatoire}
+      NEXT_PUBLIC_SUPABASE_ANON_KEY: ${NEXT_PUBLIC_SUPABASE_ANON_KEY:?NEXT_PUBLIC_SUPABASE_ANON_KEY est obligatoire}
+      SUPABASE_SERVICE_ROLE_KEY: ${SUPABASE_SERVICE_ROLE_KEY:?SUPABASE_SERVICE_ROLE_KEY est obligatoire}
+      SUPABASE_JWT_SECRET: ${SUPABASE_JWT_SECRET:?SUPABASE_JWT_SECRET est obligatoire}
+      NEXT_PUBLIC_APP_URL: ${LEARNY_PUBLIC_APP_URL:?LEARNY_PUBLIC_APP_URL est obligatoire}
+      API_PROXY_SECRET: ${API_PROXY_SECRET:?API_PROXY_SECRET est obligatoire}
+      APP_ENCRYPTION_KEY: ${APP_ENCRYPTION_KEY:?APP_ENCRYPTION_KEY est obligatoire}
+      EMAIL_FROM: ${EMAIL_FROM:-Learny <bonjour@learny.example>}
+      EMAIL_LINK_SECRET: ${EMAIL_LINK_SECRET:?EMAIL_LINK_SECRET est obligatoire}
+      SMTP_HOST: ${SMTP_HOST:-mailpit}
+      RESEND_API_KEY: ${RESEND_API_KEY:-}
+      VAPID_PRIVATE_KEY: ${VAPID_PRIVATE_KEY:-}
+      VOYAGE_API_KEY: ${VOYAGE_API_KEY:-}
+      SEARCH_API_KEY: ${SEARCH_API_KEY:-}
+      STRIPE_SECRET_KEY: ${STRIPE_SECRET_KEY:-}
+      STRIPE_WEBHOOK_SECRET: ${STRIPE_WEBHOOK_SECRET:-}
+      STRIPE_PRICE_ID: ${STRIPE_PRICE_ID:-}
+      PORT: '8081'
+      SENTRY_DSN: ${SENTRY_DSN:-}
+    expose:
+      - '8081'
+    depends_on:
+      migrate:
+        condition: service_completed_successfully
+      db:
+        condition: service_healthy
+    healthcheck:
+      test:
+        - CMD-SHELL
+        - >-
+          python -c "import os, sys, urllib.request;
+          port = os.environ['PORT'];
+          sys.exit(0 if urllib.request.urlopen(f'http://127.0.0.1:{port}/health/live', timeout=3).status == 200 else 1)"
+      interval: 10s
+      timeout: 5s
+      retries: 12
+      start_period: 30s
+    networks: [backend, egress]
+    restart: unless-stopped
+    logging: *logging
+
 networks:
   # Data plane: no route to the Internet for the database, Auth, Storage and PostgREST.
   backend:
     internal: true
-  # Only web and api (LLM, e-mail, webhooks) may reach the Internet.
+  # Only web, api-py and worker-py (LLM, e-mail, webhooks) may reach the Internet.
   egress:
 
 volumes:
