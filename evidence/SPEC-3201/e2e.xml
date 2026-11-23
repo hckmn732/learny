@@ -1,0 +1,11 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<testsuites>
+  <testsuite name="Test Suite" device="learny" tests="1" failures="1" time="70.83" timestamp="2026-11-23T14:10:10">
+    <testcase id="SPEC-3201 aujourdhui" name="SPEC-3201 aujourdhui" classname="SPEC-3201 aujourdhui" file="apps/mobile/e2e/flows/SPEC-3201-aujourdhui.yaml" time="70.804" timestamp="2026-11-23T14:10:10" status="ERROR">
+      <properties>
+        <property name="tags" value="SPEC-3201, visual"/>
+      </properties>
+      <failure>Assertion is false: id: today-toast-accept is visible</failure>
+    </testcase>
+  </testsuite>
+</testsuites>

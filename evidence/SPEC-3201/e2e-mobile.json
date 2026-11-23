@@ -1,0 +1,56 @@
+{
+  "spec": "SPEC-3201",
+  "platform": "android",
+  "transport": "local",
+  "device": {
+    "platform": "android",
+    "model": "sdk_gphone64_x86_64",
+    "apiLevel": "35",
+    "size": "Physical size: 1080x2400"
+  },
+  "tags": [
+    "SPEC-3201"
+  ],
+  "startedAt": "2026-11-23T14:10:04.505Z",
+  "finishedAt": "2026-11-23T14:11:21.778Z",
+  "passed": 0,
+  "failed": 1,
+  "videos": 1,
+  "campaignVideo": "artifacts/campagne/campagne.mp4",
+  "visual": 1,
+  "junitCases": 1,
+  "flows": [
+    {
+      "file": "apps/mobile/e2e/flows/SPEC-3201-aujourdhui.yaml",
+      "name": "SPEC-3201 aujourdhui",
+      "tags": [
+        "SPEC-3201",
+        "visual"
+      ],
+      "status": "failed",
+      "durationSec": 70.804,
+      "message": null,
+      "videos": [],
+      "screenshots": [
+        "artifacts/spec-3201-aujourdhui/SPEC-3201-aujourdhui.png",
+        "artifacts/spec-3201-aujourdhui/step-049-assertCondition-today-toast-accept.png"
+      ],
+      "visual": {
+        "flow": "SPEC-3201 aujourdhui",
+        "status": "passed",
+        "diffRatio": 0.062,
+        "capture": "/root/wt/SPEC-3201/test-results/sdd/SPEC-3201/artifacts/spec-3201-aujourdhui/SPEC-3201-aujourdhui.png",
+        "baseline": "/root/wt/SPEC-3201/apps/mobile/e2e/visual/baselines/SPEC-3201-aujourdhui.png",
+        "diff": "/root/wt/SPEC-3201/test-results/sdd/SPEC-3201/artifacts/spec-3201-aujourdhui/SPEC-3201-aujourdhui.diff.png"
+      }
+    }
+  ],
+  "visualChecks": [
+    {
+      "flow": "SPEC-3201 aujourdhui",
+      "status": "passed",
+      "diffRatio": 0.062
+    }
+  ],
+  "unattributed": []
+}
