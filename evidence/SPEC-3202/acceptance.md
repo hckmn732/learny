@@ -86,6 +86,13 @@ Fichiers rouges préexistants hors périmètre mobile, non réparés (décision 
 `evidence/SPEC-3001/acceptance.md`) : `packages/config/src/commit-rules.test.ts`,
 `apps/web/test/unit/bundle-split.test.ts`, `tools/migration/test/unit/report.test.ts`.
 
+**Instabilité connue hors périmètre** : `apps/mobile/test/bricks/recall-card.test.tsx` (SPEC-3301)
+échoue de façon intermittente sous `pnpm test:mobile` parallèle (« Unable to locate attached view
+in the native tree » : animation native démarrée avant le montage de la vue). Le fichier passe
+seul (3/3) et la suite complète passe en série (`jest --runInBand`, 35/35 suites, 214/214 tests).
+Ce n'est pas une régression de SPEC-3202 — le test appartient à SPEC-3301 —, il est consigné ici
+pour la traçabilité de la preuve.
+
 ## 5. Validation visuelle
 
 - **Référence** : `design/app-mobile/exports/screens/android-03-programme.png` (824 × 1830),
