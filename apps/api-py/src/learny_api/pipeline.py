@@ -427,7 +427,7 @@ def _check_output(spec: RouteSpec, payload: Any, logger: Any) -> Any:
             path=",".join(".".join(str(part) for part in issue["loc"]) for issue in error.errors()),
         )
         raise AppError("INTERNAL_ERROR") from error
-    return without_absent_optionals(validated.model_dump(), payload)
+    return without_absent_optionals(validated.model_dump(by_alias=True), payload)
 
 
 def without_absent_optionals(dumped: Any, source: Any) -> Any:
