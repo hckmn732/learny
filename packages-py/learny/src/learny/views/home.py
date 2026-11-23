@@ -3,7 +3,7 @@
 Port of `packages/services/src/home/get-home.ts`: one read-only aggregation under the learner's
 RLS, no rule and no write, so another learner's formations, slots, attempts or memory states never
 reach the DTO. The local day comes from the learner's time zone and every instant from
-`deps.clock.now()` (ADR-0047); the pure derivations live in `learny.views.home_derive` and the SQL
+`deps.clock.now()` (ADR-0047); the pure derivations live in `learny.views.home_derivations` and the SQL
 in `learny.views.home_queries`.
 """
 
@@ -24,10 +24,10 @@ from learny.shared.jsmath import js_round
 from learny.shared.locale_fr import home as texts
 from learny.shared.locale_fr.details import PROFILE_NOT_FOUND
 from learny.shared.naming import formation_monogram
-from learny.views import home_derive, home_queries
+from learny.views import home_derivations, home_queries
 
 MS_PER_MINUTE = shared_time.MS_PER_MINUTE
-DEFAULT_MODULE_THRESHOLD = home_derive.DEFAULT_MODULE_THRESHOLD
+DEFAULT_MODULE_THRESHOLD = home_derivations.DEFAULT_MODULE_THRESHOLD
 DEFAULT_QUIZ_MINUTES = int(ENGINE["globalQuiz"]["maxMinutesDefault"])
 ACTIVE_STATUSES = ("active", "paused", "programme_proposed", "cadrage")
 QUIZ_FORMATS = frozenset(
@@ -62,22 +62,22 @@ def _is_number(value: Any) -> TypeGuard[float | int]:
     return isinstance(value, (int, float)) and not isinstance(value, bool)
 
 
-def _slot_minutes(day_slot: home_derive.DaySlot) -> float:
+def _slot_minutes(day_slot: home_derivations.DaySlot) -> float:
     """Duration of a slot in minutes, as the JavaScript subtraction yields it."""
     return (_instant_ms(day_slot.ends_at) - _instant_ms(day_slot.starts_at)) / MS_PER_MINUTE
 
 
 def _objective_text(objectives: Sequence[str]) -> str:
     """EF-6: the known objective labels of a formation, joined by a middle dot."""
-    return texts.OBJECTIVE_SEPARATOR.join(home_derive.objective_labels(list(objectives)))
+    return texts.OBJECTIVE_SEPARATOR.join(home_derivations.objective_labels(list(objectives)))
 
 
 def _first_line_summary(value: str) -> str:
     """First line of a description, truncated with an ellipsis past 60 characters."""
     line = LINE_BREAK.split(value, maxsplit=1)[0].strip()
-    if len(line) <= home_derive.SUMMARIZED_LINE_MAX:
+    if len(line) <= home_derivations.SUMMARIZED_LINE_MAX:
         return line
-    return line[: home_derive.SUMMARIZED_LINE_MAX - 1].rstrip() + texts.ELLIPSIS
+    return line[: home_derivations.SUMMARIZED_LINE_MAX - 1].rstrip() + texts.ELLIPSIS
 
 
 def _retention_values(horizons: Sequence[RetentionHorizon]) -> dict[str, int | None]:
@@ -137,9 +137,9 @@ def _compute_retention(
     )
 
 
-def _action_slot(row: Mapping[str, Any]) -> home_derive.ActionSlot:
+def _action_slot(row: Mapping[str, Any]) -> home_derivations.ActionSlot:
     """The identifiers the action of a slot reads."""
-    return home_derive.ActionSlot(
+    return home_derivations.ActionSlot(
         formation_id=str(row["formation_id"]),
         module_id=None if row["module_id"] is None else str(row["module_id"]),
         activity_id=None if row["activity_id"] is None else str(row["activity_id"]),
@@ -147,9 +147,9 @@ def _action_slot(row: Mapping[str, Any]) -> home_derive.ActionSlot:
     )
 
 
-def _scheduled_slot(row: Mapping[str, Any]) -> home_derive.ScheduledSlot:
+def _scheduled_slot(row: Mapping[str, Any]) -> home_derivations.ScheduledSlot:
     """The fields the next-activity labels of a slot read."""
-    return home_derive.ScheduledSlot(
+    return home_derivations.ScheduledSlot(
         kind=str(row["kind"]),
         starts_at=_instant(row["starts_at"]),
         meta=None if row["meta"] is None else str(row["meta"]),
@@ -223,7 +223,7 @@ async def _today_quiz_card(
             "dueCount": due_count,
             "deferredCount": deferred_count,
             "deferredTo": deferred_to,
-            "dayLabel": home_derive.deferred_day_label(deferred_to, today, time_zone),
+            "dayLabel": home_derivations.deferred_day_label(deferred_to, today, time_zone),
             "capMin": cap_min,
         }
     return {
@@ -303,7 +303,7 @@ def _global_quiz(
             "dueCount": len(due),
             "deferredCount": deferred_count,
             "deferredTo": tomorrow,
-            "dayLabel": home_derive.deferred_day_label(tomorrow, today, time_zone),
+            "dayLabel": home_derivations.deferred_day_label(tomorrow, today, time_zone),
             "capMin": cap_minutes,
         }
     next_review_at = profile["next_review_at"]
@@ -350,7 +350,7 @@ def _ongoing_row(
     if status == "active":
         action = {
             "label": texts.ACTION_RESUME,
-            "href": home_derive.module_href(formation_id, formation["open_module_id"]),
+            "href": home_derivations.module_href(formation_id, formation["open_module_id"]),
         }
     elif status == "paused":
         action = {"label": texts.ACTION_RESUME, "href": f"/formations/{formation_id}/programme"}
@@ -378,12 +378,12 @@ def _ongoing_row(
     elif next_row is None:
         next_activity = None
     else:
-        next_activity = home_derive.next_activity(_scheduled_slot(next_row), now, time_zone)
+        next_activity = home_derivations.next_activity(_scheduled_slot(next_row), now, time_zone)
 
     module_status: dict[str, str] | None = None
     if status == "active":
         raw_threshold = formation["open_module_threshold"]
-        module_status = home_derive.module_status_pill(
+        module_status = home_derivations.module_status_pill(
             contributions_in_progress=bool(formation["contributions_in_progress"]),
             course_status=(None if formation["course_status"] is None else str(formation["course_status"])),
             reading_percent=(
@@ -422,7 +422,7 @@ def _completed_row(
 ) -> dict[str, Any]:
     """EF-7: one row of the completed tab."""
     formation_id = str(formation["id"])
-    summary = home_derive.completed_summary(
+    summary = home_derivations.completed_summary(
         start_date=formation["start_date"],
         completed_at=None if formation["completed_at"] is None else _instant(formation["completed_at"]),
         volume_hours=None if formation["volume_hours"] is None else int(formation["volume_hours"]),
@@ -457,9 +457,9 @@ def _completed_row(
     }
 
 
-def _day_slot(row: Mapping[str, Any]) -> home_derive.DaySlot:
+def _day_slot(row: Mapping[str, Any]) -> home_derivations.DaySlot:
     """EF-2: the slot fields the day-card derivations read."""
-    return home_derive.DaySlot(
+    return home_derivations.DaySlot(
         id=str(row["id"]),
         kind=str(row["kind"]),
         status=str(row["status"]),
@@ -470,28 +470,28 @@ def _day_slot(row: Mapping[str, Any]) -> home_derive.DaySlot:
 
 def _home_slot(
     row: Mapping[str, Any],
-    day_slot: home_derive.DaySlot,
+    day_slot: home_derivations.DaySlot,
     highlight_id: str | None,
     now: datetime,
     time_zone: str,
 ) -> dict[str, Any]:
     """EF-2: one slot of the day card, with its state and its pill link."""
-    state = home_derive.slot_state(day_slot, now, highlight_id=highlight_id)
+    state = home_derivations.slot_state(day_slot, now, highlight_id=highlight_id)
     return {
         "id": day_slot.id,
         "formationId": str(row["formation_id"]),
         "kind": day_slot.kind,
         "title": row["title"],
         "meta": row["meta"],
-        "time": home_derive.local_clock(day_slot.starts_at, time_zone),
+        "time": home_derivations.local_clock(day_slot.starts_at, time_zone),
         "moduleId": row["module_id"],
         "activityId": row["activity_id"],
         "startsAt": day_slot.starts_at,
         "endsAt": day_slot.ends_at,
         "status": day_slot.status,
         "state": state,
-        "minutesUntil": home_derive.minutes_until(day_slot.starts_at, now) if state == "next" else None,
-        "href": home_derive.slot_href(_action_slot(row)),
+        "minutesUntil": home_derivations.minutes_until(day_slot.starts_at, now) if state == "next" else None,
+        "href": home_derivations.slot_href(_action_slot(row)),
     }
 
 
@@ -518,7 +518,7 @@ async def read_home(tx: Tx, user_id: str, now: datetime) -> dict[str, Any]:
     bricks = [] if current_id is None else await home_queries.read_bricks(tx, user_id, current_id)
 
     day_slots = [_day_slot(row) for row in slot_rows]
-    highlight = home_derive.highlighted_slot(day_slots, now)
+    highlight = home_derivations.highlighted_slot(day_slots, now)
     highlight_id = None if highlight is None else highlight.id
     home_slots = [
         _home_slot(row, day_slot, highlight_id, now, time_zone)
@@ -535,7 +535,7 @@ async def read_home(tx: Tx, user_id: str, now: datetime) -> dict[str, Any]:
         else next((row for row in slot_rows if str(row["id"]) == highlight_id), None)
     )
     primary_action = (
-        None if highlight_row is None else home_derive.primary_action_for(_action_slot(highlight_row))
+        None if highlight_row is None else home_derivations.primary_action_for(_action_slot(highlight_row))
     )
 
     next_by_formation: dict[str, Mapping[str, Any]] = {}
@@ -583,7 +583,7 @@ async def read_home(tx: Tx, user_id: str, now: datetime) -> dict[str, Any]:
     return {
         "today": {
             "date": today,
-            "label": home_derive.civil_day_label(today, time_zone),
+            "label": home_derivations.civil_day_label(today, time_zone),
             "plannedMinutes": js_round(planned_minutes),
             "doneMinutes": js_round(done_minutes),
             "slots": home_slots,
