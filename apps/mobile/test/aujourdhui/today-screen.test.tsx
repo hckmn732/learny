@@ -13,7 +13,7 @@ import { TodayScreen } from '../../src/features/aujourdhui/TodayScreen';
 import { expectAccessible } from '../utils/expectAccessible';
 
 const mockPush = jest.fn();
-const mockOpenOnWeb = jest.fn(() => Promise.resolve('https://learny.test/quiz'));
+const mockOpenOnWeb = jest.fn((path: string) => Promise.resolve(`https://learny.test${path}`));
 
 jest.mock('expo-router', () => ({
   useRouter: () => ({ push: mockPush, replace: jest.fn(), back: jest.fn() }),
