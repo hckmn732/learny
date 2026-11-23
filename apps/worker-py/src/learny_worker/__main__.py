@@ -13,7 +13,7 @@ from typing import Any
 
 import structlog
 import uvicorn
-from learny.shared.config import Settings
+from learny.shared.config import Settings, load_settings
 from learny.shared.deps import Deps, build_deps
 from learny.shared.ownership import Ownership, load_ownership_for_worker
 
@@ -116,7 +116,7 @@ async def run(settings: Settings) -> None:
 
 def main() -> int:
     """Entry point of the worker process."""
-    settings = Settings()
+    settings = load_settings()
     if settings.jobs_mode != "worker":
         structlog.get_logger("learny.worker").warning(
             "worker not started: the jobs mode runs the consumers elsewhere",
