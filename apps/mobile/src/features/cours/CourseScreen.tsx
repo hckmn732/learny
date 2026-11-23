@@ -12,7 +12,6 @@
 import { useCallback, useMemo, useRef, useState } from 'react';
 import {
   FlatList,
-  RefreshControl,
   StyleSheet,
   View,
   type ListRenderItemInfo,
@@ -352,14 +351,8 @@ export function CourseScreen({
           }}
           onScroll={onScroll}
           ref={list}
-          refreshControl={
-            <RefreshControl
-              colors={[theme.colors.ink]}
-              onRefresh={refresh}
-              refreshing={refreshing}
-              tintColor={theme.colors.ink}
-            />
-          }
+          onRefresh={refresh}
+          refreshing={refreshing}
           renderItem={renderItem}
           scrollEventThrottle={16}
           showsVerticalScrollIndicator={false}
