@@ -1,7 +1,7 @@
 # Preuves — SPEC-3102 : Coquille, onglets natifs, compte et centre de notifications
 
-- Date : 2026-11-23T02:46:20.713Z
-- Commit : b4ac2ac2
+- Date : 2026-11-23T03:12:44.327Z
+- Commit : 0c1db16f
 - Spécification : `specs/p31-mobile-acces/SPEC-3102-coquille-onglets-natifs-et-notifications.md`
 
 ## Rapports

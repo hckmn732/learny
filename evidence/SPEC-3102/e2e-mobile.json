@@ -2,7 +2,7 @@
   "spec": "SPEC-3102",
   "platform": "android",
   "transport": "agent",
-  "jobId": "20261123024508-002",
+  "jobId": "20261123031052-001",
   "device": {
     "serial": "emulator-5554",
     "model": "sdk_gphone64_x86_64",
@@ -13,8 +13,8 @@
   "tags": [
     "SPEC-3102"
   ],
-  "startedAt": "2026-11-23T02:45:07.515Z",
-  "finishedAt": "2026-11-23T02:46:20.692Z",
+  "startedAt": "2026-11-23T03:10:52.071Z",
+  "finishedAt": "2026-11-23T03:12:44.301Z",
   "passed": 3,
   "failed": 0,
   "videos": 1,
@@ -29,7 +29,7 @@
         "SPEC-3102"
       ],
       "status": "passed",
-      "durationSec": 17.046,
+      "durationSec": 24.89,
       "message": null,
       "videos": [],
       "screenshots": [],
@@ -43,7 +43,7 @@
         "visual"
       ],
       "status": "passed",
-      "durationSec": 22.514,
+      "durationSec": 32.815,
       "message": null,
       "videos": [],
       "screenshots": [
@@ -65,7 +65,7 @@
         "SPEC-3102"
       ],
       "status": "passed",
-      "durationSec": 21.348,
+      "durationSec": 29.44,
       "message": null,
       "videos": [],
       "screenshots": [],

@@ -1,37 +1,37 @@
 {
   "lint": {
     "status": "passed",
-    "at": "2026-11-23T02:43:31.998Z",
+    "at": "2026-11-23T03:03:47.191Z",
     "details": ""
   },
   "typecheck": {
     "status": "passed",
-    "at": "2026-11-23T02:43:35.768Z",
+    "at": "2026-11-23T03:03:53.684Z",
     "details": ""
   },
   "unit": {
     "status": "passed",
-    "at": "2026-11-23T02:44:57.582Z",
+    "at": "2026-11-23T03:10:41.994Z",
     "details": "31 Vitest + 32 Jest test(s) [SPEC-3102] réussi(s), 0 échec(s)"
   },
   "integration": {
     "status": "passed",
-    "at": "2026-11-23T02:44:58.542Z",
+    "at": "2026-11-23T03:10:42.946Z",
     "details": "4 test(s) [SPEC-3102] réussi(s), 0 échec(s)"
   },
   "e2e": {
     "status": "passed",
-    "at": "2026-11-23T02:46:20.709Z",
+    "at": "2026-11-23T03:12:44.321Z",
     "details": "3 flux réussi(s), 0 échec(s), 1 vidéo(s)"
   },
   "visual": {
     "status": "passed",
-    "at": "2026-11-23T02:46:20.709Z",
+    "at": "2026-11-23T03:12:44.321Z",
     "details": "1 flux @visual réussi(s) (mode mockup)"
   },
   "acceptance": {
     "status": "passed",
-    "at": "2026-11-23T02:46:20.718Z",
+    "at": "2026-11-23T03:12:44.335Z",
     "details": "6/6 critères ✅"
   }
 }
