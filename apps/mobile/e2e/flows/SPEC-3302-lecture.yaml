@@ -3,14 +3,18 @@
 #
 # Unique flux `@visual` de la spécification (leçon 6 du BRIEF, ADR-3015 § 5) : la capture
 # `SPEC-3302-lecture` montre le haut du chapitre 2 (« Saisie des pièces comptables », chapitre 2
-# sur 4, progression de lecture) et est comparée à la ligne de base versionnée
+# sur 4, barre de lecture) et est comparée à la ligne de base versionnée
 # `e2e/visual/baselines/SPEC-3302-lecture.png` (masque : barre d'état et indicateur d'accueil, le
-# reste est du contenu). Les autres états sont capturés pour la preuve mais ne sont pas comparés.
+# reste est du contenu). Les autres états sont capturés pour la preuve, sans comparaison.
 #
 # Le flux ne mute rien : la progression envoyée porte sur un chapitre déjà lu à 100 % (valeur
 # monotone, BR-COU-08), le signalement et le résumé sont couverts par le test d'intégration et les
 # tests de composants. Maestro 2.12.1 : assertions sur `id` et texte ASCII, `scrollUntilVisible`
 # remplacé par des `swipe` bornés.
+#
+# Le chapitre 2 est ouvert par sa rangée dans le module 3 : « Reprendre » du Programme pointe le
+# chapitre en cours de lecture (le 3), pas le chapitre 2 de la maquette. L'identifiant de la rangée
+# est celui du jeu de démonstration SPEC-115 (identifiants déterministes, `demoChapterId`).
 appId: fr.learny.app
 name: SPEC-3302 lecture
 tags:
@@ -44,13 +48,21 @@ tags:
     visible:
       id: programme-screen
     timeout: 20000
-# CA-1 — « Reprendre » ouvre l'écran Cours natif, empilé au-dessus des onglets (EF-1).
 - extendedWaitUntil:
     visible:
-      id: programme-resume
+      id: programme-formation-card
+    timeout: 20000
+# CA-1 — la rangée du chapitre 2 ouvre l'écran Cours natif, empilé au-dessus des onglets (EF-1).
+- swipe:
+    start: 50%, 80%
+    end: 50%, 45%
+    duration: 500
+- extendedWaitUntil:
+    visible:
+      id: chapter-74e85d27-6960-51a1-b712-ab9cc7aba756
     timeout: 20000
 - tapOn:
-    id: programme-resume
+    id: chapter-74e85d27-6960-51a1-b712-ab9cc7aba756
 - extendedWaitUntil:
     visible:
       id: course-header
@@ -65,7 +77,7 @@ tags:
     id: course-ask-tutor
 - assertVisible:
     id: course-open-quiz
-# CA-5 — état de la maquette : haut du chapitre 2, barre de progression pleine (chapitre déjà lu).
+# CA-5 — état de la maquette : haut du chapitre 2, barre de lecture.
 - takeScreenshot: SPEC-3302-lecture
 # EF-2 — le corps : le Markdown de la première section puis la question éclair.
 - assertVisible:
@@ -85,10 +97,6 @@ tags:
     id: course-answer
 - takeScreenshot: SPEC-3302-lecture-question
 # CA-3 — la citation du chapitre ouvre sa source contrôlée (BR-COU-02).
-- swipe:
-    start: 50%, 75%
-    end: 50%, 45%
-    duration: 500
 - tapOn:
     id: course-citation-chapitre-2-flash-question
 - extendedWaitUntil:
