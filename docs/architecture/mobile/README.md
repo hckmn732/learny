@@ -125,11 +125,23 @@ illimitée pour le texte courant ; aucune troncature d'information à 200 %.
 | Bout en bout + vidéo | Maestro (`pnpm test:e2e:mobile`) | `apps/mobile/e2e/flows/SPEC-3xxx-*.yaml` | tag `SPEC-3xxx` (écrit `@SPEC-3xxx`) |
 | Visuel | Maestro + `compare.mjs` | flux avec tag `visual` (écrit `@visual`) | `@SPEC-3xxx @visual` |
 
-- Environnement e2e : `pnpm dev:up`, `pnpm db:reset && pnpm db:seed:demo`, API locale avec
-  `LLM_MODE=mock` et `CLOCK_FIXED_AT=2026-11-11T12:20:00Z` ; build `e2e` de l'application
-  (`EXPO_PUBLIC_API_URL=http://10.0.2.2:<port>` sur l'émulateur Android,
+- Environnement e2e : tout sur la **VM de développement**, émulateur Android local compris
+  (ADR-3018). `pnpm dev:up`, `pnpm db:reset && pnpm db:seed:demo`, API locale avec
+  `LLM_MODE=mock` et `CLOCK_FIXED_AT=2026-11-11T12:20:00Z` ; émulateur `learny` démarré par
+  `bash tools/dev/emulator-up.sh` (Pixel 6, API 35, démarrage à froid) ; build `e2e` de
+  l'application (`EXPO_PUBLIC_API_URL=http://10.0.2.2:3001`,
+  `EXPO_PUBLIC_SUPABASE_URL=http://10.0.2.2:54321`,
   `EXPO_PUBLIC_CLOCK_FIXED_AT=2026-11-11T12:20:00Z`, animations coupées) ; compte de
   démonstration d'Alex Perrin (SPEC-115).
+- Campagne : `pnpm test:e2e:mobile --tags SPEC-3xxx` pilote l'appareil **local** ; le préflight
+  vérifie disque ≥ 4 Go, `adb devices`, `sys.boot_completed`, API 200 et Supabase 200. Plus de
+  transport distant, plus d'agent ni de port public (ADR-3018) : `MOBILE_DEVICE_AGENT_URL` n'est
+  plus lu. Le build e2e autorise le HTTP en clair vers `10.0.2.2` (plugin
+  `plugins/with-e2e-cleartext.cjs`, activé par `LEARNY_E2E_CLEARTEXT=1`) et rejoue `expo prebuild`
+  à chaque build ; les builds EAS restent en HTTPS.
+- Lecture des ADR : ADR-3004 § 6 fixe les **niveaux** de test et reste valide ; l'exécution décrite
+  ici est locale à la VM de développement depuis ADR-3018, qui remplace le volet transport
+  d'ADR-3012 et le contrat asynchrone d'ADR-3015 § 1 (l'historique de ces ADR n'est pas réécrit).
 - Barre d'état figée : Android `adb shell settings put global sysui_demo_allowed 1` puis mode démo
   (horloge 1320) ; iOS `xcrun simctl status_bar booted override --time 13:20`.
 - Comparaison visuelle : ADR-3003 §4 (zones natives masquées, écart ≤ 12 %, contrôles
@@ -147,5 +159,8 @@ illimitée pour le texte courant ; aucune troncature d'information à 200 %.
 - **Flux SSE** : le `fetch` global de React Native ne fournit pas `response.body` en flux ;
   utiliser `fetch` de `expo/fetch` (injection dans `@learny/api-client`).
 - **SecureStore** : ~2 Ko par valeur ; d'où MMKV chiffrée (ADR-3008).
-- **Émulateur Android** : `localhost` de l'hôte = `10.0.2.2`.
+- **Émulateur Android** : il tourne sur la même VM que l'API (ADR-3018) ; `10.0.2.2` y désigne la
+  VM de développement elle-même, c'est-à-dire `localhost` de l'hôte de l'émulateur. Un seul
+  émulateur à la fois, toujours en démarrage à froid (`tools/dev/emulator-up.sh` /
+  `emulator-down.sh`).
 - **Horloge** : les composants de date (calendriers) lisent `clock.now()` ; jamais l'heure système.

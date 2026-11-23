@@ -1,6 +1,6 @@
 # ADR-3012 — Exécution des validations mobiles sur une VM séparée (agent appareil) et compatibilité Babel/React Native
 
-- **Statut** : Acceptée — précise ADR-3004 § 6 et ADR-3005 § 3
+- **Statut** : Partiellement remplacée par ADR-3018 (transport appareil retiré ; § 2 à § 4, Expo et Babel, restent valides) — précise ADR-3004 § 6 et ADR-3005 § 3
 - **Origine** : Déduite (pendant l'implémentation de SPEC-3001, sans sollicitation de l'utilisateur)
 - **Date** : 2026-11-22
 - **Liens** : ADR-1007, ADR-3004, ADR-3005, SPEC-3001

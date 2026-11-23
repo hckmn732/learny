@@ -1,76 +1,44 @@
 #!/usr/bin/env node
-// Préflight de la campagne e2e mobile (ADR-3015 § 5, runbook § 2).
+// Préflight de la campagne e2e mobile sur l'émulateur local (ADR-3018, runbook § 3).
 //
 // Appelé en tête de `pnpm test:e2e:mobile`, avant `apps/mobile/e2e/run-maestro.mjs`. Il vérifie ce
-// qui a fait échouer des campagnes pour des raisons d'outillage et **répare** ce qui peut l'être
-// sans intervention :
+// qui doit l'être avant une campagne, et démarre l'émulateur local s'il est absent :
 //
 //   1. disque `MOBILE_DISK_MIN_GB` (4 Go par défaut) disponible sur la racine du dépôt ;
-//   2. `apps/mobile/e2e/e2e.env` : clés obligatoires, cohérence (pas de `10.0.2.2` quand un agent
-//      distant est configuré, jeton présent avec l'agent) ;
-//   3. APK servi : `MOBILE_APK_URL` répond 200 (le serveur statique local est relancé au besoin) ;
-//   4. API publique (`EXPO_PUBLIC_API_URL/api/v1/health`) et Supabase joignables ;
-//   5. agent appareil : `/health` puis `/device` avec le jeton, Maestro orphelin tué (`/cleanup`) ;
-//   6. URL publique **périmée** (000/404 après un redémarrage d'instance) : republication du port
-//      par l'API Agent37 puis réécriture de `e2e.env` — chaque `publish` crée une URL neuve.
+//   2. `apps/mobile/e2e/e2e.env` : clés obligatoires présentes, aucune clé du mode distant
+//      (`MOBILE_DEVICE_AGENT_*`, `MOBILE_APK_URL`, identifiants Agent37) ;
+//   3. appareil : `adb devices` doit lister un appareil connecté (sinon
+//      `tools/dev/emulator-up.sh` est lancé, puis vérifié) ;
+//   4. démarrage terminé : `sys.boot_completed` = 1 ;
+//   5. API : `<EXPO_PUBLIC_API_URL>/api/v1/health` → 200 ;
+//   6. Supabase : `<EXPO_PUBLIC_SUPABASE_URL>/auth/v1/health` → 200 (401 accepté si la passerelle
+//      exige la clé anonyme).
 //
-// Usage : node tools/dev/mobile-preflight.mjs [--json] [--no-republish] [--quiet]
+// `10.0.2.2` n'existe que dans l'émulateur : c'est l'hôte de l'émulateur, donc cette VM. Les sondes
+// réseau le réécrivent en `127.0.0.1`, sans quoi le préflight échouerait depuis l'hôte.
+//
+// Usage : node tools/dev/mobile-preflight.mjs [--json] [--quiet]
 // Codes : 0 tout est prêt, 1 une vérification a échoué (message actionnable), 2 mauvaise usage.
-//
-// La republication exige une clé de l'API Agent37 (`AGENT37_API_KEY`, `AGENT37_API_KEY_FILE`, ou
-// `~/.agent37/api-key`) et les identifiants d'instance (`AGENT37_INSTANCE_ID` pour la VM de
-// développement, `MOBILE_DEVICE_AGENT_INSTANCE_ID` pour la VM téléphone). Sans ces valeurs, le
-// préflight vérifie quand même tout et échoue en donnant la commande exacte à exécuter.
 import { spawnSync } from 'node:child_process';
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
-export const API_ROOT = 'https://api.agent37.com/v1';
-export const SANDBOX_ROOT = 'https://sandbox.agent37.app/v1';
-
-/** Clés de `e2e.env` sans lesquelles la campagne ne peut pas démarrer. */
+/** Clés de `e2e.env` sans lesquelles la campagne (ou le build e2e) ne peut pas démarrer. */
 export const REQUIRED_KEYS = [
   'EXPO_PUBLIC_API_URL',
   'EXPO_PUBLIC_SUPABASE_URL',
   'EXPO_PUBLIC_SUPABASE_ANON_KEY',
-  'MOBILE_APK_URL',
+  'EXPO_PUBLIC_WEB_URL',
 ];
 
-/** Ports publiés qui composent une campagne (label, port par défaut, clés de `e2e.env`). */
-export const PUBLISHED_PORTS = [
-  {
-    label: 'apk',
-    port: 8099,
-    key: 'MOBILE_APK_URL',
-    suffix: '/app-release.apk',
-    path: '',
-    instance: 'dev',
-  },
-  {
-    label: 'api',
-    port: 3001,
-    key: 'EXPO_PUBLIC_API_URL',
-    suffix: '',
-    path: '/api/v1/health',
-    instance: 'dev',
-  },
-  {
-    label: 'supabase',
-    port: 54321,
-    key: 'EXPO_PUBLIC_SUPABASE_URL',
-    suffix: '',
-    path: '/auth/v1/health',
-    instance: 'dev',
-  },
-  {
-    label: 'device-agent',
-    port: 8098,
-    key: 'MOBILE_DEVICE_AGENT_URL',
-    suffix: '',
-    path: '/health',
-    instance: 'phone',
-  },
+/** Clés du mode dual-VM retiré (ADR-3012) : leur présence trahit un `e2e.env` périmé. */
+export const DEPRECATED_KEYS = [
+  'MOBILE_DEVICE_AGENT_URL',
+  'MOBILE_DEVICE_AGENT_TOKEN',
+  'MOBILE_APK_URL',
+  'MOBILE_DEVICE_AGENT_INSTANCE_ID',
+  'AGENT37_INSTANCE_ID',
 ];
 
 /** Lit un fichier `KEY=value` (commentaires et lignes vides ignorés). */
@@ -83,96 +51,91 @@ export function parseEnvFile(content) {
   return values;
 }
 
-/** Réécrit des valeurs de `e2e.env` sans toucher aux commentaires ni à l'ordre des lignes. */
-export function rewriteEnvFile(content, updates) {
-  const remaining = new Map(Object.entries(updates));
-  const lines = String(content ?? '')
-    .split('\n')
-    .map((line) => {
-      const match = /^([A-Z0-9_]+)=(.*)$/.exec(line.trim());
-      if (match === null || !remaining.has(match[1])) return line;
-      const key = match[1];
-      const value = remaining.get(key);
-      remaining.delete(key);
-      return `${key}=${String(value)}`;
-    });
-  for (const [key, value] of remaining) lines.push(`${key}=${String(value)}`);
-  return lines.join('\n');
-}
-
 /** Vérifie la présence et la cohérence des clés de `e2e.env` (aucune requête réseau). */
 export function checkEnv(env) {
   const missing = REQUIRED_KEYS.filter((key) => (env[key] ?? '') === '');
   const problems = [];
-  const remote = (env.MOBILE_DEVICE_AGENT_URL ?? '') !== '';
-  if (remote && (env.MOBILE_DEVICE_AGENT_TOKEN ?? '') === '') {
-    problems.push('MOBILE_DEVICE_AGENT_TOKEN absent alors que MOBILE_DEVICE_AGENT_URL est défini');
-  }
-  for (const key of ['EXPO_PUBLIC_API_URL', 'MOBILE_APK_URL', 'MOBILE_DEVICE_AGENT_URL']) {
-    const value = env[key] ?? '';
-    if (value === '') continue;
-    if (remote && value.includes('10.0.2.2')) {
-      problems.push(`${key} utilise 10.0.2.2 alors que la campagne passe par l'agent distant`);
+
+  for (const key of DEPRECATED_KEYS) {
+    if ((env[key] ?? '') !== '') {
+      problems.push(`${key} n'est plus utilisé (ADR-3018) : supprimer la clé`);
     }
-    if (!/^https?:\/\//.test(value)) problems.push(`${key} n'est pas une URL http(s) : ${value}`);
   }
-  if (remote && (env.MOBILE_APK_URL ?? '').includes('10.0.2.2')) {
-    problems.push("MOBILE_APK_URL doit être une URL publique : l'agent la télécharge lui-même");
+  for (const key of ['EXPO_PUBLIC_API_URL', 'EXPO_PUBLIC_SUPABASE_URL', 'EXPO_PUBLIC_WEB_URL']) {
+    const value = env[key] ?? '';
+    if (value !== '' && !/^https?:\/\//.test(value)) {
+      problems.push(`${key} n'est pas une URL http(s) : ${value}`);
+    }
+    if (/^https?:\/\/(127\.0\.0\.1|localhost)([:/]|$)/.test(value)) {
+      problems.push(
+        `${key} désigne la boucle locale de l'hôte : l'émulateur la joint par 10.0.2.2 (ADR-3018)`,
+      );
+    }
   }
+
   return { missing, problems, ok: missing.length === 0 && problems.length === 0 };
 }
 
 /**
- * Classe une réponse HTTP d'un port public :
- *   - `ok`        : 2xx/3xx, rien à faire ;
- *   - `down`      : 502/503/504 → le service local est arrêté (redémarrer le serveur) ;
- *   - `stale`     : 404 ou connexion refusée → le port public ne route plus (republier) ;
- *   - `unauthorized` : 401/403 → jeton ou port d'un autre compte.
+ * URL à sonder depuis l'hôte : `10.0.2.2`, l'hôte de l'émulateur, est cette VM. Rend `null` pour
+ * une valeur qui n'est pas une URL absolue.
  */
-export function classifyPortResponse(status) {
-  if (status === 0) return 'stale';
-  if (status === 404) return 'stale';
-  if (status === 401 || status === 403) return 'unauthorized';
-  // 405 : la route n'accepte que POST (agent appareil) — le port public route bien.
-  if (status === 405) return 'ok';
-  if (status >= 500) return 'down';
+export function hostProbeUrl(value) {
+  try {
+    const url = new URL(String(value));
+    if (url.hostname === '10.0.2.2') url.hostname = '127.0.0.1';
+    return url.toString();
+  } catch {
+    return null;
+  }
+}
+
+/**
+ * Classe une réponse HTTP : `ok` (2xx/3xx), `unauthorized` (401/403), `down` (0 ou 4xx/5xx).
+ * Le préflight accepte `unauthorized` pour Supabase, dont la route de santé peut exiger la clé.
+ */
+export function classifyHttp(status) {
   if (status >= 200 && status < 400) return 'ok';
+  if (status === 401 || status === 403) return 'unauthorized';
   return 'down';
 }
 
-/** Verdict disque : le seuil est dur (runbook § 2). */
+/** Verdict disque : le seuil est dur (runbook § 8). */
 export function diskVerdict(freeBytes, minGb) {
   const freeGb = Number(freeBytes) / 1024 ** 3;
   return { freeGb, minGb, ok: freeGb >= minGb };
 }
 
-/** Verdict de `/health` de l'agent : joignable, libre ou occupé, version du contrat. */
-export function agentVerdict(health) {
-  if (health === null || typeof health !== 'object') {
-    return { ok: false, detail: 'agent appareil injoignable' };
-  }
-  if (health.ok !== true) return { ok: false, detail: 'agent appareil en erreur' };
-  const busy = health.busy === true;
+/** Verdict de `adb devices` : un appareil connecté, un appareil hors ligne, ou aucun. */
+export function adbVerdict(output) {
+  const devices = String(output ?? '')
+    .split('\n')
+    .map((line) => line.trim())
+    .filter((line) => line !== '' && !line.startsWith('List of devices'))
+    .map((line) => {
+      const [serial, state] = line.split(/\s+/);
+      return { serial: serial ?? '', state: state ?? '' };
+    })
+    .filter((device) => device.serial !== '');
+  const ready = devices.find((device) => device.state === 'device') ?? null;
+  const offline = devices.find((device) => device.state !== 'device') ?? null;
   return {
-    ok: !busy,
-    detail: busy
-      ? `agent occupé par le travail ${String(health.jobId ?? '?')}`
-      : `agent libre (contrat v${String(health.version ?? '?')})`,
-    busy,
-    jobId: health.jobId ?? null,
-    version: health.version ?? null,
+    ok: ready !== null,
+    serial: ready?.serial ?? null,
+    offline: offline?.serial ?? null,
+    detail:
+      ready !== null
+        ? `${ready.serial} connecté`
+        : offline !== null
+          ? `${offline.serial} ${offline.state}`
+          : 'aucun appareil adb',
   };
 }
 
-/** Capacité de republication : clé et identifiants d'instance disponibles. */
-export function republishCapability(env, readKey) {
-  const key = env.AGENT37_API_KEY ?? readKey();
-  return {
-    key: key === '' ? null : key,
-    devInstance: env.AGENT37_INSTANCE_ID ?? null,
-    phoneInstance: env.MOBILE_DEVICE_AGENT_INSTANCE_ID ?? null,
-    ok: (key ?? '') !== '',
-  };
+/** Verdict de `getprop sys.boot_completed` : `1` seulement quand le démarrage est terminé. */
+export function bootVerdict(output) {
+  const value = String(output ?? '').trim();
+  return { booted: value === '1', value };
 }
 
 // ---------------------------------------------------------------------------------------------
@@ -181,18 +144,6 @@ export function republishCapability(env, readKey) {
 const HERE = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(HERE, '..', '..');
 const ENV_FILE = path.join(ROOT, 'apps', 'mobile', 'e2e', 'e2e.env');
-const DEFAULT_APK = path.join(
-  ROOT,
-  'apps',
-  'mobile',
-  'android',
-  'app',
-  'build',
-  'outputs',
-  'apk',
-  'release',
-  'app-release.apk',
-);
 
 const results = [];
 function record(name, ok, detail, fix = null) {
@@ -200,133 +151,69 @@ function record(name, ok, detail, fix = null) {
   return ok;
 }
 
+function sdkRoot() {
+  return process.env.ANDROID_SDK_ROOT ?? process.env.ANDROID_HOME ?? '/opt/android-sdk';
+}
+
+function adbBinary() {
+  if (process.env.ADB !== undefined) return process.env.ADB;
+  const candidate = path.join(sdkRoot(), 'platform-tools', 'adb');
+  return fs.existsSync(candidate) ? candidate : 'adb';
+}
+
+function adb(args, timeout = 30_000) {
+  const result = spawnSync(adbBinary(), args, { encoding: 'utf8', timeout });
+  return {
+    status: result.status ?? 1,
+    stdout: result.stdout ?? '',
+    stderr: result.stderr ?? '',
+  };
+}
+
 function readEnv() {
   if (!fs.existsSync(ENV_FILE)) return {};
   return parseEnvFile(fs.readFileSync(ENV_FILE, 'utf8'));
 }
 
-/** Clé de l'API Agent37 : env, fichier explicite, ou `~/.agent37/api-key`. */
-function readApiKey() {
-  const explicit =
-    process.env.AGENT37_API_KEY_FILE ?? path.join(process.env.HOME ?? '', '.agent37', 'api-key');
-  if (!fs.existsSync(explicit)) return '';
-  return fs.readFileSync(explicit, 'utf8').trim();
-}
-
-async function probe(url, { timeoutMs = 8_000, method = 'GET', token = null } = {}) {
+async function probe(url, { timeoutMs = 8_000 } = {}) {
   try {
-    const response = await fetch(url, {
-      method,
-      headers: token === null ? {} : { 'x-device-token': token },
-      signal: globalThis.AbortSignal.timeout(timeoutMs),
-    });
+    const response = await fetch(url, { signal: globalThis.AbortSignal.timeout(timeoutMs) });
     return { status: response.status, body: await response.text().catch(() => '') };
   } catch {
     return { status: 0, body: '' };
   }
 }
 
-/** Relance le serveur statique de l'APK s'il ne répond pas localement (runbook § 8). */
-function ensureApkServer(port, apkDir) {
-  const local = spawnSync(
-    'curl',
-    [
-      '-s',
-      '-o',
-      '/dev/null',
-      '-w',
-      '%{http_code}',
-      `http://127.0.0.1:${String(port)}/app-release.apk`,
-    ],
-    {
-      encoding: 'utf8',
-      timeout: 8_000,
-    },
-  );
-  if ((local.stdout ?? '').startsWith('2'))
-    return { started: false, detail: 'serveur 8099 déjà actif' };
-  if (!fs.existsSync(path.join(apkDir, 'app-release.apk'))) {
-    return {
-      started: false,
-      detail: `APK absent : ${path.relative(ROOT, path.join(apkDir, 'app-release.apk'))}`,
-    };
-  }
-  spawnSync(
-    'nohup',
-    ['python3', '-m', 'http.server', String(port), '--bind', '0.0.0.0', '--directory', apkDir],
-    { encoding: 'utf8', detached: true, stdio: 'ignore' },
-  );
-  return { started: true, detail: `serveur statique relancé sur ${String(port)}` };
-}
-
-/** Republie un port : `unpublish` puis `publish` (chaque publication crée une URL neuve). */
-async function republish({ key, instance, port, label }) {
-  await fetch(`${API_ROOT}/instances/${instance}/public-ports/${String(port)}`, {
-    method: 'DELETE',
-    headers: { Authorization: `Bearer ${key}` },
-    signal: globalThis.AbortSignal.timeout(20_000),
+/** Démarre l'émulateur local (idempotent) quand aucun appareil n'est connecté. */
+function startEmulator(quiet) {
+  const script = path.join(ROOT, 'tools', 'dev', 'emulator-up.sh');
+  if (!fs.existsSync(script)) return { ok: false, detail: `script absent : ${script}` };
+  const timeoutMs = Number(process.env.MOBILE_BOOT_TIMEOUT_S ?? 600) * 1_000 + 60_000;
+  const result = spawnSync('bash', [script], {
+    encoding: 'utf8',
+    timeout: timeoutMs,
+    stdio: quiet ? 'ignore' : 'inherit',
   });
-  const response = await fetch(`${API_ROOT}/instances/${instance}/public-ports`, {
-    method: 'POST',
-    headers: { Authorization: `Bearer ${key}`, 'content-type': 'application/json' },
-    body: JSON.stringify({ port, label }),
-    signal: globalThis.AbortSignal.timeout(20_000),
-  });
-  const payload = await response.json().catch(() => null);
-  const url = payload?.url ?? payload?.data?.url ?? null;
-  return url === null ? null : String(url);
-}
-
-/** Tente de tuer un Maestro orphelin sur l'appareil (`POST /cleanup`, agent v2). */
-async function cleanupAgent(baseUrl, token) {
-  const response = await probe(`${baseUrl.replace(/\/+$/, '')}/cleanup`, {
-    method: 'POST',
-    token,
-    timeoutMs: 30_000,
-  });
-  return response;
-}
-
-/** Relance l'agent appareil par l'API sandbox (la VM téléphone n'est joignable que par HTTP). */
-async function restartAgent({ key, instance }) {
-  if (key === null || instance === null) return false;
-  try {
-    const response = await fetch(`${SANDBOX_ROOT}/instances/${instance}/exec`, {
-      method: 'POST',
-      headers: { 'X-Agent37-Key': key, 'content-type': 'application/json' },
-      body: JSON.stringify({ command: 'sh /root/agent-deploy.sh', user: 'root', background: true }),
-      signal: globalThis.AbortSignal.timeout(30_000),
-    });
-    return response.ok;
-  } catch {
-    return false;
-  }
-}
-
-/** Attend le retour de l'agent après un redémarrage (30 s au plus). */
-async function waitForAgent(base, token) {
-  for (let attempt = 0; attempt < 10; attempt += 1) {
-    const state = await probe(`${base}/jobs`, { token, timeoutMs: 5_000 });
-    if (state.status === 200) return true;
-    await new Promise((resolve) => setTimeout(resolve, 3_000));
-  }
-  return false;
+  return {
+    ok: result.status === 0,
+    detail:
+      result.status === 0
+        ? `émulateur démarré (${path.relative(ROOT, script)})`
+        : `échec de ${path.relative(ROOT, script)} (code ${String(result.status ?? 1)})`,
+  };
 }
 
 async function main(argv) {
   const json = argv.includes('--json');
   const quiet = argv.includes('--quiet');
-  const allowRepublish = !argv.includes('--no-republish');
   const log = (line) => {
     if (!quiet) console.log(line);
   };
 
   const env = readEnv();
   const minGb = Number(process.env.MOBILE_DISK_MIN_GB ?? env.MOBILE_DISK_MIN_GB ?? 4);
-  const apkPort = Number(env.MOBILE_APK_SERVER_PORT ?? 8099);
-  const apkDir = path.dirname(process.env.MOBILE_APK ?? DEFAULT_APK);
 
-  // 1. Disque : le volume qui porte le dépôt (et non la racine du conteneur).
+  // 1. Disque : le volume qui porte le dépôt.
   let freeBytes = 0;
   for (const target of [ROOT, '/root', '/']) {
     try {
@@ -344,7 +231,7 @@ async function main(argv) {
     `${disk.freeGb.toFixed(1)} Go libres (seuil ${String(minGb)} Go)`,
     disk.ok
       ? null
-      : 'purger `apps/mobile/android/app/build/intermediates` et `.gradle`, jamais `outputs`',
+      : 'purger `app/build/intermediates` et `.gradle`, garder `outputs` (runbook § 8)',
   );
 
   // 2. e2e.env.
@@ -353,179 +240,104 @@ async function main(argv) {
     'e2e.env',
     envCheck.ok,
     envCheck.ok
-      ? `${REQUIRED_KEYS.length} clés obligatoires présentes`
+      ? `${String(REQUIRED_KEYS.length)} clés obligatoires présentes, aucune clé du mode distant`
       : [...envCheck.missing.map((key) => `${key} manquant`), ...envCheck.problems].join(' ; '),
     envCheck.ok ? null : 'corriger `apps/mobile/e2e/e2e.env` (modèle : `e2e.env.example`)',
   );
 
-  const remote = (env.MOBILE_DEVICE_AGENT_URL ?? '') !== '';
-
-  // 3. Serveur statique de l'APK (mode distant : l'agent télécharge).
-  if (remote) {
-    const server = ensureApkServer(apkPort, apkDir);
-    log(`… ${server.detail}`);
-  }
-
-  // 4. URLs publiques : APK, API, Supabase, agent.
-  const capability = republishCapability(env, readApiKey);
-  for (const entry of PUBLISHED_PORTS) {
-    if ((env[entry.key] ?? '') === '') continue;
-    const base = String(env[entry.key]).replace(/\/+$/, '');
-    const url = `${base}${entry.path}`;
-    const probeResult = await probe(url, {
-      timeoutMs: 12_000,
-      token:
-        entry.key === 'MOBILE_DEVICE_AGENT_URL' ? (env.MOBILE_DEVICE_AGENT_TOKEN ?? null) : null,
-    });
-    let kind = classifyPortResponse(probeResult.status);
-    if (entry.key === 'EXPO_PUBLIC_SUPABASE_URL' && probeResult.status === 401) kind = 'ok';
-
-    if (kind === 'ok') {
-      record(entry.label, true, `${url} → ${String(probeResult.status)}`);
-      continue;
-    }
-
-    if (kind === 'down' && entry.key === 'MOBILE_APK_URL') {
-      const again = ensureApkServer(apkPort, apkDir);
-      const retry = await probe(url, { timeoutMs: 12_000 });
-      if (classifyPortResponse(retry.status) === 'ok') {
-        record(entry.label, true, `${url} → ${String(retry.status)} (${again.detail})`);
-        continue;
-      }
-    }
-
-    if (kind === 'stale' && allowRepublish && capability.ok) {
-      const instance =
-        entry.instance === 'phone' ? capability.phoneInstance : capability.devInstance;
-      if (instance === null) {
-        record(
-          entry.label,
-          false,
-          `${entry.key} : port périmé et identifiant d'instance absent`,
-          'renseigner AGENT37_INSTANCE_ID et MOBILE_DEVICE_AGENT_INSTANCE_ID',
-        );
-        continue;
-      }
-      const renewed = await republish({
-        key: capability.key,
-        instance,
-        port: entry.port,
-        label: entry.label,
-      });
-      if (renewed === null) {
-        record(
-          entry.label,
-          false,
-          `republication du port ${String(entry.port)} impossible`,
-          `node a37.mjs unpublish ${instance} ${String(entry.port)} puis publish`,
-        );
-        continue;
-      }
-      const value = entry.suffix === '' ? renewed : `${renewed.replace(/\/+$/, '')}${entry.suffix}`;
-      fs.writeFileSync(
-        ENV_FILE,
-        rewriteEnvFile(fs.readFileSync(ENV_FILE, 'utf8'), { [entry.key]: value }),
-      );
-      const check = await probe(`${renewed.replace(/\/+$/, '')}${entry.path}`, {
-        timeoutMs: 12_000,
-      });
-      record(
-        entry.label,
-        classifyPortResponse(check.status) === 'ok',
-        `port ${String(entry.port)} republié → ${value} (${String(check.status)})`,
-      );
-      continue;
-    }
-
-    record(
-      entry.label,
-      false,
-      `${url} → ${String(probeResult.status)} (${kind})`,
-      kind === 'stale'
-        ? `republier le port ${String(entry.port)} (clé Agent37 absente ou --no-republish)`
-        : `redémarrer le service local du port ${String(entry.port)}`,
-    );
-  }
-
-  // 5. Agent appareil : `/jobs` (l'edge intercepte `/health`), `/device`, Maestro orphelin.
-  if (remote) {
-    const base = String(env.MOBILE_DEVICE_AGENT_URL ?? '').replace(/\/+$/, '');
-    const token = env.MOBILE_DEVICE_AGENT_TOKEN ?? null;
-    const state = await probe(`${base}/jobs`, { token, timeoutMs: 8_000 });
-    const stateBody = (() => {
-      try {
-        return JSON.parse(state.body);
-      } catch {
-        return null;
-      }
-    })();
-    const verdict = agentVerdict(
-      stateBody === null ? null : { ...stateBody, ok: state.status === 200 },
-    );
-    if (verdict.ok) {
-      const cleaned = await cleanupAgent(base, token);
-      record(
-        'agent',
-        true,
-        `${verdict.detail}${cleaned.status === 404 ? ' ; /cleanup absent (agent ancien ?)' : ' ; Maestro orphelin tué'}`,
-      );
-    } else if (verdict.busy === true) {
-      const cancel = await probe(
-        `${base}/maestro/${encodeURIComponent(String(verdict.jobId))}/cancel`,
-        { method: 'POST', token, timeoutMs: 20_000 },
-      );
-      record(
-        'agent',
-        cancel.status < 500,
-        `agent occupé : travail ${String(verdict.jobId)} annulé (${String(cancel.status)})`,
-      );
+  // 3. Appareil : adb, puis démarrage de l'émulateur local au besoin.
+  let device = adbVerdict(adb(['devices']).stdout);
+  if (!device.ok) {
+    log(`… ${device.detail} : démarrage de l'émulateur local`);
+    const started = startEmulator(quiet);
+    if (!started.ok) {
+      record('appareil', false, started.detail, 'lire /root/logs/emulator.log (runbook § 9)');
+      device = { ok: false, serial: null, detail: started.detail };
     } else {
-      // Agent injoignable : on tente un redémarrage (API sandbox) avant d'abandonner.
-      const restarted = await restartAgent({
-        key: capability.key,
-        instance: capability.phoneInstance,
-      });
-      const back = restarted && (await waitForAgent(base, token));
-      record(
-        'agent',
-        back,
-        back
-          ? 'agent redémarré puis joignable'
-          : `${verdict.detail}${restarted ? ' (redémarrage demandé, toujours muet)' : ''}`,
-        back ? null : 'relancer l’agent : `sh /root/agent-deploy.sh` sur la VM téléphone',
-      );
-    }
-
-    if (env.MOBILE_DEVICE_AGENT_URL !== undefined) {
-      const device = await probe(`${base}/device`, { method: 'POST', token, timeoutMs: 120_000 });
-      const deviceBody = (() => {
-        try {
-          return JSON.parse(device.body);
-        } catch {
-          return null;
-        }
-      })();
+      device = adbVerdict(adb(['devices']).stdout);
       record(
         'appareil',
-        deviceBody?.ok === true,
-        deviceBody?.device?.serial === undefined
-          ? 'aucun appareil adb'
-          : `${String(deviceBody.device.serial)} (API ${String(deviceBody.device.apiLevel ?? '?')})`,
-        deviceBody?.ok === true ? null : 'démarrer l’émulateur (AVD agent37) sur la VM téléphone',
+        device.ok,
+        `${device.detail} (${started.detail})`,
+        device.ok ? null : 'émulateur démarré mais absent de `adb devices` (runbook § 9)',
       );
     }
   } else {
-    const adb = spawnSync(process.env.ADB ?? 'adb', ['devices'], { encoding: 'utf8' });
-    const connected = (adb.stdout ?? '').split('\n').some((line) => line.trim().endsWith('device'));
+    record('appareil', true, device.detail);
+  }
+
+  // 4. Démarrage terminé.
+  if (device.ok && device.serial !== null) {
+    const boot = bootVerdict(
+      adb(['-s', device.serial, 'shell', 'getprop', 'sys.boot_completed']).stdout,
+    );
     record(
-      'appareil',
-      connected,
-      connected ? 'appareil adb local prêt' : 'aucun appareil adb local',
-      connected ? null : 'démarrer l’émulateur local',
+      'démarrage',
+      boot.booted,
+      boot.booted
+        ? `sys.boot_completed=1 (${device.serial})`
+        : `sys.boot_completed=${boot.value || 'vide'} (${device.serial})`,
+      boot.booted
+        ? null
+        : 'attendre la fin du démarrage, sinon `emulator-down.sh && emulator-up.sh`',
+    );
+  } else {
+    record(
+      'démarrage',
+      false,
+      'aucun appareil pour lire sys.boot_completed',
+      'démarrer l’émulateur local',
     );
   }
 
-  // 6. Rapport.
+  // 5 et 6. API et Supabase, sondés depuis l'hôte (10.0.2.2 → 127.0.0.1).
+  const services = [
+    {
+      name: 'API',
+      key: 'EXPO_PUBLIC_API_URL',
+      path: '/api/v1/health',
+      acceptUnauthorized: false,
+      fix: 'démarrer l’API : `pnpm --filter @learny/api dev` (runbook § 4)',
+    },
+    {
+      name: 'Supabase',
+      key: 'EXPO_PUBLIC_SUPABASE_URL',
+      path: '/auth/v1/health',
+      acceptUnauthorized: true,
+      fix: 'démarrer la pile : `pnpm dev:up`',
+    },
+  ];
+  for (const service of services) {
+    const value = env[service.key] ?? '';
+    if (value === '') {
+      record(service.name, false, `${service.key} absent de e2e.env`, service.fix);
+      continue;
+    }
+    const base = hostProbeUrl(value);
+    if (base === null) {
+      record(
+        service.name,
+        false,
+        `${service.key} n'est pas une URL absolue : ${value}`,
+        service.fix,
+      );
+      continue;
+    }
+    const url = `${base.replace(/\/+$/, '')}${service.path}`;
+    const response = await probe(url);
+    const kind = classifyHttp(response.status);
+    const ok = kind === 'ok' || (kind === 'unauthorized' && service.acceptUnauthorized);
+    const where =
+      url === `${value.replace(/\/+$/, '')}${service.path}` ? url : `${url} (via ${value})`;
+    record(
+      service.name,
+      ok,
+      `${where} → ${response.status === 0 ? 'injoignable' : String(response.status)}`,
+      ok ? null : service.fix,
+    );
+  }
+
+  // 7. Rapport.
   const failures = results.filter((entry) => !entry.ok);
   if (json) {
     console.log(JSON.stringify({ ok: failures.length === 0, results }, null, 2));
@@ -536,13 +348,14 @@ async function main(argv) {
     }
   }
   if (failures.length > 0) {
-    if (!json)
+    if (!json) {
       console.error(
-        `\n✖ préflight : ${String(failures.length)} vérification(s) en échec (ADR-3015 § 5).`,
+        `\n✖ préflight : ${String(failures.length)} vérification(s) en échec (ADR-3018).`,
       );
+    }
     return 1;
   }
-  if (!json) log('\n✔ préflight : campagne prête (ADR-3015 § 5).');
+  if (!json) log('\n✔ préflight : campagne prête sur l’émulateur local (ADR-3018).');
   return 0;
 }
 
