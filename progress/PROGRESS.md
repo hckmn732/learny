@@ -1,6 +1,6 @@
 # Progression du projet Learny
 
-> Généré par `node tools/sdd/status.mjs` le 2026-11-23T04:38:27.612Z. Ne pas éditer à la main.
+> Généré par `node tools/sdd/status.mjs` le 2026-11-23T13:03:47.546Z. Ne pas éditer à la main.
 
 ## Synthèse
 
@@ -37,8 +37,8 @@
 | P12 | Migration — bascule du web sur l’API | 0/3 | CP-12 | ⏳ |
 | P13 | Migration — API multi-clients et clôture | 0/2 | CP-13 | ⏳ |
 | P20 | Migration Python — inventaire, contrat et socle | 3/3 | CP-20 | ✅ 2026-11-21 cp-20 |
-| P21 | Migration Python — données, identité et worker | 2/2 | CP-21 | ❌ échec |
-| P22 | Migration Python — domaines métier | 7/7 | CP-22 | ❌ échec |
+| P21 | Migration Python — données, identité et worker | 2/2 | CP-21 | ✅ 2026-11-23 cp-21 |
+| P22 | Migration Python — domaines métier | 7/7 | CP-22 | ✅ 2026-11-23 cp-22 |
 | P23 | Migration Python — bascule et retrait du backend TypeScript | 0/2 | CP-23 | ⏳ |
 
 ## Détail des spécifications

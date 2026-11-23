@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-11-23T04:38:27.608Z",
+  "updatedAt": "2026-11-23T13:03:47.542Z",
   "specs": {
     "SPEC-001": {
       "status": "done",
@@ -7362,16 +7362,20 @@
       "reason": "Suite e2e complete rouge sur main (SPEC-006) ; exception autorisee par le porteur du projet."
     },
     "CP-21": {
-      "status": "failed",
-      "at": "2026-11-23T04:38:27.000Z",
-      "tag": null,
-      "report": "evidence/checkpoints/CP-21/summary.md"
+      "status": "passed",
+      "at": "2026-11-23T13:03:47.438Z",
+      "tag": "cp-21",
+      "report": "evidence/checkpoints/CP-21/summary.md",
+      "exception": true,
+      "reason": "Echecs e2e preexistants (lignes de base visuelles perimees, rendu Arial de repli) et SPEC-602 en conflit d'oracle ; aucune regeneration de ligne de base, exception autorisee par le porteur."
     },
     "CP-22": {
-      "status": "failed",
-      "at": "2026-11-23T04:38:27.000Z",
-      "tag": null,
-      "report": "evidence/checkpoints/CP-22/summary.md"
+      "status": "passed",
+      "at": "2026-11-23T13:03:47.438Z",
+      "tag": "cp-22",
+      "report": "evidence/checkpoints/CP-22/summary.md",
+      "exception": true,
+      "reason": "Echecs e2e preexistants (lignes de base visuelles perimees, rendu Arial de repli) et SPEC-602 en conflit d'oracle ; aucune regeneration de ligne de base, exception autorisee par le porteur."
     },
     "CP-23": {
       "status": "pending",
