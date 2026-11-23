@@ -154,6 +154,12 @@ export default defineConfig({
         DATABASE_URL:
           process.env.DATABASE_URL ?? 'postgresql://postgres:postgres@127.0.0.1:54322/postgres',
         PY_WORKER_HEALTH_PORT: String(WORKER_PORT),
+        // The Python settings read SUPABASE_URL / SUPABASE_ANON_KEY, mapped from the public names
+        // exactly like docker/compose.coolify-py.yml (Storage, Auth admin and export jobs).
+        SUPABASE_URL: process.env.NEXT_PUBLIC_SUPABASE_URL ?? 'http://127.0.0.1:54321',
+        SUPABASE_ANON_KEY: process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ?? '',
+        SUPABASE_SERVICE_ROLE_KEY: process.env.SUPABASE_SERVICE_ROLE_KEY ?? '',
+        SUPABASE_JWT_SECRET: process.env.SUPABASE_JWT_SECRET ?? '',
         JOBS_MODE: 'worker',
         APP_ENV: 'test',
       },
@@ -203,6 +209,12 @@ export default defineConfig({
         // request time; it receives the same test-only key as the web and Hono.
         APP_ENCRYPTION_KEY: TEST_ENCRYPTION_KEY,
         PY_HONO_UPSTREAM_URL: HONO_URL,
+        // The Python settings read SUPABASE_URL / SUPABASE_ANON_KEY, mapped from the public names
+        // exactly like docker/compose.coolify-py.yml (Storage, Auth admin and export jobs).
+        SUPABASE_URL: process.env.NEXT_PUBLIC_SUPABASE_URL ?? 'http://127.0.0.1:54321',
+        SUPABASE_ANON_KEY: process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ?? '',
+        SUPABASE_SERVICE_ROLE_KEY: process.env.SUPABASE_SERVICE_ROLE_KEY ?? '',
+        SUPABASE_JWT_SECRET: process.env.SUPABASE_JWT_SECRET ?? '',
         APP_ENV: 'test',
         // SPEC-2201: the facade serves the operations owned by `py`, so it must trust the web
         // relay exactly like Hono does (SPEC-208 origin guard) — same secret, same forwarded host.
