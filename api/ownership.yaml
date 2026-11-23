@@ -75,7 +75,7 @@ operations:
   'groups.rotateCode': py
   'header.get': py
   'health.get': py
-  'home.get': ts
+  'home.get': py
   'invitations.accept': py
   'invitations.get': py
   'me.ai.credentials.create': py
