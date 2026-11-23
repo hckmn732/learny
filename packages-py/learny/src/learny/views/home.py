@@ -46,8 +46,10 @@ LINE_BREAK = re.compile(r"\r?\n")
 
 
 def _instant(value: Any) -> str:
-    """A database instant as a canonical ISO string."""
-    return value if isinstance(value, str) else shared_time.to_iso(value)
+    """A database instant as a canonical ISO string (`iso` in the TypeScript service)."""
+    if isinstance(value, str):
+        return shared_time.to_iso(shared_time.parse_iso(value))
+    return shared_time.to_iso(value)
 
 
 def _instant_ms(value: Any) -> int:
