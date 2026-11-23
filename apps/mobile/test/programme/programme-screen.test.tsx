@@ -91,18 +91,35 @@ describe('[SPEC-3202] onglet Programme', () => {
     expectAccessible(screen, 'programme-resume', { role: 'button' });
   });
 
-  it('reprend le chapitre 2 et ouvre le cours correspondant (CA-2)', async () => {
+  it('reprend le chapitre 2 dans l’écran Cours natif (CA-2, SPEC-3302 EF-1)', async () => {
     await renderScreen();
+    // La reprise dépend de la progression de lecture (`/modules/:mid/course`) : attendre que le
+    // chapitre en cours soit annoncé évite de lire la première rangée avant la réponse du serveur.
+    await waitFor(() => {
+      expect(screen.getByText('8 min')).toBeTruthy();
+    });
     await fireEvent.press(screen.getByTestId('programme-resume'));
-    expect(mockOpenOnWeb).toHaveBeenCalledWith(
-      expect.stringContaining('/cours?chapitre=00000000-0000-4000-8000-00000000000302'),
-    );
+    // SPEC-3302 EF-1 — la reprise ouvre l'écran Cours empilé, avec le chapitre transmis.
+    expect(mockRouter.push).toHaveBeenCalledWith({
+      pathname: '/cours/[courseId]',
+      params: {
+        courseId: '00000000-0000-4000-8000-000000000003',
+        chapitre: '00000000-0000-4000-8000-00000000000302',
+      },
+    });
   });
 
-  it('ouvre un chapitre lisible et son quiz sur le web (EF-5)', async () => {
+  it('ouvre un chapitre lisible dans l’écran Cours et son quiz sur le web (EF-5, SPEC-3302 EF-1)', async () => {
     await renderScreen();
     await fireEvent.press(screen.getByTestId('chapter-00000000-0000-4000-8000-00000000000301'));
-    expect(mockOpenOnWeb).toHaveBeenCalledWith(expect.stringContaining('/cours?chapitre='));
+    // SPEC-3302 EF-1 — le chapitre lisible ouvre l'écran Cours natif, chapitre transmis.
+    expect(mockRouter.push).toHaveBeenCalledWith({
+      pathname: '/cours/[courseId]',
+      params: {
+        courseId: '00000000-0000-4000-8000-000000000003',
+        chapitre: '00000000-0000-4000-8000-00000000000301',
+      },
+    });
     await fireEvent.press(screen.getByTestId('module-3-quiz'));
     expect(mockOpenOnWeb).toHaveBeenCalledWith(expect.stringContaining('/quiz'));
   });

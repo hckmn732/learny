@@ -1,6 +1,6 @@
 # Progression du projet Learny
 
-> Généré par `node tools/sdd/status.mjs` le 2026-11-23T19:02:45.554Z. Ne pas éditer à la main.
+> Généré par `node tools/sdd/status.mjs` le 2026-11-23T19:39:20.745Z. Ne pas éditer à la main.
 
 ## Synthèse
 
@@ -16,7 +16,7 @@
 | **Avancement global** | **78.3 %** |
 | Avancement V1 | 99.2 % |
 | Piste active | mobile |
-| Prochaine action | start SPEC-3302 — Lecture du cours |
+| Prochaine action | start SPEC-3303 — Discussion avec le tuteur |
 
 ## Phases et checkpoints
 
@@ -218,8 +218,8 @@
 | [SPEC-3202](../specs/p32-mobile-quotidien/SPEC-3202-programme-modules-et-chapitres.md) | Programme, modules et chapitres en lecture | P32 | ✅ done | 0 | ✓lint ✓typecheck ✓unit ✓integration ✓e2e ✓visual ✓acceptance | SPEC-3102 |
 | [SPEC-3203](../specs/p32-mobile-quotidien/SPEC-3203-agenda.md) | Agenda jour, semaine, mois et replanification | P32 | ✅ done | 0 | ✓lint ✓typecheck ✓unit ✓integration ✓e2e ✓visual ✓acceptance | SPEC-3102 |
 | [SPEC-3301](../specs/p33-mobile-apprentissage/SPEC-3301-rendu-natif-des-briques.md) | Rendu natif des briques et du Markdown | P33 | ✅ done | 0 | ✓lint ✓typecheck ✓unit ✓integration ✓e2e ✓visual ✓acceptance | SPEC-3002, SPEC-3003 |
-| [SPEC-3302](../specs/p33-mobile-apprentissage/SPEC-3302-lecture-du-cours.md) | Lecture du cours | P33 | 🟢 ready | 0 | — | SPEC-3301, SPEC-3202 |
-| [SPEC-3303](../specs/p33-mobile-apprentissage/SPEC-3303-discussion-avec-le-tuteur.md) | Discussion avec le tuteur | P33 | ✅ done | 0 | ✓lint ✓typecheck ✓unit ✓integration ✓e2e ✓visual ✓acceptance | SPEC-3302 |
+| [SPEC-3302](../specs/p33-mobile-apprentissage/SPEC-3302-lecture-du-cours.md) | Lecture du cours | P33 | ✅ done | 0 | ✓lint ✓typecheck ✓unit ✓integration ✓e2e ✓visual ✓acceptance | SPEC-3301, SPEC-3202 |
+| [SPEC-3303](../specs/p33-mobile-apprentissage/SPEC-3303-discussion-avec-le-tuteur.md) | Discussion avec le tuteur | P33 | 🟢 ready | 0 | — | SPEC-3302 |
 | [SPEC-3304](../specs/p33-mobile-apprentissage/SPEC-3304-quiz-de-validation-et-resultat.md) | Quiz de validation et résultat | P33 | 🟢 ready | 0 | — | SPEC-3301, SPEC-3202 |
 | [SPEC-3305](../specs/p33-mobile-apprentissage/SPEC-3305-reviser-quiz-global-echauffement-hors-ligne.md) | Réviser — quiz global, échauffement et jeu hors ligne | P33 | 🟢 ready | 0 | — | SPEC-3301, SPEC-3201 |
 | [SPEC-3401](../specs/p34-mobile-compte/SPEC-3401-profil-reglages-et-confidentialite.md) | Profil, réglages, pause et confidentialité | P34 | ⏳ waiting | 0 | — | SPEC-3102 |

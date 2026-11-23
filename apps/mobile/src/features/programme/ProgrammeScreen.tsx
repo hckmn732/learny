@@ -38,7 +38,7 @@ import { FormationSwitcherSheet } from './FormationSwitcherSheet';
 import { ModuleAccordion } from './ModuleAccordion';
 import { ProgrammeCalendar } from './ProgrammeCalendar';
 import { ProgrammeHeader, programmeStyles } from './ProgrammeHeader';
-import { buildProgrammeView, type ChapterView, type ModuleView } from './view-model';
+import { buildProgrammeView, type ModuleView } from './view-model';
 import { WebHandoffSheet, type WebHandoffKind } from './WebHandoffSheet';
 
 const t = fr.mobile.programme;
@@ -110,15 +110,16 @@ export function ProgrammeScreen() {
     void openOnWeb(path);
   };
 
-  const openChapter = (chapter: ChapterView): void => {
-    void openOnWeb(chapter.courseHref);
+  // SPEC-3302 EF-1 — a readable chapter opens the native course screen, stacked above the tabs
+  // (BR-NAV-04: its back returns here). The web page of the course is no longer opened.
+  const openChapter = (moduleId: string, chapterId: string): void => {
+    router.push({
+      pathname: '/cours/[courseId]',
+      params: { courseId: moduleId, chapitre: chapterId },
+    });
   };
   const openQuiz = (module: ModuleView): void => {
     if (module.href !== null) void openOnWeb(`${module.href}/quiz`);
-  };
-  const openResume = (chapterId: string): void => {
-    const chapter = active?.chapters.find((entry) => entry.id === chapterId);
-    if (chapter !== undefined) void openOnWeb(chapter.courseHref);
   };
   const openDetail = (module: ModuleView): void => {
     router.push({
@@ -311,12 +312,12 @@ export function ProgrammeScreen() {
                     key={module.id}
                     module={module}
                     resume={module.id === openModule?.id ? model.resume : null}
-                    onChapter={(chapter) => {
-                      openChapter(chapter);
+                    onChapter={(chapter, entry) => {
+                      openChapter(entry.id, chapter.id);
                     }}
                     onQuiz={openQuiz}
                     onResume={(resume) => {
-                      openResume(resume.chapterId);
+                      openChapter(resume.moduleId, resume.chapterId);
                     }}
                     onLocked={(entry) => {
                       setLocked(entry);

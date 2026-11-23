@@ -1,0 +1,1 @@
+✔ écart 8.10 % (seuil 12 %), 824×1830, différence : evidence/SPEC-3302/visual/diff-maquette-android-04-cours.png
