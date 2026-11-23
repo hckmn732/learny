@@ -12,7 +12,8 @@ Deux invariants commandent tout le document :
   restauration chronométrée se mesurent sur le staging fourni par le porteur (ADR-2009). Ce qui est
   prouvé en local est indiqué comme tel.
 
-Fichiers de référence : `docker/compose.coolify.yml` (services `api-py`, `worker-py`, `migrate`),
+Fichiers de référence : `docker/compose.coolify.yml` et son inclusion `docker/compose.coolify-py.yml`
+(services `api-py`, `worker-py`, `migrate`),
 `tools/deploy/cutover.mjs` (production de `OWNERSHIP_OVERRIDES`), `apps/worker-py/src/learny_worker/drain.py`
 (contrôle du drain), `docs/operations/coolify.md` § 8 (variables et sondes).
 

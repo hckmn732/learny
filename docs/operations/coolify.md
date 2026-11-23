@@ -260,6 +260,11 @@ le job refuse une empreinte différente.
 
 La bascule vers l'API et le worker Python (ADR-2007) ajoute **deux services à la même image**,
 `docker/api-py.Dockerfile` (SPEC-2003), aux côtés de `api` (Hono), `web` et `migrate`. Ils sont
+déclarés dans un fichier inclus par la pile — `docker/compose.coolify-py.yml` pour la production,
+`docker/compose.coolify-qa-py.yml` pour la QA — et `docker/compose.coolify.yml` / `-qa.yml` portent
+`include:`. Coolify déploie donc une seule ressource : le Compose résolu contient bien `api-py` et
+`worker-py`. Le fichier inclus garde la page `/_dev/sdd/SPEC-1103` (qui énumère les services du
+fichier principal) et sa ligne de base visuelle inchangées (ADR-1001, ADR-2008). Ils sont
 désactivés de fait tant que `web` n'a pas basculé son `API_INTERNAL_URL` : la façade démarre en
 **relais pur** vers Hono, et tout ce qui reste `ts` dans `api/ownership.yaml` lui est renvoyé tel
 quel (ADR-2005).
@@ -284,8 +289,8 @@ quel (ADR-2005).
 - **Variables** : mêmes noms que le TypeScript, plus les variables `PY_*` (`PY_API_WORKERS`,
   `PY_DATABASE_POOL_MAX`, `PY_WORKER_CONCURRENCY`, `PY_WORKER_HEALTH_PORT`, `PY_HONO_UPSTREAM_URL`)
   et `OWNERSHIP_OVERRIDES`. **Aucune valeur de secret n'est écrite dans le dépôt** : la liste des
-  noms est dans l'ancre `x-py-environment` de `docker/compose.coolify.yml` (et
-  `docker/compose.coolify-qa.yml` pour la recette), les valeurs restent dans Coolify.
+  noms est dans l'ancre `x-py-environment` des fichiers inclus (`docker/compose.coolify-py.yml`,
+  `docker/compose.coolify-qa-py.yml`), les valeurs restent dans Coolify.
 - **Surcharge de propriété** : `OWNERSHIP_OVERRIDES` n'est jamais saisie à la main, elle est
   produite par `node tools/deploy/cutover.mjs` (voir `docs/operations/python-cutover.md`) et lue au
   démarrage de `api-py` : chaque changement exige un redéploiement du service.
