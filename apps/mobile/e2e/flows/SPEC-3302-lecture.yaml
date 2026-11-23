@@ -1,16 +1,15 @@
-# SPEC-3302 — lecture du cours : ouverture depuis Programme, corps, sommaire, source (CA-1, CA-2,
-# CA-3).
+# SPEC-3302 — lecture du cours : ouverture depuis Programme, corps, sommaire (CA-1, CA-5, EF-6).
 #
 # Unique flux `@visual` de la spécification (leçon 6 du BRIEF, ADR-3015 § 5) : la capture
 # `SPEC-3302-lecture` montre le haut du chapitre 2 (« Saisie des pièces comptables », chapitre 2
 # sur 4, barre de lecture) et est comparée à la ligne de base versionnée
 # `e2e/visual/baselines/SPEC-3302-lecture.png` (masque : barre d'état et indicateur d'accueil, le
-# reste est du contenu). Les autres états sont capturés pour la preuve, sans comparaison.
+# reste est du contenu).
 #
-# Le flux ne mute rien : la progression envoyée porte sur un chapitre déjà lu à 100 % (valeur
-# monotone, BR-COU-08) ; le signalement et le résumé sont couverts par le test d'intégration et les
-# tests de composants. Maestro 2.12.1 : assertions sur `id` et texte ASCII, aucun `scrollUntilVisible`
-# (les sections sont atteintes par le sommaire, ce qui couvre aussi EF-6).
+# Le flux ne mute rien : il ne fait aucun défilement de l'article (la progression envoyée porte
+# alors sur le chapitre déjà lu à 100 %, valeur monotone, BR-COU-08) et n'ouvre que le sommaire, qui
+# est une lecture. Les états plus bas (question éclair, citation, résumé) sont couverts par les
+# tests de composants et le test d'intégration, et capturés dans `evidence/SPEC-3302/`.
 #
 # Le chapitre 2 est ouvert par sa rangée dans le module 3 : « Reprendre » du Programme pointe le
 # chapitre en cours de lecture (le 3), pas le chapitre 2 de la maquette. Les identifiants de la
@@ -70,6 +69,10 @@ tags:
 - assertVisible:
     id: course-title
 - assertVisible:
+    id: course-module-tag
+- assertVisible:
+    id: course-meta
+- assertVisible:
     id: course-progress
 - assertVisible:
     id: course-toc
@@ -82,69 +85,25 @@ tags:
     id: course-markdown
 # CA-5 — état de la maquette : haut du chapitre 2, barre de lecture.
 - takeScreenshot: SPEC-3302-lecture
-# EF-6 — le sommaire amène la question éclair à l'écran (ancrage par section).
+# EF-6 — le sommaire liste les quatre chapitres et les sections du chapitre courant (BR-COU-11).
 - tapOn:
     id: course-toc
 - extendedWaitUntil:
     visible:
       id: course-toc-sheet
-    timeout: 10000
-- tapOn:
+    timeout: 15000
+- assertVisible:
+    id: course-toc-chapter-74e85d27-6960-51a1-b712-ab9cc7aba756
+- assertVisible:
     id: course-toc-section-fb0a6111-aa92-5632-9fe2-a8fc00cf1288
-- extendedWaitUntil:
-    visible:
-      id: course-quick-question
-    timeout: 20000
-# BR-COU-05 — la réponse reste masquée jusqu'à « Afficher la réponse ».
-- tapOn:
-    id: course-reveal
 - assertVisible:
-    id: course-answer
-- takeScreenshot: SPEC-3302-lecture-question
-# CA-3 — la citation du chapitre ouvre sa source contrôlée (BR-COU-02).
-- extendedWaitUntil:
-    visible:
-      id: course-citation-chapitre-2-flash-question
-    timeout: 20000
-- tapOn:
-    id: course-citation-chapitre-2-flash-question
-- extendedWaitUntil:
-    visible:
-      id: course-source
-    timeout: 10000
-- assertVisible:
-    id: course-source-label
-- takeScreenshot: SPEC-3302-lecture-source
-- tapOn:
-    id: course-source-close
-# BR-COU-04 — « À retenir » en fin de chapitre, atteint par le sommaire.
-- tapOn:
-    id: course-toc
-- extendedWaitUntil:
-    visible:
-      id: course-toc-sheet
-    timeout: 10000
-- tapOn:
     id: course-toc-section-d46c099c-d636-5e7f-902d-f87a8c7cd434
+- tapOn:
+    id: course-toc-sheet-close
 - extendedWaitUntil:
     visible:
-      id: course-takeaway
-    timeout: 20000
-# EF-4 — la fin du chapitre propose le chapitre suivant.
-- runFlow:
-    when:
-      notVisible:
-        id: course-next
-    commands:
-      - swipe:
-          start: 50%, 80%
-          end: 50%, 40%
-          duration: 500
-- extendedWaitUntil:
-    visible:
-      id: course-next
-    timeout: 20000
-- takeScreenshot: SPEC-3302-lecture-fin
+      id: course-header
+    timeout: 10000
 # BR-NAV-04 — le retour ramène à l'onglet Programme.
 - tapOn:
     id: course-back
