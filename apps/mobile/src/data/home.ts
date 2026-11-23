@@ -20,6 +20,7 @@ import type {
   WarmupTodayDto,
 } from '@learny/contracts';
 
+import { idempotencyRegistry } from '../api/idempotency';
 import { requireApiClient } from '../api/registry';
 
 import { queryKeys } from './keys';
@@ -206,16 +207,30 @@ export function useTutorActions(): TutorActions {
   const mutation = useMutation({
     mutationFn: (variables: TutorActionVariables): Promise<AutomationActionItem> => {
       const api = requireApiClient().api;
+      // ET-3, BR-PLA-08 — the routes of the tutor are `idempotent` : the key is minted here rather
+      // than by the HTTP client, whose fallback calls `crypto.randomUUID()` (absent from Hermes and
+      // from the release bundle of the application). One key per intention, forgotten on success.
+      const intent = `automation:${variables.action}:${variables.id}`;
+      const options = { idempotencyKey: idempotencyRegistry.keyFor(intent) };
+      const done = (result: AutomationActionItem): AutomationActionItem => {
+        idempotencyRegistry.resolve(intent);
+        return result;
+      };
       switch (variables.action) {
         case 'accept':
-          return api.meAutomationActionAccept({
-            params: { id: variables.id },
-            body: variables.choice === undefined ? {} : { choice: variables.choice },
-          });
+          return api
+            .meAutomationActionAccept(
+              {
+                params: { id: variables.id },
+                body: variables.choice === undefined ? {} : { choice: variables.choice },
+              },
+              options,
+            )
+            .then(done);
         case 'decline':
-          return api.meAutomationActionDecline({ params: { id: variables.id } });
+          return api.meAutomationActionDecline({ params: { id: variables.id } }, options).then(done);
         case 'undo':
-          return api.meAutomationActionUndo({ params: { id: variables.id } });
+          return api.meAutomationActionUndo({ params: { id: variables.id } }, options).then(done);
       }
     },
     onMutate: async (variables) => {
@@ -267,15 +282,26 @@ export interface SlotMover {
 export function useSlotMove(): SlotMover {
   const client = useQueryClient();
   const mutation = useMutation({
-    mutationFn: (variables: SlotMoveVariables) =>
-      requireApiClient().api.slotMove({
-        params: { sid: variables.slotId },
-        body: {
-          expectedVersion: variables.expectedVersion,
-          startsAt: variables.startsAt,
-          endsAt: variables.endsAt,
-        },
-      }),
+    mutationFn: (variables: SlotMoveVariables) => {
+      // ET-3 — same reason as the tutor actions: the idempotency key comes from the application.
+      const intent = `slot-move:${variables.slotId}:${variables.startsAt}`;
+      return requireApiClient()
+        .api.slotMove(
+          {
+            params: { sid: variables.slotId },
+            body: {
+              expectedVersion: variables.expectedVersion,
+              startsAt: variables.startsAt,
+              endsAt: variables.endsAt,
+            },
+          },
+          { idempotencyKey: idempotencyRegistry.keyFor(intent) },
+        )
+        .then((result) => {
+          idempotencyRegistry.resolve(intent);
+          return result;
+        });
+    },
     onSettled: (_data, _error, variables) => {
       void client.invalidateQueries({ queryKey: queryKeys.slotAlternatives(variables.slotId) });
       void client.invalidateQueries({ queryKey: queryKeys.home() });
