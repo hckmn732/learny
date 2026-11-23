@@ -1,7 +1,7 @@
 # Preuves — SPEC-3101 : Connexion, inscription et lien magique
 
-- Date : 2026-11-23T00:37:47.982Z
-- Commit : b5921dba
+- Date : 2026-11-23T00:51:22.804Z
+- Commit : 57ca69d6
 - Spécification : `specs/p31-mobile-acces/SPEC-3101-connexion-inscription-et-lien-magique.md`
 
 ## Rapports

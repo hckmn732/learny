@@ -1,12 +1,12 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <testsuites>
-  <testsuite name="Test Suite" device="agent37" tests="2" failures="0" time="91.524" timestamp="2026-11-23T00:36:12">
-    <testcase id="SPEC-3101 connexion" name="SPEC-3101 connexion" classname="SPEC-3101 connexion" file="/tmp/learny-device-agent/jobs/20261123003605-004/flows/SPEC-3101-connexion.yaml" time="63.563" timestamp="2026-11-23T00:36:12" status="SUCCESS">
+  <testsuite name="Test Suite" device="agent37" tests="2" failures="0" time="94.3" timestamp="2026-11-23T00:49:44">
+    <testcase id="SPEC-3101 connexion" name="SPEC-3101 connexion" classname="SPEC-3101 connexion" file="/tmp/learny-device-agent/jobs/20261123004937-005/flows/SPEC-3101-connexion.yaml" time="64.385" timestamp="2026-11-23T00:49:44" status="SUCCESS">
       <properties>
         <property name="tags" value="SPEC-3101, visual"/>
       </properties>
     </testcase>
-    <testcase id="SPEC-3101 lien magique" name="SPEC-3101 lien magique" classname="SPEC-3101 lien magique" file="/tmp/learny-device-agent/jobs/20261123003605-004/flows/SPEC-3101-lien-magique.yaml" time="27.934" timestamp="2026-11-23T00:37:15" status="SUCCESS">
+    <testcase id="SPEC-3101 lien magique" name="SPEC-3101 lien magique" classname="SPEC-3101 lien magique" file="/tmp/learny-device-agent/jobs/20261123004937-005/flows/SPEC-3101-lien-magique.yaml" time="29.893" timestamp="2026-11-23T00:50:49" status="SUCCESS">
       <properties>
         <property name="tags" value="SPEC-3101"/>
       </properties>
