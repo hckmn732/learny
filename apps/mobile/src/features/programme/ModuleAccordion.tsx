@@ -76,6 +76,7 @@ export function ModuleAccordion({
   return (
     <View testID={`module-${String(module.position)}`} style={styles.card}>
       <Pressable
+        testID={`module-${String(module.position)}-toggle`}
         accessibilityRole="button"
         accessibilityLabel={t.module.toggle(module.position, module.title)}
         accessibilityState={{ expanded: module.locked ? false : expanded, disabled: false }}

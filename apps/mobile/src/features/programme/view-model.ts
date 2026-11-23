@@ -254,12 +254,16 @@ export function buildProgrammeView(input: BuildProgrammeInput): ProgrammeView {
 
   const openModule = programme.modules.find((module) => module.status === 'open') ?? null;
   const modules: ModuleView[] = programme.modules.map((module) => {
-    const chapters = (chaptersByModule.get(module.id) ?? [])
-      .slice()
-      .sort((left, right) => left.position - right.position)
-      .map((chapter) =>
-        chapterView(module, chapter, module.id === openModule?.id ? input.course : null),
-      );
+    // BR-FOR-08 — a locked module has no readable chapter: its fiche only states the condition.
+    const chapters =
+      module.status === 'locked'
+        ? []
+        : (chaptersByModule.get(module.id) ?? [])
+            .slice()
+            .sort((left, right) => left.position - right.position)
+            .map((chapter) =>
+              chapterView(module, chapter, module.id === openModule?.id ? input.course : null),
+            );
     return {
       id: module.id,
       position: module.position,

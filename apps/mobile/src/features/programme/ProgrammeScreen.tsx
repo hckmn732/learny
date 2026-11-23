@@ -138,7 +138,10 @@ export function ProgrammeScreen() {
   };
 
   const loading =
-    (me.status === 'loading' || options.status === 'loading' || list.status === 'loading') &&
+    (me.status === 'loading' ||
+      options.status === 'loading' ||
+      list.status === 'loading' ||
+      programme.status === 'loading') &&
     model === null &&
     proposal === null;
   const failed =
