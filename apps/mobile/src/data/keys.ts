@@ -42,6 +42,15 @@ export const queryKeys = {
     health: (apiUrl: string) => ['sdd', 'health', apiUrl] as const,
     me: () => ['sdd', 'me'] as const,
   },
+  // SPEC-3401 ET-1 — les réglages du profil, les notifications, les modèles d'IA, l'abonnement et
+  // la pause. Une clé par route, comme le reste du cache (canevas § 4) ; `exportRead` porte
+  // l'identifiant de l'export pour que deux exports successifs ne partagent pas la même entrée.
+  settings: () => ['me', 'settings'] as const,
+  notificationSettings: () => ['me', 'notification-settings'] as const,
+  aiModels: () => ['me', 'ai-models'] as const,
+  subscription: () => ['billing', 'subscription'] as const,
+  pause: () => ['me', 'pause'] as const,
+  exportRead: (exportId: string) => ['me', 'export', exportId] as const,
   attempt: (attemptId: string) => ['attempt', attemptId] as const,
   attemptResult: (attemptId: string) => ['attempt', attemptId, 'result'] as const,
 } as const;

@@ -35,6 +35,7 @@ import { EmptyState } from '../../ui/EmptyState';
 import { ErrorState } from '../../ui/ErrorState';
 import { Skeleton } from '../../ui/Skeleton';
 import { Toast } from '../../ui/Toast';
+import { DeletionNotice } from '../profil/DeletionNotice';
 import { AppHeader } from '../shell/AppHeader';
 
 import { SessionHeroCard } from './SessionHeroCard';
@@ -182,6 +183,9 @@ export function TodayScreen() {
           />
         }
       >
+        {/* SPEC-3401 EF-6 — une suppression programmée s'annonce aussi ici. */}
+        <DeletionNotice />
+
         {homeQuery.status === 'loading' ? (
           <View style={styles.skeleton} testID="today-loading">
             <Skeleton animated={false} lines={3} />
