@@ -1,8 +1,8 @@
 """Textes du tuteur vus par l'apprenant (SPEC-610, SPEC-2204).
 
-Copies mot pour mot de `packages/services/src/tutor-chat/{context,conversations,sources,stream,self-test}.ts`
-et `packages/tutor/src/chat/prompt.ts`. La typographie francaise (apostrophe courbe, guillemets) est
-normative : ce module est le seul endroit ou ces libelles vivent (ADR-2011).
+Every literal is copied verbatim from the reference implementation. The French typography (curly
+apostrophe, guillemets) is normative: this module is the only place where those labels live
+(ADR-2011).
 """
 
 APOSTROPHE = "\N{RIGHT SINGLE QUOTATION MARK}"
@@ -70,7 +70,7 @@ STREAM_ANSWER_FAILED = "La réponse n’a pas pu être obtenue."
 SUMMARY_LEARNER = "Apprenant"
 SUMMARY_TUTOR = "Tuteur"
 
-# `packages/services/src/tutor-chat/conversations.ts` and `stream.ts` (SPEC-610 ET-3).
+# and `stream.ts` (SPEC-610 ET-3).
 CONVERSATION_NOT_FOUND = "Discussion introuvable."
 COURSE_NOT_FOUND = "Cours introuvable."
 MESSAGE_NOT_SAVED = "Message non enregistré."
@@ -78,7 +78,7 @@ ANSWER_NOT_SAVED = "Réponse non enregistrée."
 STREAM_IN_PROGRESS = "Une réponse est déjà en cours sur cette discussion."
 SELF_TEST_PENDING = "Répondez d’abord à la question Teste-moi en attente."
 
-# `packages/services/src/tutor-chat/self-test.ts` (SPEC-610 ET-7).
+# SPEC-610 ET-7.
 NO_NOTION_TO_TEST = "Aucune notion à tester dans ce chapitre."
 NO_QUESTION_ASKED = "Le tuteur n’a pas posé de question."
 NO_PENDING_SELF_TEST = "Aucune question Teste-moi n’est en attente."
@@ -103,7 +103,7 @@ OPEN_QUESTION_MODEL_ANSWER = "Une réponse juste mobilise {label} et l’expliqu
 OPEN_QUESTION_EXPLANATION = "La question vérifie la compréhension de {label}, sans récitation."
 OPEN_QUESTION_OBJECTIVE = "Vérifier {label}"
 
-# --- question banks (packages/tutor/src/services/question-bank.ts, SPEC-513) -----------------------
+# question banks ( SPEC-513) ----------------------
 
 QUESTION_BANK_PARAMS_INVALID = "Les param\u00e8tres de la banque sont invalides."
 QUESTION_BANK_COURSE_MISSING = "Aucune version de cours priv\u00e9e n\u2019est disponible."
@@ -116,7 +116,7 @@ QUESTION_BANK_CONTEXT_UNAVAILABLE = "Le contexte du cours n\u2019a pas pu \u00ea
 QUESTION_BANK_MODULE_MISMATCH = "Le module ne correspond pas \u00e0 la version du cours."
 QUESTION_BANK_QUESTION_FALLBACK = "Question de banque"
 
-# --- course generation (packages/tutor/src/course/{generate,run}.ts, SPEC-608, SPEC-2207) ---------
+# course generation ( SPEC-608, SPEC-2207) --------
 
 COURSE_GENERATION_FAILED = "La g\u00e9n\u00e9ration du cours a \u00e9chou\u00e9."
 COURSE_MODULE_NOT_FOUND = "Module introuvable."

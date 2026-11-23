@@ -1,11 +1,8 @@
-"""Textes français des clés personnelles et de l'onglet « Modèles d'IA » (SPEC-2204).
+"""French texts of the personal AI keys and of the model settings tab (SPEC-2204, ADR-2011).
 
-Copiés mot pour mot du TypeScript : `packages/contracts/src/ai-credentials.ts` (messages des
-raffinements du corps et libellé de la limite), `packages/contracts/src/parametres-modeles-d-ia.ts`,
-`packages/services/src/ai/{credentials-service,qualify-model}.ts`,
-`packages/services/src/parametres-modeles-d-ia.ts`, `packages/llm/src/providers/catalog.ts`
-(noms des fournisseurs et avertissements de région) et `packages/i18n/src/fr/settings.ts`
-(messages de réserve de compatibilité).
+Every literal is copied verbatim from the reference implementation: the credential contract
+refinements and the limit label, the compatibility reserve messages, and the provider names with
+their region warnings.
 """
 
 # --- corps de requête (raffinements que l'OpenAPI ne peut pas exprimer) -------------------------
