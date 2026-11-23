@@ -294,6 +294,23 @@ export default tseslint.config(
   },
   js.configs.recommended,
   {
+    // Build scripts of the mobile application (Expo config plugins) are CommonJS: they read
+    // `require`, `module`, `exports` and the file globals, which an ES-module default does not
+    // declare. They are configuration code, not shipped code (SPEC-3301, ADR-3018).
+    files: ['**/*.cjs'],
+    languageOptions: {
+      sourceType: 'commonjs',
+      globals: {
+        ...NODE_GLOBALS,
+        require: 'readonly',
+        module: 'readonly',
+        exports: 'readonly',
+        __dirname: 'readonly',
+        __filename: 'readonly',
+      },
+    },
+  },
+  {
     languageOptions: {
       ecmaVersion: 'latest',
       sourceType: 'module',

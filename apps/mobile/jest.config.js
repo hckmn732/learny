@@ -18,7 +18,7 @@ module.exports = {
   // Transform the React Native/Expo packages, the workspace TypeScript packages (pnpm symlinks)
   // and the ESM-only dependencies of @learny/core.
   transformIgnorePatterns: [
-    'node_modules/(?!(?:.pnpm/)?((jest-)?react-native|@react-native(-community)?|expo(nent)?|@expo(nent)?/.*|@expo-google-fonts/.*|react-navigation|@react-navigation/.*|@sentry/react-native|native-base|react-native-svg|@learny/.*|@date-fns/.*))',
+    'node_modules/(?!(?:.pnpm/)?((jest-)?react-native|@react-native(-community)?|expo(nent)?|@expo(nent)?/.*|@expo-google-fonts/.*|react-navigation|@react-navigation/.*|@sentry/react-native|native-base|react-native-svg|@learny/.*|@date-fns/.*|mdast-util-.*|micromark.*|unist-util-.*|zwitch|devlop|character-entities.*|decode-named-character-reference|longest-streak|markdown-table|ccount|escape-string-regexp|vfile.*|bail|trough|is-plain-obj|html-url-attributes|space-separated-tokens|comma-separated-tokens|property-information|hast-util-.*|remark-.*|unified|rehype-.*))',
   ],
   moduleNameMapper: {
     // Static assets are irrelevant to behaviour: a stable stub keeps the tests fast.
