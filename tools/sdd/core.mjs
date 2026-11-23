@@ -351,7 +351,16 @@ export function maestroVerdict(code, summary) {
   return code === 0 && summary.failed === 0 && summary.passed > 0 && summary.videos > 0;
 }
 
-/** Étape visuelle mobile réussie : au moins un flux `visual` réussi, aucun flux en échec. */
+/**
+ * Étape visuelle mobile réussie : au moins un flux `visual` réussi, aucun flux en échec.
+ *
+ * ADR-3019 : une spécification peut déclarer la comparaison pixel non applicable (export de
+ * référence sans le chrome système, par exemple). Elle n'embarque alors aucun flux `@visual` ;
+ * l'étape réussit si la campagne ne compte aucun échec, et l'exemption est consignée dans son
+ * `acceptance.md`.
+ */
 export function mobileVisualVerdict(summary) {
+  const visualFlows = (summary.flows ?? []).filter((flow) => (flow.tags ?? []).includes('visual')).length;
+  if (visualFlows === 0) return summary.failed === 0;
   return summary.visual > 0 && summary.failed === 0;
 }

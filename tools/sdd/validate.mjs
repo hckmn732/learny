@@ -235,7 +235,14 @@ if (wanted('e2e')) {
     const report = fs.existsSync(reportPath) ? JSON.parse(fs.readFileSync(reportPath, 'utf8')) : null;
     const summary = summarizeMaestro(report, tag);
     record('e2e', maestroVerdict(code, summary), `${summary.passed} flux réussi(s), ${summary.failed} échec(s), ${summary.videos} vidéo(s)`);
-    record('visual', mobileVisualVerdict(summary), `${summary.visual} flux @visual réussi(s) (mode ${spec.visual})`);
+    const visualFlows = (summary.flows ?? []).filter((flow) => (flow.tags ?? []).includes('visual')).length;
+    record(
+      'visual',
+      mobileVisualVerdict(summary),
+      visualFlows > 0
+        ? `${summary.visual} flux @visual réussi(s) (mode ${spec.visual})`
+        : `aucun flux @visual (comparaison non applicable, voir acceptance.md — ADR-3019)`,
+    );
   } else {
     const pwJson = path.join(out, 'e2e.json');
     fs.rmSync(pwJson, { force: true });
