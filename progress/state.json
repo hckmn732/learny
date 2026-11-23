@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-11-23T14:51:57.202Z",
+  "updatedAt": "2026-11-23T15:22:45.524Z",
   "specs": {
     "SPEC-001": {
       "status": "done",
@@ -6965,22 +6965,22 @@
       }
     },
     "SPEC-3201": {
-      "status": "in_progress",
+      "status": "done",
       "attempts": 0,
       "startedAt": "2026-11-23T03:21:32.767Z",
-      "completedAt": null,
+      "completedAt": "2026-11-23T15:22:45.521Z",
       "branch": "spec/SPEC-3201-ecran-aujourd-hui",
-      "commit": null,
-      "lastError": "",
+      "commit": "8255eef6",
+      "lastError": null,
       "validations": {
         "lint": {
           "status": "passed",
-          "at": "2026-11-23T14:50:40.159Z",
+          "at": "2026-11-23T15:22:22.321Z",
           "details": ""
         },
         "typecheck": {
           "status": "passed",
-          "at": "2026-11-23T14:50:48.444Z",
+          "at": "2026-11-23T15:22:30.426Z",
           "details": ""
         },
         "e2e": {
@@ -6995,8 +6995,18 @@
         },
         "acceptance": {
           "status": "passed",
-          "at": "2026-11-23T14:51:57.202Z",
+          "at": "2026-11-23T15:22:31.957Z",
           "details": "5/5 critères ✅"
+        },
+        "unit": {
+          "status": "passed",
+          "at": "2026-11-23T15:18:12.124Z",
+          "details": "11 Vitest + 26 Jest test(s) [SPEC-3201] réussi(s), 0 échec(s)"
+        },
+        "integration": {
+          "status": "passed",
+          "at": "2026-11-23T15:22:31.945Z",
+          "details": "4 test(s) réussi(s), 0 échec(s)"
         }
       }
     },
