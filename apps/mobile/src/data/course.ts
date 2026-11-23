@@ -52,29 +52,56 @@ function withProgress(
 export interface CourseQuery {
   readonly status: QueryStatus;
   readonly data: ModuleCourseScreen | null;
+  /** CL-2 - a newer version of the course was read while the learner was on another one. */
+  readonly staleVersion: boolean;
   readonly retry: () => void;
   readonly refresh: () => Promise<void>;
+  readonly clearStale: () => void;
 }
 
-/** Course of one module, selected chapter included (ET-1). */
+/** Course of one module, selected chapter included (ET-1); announces a version change (CL-2). */
 export function useCourseScreen(moduleId: string | null, chapterId: string | null): CourseQuery {
+  const [staleVersion, setStaleVersion] = useState(false);
+  const seen = useRef<{ readonly key: string; readonly version: number } | null>(null);
+  const key = `${moduleId ?? 'none'}:${chapterId ?? 'none'}`;
+
   const query = useQuery({
     queryKey: queryKeys.course(moduleId ?? 'none', chapterId ?? 'none'),
-    queryFn: () =>
-      requireApiClient().api.moduleCourse({
+    queryFn: async () => {
+      const next = await requireApiClient().api.moduleCourse({
         params: { mid: moduleId ?? '' },
         ...(chapterId === null ? {} : { query: { chapitre: chapterId } }),
-      }),
+      });
+      // CL-2 - the first version read is the reference; a later version is announced, never
+      // silently swapped under the eyes of the reader.
+      const current = next.course;
+      if (current !== null) {
+        const previous = seen.current;
+        if (previous === null || previous.key !== key) {
+          seen.current = { key, version: current.version };
+          setStaleVersion(false);
+        } else if (current.version > previous.version) {
+          seen.current = { key, version: current.version };
+          setStaleVersion(true);
+        }
+      }
+      return next;
+    },
     enabled: moduleId !== null,
   });
+
   return {
     status: moduleId === null ? 'loading' : statusOf(query),
     data: query.data ?? null,
+    staleVersion,
     retry: () => {
       void query.refetch();
     },
     refresh: async () => {
       await query.refetch();
+    },
+    clearStale: () => {
+      setStaleVersion(false);
     },
   };
 }

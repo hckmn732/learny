@@ -158,6 +158,17 @@ export function hasSectionAction(actions: SectionActions): boolean {
   return actions.askTutor || actions.report || actions.editOnWeb;
 }
 
+/** Web page of the course of one chapter - the hand-off of the two destinations not yet native. */
+export function courseWebHref(screen: ModuleCourseScreen, chapterId: string | null): string {
+  const base = `/formations/${screen.formation.id}/modules/${screen.module.id}/cours`;
+  return chapterId === null ? base : `${base}?chapitre=${chapterId}`;
+}
+
+/** Web page of the validation quiz of the module (BR-QUI-01, ADR-3002 § 3). */
+export function quizWebHref(screen: ModuleCourseScreen): string {
+  return `/formations/${screen.formation.id}/modules/${screen.module.id}/quiz`;
+}
+
 /** Whether the empty state speaks of a generation in progress or of a course never asked (EF-7). */
 export type EmptyCourseReason = 'generating' | 'failed' | 'none';
 
