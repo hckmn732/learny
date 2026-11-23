@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-11-23T00:10:15.730Z",
+  "updatedAt": "2026-11-23T00:22:20.028Z",
   "specs": {
     "SPEC-001": {
       "status": "done",
@@ -7156,11 +7156,11 @@
       }
     },
     "SPEC-2301": {
-      "status": "pending",
+      "status": "in_progress",
       "attempts": 0,
-      "startedAt": null,
+      "startedAt": "2026-11-23T00:22:20.027Z",
       "completedAt": null,
-      "branch": null,
+      "branch": "spec/SPEC-2301-deploiement-bascule-rollback",
       "commit": null,
       "lastError": null,
       "validations": {}
