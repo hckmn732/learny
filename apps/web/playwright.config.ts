@@ -194,6 +194,9 @@ export default defineConfig({
         LEARNY_API_ROLE: 'api',
         JOBS_MODE: 'inline',
         TRUST_PROXY: 'true',
+        // ADR-0336 - la pile de QA coupe le limiteur : l'horloge figée empêche la recharge des
+        // seaux et le compte de démonstration partagé resterait bloqué pour toute la campagne.
+        RATE_LIMIT_MODE: 'off',
       },
     },
     {
@@ -233,6 +236,8 @@ export default defineConfig({
         // P21 plan step 6: the facade runs the consumers of the events a request commits before it
         // answers, as Hono's inline jobs did; the worker still runs the crons and anything else.
         JOBS_MODE: 'inline',
+        // ADR-0336 - QA stack: the frozen clock never refills the buckets (see the Hono block).
+        RATE_LIMIT_MODE: 'off',
       },
     },
     {
