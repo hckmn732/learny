@@ -1,22 +1,22 @@
 # Progression du projet Learny
 
-> Généré par `node tools/sdd/status.mjs` le 2026-11-23T15:41:04.060Z. Ne pas éditer à la main.
+> Généré par `node tools/sdd/status.mjs` le 2026-11-23T16:57:04.032Z. Ne pas éditer à la main.
 
 ## Synthèse
 
 | Indicateur | Valeur |
 |---|---|
 | Spécifications | 175 (V1 : 124, V2 : 8, migration : 43) |
-| Terminées | 135 |
+| Terminées | 136 |
 | En cours | 0 |
-| Prêtes | 2 |
+| Prêtes | 1 |
 | En attente de dépendances | 38 |
 | Bloquées | 0 |
 | Bloquées par une dépendance | 0 |
-| **Avancement global** | **77.1 %** |
+| **Avancement global** | **77.7 %** |
 | Avancement V1 | 99.2 % |
 | Piste active | mobile |
-| Prochaine action | start SPEC-3202 — Programme, modules et chapitres en lecture |
+| Prochaine action | checkpoint CP-32 |
 
 ## Phases et checkpoints
 
@@ -42,7 +42,7 @@
 | P23 | Migration Python — bascule et retrait du backend TypeScript | 0/2 | CP-23 | ⏳ |
 | P30 | Mobile — socle Expo, design system natif et données | 3/3 | CP-30 | ✅ 2026-11-22 cp-30 |
 | P31 | Mobile — accès et coquille | 2/2 | CP-31 | ✅ 2026-11-23 cp-31 |
-| P32 | Mobile — Aujourd’hui, Programme et Agenda | 2/3 | CP-32 | ⏳ |
+| P32 | Mobile — Aujourd’hui, Programme et Agenda | 3/3 | CP-32 | ⏳ |
 | P33 | Mobile — cours, tuteur, quiz et révisions | 1/5 | CP-33 | ⏳ |
 | P34 | Mobile — profil, réglages et connexion tierce | 0/2 | CP-34 | ⏳ |
 | P35 | Mobile — notifications push et publication (exige CP-23) | 0/2 | CP-35 | ⏳ |
@@ -215,7 +215,7 @@
 | [SPEC-3101](../specs/p31-mobile-acces/SPEC-3101-connexion-inscription-et-lien-magique.md) | Connexion, inscription et lien magique | P31 | ✅ done | 0 | ✓lint ✓typecheck ✓unit ✓integration ✓e2e ✓visual ✓acceptance | SPEC-3002, SPEC-3003 |
 | [SPEC-3102](../specs/p31-mobile-acces/SPEC-3102-coquille-onglets-natifs-et-notifications.md) | Coquille, onglets natifs, compte et centre de notifications | P31 | ✅ done | 0 | ✓lint ✓typecheck ✓unit ✓integration ✓e2e ✓visual ✓acceptance | SPEC-3101 |
 | [SPEC-3201](../specs/p32-mobile-quotidien/SPEC-3201-ecran-aujourd-hui.md) | Écran Aujourd'hui | P32 | ✅ done | 0 | ✓lint ✓typecheck ✓e2e ✓visual ✓acceptance ✓unit ✓integration | SPEC-3102 |
-| [SPEC-3202](../specs/p32-mobile-quotidien/SPEC-3202-programme-modules-et-chapitres.md) | Programme, modules et chapitres en lecture | P32 | 🟢 ready | 0 | — | SPEC-3102 |
+| [SPEC-3202](../specs/p32-mobile-quotidien/SPEC-3202-programme-modules-et-chapitres.md) | Programme, modules et chapitres en lecture | P32 | ✅ done | 0 | ✓lint ✓typecheck ✓unit ✓integration ✓e2e ✓visual ✓acceptance | SPEC-3102 |
 | [SPEC-3203](../specs/p32-mobile-quotidien/SPEC-3203-agenda.md) | Agenda jour, semaine, mois et replanification | P32 | ✅ done | 0 | ✓lint ✓typecheck ✓unit ✓integration ✓e2e ✓visual ✓acceptance | SPEC-3102 |
 | [SPEC-3301](../specs/p33-mobile-apprentissage/SPEC-3301-rendu-natif-des-briques.md) | Rendu natif des briques et du Markdown | P33 | ✅ done | 0 | ✓lint ✓typecheck ✓unit ✓integration ✓e2e ✓visual ✓acceptance | SPEC-3002, SPEC-3003 |
 | [SPEC-3302](../specs/p33-mobile-apprentissage/SPEC-3302-lecture-du-cours.md) | Lecture du cours | P33 | ⏳ waiting | 0 | — | SPEC-3301, SPEC-3202 |
