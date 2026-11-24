@@ -9,7 +9,6 @@
 #   - migrate        : applique supabase/migrations une seule fois par fichier ;
 #   - auth-templates : sert les modèles d'e-mails de Supabase Auth (lien token_hash) sur le réseau
 #                      interne, lus par GoTrue via GOTRUE_MAILER_TEMPLATES_* ;
-#   - inngest        : Inngest auto-hébergé avec sa sonde de santé (l'image n'a ni curl ni wget).
 # Les images tierces sont celles, épinglées, de la pile auto-hébergée. Le contexte est filtré par
 # coolify-support.Dockerfile.dockerignore (liste blanche) : aucun secret, aucun code applicatif.
 
@@ -35,6 +34,3 @@ EXPOSE 8080
 HEALTHCHECK --interval=30s --timeout=5s --start-period=5s --retries=3 \
   CMD ["wget", "-q", "--spider", "http://127.0.0.1:8080/confirmation.html"]
 CMD ["httpd", "-f", "-p", "8080", "-h", "/www"]
-
-FROM inngest/inngest:v1.52.0 AS inngest
-COPY --chown=root:root --chmod=0555 docker/inngest-healthcheck.pl /healthcheck.pl

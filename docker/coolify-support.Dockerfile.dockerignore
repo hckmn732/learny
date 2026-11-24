@@ -2,7 +2,6 @@
 # place du .dockerignore racine (qui exclut supabase/). Seuls les fichiers copiés par l'image entrent.
 *
 !docker/apply-migrations.sh
-!docker/inngest-healthcheck.pl
 !docker/kong.selfhost.yml
 !docker/selfhost-init-roles.sql
 !supabase/migrations
