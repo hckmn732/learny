@@ -23,12 +23,13 @@ Normatif. Implémenté par SPEC-201 (socle) puis par chaque spécification fonct
   `packages/contracts`, exportée dans `api/openapi.yaml`, puis servie par un `@handler` de
   `apps/api` qui délègue au cas d'usage du contexte Python.
 - `apps/web/proxy.ts` relaie `/api/*` et `/openapi.json` vers `API_INTERNAL_URL` sur la même origine. Il remplace tout secret de proxy entrant, transmet `X-Learny-Proxy-Secret`, `X-Forwarded-Host`, `X-Forwarded-Proto` et `X-Forwarded-For`, préserve les flux SSE, cookies et corps bruts. La façade Python identifie ses réponses par `X-Served-By: learny-api`.
-- la façade accepte le secret courant `API_PROXY_SECRET` et, pendant une rotation uniquement,
-  `API_PROXY_SECRET_PREVIOUS`. `apps/web` ne lit et n'envoie que le secret courant. Les deux
-  valeurs sont comparées en temps constant.
+- la façade accepte l'en-tête `X-Learny-Proxy-Secret` : le secret courant est le HMAC-SHA256
+  d'`APP_ENCRYPTION_KEY` (libellé `learny/api-proxy/v1`, ADR-4007), et pendant une rotation
+  uniquement celui d'`APP_ENCRYPTION_KEY_PREVIOUS`. `apps/web` ne lit et n'envoie que le secret
+  courant, dérivé de la même clé maîtresse ; les deux valeurs sont comparées en temps constant.
 - Si la façade est indisponible, le relai répond `502` `application/problem+json` avec le code `API_UNAVAILABLE` sans empêcher le rendu des pages web.
 - Exception documentée (SPEC-206, ADR-0255) : `POST /chapters/:cid/uploads` exige l'en-tête `Idempotency-Key` mais l'idempotence est portée par le service, pas par le wrapper, car la réponse contient une URL signée qui ne doit jamais être stockée (la même clé renvoie la même ressource avec une URL fraîche).
-- Abonnement (SPEC-210, ADR-0215, ADR-0261) : `POST /billing/checkout` renvoie `{ url }` (`successPath` et `cancelPath` sont des chemins internes, `//` et URL absolues refusés, `409 ALREADY_SUBSCRIBED` pour un abonnement `active`, idempotent par `Idempotency-Key`) ; `GET /billing/subscription` renvoie `{ status, currentPeriodEnd }` (droit d'usage gratuit par défaut : `status: 'none'`, ADR-0340). `POST /webhooks/stripe` est public mais authentifié par la signature `Stripe-Signature` du **corps brut** (tolérance 300 s, `400 INVALID_SIGNATURE` sinon) : il répond toujours `200 { received, result }` pour un événement vérifié (`applied`, `duplicate`, `stale`, `ignored`, `unknown_customer`). Il vit sous `/webhooks/*`, exempté de la garde d'origine. En `STRIPE_MODE=mock`, `/api/v1/dev/sdd/stripe/*` et `/_dev/stripe/{checkout,portal}` simulent le parcours (`ENABLE_SDD_PAGES` seulement).
+- Abonnement (SPEC-210, ADR-0215, ADR-0261) : `POST /billing/checkout` renvoie `{ url }` (`successPath` et `cancelPath` sont des chemins internes, `//` et URL absolues refusés, `409 ALREADY_SUBSCRIBED` pour un abonnement `active`, idempotent par `Idempotency-Key`) ; `GET /billing/subscription` renvoie `{ status, currentPeriodEnd }` (droit d'usage gratuit par défaut : `status: 'none'`, ADR-0340). `POST /webhooks/stripe` est public mais authentifié par la signature `Stripe-Signature` du **corps brut** (tolérance 300 s, `400 INVALID_SIGNATURE` sinon) : il répond toujours `200 { received, result }` pour un événement vérifié (`applied`, `duplicate`, `stale`, `ignored`, `unknown_customer`). Il vit sous `/webhooks/*`, exempté de la garde d'origine. En mode Stripe simulé (aucune clé `STRIPE_SECRET_KEY`), `/api/v1/dev/sdd/stripe/*` et `/_dev/stripe/{checkout,portal}` simulent le parcours (`ENABLE_SDD_PAGES` seulement).
 
 ## 2. Inventaire des routes
 
@@ -70,7 +71,7 @@ Normatif. Implémenté par SPEC-201 (socle) puis par chaque spécification fonct
 | POST `/bricks/:bid/report` · PATCH `/bricks/:bid` (correction apprenant) | Signalement / correction : POST 201 `{ reportId, status: 'open' }` (200 si un signalement ouvert existe déjà), PATCH 200 `{ brickId, version, versionId }` ; 404 brique d'autrui, 409 version obsolète, 422 `BRICK_INVALID` avec `errors[{ code, path, message }]`, 422 `BRICK_RETIRED` | SPEC-609, 501 |
 | GET `/dev/sdd/email/outbox` · DELETE `/dev/sdd/email/outbox` | Boîte d'envoi d'e-mails simulée : lecture et purge (`ENABLE_SDD_PAGES` seulement, jamais en production) | SPEC-2207 |
 | POST `/dev/sdd/events/demo` (idempotent, 202 `{ jobId }`) · GET `/dev/sdd/events/demo/:runId` | Démonstration du pipeline d'événements et de l'outbox, servie par le worker Python | SPEC-203, SPEC-2207 |
-| POST `/dev/sdd/notifications/generate` · POST `/dev/sdd/stripe/session` · POST `/dev/sdd/stripe/simulate` · POST `/dev/sdd/stripe/checkout/{pay,cancel}` | Simulations de notifications et de Stripe (`STRIPE_MODE=mock`, `ENABLE_SDD_PAGES` seulement, jamais en production) | SPEC-2207 |
+| POST `/dev/sdd/notifications/generate` · POST `/dev/sdd/stripe/session` · POST `/dev/sdd/stripe/simulate` · POST `/dev/sdd/stripe/checkout/{pay,cancel}` | Simulations de notifications et de Stripe (mode Stripe simulé, `ENABLE_SDD_PAGES` seulement, jamais en production) | SPEC-2207 |
 | POST `/email/unsubscribe?token=` (public, `rateLimit: auth`, 200 page HTML ou `{ ok: true }` avec `Accept: application/json`, 400 `UNSUBSCRIBE_TOKEN_INVALID`) · GET `/email/unsubscribe?token=` (page de confirmation, aucun changement d'état) | Désinscription en un clic (RFC 8058, ADR-0124) | SPEC-204 |
 
 Toute route ajoutée par une spécification doit être ajoutée à ce tableau dans le même commit.

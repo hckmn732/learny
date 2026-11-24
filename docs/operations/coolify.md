@@ -15,8 +15,8 @@ Fichiers de référence :
 
 L'architecture et les images épinglées sont celles de la pile auto-hébergée
 (`docs/operations/self-hosting.md`, SPEC-012) ; les décisions propres à Coolify sont consignées
-dans ADR-0329. La production gérée de référence de SPEC-013 (Vercel, Supabase Cloud, Inngest Cloud)
-reste décrite dans `docs/operations/deployment.md`.
+dans ADR-0329. La production gérée de référence de SPEC-013 (Vercel, Supabase Cloud) reste décrite
+dans `docs/operations/deployment.md`.
 
 ## 0. Services
 
@@ -234,8 +234,8 @@ le job refuse une empreinte différente.
 - **Lien d'e-mail → « lien invalide »** : vérifiez que `auth` atteint les modèles
   (`docker exec auth-<uuid> wget -qO- http://auth-templates:8080/confirmation.html | head -5`) et
   que `LEARNY_PUBLIC_APP_URL` est bien l'URL publique du web.
-- **E-mails d'inscription absents** : logs de `auth` (erreur SMTP) ; vérifiez `SMTP_*` et le
-  domaine d'expédition.
+- **E-mails d'inscription absents** : logs de `auth` (erreur SMTP) ; vérifiez `RESEND_API_KEY`
+  et le domaine d'expédition d'`EMAIL_FROM`.
 - **Le web n'atteint pas l'API Supabase** : côté serveur, le web appelle Kong par son URL
   publique. Testez depuis le conteneur :
   `docker exec web-<uuid> node -e "fetch(process.env.NEXT_PUBLIC_SUPABASE_URL + '/auth/v1/health').then(r => console.log(r.status))"`.

@@ -72,8 +72,10 @@ pnpm dev:down      # arrêt sans supprimer les volumes
 ```
 
 La commande `pnpm dev` démarre le web par Turborepo et la façade Python ; le navigateur reste sur
-`:3000` et `apps/web/proxy.ts` relaie `/api/*` vers la façade sur `:3001` avec les variables
-`API_INTERNAL_URL` et `API_PROXY_SECRET`. Les deux processus du backend se lancent à la main :
+`:3000` et `apps/web/proxy.ts` relaie `/api/*` vers la façade sur `:3001` avec `API_INTERNAL_URL`.
+Le secret du relais (`API_PROXY_SECRET`) n'est pas une variable à saisir : web et API le dérivent
+tous deux d'`APP_ENCRYPTION_KEY` (ADR-4007), qui doit leur être donnée à l'identique. Les deux
+processus du backend se lancent à la main :
 
 ```bash
 uv run uvicorn learny_api.main:app --host 127.0.0.1 --port 3001   # façade FastAPI
@@ -92,7 +94,10 @@ python -m learny_worker                                          # worker (outbo
 - **Port occupé** : `pnpm dev:up` et `pnpm dev:check` nomment le service et le port en échec ; aucun port n'est changé silencieusement. Libérez-le puis relancez.
 - **Remise à zéro** : `pnpm db:reset --yes` applique les migrations et la seed minimale. La commande refuse `APP_ENV=production|preview` et toute `DATABASE_URL` non locale. `pnpm db:seed:demo` échoue explicitement jusqu'à SPEC-115.
 - **Données** : `pnpm dev:down` conserve les volumes Docker et la base Supabase ; une seconde invocation de `pnpm dev:up` réutilise les services sains.
-- **Secrets** : seules des valeurs locales publiques figurent dans `.env.example` ; `.env.local` et les identifiants Supabase distants ne sont jamais versionnés. Les variables lues par le backend sont la liste close d'ADR-2042.
+- **Secrets** : seules des valeurs locales publiques figurent dans `.env.example` ; `.env.local` et
+  les identifiants Supabase distants ne sont jamais versionnés. Le contrat déployé est le contrat
+  minimal d'ADR-4007 ; les secrets internes (relais, liens e-mail, VAPID, limiteur) dérivent
+  d'`APP_ENCRYPTION_KEY`.
 
 ## Socle technique
 

@@ -1,9 +1,9 @@
 # Auto-hébergement de Learny
 
-Ce guide décrit l'option Docker complète de Learny : deux images applicatives (`web`, `api`), un
-Supabase auto-hébergé (Postgres, Auth, Storage, API PostgREST derrière Kong) et un Inngest
-auto-hébergé. **Ce n'est pas la production gérée de la V1** : les environnements gérés (Vercel,
-Supabase Cloud, Inngest Cloud) restent la cible de référence et sont décrits dans
+Ce guide décrit l'option Docker complète de Learny : deux images applicatives (`web`, `api` — la
+façade FastAPI et le worker Python, ADR-2043) et un Supabase auto-hébergé (Postgres, Auth,
+Storage, API PostgREST derrière Kong). **Ce n'est pas la production gérée de la V1** : les
+environnements gérés (Vercel, Supabase Cloud) restent la cible de référence et sont décrits dans
 `docs/operations/deployment.md` (SPEC-013). L'auto-hébergement convient à une installation privée
 ou à une évaluation, pas à une promesse de service sans exploitation.
 
@@ -21,8 +21,8 @@ Les décisions sont consignées dans ADR-0053, ADR-0227 et ADR-0228. Le fichier 
 - Les images de base suivantes, tirées au premier démarrage : `node:24.22.3-alpine3.24`,
   `public.ecr.aws/supabase/postgres:17.11.0.006`,
   `public.ecr.aws/supabase/gotrue:v2.197.0`, `public.ecr.aws/supabase/postgrest:v16.5`,
-  `public.ecr.aws/supabase/storage-api:v1.84.19`, `public.ecr.aws/supabase/kong:2.8.1`,
-  `inngest/inngest:v1.52.0`. Mailpit (`axllent/mailpit:v1.33.1`) n'est nécessaire qu'en local.
+  `public.ecr.aws/supabase/storage-api:v1.84.19`, `public.ecr.aws/supabase/kong:2.8.1`.
+  Mailpit (`axllent/mailpit:v1.33.1`) n'est nécessaire qu'en local.
 - Un nom de domaine et un reverse proxy TLS (Caddy, Traefik ou nginx) devant les ports publiés.
   Aucun certificat n'est géré par le Compose lui-même.
 
@@ -49,15 +49,25 @@ node tools/docker/selfhost-secrets.mjs > /tmp/learny-secrets.env
 # Reportez les valeurs générées dans .env.selfhost (les lignes vides correspondantes).
 ```
 
-Le générateur produit le mot de passe Postgres, le secret JWT Supabase, les clés `anon` et
-`service_role` signées avec ce secret, les clés Inngest, la clé de chiffrement applicative et les
-secrets HMAC. Renseignez ensuite :
+Le générateur produit les cinq secrets de la pile : `POSTGRES_PASSWORD`, `SUPABASE_JWT_SECRET`,
+`NEXT_PUBLIC_SUPABASE_ANON_KEY`, `SUPABASE_SERVICE_ROLE_KEY` (clés `anon` et `service_role`
+signées avec ce secret JWT) et `APP_ENCRYPTION_KEY`. Les secrets internes (relais du web vers
+l'API, liens e-mail, paire VAPID, clé du limiteur) sont dérivés d'`APP_ENCRYPTION_KEY` (ADR-4007) :
+il n'y a plus rien à générer ni à recopier pour eux. Renseignez ensuite :
 
 - `LEARNY_PUBLIC_APP_URL` (URL publique du web, par exemple `https://learny.example`) et
   `LEARNY_PUBLIC_SUPABASE_URL` (URL publique de Kong, par exemple `https://api.learny.example`) ;
 - `GIT_COMMIT` avec `git rev-parse HEAD` et `APP_VERSION` avec la version livrée ;
-- le transport e-mail : `SMTP_HOST`, `SMTP_PORT`, `SMTP_USER`, `SMTP_PASS` et `SMTP_ADMIN_EMAIL`
-  pour un SMTP réel, ou `EMAIL_MODE=resend` avec `RESEND_API_KEY`.
+- les clés des fournisseurs que vous activez : `EMAIL_FROM` (expéditeur affiché),
+  `VOYAGE_API_KEY` pour les embeddings, `SEARCH_API_KEY` pour la recherche de repli, et
+  `STRIPE_SECRET_KEY`, `STRIPE_WEBHOOK_SECRET`, `STRIPE_PRICE_ID` pour Stripe ;
+- `APP_ENCRYPTION_KEY_PREVIOUS`, seulement pendant une rotation (facultative).
+
+Le Compose fixe le reste : les e-mails de l'application et de Supabase Auth partent vers Mailpit
+(`SMTP_HOST=mailpit`, port `1025`), les modes sont dérivés d'`APP_ENV` (le mode Stripe suit la
+clé secrète), et la taille du pool comme les schémas PostgREST sont des constantes. Aucune
+variable `SMTP_*`, `*_MODE` ni `VAPID_*` n'est à saisir ; `RESEND_API_KEY` n'est pas utilisée par
+cette pile, dont tous les e-mails restent dans Mailpit.
 
 Ne versionnez jamais `.env.selfhost`, ne le copiez pas dans une image et ne l'affichez pas dans un
 journal. Les substitutions obligatoires utilisent la syntaxe `:?` : si une valeur manque,
@@ -81,9 +91,10 @@ docker compose --env-file .env.selfhost -f docker/compose.selfhost.yml ps
 ```
 
 Les deux images portent l'étiquette `org.opencontainers.image.revision` ; elle doit être identique
-pour `web` et `api`. Le web écoute sur `LEARNY_WEB_PORT` (8080 par défaut), Kong sur
-`LEARNY_SUPABASE_PORT` (8000) et l'interface Inngest sur `LEARNY_INNGEST_PORT` (8288). Postgres,
-Auth, Storage, PostgREST et l’API ne sont pas publiés sur l'hôte.
+pour `web` et `api`. Le web écoute sur `LEARNY_WEB_PORT` (8080 par défaut) et Kong sur
+`LEARNY_SUPABASE_PORT` (8000) ; avec le profil `local`, Mailpit publie `LEARNY_MAILPIT_UI_PORT`
+(8025) et `LEARNY_MAILPIT_SMTP_PORT` (1025). Postgres, Auth, Storage, PostgREST, l'API et le
+worker ne sont pas publiés sur l'hôte.
 
 Pour un essai local avec le capteur d'e-mails Mailpit, ajoutez le profil `local` :
 
@@ -92,9 +103,9 @@ docker compose --env-file .env.selfhost -f docker/compose.selfhost.yml \
   --profile local up -d --build
 ```
 
-Mailpit reste optionnel. Sans ce profil, `web` et `api` démarrent avec le transport e-mail
-configuré dans `.env.selfhost` ; un transport de production doit être renseigné avant toute
-exposition publique.
+Mailpit n'est démarré que par ce profil : sans lui, `web` et `api` démarrent mais aucun e-mail ne
+part. Le transport est un littéral de la pile vers Mailpit (ADR-4007) ; cette pile d'évaluation ne
+configure pas de SMTP réel, et la production est décrite dans `docs/operations/coolify.md`.
 
 ## 4. Appliquer les migrations
 
@@ -134,19 +145,18 @@ vérifie les sondes. Les contrôles disponibles sont :
 | Auth | `GET /health` | HTTP 200 |
 | Storage | `GET /status` | HTTP 200 |
 | PostgREST | `GET /` via le réseau interne | HTTP 200 |
-| Inngest | `GET /health` | HTTP 200 |
 | Kong | `kong health` | `Kong is healthy` |
 
-Le contrôle de santé du conteneur `web` interroge l'API, la base, Auth, Storage, PostgREST et
-Inngest. Si une dépendance obligatoire devient indisponible, `web` passe `unhealthy` ; le Compose
+Le contrôle de santé du conteneur `web` interroge l'API, la base, Auth, Storage et PostgREST. Si
+une dépendance obligatoire devient indisponible, `web` passe `unhealthy` ; le Compose
 ne présente donc jamais un web sain alors que la base est arrêtée. Un état `degraded` de l'API n'est
 pas converti en `ok` fictif.
 
 ## 6. Sauvegarder
 
 Sauvegardez toujours avant une mise à jour ou une migration. Les données vivent dans les volumes
-nommés `learny-selfhost_db-data`, `learny-selfhost_storage-data` et
-`learny-selfhost_inngest-data` (le préfixe est le nom du projet Compose).
+nommés `learny-selfhost_db-data` et `learny-selfhost_storage-data` (le préfixe est le nom du
+projet Compose).
 
 ```bash
 mkdir -p backups
@@ -160,8 +170,9 @@ docker run --rm \
 ```
 
 Conservez aussi une copie de `.env.selfhost` dans un coffre de secrets : sans
-`SUPABASE_JWT_SECRET`, les sauvegardes de données ne suffisent pas à retrouver des sessions
-valides. Testez la restauration sur une machine isolée avant d'en dépendre.
+`SUPABASE_JWT_SECRET` ni `APP_ENCRYPTION_KEY`, les sauvegardes de données ne suffisent pas à
+retrouver des sessions valides ni à déchiffrer les clés IA personnelles. Testez la restauration
+sur une machine isolée avant d'en dépendre.
 
 ## 7. Mettre à jour les images
 
@@ -172,13 +183,13 @@ git fetch --tags
 git checkout <tag-ou-commit>
 # Sauvegardez d'abord (section 6), puis :
 GIT_COMMIT="$(git rev-parse HEAD)" docker compose --env-file .env.selfhost \
-  -f docker/compose.selfhost.yml build --pull web api
+  -f docker/compose.selfhost.yml build --pull web api-py
 GIT_COMMIT="$(git rev-parse HEAD)" docker compose --env-file .env.selfhost \
-  -f docker/compose.selfhost.yml up -d --no-deps web api
+  -f docker/compose.selfhost.yml up -d --no-deps web api-py worker-py
 node tools/docker/check-selfhost.mjs --env-file .env.selfhost
 ```
 
-Les images tierces (Supabase, Inngest, Mailpit) sont épinglées dans `docker/compose.selfhost.yml`.
+Les images tierces (Supabase, Mailpit) sont épinglées dans `docker/compose.selfhost.yml`.
 Une mise à jour coordonnée consiste à changer explicitement leurs tags, à lire leurs notes de
 version, à sauvegarder les données, puis à recréer les services et à vérifier les migrations. Ne
 remplacez jamais un tag par `latest` : les versions doivent rester reproductibles. Un retour
@@ -194,8 +205,8 @@ docker compose --env-file .env.selfhost -f docker/compose.selfhost.yml start
 ```
 
 `down` arrête et supprime les conteneurs et le réseau, mais conserve les volumes nommés. Un
-redémarrage (`start`, ou un nouveau `up -d`) retrouve les données Postgres, Storage et Inngest
-ainsi que les migrations déjà appliquées. N'ajoutez jamais l'option de suppression des volumes à
+redémarrage (`start`, ou un nouveau `up -d`) retrouve les données Postgres et Storage ainsi que
+les migrations déjà appliquées. N'ajoutez jamais l'option de suppression des volumes à
 la commande d'arrêt : la suppression est une opération distincte, explicite et destructive, à
 n'exécuter qu'après une sauvegarde vérifiée.
 
@@ -204,24 +215,23 @@ n'exécuter qu'après une sauvegarde vérifiée.
 - **Variable obligatoire manquante** : `docker compose config` échoue en nommant la variable ;
   complétez `.env.selfhost`, ne mettez pas de valeur par défaut dans le Compose.
 - **Web `unhealthy`** : `docker compose logs web` puis `docker compose exec -T db pg_isready`.
-  Le contrôle web échoue aussi quand Auth, Storage, PostgREST ou Inngest sont indisponibles.
+  Le contrôle web échoue aussi quand Auth, Storage, PostgREST ou l'API sont indisponibles.
 - **Auth ou Storage en boucle** : vérifiez que `migrate` s'est terminé avec le code 0 et que les
   rôles Supabase (`supabase_auth_admin`, `supabase_storage_admin`) existent ; l'image Postgres
   épinglée les crée à l'initialisation.
-- **Inngest ne synchronise pas l’API** : vérifiez `http://api:3001/api/inngest` depuis le
-  réseau interne et que `INNGEST_SIGNING_KEY` est un hexadécimal de longueur paire.
-- **E-mails absents** : sans profil `local`, Mailpit n'existe pas ; configurez un SMTP réel. Avec
-  Mailpit, l'interface est sur `LEARNY_MAILPIT_UI_PORT`.
-- **Port déjà utilisé** : changez `LEARNY_WEB_PORT`, `LEARNY_SUPABASE_PORT` ou
-  `LEARNY_INNGEST_PORT` dans `.env.selfhost`.
+- **E-mails absents** : sans profil `local`, Mailpit n'existe pas et les e-mails d'inscription et
+  de connexion ne partent pas. Démarrez la pile avec `--profile local` et ouvrez l'interface sur
+  `LEARNY_MAILPIT_UI_PORT`.
+- **Port déjà utilisé** : changez `LEARNY_WEB_PORT`, `LEARNY_SUPABASE_PORT`,
+  `LEARNY_MAILPIT_UI_PORT` ou `LEARNY_MAILPIT_SMTP_PORT` dans `.env.selfhost`.
 
 ## 10. Sécurité et limites
 
-Seuls `web`, Kong, Inngest et (avec le profil local) Mailpit publient un port. Placez un reverse
-proxy TLS devant `web` et Kong, limitez l'accès à l'interface Inngest, et n'exposez jamais
-Postgres. Les images `web` et `api` s'exécutent sous l'utilisateur non root `node`, avec un
-système de fichiers en lecture seule et sans capacités Linux. Les secrets sont fournis à
-l'exécution ; seules les variables `NEXT_PUBLIC_*` nécessaires sont passées au build.
+Seuls `web`, Kong et (avec le profil local) Mailpit publient un port. Placez un reverse proxy TLS
+devant `web` et Kong, limitez l'accès à l'interface Mailpit, et n'exposez jamais Postgres. Les
+images `web` et `api` s'exécutent sous l'utilisateur non root `node`, avec un système de fichiers
+en lecture seule et sans capacités Linux. Les secrets sont fournis à l'exécution ; seules les
+variables `NEXT_PUBLIC_*` nécessaires sont passées au build.
 
 L'auto-hébergement ne remplace pas les garanties de la production gérée : pas de bascule
 automatique, pas de supervision centralisée, pas de sauvegarde managée. La région d'hébergement et
