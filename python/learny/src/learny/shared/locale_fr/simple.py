@@ -1,4 +1,10 @@
-"""User-facing French strings of simple mode (SPEC-4001 EF-6, EF-7)."""
+"""User-facing French strings of simple mode (SPEC-4001 EF-6, EF-7; SPEC-4002 EF-4)."""
+
+# SPEC-4002 EF-4 — notification in-app de fin d'analyse, texte exact de la maquette.
+PROGRAMME_READY_NOTIFICATION_TITLE = "Ton programme est prêt"
+PROGRAMME_READY_NOTIFICATION_BODY = (
+    "Tes documents sont analysés : vérifie les modules, puis lance le diagnostic."
+)
 
 STEP_READ = "Lecture des documents"
 STEP_STRUCTURE = "Détection des chapitres"

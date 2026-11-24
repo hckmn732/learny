@@ -66,6 +66,9 @@ SLOT_ANCHOR_WARMUP = "#echauffement"
 # the action of a formation card.
 ACTION_RESUME = "Reprendre"
 ACTION_CONTINUE = "Continuer"
+# SPEC-4002 BR-FOR-16 — une formation en mode simple annonce son analyse à la place du cadrage.
+NEXT_SIMPLE_ANALYSIS_WHEN = "Analyse en cours"
+NEXT_SIMPLE_ANALYSIS_DETAIL = "On lit tes documents"
 ACTION_REVIEW = "Réviser"
 ACTION_VIEW_REPORT = "Voir le bilan"
 

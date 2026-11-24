@@ -126,6 +126,37 @@ async def count_sent_notifications(
         )
 
 
+async def notify_programme_ready(
+    deps: EngagementDeps, *, user_id: str, formation_id: str, title: str, body: str, href: str
+) -> dict[str, Any]:
+    """SPEC-4002 EF-4 — la notification in-app « Ton programme est prêt » du mode simple.
+
+    Le titre et le corps sont ceux de la maquette : ils ne passent pas par un gabarit, donc aucun
+    canal externe n'est décidé et la ligne est strictement in-app. La clé de déduplication rend un
+    second appel inoffensif (rejeu du consommateur d'analyse).
+    """
+    now = deps.clock.now()
+    key = f"simple-programme-ready:{formation_id}"
+    async with deps.db.service_tx() as tx:
+        await queries.lock_learner(tx, user_id)
+        inserted = await queries.insert_notification(
+            tx,
+            user_id=user_id,
+            formation_id=formation_id,
+            notification_type="course_ready",
+            title=title,
+            body=body,
+            href=href,
+            icon="book-open",
+            dedupe_key=key,
+            created_at=now,
+        )
+        if inserted is None:
+            replay = await queries.find_notification(tx, user_id=user_id, dedupe_key=key)
+            return {"notificationId": None if replay is None else replay.id, "created": False}
+        return {"notificationId": inserted.id, "created": True}
+
+
 async def notify(
     deps: EngagementDeps,
     *,

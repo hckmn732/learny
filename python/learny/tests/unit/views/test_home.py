@@ -602,3 +602,62 @@ def test_the_clock_is_the_injected_one() -> None:
     deps = _Deps()
 
     assert deps.clock.now() == NOW
+
+
+async def test_a_simple_mode_formation_continues_to_its_current_step(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    """SPEC-4002 BR-FOR-16 - « Continuer » ramène à l'étape en cours du mode simple."""
+    collecting = "3f1a0a3c-0000-4000-8000-000000000401"
+    proposed = "3f1a0a3c-0000-4000-8000-000000000402"
+    workspace = full_workspace()
+    workspace["formations"] = [
+        *workspace["formations"],
+        formation(
+            id=collecting,
+            title="Comptabilite generale",
+            status="cadrage",
+            objectives=[],
+            module_count=0,
+            validated_count=0,
+            open_module_id=None,
+            open_module_position=None,
+            open_module_title=None,
+            open_module_threshold=None,
+            last_opened_at=None,
+            created_at="2026-11-11T11:00:00Z",
+            creation_mode="simple",
+            simple_status="collecting",
+        ),
+        formation(
+            id=proposed,
+            title="Droit des societes",
+            status="cadrage",
+            objectives=[],
+            module_count=0,
+            validated_count=0,
+            open_module_id=None,
+            open_module_position=None,
+            open_module_title=None,
+            open_module_threshold=None,
+            last_opened_at=None,
+            created_at="2026-11-11T10:00:00Z",
+            creation_mode="simple",
+            simple_status="proposed",
+        ),
+    ]
+    home = await home_of(monkeypatch, workspace)
+    rows = {row["id"]: row for row in home["formations"]["ongoing"]}
+
+    assert rows[collecting]["action"] == {
+        "label": texts.ACTION_CONTINUE,
+        "href": f"/formations/{collecting}/depot",
+    }
+    assert rows[collecting]["nextActivity"] == {
+        "when": texts.NEXT_SIMPLE_ANALYSIS_WHEN,
+        "detail": texts.NEXT_SIMPLE_ANALYSIS_DETAIL,
+    }
+    assert rows[proposed]["action"] == {
+        "label": texts.ACTION_CONTINUE,
+        "href": f"/formations/{proposed}/apercu",
+    }

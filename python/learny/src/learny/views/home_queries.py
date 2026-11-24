@@ -43,6 +43,11 @@ READ_FORMATIONS = text(
            f.maintenance_mode::text as maintenance_mode,
            f.last_opened_at,
            f.created_at,
+           f.creation_mode::text as creation_mode,
+           (select sa.status::text
+              from public.simple_analyses sa
+             where sa.formation_id = f.id
+             limit 1) as simple_status,
            (select count(*)::int from public.modules m where m.formation_id = f.id) as module_count,
            (select count(*)::int
               from public.modules m

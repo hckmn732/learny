@@ -346,7 +346,19 @@ def _ongoing_row(
     module_count = int(formation["module_count"])
     validated_count = int(formation["validated_count"])
     progress_percent = 0 if module_count == 0 else js_round(validated_count / module_count * 100)
-    if status == "active":
+    simple_status = (
+        None
+        if str(formation.get("creation_mode") or "tutor") != "simple"
+        else str(formation.get("simple_status") or "collecting")
+    )
+    if simple_status is not None:
+        # SPEC-4002 BR-FOR-16 — « Continuer » ramène à l'étape en cours du mode simple : l'analyse
+        # tant qu'elle n'a pas abouti, l'aperçu du programme une fois qu'il est proposé.
+        action = {
+            "label": texts.ACTION_CONTINUE,
+            "href": f"/formations/{formation_id}/" + ("apercu" if simple_status == "proposed" else "depot"),
+        }
+    elif status == "active":
         action = {
             "label": texts.ACTION_RESUME,
             "href": home_derivations.module_href(formation_id, formation["open_module_id"]),
@@ -359,7 +371,12 @@ def _ongoing_row(
         action = {"label": texts.ACTION_CONTINUE, "href": f"/formations/{formation_id}/cadrage"}
 
     next_activity: dict[str, str] | None
-    if status == "programme_proposed":
+    if simple_status is not None and simple_status != "proposed":
+        next_activity = {
+            "when": texts.NEXT_SIMPLE_ANALYSIS_WHEN,
+            "detail": texts.NEXT_SIMPLE_ANALYSIS_DETAIL,
+        }
+    elif status == "programme_proposed":
         next_activity = {
             "when": texts.NEXT_PROGRAMME_VALIDATE,
             "detail": (

@@ -21,6 +21,7 @@ import {
   slotState,
 } from '@learny/domain/home/derive';
 import { fr } from '@learny/i18n/fr/home';
+import { simple as simpleMessages } from '@learny/i18n/fr/simple';
 import {
   Button,
   EmptyState,
@@ -40,12 +41,17 @@ import {
   slotKinds,
 } from '@learny/ui';
 
+import { SimpleChoiceCards } from '../simple/choice-cards';
+import { NewFormationButton } from '../simple/new-formation-dialog';
+
 import { TutorActivityPanel } from './TutorActivityCard';
 import { TutorProposalPanel } from './TutorProposalBanner';
 import { WarmupPanel } from './WarmupCard';
 import { WeeklyReviewPanel } from './WeeklyReviewCard';
 
 const t = fr.home;
+/** BR-FOR-10 — trois formations actives au plus : la section de choix s'efface ensuite. */
+const ACTIVE_FORMATION_LIMIT = 3;
 
 const MODULE_STATUS_CLASS = {
   green: 'bg-green-soft text-green-ink-alt',
@@ -737,12 +743,26 @@ export function HomeView({
             {t.header.title}
           </h1>
         </div>
-        <Button asChild variant="lime" size="md">
-          <NextLink prefetch={false} href="/formations/nouvelle">
-            {t.header.newFormation}
-          </NextLink>
-        </Button>
+        <NewFormationButton label={t.header.newFormation} />
       </header>
+
+      {/* SPEC-4002 EF-1 — les deux portes d'entrée restent visibles tant que le plafond de trois
+          formations actives n'est pas atteint (BR-FOR-10). */}
+      {data.formations.ongoing.length < ACTIVE_FORMATION_LIMIT ? (
+        <section
+          aria-labelledby="home-simple-choice-title"
+          className="flex flex-col gap-10"
+          data-testid="home-simple-choice"
+        >
+          <p
+            className="m-0 text-11 font-700 tracking-eyebrow text-ink-muted uppercase"
+            id="home-simple-choice-title"
+          >
+            {simpleMessages.choice.kicker}
+          </p>
+          <SimpleChoiceCards />
+        </section>
+      ) : null}
 
       <TutorProposalPanel />
 

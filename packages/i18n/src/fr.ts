@@ -25,6 +25,7 @@ import { sdd } from './fr/sdd';
 import { search } from './fr/search';
 import { settings } from './fr/settings';
 import { shell } from './fr/shell';
+import { simple } from './fr/simple';
 import { system } from './fr/system';
 import { tutorChat } from './fr/tutorChat';
 import { ui } from './fr/ui';
@@ -40,6 +41,7 @@ export const fr = {
   module: moduleMessages,
   course,
   shell,
+  simple,
   search,
   gaps,
   notionGraph,

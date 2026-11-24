@@ -47,10 +47,16 @@ test('journée d’Alex et navigation depuis l’accueil @SPEC-603', async ({
   await expect(page.getByRole('heading', { level: 1 })).toHaveText(
     "Votre journée d'apprentissage",
   );
-  await expect(page.getByRole('link', { name: 'Nouvelle formation' })).toHaveAttribute(
+  // SPEC-4002 EF-1 — « Nouvelle formation » ouvre désormais la boîte de dialogue des deux cartes ;
+  // le cadrage reste accessible par la carte « Construire avec le tuteur ».
+  await page.getByTestId('home-new-formation').click();
+  await expect(page.getByTestId('new-formation-dialog')).toBeVisible();
+  await expect(page.getByTestId('simple-card-tutor-action')).toHaveAttribute(
     'href',
     '/formations/nouvelle',
   );
+  await page.keyboard.press('Escape');
+  await expect(page.getByTestId('new-formation-dialog')).toBeHidden();
   await expect(page.getByTestId('home-day')).toContainText("Aujourd'hui · 5 activités");
   await expect(page.getByTestId('home-day')).toContainText('5 h 2 prévues · 3 h faites');
   await expect(page.getByTestId('home-day')).toContainText('Dans 40 min');

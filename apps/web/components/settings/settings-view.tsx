@@ -18,6 +18,7 @@ import {
 } from '@learny/contracts/parametres-onglets-et-profil';
 import { clock, formatUserDate } from '@learny/core';
 import { fr } from '@learny/i18n/fr/onboarding-settings-shell';
+import { simple as simpleMessages } from '@learny/i18n/fr/simple';
 import {
   AlertDialog,
   Avatar,
@@ -123,6 +124,8 @@ export interface SettingsViewProps {
   aiModelsError: boolean;
   pushPublicKey?: string | undefined;
   requestId?: string;
+  /** SPEC-4002 EF-3 — page de dépôt à rejoindre après l'ajout de la clé d'IA (BR-IA-06). */
+  retour?: string | undefined;
 }
 
 interface ProfileValues {
@@ -159,6 +162,7 @@ export function SettingsView({
   aiModelsError,
   pushPublicKey,
   requestId,
+  retour,
 }: SettingsViewProps) {
   const router = useRouter();
   const [state, setState] = useState<SettingsState | null>(initialState);
@@ -381,6 +385,17 @@ export function SettingsView({
 
   return (
     <main className="mx-auto flex w-full max-w-content flex-col gap-24 px-16 pb-56 pt-24 nav:px-0">
+      {retour === undefined ? null : (
+        <p
+          className="m-0 flex flex-wrap items-center gap-8 rounded-16 border border-solid border-border bg-surface-subtle px-16 py-12 text-14"
+          data-testid="settings-retour"
+        >
+          <a className="font-600 text-ink underline" href={retour}>
+            {simpleMessages.key.back}
+          </a>
+          <span className="text-ink-muted">{simpleMessages.key.title}</span>
+        </p>
+      )}
       <Tabs data-testid="settings-tabs-root" value={tab} onValueChange={changeTab}>
         <header className="flex flex-wrap items-end justify-between gap-16">
           <div className="flex min-w-0 flex-col gap-4">

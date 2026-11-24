@@ -2473,7 +2473,8 @@ async def insert_simple_resource(
     path: str | None,
     url: str | None,
     mime: str,
-    size_bytes: int,
+    # `None` jusqu'à `resources.finalize`, qui mesure l'objet réellement reçu (SPEC-206 ET-5).
+    size_bytes: int | None,
     metadata: str,
 ) -> str | None:
     """EF-2, EF-3 - a formation-level source (`chapter_id` null) with its role in `metadata`."""
