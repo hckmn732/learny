@@ -1,0 +1,39 @@
+# SPEC-4003 — réception d'un fichier partagé, avant ou après la connexion (CA-2, EF-3).
+#
+# The setup script pushes the PDF and the flow opens it with the application through the Android
+# VIEW intent declared by `app.config.ts` (« Ouvrir avec Learny »). The app is signed in by the deep
+# link first, then the file intent opens the deposit with the file already added.
+appId: fr.learny.app
+name: SPEC-4003 partage
+tags:
+  - SPEC-4003
+---
+- launchApp:
+    clearState: true
+- extendedWaitUntil:
+    visible:
+      id: sdd-health
+    timeout: 30000
+- openLink: learnly://connexion?demo=1
+- waitForAnimationToEnd:
+    timeout: 5000
+- runFlow:
+    when:
+      visible:
+        id: onboarding-error
+    commands:
+      - tapOn:
+          id: onboarding-error-retry
+- extendedWaitUntil:
+    visible:
+      id: tab-aujourdhui
+    timeout: 60000
+# « Ouvrir avec Learny » : le fichier arrive par un intent externe (file:// poussé par le setup).
+- openLink: file:///sdcard/Download/Manuel.pdf
+- extendedWaitUntil:
+    visible:
+      id: simple-deposit-screen
+    timeout: 30000
+- assertVisible:
+    id: simple-file-0
+- assertVisible: 'Manuel.pdf'

@@ -1,0 +1,132 @@
+# SPEC-4003 — parcours complet : dépôt d'un cours et d'un TD, analyse, aperçu, diagnostic passé,
+# premier chapitre (CA-1). Le flux est aussi le flux `@visual` de la spécification : la capture
+# `SPEC-4003-parcours` montre l'aperçu du programme (étape 4) comparé à la ligne de base versionnée.
+appId: fr.learny.app
+name: SPEC-4003 parcours
+tags:
+  - SPEC-4003
+  - visual
+---
+- launchApp:
+    clearState: true
+- extendedWaitUntil:
+    visible:
+      id: sdd-health
+    timeout: 30000
+- openLink: learnly://connexion?demo=1
+- waitForAnimationToEnd:
+    timeout: 5000
+- runFlow:
+    when:
+      visible:
+        id: onboarding-error
+    commands:
+      - tapOn:
+          id: onboarding-error-retry
+- extendedWaitUntil:
+    visible:
+      id: tab-aujourdhui
+    timeout: 60000
+# EF-1 — la section « Nouvelle formation » et sa carte citron.
+- scrollUntilVisible:
+    element:
+      id: simple-card-drop
+    direction: DOWN
+    timeout: 20000
+- tapOn:
+    id: simple-card-drop-action
+- extendedWaitUntil:
+    visible:
+      id: simple-deposit-screen
+    timeout: 15000
+# EF-2 — premier document : le cours. Le sélecteur natif Android s'ouvre sur « Récents » ; le
+# fichier poussé par `e2e/setup/SPEC-4003-fixtures.mjs` est dans Téléchargements.
+- tapOn:
+    id: simple-dropzone
+- waitForAnimationToEnd:
+    timeout: 5000
+- tapOn:
+    text: 'Téléchargements'
+    optional: true
+- tapOn:
+    text: 'Manuel.pdf'
+- tapOn:
+    text: 'Ouvrir'
+    optional: true
+- extendedWaitUntil:
+    visible:
+      id: simple-file-0
+    timeout: 20000
+# Deuxième document : le TD, sélectionné une seconde fois (le sélecteur accepte aussi plusieurs
+# fichiers en une fois).
+- tapOn:
+    id: simple-dropzone
+- waitForAnimationToEnd:
+    timeout: 3000
+- tapOn:
+    text: 'TD.pdf'
+- tapOn:
+    text: 'Ouvrir'
+    optional: true
+- extendedWaitUntil:
+    visible:
+      id: simple-file-1
+    timeout: 20000
+# Rôle du TD : exercices.
+- tapOn:
+    id: simple-role-1
+- extendedWaitUntil:
+    visible:
+      id: simple-role-sheet
+    timeout: 10000
+- tapOn:
+    id: simple-role-option-exercises
+- assertVisible:
+    id: simple-file-1
+# Motivation et création.
+- tapOn:
+    id: simple-motivation
+- inputText: 'Examen de comptabilité en juin'
+- tapOn:
+    id: simple-create
+# EF-4 — l'analyse : les quatre étapes et les chapitres trouvés.
+- extendedWaitUntil:
+    visible:
+      id: simple-steps
+    timeout: 60000
+- assertVisible:
+    id: simple-chapters-found
+# EF-6 — l'aperçu du programme.
+- extendedWaitUntil:
+    visible:
+      id: simple-preview-screen
+    timeout: 120000
+- assertVisible:
+    id: simple-kpis
+- assertVisible:
+    id: simple-modules
+- assertVisible:
+    id: simple-deadline
+- takeScreenshot: SPEC-4003-parcours
+# EF-7 — le diagnostic, puis « Passer » jusqu'au résultat.
+- tapOn:
+    id: simple-start
+- extendedWaitUntil:
+    visible:
+      id: diagnostic-progress
+    timeout: 60000
+- assertVisible:
+    id: diagnostic-skip
+- tapOn:
+    id: diagnostic-skip
+# EF-8 — le résultat et le premier chapitre.
+- extendedWaitUntil:
+    visible:
+      id: simple-result-screen
+    timeout: 60000
+- assertVisible:
+    id: simple-ready-card
+- assertVisible:
+    id: simple-generation
+- assertVisible:
+    id: simple-ready-start

@@ -31,6 +31,11 @@ module.exports = {
     // SPEC-3402 — les modules natifs des fournisseurs n'existent pas dans l'environnement de test.
     '^@react-native-google-signin/google-signin$': '<rootDir>/test/mocks/google-signin.js',
     '^expo-apple-authentication$': '<rootDir>/test/mocks/apple-authentication.js',
+    // SPEC-4003 — sélecteurs natifs, date picker et API legacy du système de fichiers.
+    '^expo-document-picker$': '<rootDir>/test/mocks/expo-document-picker.js',
+    '^expo-image-picker$': '<rootDir>/test/mocks/expo-image-picker.js',
+    '^@react-native-community/datetimepicker$': '<rootDir>/test/mocks/datetimepicker.js',
+    '^expo-file-system/legacy$': '<rootDir>/test/mocks/expo-file-system-legacy.js',
   },
   collectCoverageFrom: ['src/**/*.{ts,tsx}', 'app/**/*.tsx', '!**/*.test.{ts,tsx}'],
 };

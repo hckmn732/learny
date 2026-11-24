@@ -84,7 +84,8 @@ export function AuthScreen({ mode }: AuthScreenProps): ReactElement {
   const busyLabel = signup ? t.submitBusySignup : t.submitBusyLogin;
   // Test builds only: the credentials of the seeded account come from the build environment
   // (`EXPO_PUBLIC_SDD_DEMO_*`, never committed); the flow of CA-1 uses this button.
-  const demo = readDemoCredentials();
+  const account = params.demo === 'nokey' ? 'nokey' : params.demo === 'e2e' ? 'e2e' : 'default';
+  const demo = readDemoCredentials(account);
   // SPEC-3402 — Apple is displayed only when the platform supports it; Android reaches it by the
   // web flow of Supabase, which has no availability test (ET-1). Google stays hidden without Apple
   // (CA-1).
@@ -205,7 +206,8 @@ export function AuthScreen({ mode }: AuthScreenProps): ReactElement {
   // l'environnement du build, jamais du dépôt. L'appel est différé pour ne pas écrire d'état
   // pendant l'effet lui-même.
   useEffect(() => {
-    if (params.demo !== '1' || demo === null) return;
+    if ((params.demo !== '1' && params.demo !== 'nokey' && params.demo !== 'e2e') || demo === null)
+      return;
     const timer = setTimeout(() => {
       void submitDemo();
     }, 0);
