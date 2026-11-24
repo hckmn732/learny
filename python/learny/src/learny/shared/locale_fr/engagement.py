@@ -206,6 +206,12 @@ PUSH_LIVE_REFUSED_CI = "PUSH_MODE=live est refusé en intégration continue."
 PUSH_NOT_CONFIGURED = "Le canal push n’est pas configuré (clés VAPID absentes)."
 PUSH_ENDPOINT_INVALID = "un point de terminaison HTTPS public est attendu"
 
+# SPEC-3501 (native channels, ADR-3007). The token of a device is a credential: these messages name
+# the field, never its value.
+PUSH_TOKEN_INVALID = "un jeton d’appareil valide est attendu"
+PUSH_KIND_INVALID = "le canal de notification est inconnu"
+PUSH_CHANNEL_NOT_CONFIGURED = "Le canal push natif n’est pas configuré."
+
 # The e-mail texts live in `engagement_email`: the templates, their subjects and the unsubscribe
 # pages.
 

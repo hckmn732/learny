@@ -9,7 +9,7 @@ dependencies = [
   "structlog>=24.1",
   "pyjwt[crypto]>=2.9",
   "cryptography>=43.0",
-  "httpx>=0.27",
+  "httpx[http2]>=0.27",
   "sqlalchemy[asyncio]>=2.0",
   "psycopg[binary,pool]>=3.2",
   "tzdata>=2024.1",
@@ -21,6 +21,9 @@ dependencies = [
   "jinja2>=3.1",
   "aiosmtplib>=3.0",
   "pywebpush>=2.0",
+  # Native push channels (SPEC-3501 ET-2, ADR-3007, ADR-2015): OAuth token of the FCM service
+  # account. APNs signs its provider token with PyJWT, already required above.
+  "google-auth>=2.35",
   "stripe>=17.1,<18",
 ]
 
