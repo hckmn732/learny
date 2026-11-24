@@ -3,8 +3,8 @@
 // Container healthcheck of the web image (SPEC-012, EF-5, CL-2).
 //
 // It runs inside the web container and fails when a mandatory dependency is unreachable, so the
-// Compose stack never presents `web` as healthy while the database, Supabase API or Inngest are
-// down. It prints only component names and hosts: no environment value (and therefore no secret)
+// Compose stack never presents `web` as healthy while the database, Supabase API or the Python API
+// are down. It prints only component names and hosts: no environment value (and therefore no secret)
 // is ever echoed.
 import net from 'node:net';
 
@@ -88,7 +88,8 @@ const checks = await Promise.all([
   httpOk('supabase-rest', env('REST_URL', 'http://rest:3000/')),
   httpOk('supabase-auth', env('AUTH_URL', 'http://auth:9999/health')),
   httpOk('supabase-storage', env('STORAGE_URL', 'http://storage:5000/status')),
-  httpOk('inngest', env('INNGEST_URL', 'http://inngest:8288/health')),
+  // The Python facade serves every API call of the web (ADR-2043); Inngest is gone.
+  httpOk('api', `${env('API_INTERNAL_URL', 'http://api-py:8000').replace(/\/+$/, '')}/health`),
 ]);
 
 process.exit(checks.every(Boolean) ? 0 : 1);
