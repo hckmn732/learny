@@ -26,6 +26,16 @@ tags:
     commands:
       - tapOn:
           id: onboarding-error-retry
+# La restauration de session peut précéder la publication du jeton, et un démarrage à froid peut
+# perdre le lien : une seconde tentative, bornée, évite un faux échec de campagne.
+- runFlow:
+    when:
+      notVisible:
+        id: tab-aujourdhui
+    commands:
+      - openLink: learny://connexion?demo=1
+      - waitForAnimationToEnd:
+          timeout: 5000
 - extendedWaitUntil:
     visible:
       id: tab-aujourdhui
@@ -37,6 +47,12 @@ tags:
       id: profile-identity
     timeout: 30000
 # EF-5 — première entrée : la ligne Rythme et rappels ouvre la feuille de pause.
+- swipe:
+    direction: UP
+    duration: 400
+- swipe:
+    direction: UP
+    duration: 400
 - tapOn:
     id: profile-row-rhythm
 - extendedWaitUntil:
@@ -69,6 +85,12 @@ tags:
 - tapOn:
     id: rhythm-screen-back
 # EF-5 — seconde entrée : la feuille compte de SPEC-3102 propose la pause.
+- swipe:
+    direction: UP
+    duration: 400
+- swipe:
+    direction: UP
+    duration: 400
 - extendedWaitUntil:
     visible:
       id: profile-settings
