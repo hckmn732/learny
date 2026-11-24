@@ -7252,8 +7252,25 @@ class ProgrammeValidateParams(BaseModel):
     )
 
 
-class PushSubscriptionsDeleteBody(BaseModel):
+class PushSubscriptionsDeleteBody1(BaseModel):
     endpoint: constr(min_length=1, max_length=2048)
+    kind: Literal['webpush'] = 'webpush'
+
+
+class Kind12(StrEnum):
+    apns = 'apns'
+    fcm = 'fcm'
+
+
+class PushSubscriptionsDeleteBody2(BaseModel):
+    kind: Kind12
+    token: constr(pattern=r'^[A-Za-z0-9_.:-]+$', min_length=16, max_length=512)
+
+
+class PushSubscriptionsDeleteBody(
+    RootModel[PushSubscriptionsDeleteBody1 | PushSubscriptionsDeleteBody2]
+):
+    root: PushSubscriptionsDeleteBody1 | PushSubscriptionsDeleteBody2
 
 
 class Keys(BaseModel):
@@ -7261,11 +7278,30 @@ class Keys(BaseModel):
     p256dh: constr(pattern=r'^[A-Za-z0-9_-]+={0,2}$', min_length=1, max_length=256)
 
 
-class PushSubscriptionsUpsertBody(BaseModel):
+class PushSubscriptionsUpsertBody1(BaseModel):
     endpoint: constr(min_length=1, max_length=2048)
     expirationTime: float | None = None
     keys: Keys
+    kind: Literal['webpush'] = 'webpush'
     userAgent: constr(max_length=512) | None = None
+
+
+class Platform(StrEnum):
+    ios = 'ios'
+    android = 'android'
+
+
+class PushSubscriptionsUpsertBody2(BaseModel):
+    deviceName: constr(max_length=120) | None = None
+    kind: Kind12
+    platform: Platform | None = None
+    token: constr(pattern=r'^[A-Za-z0-9_.:-]+$', min_length=16, max_length=512)
+
+
+class PushSubscriptionsUpsertBody(
+    RootModel[PushSubscriptionsUpsertBody1 | PushSubscriptionsUpsertBody2]
+):
+    root: PushSubscriptionsUpsertBody1 | PushSubscriptionsUpsertBody2
 
 
 class PushSubscriptionsUpsertOutput(BaseModel):
@@ -7957,7 +7993,7 @@ class ResourcesCreateBody(
     root: ResourcesCreateBody1 | ResourcesCreateBody2 | ResourcesCreateBody3
 
 
-class Kind12(StrEnum):
+class Kind14(StrEnum):
     note = 'note'
     web = 'web'
     youtube = 'youtube'
@@ -7977,7 +8013,7 @@ class ResourcesCreateOutput(BaseModel):
     id: constr(
         pattern=r'^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$'
     )
-    kind: Kind12
+    kind: Kind14
     status: Status68
     title: str
 
@@ -7994,7 +8030,7 @@ class ResourcesDeleteParams(BaseModel):
     )
 
 
-class Kind13(StrEnum):
+class Kind15(StrEnum):
     pdf = 'pdf'
     image = 'image'
 
@@ -8006,7 +8042,7 @@ class ResourcesFinalizeOutput(BaseModel):
     id: constr(
         pattern=r'^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$'
     )
-    kind: Kind13
+    kind: Kind15
     mime: str
     pages: conint(ge=1, le=9007199254740991) | None
     sizeBytes: conint(ge=0, le=9007199254740991)
@@ -8295,7 +8331,7 @@ class Item11(BaseModel):
     titleHighlights: list[TitleHighlight]
 
 
-class Kind14(StrEnum):
+class Kind16(StrEnum):
     notion = 'notion'
     chapter = 'chapter'
     formation = 'formation'
@@ -8306,7 +8342,7 @@ class Group5(BaseModel):
         extra='forbid',
     )
     items: list[Item11]
-    kind: Kind14
+    kind: Kind16
     label: str
     total: conint(ge=0, le=9007199254740991)
 
@@ -8327,7 +8363,7 @@ class SearchGlobalQuery(BaseModel):
     )
 
 
-class Kind15(StrEnum):
+class Kind17(StrEnum):
     module_validated = 'module_validated'
     notions_100 = 'notions_100'
     streak_30 = 'streak_30'
@@ -8352,7 +8388,7 @@ class Item12(BaseModel):
         pattern=r'^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$'
     )
     key: constr(min_length=1, max_length=120)
-    kind: Kind15
+    kind: Kind17
     label: constr(min_length=1, max_length=160)
 
 
@@ -8361,7 +8397,7 @@ class NextMilestone(BaseModel):
         extra='forbid',
     )
     key: constr(min_length=1, max_length=120)
-    kind: Kind15
+    kind: Kind17
     label: constr(min_length=1, max_length=120)
     remaining: conint(ge=0, le=9007199254740991)
 
@@ -8389,7 +8425,7 @@ class NextMilestone1(BaseModel):
         extra='forbid',
     )
     key: constr(min_length=1, max_length=120)
-    kind: Kind15
+    kind: Kind17
     label: constr(min_length=1, max_length=120)
     remaining: conint(ge=0, le=9007199254740991)
 
@@ -8667,7 +8703,7 @@ class Formation12(BaseModel):
     title: constr(min_length=1)
 
 
-class Kind18(StrEnum):
+class Kind20(StrEnum):
     contributions = 'contributions'
     course = 'course'
     exercise = 'exercise'
@@ -8710,7 +8746,7 @@ class Slot2(BaseModel):
     id: constr(
         pattern=r'^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$'
     )
-    kind: Kind18
+    kind: Kind20
     meta: constr(max_length=1000) | None
     moduleId: (
         constr(
@@ -8772,7 +8808,7 @@ class MovedSlot(BaseModel):
     id: constr(
         pattern=r'^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$'
     )
-    kind: Kind18
+    kind: Kind20
     meta: constr(max_length=1000) | None
     moduleId: (
         constr(
@@ -8918,7 +8954,7 @@ class Item13(BaseModel):
     tag: Tag
 
 
-class Kind20(StrEnum):
+class Kind22(StrEnum):
     course = 'course'
     exercise = 'exercise'
     validation_quiz = 'validation_quiz'
@@ -8931,7 +8967,7 @@ class NextSession(BaseModel):
         extra='forbid',
     )
     href: constr(min_length=1)
-    kind: Kind20
+    kind: Kind22
     startsAt: constr(
         pattern=r'^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d:[0-5]\d(?:\.\d+)?(?:Z|([+-](?:[01]\d|2[0-3]):[0-5]\d)))$'
     )
@@ -8992,7 +9028,7 @@ class NextSession1(BaseModel):
         extra='forbid',
     )
     href: constr(min_length=1)
-    kind: Kind20
+    kind: Kind22
     startsAt: constr(
         pattern=r'^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d:[0-5]\d(?:\.\d+)?(?:Z|([+-](?:[01]\d|2[0-3]):[0-5]\d)))$'
     )

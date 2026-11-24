@@ -60,15 +60,65 @@ const Base64Url = (max: number) =>
     .max(max)
     .regex(/^[A-Za-z0-9_-]+={0,2}$/, { message: 'une valeur base64url est attendue' });
 
-/** EF-1 — the serialised `PushSubscription` of the browser (`subscription.toJSON()`). */
-export const PushSubscriptionBody = z.object({
+// ---------------------------------------------------------------------------------------------
+// Native device tokens (ADR-3007, SPEC-3501). The application obtains the token of the platform
+// (`expo-notifications` `getDevicePushTokenAsync`: APNs on iOS, FCM on Android) and registers it
+// under its `kind`; a browser keeps the Web Push form of SPEC-205, which stays the default so an
+// existing client is never broken (EF-3).
+
+/** Channels of a subscription: the browser one and the two native ones (ADR-3007). */
+export const PUSH_SUBSCRIPTION_KINDS = ['webpush', 'apns', 'fcm'] as const;
+export const PushSubscriptionKind = z.enum(PUSH_SUBSCRIPTION_KINDS);
+export type PushSubscriptionKind = z.infer<typeof PushSubscriptionKind>;
+
+/** Platforms a native token may come from; optional, kept for the settings page only. */
+export const PushTokenPlatform = z.enum(['ios', 'android']);
+
+/**
+ * EF-1, ET-1 — the raw device token (APNs: 64 hex characters, FCM: `<instance>:<registration>`).
+ * It is a credential of the device: never logged, never returned by any operation (ET-4).
+ */
+export const PushDeviceToken = z
+  .string()
+  .min(16)
+  .max(512)
+  .regex(/^[A-Za-z0-9_.:-]+$/, { message: 'un jeton d’appareil est attendu' });
+
+/** EF-1 — short description of the device, kept for the settings page (never a fingerprint). */
+const DeviceName = z.string().trim().max(120);
+
+/** EF-1 — the Web Push body of SPEC-205, unchanged: `kind` absent means `webpush`. */
+const WebPushSubscriptionBody = z.object({
+  kind: z.literal('webpush').default('webpush'),
   endpoint: PushEndpoint,
   expirationTime: z.number().nullable().optional(),
   keys: z.object({ p256dh: Base64Url(256), auth: Base64Url(128) }),
   /** Short description of the browser, kept for the settings page (never a fingerprint). */
   userAgent: z.string().trim().max(512).optional(),
 });
-export type PushSubscriptionBody = z.infer<typeof PushSubscriptionBody>;
+
+/** EF-1 — the body of a native subscription: the token replaces the endpoint and the keys. */
+const NativePushSubscriptionBody = z.object({
+  kind: z.enum(['apns', 'fcm']),
+  token: PushDeviceToken,
+  platform: PushTokenPlatform.optional(),
+  deviceName: DeviceName.optional(),
+});
+
+/**
+ * EF-3 — `POST /me/push-subscriptions` accepts either form. The discriminated union keeps the
+ * discriminating `kind` optional on the browser branch, so the historical body of SPEC-205 keeps
+ * validating and the compatibility check of ADR-2004 passes.
+ */
+export const PushSubscriptionBody = z.discriminatedUnion('kind', [
+  WebPushSubscriptionBody,
+  NativePushSubscriptionBody,
+]);
+
+/** Request body as a client writes it (`kind` may be omitted on the browser form). */
+export type PushSubscriptionBody = z.input<typeof PushSubscriptionBody>;
+/** Request body once parsed: `kind` is always present. */
+export type ParsedPushSubscriptionBody = z.output<typeof PushSubscriptionBody>;
 
 /** EF-1 — the stored subscription: an identifier, never the keys back. */
 export const PushSubscriptionOutput = z.object({
@@ -80,11 +130,18 @@ export const PushSubscriptionOutput = z.object({
 });
 export type PushSubscriptionOutput = z.infer<typeof PushSubscriptionOutput>;
 
-/** EF-2 — the browser names the endpoint it is removing; the answer never says whether it existed. */
-export const PushUnsubscribeBody = z.object({
-  endpoint: z.string().min(1).max(PUSH_ENDPOINT_MAX_LENGTH),
-});
-export type PushUnsubscribeBody = z.infer<typeof PushUnsubscribeBody>;
+/** EF-2 — the caller names what it removes: a browser endpoint, or a native `(kind, token)`. */
+export const PushUnsubscribeBody = z.discriminatedUnion('kind', [
+  z.object({
+    kind: z.literal('webpush').default('webpush'),
+    endpoint: z.string().min(1).max(PUSH_ENDPOINT_MAX_LENGTH),
+  }),
+  z.object({
+    kind: z.enum(['apns', 'fcm']),
+    token: PushDeviceToken,
+  }),
+]);
+export type PushUnsubscribeBody = z.input<typeof PushUnsubscribeBody>;
 
 export const pushSubscriptionsUpsert = defineRoute({
   id: 'pushSubscriptions.upsert',
@@ -95,7 +152,7 @@ export const pushSubscriptionsUpsert = defineRoute({
   output: PushSubscriptionOutput,
   successStatus: 200,
   summary:
-    'Enregistre ou rafraîchit l’abonnement Web Push du navigateur courant (SPEC-205). Idempotent sur le point de terminaison.',
+    'Enregistre ou rafraîchit l’abonnement push de l’appareil courant : Web Push du navigateur (SPEC-205) ou jeton natif APNs/FCM (SPEC-3501). Idempotent sur le point de terminaison ou le jeton.',
   errors: ['VALIDATION_FAILED', 'FORBIDDEN'],
 });
 
@@ -108,7 +165,7 @@ export const pushSubscriptionsDelete = defineRoute({
   output: null,
   successStatus: 204,
   summary:
-    'Retire l’abonnement Web Push du navigateur courant (SPEC-205). Idempotent : une suppression répétée répond 204.',
+    'Retire l’abonnement push de l’appareil courant : Web Push (SPEC-205) ou jeton natif (SPEC-3501). Idempotent : une suppression répétée répond 204.',
   errors: ['VALIDATION_FAILED'],
 });
 
