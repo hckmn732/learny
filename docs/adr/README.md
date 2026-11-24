@@ -291,3 +291,4 @@ Origine : **Validée** = décision prise avec le porteur du projet ; **Déduite*
 | [ADR-4005](ADR-4005-passerelle-llm-reelle-du-backend-python.md) | Passerelle LLM réelle du backend Python | Validée | ADR-0340, ADR-0341, ADR-2011, ADR-2042, ADR-2043, SPEC-504, SPEC-505, SPEC-506, SPEC-2201, SPEC-2204 |
 | [ADR-4006](ADR-4006-services-python-declares-dans-les-piles-coolify.md) | Services Python déclarés dans les piles Coolify, sans include | Déduite | ADR-2007, ADR-2041, ADR-2043, ADR-4005, SPEC-2301 |
 | [ADR-4007](ADR-4007-contrat-d-environnement-minimal.md) | Contrat d'environnement minimal | Validée | ADR-2042, ADR-4005, ADR-4006 |
+| [ADR-4008](ADR-4008-mode-simple-noms-d-evenements-pointes-et-tache-simple-analys.md) | Mode simple : noms d'événements pointés et tâche simple_analysis hors sélecteur | Déduite | SPEC-4001, ADR-4003, ADR-2014 |

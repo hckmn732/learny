@@ -1,7 +1,7 @@
 # Preuves — SPEC-4001 : Mode simple — backend et contrat
 
-- Date : 2026-11-24T19:30:24.411Z
-- Commit : 8bb25667
+- Date : 2026-11-24T19:45:14.952Z
+- Commit : 8bd79c4b
 - Spécification : `specs/p40-mode-simple/SPEC-4001-mode-simple-backend-et-contrat.md`
 
 ## Rapports
@@ -14,9 +14,9 @@
 
 ## Vidéos
 
-- `video/03-conformite-scr-05-avec-une-proposition-tiree-d-un--desktop.webm` — SHA-256 6bb2f67e7cbd642de958c52f2b3f3f391d70d9c921f8fbed5e3879461b927566 (hors Git : Git LFS indisponible, ADR-0050)
-- `video/04-conformite-scr-05-avec-une-proposition-tiree-d-un--desktop.webm` — SHA-256 ef5608da2b4a584c0a6a56896c9cb0970c5316b18668a59d9609431ea54c5e7e (hors Git : Git LFS indisponible, ADR-0050)
-- `video/07-parcours-api-du-mode-simple-en-mock-desktop.webm` — SHA-256 130bfcc4bd4daa28f3199dcb9651a78a56693a7e61c97a44a53ab693c4219c6e (hors Git : Git LFS indisponible, ADR-0050)
+- `video/03-conformite-scr-05-avec-une-proposition-tiree-d-un--desktop.webm` — SHA-256 005dcc7fbd83283f52b1291149cbc5b7eb09606c4a6ee79f76e21c26829c6620 (hors Git : Git LFS indisponible, ADR-0050)
+- `video/04-conformite-scr-05-avec-une-proposition-tiree-d-un--desktop.webm` — SHA-256 2382b2c923cf293c18df1c52a47ecc41c59865705e979e91fd381ea66450fc5d (hors Git : Git LFS indisponible, ADR-0050)
+- `video/07-parcours-api-du-mode-simple-en-mock-desktop.webm` — SHA-256 e2d5a20f3074482f9fa7584e7a115e0e0ea0956f196d43322969dd162708e23e (hors Git : Git LFS indisponible, ADR-0050)
 
 ## Captures
 

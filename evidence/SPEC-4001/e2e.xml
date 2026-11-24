@@ -1,23 +1,23 @@
-<testsuites id="" name="" tests="2" failures="0" skipped="0" errors="0" time="55.17853099999999">
-<testsuite name="p40/spec-4001-visual.spec.ts" timestamp="2026-11-24T19:07:39.523Z" hostname="desktop" tests="1" failures="0" skipped="0" time="5.995" errors="0">
-<testcase name="conformité SCR-05 avec une proposition tirée d’un document @SPEC-4001 @visual" classname="p40/spec-4001-visual.spec.ts" time="5.995">
+<testsuites id="" name="" tests="2" failures="0" skipped="0" errors="0" time="55.542396000000004">
+<testsuite name="p40/spec-4001-visual.spec.ts" timestamp="2026-11-24T19:44:54.626Z" hostname="desktop" tests="1" failures="0" skipped="0" time="6.686" errors="0">
+<testcase name="conformité SCR-05 avec une proposition tirée d’un document @SPEC-4001 @visual" classname="p40/spec-4001-visual.spec.ts" time="6.686">
 <system-out>
 <![CDATA[
 [[ATTACHMENT|artifacts/p40-spec-4001-visual-confo-be47d-n-document-SPEC-4001-visual-desktop/attachments/axe-b4354612f1016267b764602873093be0e52c3b9b.json]]
 
 [[ATTACHMENT|artifacts/p40-spec-4001-visual-confo-be47d-n-document-SPEC-4001-visual-desktop/test-finished-1.png]]
 
-[[ATTACHMENT|artifacts/p40-spec-4001-visual-confo-be47d-n-document-SPEC-4001-visual-desktop/video.webm]]
-
 [[ATTACHMENT|artifacts/p40-spec-4001-visual-confo-be47d-n-document-SPEC-4001-visual-desktop/video-1.webm]]
+
+[[ATTACHMENT|artifacts/p40-spec-4001-visual-confo-be47d-n-document-SPEC-4001-visual-desktop/video.webm]]
 
 [[ATTACHMENT|artifacts/p40-spec-4001-visual-confo-be47d-n-document-SPEC-4001-visual-desktop/trace.zip]]
 ]]>
 </system-out>
 </testcase>
 </testsuite>
-<testsuite name="p40/spec-4001.spec.ts" timestamp="2026-11-24T19:07:39.523Z" hostname="desktop" tests="1" failures="0" skipped="0" time="8.416" errors="0">
-<testcase name="parcours API du mode simple en mock @SPEC-4001" classname="p40/spec-4001.spec.ts" time="8.416">
+<testsuite name="p40/spec-4001.spec.ts" timestamp="2026-11-24T19:44:54.626Z" hostname="desktop" tests="1" failures="0" skipped="0" time="10.309" errors="0">
+<testcase name="parcours API du mode simple en mock @SPEC-4001" classname="p40/spec-4001.spec.ts" time="10.309">
 <system-out>
 <![CDATA[
 [[ATTACHMENT|artifacts/p40-spec-4001-parcours-API-du-mode-simple-en-mock-SPEC-4001-desktop/test-finished-1.png]]

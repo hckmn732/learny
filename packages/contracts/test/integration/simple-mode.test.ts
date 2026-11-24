@@ -39,6 +39,7 @@ describe('[SPEC-4001] contrat du mode simple', () => {
     for (const [id, method, routePath, status] of EXPECTED) {
       const route = Object.values(ROUTES).find((candidate) => candidate.id === id);
       expect(route, id).toBeDefined();
+      if (route === undefined) continue;
       expect(route.method, id).toBe(method);
       expect(route.path, id).toBe(routePath);
       expect(route.successStatus, id).toBe(status);

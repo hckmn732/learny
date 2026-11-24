@@ -257,6 +257,6 @@ Définition commune (`docs/engineering/testing.md` §7), avec en plus :
 
 ## 15. Décisions et hypothèses
 
-- ADR appliqués : ADR-4001, ADR-4002, ADR-4003.
+- ADR appliqués : ADR-4001, ADR-4002, ADR-4003, ADR-4008 (noms d'événements pointés acceptés par `enqueue_event` ; tâche `simple_analysis` hors du sélecteur à cinq tâches, ajoutée par SPEC-4002).
 - Le plafond de 10 documents par formation en mode simple et les marqueurs du rôle deviné sont des décisions de cette spécification, consignées dans ADR-4003 au titre du dépôt.
 - Hypothèse : les extracteurs existants couvrent PDF, DOCX (via l'import de programme), images, pages web et YouTube ; l'extraction DOCX des apports est ajoutée si elle manque, sur le modèle de `import_file.py`.

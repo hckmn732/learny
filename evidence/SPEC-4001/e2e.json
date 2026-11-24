@@ -286,12 +286,12 @@
                   "workerIndex": 0,
                   "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 5995,
+                  "duration": 6686,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-11-24T19:07:41.366Z",
+                  "startTime": "2026-11-24T19:44:56.612Z",
                   "annotations": [],
                   "attachments": [
                     {
@@ -307,12 +307,12 @@
                     {
                       "name": "video",
                       "contentType": "video/webm",
-                      "path": "/home/ubuntu/learny-wt-SPEC-4001/test-results/artifacts/p40-spec-4001-visual-confo-be47d-n-document-SPEC-4001-visual-desktop/video.webm"
+                      "path": "/home/ubuntu/learny-wt-SPEC-4001/test-results/artifacts/p40-spec-4001-visual-confo-be47d-n-document-SPEC-4001-visual-desktop/video-1.webm"
                     },
                     {
                       "name": "video",
                       "contentType": "video/webm",
-                      "path": "/home/ubuntu/learny-wt-SPEC-4001/test-results/artifacts/p40-spec-4001-visual-confo-be47d-n-document-SPEC-4001-visual-desktop/video-1.webm"
+                      "path": "/home/ubuntu/learny-wt-SPEC-4001/test-results/artifacts/p40-spec-4001-visual-confo-be47d-n-document-SPEC-4001-visual-desktop/video.webm"
                     },
                     {
                       "name": "trace",
@@ -356,12 +356,12 @@
                   "workerIndex": 0,
                   "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 8416,
+                  "duration": 10309,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-11-24T19:07:48.319Z",
+                  "startTime": "2026-11-24T19:45:04.242Z",
                   "annotations": [],
                   "attachments": [
                     {
@@ -395,8 +395,8 @@
   ],
   "errors": [],
   "stats": {
-    "startTime": "2026-11-24T19:07:01.753Z",
-    "duration": 55178.530999999995,
+    "startTime": "2026-11-24T19:44:19.216Z",
+    "duration": 55542.396,
     "expected": 2,
     "skipped": 0,
     "unexpected": 0,
