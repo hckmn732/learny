@@ -17,6 +17,14 @@ RUN uv sync --frozen --no-dev --no-editable
 
 FROM python:3.13-slim-bookworm AS runtime
 
+ARG APP_VERSION="dev"
+ARG GIT_COMMIT="unknown"
+LABEL org.opencontainers.image.title="learny-api-py" \
+      org.opencontainers.image.description="Learny API facade and worker (Python, self-hosted)" \
+      org.opencontainers.image.version=${APP_VERSION} \
+      org.opencontainers.image.revision=${GIT_COMMIT} \
+      org.opencontainers.image.source="https://github.com/hckmn732/learny"
+
 # `unprivileged` runs the process; nothing is written outside /app.
 RUN useradd --uid 1001 --create-home --shell /usr/sbin/nologin learny
 
