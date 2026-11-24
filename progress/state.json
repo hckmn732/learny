@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-11-24T11:15:14.155Z",
+  "updatedAt": "2026-11-24T11:17:30.581Z",
   "specs": {
     "SPEC-001": {
       "status": "done",
@@ -7959,7 +7959,7 @@
     },
     "SPEC-3501": {
       "status": "done",
-      "attempts": 0,
+      "attempts": 1,
       "startedAt": "2026-11-24T08:28:37.682Z",
       "completedAt": "2026-11-24T11:15:14.153Z",
       "branch": "spec/SPEC-3501-notifications-push-natives",
@@ -8210,6 +8210,13 @@
       "at": "2026-11-23T01:24:33.787Z",
       "attempts": 1,
       "reason": "staging Coolify non fourni par le porteur : CA-1/CA-2/CA-3/CA-4 non mesurables (ADR-2009, CL-3)",
+      "external": true
+    },
+    {
+      "spec": "SPEC-3501",
+      "at": "2026-11-24T11:17:30.523Z",
+      "attempts": 1,
+      "reason": "identifiants APNs (cle .p8) et FCM (compte de service) absents : aucun envoi reel possible, tout le canal est livre et prouve en PUSH_MODE=mock, iOS non compilable sans macOS",
       "external": true
     }
   ]

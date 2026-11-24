@@ -76,3 +76,4 @@
 - **Portée** : l'échange réel avec Apple et Google n'est pas prouvé ; à rejouer sur appareil dès que
   les identifiants sont fournis, sans changement de code attendu. Consigné aussi comme écart 1 de
   `evidence/SPEC-3402/acceptance.md`.
+- **SPEC-3501** (2026-11-24T11:17:30.523Z, 1 tentative(s)) — identifiants APNs (cle .p8) et FCM (compte de service) absents : aucun envoi reel possible, tout le canal est livre et prouve en PUSH_MODE=mock, iOS non compilable sans macOS
