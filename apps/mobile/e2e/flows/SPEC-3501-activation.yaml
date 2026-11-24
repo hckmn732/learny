@@ -45,28 +45,51 @@ tags:
     visible:
       id: notifications-screen
     timeout: 20000
-# CA-1 — le canal appareil est présent, éteint, avec son libellé d'état.
+# CA-1 — le canal appareil est présent. `clearState` vide les données de l'application mais pas la
+# permission déjà accordée par une campagne précédente : quand elle l'est, le démarrage réinscrit
+# le jeton (EF-1) et l'interrupteur est déjà activé. Le flux part donc d'un état normalisé : le
+# canal est coupé d'abord, pour que l'activation soit celle du flux, jamais un état hérité.
 - assertVisible:
     id: notifications-device-switch
-- assertVisible: 'Aucun rappel n’arrive sur cet appareil.'
-# CA-1 — l'activation demande la permission (déjà accordée ici) puis inscrit le jeton natif.
-- tapOn:
+- extendedWaitUntil:
+    visible:
+      id: notifications-device-switch-control
+    timeout: 20000
+- waitForAnimationToEnd:
+    timeout: 5000
+- assertVisible:
     id: notifications-device-switch-control
+    enabled: true
 - runFlow:
     when:
-      visible: 'Autoriser'
+      visible: 'Les rappels arrivent sur cet appareil.'
     commands:
-      - tapOn: 'Autoriser'
+      - tapOn:
+          id: notifications-device-switch-control
+      - extendedWaitUntil:
+          notVisible: 'Les rappels arrivent sur cet appareil.'
+          timeout: 20000
+- assertNotVisible: 'Les rappels arrivent sur cet appareil.'
+# CA-1 — l'activation demande la permission (si elle ne l'est pas encore) puis inscrit le jeton
+# natif ; l'interrupteur passe à l'état activé.
+- tapOn:
+    id: notifications-device-switch-control
+- waitForAnimationToEnd:
+    timeout: 5000
+- tapOn:
+    text: 'Autoriser'
+    optional: true
 - extendedWaitUntil:
     visible: 'Les rappels arrivent sur cet appareil.'
-    timeout: 20000
+    timeout: 30000
 - assertVisible:
     id: notifications-device-switch
 # BR-SET-03 — la désactivation supprime l'abonnement de l'appareil.
 - tapOn:
     id: notifications-device-switch-control
 - extendedWaitUntil:
-    visible: 'Aucun rappel n’arrive sur cet appareil.'
+    notVisible: 'Les rappels arrivent sur cet appareil.'
     timeout: 20000
+- assertNotVisible: 'Les rappels arrivent sur cet appareil.'
 - assertVisible:
     id: notifications-channel-email

@@ -30,7 +30,9 @@ export default function PushDemoRoute() {
         return;
       }
       await prepareNotificationChannel();
-      const seconds = 1;
+      // Ten seconds: the campaign has time to put the application in the background before the
+      // local notification fires, so it reaches the system shade (EF-2, CA-3).
+      const seconds = 10;
       await Notifications.scheduleNotificationAsync({
         content: {
           title: params.title ?? DEFAULT_TITLE,
@@ -74,10 +76,14 @@ export default function PushDemoRoute() {
 }
 
 const styles = StyleSheet.create({
+  // The internal banner of the foreground covers the top of the screen: the state of the
+  // demonstration is written at the bottom, where the campaign can always read it.
   root: {
     flex: 1,
     backgroundColor: theme.colors.canvas,
     padding: theme.spacing.lg,
+    paddingBottom: theme.spacing.lg,
     gap: theme.spacing.sm,
+    justifyContent: 'flex-end',
   },
 });

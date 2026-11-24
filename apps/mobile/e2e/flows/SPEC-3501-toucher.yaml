@@ -33,6 +33,41 @@ tags:
     visible:
       id: tab-aujourdhui
     timeout: 60000
+# La permission système est demandée au moment utile : l'activation du canal appareil l'ouvre, le
+# flux l'accorde (c'est elle qui autorise l'affichage de la notification locale ci-dessous).
+- tapOn:
+    id: tab-profil
+- extendedWaitUntil:
+    visible:
+      id: profile-identity
+    timeout: 30000
+- tapOn:
+    id: profile-row-notifications
+- extendedWaitUntil:
+    visible:
+      id: notifications-screen
+    timeout: 20000
+- extendedWaitUntil:
+    visible:
+      id: notifications-device-switch-control
+    timeout: 20000
+- waitForAnimationToEnd:
+    timeout: 5000
+- assertVisible:
+    id: notifications-device-switch-control
+    enabled: true
+# L'interrupteur est touché quel que soit son état : c'est lui qui ouvre la demande de permission
+# quand elle n'est pas encore accordée (BR-NOT-03). Le flux n'attend pas un état donné, il ne
+# dépend donc pas de la campagne précédente.
+- tapOn:
+    id: notifications-device-switch-control
+- waitForAnimationToEnd:
+    timeout: 5000
+- tapOn:
+    text: 'Autoriser'
+    optional: true
+- waitForAnimationToEnd:
+    timeout: 5000
 # La page de démonstration programme la notification locale de même charge (EF-2).
 - openLink: learny://_dev/sdd/push?href=/quiz/35010000-0000-4000-8000-000000000001
 - extendedWaitUntil:

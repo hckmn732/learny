@@ -55,4 +55,21 @@ tags:
     id: notifications-types
 - assertVisible:
     id: notifications-device-switch
+- waitForAnimationToEnd:
+    timeout: 5000
+# Capture déterministe : si la permission a été accordée par une campagne précédente, le démarrage a
+# réinscrit le jeton et l'interrupteur est activé ; il est coupé pour que la capture montre toujours
+# l'état de référence (canal appareil éteint, aucune inscription).
+- runFlow:
+    when:
+      visible: 'Les rappels arrivent sur cet appareil.'
+    commands:
+      - tapOn:
+          id: notifications-device-switch-control
+      - extendedWaitUntil:
+          notVisible: 'Les rappels arrivent sur cet appareil.'
+          timeout: 20000
+- assertNotVisible: 'Les rappels arrivent sur cet appareil.'
+- waitForAnimationToEnd:
+    timeout: 5000
 - takeScreenshot: SPEC-3501-notifications
