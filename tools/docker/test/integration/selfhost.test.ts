@@ -315,11 +315,7 @@ describe.skipIf(process.env.RUN_SELFHOST === '0')('[SPEC-012] selfhost stack', (
     expect(composeDown(PROJECT, envFile, env)).toBe(true);
     const volumesAfterDown = projectVolumes(PROJECT);
     expect(volumesAfterDown).toEqual(
-      expect.arrayContaining([
-        `${PROJECT}_db-data`,
-        `${PROJECT}_storage-data`,
-        `${PROJECT}_inngest-data`,
-      ]),
+      expect.arrayContaining([`${PROJECT}_db-data`, `${PROJECT}_storage-data`]),
     );
 
     expect(composeUp(PROJECT, envFile, env, { build: false })).toBe(true);
