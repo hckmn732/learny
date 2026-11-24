@@ -150,6 +150,16 @@ export function NotificationsScreen() {
       title={t.title}
       testID="notifications-screen"
       onBack={leave}
+      toast={
+        <Toast
+          testID="notifications-toast"
+          visible={toast !== null}
+          message={toast ?? ''}
+          onHide={() => {
+            setToast(null);
+          }}
+        />
+      }
       subtitle={t.channelsHint}
       footer={
         <SaveFooter
@@ -269,15 +279,6 @@ export function NotificationsScreen() {
           {error}
         </Text>
       )}
-
-      <Toast
-        testID="notifications-toast"
-        visible={toast !== null}
-        message={toast ?? ''}
-        onHide={() => {
-          setToast(null);
-        }}
-      />
     </SettingsScaffold>
   );
 }

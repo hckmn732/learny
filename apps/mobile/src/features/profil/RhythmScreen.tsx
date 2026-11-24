@@ -128,6 +128,16 @@ export function RhythmScreen() {
       title={r.title}
       testID="rhythm-screen"
       onBack={leave}
+      toast={
+        <Toast
+          testID="rhythm-toast"
+          visible={toast !== null}
+          message={toast ?? ''}
+          onHide={() => {
+            setToast(null);
+          }}
+        />
+      }
       subtitle={r.subtitle}
       footer={
         <SaveFooter
@@ -236,15 +246,6 @@ export function RhythmScreen() {
           setToast(message);
         }}
         timeZone={data.me.timezone}
-      />
-
-      <Toast
-        testID="rhythm-toast"
-        visible={toast !== null}
-        message={toast ?? ''}
-        onHide={() => {
-          setToast(null);
-        }}
       />
     </SettingsScaffold>
   );

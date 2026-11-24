@@ -57,7 +57,21 @@ export function ModelsScreen() {
 
   if (models.status === 'error') {
     return (
-      <SettingsScaffold title={t.title} testID="models-screen" onBack={close}>
+      <SettingsScaffold
+        title={t.title}
+        testID="models-screen"
+        onBack={close}
+        toast={
+          <Toast
+            testID="models-toast"
+            visible={toast !== null}
+            message={toast ?? ''}
+            onHide={() => {
+              setToast(null);
+            }}
+          />
+        }
+      >
         <ErrorState title={t.errorTitle} onRetry={models.refetch} testID="models-error" />
       </SettingsScaffold>
     );
@@ -180,15 +194,6 @@ export function ModelsScreen() {
           />
         )}
       </Sheet>
-
-      <Toast
-        testID="models-toast"
-        visible={toast !== null}
-        message={toast ?? ''}
-        onHide={() => {
-          setToast(null);
-        }}
-      />
     </SettingsScaffold>
   );
 }

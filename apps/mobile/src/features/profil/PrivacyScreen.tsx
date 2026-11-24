@@ -68,7 +68,21 @@ export function PrivacyScreen() {
 
   if (profile.status === 'error') {
     return (
-      <SettingsScaffold title={t.title} testID="privacy-screen" onBack={close}>
+      <SettingsScaffold
+        title={t.title}
+        testID="privacy-screen"
+        onBack={close}
+        toast={
+          <Toast
+            testID="privacy-toast"
+            visible={toast !== null}
+            message={toast ?? ''}
+            onHide={() => {
+              setToast(null);
+            }}
+          />
+        }
+      >
         <ErrorState title={t.errorTitle} onRetry={profile.refetch} testID="privacy-error" />
       </SettingsScaffold>
     );
@@ -221,15 +235,6 @@ export function PrivacyScreen() {
           {error}
         </Text>
       )}
-
-      <Toast
-        testID="privacy-toast"
-        visible={toast !== null}
-        message={toast ?? ''}
-        onHide={() => {
-          setToast(null);
-        }}
-      />
     </SettingsScaffold>
   );
 }

@@ -6,6 +6,7 @@
 // the Android system gesture.
 import { useCallback, useEffect, type ReactNode } from 'react';
 import { Alert, BackHandler, ScrollView, StyleSheet, View } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { fr } from '@learny/i18n';
 
@@ -54,6 +55,8 @@ export interface SettingsScaffoldProps {
   readonly children: ReactNode;
   /** Footer action, typically the save button of EF-3. */
   readonly footer?: ReactNode;
+  /** Confirmation de l'écran : rendue hors du défilement, donc toujours visible (EF-3). */
+  readonly toast?: ReactNode;
   /** Extra line under the title (the « brouillon » hint of a dirty form). */
   readonly subtitle?: string;
   readonly scrollTestID?: string;
@@ -68,10 +71,14 @@ export function SettingsScaffold({
   footer,
   subtitle,
   scrollTestID,
+  toast,
 }: SettingsScaffoldProps) {
+  // EF-3, canevas § 3 — the back chevron of a stacked screen is drawn under the native status bar
+  // unless the inset is reserved: without it the target sits outside the touchable area.
+  const insets = useSafeAreaInsets();
   return (
     <View style={styles.screen} testID={testID}>
-      <View style={styles.nav}>
+      <View style={[styles.nav, { paddingTop: insets.top + theme.spacing.sm }]}>
         <IconButton
           name="chevronLeft"
           accessibilityLabel={t.back}
@@ -83,6 +90,7 @@ export function SettingsScaffold({
         </Text>
       </View>
       <ScrollView
+        style={styles.scroll}
         contentContainerStyle={styles.content}
         showsVerticalScrollIndicator={false}
         {...(scrollTestID === undefined ? {} : { testID: scrollTestID })}
@@ -95,6 +103,7 @@ export function SettingsScaffold({
         {children}
       </ScrollView>
       {footer === undefined ? null : <View style={styles.footer}>{footer}</View>}
+      {toast === undefined ? null : <View style={styles.toast}>{toast}</View>}
     </View>
   );
 }
@@ -165,6 +174,8 @@ const styles = StyleSheet.create({
     paddingHorizontal: theme.spacing.xl,
     paddingTop: theme.spacing.md,
   },
+  // Le défilement occupe la place restante : le pied et la confirmation restent dans l'écran.
+  scroll: { flex: 1 },
   content: {
     gap: theme.spacing.lg,
     padding: theme.spacing.xl,
@@ -179,6 +190,7 @@ const styles = StyleSheet.create({
     backgroundColor: theme.colors.surface,
   },
   saveRow: { gap: theme.spacing.sm },
+  toast: { paddingHorizontal: theme.spacing.xl, paddingBottom: theme.spacing.lg },
   section: { gap: theme.spacing.xs },
   sectionBody: { gap: theme.spacing.sm, paddingTop: theme.spacing.sm },
 });

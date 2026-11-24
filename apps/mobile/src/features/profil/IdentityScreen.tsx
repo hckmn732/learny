@@ -119,6 +119,16 @@ export function IdentityScreen() {
       title={t.identity.title}
       testID="identity-screen"
       onBack={leave}
+      toast={
+        <Toast
+          testID="identity-toast"
+          visible={toast !== null}
+          message={toast ?? ''}
+          onHide={() => {
+            setToast(null);
+          }}
+        />
+      }
       subtitle={t.identity.created(formatUserDate(data.createdAt, data.me))}
       footer={
         <SaveFooter
@@ -209,15 +219,6 @@ export function IdentityScreen() {
           {error}
         </Text>
       )}
-
-      <Toast
-        testID="identity-toast"
-        visible={toast !== null}
-        message={toast ?? ''}
-        onHide={() => {
-          setToast(null);
-        }}
-      />
     </SettingsScaffold>
   );
 }
