@@ -71,6 +71,11 @@ export const PUSH_SUBSCRIPTION_KINDS = ['webpush', 'apns', 'fcm'] as const;
 export const PushSubscriptionKind = z.enum(PUSH_SUBSCRIPTION_KINDS);
 export type PushSubscriptionKind = z.infer<typeof PushSubscriptionKind>;
 
+/** The two native channels: the ones a device token belongs to (SPEC-3501 EF-1). */
+export const PUSH_DEVICE_KINDS = ['apns', 'fcm'] as const;
+export const PushDeviceKind = z.enum(PUSH_DEVICE_KINDS);
+export type PushDeviceKind = z.infer<typeof PushDeviceKind>;
+
 /** Platforms a native token may come from; optional, kept for the settings page only. */
 export const PushTokenPlatform = z.enum(['ios', 'android']);
 
@@ -99,7 +104,7 @@ const WebPushSubscriptionBody = z.object({
 
 /** EF-1 — the body of a native subscription: the token replaces the endpoint and the keys. */
 const NativePushSubscriptionBody = z.object({
-  kind: z.enum(['apns', 'fcm']),
+  kind: PushDeviceKind,
   token: PushDeviceToken,
   platform: PushTokenPlatform.optional(),
   deviceName: DeviceName.optional(),
@@ -137,7 +142,7 @@ export const PushUnsubscribeBody = z.discriminatedUnion('kind', [
     endpoint: z.string().min(1).max(PUSH_ENDPOINT_MAX_LENGTH),
   }),
   z.object({
-    kind: z.enum(['apns', 'fcm']),
+    kind: PushDeviceKind,
     token: PushDeviceToken,
   }),
 ]);

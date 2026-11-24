@@ -53,6 +53,11 @@ const env = {
 env.EXPO_PUBLIC_SDD_OAUTH_MOCK = '1';
 env.EXPO_PUBLIC_SDD_OAUTH_EMAIL = env.MOBILE_OAUTH_EMAIL ?? '';
 env.EXPO_PUBLIC_SDD_OAUTH_PASSWORD = env.MOBILE_OAUTH_PASSWORD ?? '';
+// SPEC-3501 EF-1 — the emulator has no FCM configuration (`google-services.json` comes from the
+// porteur), so the e2e build hands the application a deterministic device token instead of calling
+// getDevicePushTokenAsync. The registration, the API call and the switch are the real ones; only
+// the token is simulated, and this flag never exists in a production build (ADR-3007 §5).
+env.EXPO_PUBLIC_SDD_PUSH_MOCK = '1';
 
 const REQUIRED = [
   'EXPO_PUBLIC_API_URL',
