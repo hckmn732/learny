@@ -17,6 +17,8 @@ in_progress ──fail.mjs (5e échec ou --external)──▶ blocked (anomalie 
 
 **Piste active : `python-migration`** (P20 → P23, SPEC-2001 → SPEC-2302, CP-20 → CP-23, branche de base `main`, ADR à partir d'ADR-2001). Elle ne dépend d'aucun checkpoint d'une autre piste. Les pistes `produit` et `migration` décrites ci-dessous sont **gelées** par ADR-2001 : leurs specs en attente ne sont ni démarrées ni modifiées, leur historique est conservé. `validate.mjs` exécute aussi les tests pytest étiquetés `[SPEC-xxxx]` dès SPEC-2003.
 
+**Piste `mobile`** (ADR-3001, branche `mobile` uniquement) : P30 → P35, SPEC-3001 → SPEC-3502, CP-30 → CP-35, `baseBranch: "mobile"`, `adrBase: 3000`, `activeTrack: "mobile"` sur cette branche. P35 exige CP-23 (`requires`). `validate.mjs` y exécute aussi Jest et Maestro (SPEC-3001). Fin de piste : fusion dans `main` après CP-35 (ADR-3001 §6).
+
 Historique : le catalogue répartissait les phases en **pistes** indépendantes : `produit` (P0 → P9, branche `main`) et `migration` (P10 → P13, branche `migration`, séparation backend/frontend, ADR-1001).
 
 - Une phase est débloquée par le checkpoint de la phase précédente **de la même piste** et par les checkpoints de son champ `requires` (P12 exige CP-8).

@@ -1,0 +1,25 @@
+
+> learny@0.1.0 test:e2e:mobile /root/learny-mobile
+> node tools/dev/mobile-preflight.mjs && node apps/mobile/e2e/run-maestro.mjs --tags SPEC-3101
+
+… serveur 8099 déjà actif
+✔ disque : 9.4 Go libres (seuil 4 Go)
+✔ e2e.env : 4 clés obligatoires présentes
+✔ apk : https://9db167ebaeff169e64af.agent37.app/app-release.apk → 200
+✔ api : https://bc9fc3d9e54a1e18f962.agent37.app/api/v1/health → 200
+✔ supabase : https://72433167123a2009fa61.agent37.app/auth/v1/health → 200
+✔ device-agent : https://7a56c4bb254996484dfb.agent37.app/health → 200
+✔ agent : agent libre (contrat v2) ; Maestro orphelin tué
+✔ appareil : emulator-5554 (API 35)
+
+✔ préflight : campagne prête (ADR-3015 § 5).
+✔ émulateur : {"serial":"emulator-5554","model":"sdk_gphone64_x86_64","apiLevel":"35","size":"Physical size: 1080x2400","platform":"android"}
+✔ APK installé depuis https://9db167ebaeff169e64af.agent37.app/app-release.apk
+✔ barre d’état figée (13:20, réseau et batterie pleins)
+… soumis
+… running enregistrement vidéo
+… running maestro
+… running collecte de la vidéo
+… done terminé
+✔ campagne SPEC-3101 : 2 flux réussi(s), 0 échec(s), 1 vidéo(s), 0 comparaison(s) visuelle(s)
+  rapport : test-results/sdd/SPEC-3101/e2e-mobile.json

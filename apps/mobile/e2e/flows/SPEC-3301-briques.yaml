@@ -1,0 +1,92 @@
+# SPEC-3301 — galerie de revue des treize briques et parcours des jeux (CA-4, CA-5).
+#
+# La galerie est ouverte par son lien profond : la première capture
+# (`takeScreenshot: SPEC-3301-briques`) montre la question à choix non répondue en mode lecture et
+# est comparée à la ligne de base versionnée `e2e/visual/baselines/SPEC-3301-briques.png`. Les
+# autres captures (question corrigée, carte de rappel recto et verso, association jouée)
+# documentent les états demandés par le § 10 : un seul flux `@visual` par spécification (leçon 6 du
+# BRIEF), donc une seule comparaison automatique.
+appId: fr.learny.app
+name: SPEC-3301 briques
+tags:
+  - SPEC-3301
+  - visual
+---
+- launchApp:
+    clearState: true
+- assertVisible:
+    id: sdd-title
+- openLink: learny:///_dev/bricks
+- assertVisible:
+    id: bricks-gallery
+- assertVisible:
+    id: gallery-brick-choice_question
+- assertVisible:
+    id: brick-choice_question
+- assertVisible:
+    id: brick-option-0
+- assertVisible:
+    id: brick-consigne
+- takeScreenshot: SPEC-3301-briques
+# Question à choix corrigée (EF-2) : le sélecteur de mode est en haut de la galerie.
+- tapOn:
+    id: bricks-mode-corrected
+- swipe:
+    direction: UP
+    duration: 400
+- assertVisible:
+    id: brick-feedback
+- takeScreenshot: SPEC-3301-corrige
+# Retour en haut, puis mode jeu : les jeux ne répondent qu'en mode jeu (EF-1).
+- swipe:
+    direction: DOWN
+    duration: 400
+- swipe:
+    direction: DOWN
+    duration: 400
+- tapOn:
+    id: bricks-mode-play
+# Carte de rappel : recto puis verso (EF-6).
+- swipe:
+    direction: UP
+    duration: 400
+- swipe:
+    direction: UP
+    duration: 400
+- assertVisible:
+    id: gallery-brick-recall_card
+- takeScreenshot: SPEC-3301-carte-recto
+- tapOn:
+    id: brick-reveal
+- takeScreenshot: SPEC-3301-carte-verso
+# Association par appuis successifs (CA-4) : une notion puis une définition.
+- swipe:
+    direction: UP
+    duration: 400
+- swipe:
+    direction: UP
+    duration: 400
+# Les deux colonnes du jeu sont longues : chaque cible est amenée dans la zone visible avant
+# l'appui (un `assertVisible` échouerait sur un élément simplement hors écran).
+- scrollUntilVisible:
+    element:
+      id: brick-item-a
+    direction: UP
+    timeout: 20000
+- tapOn:
+    id: brick-item-a
+- scrollUntilVisible:
+    element:
+      id: brick-item-r1
+    direction: UP
+    timeout: 20000
+- tapOn:
+    id: brick-item-r1
+# La région vive ne porte un texte qu'après un placement : elle prouve que les deux appuis ont
+# réellement changé l'état du jeu (ET-4).
+- scrollUntilVisible:
+    element:
+      id: brick-live
+    direction: UP
+    timeout: 20000
+- takeScreenshot: SPEC-3301-association

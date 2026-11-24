@@ -1,0 +1,21 @@
+# SPEC-3002 — comparaison visuelle de la section « Jetons » (CA-4, ADR-3003 § 4).
+# La galerie est ouverte par son lien profond, sans défilement : la capture montre l'en-tête grand
+# titre, les pastilles de couleurs et les échelles. Le harnais compare la première image au
+# fichier de référence versionné `e2e/visual/baselines/SPEC-3002-jetons.png`.
+appId: fr.learny.app
+name: SPEC-3002 jetons
+tags:
+  - SPEC-3002
+  - visual
+---
+- launchApp:
+    clearState: true
+- assertVisible:
+    id: sdd-title
+- openLink: learny:///_dev/ui
+- assertVisible:
+    id: ui-gallery
+- assertVisible:
+    id: ui-token-lime
+- assertVisible: Galerie des composants
+- takeScreenshot: SPEC-3002-jetons

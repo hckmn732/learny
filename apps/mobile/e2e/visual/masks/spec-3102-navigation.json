@@ -1,0 +1,9 @@
+[
+  {
+    "x": 0,
+    "y": 0.17,
+    "width": 1,
+    "height": 0.78,
+    "why": "Zone de contenu de l'onglet Aujourd'hui, reportée à SPEC-3201 (SPEC-3102 EF-2) : la comparaison porte sur la zone haute de l'export android-02-aujourdhui.png — sur-titre, grand titre, cloche, pastille et avatar (ADR-3003 § 4, CA-6). La barre d'onglets et la barre d'état natives sont masquées par les zones par défaut."
+  }
+]

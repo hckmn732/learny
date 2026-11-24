@@ -1,0 +1,107 @@
+# SPEC-3401 — données et confidentialité : export et demande de suppression (EF-6, BR-ACC-10/11).
+#
+# The flow proves the parcours and the safety of the deletion (the word « SUPPRIMER » unlocks the
+# action, and nothing is sent before it). It does **not** submit the deletion:
+# `POST /me/deletion` answers 500 INTERNAL_ERROR on the local stack — a ReferenceError of the
+# TypeScript service, outside the mobile track (ADR-3001 §4) and recorded in
+# `evidence/SPEC-3401/acceptance.md`. The export is not requested either: it would leave a row on
+# the demonstration dataset ; both mutations are proven by
+# `test/integration/profile.int.test.ts` on an ephemeral account.
+appId: fr.learny.app
+name: SPEC-3401 suppression
+tags:
+  - SPEC-3401
+---
+- launchApp:
+    clearState: true
+- extendedWaitUntil:
+    visible:
+      id: sdd-health
+    timeout: 30000
+- openLink: learny://connexion?demo=1
+- waitForAnimationToEnd:
+    timeout: 5000
+- runFlow:
+    when:
+      visible:
+        id: onboarding-error
+    commands:
+      - tapOn:
+          id: onboarding-error-retry
+# La restauration de session peut précéder la publication du jeton, et un démarrage à froid peut
+# perdre le lien : une seconde tentative, bornée, évite un faux échec de campagne.
+- runFlow:
+    when:
+      notVisible:
+        id: tab-aujourdhui
+    commands:
+      - openLink: learny://connexion?demo=1
+      - waitForAnimationToEnd:
+          timeout: 5000
+- extendedWaitUntil:
+    visible:
+      id: tab-aujourdhui
+    timeout: 60000
+- tapOn:
+    id: tab-profil
+- extendedWaitUntil:
+    visible:
+      id: profile-identity
+    timeout: 30000
+# EF-2 — « Données et confidentialité » est la dernière ligne du groupe d'aide : défilement borné
+# avant l'ouverture (Maestro n'agit que sur un élément visible).
+- swipe:
+    direction: DOWN
+    duration: 400
+- swipe:
+    direction: DOWN
+    duration: 400
+
+- repeat:
+    times: 5
+    commands:
+      - runFlow:
+          when:
+            notVisible:
+              id: profile-row-data
+          commands:
+            - swipe:
+                direction: UP
+                duration: 300
+
+- assertVisible:
+    id: profile-row-data
+- tapOn:
+    id: profile-row-data
+- extendedWaitUntil:
+    visible:
+      id: privacy-screen
+    timeout: 20000
+# BR-ACC-10 — l'export est proposé et son état est lisible.
+- assertVisible:
+    id: privacy-export-state
+- assertVisible:
+    id: export-request
+# BR-ACC-11 — la suppression n'est possible qu'après avoir saisi le mot de confirmation.
+- assertVisible:
+    id: deletion-confirm
+- assertVisible:
+    id: deletion-submit
+- assertVisible:
+    id: deletion-submit
+    enabled: false
+- tapOn:
+    id: deletion-confirm
+- inputText: SUPPRIMER
+- assertVisible:
+    id: deletion-submit
+    enabled: true
+# Aucune demande n'est envoyée : le délai de trente jours et l'annulation restent la règle.
+- tapOn:
+    id: privacy-screen-back
+# Le retour laisse la racine au défilement où l'ouverture a eu lieu : l'écran, pas la carte, est le
+# repère stable.
+- extendedWaitUntil:
+    visible:
+      id: profil-screen
+    timeout: 20000

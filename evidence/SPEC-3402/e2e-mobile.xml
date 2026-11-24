@@ -1,0 +1,10 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<testsuites>
+  <testsuite name="Test Suite" device="learny" tests="1" failures="0" time="58.557" timestamp="2026-11-24T00:03:33">
+    <testcase id="SPEC-3402 fournisseur simule" name="SPEC-3402 fournisseur simule" classname="SPEC-3402 fournisseur simule" file="apps/mobile/e2e/flows/SPEC-3402-fournisseur.yaml" time="58.535" timestamp="2026-11-24T00:03:33" status="SUCCESS">
+      <properties>
+        <property name="tags" value="SPEC-3402, visual"/>
+      </properties>
+    </testcase>
+  </testsuite>
+</testsuites>

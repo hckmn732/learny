@@ -26,6 +26,23 @@ export interface Schema<T> {
   ): { success: true; data: T } | { success: false; error: { issues: readonly SchemaIssue[] } };
 }
 
+/**
+ * Identifiant d'idempotence de secours : `crypto.randomUUID` est absent de Hermes (bundle release
+ * React Native), et sans repli toute route `idempotent: true` levait avant le `fetch`.
+ */
+function fallbackUuid(): string {
+  const webCrypto = (globalThis as { crypto?: { randomUUID?: () => string } }).crypto;
+  if (typeof webCrypto?.randomUUID === 'function') return webCrypto.randomUUID();
+  const bytes = new Uint8Array(16);
+  for (let index = 0; index < bytes.length; index += 1) {
+    bytes[index] = Math.floor(Math.random() * 256);
+  }
+  bytes[6] = ((bytes[6] ?? 0) & 0x0f) | 0x40;
+  bytes[8] = ((bytes[8] ?? 0) & 0x3f) | 0x80;
+  const hex = Array.from(bytes, (byte) => byte.toString(16).padStart(2, '0')).join('');
+  return `${hex.slice(0, 8)}-${hex.slice(8, 12)}-${hex.slice(12, 16)}-${hex.slice(16, 20)}-${hex.slice(20)}`;
+}
+
 export const API_BASE = '/api/v1';
 
 export type ApiMethod = 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE';
@@ -175,10 +192,22 @@ async function toAppError(response: Response): Promise<AppError> {
 // SPEC-201: client built on the route contracts.
 
 /** Error of a call through `callApi`: HTTP status, business code, request reference (EF-9). */
+/* eslint-disable @typescript-eslint/no-unsafe-declaration-merging -- the interface below only narrows a member inherited from AppError, it adds nothing. */
 export class ApiError extends AppError {
   override readonly name = 'ApiError';
-  declare readonly status: number;
 }
+
+/**
+ * The HTTP status is carried by the `AppError` this class extends; the interface only narrows its
+ * type (declaration merging). It used to be a `declare` class field, which React Native's Babel
+ * pipeline rejects: `babel-preset-expo` strips Flow types before TypeScript ones, and Flow refuses
+ * `declare` inside a class body. ADR-3005 § 3 requires every shared client package to stay
+ * executable under React Native (SPEC-3001 ET-2).
+ */
+export interface ApiError {
+  readonly status: number;
+}
+/* eslint-enable @typescript-eslint/no-unsafe-declaration-merging */
 
 export interface CallOptions {
   /** Reused as is when given; otherwise generated once per call for an idempotent route. */
@@ -418,7 +447,7 @@ export function createApiClient(options: ApiClientOptions): ApiClient {
     // so the server never runs the service twice.
     const idempotencyKey =
       route.idempotent === true || callOptions.idempotencyKey !== undefined
-        ? (callOptions.idempotencyKey ?? crypto.randomUUID())
+        ? (callOptions.idempotencyKey ?? fallbackUuid())
         : undefined;
     const buildHeaders = async (): Promise<Record<string, string>> => {
       const headers: Record<string, string> = { Accept: 'application/json' };

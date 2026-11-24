@@ -1,0 +1,58 @@
+# SPEC-3102 — feuille « Mon compte » et déconnexion confirmée (CA-4, BR-NAV-01).
+#
+# Le flux n'est pas `@visual` (ADR-3015 § 5). La feuille est ouverte par l'avatar de l'en-tête ;
+# la déconnexion passe par la confirmation native (« Se déconnecter ? », « Se déconnecter »,
+# « Annuler »), dont le libellé est cherché par motif : les accents du dialogue système ne
+# survivent pas toujours au transport (Maestro 2.12.1).
+appId: fr.learny.app
+name: SPEC-3102 compte
+tags:
+  - SPEC-3102
+---
+- launchApp:
+    clearState: true
+- extendedWaitUntil:
+    visible:
+      id: sdd-health
+    timeout: 30000
+- openLink: learny://connexion?demo=1
+- extendedWaitUntil:
+    visible:
+      id: tab-aujourdhui
+    timeout: 60000
+# CA-4 — la feuille compte : identité et « Apprenant · 3 formations en cours ».
+- extendedWaitUntil:
+    visible:
+      id: header-account
+    timeout: 45000
+# EF-8 — la feuille compte s'ouvre par son lien profond (même route que le disque du compte).
+- openLink: learny://compte
+- extendedWaitUntil:
+    visible:
+      id: account-sheet
+    timeout: 30000
+- assertVisible:
+    id: account-name
+- assertVisible:
+    id: account-email
+- assertVisible:
+    id: account-sheet-subtitle
+- assertVisible:
+    id: account-settings
+- assertVisible:
+    id: account-pause
+# EF-4 — la déconnexion demande confirmation, puis ramène à la connexion.
+- tapOn:
+    id: account-sign-out
+- extendedWaitUntil:
+    visible:
+      text: 'Se d.*connecter .'
+    timeout: 20000
+- tapOn:
+    text: 'Se d.*connecter'
+- extendedWaitUntil:
+    visible:
+      id: auth-title
+    timeout: 45000
+- assertVisible:
+    id: auth-mode

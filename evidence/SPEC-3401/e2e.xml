@@ -1,0 +1,20 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<testsuites>
+  <testsuite name="Test Suite" device="emulator-5554" tests="3" failures="0" time="201.389" timestamp="2026-11-24T01:24:15">
+    <testcase id="SPEC-3401 suppression" name="SPEC-3401 suppression" classname="SPEC-3401 suppression" file="apps/mobile/e2e/flows/SPEC-3401-suppression.yaml" time="43.684" timestamp="2026-11-24T01:24:15" status="SUCCESS">
+      <properties>
+        <property name="tags" value="SPEC-3401"/>
+      </properties>
+    </testcase>
+    <testcase id="SPEC-3401 profil" name="SPEC-3401 profil" classname="SPEC-3401 profil" file="apps/mobile/e2e/flows/SPEC-3401-profil.yaml" time="115.838" timestamp="2026-11-24T01:24:59" status="SUCCESS">
+      <properties>
+        <property name="tags" value="SPEC-3401, visual"/>
+      </properties>
+    </testcase>
+    <testcase id="SPEC-3401 pause" name="SPEC-3401 pause" classname="SPEC-3401 pause" file="apps/mobile/e2e/flows/SPEC-3401-pause.yaml" time="41.821" timestamp="2026-11-24T01:26:55" status="SUCCESS">
+      <properties>
+        <property name="tags" value="SPEC-3401"/>
+      </properties>
+    </testcase>
+  </testsuite>
+</testsuites>

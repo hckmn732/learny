@@ -48,3 +48,20 @@ Chaque spécification concernée décrit précisément la structure attendue et 
 ## 4. Données de démonstration
 
 Les maquettes montrent la journée du **mercredi 11 novembre 2026, 13:20 (Europe/Paris)** de l'utilisateur Alex Perrin. Le jeu de données `SPEC-115` reproduit exactement ces données ; les tests end-to-end fixent l'horloge du navigateur et du serveur à cet instant (ADR-0047) pour que les captures soient comparables aux maquettes.
+
+## 5. Application mobile (piste `mobile`, ADR-3001 à ADR-3003)
+
+Maquette de référence : `design/app-mobile/` (planche `index.html`, écran seul `view.html`, exports `exports/screens/` et `exports/states/`), lue avec les corrections normatives d'ADR-3003. Périmètre : ADR-3002 ; tout écran web absent de ce tableau s'ouvre sur le web (« Continuer sur le web »).
+
+| Écran mobile | Équivalent web | Export de référence | Spécification |
+|---|---|---|---|
+| 01 Connexion | SCR-01 | `{ios,android}-01-connexion.png` | SPEC-3101, SPEC-3402 |
+| Coquille (onglets, notifications, compte) | SCR-03 (en-tête), SCR-20 | `states/ios-notifications.png` | SPEC-3102 |
+| 02 Aujourd'hui | SCR-03 | `{ios,android}-02-aujourdhui.png` | SPEC-3201 |
+| 03 Programme | SCR-05, SCR-06 (lecture) | `{ios,android}-03-programme.png`, `states/ios-programme-calendrier.png` | SPEC-3202 |
+| 04 Cours | SCR-07 | `{ios,android}-04-cours.png` | SPEC-3302 |
+| 05 Cours · tuteur | SCR-07 | `{ios,android}-04b-cours-tuteur.png`, `states/android-tuteur.png` | SPEC-3303 |
+| 06 Quiz de validation | SCR-09 | `{ios,android}-05-quiz.png`, `states/ios-resultat.png` | SPEC-3304 |
+| 07 Quiz global (Réviser) | SCR-10 | `{ios,android}-06-session.png` | SPEC-3305 |
+| 08 Agenda | SCR-12 | `{ios,android}-07-agenda.png`, `states/android-agenda-mois.png` | SPEC-3203 |
+| 09 Profil | SCR-15 | `{ios,android}-08-profil.png` | SPEC-3401, SPEC-3501 |

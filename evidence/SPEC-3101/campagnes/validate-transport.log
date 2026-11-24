@@ -1,0 +1,1464 @@
+
+$ pnpm -s lint
+
+   • turbo 2.11.11
+   • Packages in scope: @learny/api, @learny/api-client, @learny/api-routes, @learny/automations, @learny/bricks, @learny/config, @learny/contracts, @learny/core, @learny/db, @learny/domain, @learny/http, @learny/i18n, @learny/ingestion, @learny/jobs, @learny/learning-engine, @learny/llm, @learny/mobile, @learny/notifications, @learny/services, @learny/testing, @learny/tutor, @learny/ui, @learny/web
+   • Running lint in 23 packages
+   • Remote caching disabled
+
+@learny/config:lint: cache miss, executing 1761335c32ad2ab2
+@learny/core:lint: cache miss, executing b041460d533f6279
+@learny/i18n:lint: cache miss, executing c835011cfde1eafe
+@learny/config:lint: 
+@learny/config:lint: > @learny/config@0.0.0 lint /root/learny-mobile/packages/config
+@learny/config:lint: > eslint --max-warnings=0 .
+@learny/config:lint: 
+@learny/core:lint: 
+@learny/core:lint: > @learny/core@0.0.0 lint /root/learny-mobile/packages/core
+@learny/core:lint: > eslint --max-warnings=0 .
+@learny/core:lint: 
+@learny/i18n:lint: 
+@learny/i18n:lint: > @learny/i18n@0.0.0 lint /root/learny-mobile/packages/i18n
+@learny/i18n:lint: > eslint --max-warnings=0 .
+@learny/i18n:lint: 
+@learny/contracts:lint: cache miss, executing ffedfc2ad21dbead
+@learny/db:lint: cache miss, executing c613e036ff831994
+@learny/contracts:lint: 
+@learny/contracts:lint: > @learny/contracts@0.0.0 lint /root/learny-mobile/packages/contracts
+@learny/contracts:lint: > eslint --max-warnings=0 .
+@learny/contracts:lint: 
+@learny/db:lint: 
+@learny/db:lint: > @learny/db@0.0.0 lint /root/learny-mobile/packages/db
+@learny/db:lint: > eslint --max-warnings=0 .
+@learny/db:lint: 
+@learny/api-client:lint: cache miss, executing 5495d24a74edea60
+@learny/api-client:lint: 
+@learny/api-client:lint: > @learny/api-client@0.0.0 lint /root/learny-mobile/packages/api-client
+@learny/api-client:lint: > eslint --max-warnings=0 .
+@learny/api-client:lint: 
+@learny/notifications:lint: cache miss, executing e901ff04685ed5c1
+@learny/notifications:lint: 
+@learny/notifications:lint: > @learny/notifications@0.0.0 lint /root/learny-mobile/packages/notifications
+@learny/notifications:lint: > eslint --max-warnings=0 .
+@learny/notifications:lint: 
+@learny/testing:lint: cache miss, executing aedda3615beb5a07
+@learny/testing:lint: 
+@learny/testing:lint: > @learny/testing@0.0.0 lint /root/learny-mobile/packages/testing
+@learny/testing:lint: > eslint --max-warnings=0 .
+@learny/testing:lint: 
+@learny/ui:lint: cache miss, executing c0356eea9cf736ae
+@learny/learning-engine:lint: cache miss, executing 72b10661b980a1dd
+@learny/llm:lint: cache miss, executing 2a786ab2cfac5118
+@learny/llm:lint: 
+@learny/llm:lint: > @learny/llm@0.0.0 lint /root/learny-mobile/packages/llm
+@learny/llm:lint: > eslint --max-warnings=0 .
+@learny/llm:lint: 
+@learny/ui:lint: 
+@learny/ui:lint: > @learny/ui@0.0.0 lint /root/learny-mobile/packages/ui
+@learny/ui:lint: > eslint --max-warnings=0 .
+@learny/ui:lint: 
+@learny/learning-engine:lint: 
+@learny/learning-engine:lint: > @learny/learning-engine@0.0.0 lint /root/learny-mobile/packages/learning-engine
+@learny/learning-engine:lint: > eslint --max-warnings=0 .
+@learny/learning-engine:lint: 
+@learny/ingestion:lint: cache miss, executing ccd8c76a09f6b2ff
+@learny/ingestion:lint: 
+@learny/ingestion:lint: > @learny/ingestion@0.0.0 lint /root/learny-mobile/packages/ingestion
+@learny/ingestion:lint: > eslint --max-warnings=0 .
+@learny/ingestion:lint: 
+@learny/mobile:lint: cache miss, executing bd41edcdd7b9e679
+@learny/bricks:lint: cache miss, executing c05e67031ccb6899
+@learny/bricks:lint: 
+@learny/bricks:lint: > @learny/bricks@0.0.0 lint /root/learny-mobile/packages/bricks
+@learny/bricks:lint: > eslint --max-warnings=0 .
+@learny/bricks:lint: 
+@learny/mobile:lint: 
+@learny/mobile:lint: > @learny/mobile@0.0.0 lint /root/learny-mobile/apps/mobile
+@learny/mobile:lint: > eslint --max-warnings=0 .
+@learny/mobile:lint: 
+@learny/mobile:lint: 
+@learny/mobile:lint: Error while parsing /root/learny-mobile/apps/mobile/node_modules/react-native/index.js
+@learny/mobile:lint: Line 27, column 14: Expression expected.
+@learny/mobile:lint: `parseForESLint` from parser `context.languageOptions.parser` is invalid and will just be ignored
+@learny/mobile:lint: 
+@learny/mobile:lint: Error while parsing /root/learny-mobile/apps/mobile/node_modules/react-native/Libraries/Utilities/codegenNativeComponent.js
+@learny/mobile:lint: Line 30, column 43: Property or signature expected.
+@learny/mobile:lint: `parseForESLint` from parser `context.languageOptions.parser` is invalid and will just be ignored
+@learny/mobile:lint: 
+@learny/mobile:lint: Error while parsing /root/learny-mobile/apps/mobile/node_modules/react-native/Libraries/Utilities/codegenNativeComponent.js
+@learny/mobile:lint: Line 30, column 43: Property or signature expected.
+@learny/mobile:lint: `parseForESLint` from parser `context.languageOptions.parser` is invalid and will just be ignored
+@learny/mobile:lint: 
+@learny/mobile:lint: Error while parsing /root/learny-mobile/apps/mobile/node_modules/react-native/index.js
+@learny/mobile:lint: Line 27, column 14: Expression expected.
+@learny/mobile:lint: `parseForESLint` from parser `context.languageOptions.parser` is invalid and will just be ignored
+@learny/mobile:lint: 
+@learny/mobile:lint: Error while parsing /root/learny-mobile/apps/mobile/node_modules/react-native/index.js
+@learny/mobile:lint: Line 27, column 14: Expression expected.
+@learny/mobile:lint: `parseForESLint` from parser `context.languageOptions.parser` is invalid and will just be ignored
+@learny/mobile:lint: 
+@learny/mobile:lint: Error while parsing /root/learny-mobile/apps/mobile/node_modules/react-native/Libraries/Utilities/codegenNativeComponent.js
+@learny/mobile:lint: Line 30, column 43: Property or signature expected.
+@learny/mobile:lint: `parseForESLint` from parser `context.languageOptions.parser` is invalid and will just be ignored
+@learny/mobile:lint: 
+@learny/mobile:lint: Error while parsing /root/learny-mobile/apps/mobile/node_modules/react-native/Libraries/Utilities/codegenNativeComponent.js
+@learny/mobile:lint: Line 30, column 43: Property or signature expected.
+@learny/mobile:lint: `parseForESLint` from parser `context.languageOptions.parser` is invalid and will just be ignored
+@learny/mobile:lint: 
+@learny/mobile:lint: Error while parsing /root/learny-mobile/apps/mobile/node_modules/react-native/index.js
+@learny/mobile:lint: Line 27, column 14: Expression expected.
+@learny/mobile:lint: `parseForESLint` from parser `context.languageOptions.parser` is invalid and will just be ignored
+@learny/mobile:lint: 
+@learny/mobile:lint: Error while parsing /root/learny-mobile/apps/mobile/node_modules/react-native/Libraries/Utilities/codegenNativeComponent.js
+@learny/mobile:lint: Line 30, column 43: Property or signature expected.
+@learny/mobile:lint: `parseForESLint` from parser `context.languageOptions.parser` is invalid and will just be ignored
+@learny/mobile:lint: 
+@learny/mobile:lint: Error while parsing /root/learny-mobile/apps/mobile/node_modules/react-native/Libraries/Utilities/codegenNativeComponent.js
+@learny/mobile:lint: Line 30, column 43: Property or signature expected.
+@learny/mobile:lint: `parseForESLint` from parser `context.languageOptions.parser` is invalid and will just be ignored
+@learny/mobile:lint: 
+@learny/mobile:lint: Error while parsing /root/learny-mobile/apps/mobile/node_modules/react-native/index.js
+@learny/mobile:lint: Line 27, column 14: Expression expected.
+@learny/mobile:lint: `parseForESLint` from parser `context.languageOptions.parser` is invalid and will just be ignored
+@learny/mobile:lint: 
+@learny/mobile:lint: Error while parsing /root/learny-mobile/apps/mobile/node_modules/react-native/index.js
+@learny/mobile:lint: Line 27, column 14: Expression expected.
+@learny/mobile:lint: `parseForESLint` from parser `context.languageOptions.parser` is invalid and will just be ignored
+@learny/mobile:lint: 
+@learny/mobile:lint: Error while parsing /root/learny-mobile/apps/mobile/node_modules/react-native/Libraries/Utilities/codegenNativeComponent.js
+@learny/mobile:lint: Line 30, column 43: Property or signature expected.
+@learny/mobile:lint: `parseForESLint` from parser `context.languageOptions.parser` is invalid and will just be ignored
+@learny/mobile:lint: 
+@learny/mobile:lint: Error while parsing /root/learny-mobile/apps/mobile/node_modules/react-native/Libraries/Utilities/codegenNativeComponent.js
+@learny/mobile:lint: Line 30, column 43: Property or signature expected.
+@learny/mobile:lint: `parseForESLint` from parser `context.languageOptions.parser` is invalid and will just be ignored
+@learny/mobile:lint: 
+@learny/mobile:lint: Error while parsing /root/learny-mobile/apps/mobile/node_modules/react-native/index.js
+@learny/mobile:lint: Line 27, column 14: Expression expected.
+@learny/mobile:lint: `parseForESLint` from parser `context.languageOptions.parser` is invalid and will just be ignored
+@learny/mobile:lint: 
+@learny/mobile:lint: Error while parsing /root/learny-mobile/apps/mobile/node_modules/react-native/index.js
+@learny/mobile:lint: Line 27, column 14: Expression expected.
+@learny/mobile:lint: `parseForESLint` from parser `context.languageOptions.parser` is invalid and will just be ignored
+@learny/mobile:lint: 
+@learny/mobile:lint: Error while parsing /root/learny-mobile/apps/mobile/node_modules/react-native/index.js
+@learny/mobile:lint: Line 27, column 14: Expression expected.
+@learny/mobile:lint: `parseForESLint` from parser `context.languageOptions.parser` is invalid and will just be ignored
+@learny/mobile:lint: 
+@learny/mobile:lint: Error while parsing /root/learny-mobile/apps/mobile/node_modules/react-native/index.js
+@learny/mobile:lint: Line 27, column 14: Expression expected.
+@learny/mobile:lint: `parseForESLint` from parser `context.languageOptions.parser` is invalid and will just be ignored
+@learny/mobile:lint: 
+@learny/mobile:lint: Error while parsing /root/learny-mobile/apps/mobile/node_modules/react-native/index.js
+@learny/mobile:lint: Line 27, column 14: Expression expected.
+@learny/mobile:lint: `parseForESLint` from parser `context.languageOptions.parser` is invalid and will just be ignored
+@learny/mobile:lint: 
+@learny/mobile:lint: Error while parsing /root/learny-mobile/apps/mobile/node_modules/react-native/Libraries/Utilities/codegenNativeComponent.js
+@learny/mobile:lint: Line 30, column 43: Property or signature expected.
+@learny/mobile:lint: `parseForESLint` from parser `context.languageOptions.parser` is invalid and will just be ignored
+@learny/mobile:lint: 
+@learny/mobile:lint: Error while parsing /root/learny-mobile/apps/mobile/node_modules/react-native/Libraries/Utilities/codegenNativeComponent.js
+@learny/mobile:lint: Line 30, column 43: Property or signature expected.
+@learny/mobile:lint: `parseForESLint` from parser `context.languageOptions.parser` is invalid and will just be ignored
+@learny/mobile:lint: 
+@learny/mobile:lint: Error while parsing /root/learny-mobile/apps/mobile/node_modules/react-native/index.js
+@learny/mobile:lint: Line 27, column 14: Expression expected.
+@learny/mobile:lint: `parseForESLint` from parser `context.languageOptions.parser` is invalid and will just be ignored
+@learny/mobile:lint: 
+@learny/mobile:lint: Error while parsing /root/learny-mobile/apps/mobile/node_modules/react-native/Libraries/Utilities/codegenNativeComponent.js
+@learny/mobile:lint: Line 30, column 43: Property or signature expected.
+@learny/mobile:lint: `parseForESLint` from parser `context.languageOptions.parser` is invalid and will just be ignored
+@learny/mobile:lint: 
+@learny/mobile:lint: Error while parsing /root/learny-mobile/apps/mobile/node_modules/react-native/Libraries/Utilities/codegenNativeComponent.js
+@learny/mobile:lint: Line 30, column 43: Property or signature expected.
+@learny/mobile:lint: `parseForESLint` from parser `context.languageOptions.parser` is invalid and will just be ignored
+@learny/mobile:lint: 
+@learny/mobile:lint: Error while parsing /root/learny-mobile/apps/mobile/node_modules/react-native/index.js
+@learny/mobile:lint: Line 27, column 14: Expression expected.
+@learny/mobile:lint: `parseForESLint` from parser `context.languageOptions.parser` is invalid and will just be ignored
+@learny/mobile:lint: 
+@learny/mobile:lint: Error while parsing /root/learny-mobile/apps/mobile/node_modules/react-native/index.js
+@learny/mobile:lint: Line 27, column 14: Expression expected.
+@learny/mobile:lint: `parseForESLint` from parser `context.languageOptions.parser` is invalid and will just be ignored
+@learny/mobile:lint: 
+@learny/mobile:lint: Error while parsing /root/learny-mobile/apps/mobile/node_modules/react-native/index.js
+@learny/mobile:lint: Line 27, column 14: Expression expected.
+@learny/mobile:lint: `parseForESLint` from parser `context.languageOptions.parser` is invalid and will just be ignored
+@learny/mobile:lint: 
+@learny/mobile:lint: Error while parsing /root/learny-mobile/apps/mobile/node_modules/react-native/index.js
+@learny/mobile:lint: Line 27, column 14: Expression expected.
+@learny/mobile:lint: `parseForESLint` from parser `context.languageOptions.parser` is invalid and will just be ignored
+@learny/mobile:lint: 
+@learny/mobile:lint: Error while parsing /root/learny-mobile/apps/mobile/node_modules/react-native/index.js
+@learny/mobile:lint: Line 27, column 14: Expression expected.
+@learny/mobile:lint: `parseForESLint` from parser `context.languageOptions.parser` is invalid and will just be ignored
+@learny/mobile:lint: 
+@learny/mobile:lint: Error while parsing /root/learny-mobile/apps/mobile/node_modules/react-native/index.js
+@learny/mobile:lint: Line 27, column 14: Expression expected.
+@learny/mobile:lint: `parseForESLint` from parser `context.languageOptions.parser` is invalid and will just be ignored
+@learny/mobile:lint: 
+@learny/mobile:lint: Error while parsing /root/learny-mobile/apps/mobile/node_modules/react-native/index.js
+@learny/mobile:lint: Line 27, column 14: Expression expected.
+@learny/mobile:lint: `parseForESLint` from parser `context.languageOptions.parser` is invalid and will just be ignored
+@learny/mobile:lint: 
+@learny/mobile:lint: Error while parsing /root/learny-mobile/apps/mobile/node_modules/react-native/Libraries/Utilities/codegenNativeComponent.js
+@learny/mobile:lint: Line 30, column 43: Property or signature expected.
+@learny/mobile:lint: `parseForESLint` from parser `context.languageOptions.parser` is invalid and will just be ignored
+@learny/mobile:lint: 
+@learny/mobile:lint: Error while parsing /root/learny-mobile/apps/mobile/node_modules/react-native/Libraries/Utilities/codegenNativeComponent.js
+@learny/mobile:lint: Line 30, column 43: Property or signature expected.
+@learny/mobile:lint: `parseForESLint` from parser `context.languageOptions.parser` is invalid and will just be ignored
+@learny/mobile:lint: 
+@learny/mobile:lint: Error while parsing /root/learny-mobile/apps/mobile/node_modules/react-native/index.js
+@learny/mobile:lint: Line 27, column 14: Expression expected.
+@learny/mobile:lint: `parseForESLint` from parser `context.languageOptions.parser` is invalid and will just be ignored
+@learny/mobile:lint: 
+@learny/mobile:lint: Error while parsing /root/learny-mobile/apps/mobile/node_modules/react-native/index.js
+@learny/mobile:lint: Line 27, column 14: Expression expected.
+@learny/mobile:lint: `parseForESLint` from parser `context.languageOptions.parser` is invalid and will just be ignored
+@learny/mobile:lint: 
+@learny/mobile:lint: Error while parsing /root/learny-mobile/apps/mobile/node_modules/react-native/index.js
+@learny/mobile:lint: Line 27, column 14: Expression expected.
+@learny/mobile:lint: `parseForESLint` from parser `context.languageOptions.parser` is invalid and will just be ignored
+@learny/mobile:lint: 
+@learny/mobile:lint: Error while parsing /root/learny-mobile/apps/mobile/node_modules/react-native/Libraries/Utilities/codegenNativeComponent.js
+@learny/mobile:lint: Line 30, column 43: Property or signature expected.
+@learny/mobile:lint: `parseForESLint` from parser `context.languageOptions.parser` is invalid and will just be ignored
+@learny/mobile:lint: 
+@learny/mobile:lint: Error while parsing /root/learny-mobile/apps/mobile/node_modules/react-native/Libraries/Utilities/codegenNativeComponent.js
+@learny/mobile:lint: Line 30, column 43: Property or signature expected.
+@learny/mobile:lint: `parseForESLint` from parser `context.languageOptions.parser` is invalid and will just be ignored
+@learny/mobile:lint: 
+@learny/mobile:lint: Error while parsing /root/learny-mobile/apps/mobile/node_modules/react-native/index.js
+@learny/mobile:lint: Line 27, column 14: Expression expected.
+@learny/mobile:lint: `parseForESLint` from parser `context.languageOptions.parser` is invalid and will just be ignored
+@learny/mobile:lint: 
+@learny/mobile:lint: Error while parsing /root/learny-mobile/apps/mobile/node_modules/react-native/index.js
+@learny/mobile:lint: Line 27, column 14: Expression expected.
+@learny/mobile:lint: `parseForESLint` from parser `context.languageOptions.parser` is invalid and will just be ignored
+@learny/mobile:lint: 
+@learny/mobile:lint: Error while parsing /root/learny-mobile/apps/mobile/node_modules/react-native/index.js
+@learny/mobile:lint: Line 27, column 14: Expression expected.
+@learny/mobile:lint: `parseForESLint` from parser `context.languageOptions.parser` is invalid and will just be ignored
+@learny/mobile:lint: 
+@learny/mobile:lint: Error while parsing /root/learny-mobile/apps/mobile/node_modules/react-native/index.js
+@learny/mobile:lint: Line 27, column 14: Expression expected.
+@learny/mobile:lint: `parseForESLint` from parser `context.languageOptions.parser` is invalid and will just be ignored
+@learny/mobile:lint: 
+@learny/mobile:lint: Error while parsing /root/learny-mobile/apps/mobile/node_modules/react-native/index.js
+@learny/mobile:lint: Line 27, column 14: Expression expected.
+@learny/mobile:lint: `parseForESLint` from parser `context.languageOptions.parser` is invalid and will just be ignored
+@learny/mobile:lint: 
+@learny/mobile:lint: Error while parsing /root/learny-mobile/apps/mobile/node_modules/react-native/index.js
+@learny/mobile:lint: Line 27, column 14: Expression expected.
+@learny/mobile:lint: `parseForESLint` from parser `context.languageOptions.parser` is invalid and will just be ignored
+@learny/mobile:lint: 
+@learny/mobile:lint: Error while parsing /root/learny-mobile/apps/mobile/node_modules/react-native/index.js
+@learny/mobile:lint: Line 27, column 14: Expression expected.
+@learny/mobile:lint: `parseForESLint` from parser `context.languageOptions.parser` is invalid and will just be ignored
+@learny/mobile:lint: 
+@learny/mobile:lint: Error while parsing /root/learny-mobile/apps/mobile/node_modules/react-native/index.js
+@learny/mobile:lint: Line 27, column 14: Expression expected.
+@learny/mobile:lint: `parseForESLint` from parser `context.languageOptions.parser` is invalid and will just be ignored
+@learny/mobile:lint: 
+@learny/mobile:lint: Error while parsing /root/learny-mobile/apps/mobile/node_modules/react-native/index.js
+@learny/mobile:lint: Line 27, column 14: Expression expected.
+@learny/mobile:lint: `parseForESLint` from parser `context.languageOptions.parser` is invalid and will just be ignored
+@learny/mobile:lint: 
+@learny/mobile:lint: Error while parsing /root/learny-mobile/apps/mobile/node_modules/react-native/index.js
+@learny/mobile:lint: Line 27, column 14: Expression expected.
+@learny/mobile:lint: `parseForESLint` from parser `context.languageOptions.parser` is invalid and will just be ignored
+@learny/mobile:lint: 
+@learny/mobile:lint: Error while parsing /root/learny-mobile/apps/mobile/node_modules/react-native/index.js
+@learny/mobile:lint: Line 27, column 14: Expression expected.
+@learny/mobile:lint: `parseForESLint` from parser `context.languageOptions.parser` is invalid and will just be ignored
+@learny/mobile:lint: 
+@learny/mobile:lint: Error while parsing /root/learny-mobile/apps/mobile/node_modules/react-native/index.js
+@learny/mobile:lint: Line 27, column 14: Expression expected.
+@learny/mobile:lint: `parseForESLint` from parser `context.languageOptions.parser` is invalid and will just be ignored
+@learny/mobile:lint: 
+@learny/mobile:lint: Error while parsing /root/learny-mobile/apps/mobile/node_modules/react-native/index.js
+@learny/mobile:lint: Line 27, column 14: Expression expected.
+@learny/mobile:lint: `parseForESLint` from parser `context.languageOptions.parser` is invalid and will just be ignored
+@learny/mobile:lint: 
+@learny/mobile:lint: Error while parsing /root/learny-mobile/apps/mobile/node_modules/react-native/index.js
+@learny/mobile:lint: Line 27, column 14: Expression expected.
+@learny/mobile:lint: `parseForESLint` from parser `context.languageOptions.parser` is invalid and will just be ignored
+@learny/mobile:lint: 
+@learny/mobile:lint: Error while parsing /root/learny-mobile/apps/mobile/node_modules/react-native/index.js
+@learny/mobile:lint: Line 27, column 14: Expression expected.
+@learny/mobile:lint: `parseForESLint` from parser `context.languageOptions.parser` is invalid and will just be ignored
+@learny/mobile:lint: 
+@learny/mobile:lint: Error while parsing /root/learny-mobile/apps/mobile/node_modules/react-native/index.js
+@learny/mobile:lint: Line 27, column 14: Expression expected.
+@learny/mobile:lint: `parseForESLint` from parser `context.languageOptions.parser` is invalid and will just be ignored
+@learny/mobile:lint: 
+@learny/mobile:lint: Error while parsing /root/learny-mobile/apps/mobile/node_modules/react-native/index.js
+@learny/mobile:lint: Line 27, column 14: Expression expected.
+@learny/mobile:lint: `parseForESLint` from parser `context.languageOptions.parser` is invalid and will just be ignored
+@learny/mobile:lint: 
+@learny/mobile:lint: Error while parsing /root/learny-mobile/apps/mobile/node_modules/react-native/index.js
+@learny/mobile:lint: Line 27, column 14: Expression expected.
+@learny/mobile:lint: `parseForESLint` from parser `context.languageOptions.parser` is invalid and will just be ignored
+@learny/mobile:lint: 
+@learny/mobile:lint: Error while parsing /root/learny-mobile/apps/mobile/node_modules/react-native/index.js
+@learny/mobile:lint: Line 27, column 14: Expression expected.
+@learny/mobile:lint: `parseForESLint` from parser `context.languageOptions.parser` is invalid and will just be ignored
+@learny/mobile:lint: 
+@learny/mobile:lint: Error while parsing /root/learny-mobile/apps/mobile/node_modules/react-native/index.js
+@learny/mobile:lint: Line 27, column 14: Expression expected.
+@learny/mobile:lint: `parseForESLint` from parser `context.languageOptions.parser` is invalid and will just be ignored
+@learny/mobile:lint: 
+@learny/mobile:lint: Error while parsing /root/learny-mobile/apps/mobile/node_modules/react-native/index.js
+@learny/mobile:lint: Line 27, column 14: Expression expected.
+@learny/mobile:lint: `parseForESLint` from parser `context.languageOptions.parser` is invalid and will just be ignored
+@learny/mobile:lint: 
+@learny/mobile:lint: Error while parsing /root/learny-mobile/apps/mobile/node_modules/react-native/index.js
+@learny/mobile:lint: Line 27, column 14: Expression expected.
+@learny/mobile:lint: `parseForESLint` from parser `context.languageOptions.parser` is invalid and will just be ignored
+@learny/mobile:lint: 
+@learny/mobile:lint: Error while parsing /root/learny-mobile/apps/mobile/node_modules/react-native/index.js
+@learny/mobile:lint: Line 27, column 14: Expression expected.
+@learny/mobile:lint: `parseForESLint` from parser `context.languageOptions.parser` is invalid and will just be ignored
+@learny/mobile:lint: 
+@learny/mobile:lint: Error while parsing /root/learny-mobile/apps/mobile/node_modules/react-native/index.js
+@learny/mobile:lint: Line 27, column 14: Expression expected.
+@learny/mobile:lint: `parseForESLint` from parser `context.languageOptions.parser` is invalid and will just be ignored
+@learny/mobile:lint: 
+@learny/mobile:lint: Error while parsing /root/learny-mobile/apps/mobile/node_modules/react-native/index.js
+@learny/mobile:lint: Line 27, column 14: Expression expected.
+@learny/mobile:lint: `parseForESLint` from parser `context.languageOptions.parser` is invalid and will just be ignored
+@learny/domain:lint: cache miss, executing 83068af80ce49d03
+@learny/tutor:lint: cache miss, executing b235ec4578ce6681
+@learny/mobile:lint: 
+@learny/mobile:lint: Error while parsing /root/learny-mobile/apps/mobile/node_modules/react-native/index.js
+@learny/mobile:lint: Line 27, column 14: Expression expected.
+@learny/mobile:lint: `parseForESLint` from parser `context.languageOptions.parser` is invalid and will just be ignored
+@learny/mobile:lint: 
+@learny/mobile:lint: Error while parsing /root/learny-mobile/apps/mobile/node_modules/react-native/index.js
+@learny/mobile:lint: Line 27, column 14: Expression expected.
+@learny/mobile:lint: `parseForESLint` from parser `context.languageOptions.parser` is invalid and will just be ignored
+@learny/mobile:lint: 
+@learny/mobile:lint: Error while parsing /root/learny-mobile/apps/mobile/node_modules/react-native/index.js
+@learny/mobile:lint: Line 27, column 14: Expression expected.
+@learny/mobile:lint: `parseForESLint` from parser `context.languageOptions.parser` is invalid and will just be ignored
+@learny/mobile:lint: 
+@learny/mobile:lint: Error while parsing /root/learny-mobile/apps/mobile/node_modules/react-native/index.js
+@learny/mobile:lint: Line 27, column 14: Expression expected.
+@learny/mobile:lint: `parseForESLint` from parser `context.languageOptions.parser` is invalid and will just be ignored
+@learny/domain:lint: 
+@learny/domain:lint: > @learny/domain@0.0.0 lint /root/learny-mobile/packages/domain
+@learny/domain:lint: > eslint --max-warnings=0 .
+@learny/domain:lint: 
+@learny/tutor:lint: 
+@learny/tutor:lint: > @learny/tutor@0.0.0 lint /root/learny-mobile/packages/tutor
+@learny/tutor:lint: > eslint --max-warnings=0 .
+@learny/tutor:lint: 
+@learny/mobile:lint: 
+@learny/mobile:lint: Error while parsing /root/learny-mobile/apps/mobile/node_modules/react-native/Libraries/Utilities/codegenNativeComponent.js
+@learny/mobile:lint: Line 30, column 43: Property or signature expected.
+@learny/mobile:lint: `parseForESLint` from parser `context.languageOptions.parser` is invalid and will just be ignored
+@learny/mobile:lint: 
+@learny/mobile:lint: Error while parsing /root/learny-mobile/apps/mobile/node_modules/react-native/Libraries/Utilities/codegenNativeComponent.js
+@learny/mobile:lint: Line 30, column 43: Property or signature expected.
+@learny/mobile:lint: `parseForESLint` from parser `context.languageOptions.parser` is invalid and will just be ignored
+@learny/mobile:lint: 
+@learny/mobile:lint: Error while parsing /root/learny-mobile/apps/mobile/node_modules/react-native/index.js
+@learny/mobile:lint: Line 27, column 14: Expression expected.
+@learny/mobile:lint: `parseForESLint` from parser `context.languageOptions.parser` is invalid and will just be ignored
+@learny/mobile:lint: 
+@learny/mobile:lint: Error while parsing /root/learny-mobile/apps/mobile/node_modules/react-native/index.js
+@learny/mobile:lint: Line 27, column 14: Expression expected.
+@learny/mobile:lint: `parseForESLint` from parser `context.languageOptions.parser` is invalid and will just be ignored
+@learny/mobile:lint: 
+@learny/mobile:lint: Error while parsing /root/learny-mobile/apps/mobile/node_modules/react-native/index.js
+@learny/mobile:lint: Line 27, column 14: Expression expected.
+@learny/mobile:lint: `parseForESLint` from parser `context.languageOptions.parser` is invalid and will just be ignored
+@learny/mobile:lint: 
+@learny/mobile:lint: Error while parsing /root/learny-mobile/apps/mobile/node_modules/react-native/index.js
+@learny/mobile:lint: Line 27, column 14: Expression expected.
+@learny/mobile:lint: `parseForESLint` from parser `context.languageOptions.parser` is invalid and will just be ignored
+@learny/mobile:lint: 
+@learny/mobile:lint: Error while parsing /root/learny-mobile/apps/mobile/node_modules/react-native/index.js
+@learny/mobile:lint: Line 27, column 14: Expression expected.
+@learny/mobile:lint: `parseForESLint` from parser `context.languageOptions.parser` is invalid and will just be ignored
+@learny/mobile:lint: 
+@learny/mobile:lint: Error while parsing /root/learny-mobile/apps/mobile/node_modules/react-native/index.js
+@learny/mobile:lint: Line 27, column 14: Expression expected.
+@learny/mobile:lint: `parseForESLint` from parser `context.languageOptions.parser` is invalid and will just be ignored
+@learny/mobile:lint: 
+@learny/mobile:lint: Error while parsing /root/learny-mobile/apps/mobile/node_modules/react-native/index.js
+@learny/mobile:lint: Line 27, column 14: Expression expected.
+@learny/mobile:lint: `parseForESLint` from parser `context.languageOptions.parser` is invalid and will just be ignored
+@learny/mobile:lint: 
+@learny/mobile:lint: Error while parsing /root/learny-mobile/apps/mobile/node_modules/react-native/index.js
+@learny/mobile:lint: Line 27, column 14: Expression expected.
+@learny/mobile:lint: `parseForESLint` from parser `context.languageOptions.parser` is invalid and will just be ignored
+@learny/mobile:lint: 
+@learny/mobile:lint: Error while parsing /root/learny-mobile/apps/mobile/node_modules/react-native/index.js
+@learny/mobile:lint: Line 27, column 14: Expression expected.
+@learny/mobile:lint: `parseForESLint` from parser `context.languageOptions.parser` is invalid and will just be ignored
+@learny/mobile:lint: 
+@learny/mobile:lint: Error while parsing /root/learny-mobile/apps/mobile/node_modules/react-native/index.js
+@learny/mobile:lint: Line 27, column 14: Expression expected.
+@learny/mobile:lint: `parseForESLint` from parser `context.languageOptions.parser` is invalid and will just be ignored
+@learny/mobile:lint: 
+@learny/mobile:lint: Error while parsing /root/learny-mobile/apps/mobile/node_modules/react-native/index.js
+@learny/mobile:lint: Line 27, column 14: Expression expected.
+@learny/mobile:lint: `parseForESLint` from parser `context.languageOptions.parser` is invalid and will just be ignored
+@learny/mobile:lint: 
+@learny/mobile:lint: Error while parsing /root/learny-mobile/apps/mobile/node_modules/react-native/index.js
+@learny/mobile:lint: Line 27, column 14: Expression expected.
+@learny/mobile:lint: `parseForESLint` from parser `context.languageOptions.parser` is invalid and will just be ignored
+@learny/mobile:lint: 
+@learny/mobile:lint: Error while parsing /root/learny-mobile/apps/mobile/node_modules/react-native/index.js
+@learny/mobile:lint: Line 27, column 14: Expression expected.
+@learny/mobile:lint: `parseForESLint` from parser `context.languageOptions.parser` is invalid and will just be ignored
+@learny/mobile:lint: 
+@learny/mobile:lint: Error while parsing /root/learny-mobile/apps/mobile/node_modules/react-native/index.js
+@learny/mobile:lint: Line 27, column 14: Expression expected.
+@learny/mobile:lint: `parseForESLint` from parser `context.languageOptions.parser` is invalid and will just be ignored
+@learny/mobile:lint: 
+@learny/mobile:lint: Error while parsing /root/learny-mobile/apps/mobile/node_modules/react-native/index.js
+@learny/mobile:lint: Line 27, column 14: Expression expected.
+@learny/mobile:lint: `parseForESLint` from parser `context.languageOptions.parser` is invalid and will just be ignored
+@learny/mobile:lint: 
+@learny/mobile:lint: Error while parsing /root/learny-mobile/apps/mobile/node_modules/react-native/index.js
+@learny/mobile:lint: Line 27, column 14: Expression expected.
+@learny/mobile:lint: `parseForESLint` from parser `context.languageOptions.parser` is invalid and will just be ignored
+@learny/mobile:lint: 
+@learny/mobile:lint: Error while parsing /root/learny-mobile/apps/mobile/node_modules/react-native/index.js
+@learny/mobile:lint: Line 27, column 14: Expression expected.
+@learny/mobile:lint: `parseForESLint` from parser `context.languageOptions.parser` is invalid and will just be ignored
+@learny/mobile:lint: 
+@learny/mobile:lint: Error while parsing /root/learny-mobile/apps/mobile/node_modules/react-native/index.js
+@learny/mobile:lint: Line 27, column 14: Expression expected.
+@learny/mobile:lint: `parseForESLint` from parser `context.languageOptions.parser` is invalid and will just be ignored
+@learny/mobile:lint: 
+@learny/mobile:lint: Error while parsing /root/learny-mobile/apps/mobile/node_modules/react-native/index.js
+@learny/mobile:lint: Line 27, column 14: Expression expected.
+@learny/mobile:lint: `parseForESLint` from parser `context.languageOptions.parser` is invalid and will just be ignored
+@learny/mobile:lint: 
+@learny/mobile:lint: Error while parsing /root/learny-mobile/apps/mobile/node_modules/react-native/Libraries/Utilities/codegenNativeComponent.js
+@learny/mobile:lint: Line 30, column 43: Property or signature expected.
+@learny/mobile:lint: `parseForESLint` from parser `context.languageOptions.parser` is invalid and will just be ignored
+@learny/mobile:lint: 
+@learny/mobile:lint: Error while parsing /root/learny-mobile/apps/mobile/node_modules/react-native/Libraries/Utilities/codegenNativeComponent.js
+@learny/mobile:lint: Line 30, column 43: Property or signature expected.
+@learny/mobile:lint: `parseForESLint` from parser `context.languageOptions.parser` is invalid and will just be ignored
+@learny/mobile:lint: 
+@learny/mobile:lint: Error while parsing /root/learny-mobile/apps/mobile/node_modules/react-native/index.js
+@learny/mobile:lint: Line 27, column 14: Expression expected.
+@learny/mobile:lint: `parseForESLint` from parser `context.languageOptions.parser` is invalid and will just be ignored
+@learny/mobile:lint: 
+@learny/mobile:lint: Error while parsing /root/learny-mobile/apps/mobile/node_modules/react-native/Libraries/Utilities/codegenNativeComponent.js
+@learny/mobile:lint: Line 30, column 43: Property or signature expected.
+@learny/mobile:lint: `parseForESLint` from parser `context.languageOptions.parser` is invalid and will just be ignored
+@learny/mobile:lint: 
+@learny/mobile:lint: Error while parsing /root/learny-mobile/apps/mobile/node_modules/react-native/Libraries/Utilities/codegenNativeComponent.js
+@learny/mobile:lint: Line 30, column 43: Property or signature expected.
+@learny/mobile:lint: `parseForESLint` from parser `context.languageOptions.parser` is invalid and will just be ignored
+@learny/mobile:lint: 
+@learny/mobile:lint: Error while parsing /root/learny-mobile/apps/mobile/node_modules/react-native/index.js
+@learny/mobile:lint: Line 27, column 14: Expression expected.
+@learny/mobile:lint: `parseForESLint` from parser `context.languageOptions.parser` is invalid and will just be ignored
+@learny/mobile:lint: 
+@learny/mobile:lint: Error while parsing /root/learny-mobile/apps/mobile/node_modules/react-native/index.js
+@learny/mobile:lint: Line 27, column 14: Expression expected.
+@learny/mobile:lint: `parseForESLint` from parser `context.languageOptions.parser` is invalid and will just be ignored
+@learny/mobile:lint: 
+@learny/mobile:lint: Error while parsing /root/learny-mobile/apps/mobile/node_modules/react-native/Libraries/Utilities/codegenNativeComponent.js
+@learny/mobile:lint: Line 30, column 43: Property or signature expected.
+@learny/mobile:lint: `parseForESLint` from parser `context.languageOptions.parser` is invalid and will just be ignored
+@learny/mobile:lint: 
+@learny/mobile:lint: Error while parsing /root/learny-mobile/apps/mobile/node_modules/react-native/Libraries/Utilities/codegenNativeComponent.js
+@learny/mobile:lint: Line 30, column 43: Property or signature expected.
+@learny/mobile:lint: `parseForESLint` from parser `context.languageOptions.parser` is invalid and will just be ignored
+@learny/mobile:lint: 
+@learny/mobile:lint: Error while parsing /root/learny-mobile/apps/mobile/node_modules/react-native/index.js
+@learny/mobile:lint: Line 27, column 14: Expression expected.
+@learny/mobile:lint: `parseForESLint` from parser `context.languageOptions.parser` is invalid and will just be ignored
+@learny/mobile:lint: 
+@learny/mobile:lint: Error while parsing /root/learny-mobile/apps/mobile/node_modules/react-native/index.js
+@learny/mobile:lint: Line 27, column 14: Expression expected.
+@learny/mobile:lint: `parseForESLint` from parser `context.languageOptions.parser` is invalid and will just be ignored
+@learny/mobile:lint: 
+@learny/mobile:lint: Error while parsing /root/learny-mobile/apps/mobile/node_modules/react-native/index.js
+@learny/mobile:lint: Line 27, column 14: Expression expected.
+@learny/mobile:lint: `parseForESLint` from parser `context.languageOptions.parser` is invalid and will just be ignored
+@learny/mobile:lint: 
+@learny/mobile:lint: Error while parsing /root/learny-mobile/apps/mobile/node_modules/react-native/index.js
+@learny/mobile:lint: Line 27, column 14: Expression expected.
+@learny/mobile:lint: `parseForESLint` from parser `context.languageOptions.parser` is invalid and will just be ignored
+@learny/mobile:lint: 
+@learny/mobile:lint: Error while parsing /root/learny-mobile/apps/mobile/node_modules/react-native/index.js
+@learny/mobile:lint: Line 27, column 14: Expression expected.
+@learny/mobile:lint: `parseForESLint` from parser `context.languageOptions.parser` is invalid and will just be ignored
+@learny/mobile:lint: 
+@learny/mobile:lint: Error while parsing /root/learny-mobile/apps/mobile/node_modules/react-native/index.js
+@learny/mobile:lint: Line 27, column 14: Expression expected.
+@learny/mobile:lint: `parseForESLint` from parser `context.languageOptions.parser` is invalid and will just be ignored
+@learny/mobile:lint: 
+@learny/mobile:lint: Error while parsing /root/learny-mobile/apps/mobile/node_modules/react-native/index.js
+@learny/mobile:lint: Line 27, column 14: Expression expected.
+@learny/mobile:lint: `parseForESLint` from parser `context.languageOptions.parser` is invalid and will just be ignored
+@learny/mobile:lint: 
+@learny/mobile:lint: Error while parsing /root/learny-mobile/apps/mobile/node_modules/react-native/index.js
+@learny/mobile:lint: Line 27, column 14: Expression expected.
+@learny/mobile:lint: `parseForESLint` from parser `context.languageOptions.parser` is invalid and will just be ignored
+@learny/mobile:lint: 
+@learny/mobile:lint: Error while parsing /root/learny-mobile/apps/mobile/node_modules/react-native/Libraries/Utilities/codegenNativeComponent.js
+@learny/mobile:lint: Line 30, column 43: Property or signature expected.
+@learny/mobile:lint: `parseForESLint` from parser `context.languageOptions.parser` is invalid and will just be ignored
+@learny/mobile:lint: 
+@learny/mobile:lint: Error while parsing /root/learny-mobile/apps/mobile/node_modules/react-native/Libraries/Utilities/codegenNativeComponent.js
+@learny/mobile:lint: Line 30, column 43: Property or signature expected.
+@learny/mobile:lint: `parseForESLint` from parser `context.languageOptions.parser` is invalid and will just be ignored
+@learny/mobile:lint: 
+@learny/mobile:lint: Error while parsing /root/learny-mobile/apps/mobile/node_modules/react-native/index.js
+@learny/mobile:lint: Line 27, column 14: Expression expected.
+@learny/mobile:lint: `parseForESLint` from parser `context.languageOptions.parser` is invalid and will just be ignored
+@learny/jobs:lint: cache miss, executing b35cc1b2f0d7f004
+@learny/jobs:lint: 
+@learny/jobs:lint: > @learny/jobs@0.0.0 lint /root/learny-mobile/packages/jobs
+@learny/jobs:lint: > eslint --max-warnings=0 .
+@learny/jobs:lint: 
+@learny/services:lint: cache miss, executing 282e58b6386f1b24
+@learny/services:lint: 
+@learny/services:lint: > @learny/services@0.0.0 lint /root/learny-mobile/packages/services
+@learny/services:lint: > eslint --max-warnings=0 .
+@learny/services:lint: 
+@learny/http:lint: cache miss, executing abc392c2d4132183
+@learny/automations:lint: cache miss, executing 880301f641a631f3
+@learny/automations:lint: 
+@learny/automations:lint: > @learny/automations@0.0.0 lint /root/learny-mobile/packages/automations
+@learny/automations:lint: > eslint --max-warnings=0 .
+@learny/automations:lint: 
+@learny/http:lint: 
+@learny/http:lint: > @learny/http@0.0.0 lint /root/learny-mobile/packages/http
+@learny/http:lint: > eslint --max-warnings=0 .
+@learny/http:lint: 
+@learny/api-routes:lint: cache miss, executing 34b615a52d9e16fe
+@learny/api-routes:lint: 
+@learny/api-routes:lint: > @learny/api-routes@0.0.0 lint /root/learny-mobile/packages/api-routes
+@learny/api-routes:lint: > eslint --max-warnings=0 .
+@learny/api-routes:lint: 
+@learny/api:lint: cache miss, executing b490d08379e35174
+@learny/api:lint: 
+@learny/api:lint: > @learny/api@0.0.0 lint /root/learny-mobile/apps/api
+@learny/api:lint: > eslint --max-warnings=0 .
+@learny/api:lint: 
+@learny/web:lint: cache miss, executing 2713218f632195a4
+@learny/web:lint: 
+@learny/web:lint: > @learny/web@0.0.0 lint /root/learny-mobile/apps/web
+@learny/web:lint: > eslint --max-warnings=0 .
+@learny/web:lint: 
+
+ Tasks:    23 successful, 23 total
+Cached:    0 cached, 23 total
+  Time:    2m50.653s 
+
+No config path provided, using default 'drizzle.config.ts'
+Reading config file '/root/learny-mobile/packages/db/drizzle.config.ts'
+Everything's fine 🐶🔥
+✔ 54 migration(s) source(s) identique(s) dans supabase/migrations.
+✔ openapi.json à jour
+Couplage de apps/web (ADR-1003, ADR-1007) :
+  pages      0
+  lib        0
+  components 0
+  dev        0
+  proxy      0
+  apiRoutes  0
+  total      0 (hors app/api)
+Routes du registre ROUTES : 219
+Fichiers route.ts sous apps/web/app : 1
+Composants client couplés : 0
+Contrôle réussi : apps/web est un client pur de l’API.
+⏱ lint : 178 s
+✔ lint
+
+$ pnpm -s typecheck
+
+   • turbo 2.11.11
+   • Packages in scope: @learny/api, @learny/api-client, @learny/api-routes, @learny/automations, @learny/bricks, @learny/config, @learny/contracts, @learny/core, @learny/db, @learny/domain, @learny/http, @learny/i18n, @learny/ingestion, @learny/jobs, @learny/learning-engine, @learny/llm, @learny/mobile, @learny/notifications, @learny/services, @learny/testing, @learny/tutor, @learny/ui, @learny/web
+   • Running typecheck in 23 packages
+   • Remote caching disabled
+
+@learny/i18n:typecheck: cache miss, executing cfefe2c3201d8512
+@learny/core:typecheck: cache miss, executing 729b48f9978f3335
+@learny/config:typecheck: cache miss, executing 62d75d1cfca76830
+@learny/config:typecheck: 
+@learny/config:typecheck: > @learny/config@0.0.0 typecheck /root/learny-mobile/packages/config
+@learny/config:typecheck: > tsc --noEmit
+@learny/config:typecheck: 
+@learny/i18n:typecheck: 
+@learny/i18n:typecheck: > @learny/i18n@0.0.0 typecheck /root/learny-mobile/packages/i18n
+@learny/i18n:typecheck: > tsc --noEmit
+@learny/i18n:typecheck: 
+@learny/core:typecheck: 
+@learny/core:typecheck: > @learny/core@0.0.0 typecheck /root/learny-mobile/packages/core
+@learny/core:typecheck: > tsc --noEmit
+@learny/core:typecheck: 
+@learny/contracts:typecheck: cache miss, executing e202e4fd5fcaed00
+@learny/db:typecheck: cache miss, executing 5c5ffbc9d36e0236
+@learny/db:typecheck: 
+@learny/db:typecheck: > @learny/db@0.0.0 typecheck /root/learny-mobile/packages/db
+@learny/db:typecheck: > tsc --noEmit
+@learny/db:typecheck: 
+@learny/contracts:typecheck: 
+@learny/contracts:typecheck: > @learny/contracts@0.0.0 typecheck /root/learny-mobile/packages/contracts
+@learny/contracts:typecheck: > tsc --noEmit
+@learny/contracts:typecheck: 
+@learny/api-client:typecheck: cache miss, executing 4cdca53918694933
+@learny/api-client:typecheck: 
+@learny/api-client:typecheck: > @learny/api-client@0.0.0 typecheck /root/learny-mobile/packages/api-client
+@learny/api-client:typecheck: > tsc --noEmit
+@learny/api-client:typecheck: 
+@learny/notifications:typecheck: cache miss, executing d73827e7f826ed87
+@learny/notifications:typecheck: 
+@learny/notifications:typecheck: > @learny/notifications@0.0.0 typecheck /root/learny-mobile/packages/notifications
+@learny/notifications:typecheck: > tsc --noEmit
+@learny/notifications:typecheck: 
+@learny/testing:typecheck: cache miss, executing 597325215c274820
+@learny/testing:typecheck: 
+@learny/testing:typecheck: > @learny/testing@0.0.0 typecheck /root/learny-mobile/packages/testing
+@learny/testing:typecheck: > tsc --noEmit
+@learny/testing:typecheck: 
+@learny/ui:typecheck: cache miss, executing 5a621cf33f4ae8cb
+@learny/learning-engine:typecheck: cache miss, executing 0ffcd1627cbefdd7
+@learny/llm:typecheck: cache miss, executing c4cfb2d9ecad512d
+@learny/llm:typecheck: 
+@learny/llm:typecheck: > @learny/llm@0.0.0 typecheck /root/learny-mobile/packages/llm
+@learny/llm:typecheck: > tsc --noEmit
+@learny/llm:typecheck: 
+@learny/learning-engine:typecheck: 
+@learny/learning-engine:typecheck: > @learny/learning-engine@0.0.0 typecheck /root/learny-mobile/packages/learning-engine
+@learny/learning-engine:typecheck: > tsc --noEmit
+@learny/learning-engine:typecheck: 
+@learny/ui:typecheck: 
+@learny/ui:typecheck: > @learny/ui@0.0.0 typecheck /root/learny-mobile/packages/ui
+@learny/ui:typecheck: > tsc --noEmit
+@learny/ui:typecheck: 
+@learny/mobile:typecheck: cache miss, executing 65f0f301c54429f2
+@learny/bricks:typecheck: cache miss, executing 4f4e35914bece01f
+@learny/mobile:typecheck: 
+@learny/mobile:typecheck: > @learny/mobile@0.0.0 typecheck /root/learny-mobile/apps/mobile
+@learny/mobile:typecheck: > tsc --noEmit
+@learny/mobile:typecheck: 
+@learny/bricks:typecheck: 
+@learny/bricks:typecheck: > @learny/bricks@0.0.0 typecheck /root/learny-mobile/packages/bricks
+@learny/bricks:typecheck: > tsc --noEmit
+@learny/bricks:typecheck: 
+@learny/ingestion:typecheck: cache miss, executing 2be173c0e83ea0fc
+@learny/ingestion:typecheck: 
+@learny/ingestion:typecheck: > @learny/ingestion@0.0.0 typecheck /root/learny-mobile/packages/ingestion
+@learny/ingestion:typecheck: > tsc --noEmit
+@learny/ingestion:typecheck: 
+@learny/domain:typecheck: cache miss, executing a1bfbfe76bd5c435
+@learny/domain:typecheck: 
+@learny/domain:typecheck: > @learny/domain@0.0.0 typecheck /root/learny-mobile/packages/domain
+@learny/domain:typecheck: > tsc --noEmit
+@learny/domain:typecheck: 
+@learny/tutor:typecheck: cache miss, executing c6912c1799d2de46
+@learny/tutor:typecheck: 
+@learny/tutor:typecheck: > @learny/tutor@0.0.0 typecheck /root/learny-mobile/packages/tutor
+@learny/tutor:typecheck: > tsc --noEmit
+@learny/tutor:typecheck: 
+@learny/jobs:typecheck: cache miss, executing a23bd9143cf0d039
+@learny/jobs:typecheck: 
+@learny/jobs:typecheck: > @learny/jobs@0.0.0 typecheck /root/learny-mobile/packages/jobs
+@learny/jobs:typecheck: > tsc --noEmit
+@learny/jobs:typecheck: 
+@learny/services:typecheck: cache miss, executing 22818c4a7af4461e
+@learny/services:typecheck: 
+@learny/services:typecheck: > @learny/services@0.0.0 typecheck /root/learny-mobile/packages/services
+@learny/services:typecheck: > tsc --noEmit
+@learny/services:typecheck: 
+@learny/automations:typecheck: cache miss, executing 41e0fa86b59e8445
+@learny/http:typecheck: cache miss, executing feef5677b2eefe8b
+@learny/http:typecheck: 
+@learny/http:typecheck: > @learny/http@0.0.0 typecheck /root/learny-mobile/packages/http
+@learny/http:typecheck: > tsc --noEmit
+@learny/http:typecheck: 
+@learny/automations:typecheck: 
+@learny/automations:typecheck: > @learny/automations@0.0.0 typecheck /root/learny-mobile/packages/automations
+@learny/automations:typecheck: > tsc --noEmit
+@learny/automations:typecheck: 
+@learny/api-routes:typecheck: cache miss, executing 0f5ff81b03ef44ee
+@learny/api-routes:typecheck: 
+@learny/api-routes:typecheck: > @learny/api-routes@0.0.0 typecheck /root/learny-mobile/packages/api-routes
+@learny/api-routes:typecheck: > tsc --noEmit
+@learny/api-routes:typecheck: 
+@learny/api:typecheck: cache miss, executing d106644b41c87656
+@learny/api:typecheck: 
+@learny/api:typecheck: > @learny/api@0.0.0 typecheck /root/learny-mobile/apps/api
+@learny/api:typecheck: > tsc --noEmit
+@learny/api:typecheck: 
+@learny/web:typecheck: cache miss, executing 8b4deccc8e24a98d
+@learny/web:typecheck: 
+@learny/web:typecheck: > @learny/web@0.0.0 typecheck /root/learny-mobile/apps/web
+@learny/web:typecheck: > tsc --noEmit
+@learny/web:typecheck: 
+
+ Tasks:    23 successful, 23 total
+Cached:    0 cached, 23 total
+  Time:    1m56.477s 
+
+⏱ typecheck : 120 s
+✔ typecheck
+
+$ pnpm -s test:unit --reporter=default --reporter=json --outputFile.json="/root/learny-mobile/test-results/sdd/SPEC-3101/unit.json"
+(!) Your Vite config uses features that are unsupported by `configLoader: 'native'`, which is planned to become the default in a future major version of Vite:
+  - import "./packages/testing/src/env" without a file extension (vitest.config.ts:5:52). Add the file extension
+  - import "./clock" without a file extension (packages/testing/src/env.ts:2:32). Add the file extension
+Set `VITE_CONFIG_NATIVE_IGNORE_WARNING=true` to suppress this warning.
+
+[1m[30m[46m RUN [49m[39m[22m [36mv5.1.0 [39m[90m/root/learny-mobile[39m
+
+ [32m✓[39m [30m[42m unit [49m[39m apps/mobile/test/lint-rules.test.ts [2m([22m[2m3 tests[22m[2m)[22m[33m 2753[2mms[22m[39m
+   [32m✓[39m [SPEC-3002] règles ESLint des jetons [2m(3)[22m
+     [33m[2m✓[22m[39m refuse un littéral de couleur dans src/features (CA-5)[33m 2568[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m packages/core/src/time.test.ts [2m([22m[2m74 tests[22m[2m)[22m[33m 5246[2mms[22m[39m
+   [32m✓[39m [SPEC-207] local time [2m(69)[22m
+     [32m✓[39m quiet hours (CA-3) [2m(13)[22m
+       [33m[2m✓[22m[39m always lands outside quiet hours and in the future, across a year of instants[33m 5027[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m packages/learning-engine/src/planner/plan.test.ts [2m([22m[2m20 tests[22m[2m)[22m[33m 6387[2mms[22m[39m
+   [32m✓[39m [SPEC-407] Planificateur [2m(20)[22m
+     [33m[2m✓[22m[39m CA-4 : une échéance impossible produit trois options chiffrées sans appliquer la moindre[33m 1292[2mms[22m[39m
+     [33m[2m✓[22m[39m CL-4 : à 6 h/jour la capacité reste insuffisante, l’option volume est marquée non réalisable[33m 3810[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m apps/web/components/search/global-search.test.tsx [2m([22m[2m7 tests[22m[2m)[22m[33m 2243[2mms[22m[39m
+   [32m✓[39m [SPEC-307] Recherche globale : interface [2m(7)[22m
+     [33m[2m✓[22m[39m n’interroge l’API qu’à partir de deux caractères normalisés (CA-1)[33m 523[2mms[22m[39m
+     [33m[2m✓[22m[39m rend le même jeu de résultats avec accents et sans accent (CA-3)[33m 358[2mms[22m[39m
+     [33m[2m✓[22m[39m affiche une erreur réessayable sans effacer la requête (CL-3)[33m 335[2mms[22m[39m
+     [33m[2m✓[22m[39m ignore la réponse tardive d’une ancienne requête (CA-4)[33m 457[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m apps/web/components/auth/AccountForm.test.tsx [2m([22m[2m9 tests[22m[2m)[22m[33m 678[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m tools/ci/check-workflows.test.ts [2m([22m[2m23 tests[22m[2m)[22m[32m 276[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m apps/web/components/shell/header.test.tsx [2m([22m[2m9 tests[22m[2m)[22m[33m 499[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m apps/web/components/notifications/notification-panel.test.tsx [2m([22m[2m8 tests[22m[2m)[22m[33m 489[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m packages/learning-engine/src/draw/draw-attempt.test.ts [2m([22m[2m23 tests[22m[2m)[22m[32m 148[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m apps/web/components/shell/sidebar.test.tsx [2m([22m[2m7 tests[22m[2m)[22m[33m 313[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m apps/mobile/e2e/visual/compare.test.ts [2m([22m[2m7 tests[22m[2m)[22m[32m 70[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m packages/learning-engine/src/streak/calculate.test.ts [2m([22m[2m38 tests[22m[2m)[22m[32m 248[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m packages/ui/src/components/Form/Form.test.tsx [2m([22m[2m3 tests[22m[2m)[22m[33m 322[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m packages/services/src/resources/upload.test.ts [2m([22m[2m25 tests[22m[2m)[22m[32m 224[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m packages/notifications/emails/templates.test.tsx [2m([22m[2m8 tests[22m[2m)[22m[32m 254[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m packages/ingestion/src/retrieval/search-context.test.ts [2m([22m[2m13 tests[22m[2m)[22m[33m 344[2mms[22m[39m
+   [32m✓[39m [SPEC-511] Recherche sémantique et sélection du contexte [2m(13)[22m
+     [32m✓[39m selectContext (EF-2, EF-3, ET-2, CA-2, CA-3) [2m(6)[22m
+       [33m[2m✓[22m[39m respecte les budgets 6k, 24k, 4k et 8k, balises et identifiants compris (CA-2)[33m 319[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m apps/web/components/onboarding/AiStep.test.tsx [2m([22m[2m3 tests[22m[2m)[22m[32m 229[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m apps/web/components/global-quiz/games/MatchingGame.test.tsx [2m([22m[2m2 tests[22m[2m)[22m[32m 123[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m apps/web/components/home/WarmupCard.test.tsx [2m([22m[2m5 tests[22m[2m)[22m[32m 275[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m packages/ui/src/components/AlertDialog/AlertDialog.test.tsx [2m([22m[2m2 tests[22m[2m)[22m[32m 192[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m apps/web/components/agenda/agenda-composants.test.tsx [2m([22m[2m18 tests[22m[2m)[22m[32m 230[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m packages/ui/src/components/Dialog/Dialog.test.tsx [2m([22m[2m2 tests[22m[2m)[22m[32m 169[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m packages/ui/src/components/ResponsivePanel/ResponsivePanel.test.tsx [2m([22m[2m2 tests[22m[2m)[22m[32m 149[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m packages/services/src/auth/templates.test.ts [2m([22m[2m5 tests[22m[2m)[22m[32m 147[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m apps/mobile/e2e/visual/multiflow.test.ts [2m([22m[2m4 tests[22m[2m)[22m[32m 62[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m packages/bricks/src/validate.test.ts [2m([22m[2m35 tests[22m[2m)[22m[32m 155[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m apps/web/components/settings/ai-models-tab.test.tsx [2m([22m[2m6 tests[22m[2m)[22m[32m 186[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m packages/ingestion/src/process-resource.test.ts [2m([22m[2m11 tests[22m[2m)[22m[32m 97[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m apps/web/components/global-quiz/GlobalQuizSession.test.tsx [2m([22m[2m4 tests[22m[2m)[22m[32m 229[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m packages/contracts/src/openapi.test.ts [2m([22m[2m5 tests[22m[2m)[22m[32m 174[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m packages/ui/src/accessibility/focus-return.test.ts [2m([22m[2m11 tests[22m[2m)[22m[32m 145[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m packages/services/src/review/global-quiz.test.ts [2m([22m[2m39 tests[22m[2m)[22m[32m 130[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m tools/migration/test/unit/report.test.ts [2m([22m[2m4 tests[22m[2m)[22m[32m 204[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m apps/web/components/onboarding/ProfileStep.test.tsx [2m([22m[2m3 tests[22m[2m)[22m[32m 187[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m packages/ui/src/components/DropdownMenu/DropdownMenu.test.tsx [2m([22m[2m2 tests[22m[2m)[22m[32m 184[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m apps/web/components/home/TutorProposalBanner.test.tsx [2m([22m[2m9 tests[22m[2m)[22m[32m 190[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m apps/web/components/onboarding/RemindersStep.test.tsx [2m([22m[2m2 tests[22m[2m)[22m[32m 145[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m packages/ui/src/components/Toast/Toast.test.tsx [2m([22m[2m4 tests[22m[2m)[22m[32m 192[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m packages/bricks/src/types/choice-question/view.test.tsx [2m([22m[2m4 tests[22m[2m)[22m[32m 152[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m packages/bricks/src/types/matching/view.test.tsx [2m([22m[2m3 tests[22m[2m)[22m[32m 122[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m packages/learning-engine/src/mastery/calculate.test.ts [2m([22m[2m14 tests[22m[2m)[22m[32m 91[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m packages/ui/src/components/Popover/Popover.test.tsx [2m([22m[2m1 test[22m[2m)[22m[32m 125[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m apps/web/components/cadrage/ReplyBar.test.tsx [2m([22m[2m4 tests[22m[2m)[22m[32m 117[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m apps/web/components/global-quiz/games/ClozeGame.test.tsx [2m([22m[2m2 tests[22m[2m)[22m[32m 93[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m packages/ui/src/components/SegmentedControl/SegmentedControl.test.tsx [2m([22m[2m4 tests[22m[2m)[22m[32m 126[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m apps/web/components/global-quiz/games/OrderingGame.test.tsx [2m([22m[2m2 tests[22m[2m)[22m[32m 101[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m packages/ui/src/components/Switch/Switch.test.tsx [2m([22m[2m4 tests[22m[2m)[22m[32m 118[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m apps/web/components/system/system-pages.test.tsx [2m([22m[2m6 tests[22m[2m)[22m[32m 142[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m apps/web/components/notion-graph/GraphDetail.test.tsx [2m([22m[2m4 tests[22m[2m)[22m[32m 111[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m packages/learning-engine/src/fsrs/review.test.ts [2m([22m[2m32 tests[22m[2m)[22m[32m 92[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m packages/ui/src/components/Textarea/Textarea.test.tsx [2m([22m[2m2 tests[22m[2m)[22m[32m 92[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m apps/web/components/notion-graph/layout.test.ts [2m([22m[2m5 tests[22m[2m)[22m[32m 53[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m apps/web/components/home/TutorActivityCard.test.tsx [2m([22m[2m3 tests[22m[2m)[22m[32m 163[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m packages/ui/src/components/Tabs/Tabs.test.tsx [2m([22m[2m4 tests[22m[2m)[22m[32m 142[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m apps/web/components/gaps/GapFilters.test.tsx [2m([22m[2m3 tests[22m[2m)[22m[32m 111[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m packages/ui/src/components/ChoiceGroup/ChoiceGroup.test.tsx [2m([22m[2m3 tests[22m[2m)[22m[32m 123[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m packages/learning-engine/src/types.test.ts [2m([22m[2m9 tests[22m[2m)[22m[32m 88[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m tools/docker/check-selfhost.test.ts [2m([22m[2m11 tests[22m[2m)[22m[32m 86[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m packages/bricks/src/view/markdown.test.tsx [2m([22m[2m4 tests[22m[2m)[22m[32m 122[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m packages/notifications/src/email/send.test.ts [2m([22m[2m8 tests[22m[2m)[22m[32m 115[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m packages/services/src/spec-719.test.ts [2m([22m[2m7 tests[22m[2m)[22m[32m 59[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m packages/learning-engine/src/warmup/select.test.ts [2m([22m[2m16 tests[22m[2m)[22m[32m 51[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m apps/web/components/module/ResourceList.test.tsx [2m([22m[2m3 tests[22m[2m)[22m[32m 113[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m tools/deploy/check.test.ts [2m([22m[2m24 tests[22m[2m)[22m[32m 75[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m packages/bricks/src/types/instruction/view.test.tsx [2m([22m[2m4 tests[22m[2m)[22m[32m 133[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m packages/bricks/src/types/recall-card/view.test.tsx [2m([22m[2m2 tests[22m[2m)[22m[32m 72[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m apps/web/components/global-quiz/SessionModeSwitch.test.tsx [2m([22m[2m4 tests[22m[2m)[22m[32m 70[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m packages/ui/src/components/Select/Select.test.tsx [2m([22m[2m3 tests[22m[2m)[22m[32m 66[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m packages/bricks/src/view/registry.test.tsx [2m([22m[2m14 tests[22m[2m)[22m[32m 149[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m apps/web/components/auth/auth-layout.test.tsx [2m([22m[2m4 tests[22m[2m)[22m[32m 101[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m apps/web/components/course/CourseArticle.test.tsx [2m([22m[2m3 tests[22m[2m)[22m[32m 96[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m apps/web/components/site-footer/SiteFooter.test.tsx [2m([22m[2m2 tests[22m[2m)[22m[32m 75[2mms[22m[39m
+(node:28081) Warning: AI SDK Warning System: To turn off warning logging, set the AI_SDK_LOG_WARNINGS global to false.
+(Use `node --trace-warnings ...` to show where the warning was created)
+(node:28081) Warning: AI SDK Warning (anthropic.messages / test-model-a): The feature "maxOutputTokens" is used in a compatibility mode. The model "test-model-a" is unknown. The max output tokens have been limited to 4096. Set maxOutputTokens explicitly to override this limit.
+(node:28081) Warning: AI SDK Warning (anthropic.messages / test-model-a): The feature "strict" is not supported. Tool 'read_resources' has strict: true, but strict mode is not supported by this provider. The strict property will be ignored.
+(node:28081) Warning: AI SDK Warning (anthropic.messages / test-model-a): The feature "maxOutputTokens" is used in a compatibility mode. The model "test-model-a" is unknown. The max output tokens have been limited to 4096. Set maxOutputTokens explicitly to override this limit.
+(node:28081) Warning: AI SDK Warning (anthropic.messages / test-model-a): The feature "strict" is not supported. Tool 'read_resources' has strict: true, but strict mode is not supported by this provider. The strict property will be ignored.
+(node:28081) Warning: AI SDK Warning (anthropic.messages / test-model-a): The feature "maxOutputTokens" is used in a compatibility mode. The model "test-model-a" is unknown. The max output tokens have been limited to 4096. Set maxOutputTokens explicitly to override this limit.
+(node:28081) Warning: AI SDK Warning (anthropic.messages / test-model-a): The feature "strict" is not supported. Tool 'read_resources' has strict: true, but strict mode is not supported by this provider. The strict property will be ignored.
+(node:28081) Warning: AI SDK Warning (anthropic.messages / test-model-b): The feature "maxOutputTokens" is used in a compatibility mode. The model "test-model-b" is unknown. The max output tokens have been limited to 4096. Set maxOutputTokens explicitly to override this limit.
+(node:28081) Warning: AI SDK Warning (anthropic.messages / test-model-b): The feature "strict" is not supported. Tool 'read_resources' has strict: true, but strict mode is not supported by this provider. The strict property will be ignored.
+(node:28081) Warning: AI SDK Warning (anthropic.messages / test-model-c): The feature "maxOutputTokens" is used in a compatibility mode. The model "test-model-c" is unknown. The max output tokens have been limited to 4096. Set maxOutputTokens explicitly to override this limit.
+(node:28081) Warning: AI SDK Warning (anthropic.messages / test-model-c): The feature "strict" is not supported. Tool 'read_resources' has strict: true, but strict mode is not supported by this provider. The strict property will be ignored.
+ [32m✓[39m [30m[42m unit [49m[39m packages/llm/src/anthropic-provider.test.ts [2m([22m[2m5 tests[22m[2m)[22m[32m 90[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m packages/learning-engine/src/gaps/detect.test.ts [2m([22m[2m43 tests[22m[2m)[22m[32m 54[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m apps/web/components/settings/subscription-tab.test.tsx [2m([22m[2m3 tests[22m[2m)[22m[32m 77[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m packages/ui/src/components/Dialog/DialogFooter.test.tsx [2m([22m[2m1 test[22m[2m)[22m[32m 52[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m apps/web/components/global-quiz/games/CategorizationGame.test.tsx [2m([22m[2m2 tests[22m[2m)[22m[32m 76[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m apps/web/components/auth/VerifyEmailCard.test.tsx [2m([22m[2m8 tests[22m[2m)[22m[32m 101[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m packages/ui/src/components/EmptyState/EmptyState.test.tsx [2m([22m[2m2 tests[22m[2m)[22m[32m 83[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m packages/config/src/env.test.ts [2m([22m[2m21 tests[22m[2m)[22m[32m 42[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m packages/services/src/programme/import.test.ts [2m([22m[2m8 tests[22m[2m)[22m[32m 66[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m packages/ui/src/components/Tooltip/Tooltip.test.tsx [2m([22m[2m1 test[22m[2m)[22m[32m 89[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m packages/ui/src/components/Breadcrumb/Breadcrumb.test.tsx [2m([22m[2m2 tests[22m[2m)[22m[32m 66[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m apps/web/components/home/FormationsTable.test.tsx [2m([22m[2m2 tests[22m[2m)[22m[32m 76[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m packages/testing/src/msw.test.ts [2m([22m[2m2 tests[22m[2m)[22m[32m 44[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m packages/bricks/src/types/ordering/view.test.tsx [2m([22m[2m2 tests[22m[2m)[22m[32m 98[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m packages/ui/src/components/ErrorState/ErrorState.test.tsx [2m([22m[2m3 tests[22m[2m)[22m[32m 93[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m apps/web/components/quiz/QuestionCard.test.tsx [2m([22m[2m4 tests[22m[2m)[22m[32m 88[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m packages/ui/src/components/Chip/Chip.test.tsx [2m([22m[2m3 tests[22m[2m)[22m[32m 82[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m packages/notifications/src/email/transports/resend.test.ts [2m([22m[2m5 tests[22m[2m)[22m[32m 74[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m packages/ui/src/components/Checkbox/Checkbox.test.tsx [2m([22m[2m3 tests[22m[2m)[22m[32m 92[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m packages/ui/src/components/TextField/TextField.test.tsx [2m([22m[2m3 tests[22m[2m)[22m[32m 59[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m packages/services/src/warmup/warmup.test.ts [2m([22m[2m5 tests[22m[2m)[22m[32m 54[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m apps/web/components/cadrage/SuggestionGroup.test.tsx [2m([22m[2m2 tests[22m[2m)[22m[32m 94[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m apps/web/lib/offline/sync.test.ts [2m([22m[2m4 tests[22m[2m)[22m[32m 73[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m apps/web/components/programme/ProgrammeModuleCard.test.tsx [2m([22m[2m4 tests[22m[2m)[22m[32m 122[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m apps/mobile/src/api/client.test.ts [2m([22m[2m10 tests[22m[2m)[22m[32m 57[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m packages/llm/src/architecture.test.ts [2m([22m[2m4 tests[22m[2m)[22m[32m 86[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m packages/learning-engine/src/planner/plan-validation.test.ts [2m([22m[2m10 tests[22m[2m)[22m[32m 102[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m packages/services/src/resources/lifecycle.test.ts [2m([22m[2m18 tests[22m[2m)[22m[32m 88[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m packages/ui/src/components/Skeleton/Skeleton.test.tsx [2m([22m[2m2 tests[22m[2m)[22m[32m 33[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m packages/ui/src/tokens/breakpoints.test.ts [2m([22m[2m2 tests[22m[2m)[22m[32m 42[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m packages/learning-engine/src/metrics/retention.test.ts [2m([22m[2m30 tests[22m[2m)[22m[32m 85[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m apps/web/components/quiz-result/AttemptHistory.test.tsx [2m([22m[2m2 tests[22m[2m)[22m[32m 52[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m apps/web/components/quiz-result/ScoreCard.test.tsx [2m([22m[2m2 tests[22m[2m)[22m[32m 50[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m apps/web/components/cadrage/FormationProfilePanel.test.tsx [2m([22m[2m3 tests[22m[2m)[22m[32m 49[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m packages/services/src/remediation/index.test.ts [2m([22m[2m13 tests[22m[2m)[22m[32m 40[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m packages/services/src/mock-exams/format.test.ts [2m([22m[2m17 tests[22m[2m)[22m[32m 23[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m packages/services/src/personal-data/services.test.ts [2m([22m[2m14 tests[22m[2m)[22m[32m 49[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m packages/ui/src/components/Card/Card.test.tsx [2m([22m[2m2 tests[22m[2m)[22m[32m 73[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m packages/services/src/programme/adjust.test.ts [2m([22m[2m7 tests[22m[2m)[22m[32m 31[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m packages/bricks/src/types/text/view.test.tsx [2m([22m[2m2 tests[22m[2m)[22m[32m 61[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m packages/learning-engine/src/random.test.ts [2m([22m[2m5 tests[22m[2m)[22m[32m 33[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m packages/bricks/src/public.test.ts [2m([22m[2m6 tests[22m[2m)[22m[32m 35[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m packages/llm/src/providers/factory.test.ts [2m([22m[2m2 tests[22m[2m)[22m[32m 69[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m packages/ui/src/components/ProgressRing/ProgressRing.test.tsx [2m([22m[2m3 tests[22m[2m)[22m[32m 37[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m packages/ui/src/components/Button/Button.test.tsx [2m([22m[2m6 tests[22m[2m)[22m[32m 52[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m packages/services/src/formations/management.test.ts [2m([22m[2m12 tests[22m[2m)[22m[32m 26[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m packages/config/src/commit-rules.test.ts [2m([22m[2m198 tests[22m[2m)[22m[32m 66[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m packages/ui/src/tokens/tokens.test.ts [2m([22m[2m8 tests[22m[2m)[22m[32m 38[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m packages/ui/src/components/Badge/Badge.test.tsx [2m([22m[2m1 test[22m[2m)[22m[32m 34[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m packages/tutor/src/tools/search-web.test.ts [2m([22m[2m10 tests[22m[2m)[22m[32m 24[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m packages/learning-engine/src/global-quiz/build-daily-session.test.ts [2m([22m[2m20 tests[22m[2m)[22m[32m 62[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m packages/bricks/src/normalize.test.ts [2m([22m[2m21 tests[22m[2m)[22m[32m 12[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m packages/learning-engine/src/time.test.ts [2m([22m[2m21 tests[22m[2m)[22m[32m 77[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m packages/ui/src/components/PageHeader/PageHeader.test.tsx [2m([22m[2m1 test[22m[2m)[22m[32m 61[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m packages/domain/src/home/derive.test.ts [2m([22m[2m9 tests[22m[2m)[22m[32m 22[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m packages/bricks/src/types/timer/view.test.tsx [2m([22m[2m2 tests[22m[2m)[22m[32m 34[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m apps/mobile/e2e/agent-client.test.ts [2m([22m[2m11 tests[22m[2m)[22m[32m 30[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m packages/llm/src/search/search.test.ts [2m([22m[2m15 tests[22m[2m)[22m[32m 41[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m packages/services/src/mock-exams/attempt.test.ts [2m([22m[2m29 tests[22m[2m)[22m[32m 42[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m apps/web/lib/site-footer-links.test.ts [2m([22m[2m2 tests[22m[2m)[22m[32m 68[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m packages/db/src/storage/paths.test.ts [2m([22m[2m12 tests[22m[2m)[22m[32m 24[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m packages/services/src/spec-709.test.ts [2m([22m[2m13 tests[22m[2m)[22m[32m 41[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m packages/bricks/src/types/ordering/grade.test.ts [2m([22m[2m9 tests[22m[2m)[22m[32m 25[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m packages/services/src/courses/citation-source.test.ts [2m([22m[2m14 tests[22m[2m)[22m[32m 18[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m packages/services/src/notifications/list.service.test.ts [2m([22m[2m6 tests[22m[2m)[22m[32m 26[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m apps/web/components/quiz-result/ResultActions.test.tsx [2m([22m[2m3 tests[22m[2m)[22m[32m 36[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m packages/bricks/src/grade.test.ts [2m([22m[2m11 tests[22m[2m)[22m[32m 27[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m apps/web/lib/api/server-client.test.ts [2m([22m[2m2 tests[22m[2m)[22m[32m 23[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m apps/web/components/global-quiz/GameRail.test.tsx [2m([22m[2m3 tests[22m[2m)[22m[32m 28[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m packages/services/src/serie-regularite-et-jalons-interface.test.ts [2m([22m[2m5 tests[22m[2m)[22m[32m 23[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m packages/notifications/src/routing.test.ts [2m([22m[2m11 tests[22m[2m)[22m[32m 25[2mms[22m[39m
+{"level":"info","timestamp":"2026-11-11T12:20:00.000Z","requestId":"http-test-1234","route":"test.httpEcho","status":200,"method":"POST","durationMs":0,"message":"request completed"}
+{"level":"warn","timestamp":"2026-11-11T12:20:00.000Z","requestId":"http-test-5678","route":"test.httpEcho","code":"VALIDATION_FAILED","status":400,"method":"POST","durationMs":0,"message":"request failed"}
+ [32m✓[39m [30m[42m unit [49m[39m packages/http/src/handler.test.ts [2m([22m[2m4 tests[22m[2m)[22m[32m 39[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m packages/services/src/spec-723.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 27[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m apps/web/components/offline/OfflineIndicator.test.tsx [2m([22m[2m3 tests[22m[2m)[22m[32m 34[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m packages/ingestion/src/extract/remote.test.ts [2m([22m[2m9 tests[22m[2m)[22m[32m 40[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m packages/http/src/jwt.test.ts [2m([22m[2m9 tests[22m[2m)[22m[32m 30[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m tools/quality/test/unit/v1-journeys.test.ts [2m([22m[2m12 tests[22m[2m)[22m[32m 41[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m packages/services/src/spec-705.test.ts [2m([22m[2m20 tests[22m[2m)[22m[32m 55[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m packages/services/src/ai/qualify-model.test.ts [2m([22m[2m9 tests[22m[2m)[22m[32m 16[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m packages/services/src/parametres-onglets-et-profil.test.ts [2m([22m[2m12 tests[22m[2m)[22m[32m 28[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m packages/ui/src/components/StatCard/StatCard.test.tsx [2m([22m[2m1 test[22m[2m)[22m[32m 35[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m packages/services/src/courses/progress.service.test.ts [2m([22m[2m9 tests[22m[2m)[22m[32m 16[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m packages/services/src/programme/state.test.ts [2m([22m[2m9 tests[22m[2m)[22m[32m 18[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m packages/ui/src/components/IconButton/IconButton.test.tsx [2m([22m[2m3 tests[22m[2m)[22m[32m 35[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m packages/services/src/tutor-chat/context.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 13[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m packages/api-client/src/token.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 27[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m packages/services/src/resources/create.test.ts [2m([22m[2m12 tests[22m[2m)[22m[32m 24[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m packages/services/src/programme/generate.test.ts [2m([22m[2m9 tests[22m[2m)[22m[32m 24[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m packages/services/src/notifications-generation-des-rappels.test.ts [2m([22m[2m10 tests[22m[2m)[22m[32m 37[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m packages/automations/src/reprise/labels.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 15[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m packages/services/src/gaps/list-gaps.test.ts [2m([22m[2m6 tests[22m[2m)[22m[32m 13[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m packages/api-client/src/api-client.test.ts [2m([22m[2m14 tests[22m[2m)[22m[32m 36[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m packages/services/src/programme/validate.test.ts [2m([22m[2m7 tests[22m[2m)[22m[32m 24[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m packages/services/src/courses/edit-section.test.ts [2m([22m[2m11 tests[22m[2m)[22m[32m 22[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m packages/services/src/home/get-home.test.ts [2m([22m[2m7 tests[22m[2m)[22m[32m 46[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m apps/mobile/src/api/stream.test.ts [2m([22m[2m6 tests[22m[2m)[22m[32m 31[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m packages/services/src/learning/get-due-notions.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 9[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m packages/services/src/tutor-chat/self-test.test.ts [2m([22m[2m9 tests[22m[2m)[22m[32m 33[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m packages/services/src/quiz/result-flow.test.ts [2m([22m[2m5 tests[22m[2m)[22m[32m 18[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m packages/learning-engine/src/fixtures/builders.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 41[2mms[22m[39m
+[90mstderr[2m | apps/web/lib/offline/pack.test.ts[2m > [22m[2m[SPEC-801] paquet hors ligne[2m > [22m[2mabandonne silencieusement quand le quota est dépassé (CL-7)
+[22m[39m[offline] préchargement abandonné : quota de stockage dépassé (CL-7)
+
+ [32m✓[39m [30m[42m unit [49m[39m apps/web/lib/offline/pack.test.ts [2m([22m[2m4 tests[22m[2m)[22m[32m 38[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m packages/ui/src/components/ScrollableTable/ScrollableTable.test.tsx [2m([22m[2m1 test[22m[2m)[22m[32m 25[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m packages/ui/src/components/Avatar/Avatar.test.tsx [2m([22m[2m2 tests[22m[2m)[22m[32m 27[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m packages/tutor/src/loop.test.ts [2m([22m[2m13 tests[22m[2m)[22m[32m 30[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m packages/db/src/seed/demo.test.ts [2m([22m[2m16 tests[22m[2m)[22m[32m 33[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m packages/ui/src/components/ProgressBar/ProgressBar.test.tsx [2m([22m[2m3 tests[22m[2m)[22m[32m 38[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m packages/api-client/src/api-client-routes.test.ts [2m([22m[2m10 tests[22m[2m)[22m[32m 30[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m packages/services/src/spec-722.test.ts [2m([22m[2m10 tests[22m[2m)[22m[32m 21[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m packages/services/src/courses/report-section.test.ts [2m([22m[2m9 tests[22m[2m)[22m[32m 19[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m packages/ui/src/components/Link/Link.test.tsx [2m([22m[2m3 tests[22m[2m)[22m[32m 40[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m packages/ui/src/icons/Icon.test.tsx [2m([22m[2m3 tests[22m[2m)[22m[32m 21[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m packages/contracts/src/events.test.ts [2m([22m[2m104 tests[22m[2m)[22m[32m 34[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m packages/services/src/programme/get.test.ts [2m([22m[2m6 tests[22m[2m)[22m[32m 18[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m packages/core/src/request-context.test.ts [2m([22m[2m4 tests[22m[2m)[22m[32m 32[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m packages/llm/src/anthropic-fetch.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 23[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m packages/contracts/src/auth.test.ts [2m([22m[2m10 tests[22m[2m)[22m[32m 25[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m packages/services/src/tutor-chat/context.build.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 8[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m packages/contracts/src/parametres-onglets-et-profil.test.ts [2m([22m[2m7 tests[22m[2m)[22m[32m 24[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m packages/bricks/src/types/matching/schema.test.ts [2m([22m[2m11 tests[22m[2m)[22m[32m 13[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m packages/services/src/spec-708.test.ts [2m([22m[2m8 tests[22m[2m)[22m[32m 23[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m packages/services/src/notion-graph/get-graph.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 27[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m packages/services/src/spec-720.test.ts [2m([22m[2m6 tests[22m[2m)[22m[32m 20[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m packages/services/src/bricks/grade-service.test.ts [2m([22m[2m2 tests[22m[2m)[22m[32m 8[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m packages/services/src/bricks/brick-service.test.ts [2m([22m[2m6 tests[22m[2m)[22m[32m 39[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m packages/services/src/formations-a-plusieurs.test.ts [2m([22m[2m17 tests[22m[2m)[22m[32m 21[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m packages/services/src/programme/import-proposal.test.ts [2m([22m[2m7 tests[22m[2m)[22m[32m 24[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m packages/services/src/parametres-notifications.test.ts [2m([22m[2m17 tests[22m[2m)[22m[32m 29[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m packages/bricks/src/types/instruction/schema.test.ts [2m([22m[2m31 tests[22m[2m)[22m[32m 32[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m packages/api-client/src/client.test.ts [2m([22m[2m9 tests[22m[2m)[22m[32m 30[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m packages/core/src/net/safe-fetch.test.ts [2m([22m[2m9 tests[22m[2m)[22m[32m 22[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m packages/services/src/mock-exams/grade.test.ts [2m([22m[2m4 tests[22m[2m)[22m[32m 5[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m packages/services/src/courses/get-course-detail.test.ts [2m([22m[2m4 tests[22m[2m)[22m[32m 15[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m apps/web/lib/config-boundary.test.ts [2m([22m[2m4 tests[22m[2m)[22m[32m 7[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m packages/automations/src/reprise/pick-replacement.test.ts [2m([22m[2m5 tests[22m[2m)[22m[32m 15[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m packages/bricks/src/types/scoring/schema.test.ts [2m([22m[2m10 tests[22m[2m)[22m[32m 12[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m packages/ui/src/components/CountBadge/CountBadge.test.tsx [2m([22m[2m2 tests[22m[2m)[22m[32m 28[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m packages/llm/src/credentials/crypto.test.ts [2m([22m[2m10 tests[22m[2m)[22m[32m 18[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m packages/api-client/src/sse.test.ts [2m([22m[2m2 tests[22m[2m)[22m[32m 10[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m packages/core/src/zoned-time.test.ts [2m([22m[2m18 tests[22m[2m)[22m[32m 18[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m packages/notifications/src/templates/templates.test.ts [2m([22m[2m6 tests[22m[2m)[22m[32m 7[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m packages/services/src/exercises/grade-exercise.test.ts [2m([22m[2m6 tests[22m[2m)[22m[32m 17[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m packages/testing/src/visual.test.ts [2m([22m[2m5 tests[22m[2m)[22m[32m 13[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m packages/config/src/product.test.ts [2m([22m[2m26 tests[22m[2m)[22m[32m 10[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m packages/services/src/search/search.test.ts [2m([22m[2m32 tests[22m[2m)[22m[32m 21[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m packages/services/src/learning/apply-result.test.ts [2m([22m[2m6 tests[22m[2m)[22m[32m 15[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m packages/contracts/src/agenda-deplacer-et-reajuster-le-planning.test.ts [2m([22m[2m7 tests[22m[2m)[22m[32m 16[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m packages/automations/src/definitions/reprise.test.ts [2m([22m[2m7 tests[22m[2m)[22m[32m 14[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m packages/bricks/src/types/cloze/schema.test.ts [2m([22m[2m12 tests[22m[2m)[22m[32m 16[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m packages/services/src/auth/finalize.test.ts [2m([22m[2m8 tests[22m[2m)[22m[32m 26[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m packages/bricks/src/types/matching/grade.test.ts [2m([22m[2m10 tests[22m[2m)[22m[32m 11[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m apps/web/lib/shuffle.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 4[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m apps/web/lib/notion-graph/pan-zoom.test.ts [2m([22m[2m7 tests[22m[2m)[22m[32m 21[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m packages/contracts/src/course-draft.test.ts [2m([22m[2m7 tests[22m[2m)[22m[32m 14[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m apps/mobile/src/api/health.test.ts [2m([22m[2m4 tests[22m[2m)[22m[32m 25[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m packages/llm/src/qualification/compatibility.test.ts [2m([22m[2m6 tests[22m[2m)[22m[32m 28[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m packages/learning-engine/src/session/format-choice.test.ts [2m([22m[2m9 tests[22m[2m)[22m[32m 18[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m packages/services/src/agenda/get-agenda.test.ts [2m([22m[2m7 tests[22m[2m)[22m[32m 35[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m packages/core/src/logger.test.ts [2m([22m[2m6 tests[22m[2m)[22m[32m 14[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m packages/services/src/programme/validate-proposal.test.ts [2m([22m[2m9 tests[22m[2m)[22m[32m 15[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m packages/llm/src/qualification/run.test.ts [2m([22m[2m4 tests[22m[2m)[22m[32m 11[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m packages/db/src/schema/formations.test.ts [2m([22m[2m7 tests[22m[2m)[22m[32m 13[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m packages/services/src/sidebar.test.ts [2m([22m[2m8 tests[22m[2m)[22m[32m 22[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m packages/services/src/review/rationale.test.ts [2m([22m[2m10 tests[22m[2m)[22m[32m 15[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m packages/automations/src/reprise/detect-missed.test.ts [2m([22m[2m4 tests[22m[2m)[22m[32m 16[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m packages/core/src/net/assert-public-url.test.ts [2m([22m[2m41 tests[22m[2m)[22m[32m 14[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m packages/http/src/session.test.ts [2m([22m[2m2 tests[22m[2m)[22m[32m 24[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m packages/bricks/src/types/scripted-dialogue/schema.test.ts [2m([22m[2m14 tests[22m[2m)[22m[32m 14[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m packages/bricks/src/types/choice-question/schema.test.ts [2m([22m[2m11 tests[22m[2m)[22m[32m 11[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m packages/services/src/search/index.test.ts [2m([22m[2m8 tests[22m[2m)[22m[32m 21[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m packages/http/src/security.test.ts [2m([22m[2m6 tests[22m[2m)[22m[32m 24[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m packages/db/src/schema/groups.test.ts [2m([22m[2m6 tests[22m[2m)[22m[32m 10[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m packages/contracts/src/parametres-notifications.test.ts [2m([22m[2m4 tests[22m[2m)[22m[32m 10[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m packages/tutor/src/cadrage/schema.test.ts [2m([22m[2m4 tests[22m[2m)[22m[32m 7[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m packages/services/src/notifications/list.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 14[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m apps/web/lib/agenda/agenda-calculs.test.ts [2m([22m[2m31 tests[22m[2m)[22m[32m 13[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m packages/contracts/src/ingestion.test.ts [2m([22m[2m8 tests[22m[2m)[22m[32m 11[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m packages/contracts/src/automations.test.ts [2m([22m[2m5 tests[22m[2m)[22m[32m 8[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m packages/bricks/src/types/recall-card/schema.test.ts [2m([22m[2m9 tests[22m[2m)[22m[32m 10[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m packages/services/src/cadrage/create.test.ts [2m([22m[2m7 tests[22m[2m)[22m[32m 12[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m packages/contracts/src/retrieval.test.ts [2m([22m[2m2 tests[22m[2m)[22m[32m 9[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m packages/contracts/src/formations-a-plusieurs.test.ts [2m([22m[2m6 tests[22m[2m)[22m[32m 10[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m packages/db/src/schema/identity.test.ts [2m([22m[2m9 tests[22m[2m)[22m[32m 11[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m apps/mobile/test/resolution.test.ts [2m([22m[2m4 tests[22m[2m)[22m[32m 16[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m packages/services/src/tutor-chat/stream.test.ts [2m([22m[2m9 tests[22m[2m)[22m[32m 20[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m packages/llm/src/mock/mock-model.test.ts [2m([22m[2m14 tests[22m[2m)[22m[32m 10[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m packages/testing/src/wcag22.test.ts [2m([22m[2m4 tests[22m[2m)[22m[32m 6[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m packages/services/src/cadrage/post.test.ts [2m([22m[2m12 tests[22m[2m)[22m[32m 15[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m packages/services/src/agenda-deplacer-et-reajuster-le-planning.test.ts [2m([22m[2m2 tests[22m[2m)[22m[32m 4[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m packages/bricks/src/types/ordering/schema.test.ts [2m([22m[2m9 tests[22m[2m)[22m[32m 13[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m packages/services/src/billing/status.test.ts [2m([22m[2m8 tests[22m[2m)[22m[32m 9[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m packages/services/src/cadrage/persist.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 5[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m packages/bricks/src/types/instruction/response.test.ts [2m([22m[2m7 tests[22m[2m)[22m[32m 8[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m packages/bricks/src/fingerprint.test.ts [2m([22m[2m10 tests[22m[2m)[22m[32m 10[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m packages/services/src/legal/accept.test.ts [2m([22m[2m5 tests[22m[2m)[22m[32m 10[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m packages/config/src/secret-patterns.test.ts [2m([22m[2m43 tests[22m[2m)[22m[32m 10[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m packages/bricks/src/types/cloze/grade.test.ts [2m([22m[2m19 tests[22m[2m)[22m[32m 13[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m packages/core/src/net/safe-fetch-edges.test.ts [2m([22m[2m9 tests[22m[2m)[22m[32m 13[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m packages/jobs/src/functions/demo-job.test.ts [2m([22m[2m11 tests[22m[2m)[22m[32m 12[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m packages/api-routes/src/coverage.test.ts [2m([22m[2m6 tests[22m[2m)[22m[32m 14[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m packages/services/src/email/dev.test.ts [2m([22m[2m7 tests[22m[2m)[22m[32m 13[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m packages/services/src/offline/sync.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 7[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m packages/bricks/src/architecture.test.ts [2m([22m[2m2 tests[22m[2m)[22m[32m 9[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m packages/notifications/src/push/send.test.ts [2m([22m[2m13 tests[22m[2m)[22m[32m 12[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m packages/services/src/questions/prepare-bank.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 13[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m packages/services/src/tutor-chat/conversations.test.ts [2m([22m[2m9 tests[22m[2m)[22m[32m 12[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m packages/services/src/planning/index.test.ts [2m([22m[2m4 tests[22m[2m)[22m[32m 19[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m packages/db/src/schema/resources.test.ts [2m([22m[2m8 tests[22m[2m)[22m[32m 15[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m packages/learning-engine/src/fixtures/sap-reference.test.ts [2m([22m[2m7 tests[22m[2m)[22m[32m 11[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m packages/services/src/formations/final-review.test.ts [2m([22m[2m5 tests[22m[2m)[22m[32m 42[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m packages/services/src/courses/summary.test.ts [2m([22m[2m12 tests[22m[2m)[22m[32m 16[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m packages/services/src/header.test.ts [2m([22m[2m5 tests[22m[2m)[22m[32m 5[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m packages/services/src/spec-718.test.ts [2m([22m[2m6 tests[22m[2m)[22m[32m 16[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m packages/db/src/rls/matrix.test.ts [2m([22m[2m4 tests[22m[2m)[22m[32m 15[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m packages/services/src/auth/requests.test.ts [2m([22m[2m9 tests[22m[2m)[22m[32m 10[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m packages/jobs/src/mode.test.ts [2m([22m[2m2 tests[22m[2m)[22m[32m 9[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m packages/db/src/schema/memory.test.ts [2m([22m[2m8 tests[22m[2m)[22m[32m 20[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m packages/api-routes/src/deps/health.test.ts [2m([22m[2m8 tests[22m[2m)[22m[32m 12[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m apps/web/lib/format/interval.test.ts [2m([22m[2m11 tests[22m[2m)[22m[32m 18[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m packages/contracts/src/routes.test.ts [2m([22m[2m5 tests[22m[2m)[22m[32m 11[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m apps/web/lib/offline/queue.test.ts [2m([22m[2m2 tests[22m[2m)[22m[32m 18[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m packages/config/src/env-production.test.ts [2m([22m[2m4 tests[22m[2m)[22m[32m 13[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m packages/services/src/warmup/derive.test.ts [2m([22m[2m9 tests[22m[2m)[22m[32m 17[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m packages/api-routes/src/deps/sdd-pages.test.ts [2m([22m[2m7 tests[22m[2m)[22m[32m 3[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m packages/automations/src/definitions/echauffement.test.ts [2m([22m[2m5 tests[22m[2m)[22m[32m 9[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m packages/ui/src/hooks/use-breakpoint.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 13[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m packages/services/src/auth/verify.test.ts [2m([22m[2m4 tests[22m[2m)[22m[32m 7[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m packages/db/src/schema/bricks-activities.test.ts [2m([22m[2m8 tests[22m[2m)[22m[32m 20[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m packages/automations/src/definitions/jeu-lacune.test.ts [2m([22m[2m5 tests[22m[2m)[22m[32m 8[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m apps/mobile/src/lib/dates.test.ts [2m([22m[2m4 tests[22m[2m)[22m[32m 14[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m packages/services/src/billing/stripe-client.test.ts [2m([22m[2m6 tests[22m[2m)[22m[32m 16[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m apps/mobile/src/lib/clock.test.ts [2m([22m[2m6 tests[22m[2m)[22m[32m 16[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m packages/db/src/schema/ai-billing.test.ts [2m([22m[2m10 tests[22m[2m)[22m[32m 20[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m apps/web/lib/api/relay.test.ts [2m([22m[2m5 tests[22m[2m)[22m[32m 14[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m packages/bricks/src/types/open-question/schema.test.ts [2m([22m[2m16 tests[22m[2m)[22m[32m 12[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m packages/bricks/src/types/text/schema.test.ts [2m([22m[2m7 tests[22m[2m)[22m[32m 19[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m packages/tutor/src/cadrage/apply-tutor-turn.test.ts [2m([22m[2m8 tests[22m[2m)[22m[32m 12[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m packages/services/src/cadrage/get.test.ts [2m([22m[2m7 tests[22m[2m)[22m[32m 10[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m packages/db/src/schema/privacy-search.test.ts [2m([22m[2m8 tests[22m[2m)[22m[32m 11[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m packages/bricks/src/types/choice-question/grade.test.ts [2m([22m[2m15 tests[22m[2m)[22m[32m 9[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m packages/automations/src/moteur-d-automatismes.test.ts [2m([22m[2m9 tests[22m[2m)[22m[32m 14[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m packages/contracts/src/agenda.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 8[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m packages/bricks/src/types/categorization/schema.test.ts [2m([22m[2m12 tests[22m[2m)[22m[32m 12[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m apps/web/lib/push.test.ts [2m([22m[2m8 tests[22m[2m)[22m[32m 10[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m packages/services/src/security/rate-limit-limit.test.ts [2m([22m[2m4 tests[22m[2m)[22m[32m 7[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m packages/testing/src/wcag-grid.test.ts [2m([22m[2m4 tests[22m[2m)[22m[32m 9[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m packages/services/src/learning/apply-review.test.ts [2m([22m[2m5 tests[22m[2m)[22m[32m 14[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m packages/jobs/src/functions/registry.test.ts [2m([22m[2m4 tests[22m[2m)[22m[32m 6[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m packages/services/src/ai/credentials-service.test.ts [2m([22m[2m6 tests[22m[2m)[22m[32m 8[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m packages/llm/src/mock/fixtures.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 7[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m packages/jobs/src/time-window.test.ts [2m([22m[2m8 tests[22m[2m)[22m[32m 16[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m packages/learning-engine/src/params.test.ts [2m([22m[2m5 tests[22m[2m)[22m[32m 6[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m packages/services/src/spec-711.test.ts [2m([22m[2m6 tests[22m[2m)[22m[32m 8[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m packages/services/src/billing/mock-stripe.test.ts [2m([22m[2m8 tests[22m[2m)[22m[32m 10[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m packages/services/src/review/micro-composition.test.ts [2m([22m[2m10 tests[22m[2m)[22m[32m 7[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m packages/api-routes/src/deps/health-database.test.ts [2m([22m[2m4 tests[22m[2m)[22m[32m 9[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m packages/core/src/errors.test.ts [2m([22m[2m18 tests[22m[2m)[22m[32m 13[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m packages/services/src/questions/prepare-bank.service.test.ts [2m([22m[2m5 tests[22m[2m)[22m[32m 8[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m tools/legal/test/unit/check.test.ts [2m([22m[2m4 tests[22m[2m)[22m[32m 12[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m tools/sdd/test/unit/audit.test.ts [2m([22m[2m5 tests[22m[2m)[22m[32m 10[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m packages/bricks/src/types/resource-excerpt/schema.test.ts [2m([22m[2m11 tests[22m[2m)[22m[32m 12[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m packages/config/src/legal.test.ts [2m([22m[2m5 tests[22m[2m)[22m[32m 8[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m packages/automations/src/definitions/remediation.test.ts [2m([22m[2m6 tests[22m[2m)[22m[32m 9[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m apps/mobile/src/theme/theme.test.ts [2m([22m[2m7 tests[22m[2m)[22m[32m 8[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m packages/llm/src/discover-models.test.ts [2m([22m[2m1 test[22m[2m)[22m[32m 8[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m tools/sdd/test/unit/next.test.ts [2m([22m[2m11 tests[22m[2m)[22m[32m 9[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m packages/services/src/quiz/coverage.test.ts [2m([22m[2m6 tests[22m[2m)[22m[32m 11[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m packages/bricks/src/types/timer/schema.test.ts [2m([22m[2m8 tests[22m[2m)[22m[32m 12[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m packages/http/src/validate.test.ts [2m([22m[2m4 tests[22m[2m)[22m[32m 9[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m apps/web/scripts/generate-icons.test.ts [2m([22m[2m1 test[22m[2m)[22m[32m 6[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m apps/mobile/e2e/artifacts.test.ts [2m([22m[2m7 tests[22m[2m)[22m[32m 7[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m packages/contracts/src/tutor-chat.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 9[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m packages/db/src/schema/courses.test.ts [2m([22m[2m7 tests[22m[2m)[22m[32m 13[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m packages/services/src/cadrage/state.test.ts [2m([22m[2m9 tests[22m[2m)[22m[32m 8[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m packages/bricks/src/validate-locations.test.ts [2m([22m[2m5 tests[22m[2m)[22m[32m 13[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m apps/web/lib/security/csp.test.ts [2m([22m[2m6 tests[22m[2m)[22m[32m 7[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m packages/db/src/schema/planning.test.ts [2m([22m[2m7 tests[22m[2m)[22m[32m 19[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m packages/bricks/src/types/instruction/table-checks.test.ts [2m([22m[2m23 tests[22m[2m)[22m[32m 7[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m apps/mobile/src/auth/session-token.test.ts [2m([22m[2m6 tests[22m[2m)[22m[32m 16[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m packages/contracts/src/me.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 12[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m packages/services/src/resources/limits.test.ts [2m([22m[2m6 tests[22m[2m)[22m[32m 7[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m packages/services/src/courses/section-bricks.test.ts [2m([22m[2m5 tests[22m[2m)[22m[32m 5[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m packages/services/src/courses/validate-citations.test.ts [2m([22m[2m7 tests[22m[2m)[22m[32m 5[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m packages/bricks/src/types/recall-card/grade.test.ts [2m([22m[2m6 tests[22m[2m)[22m[32m 9[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m packages/services/src/learning/persist-plan.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 11[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m packages/contracts/src/cursor.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 7[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m packages/services/src/context.test.ts [2m([22m[2m4 tests[22m[2m)[22m[32m 6[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m packages/llm/src/anthropic-options.test.ts [2m([22m[2m6 tests[22m[2m)[22m[32m 10[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m packages/automations/src/definitions/micro-seance.test.ts [2m([22m[2m5 tests[22m[2m)[22m[32m 7[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m packages/services/src/dev/echo.test.ts [2m([22m[2m6 tests[22m[2m)[22m[32m 8[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m packages/db/src/schema/notifications.test.ts [2m([22m[2m6 tests[22m[2m)[22m[32m 11[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m packages/core/src/net/ip-ranges.test.ts [2m([22m[2m24 tests[22m[2m)[22m[32m 10[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m packages/testing/src/touch-targets.test.ts [2m([22m[2m5 tests[22m[2m)[22m[32m 7[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m apps/mobile/src/offline/queue.test.ts [2m([22m[2m4 tests[22m[2m)[22m[32m 5[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m apps/web/app/accessibilite/page.test.tsx [2m([22m[2m3 tests[22m[2m)[22m[32m 4[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m packages/services/src/courses/get-course.test.ts [2m([22m[2m4 tests[22m[2m)[22m[32m 10[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m packages/llm/src/mock/select.test.ts [2m([22m[2m7 tests[22m[2m)[22m[32m 9[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m packages/config/src/agenda.test.ts [2m([22m[2m2 tests[22m[2m)[22m[32m 5[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m packages/contracts/src/ai-credentials.test.ts [2m([22m[2m4 tests[22m[2m)[22m[32m 6[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m tools/sdd/test/unit/validate-mobile.test.ts [2m([22m[2m12 tests[22m[2m)[22m[32m 7[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m packages/automations/src/parametres-automatismes.test.ts [2m([22m[2m8 tests[22m[2m)[22m[32m 9[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m tools/perf/test/k6-thresholds.test.ts [2m([22m[2m7 tests[22m[2m)[22m[32m 6[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m apps/mobile/src/auth/secure-storage.test.ts [2m([22m[2m7 tests[22m[2m)[22m[32m 10[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m tools/perf/test/assert-lighthouse.test.ts [2m([22m[2m4 tests[22m[2m)[22m[32m 6[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m apps/web/lib/route-guard.test.ts [2m([22m[2m20 tests[22m[2m)[22m[32m 8[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m packages/services/src/quiz/retry-gate.test.ts [2m([22m[2m5 tests[22m[2m)[22m[32m 4[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m packages/automations/src/definitions/questions-cartes.test.ts [2m([22m[2m5 tests[22m[2m)[22m[32m 4[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m packages/llm/src/providers/catalog.test.ts [2m([22m[2m2 tests[22m[2m)[22m[32m 4[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m packages/core/src/logger-extra.test.ts [2m([22m[2m1 test[22m[2m)[22m[32m 5[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m packages/services/src/personal-data/zip-layout.test.ts [2m([22m[2m5 tests[22m[2m)[22m[32m 9[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m apps/web/test/unit/next-config.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 3[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m packages/services/src/email/unsubscribe.test.ts [2m([22m[2m4 tests[22m[2m)[22m[32m 9[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m apps/api/src/mount.test.ts [2m([22m[2m2 tests[22m[2m)[22m[32m 9[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m tools/dev/test/unit/mobile-preflight.test.ts [2m([22m[2m10 tests[22m[2m)[22m[32m 6[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m apps/mobile/src/features/auth/validation.test.ts [2m([22m[2m9 tests[22m[2m)[22m[32m 8[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m packages/services/src/cadrage/complete.test.ts [2m([22m[2m5 tests[22m[2m)[22m[32m 8[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m apps/web/lib/security/asvs.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 8[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m packages/bricks/src/types/categorization/grade.test.ts [2m([22m[2m10 tests[22m[2m)[22m[32m 8[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m packages/services/src/auth/gotrue-errors.test.ts [2m([22m[2m16 tests[22m[2m)[22m[32m 6[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m packages/services/src/programme/progress.test.ts [2m([22m[2m5 tests[22m[2m)[22m[32m 5[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m packages/bricks/src/registry-answers.test.ts [2m([22m[2m8 tests[22m[2m)[22m[32m 8[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m apps/web/lib/sw.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 6[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m packages/services/src/security/origin-guard.test.ts [2m([22m[2m22 tests[22m[2m)[22m[32m 10[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m tools/design/test/unit/manifest.test.ts [2m([22m[2m8 tests[22m[2m)[22m[32m 7[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m packages/services/src/formations/active-limit.test.ts [2m([22m[2m4 tests[22m[2m)[22m[32m 4[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m packages/services/src/courses/version-course.test.ts [2m([22m[2m2 tests[22m[2m)[22m[32m 5[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m packages/notifications/src/email/unsubscribe-token.test.ts [2m([22m[2m5 tests[22m[2m)[22m[32m 4[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m packages/ui/src/accessibility/contrast.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 3[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m apps/mobile/e2e/maestro-junit.test.ts [2m([22m[2m6 tests[22m[2m)[22m[32m 5[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m packages/services/src/spec-721.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 49[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m packages/db/src/client.test.ts [2m([22m[2m7 tests[22m[2m)[22m[32m 8[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m apps/web/test/unit/bundle-split.test.ts [2m([22m[2m1 test[22m[2m)[22m[32m 6[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m packages/services/src/exercises/validate-production.test.ts [2m([22m[2m6 tests[22m[2m)[22m[32m 9[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m packages/testing/src/clock.test.ts [2m([22m[2m12 tests[22m[2m)[22m[32m 8[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m packages/services/src/me.test.ts [2m([22m[2m7 tests[22m[2m)[22m[32m 7[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m packages/llm/src/errors.test.ts [2m([22m[2m7 tests[22m[2m)[22m[32m 7[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m packages/llm/src/tasks.test.ts [2m([22m[2m2 tests[22m[2m)[22m[32m 4[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m packages/bricks/src/types/scoring/compute.test.ts [2m([22m[2m11 tests[22m[2m)[22m[32m 7[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m packages/services/src/auth/destination.test.ts [2m([22m[2m22 tests[22m[2m)[22m[32m 5[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m packages/bricks/src/types/timer/state.test.ts [2m([22m[2m8 tests[22m[2m)[22m[32m 5[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m apps/mobile/src/config.test.ts [2m([22m[2m9 tests[22m[2m)[22m[32m 7[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m packages/services/src/resources/module-actions.test.ts [2m([22m[2m6 tests[22m[2m)[22m[32m 7[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m apps/web/components/onboarding/formatFirstNames.test.ts [2m([22m[2m2 tests[22m[2m)[22m[32m 3[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m tools/perf/test/p75.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 3[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m packages/services/src/mock-exams/review.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 3[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m packages/llm/src/session.test.ts [2m([22m[2m2 tests[22m[2m)[22m[32m 5[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m packages/testing/src/axe.test.ts [2m([22m[2m2 tests[22m[2m)[22m[32m 4[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m apps/mobile/src/api/idempotency.test.ts [2m([22m[2m4 tests[22m[2m)[22m[32m 4[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m packages/services/src/security/rate-limit.test.ts [2m([22m[2m14 tests[22m[2m)[22m[32m 7[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m packages/services/src/tutor-chat/starters.test.ts [2m([22m[2m2 tests[22m[2m)[22m[32m 3[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m tools/sdd/test/unit/merge-states.test.ts [2m([22m[2m7 tests[22m[2m)[22m[32m 5[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m packages/services/src/quiz/score.test.ts [2m([22m[2m4 tests[22m[2m)[22m[32m 4[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m packages/ui/src/tokens/contrast.test.ts [2m([22m[2m4 tests[22m[2m)[22m[32m 5[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m apps/web/components/onboarding/RhythmSummary.test.ts [2m([22m[2m4 tests[22m[2m)[22m[32m 4[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m apps/web/app/providers.test.tsx [2m([22m[2m2 tests[22m[2m)[22m[32m 3[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m apps/mobile/src/auth/email-auth.test.ts [2m([22m[2m8 tests[22m[2m)[22m[32m 7[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m packages/bricks/src/registry.test.ts [2m([22m[2m5 tests[22m[2m)[22m[32m 5[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m tools/dev/test/unit/guards.test.ts [2m([22m[2m6 tests[22m[2m)[22m[32m 5[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m packages/services/src/gaps/links.test.ts [2m([22m[2m4 tests[22m[2m)[22m[32m 7[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m apps/mobile/src/data/persist.test.ts [2m([22m[2m4 tests[22m[2m)[22m[32m 5[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m apps/web/components/onboarding/parseInviteCode.test.ts [2m([22m[2m4 tests[22m[2m)[22m[32m 3[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m apps/mobile/src/data/query-client.test.ts [2m([22m[2m4 tests[22m[2m)[22m[32m 3[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m apps/web/lib/auth/password-strength.test.ts [2m([22m[2m8 tests[22m[2m)[22m[32m 4[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m packages/ui/src/navigation/breadcrumb.test.ts [2m([22m[2m2 tests[22m[2m)[22m[32m 3[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m packages/services/src/billing/config.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 4[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m apps/web/lib/format/modules-label.test.ts [2m([22m[2m4 tests[22m[2m)[22m[32m 3[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m apps/mobile/src/offline/purge.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 5[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m apps/web/lib/api-deployment-topology.test.ts [2m([22m[2m2 tests[22m[2m)[22m[32m 8[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m packages/services/src/mock-exams/timer.test.ts [2m([22m[2m5 tests[22m[2m)[22m[32m 8[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m apps/web/lib/client-log.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 4[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m packages/ui/src/tokens/slot-kinds.test.ts [2m([22m[2m2 tests[22m[2m)[22m[32m 4[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m packages/services/src/resources/result.test.ts [2m([22m[2m2 tests[22m[2m)[22m[32m 4[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m packages/api-routes/src/deps/onboarding-ticket.test.ts [2m([22m[2m2 tests[22m[2m)[22m[32m 4[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m packages/config/src/platform.test.ts [2m([22m[2m4 tests[22m[2m)[22m[32m 3[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m apps/mobile/src/auth/auth-errors.test.ts [2m([22m[2m8 tests[22m[2m)[22m[32m 5[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m packages/core/src/sentry.test.ts [2m([22m[2m5 tests[22m[2m)[22m[32m 5[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m packages/services/src/formations/access.test.ts [2m([22m[2m4 tests[22m[2m)[22m[32m 5[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m tools/perf/test/ssr-overhead.test.ts [2m([22m[2m2 tests[22m[2m)[22m[32m 3[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m packages/http/src/request-id.test.ts [2m([22m[2m9 tests[22m[2m)[22m[32m 4[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m apps/web/components/tutor-chat/use-text-selection.test.ts [2m([22m[2m2 tests[22m[2m)[22m[32m 5[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m packages/bricks/src/checks-branches.test.ts [2m([22m[2m7 tests[22m[2m)[22m[32m 5[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m packages/core/src/clock.test.ts [2m([22m[2m6 tests[22m[2m)[22m[32m 5[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m packages/contracts/src/push.test.ts [2m([22m[2m14 tests[22m[2m)[22m[32m 4[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m packages/services/src/review/per-notion.test.ts [2m([22m[2m5 tests[22m[2m)[22m[32m 5[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m packages/automations/src/micro-seance/should-propose.test.ts [2m([22m[2m6 tests[22m[2m)[22m[32m 5[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m packages/services/src/quiz/result.test.ts [2m([22m[2m4 tests[22m[2m)[22m[32m 5[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m packages/ui/src/components/Toast/store.test.ts [2m([22m[2m1 test[22m[2m)[22m[32m 3[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m apps/mobile/src/auth/legal.test.ts [2m([22m[2m4 tests[22m[2m)[22m[32m 3[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m packages/services/src/tutor-chat/follow-ups.test.ts [2m([22m[2m2 tests[22m[2m)[22m[32m 4[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m apps/mobile/src/auth/deep-link.test.ts [2m([22m[2m6 tests[22m[2m)[22m[32m 4[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m packages/contracts/src/programme.test.ts [2m([22m[2m1 test[22m[2m)[22m[32m 3[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m apps/web/components/quiz/use-quiz-attempt.test.ts [2m([22m[2m1 test[22m[2m)[22m[32m 3[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m apps/mobile/src/api/errors.test.ts [2m([22m[2m7 tests[22m[2m)[22m[32m 4[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m packages/services/src/tutor-chat/sources.test.ts [2m([22m[2m2 tests[22m[2m)[22m[32m 4[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m packages/services/src/quiz/retry-guard.test.ts [2m([22m[2m6 tests[22m[2m)[22m[32m 4[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m packages/automations/src/reprise/inactivity.test.ts [2m([22m[2m6 tests[22m[2m)[22m[32m 7[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m apps/web/app/manifest.test.ts [2m([22m[2m1 test[22m[2m)[22m[32m 3[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m packages/http/src/no-next.test.ts [2m([22m[2m1 test[22m[2m)[22m[32m 3[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m packages/db/src/formation-monogram.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 3[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m packages/config/src/models.test.ts [2m([22m[2m2 tests[22m[2m)[22m[32m 3[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m packages/bricks/src/view/labels.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 3[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m packages/services/src/spec-717.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 3[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m apps/mobile/src/lib/motion.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 3[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m packages/llm/src/credentials/mask.test.ts [2m([22m[2m3 tests[22m[2m)[22m[32m 3[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m apps/web/components/quiz-result/gap-proposals.test.ts [2m([22m[2m1 test[22m[2m)[22m[32m 3[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m packages/tutor/src/chat/prompt.test.ts [2m([22m[2m1 test[22m[2m)[22m[32m 3[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m packages/core/src/redaction.test.ts [2m([22m[2m2 tests[22m[2m)[22m[32m 3[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m packages/services/src/quiz/start.test.ts [2m([22m[2m2 tests[22m[2m)[22m[32m 3[2mms[22m[39m
+ [32m✓[39m [30m[42m unit [49m[39m packages/services/src/courses/progress.test.ts [2m([22m[2m4 tests[22m[2m)[22m[32m 3[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m480 passed[39m[22m[90m (480)[39m
+[2m      Tests [22m [1m[32m3814 passed[39m[22m[90m (3814)[39m
+[2m   Start at [22m 00:05:04
+[2m   Duration [22m 78.55s[2m (import 60%, tests 18%, environment 15%, transform 5%, worker 1%)[22m
+
+JSON report written to /root/learny-mobile/test-results/sdd/SPEC-3101/unit.json
+⏱ unit : 79 s
+
+$ pnpm -s test:mobile
+PASS Android test/auth/session.test.tsx
+PASS Android test/ui/overlays.test.tsx
+PASS Android test/auth/callback.test.tsx
+PASS Android test/dev-sdd-page.test.tsx
+  ● Console
+
+    console.error
+      An update to Animated(View) inside a test was not wrapped in act(...).
+      
+      When testing, code that causes React state updates should be wrapped into act(...):
+      
+      act(() => {
+        /* fire events that update state */
+      });
+      /* assert on the output */
+      
+      This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+
+      at ../../node_modules/.pnpm/react-reconciler@0.34.0_react@19.3.0/node_modules/react-reconciler/cjs/react-reconciler.development.js:17864:19
+      at runWithFiberInDEV (../../node_modules/.pnpm/react-reconciler@0.34.0_react@19.3.0/node_modules/react-reconciler/cjs/react-reconciler.development.js:2663:13)
+      at warnIfUpdatesNotWrappedWithActDEV (../../node_modules/.pnpm/react-reconciler@0.34.0_react@19.3.0/node_modules/react-reconciler/cjs/react-reconciler.development.js:17863:9)
+      at scheduleUpdateOnFiber (../../node_modules/.pnpm/react-reconciler@0.34.0_react@19.3.0/node_modules/react-reconciler/cjs/react-reconciler.development.js:15445:11)
+      at dispatchReducerAction (../../node_modules/.pnpm/react-reconciler@0.34.0_react@19.3.0/node_modules/react-reconciler/cjs/react-reconciler.development.js:6963:13)
+      at Object.scheduleUpdate [as current] (../../node_modules/.pnpm/react-native@0.88.1_@babel+core@7.29.13_@react-native+metro-config@0.88.1_@babel+core@7_51353a5c03e361e196f0b692f1b9740f/node_modules/react-native/src/private/animated/createAnimatedPropsHook.js:128:20)
+      at AnimatedProps._callback (../../node_modules/.pnpm/react-native@0.88.1_@babel+core@7.29.13_@react-native+metro-config@0.88.1_@babel+core@7_51353a5c03e361e196f0b692f1b9740f/node_modules/react-native/src/private/animated/createAnimatedPropsHook.js:68:36)
+      at AnimatedProps._callback [as update] (../../node_modules/.pnpm/react-native@0.88.1_@babel+core@7.29.13_@react-native+metro-config@0.88.1_@babel+core@7_51353a5c03e361e196f0b692f1b9740f/node_modules/react-native/Libraries/Animated/nodes/AnimatedProps.js:238:10)
+      at update (../../node_modules/.pnpm/react-native@0.88.1_@babel+core@7.29.13_@react-native+metro-config@0.88.1_@babel+core@7_51353a5c03e361e196f0b692f1b9740f/node_modules/react-native/Libraries/Animated/nodes/AnimatedValue.js:66:31)
+          at Set.forEach (<anonymous>)
+      at forEach (../../node_modules/.pnpm/react-native@0.88.1_@babel+core@7.29.13_@react-native+metro-config@0.88.1_@babel+core@7_51353a5c03e361e196f0b692f1b9740f/node_modules/react-native/Libraries/Animated/nodes/AnimatedValue.js:66:10)
+      at AnimatedValue.flushValue [as _updateValue] (../../node_modules/.pnpm/react-native@0.88.1_@babel+core@7.29.13_@react-native+metro-config@0.88.1_@babel+core@7_51353a5c03e361e196f0b692f1b9740f/node_modules/react-native/Libraries/Animated/nodes/AnimatedValue.js:310:7)
+      at TimingAnimation._updateValue [as _onUpdate] (../../node_modules/.pnpm/react-native@0.88.1_@babel+core@7.29.13_@react-native+metro-config@0.88.1_@babel+core@7_51353a5c03e361e196f0b692f1b9740f/node_modules/react-native/Libraries/Animated/nodes/AnimatedValue.js:270:14)
+      at TimingAnimation._onUpdate [as onUpdate] (../../node_modules/.pnpm/react-native@0.88.1_@babel+core@7.29.13_@react-native+metro-config@0.88.1_@babel+core@7_51353a5c03e361e196f0b692f1b9740f/node_modules/react-native/Libraries/Animated/animations/TimingAnimation.js:167:10)
+      at onUpdate (../../node_modules/.pnpm/react-native@0.88.1_@babel+core@7.29.13_@react-native+metro-config@0.88.1_@babel+core@7_51353a5c03e361e196f0b692f1b9740f/node_modules/react-native/Libraries/Animated/animations/TimingAnimation.js:142:67)
+
+    console.error
+      An update to Animated(View) inside a test was not wrapped in act(...).
+      
+      When testing, code that causes React state updates should be wrapped into act(...):
+      
+      act(() => {
+        /* fire events that update state */
+      });
+      /* assert on the output */
+      
+      This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+
+      at ../../node_modules/.pnpm/react-reconciler@0.34.0_react@19.3.0/node_modules/react-reconciler/cjs/react-reconciler.development.js:17864:19
+      at runWithFiberInDEV (../../node_modules/.pnpm/react-reconciler@0.34.0_react@19.3.0/node_modules/react-reconciler/cjs/react-reconciler.development.js:2663:13)
+      at warnIfUpdatesNotWrappedWithActDEV (../../node_modules/.pnpm/react-reconciler@0.34.0_react@19.3.0/node_modules/react-reconciler/cjs/react-reconciler.development.js:17863:9)
+      at scheduleUpdateOnFiber (../../node_modules/.pnpm/react-reconciler@0.34.0_react@19.3.0/node_modules/react-reconciler/cjs/react-reconciler.development.js:15445:11)
+      at dispatchReducerAction (../../node_modules/.pnpm/react-reconciler@0.34.0_react@19.3.0/node_modules/react-reconciler/cjs/react-reconciler.development.js:6963:13)
+      at Object.scheduleUpdate [as current] (../../node_modules/.pnpm/react-native@0.88.1_@babel+core@7.29.13_@react-native+metro-config@0.88.1_@babel+core@7_51353a5c03e361e196f0b692f1b9740f/node_modules/react-native/src/private/animated/createAnimatedPropsHook.js:128:20)
+      at AnimatedProps._callback (../../node_modules/.pnpm/react-native@0.88.1_@babel+core@7.29.13_@react-native+metro-config@0.88.1_@babel+core@7_51353a5c03e361e196f0b692f1b9740f/node_modules/react-native/src/private/animated/createAnimatedPropsHook.js:68:36)
+      at AnimatedProps._callback [as update] (../../node_modules/.pnpm/react-native@0.88.1_@babel+core@7.29.13_@react-native+metro-config@0.88.1_@babel+core@7_51353a5c03e361e196f0b692f1b9740f/node_modules/react-native/Libraries/Animated/nodes/AnimatedProps.js:238:10)
+      at update (../../node_modules/.pnpm/react-native@0.88.1_@babel+core@7.29.13_@react-native+metro-config@0.88.1_@babel+core@7_51353a5c03e361e196f0b692f1b9740f/node_modules/react-native/Libraries/Animated/nodes/AnimatedValue.js:66:31)
+          at Set.forEach (<anonymous>)
+      at forEach (../../node_modules/.pnpm/react-native@0.88.1_@babel+core@7.29.13_@react-native+metro-config@0.88.1_@babel+core@7_51353a5c03e361e196f0b692f1b9740f/node_modules/react-native/Libraries/Animated/nodes/AnimatedValue.js:66:10)
+      at AnimatedValue.flushValue [as _updateValue] (../../node_modules/.pnpm/react-native@0.88.1_@babel+core@7.29.13_@react-native+metro-config@0.88.1_@babel+core@7_51353a5c03e361e196f0b692f1b9740f/node_modules/react-native/Libraries/Animated/nodes/AnimatedValue.js:310:7)
+      at TimingAnimation._updateValue [as _onUpdate] (../../node_modules/.pnpm/react-native@0.88.1_@babel+core@7.29.13_@react-native+metro-config@0.88.1_@babel+core@7_51353a5c03e361e196f0b692f1b9740f/node_modules/react-native/Libraries/Animated/nodes/AnimatedValue.js:270:14)
+      at TimingAnimation._onUpdate [as onUpdate] (../../node_modules/.pnpm/react-native@0.88.1_@babel+core@7.29.13_@react-native+metro-config@0.88.1_@babel+core@7_51353a5c03e361e196f0b692f1b9740f/node_modules/react-native/Libraries/Animated/animations/TimingAnimation.js:167:10)
+      at onUpdate (../../node_modules/.pnpm/react-native@0.88.1_@babel+core@7.29.13_@react-native+metro-config@0.88.1_@babel+core@7_51353a5c03e361e196f0b692f1b9740f/node_modules/react-native/Libraries/Animated/animations/TimingAnimation.js:142:67)
+
+    console.error
+      An update to Animated(View) inside a test was not wrapped in act(...).
+      
+      When testing, code that causes React state updates should be wrapped into act(...):
+      
+      act(() => {
+        /* fire events that update state */
+      });
+      /* assert on the output */
+      
+      This ensures that you're testing the behavior the user would see in the browser. Learn more at https://react.dev/link/wrap-tests-with-act
+
+      at ../../node_modules/.pnpm/react-reconciler@0.34.0_react@19.3.0/node_modules/react-reconciler/cjs/react-reconciler.development.js:17864:19
+      at runWithFiberInDEV (../../node_modules/.pnpm/react-reconciler@0.34.0_react@19.3.0/node_modules/react-reconciler/cjs/react-reconciler.development.js:2663:13)
+      at warnIfUpdatesNotWrappedWithActDEV (../../node_modules/.pnpm/react-reconciler@0.34.0_react@19.3.0/node_modules/react-reconciler/cjs/react-reconciler.development.js:17863:9)
+      at scheduleUpdateOnFiber (../../node_modules/.pnpm/react-reconciler@0.34.0_react@19.3.0/node_modules/react-reconciler/cjs/react-reconciler.development.js:15445:11)
+      at dispatchReducerAction (../../node_modules/.pnpm/react-reconciler@0.34.0_react@19.3.0/node_modules/react-reconciler/cjs/react-reconciler.development.js:6963:13)
+      at Object.scheduleUpdate [as current] (../../node_modules/.pnpm/react-native@0.88.1_@babel+core@7.29.13_@react-native+metro-config@0.88.1_@babel+core@7_51353a5c03e361e196f0b692f1b9740f/node_modules/react-native/src/private/animated/createAnimatedPropsHook.js:128:20)
+      at AnimatedProps._callback (../../node_modules/.pnpm/react-native@0.88.1_@babel+core@7.29.13_@react-native+metro-config@0.88.1_@babel+core@7_51353a5c03e361e196f0b692f1b9740f/node_modules/react-native/src/private/animated/createAnimatedPropsHook.js:68:36)
+      at AnimatedProps._callback [as update] (../../node_modules/.pnpm/react-native@0.88.1_@babel+core@7.29.13_@react-native+metro-config@0.88.1_@babel+core@7_51353a5c03e361e196f0b692f1b9740f/node_modules/react-native/Libraries/Animated/nodes/AnimatedProps.js:238:10)
+      at update (../../node_modules/.pnpm/react-native@0.88.1_@babel+core@7.29.13_@react-native+metro-config@0.88.1_@babel+core@7_51353a5c03e361e196f0b692f1b9740f/node_modules/react-native/Libraries/Animated/nodes/AnimatedValue.js:66:31)
+          at Set.forEach (<anonymous>)
+      at forEach (../../node_modules/.pnpm/react-native@0.88.1_@babel+core@7.29.13_@react-native+metro-config@0.88.1_@babel+core@7_51353a5c03e361e196f0b692f1b9740f/node_modules/react-native/Libraries/Animated/nodes/AnimatedValue.js:66:10)
+      at AnimatedValue.flushValue [as _updateValue] (../../node_modules/.pnpm/react-native@0.88.1_@babel+core@7.29.13_@react-native+metro-config@0.88.1_@babel+core@7_51353a5c03e361e196f0b692f1b9740f/node_modules/react-native/Libraries/Animated/nodes/AnimatedValue.js:310:7)
+      at TimingAnimation._updateValue [as _onUpdate] (../../node_modules/.pnpm/react-native@0.88.1_@babel+core@7.29.13_@react-native+metro-config@0.88.1_@babel+core@7_51353a5c03e361e196f0b692f1b9740f/node_modules/react-native/Libraries/Animated/nodes/AnimatedValue.js:270:14)
+      at TimingAnimation._onUpdate [as onUpdate] (../../node_modules/.pnpm/react-native@0.88.1_@babel+core@7.29.13_@react-native+metro-config@0.88.1_@babel+core@7_51353a5c03e361e196f0b692f1b9740f/node_modules/react-native/Libraries/Animated/animations/TimingAnimation.js:167:10)
+      at onUpdate (../../node_modules/.pnpm/react-native@0.88.1_@babel+core@7.29.13_@react-native+metro-config@0.88.1_@babel+core@7_51353a5c03e361e196f0b692f1b9740f/node_modules/react-native/Libraries/Animated/animations/TimingAnimation.js:142:67)
+
+PASS Android test/ui/primitives.test.tsx
+PASS Android test/ui/controls.test.tsx
+PASS Android test/ui/sheet.test.tsx
+PASS Android test/ui/buttons.test.tsx
+PASS Android test/offline/offline-banner.test.tsx
+PASS Android test/api/use-idempotency-key.test.tsx
+PASS Android test/ui/data-display.test.tsx
+PASS Android test/auth/account-form.test.tsx
+
+Test Suites: 12 passed, 12 total
+Tests:       89 passed, 89 total
+Snapshots:   0 total
+Time:        3.133 s
+Ran all test suites.
+Test results written to: ../../test-results/mobile/jest.json
+⏱ jest : 4 s
+✔ unit — 35 Vitest + 18 Jest test(s) [SPEC-3101] réussi(s), 0 échec(s)
+
+$ pnpm -s test:int "apps/mobile/test/integration/auth.int.test.ts" -t "\[SPEC-3101\]" --reporter=default --reporter=json --outputFile.json="/root/learny-mobile/test-results/sdd/SPEC-3101/integration.json"
+(!) Your Vite config uses features that are unsupported by `configLoader: 'native'`, which is planned to become the default in a future major version of Vite:
+  - import "./packages/testing/src/env" without a file extension (vitest.config.ts:5:52). Add the file extension
+  - import "./clock" without a file extension (packages/testing/src/env.ts:2:32). Add the file extension
+Set `VITE_CONFIG_NATIVE_IGNORE_WARNING=true` to suppress this warning.
+
+[1m[30m[46m RUN [49m[39m[22m [36mv5.1.0 [39m[90m/root/learny-mobile[39m
+
+ [31m❯[39m [30m[45m integration [49m[39m apps/mobile/test/integration/auth.int.test.ts [2m([22m[2m4 tests[22m[2m | [22m[31m4 failed[39m[2m)[22m[32m 31[2mms[22m[39m
+   [31m❯[39m [SPEC-3101] compte mobile contre la pile locale [2m(4)[22m
+[31m     [31m×[31m inscrit un compte par mot de passe et enregistre les CGU actives (CA-2)[39m[32m 29[2mms[22m[39m
+[31m     [31m×[31m ouvre une session avec un lien reçu dans Mailpit, une seule fois (CA-3)[39m[32m 0[2mms[22m[39m
+[31m     [31m×[31m répond la même chose à une adresse connue et à une adresse inconnue (CA-4)[39m[32m 0[2mms[22m[39m
+[31m     [31m×[31m se déconnecte : la route de déconnexion répond 204 et la session locale est purgée (CA-5)[39m[32m 0[2mms[22m[39m
+
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 4 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m [30m[45m integration [49m[39m apps/mobile/test/integration/auth.int.test.ts[2m > [22m[SPEC-3101] compte mobile contre la pile locale[2m > [22minscrit un compte par mot de passe et enregistre les CGU actives (CA-2)
+[31m[1mApiError[22m: Requête refusée : origine non autorisée.[39m
+[36m [2m❯[22m toApiError packages/api-client/src/client.ts:[2m211:10[22m[39m
+    [90m209|[39m
+    [90m210|[39m [35mfunction[39m [34mtoApiError[39m(error[33m:[39m [33mAppError[39m)[33m:[39m [33mApiError[39m {
+    [90m211|[39m   [35mreturn[39m [35mnew[39m [33mApiError[39m(error[33m.[39mcode[33m,[39m error[33m.[39mdetail[33m,[39m {
+    [90m   |[39m          [31m^[39m
+    [90m212|[39m     status[33m:[39m error[33m.[39mstatus [33m??[39m [34m0[39m[33m,[39m
+    [90m213|[39m     ...(error.requestId === undefined ? {} : { requestId: error.reques…
+[90m [2m❯[22m callApi packages/api-client/src/client.ts:[2m492:29[22m[39m
+[90m [2m❯[22m apps/mobile/test/integration/auth.int.test.ts:[2m120:21[22m[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/4]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m [30m[45m integration [49m[39m apps/mobile/test/integration/auth.int.test.ts[2m > [22m[SPEC-3101] compte mobile contre la pile locale[2m > [22mouvre une session avec un lien reçu dans Mailpit, une seule fois (CA-3)
+[31m[1mError[22m: Clé anonyme Supabase absente : sourcer .env.local (set -a; . ./.env.local; set +a) et lancer pnpm dev:up.[39m
+[36m [2m❯[22m supabaseClient apps/mobile/test/integration/auth.int.test.ts:[2m40:11[22m[39m
+    [90m 38|[39m [35mfunction[39m [34msupabaseClient[39m() {
+    [90m 39|[39m   [35mif[39m ([33mANON_KEY[39m [33m===[39m [32m''[39m) {
+    [90m 40|[39m     [35mthrow[39m [35mnew[39m [33mError[39m(
+    [90m   |[39m           [31m^[39m
+    [90m 41|[39m       'Clé anonyme Supabase absente : sourcer .env.local (set -a; . ./…
+    [90m 42|[39m     )[33m;[39m
+[90m [2m❯[22m apps/mobile/test/integration/auth.int.test.ts:[2m153:18[22m[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/4]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m [30m[45m integration [49m[39m apps/mobile/test/integration/auth.int.test.ts[2m > [22m[SPEC-3101] compte mobile contre la pile locale[2m > [22mrépond la même chose à une adresse connue et à une adresse inconnue (CA-4)
+[31m[1mError[22m: Clé anonyme Supabase absente : sourcer .env.local (set -a; . ./.env.local; set +a) et lancer pnpm dev:up.[39m
+[36m [2m❯[22m supabaseClient apps/mobile/test/integration/auth.int.test.ts:[2m40:11[22m[39m
+    [90m 38|[39m [35mfunction[39m [34msupabaseClient[39m() {
+    [90m 39|[39m   [35mif[39m ([33mANON_KEY[39m [33m===[39m [32m''[39m) {
+    [90m 40|[39m     [35mthrow[39m [35mnew[39m [33mError[39m(
+    [90m   |[39m           [31m^[39m
+    [90m 41|[39m       'Clé anonyme Supabase absente : sourcer .env.local (set -a; . ./…
+    [90m 42|[39m     )[33m;[39m
+[90m [2m❯[22m apps/mobile/test/integration/auth.int.test.ts:[2m177:18[22m[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/4]⎯[22m[39m
+
+[41m[1m FAIL [22m[49m [30m[45m integration [49m[39m apps/mobile/test/integration/auth.int.test.ts[2m > [22m[SPEC-3101] compte mobile contre la pile locale[2m > [22mse déconnecte : la route de déconnexion répond 204 et la session locale est purgée (CA-5)
+[31m[1mError[22m: Clé anonyme Supabase absente : sourcer .env.local (set -a; . ./.env.local; set +a) et lancer pnpm dev:up.[39m
+[36m [2m❯[22m supabaseClient apps/mobile/test/integration/auth.int.test.ts:[2m40:11[22m[39m
+    [90m 38|[39m [35mfunction[39m [34msupabaseClient[39m() {
+    [90m 39|[39m   [35mif[39m ([33mANON_KEY[39m [33m===[39m [32m''[39m) {
+    [90m 40|[39m     [35mthrow[39m [35mnew[39m [33mError[39m(
+    [90m   |[39m           [31m^[39m
+    [90m 41|[39m       'Clé anonyme Supabase absente : sourcer .env.local (set -a; . ./…
+    [90m 42|[39m     )[33m;[39m
+[90m [2m❯[22m apps/mobile/test/integration/auth.int.test.ts:[2m200:18[22m[39m
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/4]⎯[22m[39m
+
+
+[2m Test Files [22m [1m[31m1 failed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[31m4 failed[39m[22m[90m (4)[39m
+[2m   Start at [22m 00:06:27
+[2m   Duration [22m 339ms[2m (import 58%, transform 28%, tests 12%, worker 1%)[22m
+
+JSON report written to /root/learny-mobile/test-results/sdd/SPEC-3101/integration.json
+⏱ integration : 1 s
+✖ integration — 0 test(s) [SPEC-3101] réussi(s), 4 échec(s)
+
+$ pnpm -s test:e2e:mobile --tags SPEC-3101
+… serveur 8099 déjà actif
+✔ disque : 9.4 Go libres (seuil 4 Go)
+✔ e2e.env : 4 clés obligatoires présentes
+✔ apk : https://9db167ebaeff169e64af.agent37.app/app-release.apk → 200
+✔ api : https://bc9fc3d9e54a1e18f962.agent37.app/api/v1/health → 200
+✔ supabase : https://72433167123a2009fa61.agent37.app/auth/v1/health → 200
+✔ device-agent : https://7a56c4bb254996484dfb.agent37.app/health → 200
+✔ agent : agent libre (contrat v2) ; Maestro orphelin tué
+✔ appareil : emulator-5554 (API 35)
+
+✔ préflight : campagne prête (ADR-3015 § 5).
+✔ émulateur : {"serial":"emulator-5554","model":"sdk_gphone64_x86_64","apiLevel":"35","size":"Physical size: 1080x2400","platform":"android"}
+✔ APK installé depuis https://9db167ebaeff169e64af.agent37.app/app-release.apk
+✔ barre d’état figée (13:20, réseau et batterie pleins)
+… soumis
+… running enregistrement vidéo
+… running maestro
+… running scrutation en échec, nouvelle tentative
+… running maestro
+… running scrutation en échec, nouvelle tentative
+… running maestro
+… running scrutation en échec, nouvelle tentative
+… running maestro
+… running scrutation en échec, nouvelle tentative
+✖ agent appareil injoignable 12 fois de suite pendant la campagne 20261123000636-013 : GET /maestro/20261123000636-013?artifacts=0 : container_unreachable
+✖ campagne SPEC-3101 non prouvée : rapport JUnit absent ou vide (ADR-3015 § 3)
+  transport : agent appareil injoignable 12 fois de suite pendant la campagne 20261123000636-013 : GET /maestro/20261123000636-013?artifacts=0 : container_unreachable
+⏱ e2e : 237 s
+✖ e2e — 0 flux réussi(s), 2 échec(s), 0 vidéo(s)
+✖ visual — 0 flux @visual réussi(s) (mode mockup)
+preuves mobiles : 0 vidéo(s), 0 capture(s), 0 comparaison(s) visuelle(s)
+✔ acceptance — 6/6 critères ✅
+
+✖ SPEC-3101 : validations en échec. Corriger puis relancer uniquement : --only integration,e2e,visual.

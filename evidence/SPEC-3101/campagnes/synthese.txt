@@ -1,0 +1,2 @@
+✔ campagne SPEC-3101 : 2 flux réussi(s), 0 échec(s), 1 vidéo(s), 0 comparaison(s) visuelle(s)
+✔ campagne SPEC-3101 : 2 flux réussi(s), 0 échec(s), 1 vidéo(s), 0 comparaison(s) visuelle(s)

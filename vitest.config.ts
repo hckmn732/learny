@@ -49,6 +49,10 @@ export default defineConfig({
           include: [
             'packages/*/src/**/*.test.{ts,tsx}',
             'apps/*/src/**/*.test.{ts,tsx}',
+            // SPEC-3001: pure logic of the mobile e2e harness (compare.mjs).
+            'apps/mobile/e2e/**/*.test.ts',
+            // SPEC-3002 CA-5: the lint-rule proof runs in Node (ESLint API), not in Jest.
+            'apps/mobile/test/*.test.ts',
             'apps/web/{app,components,lib}/**/*.test.{ts,tsx}',
             'apps/web/test/unit/**/*.test.ts',
             'apps/web/scripts/**/*.test.ts',
@@ -62,6 +66,16 @@ export default defineConfig({
           environment: 'node',
           // CI runners are slower; the year-long quiet-hours loop needs more than the 5 s default.
           testTimeout: 20000,
+        },
+      },
+      {
+        // Checks that read the production build (apps/web/.next): run after `pnpm build` only,
+        // never in the pre-push unit run.
+        extends: true,
+        test: {
+          name: 'build',
+          include: ['apps/web/test/build/**/*.test.ts'],
+          environment: 'node',
         },
       },
       {

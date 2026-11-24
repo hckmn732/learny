@@ -1,0 +1,15 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<testsuites>
+  <testsuite name="Test Suite" device="emulator-5554" tests="2" failures="0" time="69.261" timestamp="2026-11-23T18:56:49">
+    <testcase id="SPEC-3303 contexte" name="SPEC-3303 contexte" classname="SPEC-3303 contexte" file="apps/mobile/e2e/flows/SPEC-3303-contexte.yaml" time="26.814" timestamp="2026-11-23T18:56:49" status="SUCCESS">
+      <properties>
+        <property name="tags" value="SPEC-3303"/>
+      </properties>
+    </testcase>
+    <testcase id="SPEC-3303 tuteur" name="SPEC-3303 tuteur" classname="SPEC-3303 tuteur" file="apps/mobile/e2e/flows/SPEC-3303-question.yaml" time="42.434" timestamp="2026-11-23T18:57:16" status="SUCCESS">
+      <properties>
+        <property name="tags" value="SPEC-3303, visual"/>
+      </properties>
+    </testcase>
+  </testsuite>
+</testsuites>

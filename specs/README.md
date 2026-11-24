@@ -20,12 +20,20 @@ Source de vérité de la liste : [`catalog.json`](catalog.json) (identifiant, ph
 | `p11-migration-api/` | Migration — application API autonome (piste `migration`) | SPEC-1101 → 1103 | CP-11 |
 | `p12-migration-bascule/` | Migration — bascule du web sur l’API (piste `migration`, exige CP-8) | SPEC-1201 → 1203 | CP-12 |
 | `p13-migration-multi-clients/` | Migration — API multi-clients et clôture (piste `migration`) | SPEC-1301 → 1302 | CP-13 |
+| `p30-mobile-socle/` | Mobile — socle Expo, design system natif et données (piste `mobile`) | SPEC-3001 → 3003 | CP-30 |
+| `p31-mobile-acces/` | Mobile — accès et coquille (piste `mobile`) | SPEC-3101 → 3102 | CP-31 |
+| `p32-mobile-quotidien/` | Mobile — Aujourd’hui, Programme et Agenda (piste `mobile`) | SPEC-3201 → 3203 | CP-32 |
+| `p33-mobile-apprentissage/` | Mobile — cours, tuteur, quiz et révisions (piste `mobile`) | SPEC-3301 → 3305 | CP-33 |
+| `p34-mobile-compte/` | Mobile — profil, réglages et connexion tierce (piste `mobile`) | SPEC-3401 → 3402 | CP-34 |
+| `p35-mobile-notifications-livraison/` | Mobile — notifications push et publication (piste `mobile`, exige CP-23) | SPEC-3501 → 3502 | CP-35 |
 
 Critères des checkpoints : [`checkpoints.md`](checkpoints.md).
 
 ## Pistes (ADR-1006)
 
 Les phases sont réparties en **pistes** indépendantes : `produit` (P0 → P9, branche `main`) et `migration` (P10 → P13, branche `migration`, séparation backend/frontend, ADR-1001). Une phase est débloquée par le checkpoint de la phase précédente **de sa piste** et par les checkpoints de son champ `requires`. `activeTrack` du catalogue désigne la piste pilotée par `node tools/sdd/next.mjs` (`SDD_TRACK=<piste>` la surcharge). Chaque piste déclare sa branche de base (`tracks.<piste>.baseBranch`) : `start.mjs` en part, `complete.mjs` y fusionne et la pousse.
+
+Piste `mobile` (ADR-3001) : P30 → P35, branche `mobile` partant de `main`, ADR à partir d’ADR-3001, canevas `docs/architecture/mobile/README.md`. P35 exige CP-23 (piste `python-migration`).
 
 ## Règles
 

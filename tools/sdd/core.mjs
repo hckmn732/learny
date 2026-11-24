@@ -292,3 +292,75 @@ export function e2eVerdict(code, summary) {
 export function visualVerdict(summary) {
   return summary.visual > 0 && summary.failed === 0;
 }
+
+// ---------------------------------------------------------------------------------------------
+// Piste mobile (SPEC-3001 EF-4, EF-5) : campagnes Maestro et sélection des commandes de validation.
+
+/** Commandes de validation d'une piste : la piste mobile ajoute Jest et remplace e2e par Maestro. */
+export function validationPlan(track) {
+  const mobile = track === 'mobile';
+  return {
+    track,
+    jest: mobile ? 'test:mobile' : null,
+    e2e: mobile ? 'test:e2e:mobile' : 'test:e2e',
+    visual: mobile ? 'test:e2e:mobile' : 'test:e2e',
+    e2eReport: mobile ? 'e2e-mobile.json' : 'e2e.json',
+  };
+}
+
+/** Compte les tests `[SPEC-xxx]` d'un rapport JSON Jest (`--json`). */
+export function summarizeJest(report, tag) {
+  const out = { passed: 0, failed: 0 };
+  const needle = `[${tag}]`;
+  for (const file of report?.testResults ?? []) {
+    for (const assertion of file.assertionResults ?? []) {
+      const full = [...(assertion.ancestorTitles ?? []), assertion.title].join(' ');
+      if (!full.includes(needle)) continue;
+      if (assertion.status === 'passed') out.passed += 1;
+      else if (assertion.status === 'failed') out.failed += 1;
+    }
+  }
+  return out;
+}
+
+/**
+ * Compte les flux d'une campagne Maestro (rapport `e2e-mobile.json` écrit par run-maestro.mjs).
+ * L'étiquette est comparée exactement : l'étiquette `SPEC-110` ne retient pas `SPEC-1101`.
+ */
+export function summarizeMaestro(report, tag) {
+  const out = { passed: 0, failed: 0, videos: 0, visual: 0, flows: [] };
+  for (const flow of report?.flows ?? []) {
+    const tags = Array.isArray(flow?.tags) ? flow.tags.map(String) : [];
+    if (!tags.includes(tag)) continue;
+    const status = flow.status === 'passed' ? 'passed' : 'failed';
+    if (status === 'passed') out.passed += 1;
+    else out.failed += 1;
+    const videos = Array.isArray(flow.videos) ? flow.videos.length : 0;
+    out.videos += videos;
+    const isVisual = tags.includes('visual');
+    if (isVisual && flow.visual?.status === 'passed') out.visual += 1;
+    out.flows.push({ name: String(flow.name ?? ''), status, videos, visual: isVisual, tags });
+  }
+  // Vidéo de campagne (ADR-3015 § 2) : unique pour la campagne, elle ne se rattache à aucun flux.
+  if (report?.campaignVideo) out.videos += 1;
+  return out;
+}
+
+/** Étape e2e mobile réussie : code 0, aucun flux en échec, au moins un flux et une vidéo (CL-4). */
+export function maestroVerdict(code, summary) {
+  return code === 0 && summary.failed === 0 && summary.passed > 0 && summary.videos > 0;
+}
+
+/**
+ * Étape visuelle mobile réussie : au moins un flux `visual` réussi, aucun flux en échec.
+ *
+ * ADR-3019 : une spécification peut déclarer la comparaison pixel non applicable (export de
+ * référence sans le chrome système, par exemple). Elle n'embarque alors aucun flux `@visual` ;
+ * l'étape réussit si la campagne ne compte aucun échec, et l'exemption est consignée dans son
+ * `acceptance.md`.
+ */
+export function mobileVisualVerdict(summary) {
+  const visualFlows = (summary.flows ?? []).filter((flow) => (flow.tags ?? []).includes('visual')).length;
+  if (visualFlows === 0) return summary.failed === 0;
+  return summary.visual > 0 && summary.failed === 0;
+}

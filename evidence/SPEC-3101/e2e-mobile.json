@@ -1,0 +1,70 @@
+{
+  "spec": "SPEC-3101",
+  "platform": "android",
+  "transport": "agent",
+  "jobId": "20261123004937-005",
+  "device": {
+    "serial": "emulator-5554",
+    "model": "sdk_gphone64_x86_64",
+    "apiLevel": "35",
+    "size": "Physical size: 1080x2400",
+    "platform": "android"
+  },
+  "tags": [
+    "SPEC-3101"
+  ],
+  "startedAt": "2026-11-23T00:49:37.621Z",
+  "finishedAt": "2026-11-23T00:51:22.781Z",
+  "passed": 2,
+  "failed": 0,
+  "videos": 1,
+  "campaignVideo": "artifacts/campagne/campagne.mp4",
+  "visual": 1,
+  "junitCases": 2,
+  "flows": [
+    {
+      "file": "apps/mobile/e2e/flows/SPEC-3101-connexion.yaml",
+      "name": "SPEC-3101 connexion",
+      "tags": [
+        "SPEC-3101",
+        "visual"
+      ],
+      "status": "passed",
+      "durationSec": 64.385,
+      "message": null,
+      "videos": [],
+      "screenshots": [
+        "artifacts/spec-3101-connexion/SPEC-3101-connexion.png"
+      ],
+      "visual": {
+        "flow": "SPEC-3101 connexion",
+        "status": "passed",
+        "diffRatio": 0.0978,
+        "capture": "/root/learny-mobile/test-results/sdd/SPEC-3101/artifacts/spec-3101-connexion/SPEC-3101-connexion.png",
+        "baseline": "/root/learny-mobile/apps/mobile/e2e/visual/baselines/SPEC-3101-connexion.png",
+        "diff": "/root/learny-mobile/test-results/sdd/SPEC-3101/artifacts/spec-3101-connexion/SPEC-3101-connexion.diff.png"
+      }
+    },
+    {
+      "file": "apps/mobile/e2e/flows/SPEC-3101-lien-magique.yaml",
+      "name": "SPEC-3101 lien magique",
+      "tags": [
+        "SPEC-3101"
+      ],
+      "status": "passed",
+      "durationSec": 29.893,
+      "message": null,
+      "videos": [],
+      "screenshots": [],
+      "visual": null
+    }
+  ],
+  "visualChecks": [
+    {
+      "flow": "SPEC-3101 connexion",
+      "status": "passed",
+      "diffRatio": 0.0978
+    }
+  ],
+  "unattributed": []
+}

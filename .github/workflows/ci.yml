@@ -151,6 +151,8 @@ jobs:
       - run: pnpm lint
       - run: pnpm typecheck
       - run: pnpm build
+      - name: Contrôles post-build (découpage du bundle)
+        run: pnpm test:build
       - name: Contrôler la pile auto-hébergée
         run: node tools/docker/check-selfhost.mjs --static
       # SPEC-2301, ADR-2007 : une seule image pour la façade et le worker Python, construite par

@@ -1,0 +1,268 @@
+# SPEC-3401 — Profil : racine, identité et rythme (EF-1, EF-2, EF-3 ; CA-1, CA-2, CA-6).
+#
+# Unique flux `@visual` de la spécification (leçon 6 du BRIEF) : la capture montre la racine Profil
+# telle que la maquette `design/app-mobile/exports/screens/android-08-profil.png` la décrit, avec les
+# corrections d'ADR-3003 et les écarts d'ADR-3024 (regroupement Abonnement d'EF-2, lignes légales,
+# valeurs du jeu de démonstration). Elle est prise **avant toute mutation**, puis comparée à la ligne
+# de base versionnée `e2e/visual/baselines/SPEC-3401-profil.png` (écart ≤ 12 %, ADR-3003 § 4).
+#
+# Le ton du tuteur et le rythme sont modifiés **puis remis** en état : la campagne ne laisse aucune
+# trace sur le jeu de démonstration (règle du porteur, BRIEF § Hygiène).
+appId: fr.learny.app
+name: SPEC-3401 profil
+tags:
+  - SPEC-3401
+  - visual
+---
+- launchApp:
+    clearState: true
+# Page d'accueil des builds SDD : l'application est prête à recevoir le lien profond.
+- extendedWaitUntil:
+    visible:
+      id: sdd-health
+    timeout: 30000
+- openLink: learny://connexion?demo=1
+- waitForAnimationToEnd:
+    timeout: 5000
+- runFlow:
+    when:
+      visible:
+        id: onboarding-error
+    commands:
+      - tapOn:
+          id: onboarding-error-retry
+# La restauration de session peut précéder la publication du jeton, et un démarrage à froid peut
+# perdre le lien : une seconde tentative, bornée, évite un faux échec de campagne.
+- runFlow:
+    when:
+      notVisible:
+        id: tab-aujourdhui
+    commands:
+      - openLink: learny://connexion?demo=1
+      - waitForAnimationToEnd:
+          timeout: 5000
+- extendedWaitUntil:
+    visible:
+      id: tab-aujourdhui
+    timeout: 60000
+- tapOn:
+    id: tab-profil
+# CA-1 — la racine : carte d'identité, trois indicateurs et premier groupe.
+- extendedWaitUntil:
+    visible:
+      id: profile-identity
+    timeout: 30000
+- assertVisible:
+    id: profile-name
+- assertVisible:
+    id: profile-role
+- assertVisible:
+    id: profile-member-since
+- assertVisible:
+    id: profile-stat-1
+- assertVisible:
+    id: profile-stat-2
+- assertVisible:
+    id: profile-stat-3
+# CA-6 — capture de référence, avant toute écriture et sans défilement.
+- takeScreenshot: SPEC-3401-profil
+- assertVisible:
+    id: profile-row-identity
+- assertVisible:
+    id: profile-row-notifications
+- assertVisible:
+    id: profile-row-security
+# EF-2 — les groupes Apprentissage et Aide, la déconnexion et la version, par défilement borné.
+- swipe:
+    direction: DOWN
+    duration: 400
+- swipe:
+    direction: DOWN
+    duration: 400
+
+- repeat:
+    times: 5
+    commands:
+      - runFlow:
+          when:
+            notVisible:
+              id: profile-row-rhythm
+          commands:
+            - swipe:
+                direction: UP
+                duration: 300
+
+- assertVisible:
+    id: profile-row-rhythm
+- swipe:
+    direction: DOWN
+    duration: 400
+- swipe:
+    direction: DOWN
+    duration: 400
+
+- repeat:
+    times: 5
+    commands:
+      - runFlow:
+          when:
+            notVisible:
+              id: profile-row-models
+          commands:
+            - swipe:
+                direction: UP
+                duration: 300
+
+- assertVisible:
+    id: profile-row-models
+- swipe:
+    direction: DOWN
+    duration: 400
+- swipe:
+    direction: DOWN
+    duration: 400
+
+- repeat:
+    times: 5
+    commands:
+      - runFlow:
+          when:
+            notVisible:
+              id: profile-row-subscription
+          commands:
+            - swipe:
+                direction: UP
+                duration: 300
+
+- assertVisible:
+    id: profile-row-subscription
+- swipe:
+    direction: DOWN
+    duration: 400
+- swipe:
+    direction: DOWN
+    duration: 400
+
+- repeat:
+    times: 5
+    commands:
+      - runFlow:
+          when:
+            notVisible:
+              id: profile-sign-out
+          commands:
+            - swipe:
+                direction: UP
+                duration: 300
+
+- assertVisible:
+    id: profile-sign-out
+- assertVisible:
+    id: profile-version
+- repeat:
+    times: 6
+    commands:
+      - runFlow:
+          when:
+            notVisible:
+              id: profile-row-identity
+          commands:
+            - swipe:
+                direction: DOWN
+                duration: 300
+
+# CA-2 — l'identité : le ton passe en tutoiement, s'enregistre, puis revient au vouvoiement.
+- tapOn:
+    id: profile-row-identity
+- extendedWaitUntil:
+    visible:
+      id: identity-screen
+    timeout: 20000
+- assertVisible:
+    id: identity-email
+# « Enregistrer » n'est actif qu'après une modification et redevient inactif une fois la version
+# enregistrée : c'est la preuve stable du succès, indépendante de la durée du toast (EF-3).
+- tapOn:
+    id: identity-tone-control-tu
+- assertVisible:
+    id: settings-save
+    enabled: true
+- tapOn:
+    id: settings-save
+- extendedWaitUntil:
+    visible:
+      id: settings-save
+      enabled: false
+    timeout: 20000
+- tapOn:
+    id: identity-tone-control-vous
+- assertVisible:
+    id: settings-save
+    enabled: true
+- tapOn:
+    id: settings-save
+- extendedWaitUntil:
+    visible:
+      id: settings-save
+      enabled: false
+    timeout: 20000
+- tapOn:
+    id: identity-screen-back
+# CA-2 — le rythme : résumé chiffré, modification des heures, puis retour à 5 h.
+- extendedWaitUntil:
+    visible:
+      id: profile-row-rhythm
+    timeout: 20000
+- tapOn:
+    id: profile-row-rhythm
+- extendedWaitUntil:
+    visible:
+      id: rhythm-screen
+    timeout: 20000
+- assertVisible:
+    id: rhythm-summary
+- tapOn:
+    id: rhythm-hours-3
+- assertVisible:
+    id: settings-save
+    enabled: true
+- tapOn:
+    id: settings-save
+- extendedWaitUntil:
+    visible:
+      id: settings-save
+      enabled: false
+    timeout: 20000
+- tapOn:
+    id: rhythm-hours-5
+- assertVisible:
+    id: settings-save
+    enabled: true
+- tapOn:
+    id: settings-save
+- extendedWaitUntil:
+    visible:
+      id: settings-save
+      enabled: false
+    timeout: 20000
+- tapOn:
+    id: rhythm-screen-back
+# Retour à la racine : la navigation de la pile est intacte. La liste reste au défilement où
+# l'ouverture a eu lieu, donc c'est l'écran (repère stable) qui est asserté, pas la carte du haut.
+- extendedWaitUntil:
+    visible:
+      id: profil-screen
+    timeout: 20000
+- repeat:
+    times: 5
+    commands:
+      - runFlow:
+          when:
+            notVisible:
+              id: profile-identity
+          commands:
+            - swipe:
+                direction: DOWN
+                duration: 300
+- assertVisible:
+    id: profile-identity

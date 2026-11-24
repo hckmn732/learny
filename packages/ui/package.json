@@ -9,7 +9,8 @@
     "./accessibility": "./src/accessibility/index.ts",
     "./accessibility.css": "./src/styles/accessibility.css",
     "./tokens": "./src/tokens/index.ts",
-    "./theme.css": "./src/styles/theme.css"
+    "./theme.css": "./src/styles/theme.css",
+    "./accessibility/contrast": "./src/accessibility/contrast.ts"
   },
   "scripts": {
     "lint": "eslint --max-warnings=0 .",

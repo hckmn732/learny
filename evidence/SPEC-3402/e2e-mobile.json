@@ -1,0 +1,55 @@
+{
+  "spec": "SPEC-3402",
+  "platform": "android",
+  "transport": "local",
+  "device": {
+    "platform": "android",
+    "model": "sdk_gphone64_x86_64",
+    "apiLevel": "35",
+    "size": "Physical size: 1080x2400"
+  },
+  "tags": [
+    "SPEC-3402"
+  ],
+  "startedAt": "2026-11-24T00:03:27.100Z",
+  "finishedAt": "2026-11-24T00:04:34.044Z",
+  "passed": 1,
+  "failed": 0,
+  "videos": 1,
+  "campaignVideo": "artifacts/campagne/campagne.mp4",
+  "visual": 1,
+  "junitCases": 1,
+  "flows": [
+    {
+      "file": "apps/mobile/e2e/flows/SPEC-3402-fournisseur.yaml",
+      "name": "SPEC-3402 fournisseur simule",
+      "tags": [
+        "SPEC-3402",
+        "visual"
+      ],
+      "status": "passed",
+      "durationSec": 58.535,
+      "message": null,
+      "videos": [],
+      "screenshots": [
+        "artifacts/spec-3402-fournisseur-simule/SPEC-3402-fournisseur.png"
+      ],
+      "visual": {
+        "flow": "SPEC-3402 fournisseur simule",
+        "status": "passed",
+        "diffRatio": 0.1123,
+        "capture": "/root/wt/SPEC-3402/test-results/sdd/SPEC-3402/artifacts/spec-3402-fournisseur-simule/SPEC-3402-fournisseur.png",
+        "baseline": "/root/wt/SPEC-3402/apps/mobile/e2e/visual/baselines/SPEC-3402-fournisseur.png",
+        "diff": "/root/wt/SPEC-3402/test-results/sdd/SPEC-3402/artifacts/spec-3402-fournisseur-simule/SPEC-3402-fournisseur.diff.png"
+      }
+    }
+  ],
+  "visualChecks": [
+    {
+      "flow": "SPEC-3402 fournisseur simule",
+      "status": "passed",
+      "diffRatio": 0.1123
+    }
+  ],
+  "unattributed": []
+}
