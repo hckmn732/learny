@@ -2,6 +2,8 @@
 
 Le dépôt est initialisé localement (branche `main`). Le dépôt distant sera créé et connecté par le porteur du projet (`git remote add origin …`) : **aucun agent ne crée de dépôt distant, ne pousse vers un remote inexistant ni ne modifie la configuration des remotes**. Si `origin` existe, la boucle pousse après chaque fusion ; sinon elle continue en local (ADR-0051).
 
+> **Branche unique (ADR-4004, 2026-11-24)** : `main` est la seule branche de développement ; toutes les pistes en partent et y fusionnent. Les mentions des branches `mobile` et `migration` ci-dessous sont historiques.
+
 ## 1. Branches
 
 | Branche | Rôle |

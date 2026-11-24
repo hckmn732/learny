@@ -2,29 +2,31 @@
 
 Ce dépôt est un **référentiel Spec-Driven Development** : il contient tout ce qu'il faut pour implémenter, tester, prouver et livrer **Learny** (application web d'apprentissage intensif pilotée par un tuteur IA) **en totale autonomie**. Tu n'as besoin d'aucune autre source que ce dépôt.
 
-## Piste « mode-simple » (ADR-4001)
+## Branche unique `main` (ADR-4004)
 
-Mode simple « Dépose ton cours » (ADR-4003) : l'apprenant dépose un ou plusieurs documents et Learny en fait une formation complète. La piste part de la branche `mobile` et y fusionne ; ADR à partir d'ADR-4001, phases à partir de P40, spécifications à partir de SPEC-4001, checkpoints à partir de CP-40. Lancer l'outillage avec `SDD_TRACK=mode-simple`.
+`main` est la seule branche de développement : backend Python, web, application mobile et mode simple. Toutes les pistes en partent et y fusionnent (`spec/SPEC-xxxx-…`, `--no-ff`). Les branches `mobile` et `feat/mode-simple` n'existent plus ; `sync-main.mjs` n'a plus d'usage courant. `activeTrack` vaut `mode-simple` ; une autre piste se pilote avec `SDD_TRACK=<piste>`.
+
+## Piste « mode-simple » (ADR-4001, ADR-4003)
+
+Mode simple « Dépose ton cours » : l'apprenant dépose un ou plusieurs documents et Learny en fait une formation complète. ADR à partir d'ADR-4001, phases à partir de P40, spécifications à partir de SPEC-4001, checkpoints à partir de CP-40.
 
 - **Le mobile est iso web** (ADR-4002, remplace ADR-3002) : toute fonctionnalité nouvelle est livrée en même temps sur le web et sur le mobile, avec parité prouvée.
 - Lire d'abord `docs/product/mode-simple.md` et les maquettes `design/mode-simple/index.html`.
 
-## Branche `mobile` : piste « mobile » (ADR-3001)
+## Piste « mobile » (ADR-3001)
 
-Sur la branche `mobile` (partie de `main` le 2026-11-22), la piste pilotée par `node tools/sdd/next.mjs` est **`mobile`** (`activeTrack`) : application Android et iOS en React Native + Expo (ADR-1004, ADR-3001 à ADR-3011), phases P30 → P35, SPEC-3001 → SPEC-3502, checkpoints CP-30 → CP-35, ADR numérotés à partir d’ADR-3001. Les branches de spécification partent de `mobile` et y sont fusionnées.
+Application Android et iOS en React Native + Expo (ADR-1004, ADR-3001 à ADR-3024), phases P30 → P35, SPEC-3001 → SPEC-3502, checkpoints CP-30 → CP-35 ; reste P35 (`SDD_TRACK=mobile`).
 
-- **Canevas obligatoire** : lire `docs/architecture/mobile/README.md` avant toute spec SPEC-3xxx, puis la spécification et la maquette `design/app-mobile/` (lue avec les corrections d’ADR-3003, jamais modifiée).
-- **Un seul écrivain par zone** : la piste mobile n’écrit que dans `apps/mobile/` et les zones listées par ADR-3001 §4 ; aucune modification du backend ni du contrat avant P35 (qui exige CP-23).
-- Fusionner `main` dans `mobile` (`node tools/sdd/sync-main.mjs`) à chaque checkpoint et après chaque checkpoint de la piste Python.
-- Validation : `validate.mjs` exécute Vitest, Jest (`pnpm test:mobile`) et Maestro (`pnpm test:e2e:mobile`) pour les specs mobiles (ADR-3004, livré par SPEC-3001).
-- Le reste de ce fichier décrit l’état de `main`, qui s’applique tel quel à la piste mobile.
+- **Canevas obligatoire** : lire `docs/architecture/mobile/README.md` avant toute spec SPEC-3xxx, puis la spécification et la maquette `design/app-mobile/` (lue avec les corrections d'ADR-3003, jamais modifiée).
+- **Un seul écrivain par zone**, vérifié entre spécifications (ADR-4004 §6) : deux spécifications qui touchent les mêmes fichiers ne tournent pas en parallèle.
+- Validation : `validate.mjs` exécute Vitest, Jest (`pnpm test:mobile`) et Maestro (`pnpm test:e2e:mobile`) pour les specs mobiles (ADR-3004).
 
 ## Backend : un seul runtime, Python (piste « python-migration »)
 
 Décision du porteur du projet (ADR-2001), menée à son terme par SPEC-2302 et actée par ADR-2043 : le backend TypeScript a été **retiré**. Il n'y a plus de coexistence, plus de relais, plus de `api/ownership.yaml`, plus d'Inngest, plus de paquet serveur TypeScript.
 
 - **Ce qui sert les requêtes** : `apps/api`, façade FastAPI (`uvicorn learny_api.main:app`) qui sert **tout** le contrat — 156 opérations d'`api/openapi.yaml` et 11 routes spéciales — et `apps/worker`, worker maison sur l'outbox PostgreSQL (`python -m learny_worker`, 23 consommateurs, 2 crons). Le web Next.js reste un client pur de l'API. Décisions : ADR-2001 à ADR-2010, ADR-2011 (canevas), ADR-2012 (pipeline), ADR-2043 (retrait).
-- **Ce qui reste en TypeScript** : `packages/contracts` (source unique du contrat, export `api/openapi.yaml`), les clients (`apps/web`, `apps/mobile` sur la branche `mobile`) et leurs dépendances (`api-client`, `api-sdk`, `bricks`, `ui`, `i18n`, `config`, `core`, `domain`), `packages/db` (schéma Drizzle, migrations, RLS), l'outillage et les suites e2e.
+- **Ce qui reste en TypeScript** : `packages/contracts` (source unique du contrat, export `api/openapi.yaml`), les clients (`apps/web`, `apps/mobile`) et leurs dépendances (`api-client`, `api-sdk`, `bricks`, `ui`, `i18n`, `config`, `core`, `domain`), `packages/db` (schéma Drizzle, migrations, RLS), l'outillage et les suites e2e.
 - `node tools/sdd/next.mjs` pilote la piste `python-migration` (P20 → P23, SPEC-2001 → SPEC-2302, checkpoints CP-20 → CP-23) ; la piste se clôt par CP-23. Les ADR de la piste sont numérotés à partir d'ADR-2001.
 - **Specs gelées** : piste `produit` (SPEC-808, SPEC-901 → 908, CP-7 → CP-9) et piste `migration` Hono (SPEC-1101 → SPEC-1302, CP-10 → CP-13, branche `migration`, worktree `learny-wt-migration`). Ne jamais les démarrer, les modifier ni les supprimer.
 - **Invariant absolu : conserver le fonctionnel existant** (ADR-1001, précisé par ADR-2008). Aucune assertion d'oracle (e2e, visuel, accessibilité, contrat HTTP) modifiée, aucune ligne de base visuelle régénérée, aucun libellé, contrat d'API, code d'erreur ou comportement changé. Un écart est une anomalie à corriger dans le code Python, jamais dans le test.

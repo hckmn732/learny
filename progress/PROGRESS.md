@@ -1,6 +1,6 @@
 # Progression du projet Learny
 
-> Généré par `node tools/sdd/status.mjs` le 2026-11-24T07:43:18.377Z. Ne pas éditer à la main.
+> Généré par `node tools/sdd/status.mjs` le 2026-11-24T07:47:43.274Z. Ne pas éditer à la main.
 
 ## Synthèse
 
@@ -15,8 +15,8 @@
 | Bloquées par une dépendance | 0 |
 | **Avancement global** | **87.6 %** |
 | Avancement V1 | 99.2 % |
-| Piste active | mobile |
-| Prochaine action | start SPEC-3501 — Notifications push natives (FCM et APNs) |
+| Piste active | mode-simple |
+| Prochaine action | start SPEC-4001 — Mode simple — backend et contrat |
 
 ## Phases et checkpoints
 

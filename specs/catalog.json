@@ -2,7 +2,7 @@
   "project": "Learny",
   "version": 1,
   "generatedOn": "2026-11-11",
-  "activeTrack": "mobile",
+  "activeTrack": "mode-simple",
   "tracks": {
     "produit": {
       "baseBranch": "main",
@@ -19,12 +19,12 @@
       "adrBase": 2000
     },
     "mobile": {
-      "baseBranch": "mobile",
+      "baseBranch": "main",
       "versionTags": false,
       "adrBase": 3000
     },
     "mode-simple": {
-      "baseBranch": "mobile",
+      "baseBranch": "main",
       "versionTags": false,
       "adrBase": 4000
     }

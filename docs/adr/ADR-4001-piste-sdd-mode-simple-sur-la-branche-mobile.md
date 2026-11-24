@@ -1,6 +1,6 @@
 # ADR-4001 — Piste SDD « mode-simple » sur la branche `mobile`
 
-- **Statut** : Acceptée
+- **Statut** : Acceptée — §2 et §4 remplacés par ADR-4004 (branche unique `main`)
 - **Origine** : Validée (décision du porteur du projet, 2026-11-24)
 - **Date** : 2026-11-24
 - **Liens** : ADR-1006, ADR-3001, ADR-4002, ADR-4003, SPEC-4001, SPEC-4002, SPEC-4003

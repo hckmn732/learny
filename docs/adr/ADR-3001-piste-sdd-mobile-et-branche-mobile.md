@@ -1,6 +1,6 @@
 # ADR-3001 — Piste SDD « mobile » sur la branche `mobile`
 
-- **Statut** : Acceptée — complète ADR-1004 et ADR-1006
+- **Statut** : Acceptée — complète ADR-1004 et ADR-1006 ; §1 (branche de base), §3, §5 et §6 remplacés par ADR-4004
 - **Origine** : Validée (décision prise avec le porteur du projet, 2026-11-22)
 - **Date** : 2026-11-22
 - **Liens** : ADR-1004, ADR-1006, ADR-2001, ADR-3002, SPEC-3001

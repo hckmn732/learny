@@ -170,7 +170,7 @@ Mobile — compte (SPEC-3401, SPEC-3402).
 Mobile — notifications et publication (SPEC-3501, SPEC-3502). Exige CP-23 (backend Python).
 - Canaux push natifs APNs et FCM dans le worker Python, soumis aux préférences, heures calmes et plafond ; contrat compatible ; aucune régression Web Push.
 - Parcours de bout en bout Android et iOS, audit d'accessibilité sans anomalie bloquante, budgets mobiles mesurés, builds de production signés en test interne (ou blocage `--external`).
-- Après réussite : fusion de `mobile` dans `main` selon ADR-3001 §6.
+- La fusion de `mobile` dans `main` est déjà faite (branche unique, ADR-4004).
 
 ## CP-40
 
