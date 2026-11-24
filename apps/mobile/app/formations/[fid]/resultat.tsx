@@ -9,18 +9,18 @@ import { ScrollView, StyleSheet, View } from 'react-native';
 import { isActiveProgramme } from '@learny/contracts';
 import { fr } from '@learny/i18n';
 
-import { useAttempt, useAttemptResult } from '../../../../src/data/attempts';
-import { useModuleCourse, useProgramme } from '../../../../src/data/use-programme';
-import { GenerationList } from '../../../../src/simple/GenerationList';
-import { ReadyCard } from '../../../../src/simple/ReadyCard';
-import { SimpleHeader } from '../../../../src/simple/SimpleHeader';
-import { useSimpleState } from '../../../../src/simple/use-simple';
-import { acquiredTitle, scoreLine } from '../../../../src/simple/view-model';
-import { theme } from '../../../../src/theme';
-import { Card } from '../../../../src/ui/Card';
-import { Chip } from '../../../../src/ui/Chip';
-import { Skeleton } from '../../../../src/ui/Skeleton';
-import { Text } from '../../../../src/ui/Text';
+import { useAttempt, useAttemptResult } from '../../../src/data/attempts';
+import { useModuleCourse, useProgramme } from '../../../src/data/use-programme';
+import { GenerationList } from '../../../src/simple/GenerationList';
+import { ReadyCard } from '../../../src/simple/ReadyCard';
+import { SimpleHeader } from '../../../src/simple/SimpleHeader';
+import { useSimpleState } from '../../../src/simple/use-simple';
+import { acquiredTitle, scoreLine } from '../../../src/simple/view-model';
+import { theme } from '../../../src/theme';
+import { Card } from '../../../src/ui/Card';
+import { Chip } from '../../../src/ui/Chip';
+import { Skeleton } from '../../../src/ui/Skeleton';
+import { Text } from '../../../src/ui/Text';
 
 const t = fr.mobile.simple.result;
 

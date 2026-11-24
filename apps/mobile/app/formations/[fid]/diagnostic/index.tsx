@@ -12,23 +12,23 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import type { AnyPublicPayload } from '@learny/bricks';
 import { fr } from '@learny/i18n';
 
-import { requireApiClient } from '../../../src/api/registry';
-import { BrickView } from '../../../src/bricks/BrickView';
-import { useAttempt } from '../../../src/data/attempts';
+import { requireApiClient } from '../../../../src/api/registry';
+import { BrickView } from '../../../../src/bricks/BrickView';
+import { useAttempt } from '../../../../src/data/attempts';
 import {
   useCreateDiagnostic,
   useSkipDiagnostic,
   useSubmitDiagnostic,
-} from '../../../src/simple/use-simple';
-import { theme } from '../../../src/theme';
-import { Button } from '../../../src/ui/Button';
-import { Card } from '../../../src/ui/Card';
-import { Chip } from '../../../src/ui/Chip';
-import { ErrorState } from '../../../src/ui/ErrorState';
-import { IconButton } from '../../../src/ui/IconButton';
-import { ProgressBar } from '../../../src/ui/ProgressBar';
-import { Skeleton } from '../../../src/ui/Skeleton';
-import { Text } from '../../../src/ui/Text';
+} from '../../../../src/simple/use-simple';
+import { theme } from '../../../../src/theme';
+import { Button } from '../../../../src/ui/Button';
+import { Card } from '../../../../src/ui/Card';
+import { Chip } from '../../../../src/ui/Chip';
+import { ErrorState } from '../../../../src/ui/ErrorState';
+import { IconButton } from '../../../../src/ui/IconButton';
+import { ProgressBar } from '../../../../src/ui/ProgressBar';
+import { Skeleton } from '../../../../src/ui/Skeleton';
+import { Text } from '../../../../src/ui/Text';
 
 const t = fr.mobile.simple.diagnostic;
 
@@ -79,7 +79,7 @@ export default function DiagnosticRoute() {
     setBusy(true);
     try {
       await skipper.skip();
-      router.replace(`/formations/${fid}/diagnostic/resultat?skipped=1`);
+      router.replace({ pathname: '/formations/[fid]/resultat', params: { fid, skipped: '1' } });
     } catch {
       setBusy(false);
     }
@@ -107,7 +107,10 @@ export default function DiagnosticRoute() {
       }
       if (index >= total - 1) {
         const result = await submitter.submit(attemptId);
-        router.replace(`/formations/${fid}/diagnostic/resultat?aid=${result.attemptId}`);
+        router.replace({
+          pathname: '/formations/[fid]/resultat',
+          params: { fid, aid: result.attemptId },
+        });
         return;
       }
       setIndex((current) => current + 1);
