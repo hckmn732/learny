@@ -9,14 +9,22 @@ import { loadShellPage } from '../../../lib/sidebar-page';
 
 export const dynamic = 'force-dynamic';
 
+interface ParametresPageProps {
+  searchParams: Promise<{ retour?: string | string[] }>;
+}
+
 /** SCR-15 — settings of the connected learner (SPEC-707, SPEC-708, SPEC-709). */
-export default async function ParametresPage() {
-  const [shell, settings, notifications, aiModels] = await Promise.all([
+export default async function ParametresPage({ searchParams }: ParametresPageProps) {
+  const [shell, settings, notifications, aiModels, search] = await Promise.all([
     loadShellPage(),
     loadSettingsPage(),
     loadNotificationSettingsPage(),
     loadAiModelsPage(),
+    searchParams,
   ]);
+  // SPEC-4002 EF-3 — « Ajouter ma clé » ramène au dépôt : seul un chemin interne est accepté.
+  const raw = Array.isArray(search.retour) ? search.retour[0] : search.retour;
+  const retour = typeof raw === 'string' && /^\/(?![/\\])/u.test(raw) ? raw : undefined;
   return (
     <AppShell
       sidebar={shell.sidebar.ok ? shell.sidebar.data : null}
@@ -36,6 +44,7 @@ export default async function ParametresPage() {
         {...(settings.ok || settings.requestId === undefined
           ? {}
           : { requestId: settings.requestId })}
+        retour={retour}
       />
     </AppShell>
   );

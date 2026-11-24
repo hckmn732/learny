@@ -56,6 +56,7 @@ from learny.engagement.application.notify import (
     deliver_due_deliveries,
     deliver_notification,
     notify,
+    notify_programme_ready,
     send_push,
     settings_of,
 )
@@ -158,6 +159,7 @@ __all__ = [
     "notification_group",
     "notification_settings_to_dto",
     "notify",
+    "notify_programme_ready",
     "plan_daily_digests",
     "plan_sprints_before_milestones",
     "preview_email",

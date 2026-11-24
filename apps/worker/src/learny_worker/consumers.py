@@ -25,6 +25,7 @@ from learny.learning import public as learning
 from learny.privacy import public as privacy
 from learny.shared.clock import Clock
 from learny.shared.devtools import run_demo_pipeline
+from learny.shared.locale_fr import simple as simple_texts
 from learny.shared.outbox.errors import PermanentJobError
 from learny.shared.outbox.events import Event
 from learny.shared.outbox.purge import purge_outbox
@@ -344,11 +345,24 @@ async def assessments_submit_exam_at_deadline(deps: Any, event: Event) -> None:
 
 
 async def formation_simple_analysis(deps: Any, event: Event) -> None:
-    """`simple.analysis.requested`: the four steps of the document analysis (SPEC-4001 EF-7)."""
-    await formation.run_analysis(
+    """`simple.analysis.requested`: the four steps of the document analysis (SPEC-4001 EF-7).
+
+    SPEC-4002 EF-4 — once the programme is proposed, the in-app notification « Ton programme est
+    prêt » is created, on the `course_ready` type with an explicit title and body: it is the same
+    inbox, the same read state and the same dedupe, and no external channel is triggered.
+    """
+    user_id = _text_of(event.data, "userId")
+    formation_id = _text_of(event.data, "formationId")
+    outcome = await formation.run_analysis(deps, user_id, formation_id)
+    if str(outcome.get("status") or "") != "proposed":
+        return
+    await engagement.notify_programme_ready(
         deps,
-        _text_of(event.data, "userId"),
-        _text_of(event.data, "formationId"),
+        user_id=user_id,
+        formation_id=formation_id,
+        title=simple_texts.PROGRAMME_READY_NOTIFICATION_TITLE,
+        body=simple_texts.PROGRAMME_READY_NOTIFICATION_BODY,
+        href=f"/formations/{formation_id}/apercu",
     )
 
 
