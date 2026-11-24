@@ -60,7 +60,13 @@ class JwtVerifier:
             raise _unauthenticated() from error
 
     def verify(self, token: str, transport: Transport = "bearer") -> Actor:
-        """Decodes and validates one token; raises `UNAUTHENTICATED` when it is not acceptable."""
+        """Decodes and validates one token; raises `UNAUTHENTICATED` when it is not acceptable.
+
+        The issuer is checked only when the token carries an `iss` claim. Supabase Cloud stamps it;
+        the self-hosted GoTrue of the Coolify stack (v2.197, no `GOTRUE_JWT_ISSUER` support) omits it,
+        so requiring it would refuse every session of that deployment while adding no security: the
+        token is still signed with `SUPABASE_JWT_SECRET` and checked for audience and expiry.
+        """
         header = self.peek_header(token)
         algorithm = str(header.get("alg", ""))
         key = self._key_for(algorithm, header)
@@ -70,11 +76,18 @@ class JwtVerifier:
                 key,
                 algorithms=[algorithm],
                 audience=self._settings.supabase_jwt_audience,
-                issuer=self._settings.supabase_jwt_issuer,
-                options={"verify_exp": False, "verify_nbf": False, "verify_iat": False},
+                options={
+                    "verify_exp": False,
+                    "verify_nbf": False,
+                    "verify_iat": False,
+                    "verify_iss": False,
+                },
             )
         except jwt.PyJWTError as error:
             raise _unauthenticated() from error
+        claimed_issuer = payload.get("iss")
+        if claimed_issuer is not None and claimed_issuer != self._settings.supabase_jwt_issuer:
+            raise _unauthenticated()
         self._check_times(payload)
         return _actor_from_claims(payload, transport)
 

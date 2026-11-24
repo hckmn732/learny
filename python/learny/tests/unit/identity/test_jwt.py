@@ -59,6 +59,24 @@ def test_a_wrong_audience_is_refused() -> None:
         verifier().verify(token(aud="anonymous"))
 
 
+def test_a_foreign_issuer_is_refused() -> None:
+    with pytest.raises(AppError):
+        verifier().verify(token(iss="https://evil.example/auth/v1"))
+
+
+def test_a_token_without_issuer_is_accepted_for_self_hosted_gotrue() -> None:
+    """The Coolify GoTrue (v2.197) does not stamp `iss`: the signature, audience and expiry still count."""
+    payload = {
+        "sub": "11111111-1111-4111-8111-111111111111",
+        "email": "session@test.learny.test",
+        "aud": "authenticated",
+        "iat": int(NOW.timestamp()),
+        "exp": int(NOW.timestamp()) + 3600,
+    }
+    actor = verifier().verify(jwt.encode(payload, JWT_TEST_SECRET, algorithm="HS256"))
+    assert actor.user_id == "11111111-1111-4111-8111-111111111111"
+
+
 def test_a_wrong_signature_is_refused() -> None:
     forged = jwt.encode(
         {
