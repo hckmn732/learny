@@ -31,6 +31,9 @@ Le mode simple **ne remplace pas** le mode actuel. Il devient la porte d'entrée
 | D2 | Point d'entrée | **Choix à l'accueil.** Les premiers pas restent tels quels. L'accueil propose deux cartes : « Dépose ton cours » (mode simple) et « Construire avec le tuteur » (mode actuel). |
 | D3 | Fidélité | **Le document d'abord.** Cours, exercices et quiz viennent du document, avec citation des pages. Le tuteur peut reformuler ; tout complément extérieur est signalé comme tel. |
 | D4 | Plusieurs fichiers | **Plusieurs documents dès le lot 1.** Le cours donne la structure ; les TD et annales alimentent les exercices et les quiz. |
+| D5 | Positionnement | **Diagnostic global au départ.** Juste après l'aperçu, un quiz court (une à deux questions par module, environ 10 min, bouton « Passer ») marque comme acquis les modules réussis : ils sont validés et leurs notions entrent en révision (BR-MEM-03). Il est généré à partir des résumés de sections, pas du texte complet. |
+| D6 | Coût | **Rien de spécial.** L'utilisateur paie avec sa propre clé (BR-IA-06) ; les coûts sont journalisés et agrégés comme aujourd'hui (BR-IA-08). Pas d'estimation ni de seuil de confirmation. Les modules suivants passent quand même par l'API de traitement par lots quand c'est possible (BR-IA-13). |
+| D7 | Découpage | **Suivre le document.** Un chapitre du document donne un module, borné entre 2 et 8 h d'étude (fusion ou découpe au besoin). Les chapitres Learny sont des séances de 20 à 45 min. Ordre de grandeur pour 700 pages : 15 à 25 modules, 80 à 140 h. |
 
 ## 3. Ce qui existe déjà
 
@@ -48,7 +51,7 @@ Le mode simple **ne remplace pas** le mode actuel. Il devient la porte d'entrée
 0. **Accueil** : la carte « Dépose ton cours », à côté de « Construire avec le tuteur » (D2).
 1. **Dépôt** : un seul écran avec une zone de dépôt qui accepte **un ou plusieurs fichiers** (D4), « ou colle un lien YouTube ou une page web ». Chaque fichier reçoit un rôle deviné et modifiable : cours, TD ou exercices, annales. Une phrase facultative : « Pourquoi ? (examen le…, projet, culture) ».
 2. **Analyse** (moins de 60 s) : extraction, détection de la structure (signets, table des matières, titres), estimation du volume. Le résultat s'affiche au fil de l'eau : « J'ai trouvé 14 chapitres… ».
-3. **Aperçu du programme** : modules et chapitres, durée estimée, rythme du profil, date de fin calculée. Une question au plus : « Tu as une échéance ? ». Deux boutons : **C'est parti** ou **Ajuster** (qui ouvre l'ajustement avec le tuteur du mode actuel).
+3. **Aperçu du programme** : modules et chapitres, durée estimée, rythme du profil, date de fin calculée. Une question au plus : « Tu as une échéance ? ». Deux boutons : **C'est parti** ou **Ajuster** (qui ouvre l'ajustement avec le tuteur du mode actuel). « C'est parti » propose le diagnostic global (D5), que l'apprenant peut passer.
 4. **Premier chapitre prêt** : le cours, les exercices et le quiz du module 1 sont générés en priorité. Le reste se génère en tâche de fond, module par module, toujours avec une avance sur l'apprenant.
 
 ### Valeurs déduites à la place du cadrage
@@ -85,7 +88,7 @@ Les jobs passent par l'outbox du worker Python ; leurs noms restent à définir.
 | BR-APP-05 (ressources web) | Le tuteur suggère des ressources | En mode simple, un complément extérieur est toujours étiqueté comme tel (D3) |
 | ADR-3002 (mobile) | Mobile « compagnon » : premiers pas, création et cadrage, apports, exercices, examen blanc, lacunes, carte, bilan, groupes et recherche renvoyés au web | **À remplacer** par un ADR « mobile iso web » : le mode simple en premier, puis un plan de rattrapage des écrans exclus |
 | BR-APP-08, BR-APP-09 | Audio et vidéo en fichier prévus en V2 | Lot ultérieur |
-| IA et abonnement | Coûts par appel | Plafond par document selon l'abonnement |
+| IA et coûts | Clé personnelle, coûts journalisés (BR-IA-06, BR-IA-08) | Inchangés (D6) |
 
 ## 7. Spécificités mobiles
 
@@ -104,13 +107,13 @@ Fonctionnellement, tout est identique au web. Ce qui suit ne concerne que l'ergo
 3. **Lot 3** : photos de pages (plusieurs images), lien YouTube, page web.
 4. **Lot 4** : fichiers vidéo et audio (transcription).
 
-**Prérequis** : la passerelle LLM réelle. Le backend refuse aujourd'hui de démarrer hors `LLM_MODE=mock` (point ouvert d'ADR-2042).
+**Prérequis** :
+
+- **Une clé d'IA configurée.** La plateforme ne fournit aucune IA (BR-IA-06) : sans clé ni modèle choisi pour les tâches concernées, le mode simple ne peut rien générer. Le dépôt doit le détecter avant l'analyse et mener à l'ajout de la clé en un geste, sans perdre les fichiers déposés. C'est un coût d'entrée à part entière.
+- **La passerelle LLM réelle.** Le backend refuse aujourd'hui de démarrer hors `LLM_MODE=mock` (point ouvert d'ADR-2042).
 
 ## 9. Questions ouvertes
 
-Q1 (point d'entrée), Q3 (fidélité), Q4 (plusieurs fichiers) et Q8 (iso web) sont tranchées : voir §2 bis.
+Q1 à Q6 et Q8 sont tranchées : voir §2 bis (D1 à D7). Q7 rappelle une règle existante.
 
-- **Q2, positionnement** : propose-t-on un court quiz diagnostic pour sauter ce que l'apprenant sait déjà ?
-- **Q5, limites et coût** : quel plafond par document et par abonnement ?
-- **Q6, granularité** : pour 700 pages, combien de modules, et quelle durée de séance cible ?
 - **Q7, droits** : les documents restent privés à leur propriétaire (BR-APP-03), y compris en groupe.
