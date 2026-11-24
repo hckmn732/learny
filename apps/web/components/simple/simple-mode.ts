@@ -10,6 +10,41 @@ import type {
   SimpleState,
 } from '@learny/contracts';
 
+/**
+ * Les modules tels que les écrans du mode simple les lisent : la proposition (avec ses notions et
+ * ses pages) et le programme actif (sans notions dans le DTO) partagent cette forme minimale.
+ */
+export interface ProgrammeSummaryModule {
+  position: number;
+  title: string;
+  plannedEnd: string;
+  pageFrom?: number | null | undefined;
+  pageTo?: number | null | undefined;
+  chapters: { position: number; title: string; notions: readonly unknown[] }[];
+}
+
+export interface ProgrammeSummary {
+  title: string;
+  volumeHours: number | null;
+  modules: ProgrammeSummaryModule[];
+}
+
+/** Les modules de la proposition, ou ceux du programme actif une fois le programme validé. */
+export function toSummaryModules(modules: readonly ProgrammeModuleDto[]): ProgrammeSummaryModule[] {
+  return modules.map((module) => ({
+    position: module.position,
+    title: module.title,
+    plannedEnd: module.plannedEnd,
+    pageFrom: module.pageFrom ?? null,
+    pageTo: module.pageTo ?? null,
+    chapters: module.chapters.map((chapter) => ({
+      position: chapter.position,
+      title: chapter.title,
+      notions: chapter.notions,
+    })),
+  }));
+}
+
 export const ROLE_ORDER: readonly ResourceRole[] = ['course', 'exercises', 'exam_papers', 'other'];
 
 export const DAY_MS = 86_400_000;
@@ -88,7 +123,7 @@ export function deadlineEndDate(deadline: string, today: string): string {
 }
 
 /** Dernier jour planifié de la proposition (EF-5, « fin prévue »). */
-export function proposalEndDate(modules: readonly ProgrammeModuleDto[]): string | null {
+export function proposalEndDate(modules: readonly { plannedEnd: string }[]): string | null {
   const ends = modules.map((module) => module.plannedEnd).sort();
   return ends.at(-1) ?? null;
 }
@@ -134,7 +169,7 @@ export interface ReadyChapter {
  */
 export function readyChapter(
   generation: readonly SimpleGenerationModule[],
-  modules: readonly ProgrammeModuleDto[],
+  modules: readonly ProgrammeSummaryModule[],
   volumeHours: number | null,
 ): ReadyChapter | null {
   const current =
@@ -170,10 +205,7 @@ export function chaptersFound(state: SimpleState | null): SimpleState['chaptersF
 /** EF-5 — au-delà de six modules, la liste s'arrête et le reste est résumé (maquette). */
 export const MODULE_PREVIEW_LIMIT = 6;
 
-export function visibleModules(modules: readonly ProgrammeModuleDto[]): {
-  visible: ProgrammeModuleDto[];
-  hidden: ProgrammeModuleDto[];
-} {
+export function visibleModules<T>(modules: readonly T[]): { visible: T[]; hidden: T[] } {
   return {
     visible: modules.slice(0, MODULE_PREVIEW_LIMIT),
     hidden: modules.slice(MODULE_PREVIEW_LIMIT),

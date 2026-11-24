@@ -177,6 +177,21 @@ export function DepotScreen({ fid, initialState }: DepotScreenProps) {
     };
   }, [analysingNow, formationId]);
 
+  // EF-2 — un document téléversé passe par « traitement » : l'état serveur est relu jusqu'à ce que
+  // le worker l'ait lu, pour que la ligne et « Créer ma formation » suivent sans rechargement.
+  const processing = files.some((entry) => entry.status === 'processing');
+  useEffect(() => {
+    if (!processing || formationId === null) return undefined;
+    const timer = window.setInterval(() => {
+      void refreshState(formationId).catch(() => {
+        // Une interrogation manquée n'interrompt pas la suivante.
+      });
+    }, ANALYSIS_POLL_MS);
+    return () => {
+      window.clearInterval(timer);
+    };
+  }, [processing, formationId, refreshState]);
+
   // EF-4 — le programme est prêt : la page d'aperçu prend le relais.
   useEffect(() => {
     if (formationId !== null && state?.status === 'proposed') {
@@ -405,11 +420,23 @@ export function DepotScreen({ fid, initialState }: DepotScreenProps) {
   }, [formationId, refreshState, retrying]);
 
   const remoteSources = useMemo(() => state?.sources ?? [], [state]);
+
+  // EF-2 — l'état affiché d'un document suit la source lue par le serveur : dès que le worker a
+  // fini, la ligne passe à « prêt » sans rechargement (la valeur locale reste l'affichage immédiat).
+  const displayFiles = files.map((entry) => {
+    const source = remoteSources.find((candidate) => candidate.resourceId === entry.resourceId);
+    if (source === undefined || entry.status === 'ready') return entry;
+    if (source.status === 'ready') {
+      return { ...entry, status: 'ready' as const, pages: source.pages ?? entry.pages };
+    }
+    if (source.status === 'failed') return { ...entry, status: 'failed' as const };
+    return entry;
+  });
   const canCreate =
     !keyBlocked &&
     !starting &&
     hasReadyCourseFile(
-      files.map((entry) => ({ role: entry.role, status: entry.status })),
+      displayFiles.map((entry) => ({ role: entry.role, status: entry.status })),
       remoteSources,
     );
 
@@ -474,7 +501,7 @@ export function DepotScreen({ fid, initialState }: DepotScreenProps) {
             />
 
             <SimpleFileList
-              files={files.map((entry) => ({
+              files={displayFiles.map((entry) => ({
                 id: entry.id,
                 name: entry.name,
                 sizeBytes: entry.sizeBytes,

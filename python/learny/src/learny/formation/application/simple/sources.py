@@ -6,6 +6,8 @@ feeds the programme. The upload itself stays the signed-URL flow of `uploads.cre
 """
 
 import json
+import re
+import unicodedata
 import uuid
 from datetime import timedelta
 from typing import Any, cast
@@ -29,6 +31,22 @@ from learny.shared.locale_fr.details import (
 )
 from learny.shared.locale_fr.simple import SOURCE_ROLE_LABELS
 from learny.shared.time import to_iso
+
+_STORAGE_UNSAFE = re.compile(r"[^A-Za-z0-9._-]+")
+
+
+def storage_file_name(name: str) -> str:
+    """EF-2 - nom de fichier stocké, réduit à l'ASCII : Storage refuse les clés accentuées.
+
+    Le titre affiché garde le nom d'origine (`normalize_storage_file_name`) ; seule la clé de
+    l'objet est translittérée, un fichier « Manuel de comptabilité générale.txt » devenant
+    « Manuel-de-comptabilite-generale.txt ».
+    """
+    decomposed = unicodedata.normalize("NFKD", name)
+    ascii_name = decomposed.encode("ascii", "ignore").decode("ascii")
+    cleaned = _STORAGE_UNSAFE.sub("-", ascii_name).strip("-.")
+    return cleaned or "document"
+
 
 YOUTUBE_HOSTS = frozenset({"youtube.com", "www.youtube.com", "m.youtube.com", "youtu.be"})
 SIGNED_URL_TTL_SECONDS = 600
@@ -94,8 +112,8 @@ async def create_simple_upload(
     now = deps.clock.now()
     reserved_until = to_iso(now + timedelta(seconds=SIGNED_URL_TTL_SECONDS))
     resource_id = str(uuid.uuid4())
-    path = resource_path(actor.user_id, resource_id, file_name)
     clean_name = normalize_storage_file_name(file_name)
+    path = resource_path(actor.user_id, resource_id, storage_file_name(clean_name))
     access = storage_access(cast(Any, deps), actor.user_id)
     async with deps.db.user_tx(actor) as tx:
         formation = await require_simple_formation(tx, actor.user_id, formation_id)
@@ -125,7 +143,9 @@ async def create_simple_upload(
             path=path,
             url=None,
             mime=str(body["mime"]).split(";")[0].strip().lower(),
-            size_bytes=declared,
+            # La taille déclarée reste dans `metadata.upload` : `resources.finalize` mesure l'objet
+            # réel et c'est lui qui renseigne `size_bytes` (SPEC-206 ET-5, réessai idempotent).
+            size_bytes=None,
             metadata=json.dumps(metadata, ensure_ascii=False),
         )
         if created is None:

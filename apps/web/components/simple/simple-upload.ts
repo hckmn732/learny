@@ -21,8 +21,13 @@ export function putFile(
       }
     });
     request.addEventListener('load', () => {
-      if (request.status >= 200 && request.status < 300) resolve();
-      else reject(new Error(`PUT ${String(request.status)}`));
+      if (request.status >= 200 && request.status < 300) {
+        resolve();
+        return;
+      }
+      // Le corps de Storage nomme le refus (taille, type, quota) : il est affiché tel quel (CL-1).
+      const detail = request.responseText.trim();
+      reject(new Error(detail === '' ? `PUT ${String(request.status)}` : detail));
     });
     request.addEventListener('error', () => {
       reject(new Error('PUT failed'));

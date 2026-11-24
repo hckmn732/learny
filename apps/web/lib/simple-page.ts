@@ -2,9 +2,16 @@ import { notFound, redirect } from 'next/navigation';
 
 import {
   isActiveProgramme,
+  type ActiveProgrammeDto,
   type ProgrammeProposalStateDto,
   type SimpleState,
 } from '@learny/contracts';
+
+import {
+  toSummaryModules,
+  type ProgrammeSummary,
+  type ProgrammeSummaryModule,
+} from '../components/simple/simple-mode';
 
 import { isApiError, serverApi } from './api/server-client';
 import { SIGN_IN_PATH } from './route-guard';
@@ -51,7 +58,9 @@ export interface SimpleOverviewPageResult {
 export async function loadSimpleOverviewPage(fid: string): Promise<SimpleOverviewPageResult> {
   const session = await readPageSession();
   if (session === null) redirect(SIGN_IN_PATH);
-  const [state, shell] = await Promise.all([simpleStateOf(fid), loadShellForFormation(fid)]);
+  // Une formation en mode simple n'est pas encore active : la coquille ordinaire est utilisée,
+  // comme la page de proposition de SPEC-605 (le sélecteur de formation refuserait la formation).
+  const [state, shell] = await Promise.all([simpleStateOf(fid), loadShellPage()]);
   if (state.status === 'collecting' || state.status === 'analysing') {
     redirect(`/formations/${fid}/depot`);
   }
@@ -71,7 +80,35 @@ export async function loadSimpleOverviewPage(fid: string): Promise<SimpleOvervie
 export interface SimpleDiagnosticPageResult {
   shell: ShellPageResult;
   state: SimpleState;
-  programme: ProgrammeProposalStateDto;
+  programme: ProgrammeSummary;
+}
+
+/** Le programme d'un écran de résultat : la proposition, ou le programme actif une fois validé. */
+function summaryOf(programme: ProgrammeProposalStateDto | ActiveProgrammeDto): ProgrammeSummary {
+  if (isActiveProgramme(programme)) {
+    // Le DTO du programme actif ne porte pas les pages ni les notions : seuls les titres et les
+    // chapitres servent l'écran de résultat, les pages viennent du document quand elles existent.
+    const modules: ProgrammeSummaryModule[] = programme.modules.map((module) => ({
+      position: module.position,
+      title: module.title,
+      plannedEnd: module.plannedEnd,
+      pageFrom: null,
+      pageTo: null,
+      chapters: programme.chapters
+        .filter((chapter) => chapter.moduleId === module.id)
+        .map((chapter) => ({ position: chapter.position, title: chapter.title, notions: [] })),
+    }));
+    return {
+      title: programme.formation.title,
+      volumeHours: programme.formation.volumeHours,
+      modules,
+    };
+  }
+  return {
+    title: programme.proposal?.title ?? programme.title,
+    volumeHours: programme.proposal?.volumeHours ?? null,
+    modules: toSummaryModules(programme.proposal?.modules ?? []),
+  };
 }
 
 /** SCR-24 — diagnostic global, ouvert après la validation du programme. */
@@ -82,10 +119,7 @@ export async function loadSimpleDiagnosticPage(fid: string): Promise<SimpleDiagn
   if (state.status !== 'proposed') redirect(`/formations/${fid}/apercu`);
   const client = await serverApi();
   const programme = await client.api.programmeGet({ params: { fid }, query: {} });
-  if (isActiveProgramme(programme) || programme.proposal === null) {
-    return { shell, state, programme: emptyProposal(fid, state) };
-  }
-  return { shell, state, programme };
+  return { shell, state, programme: summaryOf(programme) };
 }
 
 /** SCR-24 — résultat du diagnostic et premier chapitre. */
@@ -95,22 +129,5 @@ export async function loadSimpleResultPage(fid: string): Promise<SimpleDiagnosti
   const [state, shell] = await Promise.all([simpleStateOf(fid), loadShellForFormation(fid)]);
   const client = await serverApi();
   const programme = await client.api.programmeGet({ params: { fid }, query: {} });
-  if (isActiveProgramme(programme)) return { shell, state, programme: emptyProposal(fid, state) };
-  if (programme.proposal === null) redirect(`/formations/${fid}/apercu`);
-  return { shell, state, programme };
-}
-
-/**
- * Le programme est déjà actif (l'apprenant a validé puis rouvert la page) : les écrans du mode
- * simple n'ont plus de proposition à montrer, ils gardent l'état de préparation et le titre.
- */
-function emptyProposal(fid: string, state: SimpleState): ProgrammeProposalStateDto {
-  return {
-    formationId: fid,
-    title: state.title,
-    description: null,
-    formationStatus: 'active',
-    cadrageCompleted: true,
-    proposal: null,
-  };
+  return { shell, state, programme: summaryOf(programme) };
 }

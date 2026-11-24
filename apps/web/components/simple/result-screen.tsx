@@ -3,7 +3,7 @@
 import { useCallback, useEffect, useState } from 'react';
 
 import { api } from '@learny/api-client';
-import type { ProgrammeProposalStateDto, QuizResultDto, SimpleState } from '@learny/contracts';
+import type { QuizResultDto, SimpleState } from '@learny/contracts';
 import { fr } from '@learny/i18n/fr/simple';
 import { Button } from '@learny/ui';
 import { colors } from '@learny/ui/tokens';
@@ -16,6 +16,7 @@ import {
   formatHours,
   proposalEndDate,
   readyChapter,
+  type ProgrammeSummary,
   type ReadyChapter,
 } from './simple-mode';
 
@@ -26,7 +27,7 @@ const GENERATION_POLL_MS = 5000;
 export interface ResultScreenProps {
   fid: string;
   state: SimpleState;
-  programme: ProgrammeProposalStateDto;
+  programme: ProgrammeSummary;
   /** Tentative du diagnostic, absente quand l'apprenant l'a passé (aucune ligne de score, EF-7). */
   attemptId: string | null;
 }
@@ -81,9 +82,8 @@ export function ResultScreen({ fid, state, programme, attemptId }: ResultScreenP
     };
   }, [generation, pollGeneration]);
 
-  const proposal = programme.proposal;
-  const modules = proposal?.modules ?? [];
-  const volumeHours = proposal?.volumeHours ?? null;
+  const modules = programme.modules;
+  const volumeHours = programme.volumeHours;
   const acquired = result?.acquiredModuleIds ?? [];
   const correct =
     result === null || result.score === null ? 0 : Math.round((result.score * total) / 100);
