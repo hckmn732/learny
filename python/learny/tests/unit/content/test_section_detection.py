@@ -21,7 +21,7 @@ def chunk(page: int, text: str) -> dict[str, object]:
 
 
 def pages(count: int) -> list[dict[str, object]]:
-    return [chunk(index, f"Contenu de la page {index} du document.") for index in range(1, count + 1)]
+    return [chunk(index, f"Page {index} content of the document.") for index in range(1, count + 1)]
 
 
 def test_bookmarks_give_the_sections_and_their_pages() -> None:

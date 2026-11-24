@@ -56,5 +56,9 @@ Le contrat est régénéré et vérifié : `api/openapi.yaml` (165 opérations),
   `simple.generation.requested`) acceptés par `enqueue_event` (migration
   `0059_simple_mode_events.sql`) ; tâche `simple_analysis` dans l'enum et le catalogue mais pas
   dans le sélecteur à cinq tâches, que SPEC-4002 étend.
-- Le format DOCX/TXT/Markdown d'EF-2 est accepté au dépôt (URL signée) et lu par un extracteur
-  de document ; il n'est pas exercé par les critères, qui portent sur des PDF.
+- EF-2 : les formats DOCX, TXT et Markdown sont acceptés au dépôt, détectés sur les octets réels
+  (`detect_document`) et lus par l'extracteur de document (`extract_document`, ZIP
+  `word/document.xml` pour DOCX, UTF-8 pour TXT/Markdown), branché sur `resources.finalize` et sur
+  l'ingestion. Ils sont couverts par
+  `python/learny/tests/unit/content/test_document_extraction.py` ; les critères CA-1 à CA-7
+  portent sur des PDF et des documents déjà ingérés.

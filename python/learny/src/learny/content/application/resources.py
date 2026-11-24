@@ -376,7 +376,11 @@ async def finalize_upload(deps: ContentDeps, actor: Actor, resource_id: str) -> 
             raise AppError("UPLOAD_INCOMPLETE", texts.UPLOAD_VANISHED)
         if len(content.data) != info.size:
             raise AppError("CONFLICT", texts.FILE_CHANGED_WHILE_READING)
-        measured = detect_upload(content.data, str(kind))
+        measured = detect_upload(
+            content.data,
+            str(kind),
+            document=_metadata(row).get("sourceKind") == "document",
+        )
         digest = hashlib.sha256(content.data).hexdigest()
         etag = content.etag
     except AppError as error:
