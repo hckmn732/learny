@@ -23,6 +23,15 @@ Le mode simple **ne remplace pas** le mode actuel. Il devient la porte d'entrée
 
 **Principe : le mobile est iso web en fonctionnalités** (exigence du porteur, 2026-11-24). Le mode simple est livré en même temps sur le web et sur le mobile, avec les mêmes règles, la même API et les mêmes libellés. Seule l'ergonomie s'adapte : dépôt de fichier, appareil photo, partage. Aucun écran du parcours ne renvoie à « Continuer sur le web ».
 
+## 2 bis. Décisions prises (2026-11-24)
+
+| # | Sujet | Décision |
+|---|---|---|
+| D1 | Parité mobile | **Tout le produit est iso web sur mobile.** Un nouvel ADR remplace ADR-3002 : le mode simple d'abord, puis un plan de rattrapage des écrans exclus. |
+| D2 | Point d'entrée | **Choix à l'accueil.** Les premiers pas restent tels quels. L'accueil propose deux cartes : « Dépose ton cours » (mode simple) et « Construire avec le tuteur » (mode actuel). |
+| D3 | Fidélité | **Le document d'abord.** Cours, exercices et quiz viennent du document, avec citation des pages. Le tuteur peut reformuler ; tout complément extérieur est signalé comme tel. |
+| D4 | Plusieurs fichiers | **Plusieurs documents dès le lot 1.** Le cours donne la structure ; les TD et annales alimentent les exercices et les quiz. |
+
 ## 3. Ce qui existe déjà
 
 | Brique | Où | Ce qu'elle fait | Écart pour le mode simple |
@@ -36,7 +45,8 @@ Le mode simple **ne remplace pas** le mode actuel. Il devient la porte d'entrée
 
 ## 4. Parcours (identique sur web et mobile)
 
-1. **Dépôt** : un seul écran avec une zone de dépôt (« ou colle un lien YouTube ou une page web »). Une phrase facultative : « Pourquoi ? (examen le…, projet, culture) ».
+0. **Accueil** : la carte « Dépose ton cours », à côté de « Construire avec le tuteur » (D2).
+1. **Dépôt** : un seul écran avec une zone de dépôt qui accepte **un ou plusieurs fichiers** (D4), « ou colle un lien YouTube ou une page web ». Chaque fichier reçoit un rôle deviné et modifiable : cours, TD ou exercices, annales. Une phrase facultative : « Pourquoi ? (examen le…, projet, culture) ».
 2. **Analyse** (moins de 60 s) : extraction, détection de la structure (signets, table des matières, titres), estimation du volume. Le résultat s'affiche au fil de l'eau : « J'ai trouvé 14 chapitres… ».
 3. **Aperçu du programme** : modules et chapitres, durée estimée, rythme du profil, date de fin calculée. Une question au plus : « Tu as une échéance ? ». Deux boutons : **C'est parti** ou **Ajuster** (qui ouvre l'ajustement avec le tuteur du mode actuel).
 4. **Premier chapitre prêt** : le cours, les exercices et le quiz du module 1 sont générés en priorité. Le reste se génère en tâche de fond, module par module, toujours avec une avance sur l'apprenant.
@@ -70,7 +80,9 @@ Les jobs passent par l'outbox du worker Python ; leurs noms restent à définir.
 | BR-FOR-01, BR-FOR-02 | Cadrage obligatoire | Facultatif en mode simple (valeurs déduites, §4) |
 | BR-APP-04 | Génération après « chapitre terminé » | Génération automatique et progressive en mode simple |
 | BR-FOR-10 | Trois formations actives au plus | Inchangée |
-| SCR-02 (premiers pas) | Obligatoires avant de commencer | Réduits ou repoussés après le premier chapitre (voir Q1) |
+| SCR-02 (premiers pas) | Obligatoires avant de commencer | Inchangés (D2) |
+| SCR-03 (accueil) | Création par « Nouvelle formation » | Deux cartes : « Dépose ton cours » et « Construire avec le tuteur » (D2) |
+| BR-APP-05 (ressources web) | Le tuteur suggère des ressources | En mode simple, un complément extérieur est toujours étiqueté comme tel (D3) |
 | ADR-3002 (mobile) | Mobile « compagnon » : premiers pas, création et cadrage, apports, exercices, examen blanc, lacunes, carte, bilan, groupes et recherche renvoyés au web | **À remplacer** par un ADR « mobile iso web » : le mode simple en premier, puis un plan de rattrapage des écrans exclus |
 | BR-APP-08, BR-APP-09 | Audio et vidéo en fichier prévus en V2 | Lot ultérieur |
 | IA et abonnement | Coûts par appel | Plafond par document selon l'abonnement |
@@ -86,7 +98,8 @@ Fonctionnellement, tout est identique au web. Ce qui suit ne concerne que l'ergo
 
 ## 8. Découpage proposé en lots
 
-1. **Lot 1** : PDF, DOCX et texte deviennent une formation (web et mobile), avec aperçu et premier chapitre prioritaire, dans les limites actuelles.
+0. **Lot 0** : ADR « mobile iso web » qui remplace ADR-3002 (D1), avec le plan de rattrapage des écrans mobiles exclus.
+1. **Lot 1** : un ou plusieurs PDF, DOCX ou fichiers texte deviennent une formation (web et mobile en même temps), avec rôles des fichiers, aperçu et premier chapitre prioritaire, dans les limites actuelles.
 2. **Lot 2** : gros documents, avec découpage structurel, génération progressive et plus de 500 pages.
 3. **Lot 3** : photos de pages (plusieurs images), lien YouTube, page web.
 4. **Lot 4** : fichiers vidéo et audio (transcription).
@@ -95,11 +108,9 @@ Fonctionnellement, tout est identique au web. Ce qui suit ne concerne que l'ergo
 
 ## 9. Questions ouvertes
 
-- **Q1, point d'entrée** : le mode simple devient-il la voie par défaut pour un nouveau compte, avec des premiers pas réduits au strict minimum ?
+Q1 (point d'entrée), Q3 (fidélité), Q4 (plusieurs fichiers) et Q8 (iso web) sont tranchées : voir §2 bis.
+
 - **Q2, positionnement** : propose-t-on un court quiz diagnostic pour sauter ce que l'apprenant sait déjà ?
-- **Q3, fidélité** : le cours suit-il strictement le document, ou le tuteur peut-il le compléter (recherche web, BR-APP-05) ?
-- **Q4, plusieurs fichiers** : une formation peut-elle partir de plusieurs documents (cours, TD, annales) ?
 - **Q5, limites et coût** : quel plafond par document et par abonnement ?
 - **Q6, granularité** : pour 700 pages, combien de modules, et quelle durée de séance cible ?
 - **Q7, droits** : les documents restent privés à leur propriétaire (BR-APP-03), y compris en groupe.
-- **Q8, iso web** : la parité porte-t-elle seulement sur le mode simple, ou sur tout le produit ? Dans le second cas, il faut planifier le rattrapage des écrans exclus par ADR-3002 : premiers pas, cadrage, apports, exercice, examen blanc, lacunes, carte, bilan, groupes, recherche, abonnement.
