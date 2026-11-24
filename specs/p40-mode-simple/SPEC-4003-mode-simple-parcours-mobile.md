@@ -6,7 +6,7 @@ priority: mode-simple
 depends_on: [SPEC-4001]
 business_rules: [BR-FOR-04, BR-FOR-16, BR-APP-01, BR-APP-02, BR-APP-07, BR-IA-06, BR-PLA-03]
 screens: [SCR-03, SCR-21, SCR-22, SCR-23, SCR-24]
-adrs: [ADR-4002, ADR-4003, ADR-3003, ADR-3004, ADR-3008, ADR-3014, ADR-3015]
+adrs: [ADR-4002, ADR-4003, ADR-4009, ADR-3003, ADR-3004, ADR-3008, ADR-3014, ADR-3015]
 visual: mockup
 ---
 
@@ -150,6 +150,7 @@ Définition commune et définition de la piste mobile (ADR-3016), avec en plus :
 
 ## 15. Décisions et hypothèses
 
-- ADR appliqués : ADR-4002, ADR-4003, ADR-3003, ADR-3004, ADR-3014, ADR-3015.
+- ADR appliqués : ADR-4002, ADR-4003, ADR-4009, ADR-3003, ADR-3004, ADR-3014, ADR-3015.
 - Décision de cette spécification : la croix du diagnostic équivaut à « Passer » (pas d'abandon silencieux).
 - Hypothèse : le build iOS est validé sur l'agent appareil de la piste mobile (ADR-3018). Sinon, blocage `--external` pour iOS et preuve Android seule, consignés.
+- Décision d'implémentation (ADR-4009) : la réception du partage passe par l'URI exposée par Expo Linking (`ACTION_SEND`/`ACTION_SEND_MULTIPLE` et « Ouvrir avec Learny » déclarés dans `app.config.ts`) ; les libellés propres au mobile vivent dans `mobileSimple.ts` tant que l'espace `simple` de SPEC-4002 n'est pas fusionné ; la campagne utilise un compte sans clé dédié.
