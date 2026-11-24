@@ -1,12 +1,12 @@
 {
   "lint": {
     "status": "passed",
-    "at": "2026-11-24T22:23:24.623Z",
+    "at": "2026-11-24T22:40:59.892Z",
     "details": ""
   },
   "typecheck": {
     "status": "passed",
-    "at": "2026-11-24T22:23:35.124Z",
+    "at": "2026-11-24T22:41:41.420Z",
     "details": ""
   },
   "build": {
@@ -26,17 +26,17 @@
   },
   "e2e": {
     "status": "passed",
-    "at": "2026-11-24T22:28:35.876Z",
+    "at": "2026-11-24T22:44:47.728Z",
     "details": "10 réussi(s), 0 échec(s), 20 vidéo(s)"
   },
   "visual": {
     "status": "passed",
-    "at": "2026-11-24T22:28:35.878Z",
+    "at": "2026-11-24T22:44:47.729Z",
     "details": "4 test(s) @visual réussi(s) (mode mockup)"
   },
   "acceptance": {
     "status": "passed",
-    "at": "2026-11-24T22:28:36.071Z",
+    "at": "2026-11-24T22:44:47.838Z",
     "details": "6/6 critères ✅"
   }
 }
