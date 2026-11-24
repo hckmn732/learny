@@ -86,7 +86,7 @@ describe('[SPEC-201] buildOpenApiDocument', () => {
       '/api/v1/demo/redirect',
       '/api/v1/demo/{id}',
     ]);
-    const operation = paths['/api/v1/demo/{id}'].get as {
+    const operation = paths['/api/v1/demo/{id}']!.get as {
       parameters: { name: string; in: string; required: boolean }[];
       security: unknown[];
     };
@@ -101,7 +101,7 @@ describe('[SPEC-201] buildOpenApiDocument', () => {
   it('ajoute la clé d’idempotence, les erreurs et le corps attendu', () => {
     const document = buildOpenApiDocument(registry, { version: '1' });
     const paths = document.paths as unknown as Record<string, Record<string, Record<string, unknown>>>;
-    const create = paths['/api/v1/demo'].post;
+    const create = paths['/api/v1/demo']!.post!;
     const parameters = create.parameters as { name: string; in: string; required: boolean }[];
     expect(parameters).toContainEqual({
       name: 'Idempotency-Key',
@@ -121,13 +121,15 @@ describe('[SPEC-201] buildOpenApiDocument', () => {
   it('décrit une redirection et une réponse sans corps', () => {
     const document = buildOpenApiDocument(registry, { version: '1' });
     const paths = document.paths as unknown as Record<string, Record<string, Record<string, unknown>>>;
-    const redirect = paths['/api/v1/demo/redirect'].get;
+    const redirect = paths['/api/v1/demo/redirect']!.get!;
     expect((redirect.responses as Record<string, unknown>)['302']).toMatchObject({
       description: 'Redirection',
       headers: { Location: { schema: { type: 'string' } } },
     });
-    const accepted = paths['/api/v1/demo/accepted'].post;
-    const acceptedResponse = (accepted.responses as Record<string, Record<string, unknown>>)['202'];
+    const accepted = paths['/api/v1/demo/accepted']!.post;
+    const acceptedResponse = (accepted!.responses as Record<string, Record<string, unknown>>)[
+      '202'
+    ]!;
     expect(acceptedResponse.description).toBe('Succès');
     expect(acceptedResponse.content).toBeUndefined();
   });
