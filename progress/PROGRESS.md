@@ -1,22 +1,22 @@
 # Progression du projet Learny
 
-> Généré par `node tools/sdd/status.mjs` le 2026-11-24T14:14:19.278Z. Ne pas éditer à la main.
+> Généré par `node tools/sdd/status.mjs` le 2026-11-24T19:56:50.313Z. Ne pas éditer à la main.
 
 ## Synthèse
 
 | Indicateur | Valeur |
 |---|---|
 | Spécifications | 178 (V1 : 124, V2 : 8, migration : 46) |
-| Terminées | 158 |
+| Terminées | 159 |
 | En cours | 0 |
-| Prêtes | 1 |
-| En attente de dépendances | 19 |
+| Prêtes | 2 |
+| En attente de dépendances | 17 |
 | Bloquées | 0 |
 | Bloquées par une dépendance | 0 |
-| **Avancement global** | **88.8 %** |
+| **Avancement global** | **89.3 %** |
 | Avancement V1 | 99.2 % |
 | Piste active | mode-simple |
-| Prochaine action | start SPEC-4001 — Mode simple — backend et contrat |
+| Prochaine action | start SPEC-4002 — Mode simple — parcours web « Dépose ton cours » |
 
 ## Phases et checkpoints
 
@@ -46,7 +46,7 @@
 | P33 | Mobile — cours, tuteur, quiz et révisions | 5/5 | CP-33 | ✅ 2026-11-23 cp-33 |
 | P34 | Mobile — profil, réglages et connexion tierce | 2/2 | CP-34 | ✅ 2026-11-24 cp-34 |
 | P35 | Mobile — notifications push et publication (exige CP-23) | 2/2 | CP-35 | ✅ 2026-11-24 cp-35 |
-| P40 | Mode simple — lot 1 : dépôt de documents et formation automatique (web et mobile) | 0/3 | CP-40 | ⏳ |
+| P40 | Mode simple — lot 1 : dépôt de documents et formation automatique (web et mobile) | 1/3 | CP-40 | ⏳ |
 
 ## Détail des spécifications
 
@@ -227,9 +227,9 @@
 | [SPEC-3402](../specs/p34-mobile-compte/SPEC-3402-connexion-avec-apple-et-google.md) | Connexion avec Apple et Google | P34 | ✅ done | 1 | ✓lint ✓typecheck ✓unit ✓integration ✓e2e ✓visual ✓acceptance | SPEC-3101 |
 | [SPEC-3501](../specs/p35-mobile-notifications-livraison/SPEC-3501-notifications-push-natives.md) | Notifications push natives (FCM et APNs) | P35 | ✅ done | 1 | ✓lint ✓typecheck ✓unit ✓integration ✓e2e ✓visual ✓acceptance | SPEC-3401 |
 | [SPEC-3502](../specs/p35-mobile-notifications-livraison/SPEC-3502-accessibilite-performances-et-publication.md) | Accessibilité, performances et publication sur les stores | P35 | ✅ done | 1 | ✓lint ✓typecheck ✓unit ✓integration ✓e2e ✓visual ✓acceptance | SPEC-3203, SPEC-3303, SPEC-3304, SPEC-3305, SPEC-3402, SPEC-3501 |
-| [SPEC-4001](../specs/p40-mode-simple/SPEC-4001-mode-simple-backend-et-contrat.md) | Mode simple — backend et contrat | P40 | 🟢 ready | 0 | — | — |
-| [SPEC-4002](../specs/p40-mode-simple/SPEC-4002-mode-simple-parcours-web.md) | Mode simple — parcours web « Dépose ton cours » | P40 | ⏳ waiting | 0 | — | SPEC-4001 |
-| [SPEC-4003](../specs/p40-mode-simple/SPEC-4003-mode-simple-parcours-mobile.md) | Mode simple — parcours mobile iOS et Android | P40 | ⏳ waiting | 0 | — | SPEC-4001 |
+| [SPEC-4001](../specs/p40-mode-simple/SPEC-4001-mode-simple-backend-et-contrat.md) | Mode simple — backend et contrat | P40 | ✅ done | 0 | ✓lint ✓typecheck ✓build ✓unit ✓integration ✓e2e ✓visual ✓acceptance | — |
+| [SPEC-4002](../specs/p40-mode-simple/SPEC-4002-mode-simple-parcours-web.md) | Mode simple — parcours web « Dépose ton cours » | P40 | 🟢 ready | 0 | — | SPEC-4001 |
+| [SPEC-4003](../specs/p40-mode-simple/SPEC-4003-mode-simple-parcours-mobile.md) | Mode simple — parcours mobile iOS et Android | P40 | 🟢 ready | 0 | — | SPEC-4001 |
 
 ## Anomalies et blocages
 
