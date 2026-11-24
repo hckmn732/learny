@@ -18,6 +18,30 @@ export class UploadHttpError extends Error {
   }
 }
 
+/**
+ * Réécrit l'hôte de l'URL signée pour l'appareil : la pile locale signe avec `127.0.0.1`, qui
+ * désigne l'émulateur lui-même. Quand l'API est jointe par `10.0.2.2`, l'URL d'envoi garde son
+ * schéma, son port et son chemin mais prend l'hôte de l'API.
+ */
+export function deviceUploadUrl(uploadUrl: string): string {
+  if (!configResult.ok) return uploadUrl;
+  try {
+    const api = new URL(configResult.config.apiUrl);
+    const signed = new URL(uploadUrl);
+    if (
+      api.hostname === signed.hostname ||
+      api.hostname === 'localhost' ||
+      api.hostname === '127.0.0.1'
+    ) {
+      return uploadUrl;
+    }
+    signed.hostname = api.hostname;
+    return signed.toString();
+  } catch {
+    return uploadUrl;
+  }
+}
+
 /** Transport de production de la file. */
 export function simpleUploadTransport(formationId: string): UploadTransport {
   return async (task: UploadTask, onProgress: (sentBytes: number) => void) => {
@@ -48,7 +72,7 @@ export function simpleUploadTransport(formationId: string): UploadTransport {
 
     const anonKey = configResult.ok ? configResult.config.supabaseAnonKey : '';
     const upload = FileSystem.createUploadTask(
-      created.uploadUrl,
+      deviceUploadUrl(created.uploadUrl),
       task.uri,
       {
         httpMethod: 'PUT',

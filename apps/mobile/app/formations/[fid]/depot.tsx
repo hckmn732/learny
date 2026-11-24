@@ -12,6 +12,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { fr } from '@learny/i18n';
 
 import { messageFor } from '../../../src/api/errors';
+import { requireApiClient } from '../../../src/api/registry';
 import { AnalysisView } from '../../../src/simple/AnalysisView';
 import { FileRow } from '../../../src/simple/FileRow';
 import { KeyWarning } from '../../../src/simple/KeyWarning';
@@ -24,7 +25,7 @@ import {
   useSimpleQueue,
   useSimpleState,
 } from '../../../src/simple/use-simple';
-import { hasCourseSource, sourceRows } from '../../../src/simple/view-model';
+import { hasReadyCourse, sourceRows } from '../../../src/simple/view-model';
 import { theme } from '../../../src/theme';
 import { Button } from '../../../src/ui/Button';
 import { Card } from '../../../src/ui/Card';
@@ -60,6 +61,30 @@ export default function FormationDepositRoute() {
 
   const status = simple.data?.status ?? 'collecting';
 
+  // Le worker rend le document `ready` après la finalisation : l'analyse attend qu'au moins un
+  // document de cours soit prêt, sinon le serveur répond SIMPLE_NO_COURSE_SOURCE (EF-2).
+  const launchWhenReady = useCallback(async (): Promise<void> => {
+    for (let attempt = 0; attempt < 60; attempt += 1) {
+      try {
+        const current = await requireApiClient().api.simpleGet({ params: { fid } });
+        if (
+          current.sources.some((source) => source.role === 'course' && source.status === 'ready')
+        ) {
+          const state = await analysis.launch();
+          if (state.status === 'proposed') router.replace(`/formations/${fid}/apercu`);
+          return;
+        }
+      } catch (error) {
+        if (isAiMissing(error)) {
+          setKeyBlocked(true);
+          return;
+        }
+      }
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+    }
+    setToast(fr.mobile.simple.analysis.failedTitle);
+  }, [analysis, fid, router]);
+
   const launch = useCallback(async (): Promise<void> => {
     try {
       const state = await analysis.launch();
@@ -75,7 +100,7 @@ export default function FormationDepositRoute() {
 
   const queue = useSimpleQueue(fid === '' ? null : fid, {
     onDone: () => {
-      void launch();
+      void launchWhenReady();
     },
   });
 
@@ -151,7 +176,7 @@ export default function FormationDepositRoute() {
 
   const canLaunch =
     status === 'collecting' &&
-    (hasCourseSource(simple.data) || queue.items.some((task) => task.role === 'course'));
+    (hasReadyCourse(simple.data) || queue.items.some((task) => task.role === 'course'));
   const uploading = queue.items.some((task) => task.status === 'uploading');
   const failed = queue.items.some((task) => task.status === 'failed');
   const sources = sourceRows(simple.data);

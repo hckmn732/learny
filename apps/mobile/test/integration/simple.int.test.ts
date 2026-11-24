@@ -132,7 +132,7 @@ describe('[SPEC-4003] client API du mode simple (intégration)', () => {
         apikey: ANON_KEY,
         'content-type': 'application/pdf',
       },
-      body: bytes,
+      body: new Blob([bytes.buffer.slice(0) as ArrayBuffer], { type: 'application/pdf' }),
     });
     expect(put.status).toBe(200);
     const finalized = await client.api.resourcesFinalize({ params: { rid: upload.resourceId } });
