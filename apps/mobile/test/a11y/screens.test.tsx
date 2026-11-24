@@ -25,6 +25,7 @@ import { ProgrammeScreen } from '../../src/features/programme/ProgrammeScreen';
 import { auditScreen, MIN_TARGET } from '../utils/a11yAudit';
 
 
+/* eslint-disable @typescript-eslint/no-unsafe-return -- `jest.requireActual` rend un module de démonstration : le type est rétabli par `Demo` dans `demoOf`. */
 const noop = (): void => undefined;
 
 jest.mock('expo-router', () => {
@@ -66,8 +67,13 @@ jest.mock('../../src/api/registry', () => ({
 }));
 
 type Demo = typeof import('./demo');
-const demoModule = (): Demo => jest.requireActual<Demo>('./demo');
-const demoOf = <K extends keyof Demo>(key: K): Demo[K] => demoModule()[key];
+/**
+ * Données de démonstration, chargées dans chaque fabrique `jest.mock` : une fabrique est hoistée
+ * au-dessus des imports, elle ne peut donc pas capturer une valeur importée. `jest.requireActual`
+ * renvoie `any` par conception ; la conversion vers `Demo` rétablit le type.
+ */
+const demoOf = <K extends keyof Demo>(key: K): Demo[K] =>
+  (jest.requireActual('./demo') as Demo)[key];
 
 jest.mock('../../src/auth/session', () => demoOf('session'));
 jest.mock('../../src/data/home', () => demoOf('home'));
