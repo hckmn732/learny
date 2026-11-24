@@ -9,10 +9,15 @@ import { pngSize, REFERENCES_DIR, sha256, sourceFile } from './manifest.mjs';
 
 const REPO = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..', '..');
 
-/** Renvoie la liste des écarts entre le manifeste et les fichiers de `root`. */
-export function checkReferences(root = REPO, referencesDir = REFERENCES_DIR) {
+/**
+ * Renvoie la liste des écarts entre le manifeste et les fichiers de `root`.
+ * `manifestDir` est le dossier qui porte `manifest.json` et `tokens.json` quand il diffère du
+ * préfixe des chemins du manifeste (publication d'un sous-dossier, `design/references/mode-simple`
+ * — SPEC-4002 §10).
+ */
+export function checkReferences(root = REPO, referencesDir = REFERENCES_DIR, manifestDir = referencesDir) {
   const errors = [];
-  const manifestPath = path.join(root, referencesDir, 'manifest.json');
+  const manifestPath = path.join(root, manifestDir, 'manifest.json');
   if (!fs.existsSync(manifestPath)) return [`Manifeste absent : ${referencesDir}/manifest.json`];
   let manifest;
   try {
@@ -34,9 +39,9 @@ export function checkReferences(root = REPO, referencesDir = REFERENCES_DIR) {
     const hash = sha256(png);
     if (hash !== r.sha256) errors.push(`${r.file} : empreinte ${hash.slice(0, 12)}… ≠ manifeste ${String(r.sha256).slice(0, 12)}…`);
   }
-  const dir = path.join(root, referencesDir);
+  const dir = path.join(root, manifestDir);
   for (const f of fs.readdirSync(dir)) if (f.endsWith('.png') && !listed.has(f)) errors.push(`${referencesDir}/${f} : PNG absent du manifeste`);
-  if (!fs.existsSync(path.join(dir, 'tokens.json'))) errors.push(`${referencesDir}/tokens.json absent`);
+  if (!fs.existsSync(path.join(dir, 'tokens.json'))) errors.push(`${manifestDir}/tokens.json absent`);
   return errors;
 }
 

@@ -1,0 +1,86 @@
+{
+  "SCR-03-base-desktop": {
+    "x": 357,
+    "y": 243,
+    "width": 938,
+    "height": 598
+  },
+  "SCR-03-base-mobile": {
+    "x": 53,
+    "y": 349,
+    "width": 283,
+    "height": 635
+  },
+  "SCR-21-base-desktop": {
+    "x": 357,
+    "y": 262,
+    "width": 938,
+    "height": 596
+  },
+  "SCR-21-base-mobile": {
+    "x": 53,
+    "y": 387,
+    "width": 283,
+    "height": 635
+  },
+  "SCR-21-sans-cle-desktop": {
+    "x": 357,
+    "y": 262,
+    "width": 938,
+    "height": 596
+  },
+  "SCR-21-sans-cle-mobile": {
+    "x": 53,
+    "y": 387,
+    "width": 283,
+    "height": 635
+  },
+  "SCR-22-base-desktop": {
+    "x": 357,
+    "y": 243,
+    "width": 938,
+    "height": 598
+  },
+  "SCR-22-base-mobile": {
+    "x": 53,
+    "y": 349,
+    "width": 283,
+    "height": 635
+  },
+  "SCR-23-base-desktop": {
+    "x": 357,
+    "y": 243,
+    "width": 938,
+    "height": 718
+  },
+  "SCR-23-base-mobile": {
+    "x": 53,
+    "y": 349,
+    "width": 283,
+    "height": 635
+  },
+  "SCR-24-base-desktop": {
+    "x": 357,
+    "y": 243,
+    "width": 938,
+    "height": 668
+  },
+  "SCR-24-base-mobile": {
+    "x": 53,
+    "y": 330,
+    "width": 283,
+    "height": 635
+  },
+  "SCR-24-resultat-desktop": {
+    "x": 357,
+    "y": 243,
+    "width": 938,
+    "height": 480
+  },
+  "SCR-24-resultat-mobile": {
+    "x": 53,
+    "y": 349,
+    "width": 283,
+    "height": 635
+  }
+}

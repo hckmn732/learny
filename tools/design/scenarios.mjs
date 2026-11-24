@@ -1,6 +1,15 @@
-// Table versionnée des états de maquettes capturés en référence (SPEC-005, EF-2, ET-2).
+// Table versionnée des états de maquettes capturés en référence (SPEC-005, EF-2, ET-2) et des six
+// étapes du mode simple (SPEC-4002 §10, ADR-0034).
 // Chaque scénario part d'un contexte neuf ; `setup` atteint l'état par l'interface, `expect` vérifie
 // une condition observable avant la capture. Aucune temporisation fixe, aucun clic aveugle.
+//
+// Les scénarios du mode simple portent en plus :
+// - `dir` : dossier des sources (`design/mode-simple`), `index.html` étant la planche entière ;
+// - `sources` : source par viewport — la planche est fixe en 1280 px, donc la vue « Mobile » de la
+//   maquette sert la capture 390×844 ;
+// - `zoom` : 90 %, l'échelle des maquettes (BR-NAV-06), que la planche n'applique pas elle-même ;
+// - `rectSelector` : la zone comparable à l'application, mesurée dans la planche et publiée dans
+//   `rects.json` (comparaison de région, docs/engineering/testing.md §6).
 
 const heading = (page, name) => page.getByRole('heading', { name, exact: false }).first().waitFor({ state: 'visible' });
 const click = (page, role, name) => page.getByRole(role, { name, exact: false }).first().click();
@@ -99,3 +108,54 @@ export const VIEWPORTS = {
   desktop: { width: 1440, height: 900 },
   mobile: { width: 390, height: 844 },
 };
+
+// --- SPEC-4002 — les six étapes du mode simple « Dépose ton cours » -------------------------------
+// La planche est `design/mode-simple/index.html` : `#step=0` à `#step=5` (accueil, dépôt, analyse,
+// aperçu, diagnostic, premier chapitre) et `#nokey=1` pour l'état « Sans clé d'IA ».
+
+const MODE_SIMPLE = 'design/mode-simple';
+const MOBILE = '&view=mobile&plat=ios';
+const waitChapter = (page) =>
+  page.getByText('La consolidation (introduction)').first().waitFor({ state: 'visible' });
+
+/** Une étape de la planche, capturée en bureau (vue Web) et en mobile (vue Mobile, iOS). */
+function modeSimpleStep(screenId, state, step, expect, extra = '') {
+  const hash = `#step=${String(step)}${extra}`;
+  return {
+    screenId,
+    state,
+    dir: MODE_SIMPLE,
+    zoom: 0.9,
+    source: `index.html${hash}`,
+    sources: {
+      desktop: `index.html${hash}`,
+      mobile: `index.html${hash}${MOBILE}`,
+    },
+    rectSelector: '.page',
+    mobileRectSelector: '.screen',
+    setup: () => Promise.resolve(),
+    expect,
+  };
+}
+
+export const MODE_SIMPLE_SCENARIOS = [
+  // Étape 1 — accueil : les deux portes d'entrée (SCR-03). La vue Web et la vue Mobile ne portent
+  // pas le même titre de page : la carte « Dépose ton cours » est commune aux deux.
+  modeSimpleStep('SCR-03', 'base', 0, (page) =>
+    page.getByText('Dépose ton cours').first().waitFor()),
+  // Étape 2 — dépôt des documents (SCR-21).
+  modeSimpleStep('SCR-21', 'base', 1, (page) =>
+    page.getByText('Créer ma formation').first().waitFor()),
+  // Étape 2 — état bloquant « Sans clé d'IA » (BR-IA-06).
+  modeSimpleStep('SCR-21', 'sans-cle', 1, (page) =>
+    page.getByText('Ajoute ta clé d’IA pour continuer').waitFor(), '&nokey=1'),
+  // Étape 3 — analyse : les chapitres arrivent au fil de l'eau, on attend le dernier (SCR-22).
+  modeSimpleStep('SCR-22', 'base', 2, waitChapter),
+  // Étape 4 — aperçu du programme (SCR-23).
+  modeSimpleStep('SCR-23', 'base', 3, (page) => page.getByText('Programme prêt').waitFor()),
+  // Étape 5 — diagnostic global (SCR-24) : le badge « Diagnostic · 10 min » est commun aux vues.
+  modeSimpleStep('SCR-24', 'base', 4, (page) => page.getByText('Diagnostic · 10 min').first().waitFor()),
+  // Étape 6 — résultat et premier chapitre prêt (SCR-24).
+  modeSimpleStep('SCR-24', 'resultat', 5, (page) =>
+    page.getByText('Ton premier chapitre est prêt').waitFor()),
+];

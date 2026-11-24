@@ -8,6 +8,9 @@ export const TIME_ZONE = 'Europe/Paris';
 export const ZOOM = 0.9;
 export const SOURCES_DIR = 'design/maquettes';
 export const REFERENCES_DIR = 'design/references';
+/** SPEC-4002 — planche du mode simple : un dossier de sources et de références à part. */
+export const MODE_SIMPLE_SOURCES_DIR = 'design/mode-simple';
+export const MODE_SIMPLE_REFERENCES_DIR = 'design/references/mode-simple';
 
 const SLUG = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
 const SCREEN = /^SCR-\d{2}$/;
@@ -29,7 +32,11 @@ export function validateScenarios(scenarios, viewports) {
     const id = `${s.screenId ?? '?'}/${s.state ?? '?'}`;
     if (!SCREEN.test(s.screenId ?? '')) errors.push(`${id} : screenId invalide`);
     if (!SLUG.test(s.state ?? '')) errors.push(`${id} : nom d'état invalide`);
-    if (!s.source || !sourceFile(s.source).endsWith('.dc.html')) errors.push(`${id} : source invalide`);
+    // Les maquettes `.dc.html` viennent de `design/maquettes` ; la planche du mode simple est le
+    // seul `index.html` accepté (SPEC-4002 §10).
+    const file = s.source ? sourceFile(s.source) : '';
+    const accepted = s.dir === MODE_SIMPLE_SOURCES_DIR ? file === 'index.html' : file.endsWith('.dc.html');
+    if (!s.source || !accepted) errors.push(`${id} : source invalide`);
     if (typeof s.setup !== 'function' || typeof s.expect !== 'function') errors.push(`${id} : setup et expect sont obligatoires`);
     const selected = s.viewports ?? Object.keys(viewports);
     for (const vp of selected) {
@@ -53,7 +60,10 @@ export function pngSize(buffer) {
   return { width: buffer.readUInt32BE(16), height: buffer.readUInt32BE(20) };
 }
 
-export function manifestEntry({ screenId, state, viewport, source, png, viewportSize, zoom = ZOOM }) {
+export function manifestEntry({
+  screenId, state, viewport, source, png, viewportSize, zoom = ZOOM,
+  dir = SOURCES_DIR, referenceDir = REFERENCES_DIR,
+}) {
   if (zoom !== ZOOM) throw new Error(`Zoom ${zoom} refusé : les maquettes sont rendues à ${ZOOM} (BR-NAV-06)`);
   const { width, height } = pngSize(png);
   return {
@@ -62,8 +72,8 @@ export function manifestEntry({ screenId, state, viewport, source, png, viewport
     viewport,
     viewportWidth: viewportSize.width,
     viewportHeight: viewportSize.height,
-    source: `${SOURCES_DIR}/${source}`,
-    file: `${REFERENCES_DIR}/${referenceFile(screenId, state, viewport)}`,
+    source: `${dir}/${source}`,
+    file: `${referenceDir}/${referenceFile(screenId, state, viewport)}`,
     width,
     height,
     fixedAt: FIXED_AT,

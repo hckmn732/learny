@@ -2,6 +2,10 @@
 /* global document, MutationObserver, getComputedStyle, requestAnimationFrame */
 // Capture déterministe des maquettes en références visuelles (SPEC-005, ET-1 à ET-6).
 // Usage : node tools/design/capture-references.mjs [--out <dossier>] [--only SCR-xx[/etat]] [--keep-going]
+//         [--set mode-simple]
+//   `--set mode-simple` capture les six étapes de `design/mode-simple/index.html` (état « sans clé »
+//   compris) dans `design/references/mode-simple/` (SPEC-4002 §10). Sans `--set`, les maquettes sont
+//   régénérées PUIS les références du mode simple, pour que les deux jeux ne divergent jamais.
 //   sans --out : génère dans un dossier temporaire, vérifie, puis publie dans design/references/.
 import fs from 'node:fs';
 import http from 'node:http';
@@ -12,10 +16,11 @@ import { fileURLToPath } from 'node:url';
 import { chromium } from '@playwright/test';
 
 import {
-  buildManifest, buildTokens, FIXED_AT, LOCALE, manifestEntry, referenceFile, REFERENCES_DIR, SOURCES_DIR,
+  buildManifest, buildTokens, FIXED_AT, LOCALE, manifestEntry, MODE_SIMPLE_REFERENCES_DIR,
+  referenceFile, REFERENCES_DIR, SOURCES_DIR,
   sourceFile, TIME_ZONE, toJson, TOKEN_PROPERTIES, TOKEN_SELECTORS, tokenEntries, validateScenarios,
 } from './manifest.mjs';
-import { SCENARIOS, VIEWPORTS } from './scenarios.mjs';
+import { MODE_SIMPLE_SCENARIOS, SCENARIOS, VIEWPORTS } from './scenarios.mjs';
 
 const REPO = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..', '..');
 const FONTS = ['400 16px "Inter"', '600 16px "Inter"', '600 16px "Space Grotesk"'];
@@ -169,9 +174,11 @@ async function collectTokens(page, scenario) {
  */
 export async function captureReferences({
   outDir,
-  sourcesDir = path.join(REPO, SOURCES_DIR),
+  // Racine servie : le dépôt, pour atteindre `design/maquettes` et `design/mode-simple`.
+  sourcesDir = REPO,
   scenarios = SCENARIOS,
   viewports = VIEWPORTS,
+  referenceDir = REFERENCES_DIR,
   diagnosticsDir = path.join(os.tmpdir(), 'learny-references-diagnostics'),
   log = () => {},
   keepGoing = false,
@@ -184,6 +191,7 @@ export async function captureReferences({
   const browser = await chromium.launch({ args: CHROMIUM_ARGS });
   const entries = [];
   const tokens = [];
+  const rects = {};
   const failures = [];
   const fontCache = new Map();
   try {
@@ -199,9 +207,15 @@ export async function captureReferences({
         await hideUntilFonts(context);
         const page = await context.newPage();
         try {
+          const dir = scenario.dir ?? SOURCES_DIR;
+          const source = scenario.sources?.[viewport] ?? scenario.source;
           await page.clock.setFixedTime(new Date(FIXED_AT));
-          await page.goto(`${base}/${scenario.source}`, { waitUntil: 'load' });
+          await page.goto(`${base}/${dir}/${source}`, { waitUntil: 'load' });
           await page.addStyleTag({ content: FREEZE_CSS });
+          // BR-NAV-06 : les planches sont lues à 90 % ; la planche du mode simple ne l'applique pas.
+          if (scenario.zoom !== undefined) {
+            await page.addStyleTag({ content: `html{zoom:${String(scenario.zoom)}}` });
+          }
           // Fonts are ready before the first paint, so no fallback glyph raster is cached.
           await waitForAssets(page, label);
           await reveal(page);
@@ -213,7 +227,35 @@ export async function captureReferences({
           await page.evaluate(() => new Promise((resolve) => requestAnimationFrame(() => requestAnimationFrame(resolve))));
           const png = await page.screenshot({ fullPage: true, animations: 'disabled' });
           fs.writeFileSync(path.join(outDir, referenceFile(scenario.screenId, scenario.state, viewport)), png);
-          entries.push(manifestEntry({ screenId: scenario.screenId, state: scenario.state, viewport, source: scenario.source, png, viewportSize: size }));
+          entries.push(manifestEntry({
+            screenId: scenario.screenId,
+            state: scenario.state,
+            viewport,
+            source,
+            png,
+            viewportSize: size,
+            ...(scenario.zoom === undefined ? {} : { zoom: scenario.zoom }),
+            dir,
+            referenceDir,
+          }));
+          // Zone comparable à l'application, mesurée dans la planche (comparaison de région).
+          const rectSelector = viewport === 'desktop' ? scenario.rectSelector : (scenario.mobileRectSelector ?? scenario.rectSelector);
+          if (rectSelector) {
+            rects[referenceFile(scenario.screenId, scenario.state, viewport).replace(/\.png$/u, '')] =
+              await page.evaluate((selector) => {
+                const element = document.querySelector(selector);
+                if (!element) return null;
+                // `getBoundingClientRect` rend déjà les coordonnées visuelles : sous `zoom: 0.9`, la
+                // boîte mesurée est celle des pixels de la capture (aucune mise à l'échelle en plus).
+                const box = element.getBoundingClientRect();
+                return {
+                  x: Math.round(box.x),
+                  y: Math.round(box.y),
+                  width: Math.round(box.width),
+                  height: Math.round(box.height),
+                };
+              }, rectSelector);
+          }
           if (viewport === 'desktop' && (scenario.state === 'base' || !scenarios.some((s) => s.screenId === scenario.screenId && s.state === 'base' && sourceFile(s.source) === sourceFile(scenario.source)))) {
             tokens.push(...(await collectTokens(page, scenario)));
           }
@@ -240,6 +282,9 @@ export async function captureReferences({
   const manifest = buildManifest(entries);
   fs.writeFileSync(path.join(outDir, 'manifest.json'), toJson(manifest));
   fs.writeFileSync(path.join(outDir, 'tokens.json'), toJson(buildTokens(tokenEntries(tokens))));
+  if (Object.keys(rects).length > 0) {
+    fs.writeFileSync(path.join(outDir, 'rects.json'), toJson(rects));
+  }
   return manifest;
 }
 
@@ -256,31 +301,76 @@ export function publish(staging, target) {
   fs.rmSync(backup, { recursive: true, force: true });
 }
 
+/**
+ * Capture une table de scénarios puis publie son dossier de références (ET-4).
+ * `--out` écrit dans un dossier explicite sans publier ; `--only` interdit la publication.
+ */
+async function captureSet({ scenarios, referenceDir, explicitOut, only, keepGoing, log }) {
+  // Staging dir next to the target so that the final rename stays on the same filesystem. A
+  // reference dir nested under `design/references` (mode simple) reproduces the same suffix, so the
+  // pre-publication check can map the manifest paths onto the staging tree.
+  const stagingRoot = explicitOut
+    ? path.resolve(explicitOut)
+    : fs.mkdtempSync(path.join(REPO, 'design', '.references-staging-'));
+  const suffix = path.relative(REFERENCES_DIR, referenceDir);
+  const outDir = suffix === '' ? stagingRoot : path.join(stagingRoot, suffix);
+  try {
+    const manifest = await captureReferences({ outDir, scenarios, referenceDir, keepGoing, log });
+    if (explicitOut) {
+      log(`✔ ${manifest.references.length} référence(s) écrites dans ${outDir}`);
+      return;
+    }
+    if (only) throw new Error('--only ne publie pas : utilisez --out pour un essai partiel.');
+    const { checkReferences } = await import('./check-references.mjs');
+    const staged = path.relative(REPO, stagingRoot).replace(/\\/g, '/');
+    const manifestDir = suffix === '' ? staged : `${staged}/${suffix.replace(/\\/g, '/')}`;
+    const problems = checkReferences(REPO, staged, manifestDir).map((problem) =>
+      problem.replace(staged, REFERENCES_DIR),
+    );
+    if (problems.length) throw new Error(`Contrôle avant publication en échec :\n${problems.join('\n')}`);
+    publish(outDir, path.join(REPO, referenceDir));
+    log(`✔ ${manifest.references.length} référence(s) publiées dans ${referenceDir}/`);
+  } catch (error) {
+    if (!explicitOut) fs.rmSync(stagingRoot, { recursive: true, force: true });
+    throw error;
+  }
+}
+
 if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
   const arg = (k) => { const i = process.argv.indexOf(k); return i > 0 ? process.argv[i + 1] : undefined; };
   const only = arg('--only');
-  const scenarios = only ? SCENARIOS.filter((s) => `${s.screenId}/${s.state}`.startsWith(only)) : SCENARIOS;
+  const set = arg('--set');
   const explicitOut = arg('--out');
-  const target = path.join(REPO, REFERENCES_DIR);
-  // Staging dir next to the target so that the final rename stays on the same filesystem.
-  const outDir = explicitOut ? path.resolve(explicitOut) : fs.mkdtempSync(path.join(REPO, 'design', '.references-staging-'));
+  const keepGoing = process.argv.includes('--keep-going');
+  const log = (m) => console.log(m);
+  if (set !== undefined && set !== 'mode-simple') {
+    console.error(`✖ Jeu inconnu : ${set} (mode-simple attendu)`);
+    process.exit(1);
+  }
+  // `--set mode-simple` : la planche du mode simple seule (SPEC-4002 §10). Sans `--set`, les deux
+  // jeux sont régénérés, maquettes puis mode simple, pour qu'aucun ne dérive.
+  const sets = set === 'mode-simple'
+    ? [{ scenarios: MODE_SIMPLE_SCENARIOS, referenceDir: MODE_SIMPLE_REFERENCES_DIR }]
+    : [
+        { scenarios: SCENARIOS, referenceDir: REFERENCES_DIR },
+        { scenarios: MODE_SIMPLE_SCENARIOS, referenceDir: MODE_SIMPLE_REFERENCES_DIR },
+      ];
   try {
-    const keepGoing = process.argv.includes('--keep-going');
-    const manifest = await captureReferences({ outDir, scenarios, keepGoing, log: (m) => console.log(m) });
-    if (!explicitOut) {
-      if (only) throw new Error('--only ne publie pas : utilisez --out pour un essai partiel.');
-      const { checkReferences } = await import('./check-references.mjs');
-      const staged = path.relative(REPO, outDir);
-      const problems = checkReferences(REPO, staged.replace(/\\/g, '/'))
-        .map((p) => p.replace(staged, REFERENCES_DIR));
-      if (problems.length) throw new Error(`Contrôle avant publication en échec :\n${problems.join('\n')}`);
-      publish(outDir, target);
-      console.log(`✔ ${manifest.references.length} référence(s) publiées dans ${REFERENCES_DIR}/`);
-    } else {
-      console.log(`✔ ${manifest.references.length} référence(s) écrites dans ${outDir}`);
+    for (const entry of sets) {
+      const scenarios = only
+        ? entry.scenarios.filter((scenario) => `${scenario.screenId}/${scenario.state}`.startsWith(only))
+        : entry.scenarios;
+      if (scenarios.length === 0) continue;
+      await captureSet({
+        scenarios,
+        referenceDir: entry.referenceDir,
+        explicitOut,
+        only,
+        keepGoing,
+        log,
+      });
     }
   } catch (error) {
-    if (!explicitOut) fs.rmSync(outDir, { recursive: true, force: true });
     console.error(`✖ ${error.message}`);
     process.exitCode = 1;
   }
