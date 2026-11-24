@@ -26,6 +26,10 @@ Les maquettes cliquables sont dans `design/maquettes/` (fichiers `*.dc.html`, mo
 | SCR-18 | Résultats de recherche | `/recherche?q=` | *aucune* (le panneau d'en-tête suit la maquette du panneau notifications) | SPEC-307 |
 | SCR-19 | Pages légales | `/legal/cgu`, `/legal/confidentialite`, `/legal/mentions` | *aucune* | SPEC-806 |
 | SCR-20 | Pages système | `not-found`, `error`, `/hors-ligne` | *aucune* | SPEC-308, 801 |
+| SCR-21 | Mode simple : dépôt de documents | `/formations/depot`, `/formations/[fid]/depot` | `design/mode-simple/index.html#step=1` (proposition, ADR-4003) | SPEC-4002, SPEC-4003 |
+| SCR-22 | Mode simple : analyse | `/formations/[fid]/depot` (état analyse) | `design/mode-simple/index.html#step=2` | SPEC-4002, SPEC-4003 |
+| SCR-23 | Mode simple : aperçu du programme | `/formations/[fid]/apercu` | `design/mode-simple/index.html#step=3` | SPEC-4002, SPEC-4003 |
+| SCR-24 | Mode simple : diagnostic et premier chapitre | `/formations/[fid]/diagnostic`, `/formations/[fid]/diagnostic/resultat` | `design/mode-simple/index.html#step=4` et `#step=5` | SPEC-4002, SPEC-4003 |
 
 `[fid]`, `[mid]`, `[cid]`, `[aid]` sont des UUID. Les routes sont en français (ADR-0046).
 
@@ -48,3 +52,20 @@ Chaque spécification concernée décrit précisément la structure attendue et 
 ## 4. Données de démonstration
 
 Les maquettes montrent la journée du **mercredi 11 novembre 2026, 13:20 (Europe/Paris)** de l'utilisateur Alex Perrin. Le jeu de données `SPEC-115` reproduit exactement ces données ; les tests end-to-end fixent l'horloge du navigateur et du serveur à cet instant (ADR-0047) pour que les captures soient comparables aux maquettes.
+
+## 5. Application mobile (piste `mobile`, ADR-3001 à ADR-3003)
+
+Maquette de référence : `design/app-mobile/` (planche `index.html`, écran seul `view.html`, exports `exports/screens/` et `exports/states/`), lue avec les corrections normatives d'ADR-3003. Périmètre : ADR-3002 ; tout écran web absent de ce tableau s'ouvre sur le web (« Continuer sur le web »).
+
+| Écran mobile | Équivalent web | Export de référence | Spécification |
+|---|---|---|---|
+| 01 Connexion | SCR-01 | `{ios,android}-01-connexion.png` | SPEC-3101, SPEC-3402 |
+| Coquille (onglets, notifications, compte) | SCR-03 (en-tête), SCR-20 | `states/ios-notifications.png` | SPEC-3102 |
+| 02 Aujourd'hui | SCR-03 | `{ios,android}-02-aujourdhui.png` | SPEC-3201 |
+| 03 Programme | SCR-05, SCR-06 (lecture) | `{ios,android}-03-programme.png`, `states/ios-programme-calendrier.png` | SPEC-3202 |
+| 04 Cours | SCR-07 | `{ios,android}-04-cours.png` | SPEC-3302 |
+| 05 Cours · tuteur | SCR-07 | `{ios,android}-04b-cours-tuteur.png`, `states/android-tuteur.png` | SPEC-3303 |
+| 06 Quiz de validation | SCR-09 | `{ios,android}-05-quiz.png`, `states/ios-resultat.png` | SPEC-3304 |
+| 07 Quiz global (Réviser) | SCR-10 | `{ios,android}-06-session.png` | SPEC-3305 |
+| 08 Agenda | SCR-12 | `{ios,android}-07-agenda.png`, `states/android-agenda-mois.png` | SPEC-3203 |
+| 09 Profil | SCR-15 | `{ios,android}-08-profil.png` | SPEC-3401, SPEC-3501 |

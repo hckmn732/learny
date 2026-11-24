@@ -1,0 +1,177 @@
+# Intégration continue de la piste mobile (SPEC-3001 EF-7, ADR-3004 § 6).
+#
+# - `quality` : lint, typecheck, Vitest (logique pure) et Jest (composants et écrans).
+# - `android` : build `e2e` de l'application et campagne Maestro sur un émulateur API 35
+#   (accélération KVM des runners GitHub) ; vidéos, captures et rapport JUnit publiés.
+# - `ios`     : job macOS manuel (et aux checkpoints), faute de simulateur sur les autres runners.
+#
+# Toutes les valeurs `EXPO_PUBLIC_*` de la CI sont des valeurs de test : l'API locale de démo, une
+# horloge figée (ADR-0047) et aucune clé réelle.
+name: Mobile
+
+on:
+  push:
+    branches: [mobile, 'spec/SPEC-3*']
+  pull_request:
+    branches: [mobile, 'spec/SPEC-3*']
+  workflow_dispatch:
+    inputs:
+      ios:
+        description: Exécuter aussi le job iOS (macOS)
+        required: false
+        default: false
+        type: boolean
+
+concurrency:
+  group: mobile-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+env:
+  NODE_VERSION: '24'
+  PNPM_VERSION: '10.34.9'
+  EXPO_NO_TELEMETRY: '1'
+  CI: '1'
+  EXPO_PUBLIC_ENABLE_SDD_PAGES: '1'
+  EXPO_PUBLIC_CLOCK_FIXED_AT: '2026-11-11T12:20:00Z'
+  EXPO_PUBLIC_API_URL: 'http://10.0.2.2:3001'
+  EXPO_PUBLIC_SUPABASE_URL: 'http://10.0.2.2:54321'
+  EXPO_PUBLIC_SUPABASE_ANON_KEY: 'ci-anon-key-not-a-secret'
+  EXPO_PUBLIC_WEB_URL: 'http://10.0.2.2:3100'
+
+jobs:
+  quality:
+    name: Qualité mobile (lint, typecheck, Vitest, Jest)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: ${{ env.PNPM_VERSION }}
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: pnpm
+      - name: Installer les dépendances
+        run: pnpm install --frozen-lockfile
+      - name: Lint
+        run: pnpm lint
+      - name: Typecheck
+        run: pnpm typecheck
+      - name: Vitest (logique pure, dont l'outillage SDD)
+        run: pnpm test:unit
+      - name: Jest (composants et écrans)
+        run: pnpm test:mobile
+      - name: Publier les rapports Jest
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: mobile-jest-reports
+          path: test-results/mobile/
+          retention-days: 14
+          if-no-files-found: warn
+
+  android:
+    name: Android e2e (build e2e + Maestro)
+    runs-on: ubuntu-latest
+    needs: quality
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: ${{ env.PNPM_VERSION }}
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: pnpm
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+      - name: Activer KVM (accélération de l'émulateur)
+        run: |
+          echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' \
+            | sudo tee /etc/udev/rules.d/99-kvm4all.rules
+          sudo udevadm control --reload-rules
+          sudo udevadm trigger --name-match=kvm
+      - name: Installer les dépendances
+        run: pnpm install --frozen-lockfile
+      - name: Construire l'APK e2e
+        run: pnpm build:mobile:e2e
+      - name: Installer Maestro
+        run: |
+          curl -fsSL https://get.maestro.mobile.dev | bash
+          echo "$HOME/.maestro/bin" >> "$GITHUB_PATH"
+      - name: Campagne Maestro sur émulateur API 35
+        uses: reactivecircus/android-emulator-runner@v2
+        with:
+          api-level: 35
+          arch: x86_64
+          profile: pixel_9
+          avd-name: agent37
+          disable-animations: true
+          script: |
+            adb install -r apps/mobile/android/app/build/outputs/apk/release/app-release.apk
+            export MOBILE_PLATFORM=android MOBILE_AVD=agent37 MOBILE_RECORD_VIDEO=1
+            pnpm test:e2e:mobile --tags SPEC-3001
+      - name: Publier les preuves Maestro
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: mobile-maestro-evidence
+          path: |
+            test-results/sdd/
+            evidence/
+          retention-days: 14
+          if-no-files-found: warn
+
+  ios:
+    name: iOS e2e (macOS, manuel)
+    runs-on: macos-15
+    needs: quality
+    if: github.event_name == 'workflow_dispatch' && inputs.ios == true
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: ${{ env.PNPM_VERSION }}
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: pnpm
+      - name: Installer les dépendances
+        run: pnpm install --frozen-lockfile
+      - name: Choisir un simulateur iPhone 16 Pro
+        run: echo "SIMULATOR=platform=iOS Simulator,name=iPhone 16 Pro" >> "$GITHUB_ENV"
+      - name: Générer le projet natif
+        run: cd apps/mobile && npx expo prebuild -p ios --no-install
+      - name: Construire pour le simulateur
+        run: |
+          cd apps/mobile/ios
+          xcodebuild -workspace Learnry.xcworkspace -scheme Learnry \
+            -configuration Release -sdk iphonesimulator \
+            -derivedDataPath build CODE_SIGNING_ALLOWED=NO
+      - name: Installer Maestro
+        run: |
+          curl -fsSL https://get.maestro.mobile.dev | bash
+          echo "$HOME/.maestro/bin" >> "$GITHUB_PATH"
+      - name: Campagne Maestro sur simulateur
+        env:
+          MOBILE_PLATFORM: ios
+        run: |
+          xcrun simctl boot "iPhone 16 Pro" || true
+          xcrun simctl status_bar booted override --time 13:20 --batteryLevel 100 --wifiBars 3
+          xcrun simctl install booted apps/mobile/ios/build/Build/Products/Release-iphonesimulator/Learny.app
+          pnpm test:e2e:mobile --tags SPEC-3001
+      - name: Publier les preuves iOS
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: mobile-ios-evidence
+          path: |
+            test-results/sdd/
+            evidence/
+          retention-days: 14
+          if-no-files-found: warn

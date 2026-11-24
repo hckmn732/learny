@@ -1,0 +1,73 @@
+# SPEC-3303 — contexte transmis et nouvelle discussion (BR-TUT-02, CA-5, BR-TUT-06).
+#
+# La fiche du contexte est ouverte depuis la ligne « Contexte · N éléments », un élément est retiré :
+# la comparaison du flux est celle des états de la fiche, et le corps de la requête qui en résulte est
+# prouvé par l'intégration (`tutor.int.test.ts` → `evidence/SPEC-3303/tutor-context-request.json`).
+# « Nouvelle discussion » vide le fil sans écrire côté serveur (ET-1).
+#
+# Écarts consignés : la coupure réseau pendant le flux (mode avion) n'est pas automatisable ici —
+# l'émulateur est partagé par plusieurs spécifications et Maestro 2.12.1 ne pilote pas la radio ;
+# CA-4 est couvert par `stream-state.test.ts`, `conversation-controller.test.ts` (« Arrêter » puis
+# « Réessayer ») et le test Jest de la feuille.
+appId: fr.learny.app
+name: SPEC-3303 contexte
+tags:
+  - SPEC-3303
+---
+- launchApp:
+    clearState: true
+- extendedWaitUntil:
+    visible:
+      id: sdd-health
+    timeout: 30000
+- openLink: learny://connexion?demo=1
+- waitForAnimationToEnd:
+    timeout: 5000
+- runFlow:
+    when:
+      visible:
+        id: onboarding-error
+    commands:
+      - tapOn:
+          id: onboarding-error-retry
+- extendedWaitUntil:
+    visible:
+      id: tab-aujourdhui
+    timeout: 60000
+- openLink: learny://tuteur
+- extendedWaitUntil:
+    visible:
+      id: tutor-sheet
+    timeout: 30000
+# BR-TUT-02 — la ligne « Contexte · N éléments » et la fiche d'interrupteurs.
+- tapOn:
+    id: tutor-context
+- extendedWaitUntil:
+    visible:
+      id: tutor-context-sheet
+    timeout: 10000
+- assertVisible:
+    id: tutor-context-hint
+# Le premier élément proposé par le serveur est retiré du contexte (CA-5) : sa bascule reste visible
+# après le geste, et la fiche se referme par sa croix.
+- assertVisible:
+    id: tutor-context-formation
+- tapOn:
+    id: tutor-context-switch-formation
+- assertVisible:
+    id: tutor-context-formation
+- tapOn:
+    id: tutor-context-sheet-close
+- extendedWaitUntil:
+    notVisible:
+      id: tutor-context-sheet
+    timeout: 10000
+# BR-TUT-06 — « Nouvelle discussion » vide le fil, sans écriture côté serveur (ET-1).
+- tapOn:
+    id: tutor-new-discussion
+- extendedWaitUntil:
+    visible:
+      id: tutor-empty
+    timeout: 20000
+- assertVisible:
+    id: tutor-input

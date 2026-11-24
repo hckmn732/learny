@@ -156,3 +156,37 @@ export interface PlaywrightSummary {
 export function summarizePlaywright(report: unknown, tag: string): PlaywrightSummary;
 export function e2eVerdict(code: number, summary: PlaywrightSummary): boolean;
 export function visualVerdict(summary: PlaywrightSummary): boolean;
+
+export interface ValidationPlan {
+  track: string;
+  jest: string | null;
+  e2e: string;
+  visual: string;
+  e2eReport: string;
+}
+export function validationPlan(track: string): ValidationPlan;
+
+export interface JestSummary {
+  passed: number;
+  failed: number;
+}
+export function summarizeJest(report: unknown, tag: string): JestSummary;
+
+export interface MaestroFlowSummary {
+  name: string;
+  status: 'passed' | 'failed';
+  videos: number;
+  visual: boolean;
+  /** Étiquettes Maestro du flux (`visual`, `SPEC-xxxx`), telles que déclarées dans le YAML. */
+  tags?: readonly string[];
+}
+export interface MaestroSummary {
+  passed: number;
+  failed: number;
+  videos: number;
+  visual: number;
+  flows: MaestroFlowSummary[];
+}
+export function summarizeMaestro(report: unknown, tag: string): MaestroSummary;
+export function maestroVerdict(code: number, summary: MaestroSummary): boolean;
+export function mobileVisualVerdict(summary: MaestroSummary): boolean;

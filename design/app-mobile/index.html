@@ -1,0 +1,224 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Learny · maquettes app iOS et Android</title>
+<meta name="description" content="Proposition de maquettes natives iOS et Android pour l’application Learny : écrans, jetons et conventions de plateforme.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Space+Grotesk:wght@500;600;700&amp;display=swap">
+<link rel="stylesheet" href="assets/app.css">
+</head>
+<body class="board-page">
+<div class="board-wrap">
+
+  <header class="board-nav">
+    <div class="board-brand">
+      <span class="brand-tile" aria-hidden="true">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#111113" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19V6l8 6 8-6v13"></path></svg>
+      </span>
+      Learny <span>Design · application mobile</span>
+    </div>
+    <div class="board-meta">
+      <span class="chip">Proposition</span>
+      <span>21 novembre 2026</span>
+    </div>
+  </header>
+
+  <section class="board-hero">
+    <div>
+      <p class="eyebrow">iOS + Android</p>
+      <h1>Une même app,<br><em>deux grammaires</em> natives.</h1>
+      <p class="lede">Neuf écrans pour aller de la séance du jour au cours, au quiz et au tuteur. Même information, mêmes mots, mêmes jetons de marque — chaque plateforme garde ses conventions de navigation, de contrôles et de feuilles.</p>
+    </div>
+    <div class="hero-visual" aria-label="Aperçu comparé de l’écran Aujourd’hui sur iOS et Android">
+      <div id="compare-devices"></div>
+    </div>
+  </section>
+
+  <div class="fact-strip">
+    <div class="fact"><b>9</b><span>écrans, dont la variante tuteur ouvert</span></div>
+    <div class="fact"><b>2</b><span>plateformes : iOS et Android</span></div>
+    <div class="fact"><b>5</b><span>destinations : Aujourd’hui, Programme, Réviser, Agenda, Profil</span></div>
+    <div class="fact"><b>0</b><span>dépendance : HTML, CSS et JavaScript, ouverture directe</span></div>
+  </div>
+
+  <div class="board-toolbar">
+    <span class="label">Aperçu</span>
+    <div class="platform-switch" role="group" aria-label="Plateforme d’aperçu">
+      <button type="button" data-platform="ios" aria-pressed="true">iOS</button>
+      <button type="button" data-platform="android" aria-pressed="false">Android</button>
+    </div>
+    <span class="hint">Les 9 écrans basculent ensemble · <b id="platform-label">iOS</b></span>
+    <span class="spacer"></span>
+    <span class="hint">Cliquez dans un écran : onglets, quiz, tuteur, agenda et réglages répondent.</span>
+  </div>
+
+  <div class="gallery" id="gallery"></div>
+
+  <section class="section-block" aria-labelledby="t-prototype">
+    <p class="section-eyebrow">Prototype</p>
+    <h2 class="section-title" id="t-prototype">Chaque bouton répond</h2>
+    <p class="section-lede">La planche n’est pas une image : chaque téléphone garde un état local, les transitions sont animées et chaque action produit une feuille, un toast ou un changement d’état visible.</p>
+    <div class="principles four">
+      <article class="principle">
+        <span class="pnum">↗</span>
+        <h3>Navigation animée</h3>
+        <p>Onglets en fondu, écrans secondaires en glissement avant, retour en glissement arrière. La barre d’onglets reste stable.</p>
+      </article>
+      <article class="principle">
+        <span class="pnum">◫</span>
+        <h3>Feuilles de contexte</h3>
+        <p>Notifications, compte, séance, lacunes, import, réglages, déconnexion : une vingtaine de feuilles branchées, avec fermeture au fond ou par Échap.</p>
+      </article>
+      <article class="principle">
+        <span class="pnum">✓</span>
+        <h3>États de jeu</h3>
+        <p>Quiz, correction, résultat, cartes révélées, report de séance, filtre d’agenda et import simulé changent réellement l’écran.</p>
+      </article>
+      <article class="principle">
+        <span class="pnum">✦</span>
+        <h3>Tuteur conversationnel</h3>
+        <p>Suggestions, saisie libre, indicateur de frappe et réponse simulée avec sa source : le fil de discussion s’allonge pour de vrai.</p>
+      </article>
+    </div>
+    <p class="tiny" style="margin-top:14px">Aucune requête réseau · état en mémoire, rechargement = remise à zéro · <code>prefers-reduced-motion</code> respecté.</p>
+  </section>
+
+  <section class="section-block" aria-labelledby="t-principes">
+    <p class="section-eyebrow">Parti pris</p>
+    <h2 class="section-title" id="t-principes">Trois règles, zéro composant hybride</h2>
+    <div class="principles">
+      <article class="principle">
+        <span class="pnum">01</span>
+        <h3>Une seule architecture</h3>
+        <p>Cinq destinations, les mêmes parcours et les mêmes mots. Les écrans secondaires — cours, quiz, tuteur — s’empilent au-dessus de l’onglet, jamais à sa place.</p>
+      </article>
+      <article class="principle">
+        <span class="pnum">02</span>
+        <h3>Le natif par défaut</h3>
+        <p>Barre d’onglets translucide et feuilles à hauteur libre sur iOS ; barre de navigation Material, pastille d’onglet, FAB et bottom sheet sur Android. On ne déguise pas une plateforme en l’autre.</p>
+      </article>
+      <article class="principle">
+        <span class="pnum">03</span>
+        <h3>La marque comme fil</h3>
+        <p>Crème, encre et citron traversent les deux plateformes. Les échelles typographiques suivent HIG et Material 3 ; la voix, les textes et les données restent ceux de Learny.</p>
+      </article>
+    </div>
+  </section>
+
+  <section class="section-block" aria-labelledby="t-differences">
+    <p class="section-eyebrow">Différences assumées</p>
+    <h2 class="section-title" id="t-differences">Ce qui change, ce qui ne change pas</h2>
+    <p class="section-lede">La structure et le contenu sont communs. Le chrome, les contrôles et les gestes suivent la plateforme — c’est ce qui rend l’app crédible sur les deux stores.</p>
+    <div class="compare">
+      <div class="compare-head"><b>iOS</b><span>Human Interface Guidelines</span></div>
+      <div class="compare-head android"><b>Android</b><span>Material 3</span></div>
+
+      <div class="compare-row">
+        <div class="cell"><b>Navigation</b>Barre d’onglets 49 pt sur fond translucide, grandes feuilles, retour par chevron et balayage depuis le bord.</div>
+        <div class="cell android"><b>Navigation</b>Navigation bar 80 dp avec pastille active, top app bar, retour système et geste prédictif.</div>
+      </div>
+      <div class="compare-row">
+        <div class="cell"><b>Action principale</b>Bouton citron pleine largeur dans le contenu, action secondaire dans la barre de navigation.</div>
+        <div class="cell android"><b>Action principale</b>Bouton rempli et FAB pour créer une formation, actions dans la top app bar.</div>
+      </div>
+      <div class="compare-row">
+        <div class="cell"><b>Tuteur</b>Feuille modale à hauteur libre, poignée fine, fond assombri et flouté, fermeture par glissement.</div>
+        <div class="cell android"><b>Tuteur</b>Bottom sheet Material 28 dp, poignée, scrim, fermeture par glissement ou retour.</div>
+      </div>
+      <div class="compare-row">
+        <div class="cell"><b>Contrôles</b>Segmented control, interrupteur iOS, listes insérées à chevrons.</div>
+        <div class="cell android"><b>Contrôles</b>Segmented buttons, interrupteur Material, listes à icônes et en-têtes de groupe.</div>
+      </div>
+      <div class="compare-row">
+        <div class="cell"><b>Typographie</b>Titre large 34 pt, corps 16 pt, libellé 12 pt. Space Grotesk pour les titres, Inter pour le texte.</div>
+        <div class="cell android"><b>Typographie</b>Headline 31 sp, corps 16 sp, libellé 11 sp en capitales. Space Grotesk pour les titres, Inter pour le texte.</div>
+      </div>
+      <div class="compare-row">
+        <div class="cell"><b>Cibles tactiles</b>44 × 44 pt minimum, zones de barre d’onglets de 49 pt de haut.</div>
+        <div class="cell android"><b>Cibles tactiles</b>48 × 48 dp minimum, navigation bar de 80 dp, FAB de 56 dp.</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section-block" aria-labelledby="t-jetons">
+    <p class="section-eyebrow">Jetons</p>
+    <h2 class="section-title" id="t-jetons">La palette ne bouge pas</h2>
+    <p class="section-lede">Reprise des valeurs de <code>design/references/tokens.json</code>. Le citron reste réservé à l’action et à la progression ; l’orange signale ce qui demande attention ; l’indigo distingue le tuteur et les liens.</p>
+    <div class="tokens">
+      <div class="token"><div class="swatch" style="background:#F4F4F1"></div><div class="tname">Crème</div><div class="thex">#F4F4F1</div></div>
+      <div class="token"><div class="swatch" style="background:#111113"></div><div class="tname">Encre</div><div class="thex">#111113</div></div>
+      <div class="token"><div class="swatch" style="background:#C6F432"></div><div class="tname">Citron</div><div class="thex">#C6F432</div></div>
+      <div class="token"><div class="swatch" style="background:#5B5BD6"></div><div class="tname">Indigo</div><div class="thex">#5B5BD6</div></div>
+      <div class="token"><div class="swatch" style="background:#F97316"></div><div class="tname">Orange</div><div class="thex">#F97316</div></div>
+      <div class="token"><div class="swatch" style="background:#0F9F7F"></div><div class="tname">Vert</div><div class="thex">#0F9F7F</div></div>
+    </div>
+  </section>
+
+  <section class="section-block" aria-labelledby="t-typo">
+    <p class="section-eyebrow">Typographie</p>
+    <h2 class="section-title" id="t-typo">Deux échelles, une voix</h2>
+    <div class="typeset-grid">
+      <article class="typeset">
+        <h3><span class="brand-tile" style="width:24px;height:24px;border-radius:7px;font-size:0" aria-hidden="true"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#111113" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19V6l8 6 8-6v13"></path></svg></span>iOS</h3>
+        <div class="tr"><span>Titre large</span><b style="font-size:20px">34 pt</b></div>
+        <div class="tr"><span>Titre de section</span><b style="font-size:16px">20 pt</b></div>
+        <div class="tr"><span>Corps</span><b style="font-size:15px">16 pt</b></div>
+        <div class="tr"><span>Libellé</span><b style="font-size:12px">12 pt</b></div>
+        <div class="tr"><span>Cible tactile</span><b>44 pt</b></div>
+        <div class="tr"><span><em>Space Grotesk 600 · Inter 400/600</em></span></div>
+      </article>
+      <article class="typeset">
+        <h3><span class="brand-tile" style="width:24px;height:24px;border-radius:7px;background:#ECECFC;font-size:0" aria-hidden="true"><svg width="14" height="14" viewBox="0 0 24 24" fill="#3A3AA8"><path d="M12 3 3 7.5 12 12l9-4.5L12 3Zm-7 7.6v4.2c0 1.9 3.1 3.7 7 3.7s7-1.8 7-3.7v-4.2l-7 3.5-7-3.5Z"/></svg></span>Android</h3>
+        <div class="tr"><span>Headline</span><b style="font-size:19px">31 sp</b></div>
+        <div class="tr"><span>Titre de section</span><b style="font-size:15px">20 sp</b></div>
+        <div class="tr"><span>Corps</span><b style="font-size:15px">16 sp</b></div>
+        <div class="tr"><span>Libellé</span><b style="font-size:11px">11 sp</b></div>
+        <div class="tr"><span>Cible tactile</span><b>48 dp</b></div>
+        <div class="tr"><span><em>Space Grotesk 500 · Inter 400/500</em></span></div>
+      </article>
+    </div>
+  </section>
+
+  <section class="section-block" aria-labelledby="t-suite">
+    <p class="section-eyebrow">Suite</p>
+    <h2 class="section-title" id="t-suite">Ce qu’il reste à trancher</h2>
+    <div class="notes">
+      <article class="note-card">
+        <h3>Avant l’implémentation</h3>
+        <ul>
+          <li>Profondeur de navigation : une pile par onglet ou un parcours linéaire ?</li>
+          <li>Hors-ligne : cours, cartes et quiz doivent-ils rester consultables sans réseau ?</li>
+          <li>Notifications push : rappels de séance, série et bilan hebdomadaire.</li>
+          <li>Widgets et écran verrouillé : la prochaine séance et la série.</li>
+          <li>Tablette et pliage : une colonne ou deux ?</li>
+          <li>Technique : natif, Kotlin Multiplatform ou Flutter — la maquette est neutre.</li>
+        </ul>
+      </article>
+      <article class="note-card">
+        <h3>Déjà dans le cadre</h3>
+        <ul>
+          <li>Textes en français, identiques au web et aux maquettes existantes.</li>
+          <li>Jeu de données de démonstration : Alex Perrin, SAP S/4HANA Finance, 11 novembre 2026.</li>
+          <li>États pressés, sélectionnés, validés, verrouillés et vides amorcés.</li>
+          <li>Cibles tactiles et contrastes vérifiés à la conception, à recontrôler sur appareil.</li>
+          <li>Aucune modification des maquettes normatives : proposition dans un dossier séparé.</li>
+        </ul>
+      </article>
+    </div>
+  </section>
+
+  <footer class="board-footer">
+    <span>Learny · proposition de maquettes applicatives · 21 novembre 2026</span>
+    <span>Exports écran dans <code>exports/screens/</code> · maquettes web inchangées</span>
+  </footer>
+
+</div>
+
+<script src="assets/icons.js"></script>
+<script src="assets/screens.js"></script>
+<script src="assets/app.js"></script>
+</body>
+</html>

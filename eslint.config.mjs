@@ -7,6 +7,20 @@ import jsxA11y from 'eslint-plugin-jsx-a11y';
 import reactHooks from 'eslint-plugin-react-hooks';
 import tseslint from 'typescript-eslint';
 
+// Server-side packages the mobile client may never import (SPEC-3001 ET-3, ADR-1007).
+const MOBILE_SERVER_PACKAGES = [
+  '@learny/db',
+  '@learny/services',
+  '@learny/jobs',
+  '@learny/llm',
+  '@learny/tutor',
+  '@learny/ingestion',
+  '@learny/automations',
+  '@learny/notifications',
+  '@learny/http',
+  '@learny/api-routes',
+].flatMap((name) => [name, `${name}/*`]);
+
 const CLOCK_MESSAGE = 'Utiliser clock.now() de @learny/core (ADR-0047).';
 
 const NODE_GLOBALS = Object.fromEntries(
@@ -266,6 +280,8 @@ export default tseslint.config(
       '**/.next/**',
       '**/dist/**',
       '**/next-env.d.ts',
+      'apps/mobile/android/**',
+      'apps/mobile/.expo/**',
       'test-results/**',
       'coverage/**',
       'design/**',
@@ -876,6 +892,136 @@ export default tseslint.config(
         },
       ],
     },
+  },
+  {
+    // SPEC-3001 ET-3 — the mobile application is a client of the API (ADR-1007, ADR-3005): no
+    // server package, no Next/React DOM module, no Node builtin. The shared client packages and
+    // the pure token entry of @learny/ui are allowed.
+    files: ['apps/mobile/**/*.{ts,tsx}'],
+    rules: {
+      'no-restricted-imports': [
+        'error',
+        {
+          paths: [
+            ...AI_SDK_PATHS,
+            {
+              name: '@learny/core/server',
+              message: "@learny/mobile est un client : jamais l'entrée serveur de core (ET-3).",
+            },
+          ],
+          patterns: [
+            {
+              group: [...MOBILE_SERVER_PACKAGES, '@learny/web', '@learny/web/*'],
+              message:
+                'apps/mobile est un client (ADR-1007) : aucun paquet serveur, aucun import du web.',
+            },
+            {
+              group: ['next', 'next/*'],
+              message: 'apps/mobile ne peut importer aucun module Next (ET-3).',
+            },
+            {
+              group: ['react-dom', 'react-dom/*'],
+              message: 'apps/mobile ne peut importer react-dom (ET-3).',
+            },
+            {
+              group: ['node:*'],
+              message: 'apps/mobile ne peut importer aucun module Node (ET-3).',
+            },
+          ],
+        },
+      ],
+    },
+  },
+  {
+    // SPEC-3001 ET-4 — the application reads the time through src/lib/clock.ts only (ADR-0047).
+    files: ['apps/mobile/**/*.{ts,tsx}'],
+    ignores: ['apps/mobile/src/lib/clock.ts'],
+    rules: {
+      'no-restricted-syntax': [
+        'error',
+        {
+          selector: "CallExpression[callee.object.name='Date'][callee.property.name='now']",
+          message: 'Utiliser clock.now() de @learny/core via src/lib/clock.ts (ADR-0047).',
+        },
+        {
+          selector: "NewExpression[callee.name='Date'][arguments.length=0]",
+          message: 'Utiliser clock.now() de @learny/core via src/lib/clock.ts (ADR-0047).',
+        },
+      ],
+    },
+  },
+  {
+    // SPEC-3001 § 10 — colours and radii come from src/theme (itself built from @learny/ui/tokens).
+    files: ['apps/mobile/**/*.{ts,tsx}'],
+    ignores: [
+      'apps/mobile/src/theme/**',
+      'apps/mobile/**/*.test.{ts,tsx}',
+      'apps/mobile/e2e/**',
+      // The Expo configuration runs in the config loader, not in the bundle: it repeats the
+      // canvas colour of the theme because the token sources are not resolvable there.
+      'apps/mobile/app.config.ts',
+    ],
+    rules: {
+      'no-restricted-syntax': [
+        'error',
+        {
+          selector: 'Literal[value=/#[0-9A-Fa-f]{3,8}\\b/]',
+          message: 'Couleur hors du thème : importer src/theme (SPEC-3001 § 10).',
+        },
+        {
+          selector: 'TemplateElement[value.raw=/#[0-9A-Fa-f]{3,8}\\b/]',
+          message: 'Couleur hors du thème : importer src/theme (SPEC-3001 § 10).',
+        },
+      ],
+    },
+  },
+  {
+    // Unit tests of the mobile application run in Node (Vitest, canevas § 5): they read the
+    // design references (tokens, fonts) and drive ESLint to prove CA-5, which the application
+    // bundle never does. Only test files get this exemption: production code stays a pure
+    // client of the API (SPEC-3001 ET-3).
+    files: ['apps/mobile/src/**/*.test.ts', 'apps/mobile/test/**/*.{ts,tsx}'],
+    rules: { 'no-restricted-imports': 'off' },
+  },
+  {
+    // The icon set is generated from `design/app-mobile/assets/icons.js` (SPEC-3002 § 8.3): the
+    // brand marks of Apple and Google carry their own colours, and `Rect` attributes named `x`/`y`
+    // are the SVG geometry of the mockup, not the deprecated DOM props of the base rule.
+    files: ['apps/mobile/src/ui/icons.tsx'],
+    rules: { 'no-restricted-syntax': 'off', '@typescript-eslint/no-deprecated': 'off' },
+  },
+  {
+    // The Expo configuration files (Metro, Babel, Jest) and the asset stub are CommonJS.
+    files: [
+      'apps/mobile/*.config.js',
+      'apps/mobile/test/**/*.js',
+      'apps/mobile/e2e/**/*.mjs',
+      'apps/mobile/plugins/**/*.cjs',
+    ],
+    languageOptions: {
+      globals: {
+        module: 'writable',
+        exports: 'writable',
+        require: 'readonly',
+        __dirname: 'readonly',
+        process: 'readonly',
+        console: 'readonly',
+        Buffer: 'readonly',
+        fetch: 'readonly',
+        AbortSignal: 'readonly',
+        URL: 'readonly',
+        setTimeout: 'readonly',
+        clearTimeout: 'readonly',
+        setInterval: 'readonly',
+        clearInterval: 'readonly',
+      },
+    },
+  },
+  {
+    // The device agent, the Maestro runner and the build wrapper are Node programs of the e2e
+    // harness: out-of-product tooling, free to read the system time (like tools/sdd, ADR-0101).
+    files: ['apps/mobile/e2e/**/*.mjs'],
+    rules: { 'import/order': 'off', 'no-restricted-syntax': 'off' },
   },
   {
     // The clock module and the out-of-product SDD tooling may read the system time (ADR-0101).

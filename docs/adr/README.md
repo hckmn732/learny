@@ -263,3 +263,26 @@ Origine : **Validée** = décision prise avec le porteur du projet ; **Déduite*
 | [ADR-2042](ADR-2042-contrat-d-environnement-reduit-du-backend-python-variables-c.md) | Contrat d'environnement réduit du backend Python : variables conservées, dérivées et constantes | Déduite | SPEC-009, ADR-0227, ADR-0336, ADR-2005, ADR-2006, ADR-2011, ADR-2040, SPEC-2302 |
 | [ADR-2043](ADR-2043-backend-100-python-retrait-du-backend-typescript.md) | Backend 100 % Python, retrait du backend TypeScript | Déduite | SPEC-2302, ADR-2001, ADR-2005, ADR-2006, ADR-2008, ADR-2012, ADR-2019, ADR-2035, ADR-2041, ADR-2042 |
 | [ADR-2044](ADR-2044-renommage-de-l-arborescence-apps-api-apps-worker-et-python-l.md) | Renommage de l arborescence apps/api, apps/worker et python/learny | Déduite | ADR-2043, SPEC-2302 |
+| [ADR-3001](ADR-3001-piste-sdd-mobile-et-branche-mobile.md) | Piste SDD « mobile » sur la branche `mobile` | Validée | ADR-1004, ADR-1006, ADR-2001, SPEC-3001 |
+| [ADR-3002](ADR-3002-perimetre-v1-de-l-application-mobile-compagnon.md) | Périmètre V1 de l'application mobile : compagnon d'apprentissage (remplacée par ADR-4002) | Déduite | ADR-0005, ADR-1004, SPEC-3102 |
+| [ADR-3003](ADR-3003-maquette-mobile-de-reference-et-corrections-normatives.md) | Maquette mobile de référence et corrections normatives | Déduite | ADR-0034, SPEC-3002, SPEC-3304, SPEC-3305 |
+| [ADR-3004](ADR-3004-socle-technique-de-l-application-mobile.md) | Socle technique de l'application mobile | Déduite | ADR-1004, SPEC-3001, SPEC-3002, SPEC-3003 |
+| [ADR-3005](ADR-3005-paquets-partages-conserves-pour-le-client-mobile.md) | Paquets partagés conservés pour le client mobile | Déduite | ADR-1007, ADR-2004, SPEC-3001 |
+| [ADR-3006](ADR-3006-regles-des-stores-abonnement-et-suppression-de-compte.md) | Règles des stores : abonnement, suppression du compte et connexion tierce | Déduite | ADR-0215, SPEC-3401, SPEC-3402, SPEC-3502 |
+| [ADR-3007](ADR-3007-notifications-push-natives-par-fcm-et-apns.md) | Notifications push natives par FCM et APNs | Déduite | ADR-0055, ADR-2006, SPEC-3501 |
+| [ADR-3008](ADR-3008-authentification-et-session-de-l-application-mobile.md) | Authentification et session de l'application mobile | Déduite | ADR-1005, SPEC-3003, SPEC-3101, SPEC-3402 |
+| [ADR-3009](ADR-3009-rendu-natif-des-briques-et-du-markdown.md) | Rendu natif des briques et du Markdown | Déduite | ADR-0150, ADR-3004, SPEC-3301 |
+| [ADR-3010](ADR-3010-adaptations-tactiles-des-interactions-du-web.md) | Adaptations tactiles des interactions du web | Déduite | ADR-3003, SPEC-3302, SPEC-3303 |
+| [ADR-3011](ADR-3011-connexion-apple-et-google-sur-mobile.md) | Connexion avec Apple et Google sur l'application mobile | Déduite | ADR-0007, ADR-3006, SPEC-3402 |
+| [ADR-3012](ADR-3012-execution-des-validations-mobiles-et-compatibilite-babel.md) | Exécution des validations mobiles sur une VM séparée (agent appareil) et compatibilité Babel/React Native | Déduite | ADR-1007, ADR-3004, ADR-3005, SPEC-3001 |
+| [ADR-3013](ADR-3013-theme-natif-composants-et-galerie-de-la-piste-mobile.md) | Thème natif, composants et galerie de la piste mobile | Déduite | ADR-3003, ADR-3004, ADR-0131, SPEC-3002 |
+| [ADR-3014](ADR-3014-client-api-mobile-session-et-cache-hors-ligne.md) | Client API mobile, session et cache hors ligne | Déduite | ADR-1005, ADR-3004, ADR-3005, ADR-3008, SPEC-3003 |
+| [ADR-3015](ADR-3015-outillage-e2e-mobile-jobs-asynchrones-et-artefacts-par-flux.md) | Outillage e2e mobile : jobs asynchrones et artefacts par flux | Déduite | ADR-3004, ADR-3012, SPEC-3001, SPEC-3002, SPEC-3003 |
+| [ADR-3016](ADR-3016-checkpoint-mobile-agregation-des-preuves-de-campagne.md) | Checkpoint d'une phase mobile : agrégation des preuves de campagne | Déduite | ADR-3001, ADR-3004, ADR-3012, ADR-3015 |
+| [ADR-3018](ADR-3018-environnement-mobile-sur-une-vm-unique-avec-emulateur-local.md) | Environnement mobile sur une VM unique avec émulateur local | Validée | ADR-3004, ADR-3012, ADR-3015, ADR-3016, SPEC-3001 |
+| [ADR-3020](ADR-3020-feuille-du-tuteur-mobile-sans-post-tutor-cards.md) | Feuille du tuteur mobile sans POST /tutor/cards | Déduite | SPEC-3303, SPEC-717, ADR-0193, ADR-3010, ADR-3018 |
+| [ADR-3021](ADR-3021-conformite-visuelle-du-tuteur-mobile-ligne-de-base-versionnee.md) | Conformité visuelle du tuteur : ligne de base versionnée, pas superposition à l'export | Déduite | SPEC-3303, ADR-3003, ADR-3019 |
+| [ADR-3024](ADR-3024-profil-mobile-ligne-de-base-selection-de-date-et-suppression.md) | Profil mobile : ligne de base versionnée, sélecteur de date borné et suppression bloquée côté serveur | Déduite | SPEC-3401, ADR-3001, ADR-3003, ADR-3022 |
+| [ADR-4001](ADR-4001-piste-sdd-mode-simple-sur-la-branche-mobile.md) | Piste SDD « mode-simple » sur la branche `mobile` | Validée | ADR-1006, ADR-3001, ADR-4002, ADR-4003, SPEC-4001, SPEC-4002, SPEC-4003 |
+| [ADR-4002](ADR-4002-application-mobile-iso-web-en-fonctionnalites.md) | Application mobile iso web en fonctionnalités (remplace ADR-3002) | Validée | ADR-3002, ADR-3001, ADR-3003, ADR-3006, ADR-4001, ADR-4003, SPEC-4003 |
+| [ADR-4003](ADR-4003-mode-simple-creation-d-une-formation-par-depot-de-documents.md) | Mode simple : création d'une formation par dépôt de documents | Validée | ADR-0005, ADR-0008, ADR-0039, ADR-0340, ADR-4001, ADR-4002, SPEC-605, SPEC-607, SPEC-608, SPEC-4001, SPEC-4002, SPEC-4003 |

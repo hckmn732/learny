@@ -2,7 +2,7 @@
   "project": "Learny",
   "version": 1,
   "generatedOn": "2026-11-11",
-  "activeTrack": "python-migration",
+  "activeTrack": "mobile",
   "tracks": {
     "produit": {
       "baseBranch": "main",
@@ -17,6 +17,16 @@
       "baseBranch": "main",
       "versionTags": false,
       "adrBase": 2000
+    },
+    "mobile": {
+      "baseBranch": "mobile",
+      "versionTags": false,
+      "adrBase": 3000
+    },
+    "mode-simple": {
+      "baseBranch": "mobile",
+      "versionTags": false,
+      "adrBase": 4000
     }
   },
   "phases": [
@@ -153,6 +163,58 @@
         "cross-browser",
         "perf"
       ]
+    },
+    {
+      "id": "P30",
+      "dir": "p30-mobile-socle",
+      "title": "Mobile — socle Expo, design system natif et données",
+      "checkpoint": "CP-30",
+      "track": "mobile"
+    },
+    {
+      "id": "P31",
+      "dir": "p31-mobile-acces",
+      "title": "Mobile — accès et coquille",
+      "checkpoint": "CP-31",
+      "track": "mobile"
+    },
+    {
+      "id": "P32",
+      "dir": "p32-mobile-quotidien",
+      "title": "Mobile — Aujourd’hui, Programme et Agenda",
+      "checkpoint": "CP-32",
+      "track": "mobile"
+    },
+    {
+      "id": "P33",
+      "dir": "p33-mobile-apprentissage",
+      "title": "Mobile — cours, tuteur, quiz et révisions",
+      "checkpoint": "CP-33",
+      "track": "mobile"
+    },
+    {
+      "id": "P34",
+      "dir": "p34-mobile-compte",
+      "title": "Mobile — profil, réglages et connexion tierce",
+      "checkpoint": "CP-34",
+      "track": "mobile"
+    },
+    {
+      "id": "P35",
+      "dir": "p35-mobile-notifications-livraison",
+      "title": "Mobile — notifications push et publication (exige CP-23)",
+      "checkpoint": "CP-35",
+      "track": "mobile",
+      "requires": [
+        "CP-23"
+      ]
+    },
+    {
+      "id": "P40",
+      "dir": "p40-mode-simple",
+      "title": "Mode simple — lot 1 : dépôt de documents et formation automatique (web et mobile)",
+      "checkpoint": "CP-40",
+      "track": "mode-simple"
     }
   ],
   "specs": [
@@ -4771,6 +4833,761 @@
         "e2e": true,
         "visual": "demo",
         "acceptance": true
+      }
+    },
+    {
+      "id": "SPEC-3001",
+      "phase": "P30",
+      "title": "Application Expo, intégration au monorepo et outillage SDD mobile",
+      "priority": "mobile",
+      "dependsOn": [],
+      "businessRules": [
+        "BR-PLA-03"
+      ],
+      "screens": [],
+      "adrs": [
+        "ADR-1004",
+        "ADR-1007",
+        "ADR-3001",
+        "ADR-3003",
+        "ADR-3004",
+        "ADR-3005"
+      ],
+      "visual": "demo",
+      "path": "specs/p30-mobile-socle/SPEC-3001-application-expo-monorepo-et-outillage-sdd-mobile.md",
+      "scope": "Créer l'application `apps/mobile` (Expo, React Native, TypeScript strict) intégrée au monorepo pnpm/Turborepo, et rendre la boucle SDD capable de valider une spécification mobile : tests Jest, flux Maestro avec vidéo, comparaison visuelle et preuves, localement et en CI.",
+      "validation": {
+        "unit": true,
+        "integration": true,
+        "e2e": true,
+        "visual": "demo",
+        "acceptance": true
+      }
+    },
+    {
+      "id": "SPEC-3002",
+      "phase": "P30",
+      "title": "Thème, jetons et composants natifs iOS et Android",
+      "priority": "mobile",
+      "dependsOn": [
+        "SPEC-3001"
+      ],
+      "businessRules": [
+        "BR-PLA-02",
+        "BR-PLA-03"
+      ],
+      "screens": [],
+      "adrs": [
+        "ADR-3003",
+        "ADR-3004",
+        "ADR-0131"
+      ],
+      "visual": "demo",
+      "path": "specs/p30-mobile-socle/SPEC-3002-theme-jetons-et-composants-natifs.md",
+      "scope": "Livrer le thème de l'application (couleurs, typographies iOS et Android, rayons, espacements, ombres, mouvements) dérivé de `@learny/ui/tokens`, les polices embarquées, le jeu d'icônes et la bibliothèque de composants natifs utilisés par tous les écrans, avec une galerie de démonstration dans l'application.",
+      "validation": {
+        "unit": true,
+        "integration": true,
+        "e2e": true,
+        "visual": "demo",
+        "acceptance": true
+      }
+    },
+    {
+      "id": "SPEC-3003",
+      "phase": "P30",
+      "title": "Client d'API, session sécurisée et cache hors ligne",
+      "priority": "mobile",
+      "dependsOn": [
+        "SPEC-3001"
+      ],
+      "businessRules": [
+        "BR-ACC-07",
+        "BR-PLA-08"
+      ],
+      "screens": [],
+      "adrs": [
+        "ADR-1005",
+        "ADR-1007",
+        "ADR-1009",
+        "ADR-3004",
+        "ADR-3005",
+        "ADR-3008"
+      ],
+      "visual": "demo",
+      "path": "specs/p30-mobile-socle/SPEC-3003-client-d-api-session-et-cache-hors-ligne.md",
+      "scope": "Brancher l'application sur l'API `/api/v1` : instance de `@learny/api-client` avec Bearer, renouvellement du jeton, flux SSE par `expo/fetch`, session Supabase stockée chiffrée, TanStack Query avec cache persistant, gestion du réseau et traduction des erreurs. Toutes les spécifications d'écran s'appuient sur ce socle.",
+      "validation": {
+        "unit": true,
+        "integration": true,
+        "e2e": true,
+        "visual": "demo",
+        "acceptance": true
+      }
+    },
+    {
+      "id": "SPEC-3101",
+      "phase": "P31",
+      "title": "Connexion, inscription et lien magique",
+      "priority": "mobile",
+      "dependsOn": [
+        "SPEC-3002",
+        "SPEC-3003"
+      ],
+      "businessRules": [
+        "BR-ACC-01",
+        "BR-ACC-02",
+        "BR-ACC-03",
+        "BR-ACC-09",
+        "BR-PLA-05",
+        "BR-PLA-06"
+      ],
+      "screens": [
+        "SCR-01"
+      ],
+      "adrs": [
+        "ADR-0007",
+        "ADR-0121",
+        "ADR-1005",
+        "ADR-3003",
+        "ADR-3006",
+        "ADR-3008"
+      ],
+      "visual": "mockup",
+      "path": "specs/p31-mobile-acces/SPEC-3101-connexion-inscription-et-lien-magique.md",
+      "scope": "Permettre de se connecter, de créer un compte et de recevoir un lien magique depuis l'application, d'ouvrir ce lien dans l'application, d'accepter les CGU et de se déconnecter, avec les mêmes règles et les mêmes messages que le web.",
+      "validation": {
+        "unit": true,
+        "integration": true,
+        "e2e": true,
+        "visual": "mockup",
+        "acceptance": true
+      }
+    },
+    {
+      "id": "SPEC-3102",
+      "phase": "P31",
+      "title": "Coquille, onglets natifs, compte et centre de notifications",
+      "priority": "mobile",
+      "dependsOn": [
+        "SPEC-3101"
+      ],
+      "businessRules": [
+        "BR-ACC-04",
+        "BR-NAV-01",
+        "BR-NOT-01",
+        "BR-NOT-02",
+        "BR-PLA-02"
+      ],
+      "screens": [
+        "SCR-03",
+        "SCR-20"
+      ],
+      "adrs": [
+        "ADR-3002",
+        "ADR-3003",
+        "ADR-3004",
+        "ADR-0046"
+      ],
+      "visual": "mockup",
+      "path": "specs/p31-mobile-acces/SPEC-3102-coquille-onglets-natifs-et-notifications.md",
+      "scope": "Livrer la structure de navigation de l'application : cinq onglets natifs avec une pile par onglet, l'en-tête commun (cloche et compte), la feuille « Mon compte », le centre de notifications, la garde d'onboarding, les états communs (chargement, erreur, hors ligne) et le mécanisme « Continuer sur le web ».",
+      "validation": {
+        "unit": true,
+        "integration": true,
+        "e2e": true,
+        "visual": "mockup",
+        "acceptance": true
+      }
+    },
+    {
+      "id": "SPEC-3201",
+      "phase": "P32",
+      "title": "Écran Aujourd'hui",
+      "priority": "mobile",
+      "dependsOn": [
+        "SPEC-3102"
+      ],
+      "businessRules": [
+        "BR-PRO-02",
+        "BR-AUT-01",
+        "BR-AUT-12",
+        "BR-AUT-13",
+        "BR-GAM-01",
+        "BR-GAM-02",
+        "BR-MEM-06"
+      ],
+      "screens": [
+        "SCR-03"
+      ],
+      "adrs": [
+        "ADR-3002",
+        "ADR-3003",
+        "ADR-3005",
+        "ADR-0190"
+      ],
+      "visual": "mockup",
+      "path": "specs/p32-mobile-quotidien/SPEC-3201-ecran-aujourd-hui.md",
+      "scope": "Livrer l'onglet Aujourd'hui : la séance du jour mise en avant, les indicateurs série, rétention et lacunes, les actions du tuteur à accepter ou annuler et la suite de la journée, avec les fiches de détail et le report de séance.",
+      "validation": {
+        "unit": true,
+        "integration": true,
+        "e2e": true,
+        "visual": "mockup",
+        "acceptance": true
+      }
+    },
+    {
+      "id": "SPEC-3202",
+      "phase": "P32",
+      "title": "Programme, modules et chapitres en lecture",
+      "priority": "mobile",
+      "dependsOn": [
+        "SPEC-3102"
+      ],
+      "businessRules": [
+        "BR-PRO-01",
+        "BR-FOR-05",
+        "BR-FOR-07",
+        "BR-FOR-08",
+        "BR-FOR-11",
+        "BR-COU-08"
+      ],
+      "screens": [
+        "SCR-05",
+        "SCR-06"
+      ],
+      "adrs": [
+        "ADR-3002",
+        "ADR-3003"
+      ],
+      "visual": "mockup",
+      "path": "specs/p32-mobile-quotidien/SPEC-3202-programme-modules-et-chapitres.md",
+      "scope": "Livrer l'onglet Programme : la formation en cours avec son avancement, la liste des modules (statuts validé, en cours, verrouillé) et de leurs chapitres, la reprise du chapitre en cours, la vue calendrier, le changement de formation et les renvois au web pour la création et l'import.",
+      "validation": {
+        "unit": true,
+        "integration": true,
+        "e2e": true,
+        "visual": "mockup",
+        "acceptance": true
+      }
+    },
+    {
+      "id": "SPEC-3203",
+      "phase": "P32",
+      "title": "Agenda jour, semaine, mois et replanification",
+      "priority": "mobile",
+      "dependsOn": [
+        "SPEC-3102"
+      ],
+      "businessRules": [
+        "BR-AGE-01",
+        "BR-AGE-02",
+        "BR-AGE-04",
+        "BR-AGE-05",
+        "BR-AGE-06",
+        "BR-AGE-07"
+      ],
+      "screens": [
+        "SCR-12"
+      ],
+      "adrs": [
+        "ADR-3002",
+        "ADR-3003",
+        "ADR-0029"
+      ],
+      "visual": "mockup",
+      "path": "specs/p32-mobile-quotidien/SPEC-3203-agenda.md",
+      "scope": "Livrer l'onglet Agenda : vues Jour, Semaine et Mois communes à toutes les formations, filtre par formation, détail d'une activité avec « Ouvrir » et « Replanifier » (trois créneaux proposés), conformes à la maquette et aux règles de l'agenda web.",
+      "validation": {
+        "unit": true,
+        "integration": true,
+        "e2e": true,
+        "visual": "mockup",
+        "acceptance": true
+      }
+    },
+    {
+      "id": "SPEC-3301",
+      "phase": "P33",
+      "title": "Rendu natif des briques et du Markdown",
+      "priority": "mobile",
+      "dependsOn": [
+        "SPEC-3002",
+        "SPEC-3003"
+      ],
+      "businessRules": [
+        "BR-BRI-01",
+        "BR-BRI-02",
+        "BR-BRI-08",
+        "BR-MEM-05",
+        "BR-MEM-10",
+        "BR-COU-02"
+      ],
+      "screens": [],
+      "adrs": [
+        "ADR-0027",
+        "ADR-0150",
+        "ADR-3004",
+        "ADR-3005",
+        "ADR-3009"
+      ],
+      "visual": "demo",
+      "path": "specs/p33-mobile-apprentissage/SPEC-3301-rendu-natif-des-briques.md",
+      "scope": "Livrer les composants natifs qui affichent et font jouer les briques reçues de l'API (charges publiques) ainsi que le rendu Markdown, avec un registre unique couvrant les treize types, pour qu'un même composant serve au cours, au quiz de validation, au quiz global et à l'échauffement.",
+      "validation": {
+        "unit": true,
+        "integration": true,
+        "e2e": true,
+        "visual": "demo",
+        "acceptance": true
+      }
+    },
+    {
+      "id": "SPEC-3302",
+      "phase": "P33",
+      "title": "Lecture du cours",
+      "priority": "mobile",
+      "dependsOn": [
+        "SPEC-3301",
+        "SPEC-3202"
+      ],
+      "businessRules": [
+        "BR-COU-02",
+        "BR-COU-04",
+        "BR-COU-05",
+        "BR-COU-06",
+        "BR-COU-07",
+        "BR-COU-08",
+        "BR-COU-09",
+        "BR-COU-11",
+        "BR-NAV-04"
+      ],
+      "screens": [
+        "SCR-07"
+      ],
+      "adrs": [
+        "ADR-3002",
+        "ADR-3003",
+        "ADR-3009",
+        "ADR-3010"
+      ],
+      "visual": "mockup",
+      "path": "specs/p33-mobile-apprentissage/SPEC-3302-lecture-du-cours.md",
+      "scope": "Livrer l'écran Cours : lecture d'un chapitre du cours d'un module, progression de lecture enregistrée, navigation entre chapitres, blocs pédagogiques, citations des sources, signalement d'erreur, résumé de fin de chapitre et accès au tuteur et au quiz.",
+      "validation": {
+        "unit": true,
+        "integration": true,
+        "e2e": true,
+        "visual": "mockup",
+        "acceptance": true
+      }
+    },
+    {
+      "id": "SPEC-3303",
+      "phase": "P33",
+      "title": "Discussion avec le tuteur",
+      "priority": "mobile",
+      "dependsOn": [
+        "SPEC-3302"
+      ],
+      "businessRules": [
+        "BR-TUT-01",
+        "BR-TUT-02",
+        "BR-TUT-03",
+        "BR-TUT-04",
+        "BR-TUT-06",
+        "BR-TUT-07",
+        "BR-AUT-06",
+        "BR-ACC-05"
+      ],
+      "screens": [
+        "SCR-07"
+      ],
+      "adrs": [
+        "ADR-0040",
+        "ADR-3003",
+        "ADR-3004",
+        "ADR-3008",
+        "ADR-3010"
+      ],
+      "visual": "mockup",
+      "path": "specs/p33-mobile-apprentissage/SPEC-3303-discussion-avec-le-tuteur.md",
+      "scope": "Livrer la feuille du tuteur ouverte depuis le cours : envoi d'une question, réponse diffusée en flux avec ses sources, suites proposées, « Teste-moi », création d'une carte de rappel, historique de la discussion et contexte transmis.",
+      "validation": {
+        "unit": true,
+        "integration": true,
+        "e2e": true,
+        "visual": "mockup",
+        "acceptance": true
+      }
+    },
+    {
+      "id": "SPEC-3304",
+      "phase": "P33",
+      "title": "Quiz de validation et résultat",
+      "priority": "mobile",
+      "dependsOn": [
+        "SPEC-3301",
+        "SPEC-3202"
+      ],
+      "businessRules": [
+        "BR-QUI-01",
+        "BR-QUI-02",
+        "BR-QUI-04",
+        "BR-QUI-05",
+        "BR-QUI-06",
+        "BR-QUI-07",
+        "BR-QUI-08",
+        "BR-AUT-04"
+      ],
+      "screens": [
+        "SCR-09"
+      ],
+      "adrs": [
+        "ADR-0014",
+        "ADR-3002",
+        "ADR-3003",
+        "ADR-3009"
+      ],
+      "visual": "mockup",
+      "path": "specs/p33-mobile-apprentissage/SPEC-3304-quiz-de-validation-et-resultat.md",
+      "scope": "Livrer le quiz de validation d'un module sur mobile : démarrage ou reprise d'une tentative, réponse question par question avec « Vérifier » et correction immédiate, soumission, écran de résultat et suites (module suivant, remédiation, nouvelle tentative).",
+      "validation": {
+        "unit": true,
+        "integration": true,
+        "e2e": true,
+        "visual": "mockup",
+        "acceptance": true
+      }
+    },
+    {
+      "id": "SPEC-3305",
+      "phase": "P33",
+      "title": "Réviser — quiz global, échauffement et jeu hors ligne",
+      "priority": "mobile",
+      "dependsOn": [
+        "SPEC-3301",
+        "SPEC-3201"
+      ],
+      "businessRules": [
+        "BR-MEM-02",
+        "BR-MEM-03",
+        "BR-MEM-05",
+        "BR-MEM-08",
+        "BR-MEM-10",
+        "BR-AUT-03",
+        "BR-AUT-07",
+        "BR-GAM-02",
+        "BR-PLA-01"
+      ],
+      "screens": [
+        "SCR-10"
+      ],
+      "adrs": [
+        "ADR-0037",
+        "ADR-3002",
+        "ADR-3003",
+        "ADR-3005",
+        "ADR-3009"
+      ],
+      "visual": "mockup",
+      "path": "specs/p33-mobile-apprentissage/SPEC-3305-reviser-quiz-global-echauffement-hors-ligne.md",
+      "scope": "Livrer l'onglet Réviser : la session de quiz global du jour (tous les jeux, rail, raison du tuteur, auto-évaluation des cartes, écran de fin), l'échauffement (« À revoir » / « Je savais ») et le jeu hors ligne avec correction locale, file des réponses et synchronisation, équivalents au web (SPEC-701, SPEC-702, SPEC-714, SPEC-801).",
+      "validation": {
+        "unit": true,
+        "integration": true,
+        "e2e": true,
+        "visual": "mockup",
+        "acceptance": true
+      }
+    },
+    {
+      "id": "SPEC-3401",
+      "phase": "P34",
+      "title": "Profil, réglages, pause et confidentialité",
+      "priority": "mobile",
+      "dependsOn": [
+        "SPEC-3102"
+      ],
+      "businessRules": [
+        "BR-ACC-05",
+        "BR-ACC-08",
+        "BR-ACC-10",
+        "BR-ACC-11",
+        "BR-ACC-12",
+        "BR-SET-02",
+        "BR-SET-03",
+        "BR-SET-05",
+        "BR-SET-06",
+        "BR-AUT-10"
+      ],
+      "screens": [
+        "SCR-15"
+      ],
+      "adrs": [
+        "ADR-0044",
+        "ADR-0340",
+        "ADR-3002",
+        "ADR-3003",
+        "ADR-3006"
+      ],
+      "visual": "mockup",
+      "path": "specs/p34-mobile-compte/SPEC-3401-profil-reglages-et-confidentialite.md",
+      "scope": "Livrer l'onglet Profil : identité et indicateurs, réglages du profil et du rythme, des notifications et des modèles d'IA, statut d'abonnement, mise en pause, export des données, suppression du compte, aide et pages légales, déconnexion.",
+      "validation": {
+        "unit": true,
+        "integration": true,
+        "e2e": true,
+        "visual": "mockup",
+        "acceptance": true
+      }
+    },
+    {
+      "id": "SPEC-3402",
+      "phase": "P34",
+      "title": "Connexion avec Apple et Google",
+      "priority": "mobile",
+      "dependsOn": [
+        "SPEC-3101"
+      ],
+      "businessRules": [
+        "BR-ACC-02",
+        "BR-ACC-03",
+        "BR-PLA-05"
+      ],
+      "screens": [
+        "SCR-01"
+      ],
+      "adrs": [
+        "ADR-0007",
+        "ADR-3003",
+        "ADR-3006",
+        "ADR-3008",
+        "ADR-3011"
+      ],
+      "visual": "mockup",
+      "path": "specs/p34-mobile-compte/SPEC-3402-connexion-avec-apple-et-google.md",
+      "scope": "Ajouter « Continuer avec Apple » et « Continuer avec Google » à l'écran de connexion mobile, conformément à la maquette et aux règles des stores, sans nouvelle route d'API : identité native puis `signInWithIdToken` de Supabase Auth.",
+      "validation": {
+        "unit": true,
+        "integration": true,
+        "e2e": true,
+        "visual": "mockup",
+        "acceptance": true
+      }
+    },
+    {
+      "id": "SPEC-3501",
+      "phase": "P35",
+      "title": "Notifications push natives (FCM et APNs)",
+      "priority": "mobile",
+      "dependsOn": [
+        "SPEC-3401"
+      ],
+      "businessRules": [
+        "BR-NOT-02",
+        "BR-NOT-03",
+        "BR-NOT-04",
+        "BR-NOT-05",
+        "BR-NOT-06",
+        "BR-NOT-07",
+        "BR-SET-03"
+      ],
+      "screens": [
+        "SCR-15"
+      ],
+      "adrs": [
+        "ADR-0031",
+        "ADR-0055",
+        "ADR-2006",
+        "ADR-2011",
+        "ADR-3001",
+        "ADR-3007"
+      ],
+      "visual": "mockup",
+      "path": "specs/p35-mobile-notifications-livraison/SPEC-3501-notifications-push-natives.md",
+      "scope": "Envoyer les notifications hors application sur les téléphones : enregistrement du jeton natif par l'application, canaux `apns` et `fcm` dans le worker Python soumis aux mêmes règles que le Web Push, ouverture de l'écran concerné au toucher, réglage dans Profil → Notifications.",
+      "validation": {
+        "unit": true,
+        "integration": true,
+        "e2e": true,
+        "visual": "mockup",
+        "acceptance": true
+      }
+    },
+    {
+      "id": "SPEC-3502",
+      "phase": "P35",
+      "title": "Accessibilité, performances et publication sur les stores",
+      "priority": "mobile",
+      "dependsOn": [
+        "SPEC-3203",
+        "SPEC-3303",
+        "SPEC-3304",
+        "SPEC-3305",
+        "SPEC-3402",
+        "SPEC-3501"
+      ],
+      "businessRules": [
+        "BR-PLA-02",
+        "BR-PLA-03",
+        "BR-PLA-04",
+        "BR-PLA-05",
+        "BR-PLA-07"
+      ],
+      "screens": [],
+      "adrs": [
+        "ADR-0041",
+        "ADR-3003",
+        "ADR-3004",
+        "ADR-3006",
+        "ADR-3007"
+      ],
+      "visual": "demo",
+      "path": "specs/p35-mobile-notifications-livraison/SPEC-3502-accessibilite-performances-et-publication.md",
+      "scope": "Rendre l'application publiable : audit d'accessibilité sur appareil (VoiceOver, TalkBack, texte agrandi), budgets de performance mesurés, parcours de bout en bout complet sur iOS et Android, builds de production signés, fiches de confidentialité et diffusion en test interne (TestFlight, Google Play test interne).",
+      "validation": {
+        "unit": true,
+        "integration": true,
+        "e2e": true,
+        "visual": "demo",
+        "acceptance": true
+      }
+    },
+    {
+      "id": "SPEC-4001",
+      "phase": "P40",
+      "title": "Mode simple — backend et contrat",
+      "dependsOn": [],
+      "businessRules": [
+        "BR-FOR-01",
+        "BR-FOR-02",
+        "BR-FOR-04",
+        "BR-FOR-05",
+        "BR-FOR-10",
+        "BR-FOR-16",
+        "BR-APP-01",
+        "BR-APP-02",
+        "BR-APP-03",
+        "BR-APP-04",
+        "BR-APP-06",
+        "BR-APP-07",
+        "BR-IA-06",
+        "BR-IA-08",
+        "BR-IA-10",
+        "BR-IA-11",
+        "BR-IA-12",
+        "BR-IA-13",
+        "BR-MEM-03"
+      ],
+      "screens": [],
+      "adrs": [
+        "ADR-4001",
+        "ADR-4002",
+        "ADR-4003",
+        "ADR-0008",
+        "ADR-0039",
+        "ADR-0340",
+        "ADR-2011",
+        "ADR-2014"
+      ],
+      "visual": "demo",
+      "path": "specs/p40-mode-simple/SPEC-4001-mode-simple-backend-et-contrat.md",
+      "scope": "Contrat et backend Python du mode simple : création, dépôt multiple avec rôles, analyse (structure, résumés, programme tiré du document), échéance, validation avec génération progressive, diagnostic global.",
+      "priority": "mode-simple",
+      "validation": {
+        "unit": true,
+        "integration": true,
+        "e2e": true,
+        "acceptance": true,
+        "visual": "demo"
+      }
+    },
+    {
+      "id": "SPEC-4002",
+      "phase": "P40",
+      "title": "Mode simple — parcours web « Dépose ton cours »",
+      "dependsOn": [
+        "SPEC-4001"
+      ],
+      "businessRules": [
+        "BR-FOR-04",
+        "BR-FOR-13",
+        "BR-FOR-16",
+        "BR-APP-01",
+        "BR-APP-02",
+        "BR-APP-07",
+        "BR-IA-06",
+        "BR-PLA-03"
+      ],
+      "screens": [
+        "SCR-03",
+        "SCR-21",
+        "SCR-22",
+        "SCR-23",
+        "SCR-24"
+      ],
+      "adrs": [
+        "ADR-4002",
+        "ADR-4003",
+        "ADR-0034",
+        "ADR-0046"
+      ],
+      "visual": "mockup",
+      "path": "specs/p40-mode-simple/SPEC-4002-mode-simple-parcours-web.md",
+      "scope": "Accueil à deux cartes, dépôt, analyse, aperçu avec échéance, diagnostic et premier chapitre sur le web, conformes à design/mode-simple.",
+      "priority": "mode-simple",
+      "validation": {
+        "unit": true,
+        "integration": true,
+        "e2e": true,
+        "acceptance": true,
+        "visual": "mockup"
+      }
+    },
+    {
+      "id": "SPEC-4003",
+      "phase": "P40",
+      "title": "Mode simple — parcours mobile iOS et Android",
+      "dependsOn": [
+        "SPEC-4001"
+      ],
+      "businessRules": [
+        "BR-FOR-04",
+        "BR-FOR-16",
+        "BR-APP-01",
+        "BR-APP-02",
+        "BR-APP-07",
+        "BR-IA-06",
+        "BR-PLA-03"
+      ],
+      "screens": [
+        "SCR-03",
+        "SCR-21",
+        "SCR-22",
+        "SCR-23",
+        "SCR-24"
+      ],
+      "adrs": [
+        "ADR-4002",
+        "ADR-4003",
+        "ADR-3003",
+        "ADR-3004",
+        "ADR-3008",
+        "ADR-3014",
+        "ADR-3015"
+      ],
+      "visual": "mockup",
+      "path": "specs/p40-mode-simple/SPEC-4003-mode-simple-parcours-mobile.md",
+      "scope": "Même parcours que le web sur iOS et Android (ADR-4002) : sélecteurs natifs, photos de pages, partage vers Learny, téléversement reprenable ; parité prouvée.",
+      "priority": "mode-simple",
+      "validation": {
+        "unit": true,
+        "integration": true,
+        "e2e": true,
+        "acceptance": true,
+        "visual": "mockup"
       }
     }
   ]

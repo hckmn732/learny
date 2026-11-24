@@ -1,0 +1,133 @@
+# SPEC-3304 — quiz de validation : en-tête, correction immédiate, sortie confirmée et reprise.
+#
+# Unique flux `@visual` de la spécification (leçon 6 du BRIEF, ADR-3015 § 5) : la capture montre la
+# question 3 sur 10 de la maquette `design/app-mobile/exports/screens/android-05-quiz.png`, avec les
+# corrections d'ADR-3003 § 2 (pas de chronomètre, « Vérifier » au lieu de « Valider », mention
+# BR-QUI-07) comparée à la ligne de base versionnée
+# `e2e/visual/baselines/SPEC-3304-quiz.png` (ADR-3003 § 4, ADR-3022).
+#
+# La tentative est préparée par `seed-quiz.sql` (dix questions à choix, bonne option en tête) : la
+# banque de questions de démonstration n'est jamais régénérée sur la pile locale, donc
+# `POST /modules/:mid/quiz/attempts` répondrait 202 « preparing » indéfiniment. Le flux ne soumet
+# pas la tentative : le jeu de démonstration (progression des modules, historique) reste intact, et
+# `cleanup-quiz.sql` supprime les lignes du seed à la fin de la campagne.
+appId: fr.learny.app
+name: SPEC-3304 quiz
+tags:
+  - SPEC-3304
+  - visual
+---
+- launchApp:
+    clearState: true
+# Page d'accueil des builds SDD : l'application est prête à recevoir le lien profond.
+- extendedWaitUntil:
+    visible:
+      id: sdd-health
+    timeout: 30000
+- openLink: learny://connexion?demo=1
+# La restauration de session peut précéder la publication du jeton : réessai unique de la garde.
+- waitForAnimationToEnd:
+    timeout: 5000
+- runFlow:
+    when:
+      visible:
+        id: onboarding-error
+    commands:
+      - tapOn:
+          id: onboarding-error-retry
+- extendedWaitUntil:
+    visible:
+      id: tab-aujourdhui
+    timeout: 60000
+# EF-1 — entrée depuis le Programme : fiche du module 3, puis « Quiz de validation » (tentative en
+# cours). L'accordéon garde son renvoi au web pour le quiz (comportement de SPEC-3202, inchangé) :
+# la fiche du module est le point d'entrée natif de SPEC-3304.
+- tapOn:
+    id: tab-programme
+- extendedWaitUntil:
+    visible:
+      id: module-3-toggle
+    timeout: 30000
+- scrollUntilVisible:
+    element:
+      id: module-3-detail
+    direction: DOWN
+    timeout: 15000
+- tapOn:
+    id: module-3-detail
+- extendedWaitUntil:
+    visible:
+      id: module-detail-quiz
+    timeout: 20000
+- tapOn:
+    id: module-detail-quiz
+- extendedWaitUntil:
+    visible:
+      id: quiz-question
+    timeout: 30000
+# CA-2 — l'en-tête : « Question n sur N », « Tentative 2 · seuil 80 % », la mention BR-QUI-07 et
+# l'absence de chronomètre (ADR-3003 § 2).
+- assertVisible:
+    id: quiz-count
+- assertVisible:
+    id: quiz-attempt-meta
+- assertVisible:
+    id: quiz-mention
+- assertNotVisible:
+    id: quiz-timer
+- assertVisible: 'Question 1 sur 10'
+# CA-1 — une réponse est vérifiée, la correction s'affiche et la réponse est verrouillée.
+- tapOn:
+    id: brick-option-0
+- tapOn:
+    id: quiz-check
+- extendedWaitUntil:
+    visible:
+      id: brick-feedback
+    timeout: 20000
+- assertVisible:
+    id: quiz-next
+- tapOn:
+    id: quiz-next
+# Deuxième question : le compteur suit l'avancement.
+- assertVisible: 'Question 2 sur 10'
+- tapOn:
+    id: brick-option-0
+- tapOn:
+    id: quiz-check
+- extendedWaitUntil:
+    visible:
+      id: quiz-next
+    timeout: 20000
+- tapOn:
+    id: quiz-next
+# CA-2, CA-5 — état de la maquette : question 3 sur 10, aucune option choisie, pied « Vérifier ».
+- assertVisible: 'Question 3 sur 10'
+- assertVisible:
+    id: quiz-check
+- takeScreenshot: SPEC-3304-quiz
+# EF-5, CA-4 — la croix demande confirmation ; « Quitter » revient au programme.
+- tapOn:
+    id: quiz-close
+- extendedWaitUntil:
+    visible:
+      id: quiz-quit-sheet
+    timeout: 10000
+- assertVisible:
+    id: quiz-quit-body
+- tapOn:
+    id: quiz-quit-confirm
+- extendedWaitUntil:
+    visible:
+      id: module-detail-quiz
+    timeout: 15000
+# CA-4 — rouvrir la tentative reprend à la première question sans réponse, pas à la première.
+- tapOn:
+    id: module-detail-quiz
+- extendedWaitUntil:
+    visible:
+      id: quiz-question
+    timeout: 30000
+- assertVisible: 'Question 3 sur 10'
+- assertVisible:
+    id: quiz-check

@@ -1,0 +1,62 @@
+# SPEC-3402 — fournisseur simulé : boutons, capture visuelle, acceptation des CGU et accès
+# (CA-1, CA-2, CA-4). Unique flux `@visual` de la spécification (ADR-3015 § 5).
+#
+# L'écran de connexion est capturé dans l'état de la maquette (adresse de démonstration, mot de
+# passe saisi) puis comparé à `design/app-mobile/exports/screens/android-01-connexion.png`, zone
+# des fournisseurs comprise (elle était masquée en SPEC-3101).
+#
+# Précautions Maestro 2.12.1 : assertions sur des `id` et des textes ASCII ; clavier refermé avant
+# d'appuyer sur un bouton du bas de l'écran.
+appId: fr.learny.app
+name: SPEC-3402 fournisseur simule
+tags:
+  - SPEC-3402
+  - visual
+---
+- launchApp:
+    clearState: true
+- extendedWaitUntil:
+    visible:
+      id: sdd-health
+    timeout: 30000
+- openLink: learny://connexion
+- extendedWaitUntil:
+    visible:
+      id: auth-title
+    timeout: 30000
+# CA-1 — Android : Google d'abord, Apple ensuite, les deux toujours ensemble.
+- assertVisible:
+    id: auth-providers
+- assertVisible:
+    id: auth-google
+- assertVisible:
+    id: auth-apple
+- assertVisible:
+    id: auth-magic-link
+# CA-4 — état de la maquette pour la comparaison visuelle.
+- tapOn:
+    id: auth-email
+- inputText: alex.perrin@exemple.fr
+- tapOn:
+    id: auth-password
+- inputText: motdepasse
+- hideKeyboard
+- takeScreenshot: SPEC-3402-fournisseur
+# CA-2 — première connexion : la feuille des CGU s'impose avant tout accès.
+- tapOn:
+    id: auth-google
+- extendedWaitUntil:
+    visible:
+      id: auth-legal-sheet
+    timeout: 45000
+- assertVisible:
+    id: auth-legal-sheet-accept
+- tapOn:
+    id: auth-legal-sheet-accept
+# La coquille s'ouvre sur la garde d'onboarding du compte neuf (BR-ACC-04, ADR-3002).
+- extendedWaitUntil:
+    visible:
+      id: onboarding-gate
+    timeout: 60000
+- assertNotVisible:
+    id: auth-title

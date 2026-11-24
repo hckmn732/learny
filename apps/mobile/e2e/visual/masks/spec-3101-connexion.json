@@ -1,0 +1,9 @@
+[
+  {
+    "x": 0,
+    "y": 0.688,
+    "width": 1,
+    "height": 0.114,
+    "why": "Zone des deux boutons Apple/Google de la maquette (bande 7 de la comparaison) : ADR-3011 les reporte à SPEC-3402, ADR-3003 § 4 autorise le masquage d'une zone non comparable. Le bouton du lien magique occupe cette place ; l'en-tête, les champs, le bouton principal et la mention légale restent comparés."
+  }
+]

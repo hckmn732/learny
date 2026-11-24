@@ -1,0 +1,20 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<testsuites>
+  <testsuite name="Test Suite" device="agent37" tests="3" failures="0" time="87.184" timestamp="2026-11-23T03:11:13">
+    <testcase id="SPEC-3102 navigation" name="SPEC-3102 navigation" classname="SPEC-3102 navigation" file="/tmp/learny-device-agent/jobs/20261123031052-001/flows/SPEC-3102-navigation.yaml" time="32.815" timestamp="2026-11-23T03:11:13" status="SUCCESS">
+      <properties>
+        <property name="tags" value="SPEC-3102, visual"/>
+      </properties>
+    </testcase>
+    <testcase id="SPEC-3102 compte" name="SPEC-3102 compte" classname="SPEC-3102 compte" file="/tmp/learny-device-agent/jobs/20261123031052-001/flows/SPEC-3102-compte.yaml" time="24.89" timestamp="2026-11-23T03:11:46" status="SUCCESS">
+      <properties>
+        <property name="tags" value="SPEC-3102"/>
+      </properties>
+    </testcase>
+    <testcase id="SPEC-3102 notifications" name="SPEC-3102 notifications" classname="SPEC-3102 notifications" file="/tmp/learny-device-agent/jobs/20261123031052-001/flows/SPEC-3102-notifications.yaml" time="29.44" timestamp="2026-11-23T03:12:11" status="SUCCESS">
+      <properties>
+        <property name="tags" value="SPEC-3102"/>
+      </properties>
+    </testcase>
+  </testsuite>
+</testsuites>

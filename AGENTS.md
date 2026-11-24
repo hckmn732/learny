@@ -2,6 +2,13 @@
 
 Ce dépôt est un **référentiel Spec-Driven Development** : il contient tout ce qu'il faut pour implémenter, tester, prouver et livrer **Learny** (application web d'apprentissage intensif pilotée par un tuteur IA) **en totale autonomie**. Tu n'as besoin d'aucune autre source que ce dépôt.
 
+## Piste « mode-simple » (ADR-4001)
+
+Mode simple « Dépose ton cours » (ADR-4003) : l'apprenant dépose un ou plusieurs documents et Learny en fait une formation complète. La piste part de la branche `mobile` et y fusionne ; ADR à partir d'ADR-4001, phases à partir de P40, spécifications à partir de SPEC-4001, checkpoints à partir de CP-40. Lancer l'outillage avec `SDD_TRACK=mode-simple`.
+
+- **Le mobile est iso web** (ADR-4002, remplace ADR-3002) : toute fonctionnalité nouvelle est livrée en même temps sur le web et sur le mobile, avec parité prouvée.
+- Lire d'abord `docs/product/mode-simple.md` et les maquettes `design/mode-simple/index.html`.
+
 ## Branche `mobile` : piste « mobile » (ADR-3001)
 
 Sur la branche `mobile` (partie de `main` le 2026-11-22), la piste pilotée par `node tools/sdd/next.mjs` est **`mobile`** (`activeTrack`) : application Android et iOS en React Native + Expo (ADR-1004, ADR-3001 à ADR-3011), phases P30 → P35, SPEC-3001 → SPEC-3502, checkpoints CP-30 → CP-35, ADR numérotés à partir d’ADR-3001. Les branches de spécification partent de `mobile` et y sont fusionnées.

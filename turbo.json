@@ -31,6 +31,7 @@
     "test": { "cache": false },
     "test:unit": { "cache": false },
     "test:int": { "cache": false },
-    "test:e2e": { "cache": false }
+    "test:e2e": { "cache": false },
+    "test:mobile": { "cache": false }
   }
 }

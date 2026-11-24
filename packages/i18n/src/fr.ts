@@ -12,6 +12,7 @@ import { group } from './fr/group';
 import { home } from './fr/home';
 import { legal } from './fr/legal';
 import { meta } from './fr/meta';
+import { mobile } from './fr/mobile';
 import { mockExam } from './fr/mockExam';
 import { moduleMessages } from './fr/module';
 import { notionGraph } from './fr/notionGraph';
@@ -52,6 +53,7 @@ export const fr = {
   system,
   tutorChat,
   meta,
+  mobile,
   quiz,
   mockExam,
   remediation,

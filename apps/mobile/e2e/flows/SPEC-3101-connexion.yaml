@@ -1,0 +1,95 @@
+# SPEC-3101 — connexion, erreur générique et déconnexion (CA-1, CA-5, CA-6).
+#
+# Le flux est l'unique flux `@visual` de la spécification (ADR-3015 § 5) : il capture l'écran de
+# connexion dans l'état de la maquette — e-mail `alex.perrin@exemple.fr` prérempli, mot de passe
+# saisi (SPEC-3101 § 10) — comparé à l'export de référence
+# `design/app-mobile/exports/screens/android-01-connexion.png` (ADR-3003 § 4, CA-6).
+#
+# Précautions Maestro 2.12.1 : matcher `text` ancré et accents abîmés en transit, donc les
+# assertions n'utilisent que des `id` et des textes ASCII (`signedIn`) ; le clavier est refermé
+# avant chaque appui sur un bouton du bas de l'écran.
+appId: fr.learny.app
+name: SPEC-3101 connexion
+tags:
+  - SPEC-3101
+  - visual
+---
+- launchApp:
+    clearState: true
+# Page d'accueil des builds SDD : l'application est prête à recevoir le lien profond.
+- extendedWaitUntil:
+    visible:
+      id: sdd-health
+    timeout: 30000
+- openLink: learny://connexion
+- extendedWaitUntil:
+    visible:
+      id: auth-title
+    timeout: 30000
+# EF-1 — les contrôles de l'écran de connexion.
+- assertVisible:
+    id: auth-mode
+- assertVisible:
+    id: auth-email
+- assertVisible:
+    id: auth-password
+- assertVisible:
+    id: auth-forgot
+- assertVisible:
+    id: auth-magic-link
+- assertVisible:
+    id: auth-submit
+# CA-6 — état de la maquette : l'adresse de démonstration et un mot de passe saisi.
+- tapOn:
+    id: auth-email
+- inputText: alex.perrin@exemple.fr
+- tapOn:
+    id: auth-password
+- inputText: motdepasse
+- hideKeyboard
+- takeScreenshot: SPEC-3101-connexion
+# CA-1 — des identifiants faux affichent le message générique, sans révéler le compte.
+- tapOn:
+    id: auth-email
+- eraseText: 40
+- inputText: inconnu@exemple.fr
+- tapOn:
+    id: auth-password
+- eraseText: 40
+- inputText: mauvais-mot-de-passe
+# Le clavier masque le bouton d'envoi : on le referme avant d'appuyer.
+- hideKeyboard
+- tapOn:
+    id: auth-submit
+- extendedWaitUntil:
+    visible:
+      id: auth-error
+    timeout: 45000
+- assertVisible:
+    id: auth-title
+# CA-1 — le compte de démonstration se connecte par le formulaire et arrive dans la coquille.
+# Le lien profond `?demo=1` remplit les champs avec les identifiants du build de test ; on passe
+# par une autre route auparavant, sinon Expo Router garde l'écran monté et le paramètre n'est pas
+# relu (constaté sur cet émulateur).
+- openLink: learny://_dev/sdd/SPEC-3001
+- extendedWaitUntil:
+    visible:
+      id: sdd-health
+    timeout: 30000
+- openLink: learny://connexion?demo=1
+- extendedWaitUntil:
+    visible:
+      id: shell-placeholder
+    timeout: 45000
+- assertVisible:
+    id: shell-placeholder-state
+    text: '.*signedIn.*'
+# CA-5 — « Se déconnecter » ramène à la connexion.
+- tapOn:
+    id: auth-signout
+- extendedWaitUntil:
+    visible:
+      id: auth-title
+    timeout: 45000
+- assertVisible:
+    id: auth-mode

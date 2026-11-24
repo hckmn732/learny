@@ -1,0 +1,98 @@
+# SPEC-3303 — feuille du tuteur : discussion neuve, réponse sourcée, historique (CA-1, CA-2, CA-6).
+#
+# Unique flux `@visual` de la spécification (ADR-3015 § 5, leçon 6 du BRIEF) : la capture montre la
+# réponse sourcée du tuteur, ses suites, la saisie et la mention de pied de la maquette
+# `design/app-mobile/exports/screens/android-04b-cours-tuteur.png`, comparée à la ligne de base
+# versionnée `e2e/visual/baselines/SPEC-3303-tuteur.png` (ADR-3003 § 4).
+#
+# Le fil est ouvert par « Nouvelle discussion » : le contenu capturé ne dépend donc pas des
+# discussions déjà présentes dans le jeu de démonstration partagé (le flux ne mute pas les données :
+# aucun `db:reset`, aucun changement de seed).
+#
+# Précautions Maestro 2.12.1 : assertions de texte ASCII, nœuds vérifiés portant un `id`, clavier
+# refermé avant d'appuyer sur « Envoyer ».
+appId: fr.learny.app
+name: SPEC-3303 tuteur
+tags:
+  - SPEC-3303
+  - visual
+---
+- launchApp:
+    clearState: true
+# Page d'accueil des builds SDD : l'application est prête à recevoir le lien profond.
+- extendedWaitUntil:
+    visible:
+      id: sdd-health
+    timeout: 30000
+- openLink: learny://connexion?demo=1
+# La restauration de session peut précéder la publication du jeton : réessai unique de la garde.
+- waitForAnimationToEnd:
+    timeout: 5000
+- runFlow:
+    when:
+      visible:
+        id: onboarding-error
+    commands:
+      - tapOn:
+          id: onboarding-error-retry
+- extendedWaitUntil:
+    visible:
+      id: tab-aujourdhui
+    timeout: 60000
+# Ouverture de la feuille par sa route : `courseId` et `chapterId` sont optionnels et résolus depuis
+# le programme courant (module 3 « Comptabilité générale » ; SPEC-3302 ouvrira le même chemin).
+- openLink: learny://tuteur
+- extendedWaitUntil:
+    visible:
+      id: tutor-sheet
+    timeout: 30000
+# EF-2 — l'en-tête, la ligne de contexte et la mention de pied.
+- assertVisible:
+    id: tutor-title
+- assertVisible:
+    id: tutor-subtitle
+- assertVisible:
+    id: tutor-context
+- assertVisible:
+    id: tutor-footnote
+# CA-2 — la feuille ouvre la discussion du cours : le fil contient déjà l'historique du serveur.
+- assertVisible:
+    id: tutor-message-0
+- assertVisible:
+    id: tutor-thread
+# Fil neuf pour une capture déterministe, puis la question de la maquette.
+- tapOn:
+    id: tutor-new-discussion
+- extendedWaitUntil:
+    visible:
+      id: tutor-empty
+    timeout: 10000
+- tapOn:
+    id: tutor-input
+- inputText: Pourquoi deux dates sur une piece ?
+- hideKeyboard
+- tapOn:
+    id: tutor-send
+# CA-1 — la réponse arrive avec ses sources et ses suites.
+- extendedWaitUntil:
+    visible:
+      id: tutor-follow-up-0
+    timeout: 30000
+- assertVisible:
+    id: tutor-source-0
+# CA-6 — état de la maquette : réponse sourcée, suites, saisie, pied.
+- takeScreenshot: SPEC-3303-tuteur
+# CA-2 — fermer puis rouvrir la feuille retrouve la discussion enregistrée par le serveur.
+- tapOn:
+    id: tutor-close
+- extendedWaitUntil:
+    notVisible:
+      id: tutor-sheet
+    timeout: 10000
+- openLink: learny://tuteur?sectionId=reopen
+- extendedWaitUntil:
+    visible:
+      id: tutor-message-2
+    timeout: 30000
+- assertVisible:
+    id: tutor-source-0

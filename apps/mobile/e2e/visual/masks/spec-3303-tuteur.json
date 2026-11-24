@@ -1,0 +1,9 @@
+[
+  {
+    "x": 0,
+    "y": 0.05,
+    "width": 1,
+    "height": 0.035,
+    "why": "Bord supérieur du fond assombri au-dessus de la feuille (ADR-3003 § 4, § 10 de la spécification) : la feuille mesure au plus 92 % de la hauteur, donc les 3 % sous la barre d'état ne montrent que l'arrière-plan, qui dépend de l'écran d'où la feuille est ouverte. Aucune zone de contenu de la feuille n'est masquée."
+  }
+]

@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-11-24T06:44:19.052Z",
+  "updatedAt": "2026-11-24T07:43:18.371Z",
   "specs": {
     "SPEC-001": {
       "status": "done",
@@ -7266,6 +7266,746 @@
           "details": "3/3 critères ✅"
         }
       }
+    },
+    "SPEC-3001": {
+      "status": "done",
+      "attempts": 0,
+      "startedAt": "2026-11-22T12:19:33.823Z",
+      "completedAt": "2026-11-22T14:01:04.464Z",
+      "branch": "spec/SPEC-3001-application-expo-monorepo-et-outillage-s",
+      "commit": "6a916850",
+      "lastError": null,
+      "validations": {
+        "lint": {
+          "status": "passed",
+          "at": "2026-11-22T13:55:04.290Z",
+          "details": ""
+        },
+        "typecheck": {
+          "status": "passed",
+          "at": "2026-11-22T13:55:08.260Z",
+          "details": ""
+        },
+        "unit": {
+          "status": "passed",
+          "at": "2026-11-22T13:56:30.063Z",
+          "details": "41 Vitest + 13 Jest test(s) [SPEC-3001] réussi(s), 0 échec(s)"
+        },
+        "integration": {
+          "status": "passed",
+          "at": "2026-11-22T13:56:30.871Z",
+          "details": "2 test(s) [SPEC-3001] réussi(s), 0 échec(s)"
+        },
+        "e2e": {
+          "status": "passed",
+          "at": "2026-11-22T13:56:50.683Z",
+          "details": "1 flux réussi(s), 0 échec(s), 1 vidéo(s)"
+        },
+        "visual": {
+          "status": "passed",
+          "at": "2026-11-22T13:56:50.683Z",
+          "details": "1 flux @visual réussi(s) (mode demo)"
+        },
+        "acceptance": {
+          "status": "passed",
+          "at": "2026-11-22T13:56:50.691Z",
+          "details": "5/5 critères ✅"
+        }
+      }
+    },
+    "SPEC-3002": {
+      "status": "done",
+      "attempts": 0,
+      "startedAt": "2026-11-22T14:04:01.732Z",
+      "completedAt": "2026-11-22T17:47:06.614Z",
+      "branch": "spec/SPEC-3002-theme-jetons-et-composants-natifs",
+      "commit": "66ae3f5a",
+      "lastError": null,
+      "validations": {
+        "lint": {
+          "status": "passed",
+          "at": "2026-11-22T17:42:05.685Z",
+          "details": ""
+        },
+        "typecheck": {
+          "status": "passed",
+          "at": "2026-11-22T17:43:51.721Z",
+          "details": ""
+        },
+        "unit": {
+          "status": "passed",
+          "at": "2026-11-22T17:45:09.201Z",
+          "details": "10 Vitest + 49 Jest test(s) [SPEC-3002] réussi(s), 0 échec(s)"
+        },
+        "integration": {
+          "status": "passed",
+          "at": "2026-11-22T17:45:09.753Z",
+          "details": "2 test(s) [SPEC-3002] réussi(s), 0 échec(s)"
+        },
+        "e2e": {
+          "status": "passed",
+          "at": "2026-11-22T17:45:27.415Z",
+          "details": "1 flux réussi(s), 0 échec(s), 1 vidéo(s)"
+        },
+        "visual": {
+          "status": "passed",
+          "at": "2026-11-22T17:45:27.415Z",
+          "details": "1 flux @visual réussi(s) (mode demo)"
+        },
+        "acceptance": {
+          "status": "passed",
+          "at": "2026-11-22T17:45:27.422Z",
+          "details": "5/5 critères ✅"
+        }
+      }
+    },
+    "SPEC-3003": {
+      "status": "done",
+      "attempts": 0,
+      "startedAt": "2026-11-22T17:49:45.998Z",
+      "completedAt": "2026-11-22T21:43:23.289Z",
+      "branch": "spec/SPEC-3003-client-d-api-session-et-cache-hors-ligne",
+      "commit": "2f3a9fbc",
+      "lastError": null,
+      "validations": {
+        "lint": {
+          "status": "passed",
+          "at": "2026-11-22T21:40:18.947Z",
+          "details": ""
+        },
+        "typecheck": {
+          "status": "passed",
+          "at": "2026-11-22T21:40:22.590Z",
+          "details": ""
+        },
+        "unit": {
+          "status": "passed",
+          "at": "2026-11-22T21:41:42.253Z",
+          "details": "59 Vitest + 13 Jest test(s) [SPEC-3003] réussi(s), 0 échec(s)"
+        },
+        "integration": {
+          "status": "passed",
+          "at": "2026-11-22T21:41:43.243Z",
+          "details": "3 test(s) [SPEC-3003] réussi(s), 0 échec(s)"
+        },
+        "e2e": {
+          "status": "passed",
+          "at": "2026-11-22T21:42:20.493Z",
+          "details": "1 flux réussi(s), 0 échec(s), 1 vidéo(s)"
+        },
+        "visual": {
+          "status": "passed",
+          "at": "2026-11-22T21:42:20.493Z",
+          "details": "1 flux @visual réussi(s) (mode demo)"
+        },
+        "acceptance": {
+          "status": "passed",
+          "at": "2026-11-22T21:42:20.501Z",
+          "details": "5/5 critères ✅"
+        }
+      }
+    },
+    "SPEC-3101": {
+      "status": "done",
+      "attempts": 0,
+      "startedAt": "2026-11-22T22:57:39.931Z",
+      "completedAt": "2026-11-23T00:53:30.024Z",
+      "branch": "spec/SPEC-3101-connexion-inscription-et-lien-magique",
+      "commit": "8aa06376",
+      "lastError": null,
+      "validations": {
+        "lint": {
+          "status": "passed",
+          "at": "2026-11-23T00:49:21.727Z",
+          "details": ""
+        },
+        "typecheck": {
+          "status": "passed",
+          "at": "2026-11-23T00:49:29.453Z",
+          "details": ""
+        },
+        "unit": {
+          "status": "passed",
+          "at": "2026-11-23T00:06:27.017Z",
+          "details": "35 Vitest + 18 Jest test(s) [SPEC-3101] réussi(s), 0 échec(s)"
+        },
+        "integration": {
+          "status": "passed",
+          "at": "2026-11-23T00:14:59.032Z",
+          "details": "4 test(s) [SPEC-3101] réussi(s), 0 échec(s)"
+        },
+        "e2e": {
+          "status": "passed",
+          "at": "2026-11-23T00:51:22.799Z",
+          "details": "2 flux réussi(s), 0 échec(s), 1 vidéo(s)"
+        },
+        "visual": {
+          "status": "passed",
+          "at": "2026-11-23T00:51:22.799Z",
+          "details": "1 flux @visual réussi(s) (mode mockup)"
+        },
+        "acceptance": {
+          "status": "passed",
+          "at": "2026-11-23T00:51:22.811Z",
+          "details": "6/6 critères ✅"
+        }
+      }
+    },
+    "SPEC-3102": {
+      "status": "done",
+      "attempts": 0,
+      "startedAt": "2026-11-23T00:54:32.506Z",
+      "completedAt": "2026-11-23T03:13:47.792Z",
+      "branch": "spec/SPEC-3102-coquille-onglets-natifs-et-notifications",
+      "commit": "f54e5e7d",
+      "lastError": null,
+      "validations": {
+        "lint": {
+          "status": "passed",
+          "at": "2026-11-23T03:03:47.191Z",
+          "details": ""
+        },
+        "typecheck": {
+          "status": "passed",
+          "at": "2026-11-23T03:03:53.684Z",
+          "details": ""
+        },
+        "unit": {
+          "status": "passed",
+          "at": "2026-11-23T03:10:41.994Z",
+          "details": "31 Vitest + 32 Jest test(s) [SPEC-3102] réussi(s), 0 échec(s)"
+        },
+        "integration": {
+          "status": "passed",
+          "at": "2026-11-23T03:10:42.946Z",
+          "details": "4 test(s) [SPEC-3102] réussi(s), 0 échec(s)"
+        },
+        "e2e": {
+          "status": "passed",
+          "at": "2026-11-23T03:12:44.321Z",
+          "details": "3 flux réussi(s), 0 échec(s), 1 vidéo(s)"
+        },
+        "visual": {
+          "status": "passed",
+          "at": "2026-11-23T03:12:44.321Z",
+          "details": "1 flux @visual réussi(s) (mode mockup)"
+        },
+        "acceptance": {
+          "status": "passed",
+          "at": "2026-11-23T03:12:44.335Z",
+          "details": "6/6 critères ✅"
+        }
+      }
+    },
+    "SPEC-3201": {
+      "status": "done",
+      "attempts": 0,
+      "startedAt": "2026-11-23T03:21:32.767Z",
+      "completedAt": "2026-11-23T15:22:45.521Z",
+      "branch": "spec/SPEC-3201-ecran-aujourd-hui",
+      "commit": "8255eef6",
+      "lastError": null,
+      "validations": {
+        "lint": {
+          "status": "passed",
+          "at": "2026-11-23T15:22:22.321Z",
+          "details": ""
+        },
+        "typecheck": {
+          "status": "passed",
+          "at": "2026-11-23T15:22:30.426Z",
+          "details": ""
+        },
+        "e2e": {
+          "status": "passed",
+          "at": "2026-11-23T14:51:57.187Z",
+          "details": "1 flux réussi(s), 0 échec(s), 1 vidéo(s)"
+        },
+        "visual": {
+          "status": "passed",
+          "at": "2026-11-23T14:51:57.187Z",
+          "details": "1 flux @visual réussi(s) (mode mockup)"
+        },
+        "acceptance": {
+          "status": "passed",
+          "at": "2026-11-23T15:22:31.957Z",
+          "details": "5/5 critères ✅"
+        },
+        "unit": {
+          "status": "passed",
+          "at": "2026-11-23T15:18:12.124Z",
+          "details": "11 Vitest + 26 Jest test(s) [SPEC-3201] réussi(s), 0 échec(s)"
+        },
+        "integration": {
+          "status": "passed",
+          "at": "2026-11-23T15:22:31.945Z",
+          "details": "4 test(s) réussi(s), 0 échec(s)"
+        }
+      }
+    },
+    "SPEC-3202": {
+      "status": "done",
+      "attempts": 0,
+      "startedAt": "2026-11-23T16:13:10.725Z",
+      "completedAt": "2026-11-23T16:57:04.029Z",
+      "branch": "spec/SPEC-3202-programme-modules-et-chapitres",
+      "commit": "83edcc17",
+      "lastError": null,
+      "validations": {
+        "lint": {
+          "status": "passed",
+          "at": "2026-11-23T16:56:51.665Z",
+          "details": ""
+        },
+        "typecheck": {
+          "status": "passed",
+          "at": "2026-11-23T16:56:57.468Z",
+          "details": ""
+        },
+        "unit": {
+          "status": "passed",
+          "at": "2026-11-23T16:55:04.160Z",
+          "details": "10 Vitest + 18 Jest test(s) [SPEC-3202] réussi(s), 0 échec(s)"
+        },
+        "integration": {
+          "status": "passed",
+          "at": "2026-11-23T16:32:56.305Z",
+          "details": "3 test(s) réussi(s), 0 échec(s)"
+        },
+        "e2e": {
+          "status": "passed",
+          "at": "2026-11-23T16:33:46.213Z",
+          "details": "1 flux réussi(s), 0 échec(s), 1 vidéo(s)"
+        },
+        "visual": {
+          "status": "passed",
+          "at": "2026-11-23T16:33:46.213Z",
+          "details": "1 flux @visual réussi(s) (mode mockup)"
+        },
+        "acceptance": {
+          "status": "passed",
+          "at": "2026-11-23T16:56:58.014Z",
+          "details": "5/5 critères ✅"
+        }
+      }
+    },
+    "SPEC-3203": {
+      "status": "done",
+      "attempts": 0,
+      "startedAt": "2026-11-23T13:40:46.179Z",
+      "completedAt": "2026-11-23T15:16:48.842Z",
+      "branch": "spec/SPEC-3203-agenda",
+      "commit": "bb34add4",
+      "lastError": null,
+      "validations": {
+        "lint": {
+          "status": "passed",
+          "at": "2026-11-23T15:12:28.670Z",
+          "details": ""
+        },
+        "typecheck": {
+          "status": "passed",
+          "at": "2026-11-23T15:12:35.243Z",
+          "details": ""
+        },
+        "unit": {
+          "status": "passed",
+          "at": "2026-11-23T15:14:38.003Z",
+          "details": "17 Vitest + 16 Jest test(s) [SPEC-3203] réussi(s), 0 échec(s)"
+        },
+        "integration": {
+          "status": "passed",
+          "at": "2026-11-23T14:59:26.649Z",
+          "details": "3 test(s) réussi(s), 0 échec(s)"
+        },
+        "e2e": {
+          "status": "passed",
+          "at": "2026-11-23T15:00:22.734Z",
+          "details": "1 flux réussi(s), 0 échec(s), 1 vidéo(s)"
+        },
+        "visual": {
+          "status": "passed",
+          "at": "2026-11-23T15:00:22.734Z",
+          "details": "aucun flux @visual (comparaison non applicable, voir acceptance.md — ADR-3019)"
+        },
+        "acceptance": {
+          "status": "passed",
+          "at": "2026-11-23T15:14:38.013Z",
+          "details": "5/5 critères ✅"
+        }
+      }
+    },
+    "SPEC-3301": {
+      "status": "done",
+      "attempts": 0,
+      "startedAt": "2026-11-23T12:29:05.964Z",
+      "completedAt": "2026-11-23T14:14:56.278Z",
+      "branch": "spec/SPEC-3301",
+      "commit": "be930f17",
+      "lastError": null,
+      "validations": {
+        "lint": {
+          "status": "passed",
+          "at": "2026-11-23T14:11:42.174Z",
+          "details": ""
+        },
+        "typecheck": {
+          "status": "passed",
+          "at": "2026-11-23T14:11:50.531Z",
+          "details": ""
+        },
+        "unit": {
+          "status": "passed",
+          "at": "2026-11-23T13:57:38.288Z",
+          "details": "45 Vitest + 33 Jest test(s) [SPEC-3301] réussi(s), 0 échec(s)"
+        },
+        "integration": {
+          "status": "passed",
+          "at": "2026-11-23T13:51:02.560Z",
+          "details": "4 test(s) [SPEC-3301] réussi(s), 0 échec(s)"
+        },
+        "e2e": {
+          "status": "passed",
+          "at": "2026-11-23T14:12:28.737Z",
+          "details": "1 flux réussi(s), 0 échec(s), 1 vidéo(s)"
+        },
+        "visual": {
+          "status": "passed",
+          "at": "2026-11-23T14:12:28.737Z",
+          "details": "1 flux @visual réussi(s) (mode demo)"
+        },
+        "acceptance": {
+          "status": "passed",
+          "at": "2026-11-23T14:12:28.749Z",
+          "details": "5/5 critères ✅"
+        }
+      }
+    },
+    "SPEC-3302": {
+      "status": "done",
+      "attempts": 0,
+      "startedAt": "2026-11-23T17:20:47.785Z",
+      "completedAt": "2026-11-23T19:36:56.008Z",
+      "branch": "spec/SPEC-3302-lecture-du-cours",
+      "commit": "6ed90f1e",
+      "lastError": null,
+      "validations": {
+        "lint": {
+          "status": "passed",
+          "at": "2026-11-23T19:32:35.189Z",
+          "details": ""
+        },
+        "typecheck": {
+          "status": "passed",
+          "at": "2026-11-23T19:32:42.735Z",
+          "details": ""
+        },
+        "unit": {
+          "status": "passed",
+          "at": "2026-11-23T19:34:58.868Z",
+          "details": "11 Vitest + 27 Jest test(s) [SPEC-3302] réussi(s), 0 échec(s)"
+        },
+        "integration": {
+          "status": "passed",
+          "at": "2026-11-23T19:26:29.376Z",
+          "details": "5 test(s) réussi(s), 0 échec(s)"
+        },
+        "e2e": {
+          "status": "passed",
+          "at": "2026-11-23T19:27:07.748Z",
+          "details": "1 flux réussi(s), 0 échec(s), 1 vidéo(s)"
+        },
+        "visual": {
+          "status": "passed",
+          "at": "2026-11-23T19:27:07.748Z",
+          "details": "1 flux @visual réussi(s) (mode mockup)"
+        },
+        "acceptance": {
+          "status": "passed",
+          "at": "2026-11-23T19:34:58.879Z",
+          "details": "5/5 critères ✅"
+        }
+      }
+    },
+    "SPEC-3303": {
+      "status": "done",
+      "attempts": 0,
+      "startedAt": "2026-11-23T18:21:31.354Z",
+      "completedAt": "2026-11-23T19:02:45.548Z",
+      "branch": "spec/SPEC-3303",
+      "commit": "21a9277d",
+      "lastError": null,
+      "validations": {
+        "lint": {
+          "status": "passed",
+          "at": "2026-11-23T18:59:39.156Z",
+          "details": ""
+        },
+        "typecheck": {
+          "status": "passed",
+          "at": "2026-11-23T18:59:44.890Z",
+          "details": ""
+        },
+        "unit": {
+          "status": "passed",
+          "at": "2026-11-23T19:01:39.544Z",
+          "details": "21 Vitest + 23 Jest test(s) [SPEC-3303] réussi(s), 0 échec(s)"
+        },
+        "integration": {
+          "status": "passed",
+          "at": "2026-11-23T18:54:45.757Z",
+          "details": "4 test(s) réussi(s), 0 échec(s)"
+        },
+        "e2e": {
+          "status": "passed",
+          "at": "2026-11-23T18:58:00.132Z",
+          "details": "2 flux réussi(s), 0 échec(s), 1 vidéo(s)"
+        },
+        "visual": {
+          "status": "passed",
+          "at": "2026-11-23T18:58:00.132Z",
+          "details": "1 flux @visual réussi(s) (mode mockup)"
+        },
+        "acceptance": {
+          "status": "passed",
+          "at": "2026-11-23T19:01:39.559Z",
+          "details": "6/6 critères ✅"
+        }
+      }
+    },
+    "SPEC-3304": {
+      "status": "done",
+      "attempts": 0,
+      "startedAt": "2026-11-23T19:15:23.217Z",
+      "completedAt": "2026-11-23T22:47:35.044Z",
+      "branch": "spec/SPEC-3304-quiz-de-validation-et-resultat",
+      "commit": "5c9cb7c7",
+      "lastError": null,
+      "validations": {
+        "lint": {
+          "status": "passed",
+          "at": "2026-11-23T22:44:56.647Z",
+          "details": ""
+        },
+        "typecheck": {
+          "status": "passed",
+          "at": "2026-11-23T22:45:02.485Z",
+          "details": ""
+        },
+        "unit": {
+          "status": "passed",
+          "at": "2026-11-23T22:46:35.899Z",
+          "details": "17 Vitest + 12 Jest test(s) [SPEC-3304] réussi(s), 0 échec(s)"
+        },
+        "integration": {
+          "status": "passed",
+          "at": "2026-11-23T22:46:36.774Z",
+          "details": "3 test(s) réussi(s), 0 échec(s)"
+        },
+        "e2e": {
+          "status": "passed",
+          "at": "2026-11-23T22:47:33.156Z",
+          "details": "1 flux réussi(s), 0 échec(s), 1 vidéo(s)"
+        },
+        "visual": {
+          "status": "passed",
+          "at": "2026-11-23T22:47:33.156Z",
+          "details": "1 flux @visual réussi(s) (mode mockup)"
+        },
+        "acceptance": {
+          "status": "passed",
+          "at": "2026-11-23T22:47:33.165Z",
+          "details": "5/5 critères ✅"
+        }
+      }
+    },
+    "SPEC-3305": {
+      "status": "done",
+      "attempts": 0,
+      "startedAt": "2026-11-23T19:15:28.422Z",
+      "completedAt": "2026-11-23T20:35:58.481Z",
+      "branch": "spec/SPEC-3305-reviser-quiz-global-echauffement-hors-li",
+      "commit": "879204ff",
+      "lastError": null,
+      "validations": {
+        "lint": {
+          "status": "passed",
+          "at": "2026-11-23T20:33:58.123Z",
+          "details": ""
+        },
+        "typecheck": {
+          "status": "passed",
+          "at": "2026-11-23T20:34:04.096Z",
+          "details": ""
+        },
+        "unit": {
+          "status": "passed",
+          "at": "2026-11-23T20:24:46.568Z",
+          "details": "16 Vitest + 20 Jest test(s) [SPEC-3305] réussi(s), 0 échec(s)"
+        },
+        "integration": {
+          "status": "passed",
+          "at": "2026-11-23T20:24:47.514Z",
+          "details": "5 test(s) réussi(s), 0 échec(s)"
+        },
+        "e2e": {
+          "status": "passed",
+          "at": "2026-11-23T20:34:04.652Z",
+          "details": "3 flux réussi(s), 0 échec(s), 1 vidéo(s)"
+        },
+        "visual": {
+          "status": "passed",
+          "at": "2026-11-23T20:34:04.652Z",
+          "details": "1 flux @visual réussi(s) (mode mockup)"
+        },
+        "acceptance": {
+          "status": "passed",
+          "at": "2026-11-23T20:34:04.663Z",
+          "details": "5/5 critères ✅"
+        }
+      }
+    },
+    "SPEC-3401": {
+      "status": "done",
+      "attempts": 0,
+      "startedAt": "2026-11-23T23:12:39.636Z",
+      "completedAt": "2026-11-24T01:28:00.300Z",
+      "branch": "spec/SPEC-3401-profil-reglages-et-confidentialite",
+      "commit": "3dee7d89",
+      "lastError": null,
+      "validations": {
+        "lint": {
+          "status": "passed",
+          "at": "2026-11-24T01:20:21.921Z",
+          "details": ""
+        },
+        "typecheck": {
+          "status": "passed",
+          "at": "2026-11-24T01:22:29.767Z",
+          "details": ""
+        },
+        "unit": {
+          "status": "passed",
+          "at": "2026-11-24T01:24:09.165Z",
+          "details": "10 Vitest + 36 Jest test(s) [SPEC-3401] réussi(s), 0 échec(s)"
+        },
+        "integration": {
+          "status": "passed",
+          "at": "2026-11-24T01:24:10.115Z",
+          "details": "7 test(s) réussi(s), 0 échec(s)"
+        },
+        "e2e": {
+          "status": "passed",
+          "at": "2026-11-24T01:27:37.989Z",
+          "details": "3 flux réussi(s), 0 échec(s), 1 vidéo(s)"
+        },
+        "visual": {
+          "status": "passed",
+          "at": "2026-11-24T01:27:37.989Z",
+          "details": "1 flux @visual réussi(s) (mode mockup)"
+        },
+        "acceptance": {
+          "status": "passed",
+          "at": "2026-11-24T01:27:38.002Z",
+          "details": "6/6 critères ✅"
+        }
+      }
+    },
+    "SPEC-3402": {
+      "status": "done",
+      "attempts": 1,
+      "startedAt": "2026-11-23T23:12:46.308Z",
+      "completedAt": "2026-11-24T00:21:18.541Z",
+      "branch": "spec/SPEC-3402-connexion-avec-apple-et-google",
+      "commit": "63be4e96",
+      "lastError": null,
+      "validations": {
+        "lint": {
+          "status": "passed",
+          "at": "2026-11-24T00:15:19.607Z",
+          "details": ""
+        },
+        "typecheck": {
+          "status": "passed",
+          "at": "2026-11-24T00:15:38.562Z",
+          "details": ""
+        },
+        "unit": {
+          "status": "passed",
+          "at": "2026-11-24T00:19:12.795Z",
+          "details": "15 Vitest + 12 Jest test(s) [SPEC-3402] réussi(s), 0 échec(s)"
+        },
+        "integration": {
+          "status": "passed",
+          "at": "2026-11-24T00:03:23.223Z",
+          "details": "2 test(s) réussi(s), 0 échec(s)"
+        },
+        "e2e": {
+          "status": "passed",
+          "at": "2026-11-24T00:04:34.069Z",
+          "details": "1 flux réussi(s), 0 échec(s), 1 vidéo(s)"
+        },
+        "visual": {
+          "status": "passed",
+          "at": "2026-11-24T00:04:34.070Z",
+          "details": "1 flux @visual réussi(s) (mode mockup)"
+        },
+        "acceptance": {
+          "status": "passed",
+          "at": "2026-11-24T00:19:12.848Z",
+          "details": "4/4 critères ✅"
+        }
+      }
+    },
+    "SPEC-3501": {
+      "status": "pending",
+      "attempts": 0,
+      "startedAt": null,
+      "completedAt": null,
+      "branch": null,
+      "commit": null,
+      "lastError": null,
+      "validations": {}
+    },
+    "SPEC-3502": {
+      "status": "pending",
+      "attempts": 0,
+      "startedAt": null,
+      "completedAt": null,
+      "branch": null,
+      "commit": null,
+      "lastError": null,
+      "validations": {}
+    },
+    "SPEC-4001": {
+      "status": "pending",
+      "attempts": 0,
+      "startedAt": null,
+      "completedAt": null,
+      "branch": null,
+      "commit": null,
+      "lastError": null,
+      "validations": {}
+    },
+    "SPEC-4002": {
+      "status": "pending",
+      "attempts": 0,
+      "startedAt": null,
+      "completedAt": null,
+      "branch": null,
+      "commit": null,
+      "lastError": null,
+      "validations": {}
+    },
+    "SPEC-4003": {
+      "status": "pending",
+      "attempts": 0,
+      "startedAt": null,
+      "completedAt": null,
+      "branch": null,
+      "commit": null,
+      "lastError": null,
+      "validations": {}
     }
   },
   "checkpoints": {
@@ -7384,6 +8124,48 @@
       "report": "evidence/checkpoints/CP-23/summary.md",
       "reason": "Marque franchi sur decision du porteur (2026-11-24) : backend 100 % Python livre (ADR-2043) ; SPEC-2301 reste sans preuve de staging Coolify (ADR-2009) et SPEC-2302 sans campagne de validation complete.",
       "exception": true
+    },
+    "CP-30": {
+      "status": "passed",
+      "at": "2026-11-22T22:55:34.516Z",
+      "tag": "cp-30",
+      "report": "evidence/checkpoints/CP-30/summary.md"
+    },
+    "CP-31": {
+      "status": "passed",
+      "at": "2026-11-23T03:16:55.508Z",
+      "tag": "cp-31",
+      "report": "evidence/checkpoints/CP-31/summary.md"
+    },
+    "CP-32": {
+      "status": "passed",
+      "at": "2026-11-23T17:20:01.353Z",
+      "tag": "cp-32",
+      "report": "evidence/checkpoints/CP-32/summary.md"
+    },
+    "CP-33": {
+      "status": "passed",
+      "at": "2026-11-23T23:09:26.948Z",
+      "tag": "cp-33",
+      "report": "evidence/checkpoints/CP-33/summary.md"
+    },
+    "CP-34": {
+      "status": "passed",
+      "at": "2026-11-24T01:36:28.763Z",
+      "tag": "cp-34",
+      "report": "evidence/checkpoints/CP-34/summary.md"
+    },
+    "CP-35": {
+      "status": "pending",
+      "at": null,
+      "tag": null,
+      "report": null
+    },
+    "CP-40": {
+      "status": "pending",
+      "at": null,
+      "tag": null,
+      "report": null
     }
   },
   "anomalies": [

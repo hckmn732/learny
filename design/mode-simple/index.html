@@ -1,0 +1,527 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mode simple · maquettes</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap">
+<style>
+:root{
+  --bg:#F4F4F1; --ink:#111113; --ink2:#18181B; --ink3:#232328; --muted:#62626B; --muted2:#A1A1AA;
+  --line:#E7E6E1; --line2:#DAD9D3; --card:#FFFFFF; --soft:#F8F8F6; --lime:#C6F432; --lime-ink:#3D5200;
+  --indigo:#3A3AA8; --violet:#5B5BD6; --orange:#EA580C; --orange-soft:#FFF1E8; --green:#0F9F6E; --green-soft:#E6F6EF;
+  --board:#E9E8E3;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--board);font-family:Inter,system-ui,sans-serif;color:var(--ink)}
+button{font:inherit;cursor:pointer}
+h1,h2,h3,.gro{font-family:'Space Grotesk',sans-serif}
+
+/* ---------- Planche ---------- */
+.board-head{position:sticky;top:0;z-index:10;background:var(--ink);color:#fff;padding:14px 20px;display:flex;flex-wrap:wrap;gap:12px 20px;align-items:center}
+.board-head .brand{display:flex;align-items:center;gap:10px;font-family:'Space Grotesk';font-weight:600;font-size:16px;margin-right:auto}
+.logo{width:30px;height:30px;border-radius:9px;background:var(--lime);display:inline-flex;align-items:center;justify-content:center;flex:0 0 30px}
+.seg{display:inline-flex;background:var(--ink3);border-radius:11px;padding:3px;gap:2px}
+.seg button{border:0;background:transparent;color:#D4D4D8;padding:7px 12px;border-radius:9px;font-size:13px;font-weight:500}
+.seg button[aria-pressed=true]{background:#fff;color:var(--ink)}
+.toggle{display:inline-flex;align-items:center;gap:8px;font-size:13px;color:#D4D4D8}
+.toggle input{accent-color:var(--lime);width:16px;height:16px}
+.steps{display:flex;flex-wrap:wrap;gap:6px;padding:14px 20px;background:#fff;border-bottom:1px solid var(--line)}
+.steps button{border:1px solid var(--line2);background:#fff;color:var(--ink);border-radius:999px;padding:7px 12px;font-size:13px;font-weight:500;display:inline-flex;gap:8px;align-items:center}
+.steps button .n{width:20px;height:20px;border-radius:50%;background:var(--soft);display:inline-flex;align-items:center;justify-content:center;font-size:11px;font-weight:700}
+.steps button[aria-current=step]{background:var(--ink);color:#fff;border-color:var(--ink)}
+.steps button[aria-current=step] .n{background:var(--lime);color:var(--ink)}
+.note{max-width:1180px;margin:18px auto 0;padding:0 20px;font-size:13.5px;color:var(--muted);line-height:1.55}
+.note b{color:var(--ink)}
+.stage{padding:20px;display:flex;justify-content:center;gap:40px;flex-wrap:wrap}
+
+/* ---------- Bureau ---------- */
+.desk-wrap{width:100%;max-width:1280px}
+.desk-scale{transform-origin:top left}
+.desk{width:1280px;min-height:860px;display:flex;background:var(--bg);border-radius:14px;overflow:hidden;box-shadow:0 30px 60px -30px rgba(17,17,19,.35);border:1px solid var(--line2)}
+.side{flex:0 0 236px;background:var(--ink);color:var(--bg);padding:16px 12px;display:flex;flex-direction:column;gap:6px}
+.side .brand{display:flex;gap:10px;align-items:center;font-family:'Space Grotesk';font-weight:600;padding:0 4px 10px}
+.nav{display:flex;align-items:center;gap:10px;padding:9px 10px;border-radius:10px;font-size:14px;color:#D4D4D8}
+.nav.on{background:var(--ink2);color:#fff;font-weight:600}
+.side .cur{margin-top:14px;border:1px solid #26262B;border-radius:14px;padding:12px}
+.side .cur small{font-size:11px;letter-spacing:.08em;color:var(--muted2);font-weight:600}
+.main{flex:1;min-width:0}
+.top{height:60px;display:flex;align-items:center;gap:12px;padding:0 28px;border-bottom:1px solid var(--line)}
+.search{flex:0 1 460px;height:38px;border:1px solid var(--line2);border-radius:11px;background:#fff;display:flex;align-items:center;gap:8px;padding:0 12px;color:var(--muted);font-size:13px}
+.av{width:30px;height:30px;border-radius:50%;background:var(--violet);color:#fff;font-size:12px;font-weight:600;display:inline-flex;align-items:center;justify-content:center}
+.page{padding:28px 64px 56px;max-width:1080px}
+.eyebrow{font-size:11.5px;letter-spacing:.09em;font-weight:700;text-transform:uppercase}
+.card{background:var(--card);border:1px solid var(--line);border-radius:18px}
+.btn{border:1px solid var(--line2);background:#fff;color:var(--ink);border-radius:11px;padding:11px 16px;font-size:14px;font-weight:600;display:inline-flex;align-items:center;justify-content:center;gap:8px}
+.btn.lime{background:var(--lime);border-color:var(--lime)}
+.btn.dark{background:var(--ink);border-color:var(--ink);color:#fff}
+.btn[disabled]{opacity:.45;cursor:not-allowed}
+.chip{display:inline-flex;align-items:center;gap:6px;border-radius:999px;padding:3px 9px;font-size:12px;font-weight:600;background:var(--soft);border:1px solid var(--line)}
+.chip.lime{background:#EEFBC4;border-color:#DDF28A;color:var(--lime-ink)}
+.chip.ind{background:#ECECFA;border-color:#D9D9F3;color:var(--indigo)}
+.chip.or{background:var(--orange-soft);border-color:#FBD5BC;color:#9A3412}
+.chip.gr{background:var(--green-soft);border-color:#BDE7D4;color:#065F46}
+.muted{color:var(--muted)}
+.row{display:flex;gap:12px;align-items:center}
+.drop{border:2px dashed var(--line2);border-radius:18px;background:var(--soft);display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:8px}
+.file{display:flex;align-items:center;gap:12px;padding:12px 14px;border:1px solid var(--line);border-radius:14px;background:#fff}
+.ficon{width:38px;height:44px;border-radius:8px;display:inline-flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;flex:0 0 38px}
+.select{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--line2);border-radius:9px;padding:6px 10px;font-size:13px;font-weight:500;background:#fff}
+.field{border:1px solid var(--line2);border-radius:11px;background:#fff;padding:11px 12px;font-size:14px;color:var(--muted)}
+.warn{border:1px solid #FBD5BC;background:var(--orange-soft);border-radius:14px;padding:14px 16px;display:flex;gap:12px;align-items:flex-start}
+.check{width:22px;height:22px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;flex:0 0 22px}
+.check.ok{background:var(--lime)}
+.check.run{border:2.5px solid var(--line2);border-top-color:var(--indigo);animation:spin 1s linear infinite}
+.check.wait{border:2px solid var(--line2)}
+@keyframes spin{to{transform:rotate(360deg)}}
+.bar{height:6px;border-radius:99px;background:var(--line);overflow:hidden}
+.bar>i{display:block;height:100%;background:var(--lime);border-radius:99px}
+.dark .bar{background:#2E2E34}
+.mod{display:flex;gap:14px;align-items:center;padding:12px 14px;border-radius:14px;background:var(--soft);border:1px solid var(--line)}
+.mod .num{width:30px;height:30px;border-radius:9px;background:#fff;border:1px solid var(--line);display:inline-flex;align-items:center;justify-content:center;font-weight:700;font-size:13px;flex:0 0 30px}
+.opt{display:flex;gap:12px;align-items:center;border:1px solid var(--line2);border-radius:14px;padding:14px 16px;background:#fff;font-size:15px;text-align:left;width:100%}
+.opt .k{width:28px;height:28px;border-radius:8px;background:var(--soft);border:1px solid var(--line);display:inline-flex;align-items:center;justify-content:center;font-weight:700;font-size:13px;flex:0 0 28px}
+.opt.sel{border-color:var(--indigo);box-shadow:0 0 0 3px #E1E1F7}
+.opt.sel .k{background:var(--indigo);color:#fff;border-color:var(--indigo)}
+.kpi{border-radius:14px;background:var(--soft);border:1px solid var(--line);padding:12px 14px}
+.kpi b{font-family:'Space Grotesk';font-size:22px;display:block}
+.kpi span{font-size:12px;color:var(--muted)}
+.dim{opacity:.35;filter:saturate(.6);pointer-events:none}
+.found{animation:pop .5s ease both}
+@keyframes pop{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+
+/* ---------- Téléphone ---------- */
+.phone{width:390px;height:844px;border-radius:52px;background:var(--ink);padding:12px;box-shadow:0 30px 60px -25px rgba(17,17,19,.45);flex:0 0 auto}
+.screen{width:100%;height:100%;border-radius:42px;background:var(--bg);overflow:hidden;display:flex;flex-direction:column;position:relative}
+.android .phone{border-radius:34px}
+.android .screen{border-radius:24px}
+.sbar{height:50px;flex:0 0 50px;display:flex;align-items:flex-end;justify-content:space-between;padding:0 28px 8px;font-weight:600;font-size:15px}
+.android .sbar{height:34px;flex-basis:34px;align-items:center;padding:0 18px;font-size:13px;font-weight:500}
+.island{position:absolute;top:11px;left:50%;transform:translateX(-50%);width:120px;height:34px;border-radius:20px;background:#000}
+.android .island{width:12px;height:12px;top:11px;border-radius:50%}
+.pbody{flex:1;overflow:auto;padding:6px 18px 18px;scrollbar-width:none}
+.pbody::-webkit-scrollbar{display:none}
+.phead{display:flex;align-items:center;gap:10px;padding:4px 0 10px}
+.back{width:38px;height:38px;border-radius:12px;border:1px solid var(--line2);background:#fff;display:inline-flex;align-items:center;justify-content:center}
+.android .back{border:0;background:transparent;border-radius:50%}
+.ptitle{font-family:'Space Grotesk';font-size:28px;font-weight:600;margin:4px 0 4px;letter-spacing:-.01em}
+.android .ptitle{font-size:26px}
+.cta{padding:12px 18px 14px;border-top:1px solid var(--line);background:var(--bg);display:flex;flex-direction:column;gap:8px}
+.cta .btn{width:100%;padding:14px;font-size:15px;border-radius:14px}
+.android .cta .btn{border-radius:999px}
+.tabs{display:flex;justify-content:space-around;padding:8px 6px 4px;border-top:1px solid var(--line);background:#fff}
+.tabs div{display:flex;flex-direction:column;align-items:center;gap:3px;font-size:10.5px;color:var(--muted2);font-weight:500}
+.tabs div.on{color:var(--ink)}
+.android .tabs div.on svg{background:#E5F7A4;border-radius:999px;padding:3px 14px;box-sizing:content-box}
+.home-ind{height:20px;display:flex;justify-content:center;align-items:center;background:#fff}
+.home-ind i{width:134px;height:5px;border-radius:5px;background:var(--ink)}
+.android .home-ind i{width:100px;height:4px;background:#9B9BA3}
+.plat{font-size:12px;color:var(--muted);text-align:center;margin-top:10px;font-weight:600;letter-spacing:.06em;text-transform:uppercase}
+.sheetbtns{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px}
+.sheetbtns button{border:1px solid var(--line2);background:#fff;border-radius:14px;padding:12px 6px;display:flex;flex-direction:column;align-items:center;gap:6px;font-size:12px;font-weight:600}
+@media (max-width:700px){.board-head{padding:12px 16px}.steps{padding:12px 16px}.stage{padding:16px}.phone{transform:scale(.86);transform-origin:top center;margin-bottom:-110px}}
+</style>
+</head>
+<body>
+<header class="board-head">
+  <div class="brand"><span class="logo"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#111113" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19V6l8 6 8-6v13"/></svg></span>Learny · Mode simple <span style="color:#A1A1AA;font-weight:500">« Dépose ton cours »</span></div>
+  <div class="seg" role="group" aria-label="Support">
+    <button data-view="web" aria-pressed="true">Web</button>
+    <button data-view="mobile" aria-pressed="false">Mobile</button>
+    <button data-view="both" aria-pressed="false">Côte à côte</button>
+  </div>
+  <div class="seg" role="group" aria-label="Plateforme mobile" id="platSeg">
+    <button data-plat="ios" aria-pressed="true">iOS</button>
+    <button data-plat="android" aria-pressed="false">Android</button>
+  </div>
+  <label class="toggle"><input type="checkbox" id="noKey"> Sans clé d'IA</label>
+</header>
+<nav class="steps" id="steps" aria-label="Étapes du parcours"></nav>
+<p class="note" id="note"></p>
+<main class="stage" id="stage"></main>
+
+<script>
+const I = {
+  home:'<path d="M3 11l9-7 9 7v9a1 1 0 0 1-1 1h-5v-6h-6v6H4a1 1 0 0 1-1-1z"/>',
+  cal:'<rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/>',
+  list:'<path d="M9 6h12M9 12h12M9 18h12M4 6h.01M4 12h.01M4 18h.01"/>',
+  layers:'<path d="M12 3l9 5-9 5-9-5 9-5z"/><path d="M3 13l9 5 9-5"/>',
+  cards:'<rect x="7" y="7" width="13" height="13" rx="2"/><path d="M4 16V5a1 1 0 0 1 1-1h11"/>',
+  user:'<circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/>',
+  upload:'<path d="M12 16V4M6 10l6-6 6 6"/><path d="M4 16v3a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-3"/>',
+  camera:'<path d="M4 8h3l2-3h6l2 3h3v11H4z"/><circle cx="12" cy="13" r="3.5"/>',
+  link:'<path d="M10 14a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1 1"/><path d="M14 10a4 4 0 0 0-5.7 0l-3 3a4 4 0 0 0 5.7 5.7l1-1"/>',
+  chat:'<path d="M4 5h16v11H9l-5 4z"/>',
+  key:'<circle cx="8" cy="15" r="4"/><path d="M11 12l9-9M17 6l3 3"/>',
+  back:'<path d="M15 5l-7 7 7 7"/>',
+  close:'<path d="M6 6l12 12M18 6L6 18"/>',
+  chev:'<path d="M6 9l6 6 6-6"/>',
+  check:'<path d="M5 12l5 5 9-10"/>',
+  spark:'<path d="M12 3v4M12 17v4M3 12h4M17 12h4M6 6l2.5 2.5M15.5 15.5L18 18M6 18l2.5-2.5M15.5 8.5L18 6"/>',
+  search:'<circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/>',
+  bell:'<path d="M6 16V11a6 6 0 0 1 12 0v5l2 2H4z"/><path d="M10 21h4"/>',
+  quote:'<path d="M7 7h4v4H8v3H5v-4zM15 7h4v4h-3v3h-3v-4z"/>',
+  map:'<circle cx="6" cy="6" r="2.5"/><circle cx="18" cy="8" r="2.5"/><circle cx="10" cy="18" r="2.5"/><path d="M8 7l8 1M7 8l2.5 8M16.5 10l-5 6"/>',
+  target:'<circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="3"/>',
+};
+const svg = (n, s=18, c='currentColor', w=2) => `<svg width="${s}" height="${s}" viewBox="0 0 24 24" fill="none" stroke="${c}" stroke-width="${w}" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${I[n]}</svg>`;
+
+const STEPS = [
+  {id:'accueil', label:'Accueil', note:'<b>Accueil (D2).</b> Les premiers pas restent inchangés. Deux portes d’entrée : « Dépose ton cours » (mode simple, mise en avant) et « Construire avec le tuteur » (mode actuel, cadrage par chat). Le bouton « Nouvelle formation » ouvre le même choix.'},
+  {id:'depot', label:'Dépôt', note:'<b>Dépôt (D4).</b> Un ou plusieurs fichiers en une fois ; chaque fichier reçoit un rôle deviné et modifiable (cours, exercices, annales). Lien YouTube ou page web possible. Mobile : fichiers, appareil photo (plusieurs pages) et lien, plus « Ouvrir avec Learny » depuis une autre app. Cochez « Sans clé d’IA » pour voir le blocage : les fichiers restent déposés, un geste mène à l’ajout de la clé.'},
+  {id:'analyse', label:'Analyse', note:'<b>Analyse (moins d’une minute).</b> Lecture unique des documents, structure tirée des signets et de la table des matières, découverte affichée au fil de l’eau. L’apprenant peut quitter l’écran : notification quand le programme est prêt (push sur mobile).'},
+  {id:'apercu', label:'Aperçu', note:'<b>Aperçu du programme (D7).</b> Un chapitre du document donne un module de 2 à 8 h ; pages sources affichées. Une seule question : l’échéance. « C’est parti » valide le programme ; « Ajuster avec le tuteur » ouvre l’ajustement du mode actuel. Aucune estimation de coût (D6).'},
+  {id:'diagnostic', label:'Diagnostic', note:'<b>Diagnostic global (D5).</b> Une à deux questions par module, environ 10 min, généré à partir des résumés de sections. « Passer le diagnostic » reste toujours visible. Pas de correction question par question : le bilan arrive à la fin.'},
+  {id:'pret', label:'Premier chapitre', note:'<b>Résultat et premier chapitre (D3, D5).</b> Les modules réussis sont validés et entrent en révision. Le premier module restant est prêt ; les suivants se génèrent en tâche de fond, toujours en avance sur l’apprenant. Tout le contenu cite les pages du document.'},
+];
+
+const S = {step:0, view:'web', plat:'ios', noKey:false, roleOpen:-1, answer:1, deadline:false, found:0};
+const FILES = [
+  {name:'Manuel de comptabilité générale.pdf', meta:'712 pages · 38 Mo', kind:'PDF', role:'Cours', col:['#FDE8E8','#B42318']},
+  {name:'TD corrigés, chapitres 1 à 12.pdf', meta:'96 pages · 6 Mo', kind:'PDF', role:'Exercices', col:['#FDE8E8','#B42318']},
+  {name:'Annales DCG 2023-2025.docx', meta:'54 pages · 2 Mo', kind:'DOC', role:'Annales', col:['#E8EEFD','#2349B4']},
+];
+const MODULES = [
+  ['Le cadre comptable','p. 1–48','5 h','3 chapitres'],
+  ['Les opérations courantes','p. 49–122','8 h','5 chapitres'],
+  ['La TVA','p. 123–170','6 h','4 chapitres'],
+  ['Les opérations de trésorerie','p. 171–226','6 h','4 chapitres'],
+  ['Les immobilisations','p. 227–301','8 h','5 chapitres'],
+  ['Amortissements et dépréciations','p. 302–368','8 h','5 chapitres'],
+];
+const CHAPTERS = ['Le cadre comptable','Les opérations courantes','La TVA','Les opérations de trésorerie','Les immobilisations','Amortissements et dépréciations','Les provisions','Les opérations de fin d’exercice','Les capitaux propres','Les emprunts','Les états financiers','L’analyse du résultat','Le tableau des flux','La consolidation (introduction)'];
+
+/* ---------- Contenus partagés ---------- */
+function choiceCards(m){
+  const a = `<div class="card" style="background:var(--lime);border-color:var(--lime);padding:${m?18:24}px;display:flex;flex-direction:column;gap:${m?8:10}px">
+      <span class="chip" style="background:var(--ink);color:var(--lime);border-color:var(--ink);align-self:flex-start">Nouveau · le plus rapide</span>
+      <h3 style="margin:2px 0 0;font-size:${m?22:26}px">Dépose ton cours</h3>
+      <p style="margin:0;font-size:${m?14:15}px;line-height:1.5;color:#2A3300">PDF, Word, photos de pages ou lien vidéo. On en fait un programme complet : cours, exercices, quiz et révisions.</p>
+      <div class="row" style="justify-content:space-between;margin-top:${m?4:8}px;flex-wrap:wrap">
+        <span style="font-size:13px;font-weight:600;color:#2A3300">Prêt en quelques minutes</span>
+        <button class="btn dark" data-go="1">${svg('upload',16,'#fff')} Déposer mes fichiers</button>
+      </div></div>`;
+  const b = `<div class="card" style="padding:${m?18:24}px;display:flex;flex-direction:column;gap:${m?8:10}px">
+      <span class="chip ind" style="align-self:flex-start">Sur mesure</span>
+      <h3 style="margin:2px 0 0;font-size:${m?20:26}px">Construire avec le tuteur</h3>
+      <p style="margin:0;font-size:${m?14:15}px;line-height:1.5" class="muted">Tu pars d’un objectif. Le tuteur te pose quelques questions et propose un programme fait pour toi.</p>
+      <div class="row" style="justify-content:space-between;margin-top:${m?4:8}px;flex-wrap:wrap">
+        <span class="muted" style="font-size:13px;font-weight:600">5 questions · 5 min</span>
+        <button class="btn">${svg('chat',16)} Commencer le cadrage</button>
+      </div></div>`;
+  return m ? `<div style="display:flex;flex-direction:column;gap:10px">${a}${b}</div>` : `<div style="display:grid;grid-template-columns:1.25fr 1fr;gap:16px">${a}${b}</div>`;
+}
+
+function keyWarn(m){
+  if(!S.noKey) return '';
+  return `<div class="warn">${svg('key',20,'#C2410C')}<div style="flex:1">
+    <div style="font-weight:700;font-size:14px;color:#7C2D12">Ajoute ta clé d’IA pour continuer</div>
+    <div style="font-size:13px;color:#9A3412;line-height:1.5;margin-top:2px">Learny fonctionne avec ta propre clé (OpenAI, Anthropic, Mistral…). Tes fichiers restent déposés ici.</div>
+    <button class="btn dark" style="margin-top:10px;padding:8px 12px;font-size:13px">${svg('key',14,'#fff')} Ajouter ma clé</button></div></div>`;
+}
+
+function fileList(m){
+  return FILES.map((f,i)=>`<div class="file">
+    <span class="ficon" style="background:${f.col[0]};color:${f.col[1]}">${f.kind}</span>
+    <div style="flex:1;min-width:0"><div style="font-weight:600;font-size:14px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${f.name}</div>
+    <div class="muted" style="font-size:12.5px;margin-top:2px">${f.meta}${m?'':' · lu en 2 s'}</div>
+    ${m?`<button class="select" style="margin-top:8px" data-role="${i}">Rôle : ${f.role} ${svg('chev',14)}</button>`:''}</div>
+    ${m?'':`<button class="select" data-role="${i}">${f.role} ${svg('chev',14)}</button>`}
+    <button aria-label="Retirer" style="border:0;background:transparent;color:var(--muted2);padding:4px">${svg('close',16)}</button>
+  </div>${S.roleOpen===i?roleMenu(i):''}`).join('');
+}
+function roleMenu(i){
+  return `<div class="card" style="padding:6px;margin:-4px 0 4px auto;width:240px;box-shadow:0 12px 30px -12px rgba(0,0,0,.25)">
+    ${['Cours','Exercices','Annales','Autre support'].map(r=>`<button data-setrole="${i}:${r}" style="display:flex;justify-content:space-between;width:100%;border:0;background:${FILES[i].role===r?'var(--soft)':'transparent'};padding:9px 10px;border-radius:9px;font-size:13.5px;text-align:left">${r}${FILES[i].role===r?svg('check',15,'var(--indigo)',2.4):''}</button>`).join('')}
+    <div class="muted" style="font-size:11.5px;padding:6px 10px 4px;line-height:1.4">Le cours donne la structure ; exercices et annales alimentent les exercices et les quiz.</div></div>`;
+}
+
+const ANALYSE = [
+  ['Lecture des 3 documents','862 pages lues'],
+  ['Structure détectée','14 chapitres, d’après la table des matières du manuel'],
+  ['Exercices et annales repérés','212 exercices corrigés, 3 sessions d’annales'],
+  ['Construction du programme','Regroupement en modules de 2 à 8 h'],
+];
+function analyseSteps(){
+  return ANALYSE.map((a,i)=>{const st = i<3?'ok':(i===3?'run':'wait');
+    return `<div class="row" style="align-items:flex-start;gap:12px;padding:10px 0;${i?'border-top:1px solid var(--line)':''}">
+    <span class="check ${st}">${st==='ok'?svg('check',13,'#111113',3):''}</span>
+    <div><div style="font-weight:600;font-size:14.5px">${a[0]}</div><div class="muted" style="font-size:13px;margin-top:2px">${a[1]}</div></div></div>`}).join('');
+}
+function foundList(m){
+  const n = Math.min(S.found, CHAPTERS.length);
+  return CHAPTERS.slice(0,n).map((c,i)=>`<div class="row found" style="gap:10px;padding:7px 0;font-size:${m?13.5:14}px"><span class="muted" style="width:22px;font-variant-numeric:tabular-nums">${String(i+1).padStart(2,'0')}</span><span style="flex:1">${c}</span></div>`).join('')
+    + (n<CHAPTERS.length?`<div class="muted" style="font-size:13px;padding-top:6px">Lecture en cours…</div>`:'');
+}
+
+function moduleRows(m, count){
+  return MODULES.slice(0,count).map((x,i)=>`<div class="mod">
+    <span class="num">${i+1}</span>
+    <div style="flex:1;min-width:0"><div style="font-weight:600;font-size:14.5px">${x[0]}</div>
+    <div class="muted" style="font-size:12.5px;margin-top:2px">${x[3]} · ${x[2]}${m?'':' · exercices et quiz'}</div></div>
+    <span class="chip" title="Pages du manuel">${svg('quote',12)} ${x[1]}</span></div>`).join('');
+}
+function deadlineBlock(m){
+  return `<div class="card" style="padding:${m?14:18}px;background:var(--soft)">
+    <div style="font-weight:600;font-size:15px">Tu as une échéance ?</div>
+    <div class="muted" style="font-size:13px;margin-top:2px">Un examen, une certification, une date à tenir.</div>
+    <div class="row" style="margin-top:10px;flex-wrap:wrap;gap:8px">
+      <button class="btn" data-deadline="0" style="padding:8px 14px;${!S.deadline?'background:var(--ink);color:#fff;border-color:var(--ink)':''}">Non, à mon rythme</button>
+      <button class="btn" data-deadline="1" style="padding:8px 14px;${S.deadline?'background:var(--ink);color:#fff;border-color:var(--ink)':''}">Oui, le…</button>
+      ${S.deadline?`<span class="field" style="padding:8px 12px;color:var(--ink);font-weight:600">${svg('cal',14)} 15 juin 2027</span>`:''}
+    </div>
+    ${S.deadline?`<div style="font-size:12.5px;margin-top:10px;color:var(--lime-ink)">Objectif « examen » : le planning finit 2 semaines avant, avec un examen blanc.</div>`:''}
+  </div>`;
+}
+const KPIS = () => S.deadline
+  ? [['14','modules'],['112 h','d’étude'],['2 h 20','par jour, lun.–ven.'],['1er juin','fin prévue']]
+  : [['14','modules'],['112 h','d’étude'],['2 h','par jour, lun.–ven.'],['3 mars','fin prévue']];
+function kpis(m){
+  return `<div style="display:grid;grid-template-columns:repeat(${m?2:4},1fr);gap:10px">${KPIS().map(k=>`<div class="kpi"><b>${k[0]}</b><span>${k[1]}</span></div>`).join('')}</div>`;
+}
+
+const Q = {mod:'Module 2 · Les opérations courantes', text:'Une facture d’achat de marchandises de 1 200 € HT (TVA 20 %) est reçue. Quel compte est crédité ?',
+  opts:['401 Fournisseurs','607 Achats de marchandises','44566 TVA déductible sur biens et services','512 Banque']};
+function quiz(m){
+  return `<div class="muted" style="font-size:12.5px;font-weight:600">${Q.mod}</div>
+  <div style="font-family:'Space Grotesk';font-size:${m?20:24}px;font-weight:600;line-height:1.3;margin:8px 0 16px">${Q.text}</div>
+  <div style="display:flex;flex-direction:column;gap:10px">${Q.opts.map((o,i)=>`<button class="opt ${S.answer===i?'sel':''}" data-answer="${i}"><span class="k">${'ABCD'[i]}</span>${o}</button>`).join('')}</div>`;
+}
+
+function readyCard(m){
+  return `<div class="dark" style="background:var(--ink);color:#fff;border-radius:${m?24:22}px;padding:${m?20:26}px">
+    <div class="eyebrow" style="color:var(--lime)">Ton premier chapitre est prêt</div>
+    <h3 style="margin:10px 0 4px;font-size:${m?24:28}px;font-weight:600">La TVA</h3>
+    <div style="color:#D4D4D8;font-size:${m?14:15}px">Module 3 · Chapitre 1 : principe et champ d’application</div>
+    <div class="row" style="gap:8px;margin-top:12px;flex-wrap:wrap">
+      <span class="chip" style="background:#232328;border-color:#2E2E34;color:#E4E4E7">Cours · 25 min</span>
+      <span class="chip" style="background:#232328;border-color:#2E2E34;color:#E4E4E7">4 exercices</span>
+      <span class="chip" style="background:#232328;border-color:#2E2E34;color:#E4E4E7">${svg('quote',12,'#E4E4E7')} p. 123–134</span>
+    </div>
+    <div class="row" style="margin-top:${m?16:20}px;gap:10px;${m?'flex-direction:column;align-items:stretch':''}">
+      <button class="btn lime" style="${m?'width:100%;padding:14px;font-size:15px;border-radius:14px':''}">Commencer · 30 min</button>
+      <button class="btn" style="background:transparent;color:#fff;border-color:#3A3A42;${m?'width:100%;padding:14px;border-radius:14px':''}">Voir le programme</button>
+    </div></div>`;
+}
+function genList(m){
+  const rows = [['Modules 1 et 2','Acquis au diagnostic · en révision','gr'],['Module 3 · La TVA','Prêt','ok'],['Module 4 · Trésorerie','Prêt','ok'],['Module 5 · Immobilisations','En préparation…','run'],['Modules 6 à 14','Prêts avant que tu y arrives','wait']];
+  return rows.map((r,i)=>`<div class="row" style="gap:12px;padding:10px 0;${i?'border-top:1px solid var(--line)':''}">
+    ${r[2]==='gr'?`<span class="check" style="background:var(--green-soft)">${svg('check',13,'#065F46',3)}</span>`:`<span class="check ${r[2]}">${r[2]==='ok'?svg('check',13,'#111113',3):''}</span>`}
+    ${m ? `<div style="flex:1"><div style="font-weight:600;font-size:14px">${r[0]}</div><div class="muted" style="font-size:12.5px;margin-top:2px">${r[1]}</div></div>`
+        : `<div style="flex:1;font-weight:600;font-size:14px">${r[0]}</div><span class="muted" style="font-size:13px">${r[1]}</span>`}</div>`).join('');
+}
+
+/* ---------- Bureau ---------- */
+function desk(content){
+  return `<div class="desk">
+    <aside class="side">
+      <div class="brand"><span class="logo"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#111113" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19V6l8 6 8-6v13"/></svg></span>Learny</div>
+      <div class="nav ${S.step===0?'on':''}">${svg('home',17)} Accueil</div>
+      <div class="nav">${svg('cal',17)} Agenda</div>
+      <div class="cur"><small>FORMATION EN COURS</small>
+        <div style="margin-top:8px;font-weight:600;font-size:13.5px">${S.step>=3?'Comptabilité générale':'SAP S/4HANA Finance'}</div>
+        <div class="bar" style="margin-top:8px;background:#2E2E34"><i style="width:${S.step>=5?'14%':(S.step>=3?'0%':'38%')}"></i></div>
+        <div style="font-size:11.5px;color:var(--muted2);margin-top:6px">${S.step>=5?'Module 3 sur 14':(S.step>=3?'Programme à valider':'Module 3 sur 7')}</div></div>
+      <div class="nav">${svg('list',17)} Programme</div>
+      <div class="nav">${svg('map',17)} Carte des notions</div>
+      <div class="nav">${svg('cards',17)} Quiz global</div>
+      <div class="nav">${svg('target',17)} Mes lacunes</div>
+    </aside>
+    <div class="main">
+      <div class="top"><div class="search">${svg('search',16)} Rechercher une notion, un cours, une formation…</div><span style="flex:1"></span>
+        <span class="back" style="border-radius:11px">${svg('bell',17)}</span><span class="av">AP</span><span style="font-size:14px;font-weight:600">Mon compte</span></div>
+      <div class="page">${content}</div>
+    </div></div>`;
+}
+function deskStep(){
+  const s = S.step;
+  if(s===0) return desk(`
+    <div class="muted" style="font-size:14px">Mercredi 11 novembre</div>
+    <div class="row" style="justify-content:space-between;margin:4px 0 22px"><h1 style="margin:0;font-size:32px;font-weight:600">Votre journée d’apprentissage</h1>
+      <button class="btn lime">+ Nouvelle formation</button></div>
+    <div class="eyebrow muted" style="margin-bottom:10px">Commencer une formation</div>
+    ${choiceCards(false)}
+    <div class="dim" style="margin-top:22px;display:grid;grid-template-columns:1.6fr 1fr;gap:16px">
+      <div style="background:var(--ink);border-radius:22px;height:220px;padding:22px;color:#fff"><div class="eyebrow" style="color:var(--lime)">Aujourd’hui · 4 activités</div></div>
+      <div class="card" style="height:220px"></div></div>`);
+  if(s===1) return desk(`
+    <div class="row" style="gap:10px;color:var(--muted);font-size:13.5px">${svg('back',15)} Accueil</div>
+    <h1 style="margin:10px 0 4px;font-size:32px;font-weight:600">Dépose ton cours</h1>
+    <p class="muted" style="margin:0 0 20px;font-size:15px">Un ou plusieurs fichiers. On en fait une formation complète, et tu valides avant de commencer.</p>
+    <div style="display:grid;grid-template-columns:1.35fr 1fr;gap:20px;align-items:start">
+      <div style="display:flex;flex-direction:column;gap:12px">
+        <div class="drop" style="height:170px">${svg('upload',28,'var(--muted)')}<div style="font-weight:600;font-size:16px">Glisse tes fichiers ici</div>
+          <div class="muted" style="font-size:13.5px">ou <u style="color:var(--indigo)">parcours ton ordinateur</u> · PDF, Word, texte, images · jusqu’à 1 000 pages</div></div>
+        ${fileList(false)}
+        <div class="field row" style="gap:8px">${svg('link',16)} Ou colle un lien : vidéo YouTube, page web…</div>
+      </div>
+      <div class="card" style="padding:20px;display:flex;flex-direction:column;gap:14px">
+        ${keyWarn(false)}
+        <div><div style="font-weight:600;font-size:15px">Pourquoi tu l’apprends ? <span class="muted" style="font-weight:500">· facultatif</span></div>
+          <div class="field" style="margin-top:8px;min-height:74px">Examen le 15 juin, reconversion, culture…</div></div>
+        <div style="font-size:13px;line-height:1.55" class="muted">${svg('spark',14,'var(--indigo)')} Le contenu vient de tes documents, avec les pages citées. Tout ajout du tuteur est signalé.</div>
+        <button class="btn lime" style="padding:14px" data-go="2" ${S.noKey?'disabled':''}>Créer ma formation</button>
+        <div class="muted" style="font-size:12.5px;text-align:center">Analyse en moins d’une minute · rien ne démarre sans ton accord</div>
+      </div></div>`);
+  if(s===2) return desk(`
+    <h1 style="margin:6px 0 4px;font-size:32px;font-weight:600">On lit tes documents</h1>
+    <p class="muted" style="margin:0 0 20px;font-size:15px">Tu peux quitter cette page : on te prévient dès que ton programme est prêt.</p>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;align-items:start">
+      <div class="card" style="padding:20px 22px">${analyseSteps()}<div class="bar" style="margin-top:12px"><i style="width:78%"></i></div>
+        <div class="muted" style="font-size:12.5px;margin-top:8px">Environ 15 secondes restantes</div></div>
+      <div class="card" style="padding:20px 22px"><div class="eyebrow muted">Chapitres trouvés dans le manuel</div><div style="margin-top:8px">${foundList(false)}</div></div>
+    </div>`);
+  if(s===3) return desk(`
+    <span class="chip lime">${svg('check',13,'#3D5200',3)} Programme prêt</span>
+    <h1 style="margin:10px 0 4px;font-size:32px;font-weight:600">Comptabilité générale</h1>
+    <p class="muted" style="margin:0 0 18px;font-size:15px">D’après <b style="color:var(--ink)">Manuel de comptabilité générale</b> (712 p.), tes TD corrigés et 3 sessions d’annales.</p>
+    ${kpis(false)}
+    <div style="display:grid;grid-template-columns:1.5fr 1fr;gap:20px;margin-top:18px;align-items:start">
+      <div class="card" style="padding:18px;display:flex;flex-direction:column;gap:8px">
+        <div class="row" style="justify-content:space-between"><div style="font-weight:600;font-size:16px">Les modules</div><span class="muted" style="font-size:13px">Suit l’ordre du manuel</span></div>
+        ${moduleRows(false,6)}<div class="muted" style="font-size:13.5px;padding:6px 4px">+ 8 autres modules, jusqu’à « La consolidation (introduction) »</div></div>
+      <div style="display:flex;flex-direction:column;gap:14px">${deadlineBlock(false)}
+        <button class="btn lime" style="padding:14px" data-go="4">C’est parti</button>
+        <button class="btn" style="padding:13px">${svg('chat',16)} Ajuster avec le tuteur</button>
+        <div class="muted" style="font-size:12.5px;line-height:1.5">Les premiers modules sont générés en priorité ; les suivants le seront avant que tu y arrives.</div></div>
+    </div>`);
+  if(s===4) return desk(`
+    <div class="row" style="justify-content:space-between"><span class="chip ind">Diagnostic · 10 min</span><button class="btn" style="padding:8px 14px" data-go="5">Passer le diagnostic</button></div>
+    <h1 style="margin:12px 0 4px;font-size:30px;font-weight:600">Sautons ce que tu sais déjà</h1>
+    <p class="muted" style="margin:0 0 18px;font-size:15px">Une ou deux questions par module. Les modules réussis seront validés et passeront en révision.</p>
+    <div class="card" style="padding:26px 28px;max-width:760px">
+      <div class="row" style="justify-content:space-between;font-size:13px;font-weight:600"><span>Question 4 sur 20</span><span class="muted">Pas de correction avant la fin</span></div>
+      <div class="bar" style="margin:10px 0 22px"><i style="width:20%;background:var(--indigo)"></i></div>
+      ${quiz(false)}
+      <div class="row" style="margin-top:20px;gap:10px"><button class="btn dark" data-go="5">Valider</button><button class="btn">Je ne sais pas</button></div>
+    </div>`);
+  return desk(`
+    <span class="chip gr">${svg('check',13,'#065F46',3)} Diagnostic terminé · 17 bonnes réponses sur 20</span>
+    <h1 style="margin:10px 0 4px;font-size:32px;font-weight:600">2 modules déjà acquis</h1>
+    <p class="muted" style="margin:0 0 18px;font-size:15px">« Le cadre comptable » et « Les opérations courantes » sont validés ; leurs notions entrent dans ton quiz global. Il reste 12 modules, 99 h, fin prévue le 15 février.</p>
+    <div style="display:grid;grid-template-columns:1.2fr 1fr;gap:20px;align-items:start">
+      ${readyCard(false)}
+      <div class="card" style="padding:18px 20px"><div class="eyebrow muted">Préparation du programme</div><div style="margin-top:6px">${genList()}</div>
+        <div class="muted" style="font-size:12.5px;margin-top:10px;line-height:1.5">${svg('quote',13)} Chaque cours cite les pages de ton manuel ; un complément du tuteur est marqué « Hors document ».</div></div>
+    </div>`);
+}
+
+/* ---------- Téléphone ---------- */
+function phone(body, opts={}){
+  const android = S.plat==='android';
+  const sb = android
+    ? `<span>13:20</span><span style="display:flex;gap:6px;align-items:center">▾ ▴ <span style="font-size:12px">87 %</span></span>`
+    : `<span>13:20</span><span style="display:flex;gap:6px;align-items:center;font-size:13px">●●●● ◠ ▭</span>`;
+  const head = opts.title ? `<div class="phead">${opts.back!==false?`<span class="back">${svg(android?'back':'back',18)}</span>`:''}${opts.headRight||''}</div>` : '';
+  const tabs = opts.tabs ? `<div class="tabs">${[['home','Aujourd’hui'],['layers','Programme'],['cards','Réviser'],['cal','Agenda'],['user','Profil']].map((t,i)=>`<div class="${i===0?'on':''}">${svg(t[0],22)}${t[1]}</div>`).join('')}</div>` : '';
+  return `<div class="${android?'android':''}"><div class="phone"><div class="screen">
+    <div class="island"></div><div class="sbar">${sb}</div>
+    <div class="pbody">${head}${body}</div>
+    ${opts.cta?`<div class="cta">${opts.cta}</div>`:''}${tabs}<div class="home-ind"><i></i></div>
+  </div></div><div class="plat">${android?'Android':'iOS'} · ${STEPS[S.step].label}</div></div>`;
+}
+function phoneStep(){
+  const s = S.step;
+  if(s===0) return phone(`
+    <div class="row" style="justify-content:space-between;align-items:flex-start;padding-top:6px">
+      <div><div class="muted" style="font-size:14px">Mercredi 11 novembre</div><div class="ptitle">Aujourd’hui</div></div>
+      <span class="av" style="width:42px;height:42px;font-size:15px">AP</span></div>
+    <div class="eyebrow muted" style="margin:10px 0 10px">Nouvelle formation</div>
+    ${choiceCards(true)}
+    <div class="dim" style="margin-top:14px;background:var(--ink);border-radius:24px;height:150px"></div>`, {tabs:true});
+  if(s===1) return phone(`
+    <div class="ptitle">Dépose ton cours</div>
+    <p class="muted" style="margin:0 0 14px;font-size:14px;line-height:1.5">Un ou plusieurs fichiers. Tu valides le programme avant de commencer.</p>
+    ${S.noKey?`<div style="margin-bottom:12px">${keyWarn(true)}</div>`:''}
+    <div class="sheetbtns" style="margin-bottom:14px">
+      <button>${svg('upload',20)}Fichiers</button><button>${svg('camera',20)}Photos de pages</button><button>${svg('link',20)}Lien</button></div>
+    <div style="display:flex;flex-direction:column;gap:8px">${fileList(true)}</div>
+    <div style="font-weight:600;font-size:14px;margin:16px 0 6px">Pourquoi tu l’apprends ? <span class="muted" style="font-weight:500">· facultatif</span></div>
+    <div class="field">Examen le 15 juin, reconversion…</div>
+    <div class="muted" style="font-size:12.5px;margin-top:12px;line-height:1.5">Astuce : depuis une autre app, « Partager » puis « Learny » ajoute le fichier ici.</div>`,
+    {title:true, cta:`<button class="btn lime" data-go="2" ${S.noKey?'disabled':''}>Créer ma formation</button>`});
+  if(s===2) return phone(`
+    <div class="ptitle">On lit tes documents</div>
+    <p class="muted" style="margin:0 0 14px;font-size:14px;line-height:1.5">Tu peux fermer l’app : une notification te prévient quand c’est prêt.</p>
+    <div class="card" style="padding:6px 16px 14px">${analyseSteps()}<div class="bar" style="margin-top:6px"><i style="width:78%"></i></div></div>
+    <div class="card" style="padding:14px 16px;margin-top:12px"><div class="eyebrow muted">Chapitres trouvés</div><div style="margin-top:4px">${foundList(true)}</div></div>`,
+    {title:true});
+  if(s===3) return phone(`
+    <span class="chip lime">${svg('check',13,'#3D5200',3)} Programme prêt</span>
+    <div class="ptitle" style="margin-top:8px">Comptabilité générale</div>
+    <p class="muted" style="margin:0 0 12px;font-size:13.5px;line-height:1.5">D’après ton manuel (712 p.), tes TD et 3 sessions d’annales.</p>
+    ${kpis(true)}
+    <div style="margin-top:12px">${deadlineBlock(true)}</div>
+    <div style="font-weight:600;font-size:16px;margin:16px 0 8px">Les modules</div>
+    <div style="display:flex;flex-direction:column;gap:8px">${moduleRows(true,4)}</div>
+    <div class="muted" style="font-size:13px;padding:8px 2px">+ 10 autres modules</div>`,
+    {title:true, cta:`<button class="btn lime" data-go="4">C’est parti</button><button class="btn">${svg('chat',16)} Ajuster avec le tuteur</button>`});
+  if(s===4) return phone(`
+    <div class="row" style="justify-content:space-between;margin-top:2px"><span class="chip ind">Diagnostic · 10 min</span><button class="btn" style="padding:7px 12px;font-size:13px" data-go="5">Passer</button></div>
+    <div class="row" style="justify-content:space-between;font-size:13px;font-weight:600;margin-top:16px"><span>Question 4 sur 20</span></div>
+    <div class="bar" style="margin:8px 0 18px"><i style="width:20%;background:var(--indigo)"></i></div>
+    ${quiz(true)}`,
+    {title:true, back:false, headRight:`<span class="back">${svg('close',18)}</span>`, cta:`<button class="btn dark" data-go="5">Valider</button><button class="btn">Je ne sais pas</button>`});
+  return phone(`
+    <span class="chip gr">${svg('check',13,'#065F46',3)} 17 sur 20 au diagnostic</span>
+    <div class="ptitle" style="margin-top:8px">2 modules déjà acquis</div>
+    <p class="muted" style="margin:0 0 14px;font-size:13.5px;line-height:1.5">Ils passent en révision. Il reste 12 modules, fin prévue le 15 février.</p>
+    ${readyCard(true)}
+    <div class="card" style="padding:6px 16px 10px;margin-top:12px">${genList(true)}</div>`, {tabs:true});
+}
+
+/* ---------- Rendu ---------- */
+function render(){
+  document.getElementById('steps').innerHTML = STEPS.map((s,i)=>`<button data-go="${i}" ${i===S.step?'aria-current="step"':''}><span class="n">${i+1}</span>${s.label}</button>`).join('');
+  document.getElementById('note').innerHTML = STEPS[S.step].note;
+  document.querySelectorAll('[data-view]').forEach(b=>b.setAttribute('aria-pressed', b.dataset.view===S.view));
+  document.querySelectorAll('[data-plat]').forEach(b=>b.setAttribute('aria-pressed', b.dataset.plat===S.plat));
+  document.getElementById('platSeg').style.display = S.view==='web' ? 'none' : '';
+  const st = document.getElementById('stage');
+  let html = '';
+  if(S.view!=='mobile') html += `<div class="desk-wrap" id="dw"><div class="desk-scale" id="ds">${deskStep()}</div></div>`;
+  if(S.view!=='web') html += phoneStep();
+  st.innerHTML = html;
+  fit();
+}
+function fit(){
+  const dw = document.getElementById('dw'), ds = document.getElementById('ds');
+  if(!dw) return;
+  const w = S.view==='both' ? Math.min(dw.parentElement.clientWidth - 520, 1280) : Math.min(dw.parentElement.clientWidth - 40, 1280);
+  const k = Math.max(.3, Math.min(1, w/1280));
+  dw.style.width = (1280*k)+'px';
+  ds.style.transform = `scale(${k})`;
+  dw.style.height = (ds.firstElementChild.offsetHeight*k)+'px';
+}
+let timer;
+function animateFound(){
+  clearInterval(timer);
+  if(S.step!==2){S.found=CHAPTERS.length;return;}
+  S.found = 3;
+  timer = setInterval(()=>{ S.found++; render(); if(S.found>=CHAPTERS.length) clearInterval(timer); }, 450);
+}
+document.addEventListener('click', e=>{
+  const t = e.target.closest('button'); if(!t) return;
+  if(t.dataset.go!==undefined){ S.step=+t.dataset.go; S.roleOpen=-1; animateFound(); render(); window.scrollTo({top:0}); return; }
+  if(t.dataset.view){ S.view=t.dataset.view; render(); return; }
+  if(t.dataset.plat){ S.plat=t.dataset.plat; render(); return; }
+  if(t.dataset.role!==undefined){ const i=+t.dataset.role; S.roleOpen = S.roleOpen===i?-1:i; render(); return; }
+  if(t.dataset.setrole){ const [i,r]=t.dataset.setrole.split(':'); FILES[+i].role=r; S.roleOpen=-1; render(); return; }
+  if(t.dataset.deadline!==undefined){ S.deadline = t.dataset.deadline==='1'; render(); return; }
+  if(t.dataset.answer!==undefined){ S.answer=+t.dataset.answer; render(); return; }
+});
+document.getElementById('noKey').addEventListener('change', e=>{ S.noKey=e.target.checked; if(S.noKey&&S.step!==1){S.step=1;} render(); });
+document.addEventListener('keydown', e=>{
+  if(e.key==='ArrowRight' && S.step<STEPS.length-1){S.step++;animateFound();render();}
+  if(e.key==='ArrowLeft' && S.step>0){S.step--;animateFound();render();}
+});
+window.addEventListener('resize', fit);
+const h = new URLSearchParams(location.hash.slice(1));
+if(h.get('step')) S.step = Math.max(0, Math.min(5, +h.get('step')));
+if(h.get('view')) S.view = h.get('view');
+if(h.get('plat')) S.plat = h.get('plat');
+if(h.get('nokey')) { S.noKey = true; document.getElementById('noKey').checked = true; }
+animateFound(); render();
+</script>
+</body>
+</html>

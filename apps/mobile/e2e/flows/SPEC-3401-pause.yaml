@@ -1,0 +1,115 @@
+# SPEC-3401 — mise en pause depuis la feuille compte et depuis la ligne Rythme (EF-5, BR-AUT-10).
+#
+# Le flux **n'écrit pas** : déclarer une pause gèle les créneaux à venir de toutes les formations
+# actives et la reprise les replanifie (SPEC-721), ce qui muterait le jeu de démonstration partagé par
+# toutes les campagnes. La mutation est prouvée par `test/integration/profile.int.test.ts` sur un
+# compte éphémère (créé puis supprimé) et par `test/profil/pause.test.tsx` ; ce flux prouve le
+# parcours et le sélecteur borné de l'application (ADR-3024).
+appId: fr.learny.app
+name: SPEC-3401 pause
+tags:
+  - SPEC-3401
+---
+- launchApp:
+    clearState: true
+- extendedWaitUntil:
+    visible:
+      id: sdd-health
+    timeout: 30000
+- openLink: learny://connexion?demo=1
+- waitForAnimationToEnd:
+    timeout: 5000
+- runFlow:
+    when:
+      visible:
+        id: onboarding-error
+    commands:
+      - tapOn:
+          id: onboarding-error-retry
+# La restauration de session peut précéder la publication du jeton, et un démarrage à froid peut
+# perdre le lien : une seconde tentative, bornée, évite un faux échec de campagne.
+- runFlow:
+    when:
+      notVisible:
+        id: tab-aujourdhui
+    commands:
+      - openLink: learny://connexion?demo=1
+      - waitForAnimationToEnd:
+          timeout: 5000
+- extendedWaitUntil:
+    visible:
+      id: tab-aujourdhui
+    timeout: 60000
+- tapOn:
+    id: tab-profil
+- extendedWaitUntil:
+    visible:
+      id: profile-identity
+    timeout: 30000
+# EF-5 — première entrée : la ligne Rythme et rappels ouvre la feuille de pause.
+- swipe:
+    direction: UP
+    duration: 400
+- swipe:
+    direction: UP
+    duration: 400
+- tapOn:
+    id: profile-row-rhythm
+- extendedWaitUntil:
+    visible:
+      id: rhythm-screen
+    timeout: 20000
+- tapOn:
+    id: rhythm-pause
+- extendedWaitUntil:
+    visible:
+      id: pause-sheet
+    timeout: 15000
+- assertVisible:
+    id: pause-date
+- assertVisible:
+    id: pause-date-1
+- assertVisible:
+    id: pause-confirm
+- assertVisible:
+    id: pause-diagnostic
+# CL-3 de SPEC-721 — demain est la borne la plus proche : aucune proposition « aujourd'hui ».
+- assertNotVisible:
+    id: pause-date-0
+- tapOn:
+    id: pause-cancel
+- extendedWaitUntil:
+    notVisible:
+      id: pause-sheet
+    timeout: 15000
+- tapOn:
+    id: rhythm-screen-back
+# EF-5 — seconde entrée : la feuille compte de SPEC-3102 propose la pause.
+- swipe:
+    direction: UP
+    duration: 400
+- swipe:
+    direction: UP
+    duration: 400
+- extendedWaitUntil:
+    visible:
+      id: profile-settings
+    timeout: 20000
+- tapOn:
+    id: profile-settings
+- extendedWaitUntil:
+    visible:
+      id: profile-settings-sheet
+    timeout: 15000
+- tapOn:
+    id: settings-row-pause
+- extendedWaitUntil:
+    visible:
+      id: pause-sheet
+    timeout: 15000
+- tapOn:
+    id: pause-cancel
+- extendedWaitUntil:
+    notVisible:
+      id: pause-sheet
+    timeout: 15000

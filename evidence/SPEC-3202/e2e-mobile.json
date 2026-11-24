@@ -1,0 +1,55 @@
+{
+  "spec": "SPEC-3202",
+  "platform": "android",
+  "transport": "local",
+  "device": {
+    "platform": "android",
+    "model": "sdk_gphone64_x86_64",
+    "apiLevel": "35",
+    "size": "Physical size: 1080x2400"
+  },
+  "tags": [
+    "SPEC-3202"
+  ],
+  "startedAt": "2026-11-23T16:32:58.340Z",
+  "finishedAt": "2026-11-23T16:33:46.195Z",
+  "passed": 1,
+  "failed": 0,
+  "videos": 1,
+  "campaignVideo": "artifacts/campagne/campagne.mp4",
+  "visual": 1,
+  "junitCases": 1,
+  "flows": [
+    {
+      "file": "apps/mobile/e2e/flows/SPEC-3202-programme.yaml",
+      "name": "SPEC-3202 programme",
+      "tags": [
+        "SPEC-3202",
+        "visual"
+      ],
+      "status": "passed",
+      "durationSec": 41.334,
+      "message": null,
+      "videos": [],
+      "screenshots": [
+        "artifacts/spec-3202-programme/SPEC-3202-programme.png"
+      ],
+      "visual": {
+        "flow": "SPEC-3202 programme",
+        "status": "passed",
+        "diffRatio": 0.088,
+        "capture": "/root/wt/SPEC-3202/test-results/sdd/SPEC-3202/artifacts/spec-3202-programme/SPEC-3202-programme.png",
+        "baseline": "/root/wt/SPEC-3202/apps/mobile/e2e/visual/baselines/SPEC-3202-programme.png",
+        "diff": "/root/wt/SPEC-3202/test-results/sdd/SPEC-3202/artifacts/spec-3202-programme/SPEC-3202-programme.diff.png"
+      }
+    }
+  ],
+  "visualChecks": [
+    {
+      "flow": "SPEC-3202 programme",
+      "status": "passed",
+      "diffRatio": 0.088
+    }
+  ],
+  "unattributed": []
+}

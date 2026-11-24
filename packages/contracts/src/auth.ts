@@ -23,6 +23,9 @@ export {
   validateAccountForm,
 } from './account-form';
 export type { AccountFormMessages } from './account-form';
+// SPEC-3101 — même indicateur de solidité sur le web et dans l'application mobile.
+export { passwordStrength } from './password-strength';
+export type { PasswordStrength } from './password-strength';
 
 /**
  * Account form of the sign-up screen (SPEC-601 ET-2). The union is discriminated on `method` so

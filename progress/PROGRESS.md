@@ -1,22 +1,22 @@
 # Progression du projet Learny
 
-> Généré par `node tools/sdd/status.mjs` le 2026-11-24T06:44:19.056Z. Ne pas éditer à la main.
+> Généré par `node tools/sdd/status.mjs` le 2026-11-24T07:43:18.377Z. Ne pas éditer à la main.
 
 ## Synthèse
 
 | Indicateur | Valeur |
 |---|---|
-| Spécifications | 158 (V1 : 124, V2 : 8, migration : 26) |
-| Terminées | 141 |
+| Spécifications | 178 (V1 : 124, V2 : 8, migration : 46) |
+| Terminées | 156 |
 | En cours | 0 |
-| Prêtes | 0 |
-| En attente de dépendances | 17 |
+| Prêtes | 2 |
+| En attente de dépendances | 20 |
 | Bloquées | 0 |
 | Bloquées par une dépendance | 0 |
-| **Avancement global** | **89.2 %** |
+| **Avancement global** | **87.6 %** |
 | Avancement V1 | 99.2 % |
-| Piste active | python-migration |
-| Prochaine action | finished |
+| Piste active | mobile |
+| Prochaine action | start SPEC-3501 — Notifications push natives (FCM et APNs) |
 
 ## Phases et checkpoints
 
@@ -40,6 +40,13 @@
 | P21 | Migration Python — données, identité et worker | 2/2 | CP-21 | ✅ 2026-11-23 cp-21 |
 | P22 | Migration Python — domaines métier | 7/7 | CP-22 | ✅ 2026-11-23 cp-22 |
 | P23 | Migration Python — bascule et retrait du backend TypeScript | 2/2 | CP-23 | ✅ 2026-11-24 cp-23 |
+| P30 | Mobile — socle Expo, design system natif et données | 3/3 | CP-30 | ✅ 2026-11-22 cp-30 |
+| P31 | Mobile — accès et coquille | 2/2 | CP-31 | ✅ 2026-11-23 cp-31 |
+| P32 | Mobile — Aujourd’hui, Programme et Agenda | 3/3 | CP-32 | ✅ 2026-11-23 cp-32 |
+| P33 | Mobile — cours, tuteur, quiz et révisions | 5/5 | CP-33 | ✅ 2026-11-23 cp-33 |
+| P34 | Mobile — profil, réglages et connexion tierce | 2/2 | CP-34 | ✅ 2026-11-24 cp-34 |
+| P35 | Mobile — notifications push et publication (exige CP-23) | 0/2 | CP-35 | ⏳ |
+| P40 | Mode simple — lot 1 : dépôt de documents et formation automatique (web et mobile) | 0/3 | CP-40 | ⏳ |
 
 ## Détail des spécifications
 
@@ -203,6 +210,26 @@
 | [SPEC-2206](../specs/p22-python-domaines/SPEC-2206-domaines-facturation-confidentialite.md) | Domaines Billing & Entitlements et Privacy & Accounts en Python | P22 | ✅ done | 0 | ✓lint ✓typecheck ✓build ✓unit ✓integration ✓e2e ✓visual ✓acceptance | SPEC-2201, SPEC-2203, SPEC-2204, SPEC-2205 |
 | [SPEC-2301](../specs/p23-python-bascule/SPEC-2301-deploiement-bascule-rollback.md) | Déploiement Coolify, bascule progressive et rollback | P23 | ✅ done | 1 | ✓lint ✓typecheck ✓build ✓unit ✓integration ✓e2e ✓visual ✓acceptance | SPEC-2207 |
 | [SPEC-2302](../specs/p23-python-bascule/SPEC-2302-retrait-backend-typescript.md) | Non-régression complète et retrait du backend TypeScript | P23 | ✅ done | 1 | — | SPEC-2301 |
+| [SPEC-3001](../specs/p30-mobile-socle/SPEC-3001-application-expo-monorepo-et-outillage-sdd-mobile.md) | Application Expo, intégration au monorepo et outillage SDD mobile | P30 | ✅ done | 0 | ✓lint ✓typecheck ✓unit ✓integration ✓e2e ✓visual ✓acceptance | — |
+| [SPEC-3002](../specs/p30-mobile-socle/SPEC-3002-theme-jetons-et-composants-natifs.md) | Thème, jetons et composants natifs iOS et Android | P30 | ✅ done | 0 | ✓lint ✓typecheck ✓unit ✓integration ✓e2e ✓visual ✓acceptance | SPEC-3001 |
+| [SPEC-3003](../specs/p30-mobile-socle/SPEC-3003-client-d-api-session-et-cache-hors-ligne.md) | Client d'API, session sécurisée et cache hors ligne | P30 | ✅ done | 0 | ✓lint ✓typecheck ✓unit ✓integration ✓e2e ✓visual ✓acceptance | SPEC-3001 |
+| [SPEC-3101](../specs/p31-mobile-acces/SPEC-3101-connexion-inscription-et-lien-magique.md) | Connexion, inscription et lien magique | P31 | ✅ done | 0 | ✓lint ✓typecheck ✓unit ✓integration ✓e2e ✓visual ✓acceptance | SPEC-3002, SPEC-3003 |
+| [SPEC-3102](../specs/p31-mobile-acces/SPEC-3102-coquille-onglets-natifs-et-notifications.md) | Coquille, onglets natifs, compte et centre de notifications | P31 | ✅ done | 0 | ✓lint ✓typecheck ✓unit ✓integration ✓e2e ✓visual ✓acceptance | SPEC-3101 |
+| [SPEC-3201](../specs/p32-mobile-quotidien/SPEC-3201-ecran-aujourd-hui.md) | Écran Aujourd'hui | P32 | ✅ done | 0 | ✓lint ✓typecheck ✓e2e ✓visual ✓acceptance ✓unit ✓integration | SPEC-3102 |
+| [SPEC-3202](../specs/p32-mobile-quotidien/SPEC-3202-programme-modules-et-chapitres.md) | Programme, modules et chapitres en lecture | P32 | ✅ done | 0 | ✓lint ✓typecheck ✓unit ✓integration ✓e2e ✓visual ✓acceptance | SPEC-3102 |
+| [SPEC-3203](../specs/p32-mobile-quotidien/SPEC-3203-agenda.md) | Agenda jour, semaine, mois et replanification | P32 | ✅ done | 0 | ✓lint ✓typecheck ✓unit ✓integration ✓e2e ✓visual ✓acceptance | SPEC-3102 |
+| [SPEC-3301](../specs/p33-mobile-apprentissage/SPEC-3301-rendu-natif-des-briques.md) | Rendu natif des briques et du Markdown | P33 | ✅ done | 0 | ✓lint ✓typecheck ✓unit ✓integration ✓e2e ✓visual ✓acceptance | SPEC-3002, SPEC-3003 |
+| [SPEC-3302](../specs/p33-mobile-apprentissage/SPEC-3302-lecture-du-cours.md) | Lecture du cours | P33 | ✅ done | 0 | ✓lint ✓typecheck ✓unit ✓integration ✓e2e ✓visual ✓acceptance | SPEC-3301, SPEC-3202 |
+| [SPEC-3303](../specs/p33-mobile-apprentissage/SPEC-3303-discussion-avec-le-tuteur.md) | Discussion avec le tuteur | P33 | ✅ done | 0 | ✓lint ✓typecheck ✓unit ✓integration ✓e2e ✓visual ✓acceptance | SPEC-3302 |
+| [SPEC-3304](../specs/p33-mobile-apprentissage/SPEC-3304-quiz-de-validation-et-resultat.md) | Quiz de validation et résultat | P33 | ✅ done | 0 | ✓lint ✓typecheck ✓unit ✓integration ✓e2e ✓visual ✓acceptance | SPEC-3301, SPEC-3202 |
+| [SPEC-3305](../specs/p33-mobile-apprentissage/SPEC-3305-reviser-quiz-global-echauffement-hors-ligne.md) | Réviser — quiz global, échauffement et jeu hors ligne | P33 | ✅ done | 0 | ✓lint ✓typecheck ✓unit ✓integration ✓e2e ✓visual ✓acceptance | SPEC-3301, SPEC-3201 |
+| [SPEC-3401](../specs/p34-mobile-compte/SPEC-3401-profil-reglages-et-confidentialite.md) | Profil, réglages, pause et confidentialité | P34 | ✅ done | 0 | ✓lint ✓typecheck ✓unit ✓integration ✓e2e ✓visual ✓acceptance | SPEC-3102 |
+| [SPEC-3402](../specs/p34-mobile-compte/SPEC-3402-connexion-avec-apple-et-google.md) | Connexion avec Apple et Google | P34 | ✅ done | 1 | ✓lint ✓typecheck ✓unit ✓integration ✓e2e ✓visual ✓acceptance | SPEC-3101 |
+| [SPEC-3501](../specs/p35-mobile-notifications-livraison/SPEC-3501-notifications-push-natives.md) | Notifications push natives (FCM et APNs) | P35 | 🟢 ready | 0 | — | SPEC-3401 |
+| [SPEC-3502](../specs/p35-mobile-notifications-livraison/SPEC-3502-accessibilite-performances-et-publication.md) | Accessibilité, performances et publication sur les stores | P35 | ⏳ waiting | 0 | — | SPEC-3203, SPEC-3303, SPEC-3304, SPEC-3305, SPEC-3402, SPEC-3501 |
+| [SPEC-4001](../specs/p40-mode-simple/SPEC-4001-mode-simple-backend-et-contrat.md) | Mode simple — backend et contrat | P40 | 🟢 ready | 0 | — | — |
+| [SPEC-4002](../specs/p40-mode-simple/SPEC-4002-mode-simple-parcours-web.md) | Mode simple — parcours web « Dépose ton cours » | P40 | ⏳ waiting | 0 | — | SPEC-4001 |
+| [SPEC-4003](../specs/p40-mode-simple/SPEC-4003-mode-simple-parcours-mobile.md) | Mode simple — parcours mobile iOS et Android | P40 | ⏳ waiting | 0 | — | SPEC-4001 |
 
 ## Anomalies et blocages
 
