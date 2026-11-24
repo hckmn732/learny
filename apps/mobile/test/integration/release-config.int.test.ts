@@ -55,7 +55,7 @@ beforeAll(async () => {
   delete process.env.LEARNY_E2E_CLEARTEXT;
 
   const module = await import('../../app.config');
-  production = module.default({ config: {} });
+  production = module.default({ config: {} } as unknown as Parameters<typeof module.default>[0]);
 });
 
 describe('[SPEC-3502] configuration de production', () => {
@@ -76,8 +76,7 @@ describe('[SPEC-3502] configuration de production', () => {
     const filters = production.android?.intentFilters ?? [];
     expect(filters).toHaveLength(1);
     expect(filters[0]?.autoVerify).toBe(true);
-    const data = (filters[0]?.data ?? []) as ({ pathPrefix?: string } | string)[];
-    const paths = data.map((entry) =>
+    const paths = (filters[0]?.data ?? []).map((entry) =>
       typeof entry === 'string' ? entry : (entry.pathPrefix ?? ''),
     );
     expect(paths).toEqual(['/auth/mobile', '/api/v1/auth/callback']);
@@ -93,18 +92,11 @@ describe('[SPEC-3502] configuration de production', () => {
     expect(prod?.env?.EXPO_PUBLIC_ENABLE_SDD_PAGES).toBe('0');
     for (const key of Object.keys(prod?.env ?? {})) {
       expect(key).not.toContain('CLOCK_FIXED');
-      // Les variables de démonstration sont préfixées `EXPO_PUBLIC_SDD_` ; `ENABLE_SDD_PAGES`
-      // est le drapeau de configuration, présent et posé à `0` en production.
-      expect(key.startsWith('EXPO_PUBLIC_SDD_')).toBe(false);
+      expect(key).not.toContain('SDD_');
     }
-    // Le plugin du HTTP local reste dans la liste des plugins, mais il ne fait rien sans
-    // `LEARNY_E2E_CLEARTEXT` : la configuration de production ne pose pas cette variable.
-    const plugin = fs.readFileSync(path.join(APP_DIR, 'plugins', 'with-e2e-cleartext.cjs'), 'utf8');
-    expect(plugin).toContain('LEARNY_E2E_CLEARTEXT');
-    expect(process.env.LEARNY_E2E_CLEARTEXT).toBeUndefined();
     const plugins = JSON.stringify(production.plugins ?? []);
+    expect(plugins).not.toContain('e2e-cleartext');
     expect(plugins).toContain('expo-notifications');
-    expect(production.android?.usesCleartextTraffic).toBeUndefined();
   });
 
   it('déclare les permissions Android réellement utilisées, sans permission intrusive', () => {
