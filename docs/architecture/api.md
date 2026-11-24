@@ -3,7 +3,7 @@
 Normatif. Implémenté par SPEC-201 (socle) puis par chaque spécification fonctionnelle. Les schémas d'entrée/sortie vivent dans `packages/contracts/src/<domaine>.ts` ; le document OpenAPI 3.1 est exporté dans `api/openapi.yaml` (`pnpm contract:export`, ADR-2004) ; ce fichier est la source de la table de routes Python, des modèles Pydantic et du SDK (ADR-2012). Aucune application ne sert plus de document OpenAPI : le contrat est un artefact du dépôt.
 
 > **Séparation backend / frontend (ADR-1001, ADR-1005, ADR-2043).**
-> `apps/api` est l'unique serveur HTTP : la façade FastAPI sert les 156 opérations du contrat et
+> `apps/api` est l'unique serveur HTTP : la façade FastAPI sert les 165 opérations du contrat et
 > les 11 routes spéciales. Le pipeline générique (identifiant de requête, origine, limite,
 > idempotence, authentification, validation, CGU, validation de sortie) vit dans
 > `learny_api/pipeline.py` ; les adaptateurs minces sont les `@handler("<route id>")` de
@@ -50,12 +50,12 @@ Normatif. Implémenté par SPEC-201 (socle) puis par chaque spécification fonct
 | GET `/home` | Données de l'accueil | SPEC-603 |
 | GET `/formations` · POST `/formations` · GET/PATCH `/formations/:fid` · GET `/formations/:fid/access` · POST `/formations/:fid/(pause|resume|archive|open)` · PATCH `/me/current-formation` | Formations ; l’accès interne répond 204 ou 404 avant le rendu et n’est pas limité | SPEC-604, 615, 618, 1202 |
 | GET `/formations/:fid/cadrage` · GET/POST `/formations/:fid/cadrage/messages` · POST `/formations/:fid/cadrage/complete` | Cadrage et DTO de page | SPEC-604, 1202 |
-| POST `/formations/:fid/programme/generate` · POST `/formations/:fid/programme/import` · POST `/formations/:fid/programme/adjust` · POST `/formations/:fid/programme/validate` · GET `/formations/:fid/programme` | Programme | SPEC-605, 606 |
+| POST `/formations/:fid/programme/generate` · POST `/formations/:fid/programme/import` · POST `/formations/:fid/programme/adjust` · POST `/formations/:fid/programme/validate` · GET `/formations/:fid/programme` | Programme (mode simple : `source = 'document'`, plages de pages par module et par chapitre, validation qui remplit `chapter_sources` et lance la génération) | SPEC-605, 606, 4001 |
 | GET `/formations/:fid/modules/:mid` · PATCH `/chapters/:cid/progress` | Module, statut des chapitres | SPEC-607 |
 | POST `/chapters/:cid/resources` (note, url) · POST `/chapters/:cid/uploads` (URL d'envoi signée) · POST `/resources/:rid/finalize` · GET `/resources/:rid/url` (URL de lecture signée) · PATCH/DELETE `/resources/:rid` · POST `/resources/:rid/retry` · POST `/resources/:rid/(import|dismiss)` | Apports | SPEC-607, 206 |
 | POST `/modules/:mid/course/generate` · GET `/modules/:mid/course` · PATCH `/course-sections/:sid` · POST `/course-sections/:sid/report` · PUT `/courses/:cid/progress` · POST `/chapters/:cid/summary` | Cours | SPEC-608, 609 |
 | POST `/courses/:cid/conversations` · GET `/courses/:cid/conversations` · GET `/conversations/:id` · POST `/conversations/:id/messages` (flux SSE) · POST `/conversations/:id/self-test/answer` · POST `/tutor/cards` | Discussion tuteur | SPEC-610, 717 |
-| POST `/modules/:mid/quiz/attempts` · GET `/attempts/:aid` · PUT `/attempts/:aid/answers/:pos` · POST `/attempts/:aid/answers/:pos/check` · POST `/attempts/:aid/submit` · GET `/attempts/:aid/result` | Quiz, examen, exercice | SPEC-611, 613, 614 |
+| POST `/modules/:mid/quiz/attempts` · GET `/attempts/:aid` · PUT `/attempts/:aid/answers/:pos` · POST `/attempts/:aid/answers/:pos/check` · POST `/attempts/:aid/submit` · GET `/attempts/:aid/result` | Quiz, examen, exercice ; le diagnostic du mode simple réutilise ces routes (`check` refusé en `409 DIAGNOSTIC_NO_CHECK`, `acquiredModuleIds` dans le résultat) | SPEC-611, 613, 614, 4001 |
 | GET `/modules/:mid/remediation` · POST `/modules/:mid/remediation/complete` | Remédiation | SPEC-612 |
 | POST `/modules/:mid/exercises/:aid/hint` | Indices d'exercice | SPEC-613 |
 | POST `/formations/:fid/mock-exams` · PATCH `/formations/:fid/exam-format` | Examen blanc | SPEC-614 |
@@ -75,6 +75,25 @@ Normatif. Implémenté par SPEC-201 (socle) puis par chaque spécification fonct
 | POST `/email/unsubscribe?token=` (public, `rateLimit: auth`, 200 page HTML ou `{ ok: true }` avec `Accept: application/json`, 400 `UNSUBSCRIBE_TOKEN_INVALID`) · GET `/email/unsubscribe?token=` (page de confirmation, aucun changement d'état) | Désinscription en un clic (RFC 8058, ADR-0124) | SPEC-204 |
 
 Toute route ajoutée par une spécification doit être ajoutée à ce tableau dans le même commit.
+
+### Mode simple (SPEC-4001, ADR-4003)
+
+Huit opérations servent le parcours « Dépose ton cours » ; elles sont communes au web (SPEC-4002) et au mobile (SPEC-4003).
+
+| Méthode et chemin | Réponse | Rôle |
+|---|---|---|
+| POST `/formations/simple` | 201 | Crée une formation `creation_mode = 'simple'` au statut `cadrage`, titre provisoire « Nouvelle formation », motivation facultative (300 caractères au plus) et ligne `simple_analyses` au statut `collecting`. |
+| POST `/formations/:fid/sources/uploads` | 201 | Réserve un document de la formation (`chapter_id` nul), devine son rôle par règles de code (`exam_papers`, `exercises`, puis `course` pour le premier et `other` ensuite) et renvoie une URL d'envoi signée. Dix documents au plus ; refusé dès que l'analyse a commencé. |
+| POST `/formations/:fid/sources/links` | 201 | Dépose une page web ou une vidéo YouTube comme document, avec son rôle. |
+| PATCH `/resources/:rid/role` | 200 | Corrige le rôle deviné avant l'analyse (`409 SIMPLE_ANALYSIS_LOCKED` ensuite). |
+| POST `/formations/:fid/simple/analysis` | 202 | Lance l'analyse : exige un document `course` prêt, vérifie les modèles des tâches `simple_analysis`, `programme` et `course` (`409 AI_NOT_CONFIGURED` avec `details.tasks`), passe le statut à `analysing` et émet `simple.analysis.requested`. Un second appel ne crée pas de second événement. |
+| GET `/formations/:fid/simple` | 200 | État complet : statut, quatre étapes (`read`, `structure`, `practice`, `programme`), sections détectées, sources, erreur, version de la proposition, et `generation` après validation. |
+| POST `/formations/:fid/diagnostic` | 201 | Crée le diagnostic facultatif (une à deux questions par module) et sa tentative ; `409 DIAGNOSTIC_ALREADY_DONE` après un rendu ou un passage. |
+| POST `/formations/:fid/diagnostic/skip` | 204 | Abandonne le diagnostic sans rien valider ; le diagnostic n'est plus proposé. |
+
+`PATCH /formations/:fid` accepte en plus `endDate` : en mode simple, une échéance fixe l'objectif `exam` et fait finir le plan quatorze jours avant ; `null` rétablit `operational` et la fin calculée au rythme du profil. Une échéance à moins de quinze jours est refusée (`422 VALIDATION_FAILED`).
+
+Codes d'erreur ajoutés : `AI_NOT_CONFIGURED` (409), `SIMPLE_NO_COURSE_SOURCE` (422), `SIMPLE_TOO_MANY_SOURCES` (422), `SIMPLE_ANALYSIS_LOCKED` (409), `SIMPLE_NOT_SIMPLE` (409), `DIAGNOSTIC_ALREADY_DONE` (409), `DIAGNOSTIC_NO_CHECK` (409).
 
 ## 3. Versions et clients
 
