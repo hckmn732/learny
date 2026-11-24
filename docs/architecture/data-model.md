@@ -18,7 +18,7 @@ Normatif. Implémenté dans `packages/db/src/schema/*.ts` (Drizzle) par les spé
 
 **notification_settings** — `user_id pk`, `channel_email bool default true`, `channel_push bool default true`, `type_revision bool default true`, `type_validation bool default true`, `type_course bool default true`, `type_gap bool default true`, `type_planning bool default true`, `type_relaunch bool default true`, `digest_time time default '08:00'`, `quiet_start time default '21:00'`, `quiet_end time default '08:00'`, `weekend_quiet bool default true`, `max_per_day smallint default 5 check(in (3,5,8))`, `updated_at`.
 
-**push_subscriptions** — `id`, `user_id`, `endpoint text unique not null`, `p256dh text`, `auth text`, `user_agent text`, `created_at`, `last_success_at`, `failure_count smallint default 0`.
+**push_subscriptions** — `id`, `user_id`, `kind text default 'webpush' check(in ('webpush','apns','fcm'))`, `endpoint text` (unique par compte et globalement pour `webpush`), `p256dh text`, `auth text`, `token text` (unique par `(user_id, kind, token)` pour `apns`/`fcm`), `platform text` (`ios|android`), `user_agent text` (libellé de l'appareil pour un jeton natif), `created_at`, `updated_at`, `last_success_at`, `failure_count smallint default 0` ; un CHECK de forme impose l'endpoint et les deux clés pour `webpush`, le jeton seul pour `apns`/`fcm` (SPEC-3501 EF-4, ADR-3007).
 
 **automation_settings** — `user_id`, `key automation_key` (`reprise|micro_seance|echauffement|remediation|jeu_lacune|questions_cartes|plafond_quiz|sprint|bilan|pause`), `enabled bool default true`, `params jsonb not null` (schéma par clé dans `packages/contracts/automations.ts`, valeurs par défaut de BR-AUT-*), `updated_at` ; `pk(user_id, key)`.
 
