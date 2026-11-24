@@ -192,11 +192,16 @@
         "apps/api/test/integration/coverage.test.ts",
         "apps/api/test/integration/relay-e2e.test.ts",
         "apps/mobile/test/integration/agenda.int.test.ts",
+        "apps/mobile/test/integration/attempts.int.test.ts",
         "apps/mobile/test/integration/auth.int.test.ts",
+        "apps/mobile/test/integration/course.int.test.ts",
         "apps/mobile/test/integration/home.int.test.ts",
+        "apps/mobile/test/integration/id-token.int.test.ts",
         "apps/mobile/test/integration/notifications.int.test.ts",
         "apps/mobile/test/integration/programme.int.test.ts",
+        "apps/mobile/test/integration/review.int.test.ts",
         "apps/mobile/test/integration/session.int.test.ts",
+        "apps/mobile/test/integration/tutor.int.test.ts",
         "packages/services/src/legal/accept.test.ts"
       ],
       "gap": false
@@ -767,6 +772,7 @@
       ],
       "events": [],
       "tests": [
+        "apps/mobile/test/integration/tutor.int.test.ts",
         "apps/web/e2e/specs/p22/spec-2204.spec.ts"
       ],
       "gap": false
@@ -823,6 +829,7 @@
       ],
       "events": [],
       "tests": [
+        "apps/mobile/test/integration/tutor.int.test.ts",
         "apps/web/e2e/specs/p22/spec-2204.spec.ts",
         "packages/contracts/src/routes.test.ts"
       ],

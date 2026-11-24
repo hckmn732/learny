@@ -28,6 +28,9 @@ module.exports = {
     // only needs the shape of MMKV and of NetInfo.
     '^react-native-mmkv$': '<rootDir>/test/mocks/react-native-mmkv.js',
     '^@react-native-community/netinfo$': '<rootDir>/test/mocks/netinfo.js',
+    // SPEC-3402 — les modules natifs des fournisseurs n'existent pas dans l'environnement de test.
+    '^@react-native-google-signin/google-signin$': '<rootDir>/test/mocks/google-signin.js',
+    '^expo-apple-authentication$': '<rootDir>/test/mocks/apple-authentication.js',
   },
   collectCoverageFrom: ['src/**/*.{ts,tsx}', 'app/**/*.tsx', '!**/*.test.{ts,tsx}'],
 };
