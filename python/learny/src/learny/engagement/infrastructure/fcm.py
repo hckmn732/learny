@@ -173,9 +173,7 @@ class FcmTransport:
     def mode(self) -> str:
         return "live"
 
-    async def send(
-        self, target: PushTarget, payload: str, *, ttl: int, topic: str | None
-    ) -> PushSendResult:
+    async def send(self, target: PushTarget, payload: str, *, ttl: int, topic: str | None) -> PushSendResult:
         if not isinstance(target.token, str) or target.token == "":
             return PushSendResult(ok=False, status_code=None, reason="gone")
         headers = {
