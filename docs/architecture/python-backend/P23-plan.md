@@ -2,6 +2,14 @@
 
 Exit state (CP-23): production is served by the Python API and worker on Coolify, rollback and restore have been rehearsed on the staging environment provided by the project owner (ADR-2009), and the TypeScript backend, Inngest and the facade relay are gone.
 
+**Reached on 2026-11-23** for the code and the documentation: `apps/api`, `apps/worker`, Inngest, the
+eleven server packages, the relay, `api/ownership.yaml`, `OWNERSHIP_OVERRIDES` and
+`PY_HONO_UPSTREAM_URL` are removed (SPEC-2302, ADR-2043); the final inventory proves that every
+operation, special route, consumer and cron is served by Python (§4 below). **Not yet reached**: the
+load, canary and timed restore drills that require the staging environment of ADR-2009, and the full
+e2e/visual/cross-browser/axe campaign. They are listed as open in `evidence/SPEC-2302/acceptance.md`
+and SPEC-2302 stays `in_progress` until they are measured.
+
 Rule for the whole phase: **every production change is a reversible step with a written stop criterion.** No step starts before the previous one met its promotion criteria.
 
 ---
@@ -60,5 +68,11 @@ Deploy, flip a context, canary, rollback a context, jobs rollback, drain the wor
 - ADR-1002 and ADR-0017: set their status line to "Remplacée par ADR-2001 / ADR-2006" (status line only).
 - `docs/architecture/python-backend/` stays as the backend reference.
 
-### Step 4 — Final inventory
-`node tools/migration/inventory.mjs --runtime` (extended in this spec) proves: 217 operations and all special routes have a Python handler; all consumers and crons are Python; no TS backend package remains in the build or deployment; Coolify runs only `api-py` and `worker-py` (+ web where applicable). The Vercel API project deletion is an owner action, listed in the runbook.
+### Step 4 — Final inventory (delivered)
+`node tools/migration/inventory.mjs --runtime` proves: every operation of `api/openapi.yaml` (156
+after the removal of the `/_dev` demonstrations, ADR-2041 — the 217 of the pre-P23 registry are not
+the contract any more) and all 11 special routes have a Python handler; all 23 consumers and 2 crons
+are Python; no TS backend package remains in the build or deployment. `--check` fails on any drift,
+and `api/inventory.json` stays the artefact read by the pytest coverage test, the SDK test and the
+parity runner. Coolify runs only `api-py` and `worker-py` (+ `web`), `migrate` included. The Vercel
+API project deletion is an owner action, listed in the runbook.

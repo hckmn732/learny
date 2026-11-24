@@ -1,6 +1,6 @@
-import { closeDb, serviceDb, sql } from '@learny/db';
-import { DEMO_USERS, demoUserId } from '@learny/db/seed/fixtures';
-import { createTestProgramme } from '@learny/db/testing';
+import { closeDb, serviceDb, sql } from '@learny/testing/db';
+import { createTestProgramme } from '@learny/testing/db';
+import { DEMO_USERS, demoUserId } from '@learny/testing/db-factories';
 import { expect, restoreDemoData, test } from '@learny/testing/playwright';
 import {
   createDemoSession,

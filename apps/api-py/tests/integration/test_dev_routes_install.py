@@ -1,8 +1,9 @@
-"""[SPEC-2207] The real ownership table installs every `dev.*` entry exactly once.
+"""[SPEC-2207] The special registry installs every `dev.*` entry exactly once.
 
-A development route is served by the special registry (guard before authentication); every other
-`py` operation is served by the pipeline. The test builds the real facade, so a missing registry
-entry or a flipped key without handler fails here, before any deployment.
+A development route is served by the special registry (guard before authentication); the other
+`dev.*` operations are served by the pipeline. The test builds the real facade, so a missing
+registry entry fails here, before any deployment (SPEC-2302 removed the ownership table that used
+to select them).
 """
 
 from collections.abc import AsyncIterator
@@ -12,7 +13,6 @@ from pathlib import Path
 import pytest
 from fastapi import FastAPI
 from learny.shared.config import Settings
-from learny.shared.ownership import load_ownership
 from learny_api import handlers  # noqa: F401 - registers the @handler roles
 from learny_api.generated.routes import ROUTES_BY_ID
 from learny_api.main import create_app
@@ -25,8 +25,7 @@ ROOT = Path(__file__).resolve().parents[4]
 
 @pytest.fixture
 def app() -> FastAPI:
-    settings = Settings(app_env="test", py_hono_upstream_url="http://upstream")
-    instance = create_app(settings)
+    instance = create_app(Settings(app_env="test"))
 
     @asynccontextmanager
     async def lifespan(_: FastAPI) -> AsyncIterator[None]:
@@ -48,31 +47,28 @@ def installed_developments(app: FastAPI) -> dict[str, str]:
     return found
 
 
-def test_every_python_development_operation_is_installed_once(app: FastAPI) -> None:
-    ownership = load_ownership(ROOT / "api" / "ownership.yaml")
-    expected = {
-        operation
-        for operation, owner in ownership.operations.items()
-        if operation.startswith("dev.") and owner == "py"
-    }
+def test_every_development_operation_is_installed_once(app: FastAPI) -> None:
+    expected = {route_id for route_id in ROUTES_BY_ID if route_id.startswith("dev.")}
     found = installed_developments(app)
+    names = [
+        getattr(route, "name", "")
+        for route in app.routes
+        if getattr(route, "name", "").startswith(("special:dev.", "py:dev."))
+    ]
 
     assert set(found) == expected
-    assert all(owner == "py" for owner in ownership.operations.values() if owner not in ("ts",))
+    assert len(names) == len(expected)
 
 
-def test_every_python_special_development_route_uses_the_special_registry(app: FastAPI) -> None:
-    ownership = load_ownership(ROOT / "api" / "ownership.yaml")
+def test_every_special_development_route_uses_the_special_registry(app: FastAPI) -> None:
     installed = {route_id for route_id, kind in installed_developments(app).items() if kind == "special"}
-    expected = {route_id for route_id in DEVELOPMENT_ROUTE_IDS if ownership.operations.get(route_id) == "py"}
-    assert installed == expected
+
+    assert installed == set(DEVELOPMENT_ROUTE_IDS)
     assert all(ROUTES_BY_ID[route_id].id == route_id for route_id in DEVELOPMENT_ROUTE_IDS)
 
 
-def test_the_development_guard_of_the_real_table_is_closed_in_production(app: FastAPI) -> None:
-    ownership = load_ownership(ROOT / "api" / "ownership.yaml")
-    settings = Settings(app_env="production", py_hono_upstream_url="http://upstream")
-    instance = create_app(settings, ownership=ownership, context=app.state.pipeline)
+def test_the_development_guard_is_installed_in_production(app: FastAPI) -> None:
+    instance = create_app(Settings(app_env="production"), context=app.state.pipeline)
     names = {getattr(route, "name", "") for route in instance.routes}
 
-    assert "special:dev.echo" in names
+    assert "special:dev.email.outbox" in names

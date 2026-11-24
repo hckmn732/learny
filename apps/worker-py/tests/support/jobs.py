@@ -11,7 +11,6 @@ from datetime import datetime
 from typing import Any
 
 from factories.engagement_deps import engagement_deps
-from learny.shared.ownership import Owner
 from learny.shared.time import parse_iso
 from learny_worker.consumers import CONSUMERS, Consumer
 from learny_worker.dispatcher import Dispatcher
@@ -28,13 +27,6 @@ def consumer_named(name: str) -> Consumer:
 
 def consumers_for(names: tuple[str, ...]) -> tuple[Consumer, ...]:
     return tuple(consumer_named(name) for name in names)
-
-
-@dataclass(frozen=True)
-class Ownership:
-    """Every selected consumer is Python-owned, like the real table after the flip."""
-
-    consumers: dict[str, Owner]
 
 
 @dataclass
@@ -56,11 +48,10 @@ class Harness:
 def harness(tx: Any, names: tuple[str, ...], *, now: datetime = FIXED) -> Harness:
     deps = engagement_deps(tx, now=now)
     consumers = consumers_for(names)
-    ownership = Ownership({consumer.name: "py" for consumer in consumers})
     return Harness(
         deps=deps,
         consumers=consumers,
-        dispatcher=Dispatcher(deps, ownership, consumers=consumers, interval_ms=1),
+        dispatcher=Dispatcher(deps, consumers=consumers, interval_ms=1),
         runner=Runner(deps, consumers, concurrency=1, poll_interval_ms=1),
     )
 
@@ -125,7 +116,6 @@ __all__ = [
     "FIXED",
     "OLD",
     "Harness",
-    "Ownership",
     "consumer_named",
     "consumers_for",
     "count",

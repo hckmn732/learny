@@ -1,9 +1,8 @@
 """[SPEC-2202] Format and introduction of the mock exam (SPEC-614, EF-1, EF-5, ET-3).
 
-Port of the useful cases of `packages/services/src/mock-exams/format.ts`: the normative default
-without a guide, a format extracted from a guide that stays proposed until the learner confirms it,
-the studied and diagnostic modules with the diagnostic share, and the two planned exams of a
-formation whose objectives contain `exam` (BR-PRA-05).
+The normative default without a guide, a format extracted from a guide that stays proposed until the
+learner confirms it, the studied and diagnostic modules with the diagnostic share, and the two
+planned exams of a formation whose objectives contain `exam` (BR-PRA-05).
 """
 
 import json

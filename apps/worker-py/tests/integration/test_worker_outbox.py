@@ -1,7 +1,7 @@
 """[SPEC-2102] Durable worker on the local stack: fan-out, crash, concurrency, duplicates.
 
-CA-1 (one effect per event through crash, concurrency and duplicate delivery), CA-2 (one scheduler
-among two instances) and CA-3 (a `ts`-owned consumer is never run by Python). Every event created by
+CA-1 (one effect per event through crash, concurrency and duplicate delivery) and CA-2 (one scheduler
+among two instances). Every event created by
 a test is deleted afterwards, with its deliveries (`on delete cascade`).
 """
 
@@ -17,7 +17,6 @@ from learny.shared.clock import Clock
 from learny.shared.db.uow import Database
 from learny.shared.outbox import deliveries as outbox
 from learny.shared.outbox.events import Event
-from learny.shared.ownership import Owner
 from learny.shared.time import parse_iso
 from learny_worker.consumers import Consumer
 from learny_worker.dispatcher import Dispatcher
@@ -31,12 +30,6 @@ pytestmark = pytest.mark.spec("SPEC-2102")
 FIXED = parse_iso("2026-11-11T12:20:00Z")
 DEMO_EVENT = "sdd/demo-requested"
 DEMO_CONSUMER = "devtools.demo_job"
-
-
-@dataclass
-class Ownership:
-    consumers: dict[str, Owner] = field(default_factory=dict)
-    crons: dict[str, Owner] = field(default_factory=dict)
 
 
 @dataclass
@@ -110,9 +103,7 @@ async def delivery(database: Database, event_id: str, name: str = DEMO_CONSUMER)
 
 async def test_a_dispatched_event_runs_once(events: list[str], database: Database) -> None:
     counter = Counter()
-    dispatcher = Dispatcher(
-        deps(database), Ownership(consumers={DEMO_CONSUMER: "py"}), consumers=(consumer(counter),)
-    )
+    dispatcher = Dispatcher(deps(database), consumers=(consumer(counter),))
     runner = Runner(deps(database), (consumer(counter),), concurrency=2)
 
     event_id = await emit(database, events)
@@ -137,9 +128,7 @@ async def test_a_crashed_worker_reclaims_its_delivery(events: list[str], databas
     # CL-1: the worker dies after claiming. The claim is made here, without execution, and the
     # lease is expired as the database clock would after the timeout.
     counter = Counter()
-    dispatcher = Dispatcher(
-        deps(database), Ownership(consumers={DEMO_CONSUMER: "py"}), consumers=(consumer(counter),)
-    )
+    dispatcher = Dispatcher(deps(database), consumers=(consumer(counter),))
     event_id = await emit(database, events)
     await dispatcher.dispatch_once()
 
@@ -169,9 +158,7 @@ async def test_two_runners_never_share_a_delivery(events: list[str], database: D
     # CL-2: four deliveries, two concurrent runners of concurrency 3, one execution each.
     counter = Counter()
     test_deps = deps(database)
-    dispatcher = Dispatcher(
-        test_deps, Ownership(consumers={DEMO_CONSUMER: "py"}), consumers=(consumer(counter),)
-    )
+    dispatcher = Dispatcher(test_deps, consumers=(consumer(counter),))
     first = Runner(test_deps, (consumer(counter),), concurrency=3)
     second = Runner(test_deps, (consumer(counter),), concurrency=3)
     identifiers = [await emit(database, events) for _ in range(4)]
@@ -194,7 +181,6 @@ async def test_an_invalid_payload_never_runs(events: list[str], database: Databa
     )
     dispatcher = Dispatcher(
         deps(database),
-        Ownership(consumers={DEMO_CONSUMER: "py"}),
         consumers=(invalid_consumer,),
     )
     event_id = await emit(database, events, {"runId": "not-a-uuid", "failOnceAt": "none"})
@@ -205,29 +191,11 @@ async def test_an_invalid_payload_never_runs(events: list[str], database: Databa
     assert counter.runs == 0
 
 
-async def test_a_typescript_owned_consumer_is_never_run(events: list[str], database: Database) -> None:
-    # CA-3: the same event, the same registry, but the ownership table keeps it for Hono.
-    counter = Counter()
-    dispatcher = Dispatcher(
-        deps(database),
-        Ownership(consumers={DEMO_CONSUMER: "ts"}),
-        consumers=(),
-    )
-    event_id = await emit(database, events)
-    await dispatcher.dispatch_once()
-    assert await delivery(database, event_id) == {}
-    runner = Runner(deps(database), (), concurrency=1)
-    assert await runner.run_once() == 0
-    assert counter.runs == 0
-
-
 async def test_the_stop_event_lets_the_batch_finish(events: list[str], database: Database) -> None:
     # ET-1: SIGTERM stops the claiming, the delivery in flight is completed before the exit.
     counter = Counter(delay=0.2)
     test_deps = deps(database)
-    dispatcher = Dispatcher(
-        test_deps, Ownership(consumers={DEMO_CONSUMER: "py"}), consumers=(consumer(counter),)
-    )
+    dispatcher = Dispatcher(test_deps, consumers=(consumer(counter),))
     event_id = await emit(database, events)
     await dispatcher.dispatch_once()
     runner = Runner(test_deps, (consumer(counter),), concurrency=1, poll_interval_ms=10)
@@ -245,10 +213,15 @@ async def test_the_stop_event_lets_the_batch_finish(events: list[str], database:
 
 async def test_two_schedulers_elect_a_single_leader(database: Database) -> None:
     # CA-2: the advisory lock elects one instance; the idle one retries and stays standby.
-    test_deps = deps(database)
-    ownership = Ownership(crons={})
-    first = Scheduler(test_deps, ownership, retry_interval_s=0.1, poll_interval_s=0.1)
-    second = Scheduler(test_deps, ownership, retry_interval_s=0.1, poll_interval_s=0.1)
+    # The clock sits outside both tick windows, so the leader proves the election without
+    # writing the shared outbox that the scheduler suites read (test isolation).
+    test_deps = Deps(
+        db=database,
+        clock=FakeClock(parse_iso("2026-11-11T00:00:00Z")),
+        logger=RecordingLogger(),
+    )
+    first = Scheduler(test_deps, retry_interval_s=0.1, poll_interval_s=0.1)
+    second = Scheduler(test_deps, retry_interval_s=0.1, poll_interval_s=0.1)
     stop = asyncio.Event()
     tasks = [
         asyncio.create_task(first.run(stop), name="first"),
@@ -271,9 +244,7 @@ async def test_a_claimed_delivery_marks_its_lease(database: Database) -> None:
     # The claim statement is the only writer of the lease; a foreign claim sees the same row only
     # after expiry, which is what makes CL-1 and CL-2 hold.
     counter = Counter()
-    dispatcher = Dispatcher(
-        deps(database), Ownership(consumers={DEMO_CONSUMER: "py"}), consumers=(consumer(counter),)
-    )
+    dispatcher = Dispatcher(deps(database), consumers=(consumer(counter),))
     event_id = f"spec-2102:{uuid.uuid4()}"
     try:
         async with database.service_tx() as tx:

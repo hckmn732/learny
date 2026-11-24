@@ -1,9 +1,9 @@
-"""[SPEC-2207] The quiz grade job against the local stack (port of `runQuizGrade`).
+"""[SPEC-2207] The quiz grade job against the local stack.
 
-One submitted attempt holds a code-graded question and one pending open answer: the tutor
-correction fills the pending answer, the score and the verdict are computed, the learning result is
-applied and `quiz/graded` is queued once. A replayed delivery of `quiz/submitted` corrects nothing
-twice and queues no second event.
+One submitted attempt holds a code-graded question and one pending open answer: the tutor correction
+fills the pending answer, the score and the verdict are computed, the learning result is applied and
+`quiz/graded` is queued once. A replayed delivery of `quiz/submitted` corrects nothing twice and
+queues no second event.
 """
 
 import json

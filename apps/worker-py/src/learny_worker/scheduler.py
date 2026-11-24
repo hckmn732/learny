@@ -5,18 +5,17 @@ and retries every 15 s (CL-2). Two schedules only, hard-coded: hourly at minute 
 01:30, both UTC.
 
 - hourly: expires the pending automation actions whose instant has passed (SPEC-711 ET-4), emits one
-  `user/local-tick` per active learner (pages of 500, the exact payload of the TypeScript cron) and
-  then `cron/hourly-tick` (`{tickAt}`);
+`user/local-tick` per active learner and
+then `cron/hourly-tick` (`{tickAt}`);
 - nightly: emits `cron/nightly` (`{runDate}`), which fans out to the six nightly treatments.
 
-The outbox resend of the TypeScript tick is not ported: the dispatcher polls. Both tasks read
-`ownership.yaml` and emit nothing while the cron is not `py`; the event identifiers
-(`hourly-tick:<T>`, `nightly:<runDate>`, `local-tick:<user>:<windowStart>`) make a replay harmless.
+Both tasks are served by Python (SPEC-2302); the event identifiers (`hourly-tick:<T>`,
+`nightly:<runDate>`, `local-tick:<user>:<windowStart>`) make a replay harmless.
 """
 
 import asyncio
 from datetime import UTC, datetime, timedelta
-from typing import Any, Protocol
+from typing import Any
 
 import structlog
 from learny.engagement.domain.tick import TICK_PAGE_SIZE
@@ -26,7 +25,6 @@ from learny.engagement.public import (
     local_tick_event_id,
     local_tick_page,
 )
-from learny.shared.ownership import Owner
 from sqlalchemy import text
 
 SCHEDULER_LOCK_KEY = 2102_0001
@@ -44,7 +42,7 @@ CRON_NIGHTLY = "cron/nightly"
 
 
 def hourly_tick_instant(now: datetime) -> datetime:
-    """`T` truncated to the minute, as the TypeScript cron does."""
+    """`T` truncated to the minute."""
     return now.astimezone(UTC).replace(second=0, microsecond=0)
 
 
@@ -92,44 +90,29 @@ def period_of(name: str, now: datetime) -> datetime:
     return instant.replace(hour=0, minute=0, second=0, microsecond=0)
 
 
-class CronOwnership(Protocol):
-    """The part of the ownership table the scheduler reads."""
-
-    @property
-    def crons(self) -> dict[str, Owner]: ...
-
-
 class Scheduler:
     """Leader-only scheduler: acquires the advisory lock once and runs the due tasks."""
 
     def __init__(
         self,
         deps: Any,
-        ownership: CronOwnership,
         *,
         retry_interval_s: float = DEFAULT_RETRY_INTERVAL_S,
         poll_interval_s: float = TICK_POLL_INTERVAL_S,
         logger: Any = None,
     ) -> None:
         self._deps = deps
-        self._ownership = ownership
         self._retry_interval = retry_interval_s
         self._poll_interval = poll_interval_s
         self._logger = logger or structlog.get_logger("learny.worker.scheduler")
         self._last: dict[str, datetime] = {}
         self.is_leader = False
 
-    def owns(self, name: str) -> bool:
-        """A cron is emitted only once `ownership.yaml` says `py`."""
-        return self._ownership.crons.get(name) == "py"
-
     async def emit_due(self) -> list[str]:
-        """Runs the tasks that are due and owned by Python; returns their event identifiers."""
+        """Runs the tasks that are due; returns their event identifiers."""
         emitted: list[str] = []
         now = self._deps.clock.now()
         for name, event_id, data in due_ticks(now, self._last):
-            if not self.owns(name):
-                continue
             if name == CRON_HOURLY:
                 await self.hourly_task(now)
             else:
@@ -137,15 +120,12 @@ class Scheduler:
             self._last[name] = period_of(name, now)
             emitted.append(event_id)
             self._logger.info("cron emitted", eventName=name, eventId=event_id)
-        if not any(self.owns(name) for name in (CRON_HOURLY, CRON_NIGHTLY)):
-            self._logger.debug("scheduler idle: every cron is owned by typescript")
         return emitted
 
     async def hourly_task(self, now: datetime) -> int:
         """`cron-hourly-tick`: expire, fan the local ticks out, then emit the tick itself.
 
-        Returns how many learners received a local tick. The order is the one of the TypeScript
-        cron; the actions expire on the same injected instant as the rest of the run.
+        Returns how many learners received a local tick.
         """
         instant = hourly_tick_instant(now)
         expired = await expire_due_automation_actions(self._deps)

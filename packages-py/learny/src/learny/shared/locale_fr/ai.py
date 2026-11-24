@@ -1,11 +1,8 @@
-"""Textes français des clés personnelles et de l'onglet « Modèles d'IA » (SPEC-2204).
+"""French texts of the personal AI keys and of the model settings tab (SPEC-2204, ADR-2011).
 
-Copiés mot pour mot du TypeScript : `packages/contracts/src/ai-credentials.ts` (messages des
-raffinements du corps et libellé de la limite), `packages/contracts/src/parametres-modeles-d-ia.ts`,
-`packages/services/src/ai/{credentials-service,qualify-model}.ts`,
-`packages/services/src/parametres-modeles-d-ia.ts`, `packages/llm/src/providers/catalog.ts`
-(noms des fournisseurs et avertissements de région) et `packages/i18n/src/fr/settings.ts`
-(messages de réserve de compatibilité).
+Every literal is copied verbatim from the reference implementation: the credential contract
+refinements and the limit label, the compatibility reserve messages, and the provider names with
+their region warnings.
 """
 
 # --- corps de requête (raffinements que l'OpenAPI ne peut pas exprimer) -------------------------
@@ -37,6 +34,11 @@ PROVIDER_NO_MODELS = "Le fournisseur n’a retourné aucun modèle disponible."
 CHAT_MODEL_UNCONFIRMED = "Le modèle de chat n’a pas confirmé la connexion."
 MODEL_ID_INVALID = "Identifiant de modèle invalide."
 
+AI_UNAVAILABLE_DETAIL = (
+    "Cette fonction demande un modèle d’IA. Choisissez un modèle de votre propre clé dans "
+    "Paramètres › Modèles d’IA."
+)
+
 # --- onglet « Modèles d'IA » --------------------------------------------------------------------
 
 MODEL_NOT_FOUND = "Modèle introuvable."
@@ -55,6 +57,13 @@ OUTSIDE_EU_NOTE = "Ce fournisseur traite les données hors de l’Union europée
 MISTRAL_NOTE = "Vérifiez la région de traitement proposée par votre offre."
 COMPATIBLE_NOTE = "Vérifiez où ce service traite les données avant de l’utiliser."
 LOCAL_NOTE = "Les données restent sur votre machine."
+
+# --- résolution du modèle de tâche (SPEC-709) ---------------------------------------------------
+
+AI_UNAVAILABLE_MODEL = (
+    "Cette fonction demande un modèle d’IA. "
+    "Choisissez un modèle de votre propre clé dans Paramètres › Modèles d’IA."
+)
 
 # --- compatibilité d'une tâche (réserve non bloquante) ------------------------------------------
 

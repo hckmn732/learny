@@ -1,9 +1,7 @@
 """Embeddings of the passages (SPEC-509 EF-4, ET-2; ADR-0056).
 
-Port of `packages/ingestion/src/embeddings.ts`. Mock mode derives a deterministic unit vector from
-SHA-256 blocks of the text, exactly like `fakeEmbedding` of `@learny/db/testing`, so no test or
-demonstration ever reaches the network. Every vector is checked to have exactly `EMBEDDING_DIM`
-finite components before anything is written.
+Mock mode derives a deterministic unit vector from SHA-256 blocks of the text, exactly like
+`fakeEmbedding` of `@learny/db/testing`, so no test or demonstration ever reaches the network.
 """
 
 import hashlib
@@ -21,7 +19,7 @@ _MAX_UINT32 = 0xFFFF_FFFF
 
 
 class EmbeddingClient(Protocol):
-    """Port of the embedding provider used by the ingestion."""
+    """One embedding adapter used by the ingestion."""
 
     async def embed(self, texts: list[str]) -> list[list[float]]: ...
 

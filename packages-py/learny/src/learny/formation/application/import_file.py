@@ -1,9 +1,9 @@
 """Extraction of an imported programme (SPEC-605 EF-2, CL-1).
 
-Port of `programme/import-file.ts`. The original bytes never leave the server: the service keeps
-them in `programme_imports.original_content` and only the extracted text goes to the tutor. PDF uses
-`pypdf` (ADR-2015), DOCX reads `word/document.xml` of the ZIP archive without executing anything,
-TXT and Markdown are UTF-8 text.
+The original bytes never leave the server: the service keeps them in
+`programme_imports.original_content` and only the extracted text goes to the tutor. PDF uses `pypdf`
+(ADR-2015), DOCX reads `word/document.xml` of the ZIP archive without executing anything, TXT and
+Markdown are UTF-8 text.
 """
 
 import base64

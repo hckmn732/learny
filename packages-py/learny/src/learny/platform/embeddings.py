@@ -1,9 +1,9 @@
 """Voyage AI embeddings of the passages (SPEC-509 EF-4, ET-2; ADR-0056).
 
-Port of `packages/ingestion/src/embeddings.ts`: live mode calls Voyage AI `voyage-4-lite` with the
-server-side key; mock mode derives a deterministic unit vector from SHA-256 blocks of the text, so
-no test or demonstration ever reaches the network. A missing key is a permanent configuration
-failure, 429 and 5xx are transient, and the provider body is never surfaced: it can quote the input.
+Live mode calls Voyage AI `voyage-4-lite` with the server-side key; mock mode derives a
+deterministic unit vector from SHA-256 blocks of the text, so no test or demonstration ever reaches
+the network. A missing key is a permanent configuration failure, 429 and 5xx are transient, and the
+provider body is never surfaced: it can quote the input.
 """
 
 import json
@@ -33,7 +33,7 @@ class EmbeddingProvider(Protocol):
 
 
 class MockEmbedder:
-    """ADR-0056: deterministic unit vectors, identical to the TypeScript mock."""
+    """ADR-0056: deterministic unit vectors, identical to the reference mock."""
 
     async def embed(self, texts_to_embed: list[str]) -> list[list[float]]:
         return [fake_embedding(text) for text in texts_to_embed]

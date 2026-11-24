@@ -4,8 +4,8 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
-import { closeDb } from '@learny/db';
-import { DEMO_USERS, demoChapterId, demoFormationId, demoModuleId, demoUserId } from '@learny/db/seed/fixtures';
+import { closeDb } from '@learny/testing/db';
+import { DEMO_USERS, demoChapterId, demoFormationId, demoModuleId, demoUserId } from '@learny/testing/db-factories';
 import { expect, restoreDemoData, test } from '@learny/testing/playwright';
 import { createDemoSession, type TestSession } from '@learny/testing/supabase';
 import {

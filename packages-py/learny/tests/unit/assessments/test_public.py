@@ -1,7 +1,6 @@
 """[SPEC-2202] Public payload of every brick type (SPEC-501 ET-7, ADR-0150).
 
-Ported from `packages/bricks/src/public.test.ts`. The expected projections are the recordings of
-the TypeScript engine taken on 2026-11-21 from the reference examples and the version seed.
+The expected projections are the reference recordings.
 """
 
 import json
@@ -9,11 +8,11 @@ from pathlib import Path
 from typing import Any
 
 import pytest
-from learny.assessments.domain.bricks.public import ordering_public
 from learny.assessments.domain.bricks.public_brick import (
     BRICK_PUBLIC_REQUIRED_ABSENT_FIELDS,
     to_public_brick,
 )
+from learny.assessments.domain.bricks.public_payload import ordering_public
 from learny.assessments.domain.bricks.random import shuffle_seeded
 
 pytestmark = pytest.mark.spec("SPEC-2202")

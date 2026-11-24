@@ -1,10 +1,9 @@
 """[SPEC-2205] Platform of the engagement notifications: e-mail, push and unsubscribe links.
 
 Every mode runs without any network: `EMAIL_MODE=memory` captures the messages in an outbox and
-`PUSH_MODE=mock` simulates the push service from the endpoint itself. The unsubscribe vectors are
-produced by the TypeScript implementation (`packages/notifications/src/email/unsubscribe-token.ts`)
-so the same links are accepted by both runtimes. The French copy is asserted through
-`learny.shared.locale_fr.engagement_email`, the single source of the user-facing strings (ADR-2011).
+`PUSH_MODE=mock` simulates the push service from the endpoint itself. The French copy is asserted
+through `learny.shared.locale_fr.engagement_email`, the single source of the user-facing strings
+(ADR-2011).
 """
 
 import base64
@@ -85,7 +84,6 @@ pytestmark = pytest.mark.spec("SPEC-2205")
 USER_ID = "11111111-1111-4111-8111-111111111111"
 SECRET = "learny-test-only-email-link-secret-00000000"
 
-# Produced by the TypeScript implementation itself (`createUnsubscribeToken`), never by hand.
 TOKEN_VECTORS = [
     (
         SECRET,
@@ -131,9 +129,6 @@ def content_for(
     payload: dict[str, Any] = {"formationTitle": "SAP"}
     payload.update(data)
     return build_email_content(notification_type, payload, RENDERED, first_name)
-
-
-# --- unsubscribe token: the TypeScript vectors ---------------------------------------------------
 
 
 @pytest.mark.parametrize(("secret", "user_id", "expected"), TOKEN_VECTORS)

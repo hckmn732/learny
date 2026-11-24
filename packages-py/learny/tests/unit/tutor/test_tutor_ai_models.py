@@ -1,10 +1,4 @@
-"""[SPEC-2204] BYOK projections, catalogue, discovery and compatibility probes (unit).
-
-Ports of the pure helpers of `packages/services/src/ai/{credentials-service,qualify-model}.ts`,
-`packages/services/src/parametres-modeles-d-ia.ts` and `packages/llm/src/{providers/catalog,
-discover-models,qualification/compatibility}.ts`: the fakes are replaced by the committed mock
-fixtures, and nothing here opens a socket (ADR-0048).
-"""
+"""[SPEC-2204] BYOK projections, catalogue, discovery and compatibility probes (unit)."""
 
 import json
 from datetime import datetime

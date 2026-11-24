@@ -1,7 +1,7 @@
-"""User-facing French strings of the billing context, copied verbatim from the TypeScript backend.
+"""User-facing French strings of the billing context (SPEC-210, ADR-0215, ADR-2011).
 
-Sources: `packages/services/src/billing/{config,stripe-client,stripe-event,checkout,webhook}.ts`
-(SPEC-210, ADR-0215). Never referenced by a literal in the code (ADR-2011).
+Every literal is copied verbatim from the reference implementation. Never referenced by a
+literal in the code (ADR-2011).
 """
 
 # `config.ts` - `STRIPE_MODE=mock` is refused in production (defence in depth).
@@ -29,7 +29,7 @@ SUBSCRIPTION_NOT_FOUND = "Abonnement introuvable."
 ALREADY_SUBSCRIBED = "Votre abonnement est déjà actif."
 NO_SUBSCRIPTION_TO_MANAGE = "Aucun abonnement à gérer."
 
-# packages/services/src/billing/dev.ts (SPEC-210 EF-7, EF-8, ported by SPEC-2207).
+# SPEC-210 EF-7, EF-8, SPEC-2207.
 SIMULATION_UNAVAILABLE = "La simulation n’est disponible qu’avec STRIPE_MODE=mock."
 SESSION_NOT_FOUND = "Session de paiement introuvable."
 NO_WEBHOOK_TO_REPLAY = "Aucun webhook à rejouer."

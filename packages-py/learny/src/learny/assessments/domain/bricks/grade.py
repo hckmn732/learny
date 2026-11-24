@@ -3,8 +3,8 @@
 `grade_brick` dispatches to the pure module of each auto-corrected type and explicitly refuses the
 three tutor-graded types. No IO, no clock, no model call (BR-IA-09, CA-7). Errors are raised as
 `BrickGradeError` carrying the stable code (`RESPONSE_INVALID` or `GRADED_BY_TUTOR`) and one issue
-per invalid field, exactly like the TypeScript `Result` error branch. The shared helpers live in
-`grade_support` so a type grader never imports this dispatcher.
+per invalid field. The shared helpers live in `grade_support` so a type grader never imports this
+dispatcher.
 """
 
 from collections.abc import Mapping

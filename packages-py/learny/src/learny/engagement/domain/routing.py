@@ -1,4 +1,4 @@
-"""Pure routing of one external delivery, ported from `packages/notifications/src/routing.ts`.
+"""Pure routing of one external delivery.
 
 One function decides, for one channel and one notification type, whether the delivery is sent,
 scheduled, deferred by the quiet hours or the weekend, capped by the daily limit or skipped by a

@@ -1,8 +1,8 @@
 """Import or dismiss a tutor suggestion (BR-APP-05, SPEC-607 EF-4, ET-5).
 
-Port of `packages/services/src/resources/suggestions.ts`: importing creates one learner `web`
-contribution and its event in the same transaction; dismissing creates nothing and emits nothing.
-The suggestion URL is never fetched here: the ingestion applies its anti-SSRF rules later (SPEC-510).
+Importing creates one learner `web` contribution and its event in the same transaction; dismissing
+creates nothing and emits nothing. The suggestion URL is never fetched here: the ingestion applies
+its anti-SSRF rules later (SPEC-510).
 """
 
 from typing import Any

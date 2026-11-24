@@ -1,9 +1,9 @@
 """Read model of the module screen (SCR-06, SPEC-607 EF-1 to EF-5, BR-APP-04, BR-NAP-04).
 
-Port of `packages/services/src/resources/module.ts`: everything runs in the learner's RLS
-transaction, so another owner's formation is the same NOT_FOUND as an unknown one. The selected
-chapter comes from `?chapitre=` when it belongs to the module, otherwise the first chapter still in
-progress. Statuses, pages and sizes come from the persisted rows, never from a provisional state.
+Everything runs in the learner's RLS transaction, so another owner's formation is the same NOT_FOUND
+as an unknown one. The selected chapter comes from `?chapitre=` when it belongs to the module,
+otherwise the first chapter still in progress. Statuses, pages and sizes come from the persisted
+rows, never from a provisional state.
 """
 
 from typing import Any

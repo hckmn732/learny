@@ -1,9 +1,8 @@
 """Onboarding state and advancement (SPEC-602 ET-1, ET-2, EF-1, EF-8, EF-10, EF-13; SPEC-2201).
 
-Port of `packages/services/src/onboarding/{state,advance}.ts`. The stored step is monotone
-(`max(stored, requested)`), the side effects of a request still apply when the step does not move,
-and the completion event is written in the same transaction with a stable identifier so two clicks
-can never emit it twice.
+The stored step is monotone (`max(stored, requested)`), the side effects of a request still apply
+when the step does not move, and the completion event is written in the same transaction with a
+stable identifier so two clicks can never emit it twice.
 """
 
 from collections.abc import Mapping

@@ -1,4 +1,4 @@
-"""[SPEC-2206] Simulated Stripe gateway (ported from `billing/mock-stripe.test.ts`, SPEC-210 ET-2).
+"""[SPEC-2206] Simulated Stripe gateway (SPEC-210, ET-2).
 
 The simulation numbers its identifiers, replays an idempotency key, signs its webhooks with the
 documented scheme and never reaches the network.

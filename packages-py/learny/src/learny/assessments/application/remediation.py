@@ -1,14 +1,13 @@
 """Targeted remediation of a failed validation attempt (SPEC-612 EF-6, ET-2, ET-4, ET-5; ADR-0173).
 
-Port of `packages/services/src/remediation/index.ts`. One activity `remediation` per failed attempt:
-a tutor text per open gap, zero to two excerpts of the current course and two questions per notion
-drawn from the bank (none already answered). The plan is persisted with the activity so a reload
-shows the same texts and questions. The activity is archived when the learner terminates it; its
-answers feed mastery and FSRS with `review_source = 'validation'`.
+One activity `remediation` per failed attempt: a tutor text per open gap, zero to two excerpts of
+the current course and two questions per notion drawn from the bank (none already answered). The
+plan is persisted with the activity so a reload shows the same texts and questions. The activity is
+archived when the learner terminates it; its answers feed mastery and FSRS with `review_source =
+'validation'`.
 
-The tutor plan is a structured object of `learny.platform.llm` (task `gaps`, prompt
-`tutor.remediation-plan`, mock scenario `remediation-plan`, same fixture as the TypeScript service).
-The request emitted by `request_remediation_preparation` is consumed by the worker in SPEC-2207.
+The tutor plan is a structured object of `learny.platform.llm`. The request emitted by
+`request_remediation_preparation` is consumed by the worker in SPEC-2207.
 """
 
 import json
@@ -22,7 +21,7 @@ from learny.assessments.application.ports import AssessmentDeps
 from learny.assessments.application.quiz import get_attempt
 from learny.assessments.application.quiz_result import nature_label_of, proposal_of
 from learny.assessments.application.retry_gate import retry_gate
-from learny.assessments.domain.bricks.public import project_public
+from learny.assessments.domain.bricks.public_payload import project_public
 from learny.assessments.domain.bricks.schema import parse_payload
 from learny.assessments.infrastructure import queries
 from learny.identity.domain.actor import Actor
@@ -77,7 +76,7 @@ def escape_data(value: str) -> str:
 
 
 def escape_component(value: str) -> str:
-    """`encodeURIComponent`: the href escaping of the TypeScript service."""
+    """Percent-encoding of one path component of a plan link."""
     return quote(value, safe="-_.!~*'()")
 
 

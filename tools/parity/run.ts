@@ -1,12 +1,17 @@
 ﻿// SPEC-2001 â€” parity runner (ADR-2008, P20 plan Â§3).
 //
-// Records the reference responses of the TypeScript backend and replays them against any target
-// (the Hono API today, the Python facade tomorrow). Comparison is semantic: status, an allow-list
-// of headers, and the JSON body after normalisation of the non-deterministic values (CL-2).
+// Records the reference responses of the Python facade and replays them against any instance of it
+// (local stack, QA, staging). The TypeScript backend is gone (SPEC-2302, ADR-2006), so this suite
+// is the permanent regression oracle of P23 §2.7. Comparison is semantic: status, an allow-list of
+// headers, and the JSON body after normalisation of the non-deterministic values (CL-2).
 // For an SSE answer the body is the ordered list of parsed `data:` payloads (00-conventions §11).
 //
-//   corepack pnpm exec tsx tools/parity/run.mts --record --target http://127.0.0.1:3102
-//   corepack pnpm exec tsx tools/parity/run.mts --check  --target http://127.0.0.1:3102
+//   pnpm parity:record --target http://127.0.0.1:3001   (writes api/oracles/recordings/reads.json)
+//   pnpm parity:check  --target http://127.0.0.1:3001   (replays it, exits 1 on any divergence)
+//
+// `--group <name>` (repeatable) restricts the run to one business context. The target is the Python
+// API (`uv run uvicorn learny_api.main:app`, port 3001 in the local stack): no TypeScript server is
+// started by this harness.
 //
 // Generated scenarios cover every side-effect-free read operation of the inventory (one success
 // scenario per read route, P20 plan Â§3). Mutations are hand-written in
@@ -314,7 +319,7 @@ function selectedGroups(argv: string[]): string[] {
 
 async function main(argv: string[]): Promise<void> {
   const targetIndex = argv.indexOf('--target');
-  const target = targetIndex === -1 ? 'http://127.0.0.1:3102' : argv[targetIndex + 1];
+  const target = targetIndex === -1 ? 'http://127.0.0.1:3001' : argv[targetIndex + 1];
   if (target === undefined) throw new Error('--target <url> is required');
   const check = argv.includes('--check');
   const groups = selectedGroups(argv);

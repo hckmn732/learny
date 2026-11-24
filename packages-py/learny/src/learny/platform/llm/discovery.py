@@ -1,9 +1,7 @@
-"""Discovery of the provider model catalogue (SPEC-2204, port of `discover-models.ts`).
+"""Discovery of the provider model catalogue (SPEC-2204).
 
-The learner's key is sent to the provider exactly as the TypeScript backend does it, with a bounded
-timeout, and only chat models are kept. Simulation mode (`LLM_MODE=mock`, ADR-0048) never opens a
-socket: each provider answers a fixed list. The HTTP seam (`fetcher`) exists so a test proves the
-live branch without any network, exactly like `fetchImpl` in TypeScript.
+The learner's key is sent to the provider. Simulation mode (`LLM_MODE=mock`, ADR-0048) never opens a
+socket: each provider answers a fixed list.
 """
 
 import re
@@ -45,12 +43,13 @@ _ENDPOINTS: dict[str, str] = {
 Fetcher = Callable[[str, Mapping[str, str]], Awaitable[tuple[int, Any]]]
 
 
-def llm_mode(env: Mapping[str, str | None] | None = None) -> str:
-    """`llmMode`: the simulated adapter unless `LLM_MODE` names a live provider."""
-    import os
+def llm_mode(env: Mapping[str, str | None]) -> str:
+    """`llmMode`: the simulated adapter unless `LLM_MODE` names a live provider.
 
-    source = os.environ if env is None else env
-    value = source.get("LLM_MODE")
+    The Python backend no longer reads `LLM_MODE` from the process environment: the mode is derived
+    from `APP_ENV` by the settings (ADR-2042) and passed to `discover_provider_models`.
+    """
+    value = env.get("LLM_MODE")
     if value is None or value.strip() == "":
         return "mock"
     return value.strip().lower()
@@ -164,7 +163,7 @@ async def discover_provider_models(
     timeout_ms: int = DISCOVERY_TIMEOUT_MS,
 ) -> list[str]:
     """`discoverProviderModels`: the chat catalogue of one provider, simulated or live."""
-    if (mode if mode is not None else llm_mode()) == "mock":
+    if (mode if mode is not None else "mock") == "mock":
         return mock_models(provider)
     if provider not in AI_PROVIDERS:
         raise ValueError(f"unknown AI provider: {provider}")

@@ -1,8 +1,8 @@
 """Notion map of one formation (SPEC-616 ET-3 to ET-5; BR-CAR-01 to 05).
 
-Port of `notion-graph/get-graph.ts`. Every read runs in the learner's RLS transaction: a formation
-of another learner is invisible and therefore a 404, never an empty graph. The projection itself
-lives in `learny.formation.domain.notion_graph`.
+Every read runs in the learner's RLS transaction: a formation of another learner is invisible and
+therefore a 404, never an empty graph. The projection itself lives in
+`learny.formation.domain.notion_graph`.
 """
 
 from dataclasses import dataclass

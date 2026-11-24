@@ -5,7 +5,7 @@
 // BR-PRA-03, ADR-0172). Owner specifications: SPEC-614 (exam), SPEC-615 (Mes lacunes).
 import type { Page } from '@playwright/test';
 
-import { closeDb } from '@learny/db';
+import { closeDb } from '@learny/testing/db';
 import { expect, test } from '@learny/testing/playwright';
 import { createTestSession, deleteTestSession, type TestSession } from '@learny/testing/supabase';
 

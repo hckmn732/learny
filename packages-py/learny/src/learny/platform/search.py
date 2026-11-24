@@ -1,10 +1,9 @@
 """Web search of the tutor (SPEC-512 EF-2, EF-3, EF-5; BR-IA-12, ADR-0048).
 
-Port of `packages/llm/src/search/{normalize,tavily,fixtures}.ts`: the Tavily fallback is called with
-`SEARCH_API_KEY`, `LLM_MODE=mock` plays the committed fixtures, and a missing key is an explicit
-`SEARCH_UNAVAILABLE`. A provider answer is untrusted: only a public HTTP(S) URL survives, active
-HTML is removed, duplicates are collapsed on the canonical URL, and the answer is cut to the
-programme text budget.
+The Tavily fallback is called with `SEARCH_API_KEY`, `LLM_MODE=mock` plays the committed fixtures,
+and a missing key is an explicit `SEARCH_UNAVAILABLE`. A provider answer is untrusted: only a public
+HTTP(S) URL survives, active HTML is removed, duplicates are collapsed on the canonical URL, and the
+answer is cut to the programme text budget.
 """
 
 import json
@@ -77,7 +76,7 @@ class SearchWebResult:
     published_at: str | None = None
 
     def as_json(self) -> dict[str, Any]:
-        """The provider-neutral shape, keys in the TypeScript order (budget cost is identical)."""
+        """The provider-neutral shape, with the same key order."""
         payload: dict[str, Any] = {
             "title": self.title,
             "url": self.url,
@@ -357,7 +356,7 @@ def fit_results_to_budget(
 
 
 def search_fixtures_directory() -> Path:
-    """`<packages/llm/fixtures>/search`, or `LLM_FIXTURES_DIR/search` in a container."""
+    """Directory of the committed search fixtures."""
     return fixtures_directory() / "search"
 
 

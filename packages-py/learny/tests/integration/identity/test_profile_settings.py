@@ -1,4 +1,4 @@
-"""[SPEC-2201] Settings screen state (port of parametres-onglets-et-profil.ts)."""
+"""[SPEC-2201] Settings screen state."""
 
 from typing import Any
 

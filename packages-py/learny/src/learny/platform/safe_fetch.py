@@ -1,11 +1,10 @@
 """Bounded, anti-SSRF retrieval of a user-supplied URL (SPEC-510 ET-1, EF-5; ADR-0159).
 
-Port of `packages/core/src/net/{ip-ranges,assert-public-url,safe-fetch}.ts`. Every hop is validated
-by `resolve_public_url`, the connection is pinned on the verified address (no second DNS resolution
-can rebind it), redirects are followed manually and re-checked, the body is read in a stream with a
-hard byte bound, the whole exchange has one total deadline and robots.txt is honoured for
-`LearnyBot`. The default transport uses `httpx` with the verified address and an explicit SNI
-hostname; tests inject a transport that never opens a socket.
+Every hop is validated by `resolve_public_url`, the connection is pinned on the verified address (no
+second DNS resolution can rebind it), redirects are followed manually and re-checked, the body is
+read in a stream with a hard byte bound, the whole exchange has one total deadline and robots.txt is
+honoured for `LearnyBot`. The default transport uses `httpx` with the verified address and an
+explicit SNI hostname; tests inject a transport that never opens a socket.
 """
 
 import asyncio

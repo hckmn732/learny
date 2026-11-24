@@ -1,8 +1,7 @@
 """[SPEC-2207] The hourly security purge against the local stack.
 
-The keys created more than twenty-four hours ago and the buckets untouched for twenty-four hours
-are deleted, the boundary rows are kept, and a replayed tick deletes nothing. The fixture mirrors
-`packages/jobs/test/integration/security-purge.test.ts`.
+The keys created more than twenty-four hours ago and the buckets untouched for twenty-four hours are
+deleted, the boundary rows are kept, and a replayed tick deletes nothing.
 """
 
 from datetime import datetime

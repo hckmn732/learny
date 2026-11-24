@@ -1,9 +1,8 @@
-"""Byte builders of the upload tests (port of `packages/services/test/support/files.ts`).
+"""Byte builders of the upload tests.
 
-A test file is built in memory, never committed: the PDF assembler is the one of
-`packages/ingestion/fixtures/pdf.ts` (a valid `/Pages` tree with `/Count` pages, no font and no
-text, so `pypdf` reads exactly the expected page count), and the image helpers only write the
-signatures `file-type` recognises, which is what `detect_mime` reads.
+A test file is built in memory, never committed: the PDF assembler is the one (a valid `/Pages` tree
+with `/Count` pages, no font and no text, so `pypdf` reads exactly the expected page count), and the
+image helpers only write the signatures `file-type` recognises, which is what `detect_mime` reads.
 """
 
 

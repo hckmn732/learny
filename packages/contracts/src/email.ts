@@ -91,32 +91,6 @@ export const emailUnsubscribeGet = defineRoute({
   errors: ['UNSUBSCRIBE_TOKEN_INVALID'],
 });
 
-export const devEmailPreview = defineRoute({
-  id: 'dev.email.preview',
-  method: 'GET',
-  path: '/api/v1/dev/sdd/email/preview',
-  auth: 'user',
-  query: EmailPreviewQuery,
-  output: EmailPreview,
-  successStatus: 200,
-  summary:
-    'Route de démonstration : aperçu d’un gabarit avec les données d’exemple (JSON, ou text/html sans Accept: application/json) (SPEC-204).',
-  errors: ['VALIDATION_FAILED'],
-});
-
-export const devEmailSend = defineRoute({
-  id: 'dev.email.send',
-  method: 'POST',
-  path: '/api/v1/dev/sdd/email/send',
-  auth: 'user',
-  body: EmailSendInput,
-  output: EmailSendResult,
-  successStatus: 201,
-  idempotent: true,
-  summary: 'Route de démonstration : envoie un gabarit à l’utilisateur connecté (SPEC-204).',
-  errors: ['VALIDATION_FAILED', 'IDEMPOTENCY_IN_PROGRESS', 'NOT_FOUND'],
-});
-
 export const devEmailOutbox = defineRoute({
   id: 'dev.email.outbox',
   method: 'GET',
@@ -141,9 +115,8 @@ export const devEmailOutboxPurge = defineRoute({
 });
 
 export const emailRoutes = { emailUnsubscribePost, emailUnsubscribeGet } as const;
+// ADR-2041: only the outbox read by the data-rights journey stays.
 export const devEmailRoutes = {
-  devEmailPreview,
-  devEmailSend,
   devEmailOutbox,
   devEmailOutboxPurge,
 } as const;

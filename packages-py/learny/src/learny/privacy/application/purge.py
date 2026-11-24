@@ -1,8 +1,8 @@
 """Nightly purge of expired personal-data exports (SPEC-211 EF-8).
 
-Port of `packages/jobs/src/personal-data/purge.ts`. An archive is removed from the private bucket
-once its expiration is older than 24 hours; the row goes with it. A missing blob counts as removed
-(idempotent step), and a page opened after the expiration but before the purge still answers 410.
+An archive is removed from the private bucket once its expiration is older than 24 hours; the row
+goes with it. A missing blob counts as removed (idempotent step), and a page opened after the
+expiration but before the purge still answers 410.
 """
 
 from collections.abc import Awaitable, Callable

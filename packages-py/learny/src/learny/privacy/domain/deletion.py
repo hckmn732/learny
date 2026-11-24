@@ -1,7 +1,6 @@
 """Deletion schedule of an account (SPEC-211 EF-5, EF-6, EF-7; BR-ACC-11).
 
-Port of the pure constants of `personal-data/deletion.ts` and `jobs/src/functions/account-deletion.ts`:
-the request schedules the effective deletion thirty days later, a replay returns the same deadline,
+The request schedules the effective deletion thirty days later, a replay returns the same deadline,
 the nightly job only picks the profiles that are due (oldest first, fifty per run), and a cancelled
 request deletes nothing.
 """

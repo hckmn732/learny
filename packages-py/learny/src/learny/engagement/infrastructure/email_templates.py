@@ -1,7 +1,5 @@
 """E-mail side of a notification (SPEC-2205).
 
-Ported from `packages/notifications/src/templates/email-props.ts`.
-
 A notification type maps to one of the service templates: `reminder` for ordinary messages,
 `weekly_review` and `ai_task_failed` for their own, `daily_digest` for the programme du jour.
 `export_ready` has no e-mail at all (SPEC-211 sends the export message itself). The title, body and

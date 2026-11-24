@@ -1,7 +1,7 @@
 """Activity and exercise scales (SPEC-502 ET-5, ADR-0014, BR-PRA-01).
 
-Port of `packages/bricks/src/types/scoring/compute.ts`. Pure functions: the caller passes the
-per-brick success ratios in [0, 1] and gets the points, the percentage and the threshold verdict.
+Pure functions: the caller passes the per-brick success ratios in [0, 1] and gets the points, the
+percentage and the threshold verdict.
 """
 
 import math

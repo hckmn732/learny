@@ -1,8 +1,7 @@
 """Exam answers and marks of a mock exam (SPEC-614 EF-2, ET-4, BR-PRA-03).
 
-Port of `saveExamAnswer`, `markExamQuestion` and the timer rules of
-`packages/services/src/mock-exams/{attempt,timer}.ts`. An answer is written before the deadline
-plus the five-second tolerance; a marked question keeps its marker across reloads.
+An answer is written before the deadline plus the five-second tolerance; a marked question keeps its
+marker across reloads.
 """
 
 import json

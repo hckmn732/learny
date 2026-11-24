@@ -1,8 +1,7 @@
 """Sample data of the notification demonstrations (SPEC-209 EF-8, SPEC-706 EF-8, SPEC-205).
 
-Copied from `packages/services/src/notifications-generation-des-rappels.ts`,
-`packages/services/src/dev/notifications.ts` and `packages/notifications/src/push/demo.ts`. Only the
-labels live here; the demonstration builds the same facts as the production producers.
+Copied from the reference implementation. Only the labels live here; the demonstration builds the
+same facts as the production producers.
 """
 
 NOTIFY_FORMATION_TITLE = "SAP S/4HANA Finance"

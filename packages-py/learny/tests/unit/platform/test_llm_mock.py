@@ -219,8 +219,6 @@ def test_the_registry_holds_only_model_fixtures() -> None:
 
 
 def test_a_binary_part_serialises_like_a_typescript_uint8array() -> None:
-    # SPEC-510: the image sent to the vision model is a Uint8Array in TypeScript; JSON.stringify
-    # writes it as an object of index keys in numeric order, and the selection never fails on it.
     from learny.platform.llm.mock import canonical_json
 
     serialised = canonical_json([{"b": 1, "a": bytes(range(12))}])

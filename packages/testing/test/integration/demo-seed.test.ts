@@ -3,7 +3,8 @@
 // never truncated, even when SPEC-114 runs in parallel.
 import { describe, expect, it } from 'vitest';
 
-import { sql, type DbTx } from '@learny/db';
+import { sql, type DbTx } from '@learny/testing/db';
+import { asUser, withRollback } from '@learny/testing/db';
 import {
   DEMO_NOW_ISO,
   DEMO_USERS,
@@ -14,8 +15,7 @@ import {
   demoUserId,
   seedDemo,
   type SeedDemoSummary,
-} from '@learny/db/seed';
-import { asUser, withRollback } from '@learny/db/testing';
+} from '@learny/testing/db-seed';
 
 import {
   createAttempt,

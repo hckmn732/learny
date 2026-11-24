@@ -214,16 +214,3 @@ export const SimulateUploadOutput = z.object({
 });
 export type SimulateUploadOutput = z.infer<typeof SimulateUploadOutput>;
 
-export const devUploadSimulation = defineRoute({
-  id: 'dev.uploadSimulation',
-  method: 'POST',
-  path: '/api/v1/dev/sdd/uploads',
-  auth: 'user',
-  body: SimulateUploadBody,
-  output: SimulateUploadOutput,
-  successStatus: 200,
-  summary: 'Route de démonstration : essais simulés des limites d’envoi (SPEC-206).',
-  errors: ['VALIDATION_FAILED', 'UPLOAD_TOO_LARGE', 'UNSUPPORTED_TYPE', 'QUOTA_EXCEEDED'],
-});
-
-export const uploadsDevRoutes = { devUploadSimulation } as const;

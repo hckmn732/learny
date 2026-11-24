@@ -1,9 +1,9 @@
 """Global search use case (SPEC-212 EF-1 to EF-5, ET-2, ET-4, ET-5; BR-NAV-05, ADR-0217).
 
-Port of `search/index.ts`. The query is validated and normalized first (CL-1); the private SQL
-function `search_user_content` runs under the caller's JWT with the normalized text as a bound
-parameter, then the rows are grouped by kind in the fixed order and turned into plain-text snippets.
-Only the length of the query and the number of results are logged, never the text.
+The query is validated and normalized first (CL-1); the private SQL function `search_user_content`
+runs under the caller's JWT with the normalized text as a bound parameter, then the rows are grouped
+by kind in the fixed order and turned into plain-text snippets. Only the length of the query and the
+number of results are logged, never the text.
 """
 
 from collections.abc import Mapping, Sequence

@@ -1,4 +1,4 @@
-"""[SPEC-2101] Origin guard and trusted proxy, ported from SPEC-208 and SPEC-1102."""
+"""[SPEC-2101] Origin guard and trusted proxy (SPEC-208, SPEC-1102)."""
 
 from dataclasses import dataclass, field
 from typing import Any
@@ -211,7 +211,7 @@ def test_legacy_trust_proxy_is_ignored_when_a_relay_secret_is_configured() -> No
     # `x-forwarded-host` is honoured through the relay secret only.
     assert request_origin(plain, legacy) == "https://api.internal"
     assert client_address(plain, legacy) == "198.51.100.9"
-    # A configured-but-empty secret disables the legacy mode, like the TypeScript check.
+    # A configured-but-empty secret disables the legacy mode.
     assert request_origin(plain, {**legacy, "API_PROXY_SECRET": ""}) == "http://api.internal"
 
 

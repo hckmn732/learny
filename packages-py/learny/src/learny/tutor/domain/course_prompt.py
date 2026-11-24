@@ -1,10 +1,9 @@
 """Prompt of the structured course task (SPEC-608 EF-1, EF-2, ET-3, ET-4; SPEC-2207).
 
-Port of `packages/tutor/src/course/prompt.ts`: the versioned `course.md` prompt read at startup, the
-fixed profile part, then the JSON contract of one chapter, so the model answers with a typed
-`CourseChapterDraft` instead of free prose. Every contribution stays inside the `<document>` data
-blocks built here; the learner content can neither close a tag nor select a simulated fixture
-(ADR-0023). No IO, no clock, no model call.
+The versioned `course.md` prompt read at startup, the fixed profile part, then the JSON contract of
+one chapter, so the model answers with a typed `CourseChapterDraft` instead of free prose. Every
+contribution stays inside the `<document>` data blocks built here; the learner content can neither
+close a tag nor select a simulated fixture (ADR-0023). No IO, no clock, no model call.
 """
 
 import json
@@ -126,7 +125,7 @@ def task_context(
 
 
 def learner_message(chapter_title: str, *, base_course: bool) -> str:
-    """The French instruction of the chapter, copied verbatim from the TypeScript prompt."""
+    """The French instruction of the chapter."""
     template = texts.COURSE_MESSAGE_BASE if base_course else texts.COURSE_MESSAGE_SOURCED
     return template.format(title=chapter_title)
 

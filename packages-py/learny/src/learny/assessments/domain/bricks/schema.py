@@ -1,10 +1,8 @@
 """Payload schemas of the thirteen brick types (SPEC-501 ET-2/ET-3).
 
-Port of the Zod schemas of `packages/bricks/src/types/<type>/schema.ts`: same fields, same bounds,
-same defaults, same trimming and same strictness. Every rejected payload produces `SCHEMA_INVALID`
-issues with the same code and the same JSON path as the TypeScript validator; the message is
-written here in English because a Zod message is an internal detail never shown to a learner
-(ADR-2011).
+Same fields, same bounds, same defaults, same trimming and same strictness. Every rejected payload
+produces `SCHEMA_INVALID` issues with the same code and the same JSON path; the message is written
+here in English because a Zod message is an internal detail never shown to a learner (ADR-2011).
 """
 
 import copy

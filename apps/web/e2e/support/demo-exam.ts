@@ -1,8 +1,8 @@
 // SPEC-802 ET-3 — demonstration exam states. The seeded `mock-exam` activity only references its
 // bricks; the exam screen needs the frozen question rows, so the first matrix navigation upgrades
 // the activity and inserts one graded and one in-progress attempt for the demo learner.
-import { serviceDb, sql } from '@learny/db';
-import { demoId, demoUserId } from '@learny/db/seed/fixtures';
+import { serviceDb, sql } from '@learny/testing/db';
+import { demoId, demoUserId } from '@learny/testing/db-factories';
 
 interface BrickRow extends Record<string, unknown> {
   brick_id: string;

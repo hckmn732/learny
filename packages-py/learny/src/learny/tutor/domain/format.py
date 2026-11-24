@@ -1,10 +1,8 @@
 """Text helpers shared by the tutor domain (SPEC-2204).
 
-Ports `escapeDocumentText` and `escapeDocumentAttribute` of
-`packages/ingestion/src/retrieval/format-document.ts` and the `lowerInitial` helper repeated by the
-TypeScript services. The tutor context embeds the same untrusted data in the same tags as the
-ingestion pipeline, so the escaping rules are identical, byte for byte; `escape_tutor_data` adds the
-`escapeTutorData` of `packages/tutor/src/context.ts`, which also neutralises a simulation marker.
+The tutor context embeds the same untrusted data in the same tags as the ingestion pipeline, so the
+escaping rules are identical, byte for byte; `escape_tutor_data` adds the `escapeTutorData`, which
+also neutralises a simulation marker.
 """
 
 import re

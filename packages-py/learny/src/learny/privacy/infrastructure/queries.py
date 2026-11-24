@@ -1,9 +1,7 @@
-"""SQL of the privacy context (SPEC-2206, port of the Drizzle queries of `personal-data/`).
+"""SQL of the privacy context (SPEC-2206).
 
-The statements are the TypeScript ones: same `order by`, same `for update`, same advisory lock for
-the daily quota. The account page reads an export under the owner's RLS (`get_data_export`), while
-the creation and the deletion schedule run with the owner role, exactly like the TypeScript
-`serviceDb()` calls they replace.
+The account page reads an export under the owner's RLS (`get_data_export`), while the creation and
+the deletion schedule run with the owner role.
 """
 
 import re

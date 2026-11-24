@@ -1,4 +1,4 @@
-"""[SPEC-2201] Profile and study rhythm use cases (port of me.ts, onboarding/advance.ts)."""
+"""[SPEC-2201] Profile and study rhythm use cases."""
 
 import uuid
 from typing import Any

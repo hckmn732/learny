@@ -1,8 +1,8 @@
 import fs from 'node:fs';
 
-import { closeDb, serviceDb, sql } from '@learny/db';
-import { createTestProgramme } from '@learny/db/testing';
 import { createNotionState } from '@learny/testing';
+import { closeDb, serviceDb, sql } from '@learny/testing/db';
+import { createTestProgramme } from '@learny/testing/db';
 import { expect, test } from '@learny/testing/playwright';
 import { createTestSession, deleteTestSession, type TestSession } from '@learny/testing/supabase';
 import {
@@ -12,6 +12,8 @@ import {
   expectTokens,
 } from '@learny/testing/visual';
 import { colors } from '@learny/ui/tokens';
+
+import { mockupReference } from '../../support/mockup-reference';
 
 const ACCUEIL = '/accueil';
 const NOW = '2026-11-11T12:20:00Z';
@@ -357,10 +359,7 @@ test('Coquille : menu latéral @SPEC-304 @visual', async ({ page, axeCheck }, te
   const actual = await sidebar.screenshot({ animations: 'disabled' });
   const referencePage = await page.context().newPage();
   await referencePage.setViewportSize({ width: 1600, height: 2095 });
-  const referenceUrl = new URL(
-    '/_dev/sdd/reference/SCR-03-base-desktop.png',
-    page.url(),
-  ).toString();
+  const referenceUrl = mockupReference('SCR-03-base-desktop.png');
   await referencePage.setContent(
     `<img id="ref" src="${referenceUrl}" width="1600" height="2095" style="display:block;margin:0">`,
   );

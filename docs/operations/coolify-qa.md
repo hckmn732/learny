@@ -166,6 +166,13 @@ QA_SEED=off
 Pour de vrais envois d'e-mails, ajoutez `EMAIL_MODE=resend` et `RESEND_API_KEY` (sinon Mailpit).
 Paire VAPID : `npx web-push generate-vapid-keys`.
 
+**Services Python (`api-py`, `worker-py`, ADR-2042).** Ils ne lisent pas `LLM_MODE`, `STRIPE_MODE`,
+`PUSH_MODE`, `EMAIL_MODE`, `RATE_LIMIT_MODE`, `TRUST_PROXY` ni `JOBS_MODE` : `APP_ENV=preview` donne
+l'IA et le push réels, le mode Stripe suit la clé (`sk_test_…` : test, `sk_live_…` : live, aucune :
+simulé), `CLOCK_FIXED_AT=real` remet le limiteur, et les e-mails partent vers `SMTP_HOST` (Mailpit
+par défaut dans cette pile). La clé publique et le sujet VAPID sont dérivés de `VAPID_PRIVATE_KEY`
+et d'`EMAIL_FROM`.
+
 ### Recette en mode production
 
 Même liste, avec `APP_ENV=production` et `RESEND_API_KEY` (exigée en production même si les

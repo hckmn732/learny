@@ -1,10 +1,10 @@
 """Sidebar of the application shell (SPEC-304 EF-1 to EF-5, ET-1 to ET-5; SPEC-2201).
 
-Port of `packages/services/src/sidebar.ts`. Everything is read with the learner's own RLS
-transaction: another learner's formations, module progress, counters or streak never reach the DTO.
-The current formation is the active one stored in `profiles.current_formation_id`; when it is
-missing, paused or inaccessible, the first active formation is used. Paused formations stay in the
-switcher but are never rendered as the current formation (ET-1).
+Everything is read with the learner's own RLS transaction: another learner's formations, module
+progress, counters or streak never reach the DTO. The current formation is the active one stored in
+`profiles.current_formation_id`; when it is missing, paused or inaccessible, the first active
+formation is used. Paused formations stay in the switcher but are never rendered as the current
+formation (ET-1).
 """
 
 from collections.abc import Mapping

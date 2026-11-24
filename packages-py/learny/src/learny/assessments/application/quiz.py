@@ -1,9 +1,8 @@
 """Read model, drafts and immediate correction of one attempt (SPEC-611 EF-1 to EF-7).
 
-Port of `packages/services/src/quiz/check.ts`. The correct answers, expected gaps and explanations
-are read from the immutable brick version on the server only; a question that is not checked never
-carries them. Every write runs in the caller's RLS transaction and the answer row is locked by a
-consultative lock on `(attempt, position)`.
+The correct answers, expected gaps and explanations are read from the immutable brick version on the
+server only; a question that is not checked never carries them. Every write runs in the caller's RLS
+transaction and the answer row is locked by a consultative lock on `(attempt, position)`.
 """
 
 import json
@@ -14,11 +13,10 @@ from typing import Any
 from learny.assessments.application.ports import AssessmentDeps
 from learny.assessments.domain.bricks.grade import grade_brick
 from learny.assessments.domain.bricks.grade_support import BrickGradeError
-from learny.assessments.domain.bricks.public import project_public
+from learny.assessments.domain.bricks.public_payload import project_public
 from learny.assessments.domain.bricks.schema import parse_payload
 from learny.assessments.infrastructure import queries
 from learny.identity.domain.actor import Actor
-from learny.learning.application.review_games import to_game_correction
 from learny.shared.errors import AppError
 from learny.shared.jsmath import js_round
 from learny.shared.locale_fr import assessments as texts
@@ -338,15 +336,6 @@ async def save_draft(
         return {"position": position, "savedAt": now}
 
 
-def _correction_for(
-    type_name: str, parsed: Mapping[str, Any], outcome: Mapping[str, Any], version_id: str
-) -> Any:
-    """ET-2 - the contract correction of a closed question."""
-    if type_name == "choice_question":
-        return outcome["correction"]
-    return to_game_correction(type_name, parsed, outcome, version_id)
-
-
 async def check_answer(
     deps: AssessmentDeps, actor: Actor, attempt_id: str, position: int, body: Mapping[str, Any]
 ) -> dict[str, Any]:
@@ -389,7 +378,9 @@ async def check_answer(
                 raise AppError("INTERNAL_ERROR", texts.QUIZ_TUTOR_GRADED) from error
             raise AppError("VALIDATION_FAILED", texts.QUIZ_RESPONSE_INVALID, errors=error.issues) from error
 
-        correction = _correction_for(type_name, parsed, outcome, version_id)
+        # The quiz contract correction is the raw brick correction (cloze, matching, choice):
+        # the game projection of `review_games` reverses the keys and is not the quiz DTO.
+        correction = outcome["correction"]
         points = js_round(float(outcome["score"]) * max_score * 100) / 100
         raw_explanation = outcome["correction"].get("explanation")
         explanation = raw_explanation if isinstance(raw_explanation, str) else None

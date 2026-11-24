@@ -3,11 +3,11 @@
 // the group, the invitation by code, the apports and the departure go through the product.
 import type { APIResponse, Page } from '@playwright/test';
 
-import { closeDb } from '@learny/db';
+import { closeDb } from '@learny/testing/db';
 import { expect, test } from '@learny/testing/playwright';
 import { supabaseLocalEnv } from '@learny/testing/supabase';
 
-import { buildPdf } from '../../../../packages/services/test/support/files';
+import { buildPdf } from '../support/files';
 
 import {
   accessTokenOf,

@@ -1,9 +1,8 @@
 """Read model of a corrected validation attempt (SPEC-612 EF-1 to EF-5, ET-1, BR-QUI-05, BR-LAC-04).
 
-Port of `packages/services/src/quiz/result.ts`. Every value comes from the persisted attempt, the
-module, the learner's notion states and the retry gate: the screen never recomputes a verdict. The
-gap cards, the mastered notions and the per-notion detail reuse the domain helpers of the engine and
-the learning context instead of duplicating them.
+Every value comes from the persisted attempt, the module, the learner's notion states and the retry
+gate: the screen never recomputes a verdict. The gap cards, the mastered notions and the per-notion
+detail reuse the domain helpers of the engine and the learning context instead of duplicating them.
 """
 
 import json

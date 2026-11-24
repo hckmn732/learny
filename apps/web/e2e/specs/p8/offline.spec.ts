@@ -1,8 +1,8 @@
 // Offline mode end-to-end (SPEC-801 §12, CA-2 to CA-7): the production build really registers the
 // service worker, the pack is stored in IndexedDB, a session is played without network, the queue
 // is synchronised on the return of the network and the device data is purged on sign-out.
-import { serviceDb, sql } from '@learny/db';
-import { DEMO_USERS, demoFormationId, demoUserId } from '@learny/db/seed/fixtures';
+import { serviceDb, sql } from '@learny/testing/db';
+import { DEMO_USERS, demoFormationId, demoUserId } from '@learny/testing/db-factories';
 import { expect, restoreDemoData, test } from '@learny/testing/playwright';
 import { createDemoSession, type TestSession } from '@learny/testing/supabase';
 

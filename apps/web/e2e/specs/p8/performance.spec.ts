@@ -1,11 +1,10 @@
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
-import { closeDb } from '@learny/db';
-import { DEMO_USERS, demoUserId } from '@learny/db/seed/fixtures';
+import { closeDb } from '@learny/testing/db';
+import { DEMO_USERS, demoUserId } from '@learny/testing/db-factories';
 import { expect, test } from '@learny/testing/playwright';
 import { createDemoSession, deleteTestSession, type TestSession } from '@learny/testing/supabase';
-import { expectScreenshotBaseline, expectTokens } from '@learny/testing/visual';
 
 const ALEX = DEMO_USERS.find((user) => user.key === 'alex');
 const NOW = new Date('2026-11-11T12:20:00Z');
@@ -36,34 +35,6 @@ async function useDemoUser(
   );
   await page.clock.setFixedTime(NOW);
 }
-
-test('page de démonstration des performances @SPEC-804', async ({
-  page,
-  axeCheck,
-  captureEvidence,
-}) => {
-  await page.clock.setFixedTime(NOW);
-  await page.goto('/_dev/sdd/SPEC-804');
-
-  await expect(page.getByTestId('sdd-title')).toHaveText('SPEC-804 · Performances');
-  await expect(page.getByTestId('perf-budgets').getByTestId('perf-budget-row')).toHaveCount(11);
-  await expect(page.getByTestId('perf-budget-row').first()).toContainText('LCP');
-  await expect(page.getByTestId('perf-report-commit')).toHaveText('sample804');
-  await expect(page.getByTestId('perf-report-status')).toHaveText('ok');
-  await expect(page.getByTestId('perf-report-page')).toHaveCount(1);
-  await expect(page.getByTestId('perf-report-route')).toHaveCount(1);
-
-  await expect(page.getByTestId('perf-live')).toHaveAttribute('data-hydrated', 'true');
-  await expect(page.getByTestId('perf-live')).toBeVisible();
-  await expect(page.getByTestId('perf-live-inp')).toContainText('En attente');
-  await page.getByTestId('perf-simulate').click();
-  await expect(page.getByTestId('perf-live-inp')).toContainText(/\d+ ms/);
-  await expect(page.getByTestId('perf-live-lcp')).toContainText(/\d+ ms/);
-
-  await expect(page.getByTestId('perf-budgets').locator('table')).toBeVisible();
-  await axeCheck();
-  await captureEvidence('perf-demo');
-});
 
 test('vitals de l’accueil sans régression @SPEC-804', async ({ page, context, baseURL }) => {
   await useDemoUser(context, baseURL, page);
@@ -122,19 +93,3 @@ test('vitals de l’accueil sans régression @SPEC-804', async ({ page, context,
   expect(deferred).toEqual([]);
 });
 
-test('page de démonstration des performances @SPEC-804 @visual @mobile', async ({
-  page,
-  axeCheck,
-}) => {
-  await page.clock.setFixedTime(NOW);
-  await page.goto('/_dev/sdd/SPEC-804');
-  await expect(page.getByTestId('sdd-title')).toBeVisible();
-  await expect(page.getByTestId('sdd-title')).toHaveCSS('font-weight', '600');
-  await expect(page.getByTestId('sdd-title')).toHaveCSS('font-family', /Space Grotesk/);
-  await expectTokens(page, {
-    '[data-testid="perf-simulate"]': { 'background-color': '#111113' },
-  });
-  await expect(page.getByTestId('perf-budgets')).toBeVisible();
-  await axeCheck();
-  await expectScreenshotBaseline(page, 'perf-demo.png');
-});

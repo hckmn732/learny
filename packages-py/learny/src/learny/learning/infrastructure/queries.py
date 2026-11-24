@@ -1,8 +1,6 @@
 """SQL of the learning context (SPEC-2202).
 
-Every statement is copied from the TypeScript service it replaces (`agenda/get-agenda.ts`,
-`gaps/list-gaps.ts`, ...): same tables, same columns, same `order by`, same `for update` and same
-advisory locks. `${x}` placeholders become bound `:x` parameters and nothing here reads the clock.
+`${x}` placeholders become bound `:x` parameters and nothing here reads the clock.
 """
 
 from collections.abc import Mapping
@@ -19,7 +17,7 @@ def row_of(found: Any) -> dict[str, Any]:
 
 
 # --------------------------------------------------------------------------------------------------
-# agenda.get (packages/services/src/agenda/get-agenda.ts, SPEC-704 ET-2)
+# agenda.get
 # --------------------------------------------------------------------------------------------------
 
 READ_AGENDA_PROFILE = text(
@@ -163,7 +161,7 @@ async def read_agenda_slots(
 
 
 # --------------------------------------------------------------------------------------------------
-# gaps.list (packages/services/src/gaps/list-gaps.ts, SPEC-615 EF-1)
+# gaps.list
 # --------------------------------------------------------------------------------------------------
 
 READ_GAPS_FORMATION = text(
@@ -421,7 +419,7 @@ def _instant(value: Any) -> str:
 
 
 # --------------------------------------------------------------------------------------------------
-# series.streak, series.milestones (packages/services/src/serie-regularite-et-jalons-interface.ts,
+# series.streak, series.milestones (
 # SPEC-723)
 # --------------------------------------------------------------------------------------------------
 
@@ -688,7 +686,7 @@ async def read_series_milestone_items(
 
 # --------------------------------------------------------------------------------------------------
 # formations.finalReview, formations.maintenance
-# (packages/services/src/formations/{get-final-review,set-maintenance}.ts, SPEC-617)
+#
 # --------------------------------------------------------------------------------------------------
 
 READ_FINAL_REVIEW_FORMATION = text(
@@ -1046,7 +1044,7 @@ async def skip_scheduled_reminders(tx: Tx, user_id: str, formation_id: str) -> N
 
 # --------------------------------------------------------------------------------------------------
 # slots.alternatives, slots.move, formations.replan-options, formations.replan
-# (packages/services/src/agenda-deplacer-et-reajuster-le-planning.ts, SPEC-705)
+#
 # --------------------------------------------------------------------------------------------------
 
 READ_PLANNING_PROFILE = text(
@@ -1589,7 +1587,7 @@ async def read_automation_action_by_dedupe(
 
 
 # --------------------------------------------------------------------------------------------------
-# warmups.today.get (packages/services/src/warmup/get-today.ts, SPEC-714)
+# warmups.today.get
 # --------------------------------------------------------------------------------------------------
 
 READ_WARMUP_PROFILE = text("select timezone from public.profiles where id = cast(:user_id as uuid)")
@@ -3574,7 +3572,7 @@ async def read_due_notions_rows(tx: Tx, user_id: str, formation_id: str, at: str
 
 
 # --------------------------------------------------------------------------------------------------
-# apply_learning_result (packages/services/src/learning/apply-result.ts, SPEC-411 ET-1, ET-4)
+# apply_learning_result
 # --------------------------------------------------------------------------------------------------
 
 READ_ATTEMPT_FOR_APPLICATION = text(

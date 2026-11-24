@@ -1,12 +1,12 @@
 """Inline execution of the Python consumers (SPEC-2102 step 6).
 
-Port of `packages/jobs/src/inline.ts` for the Python side: with `JOBS_MODE=inline` an emitted event
-does not wait for the worker, the consumers Python owns run in the API process, the delays are
-ignored, a failing consumer is retried up to four executions and the depth of the events produced by
-a consumer is capped at five. Errors are logged and never reach the emitter.
+With `JOBS_MODE=inline` an emitted event does not wait for the worker, the consumers Python owns run
+in the API process, the delays are ignored, a failing consumer is retried up to four executions and
+the depth of the events produced by a consumer is capped at five. Errors are logged and never reach
+the emitter.
 
-The bridge to the `ts`-owned consumers of P21 (a call to the Hono dev dispatch route) is removed by
-SPEC-2207: every consumer of the table is `py`, so nothing is relayed any more.
+The bridge to the `ts`-owned consumers of P21 is removed by SPEC-2207: every consumer of the table
+is `py`, so nothing is relayed any more.
 
 `run_committed` is what the API calls after a request committed its events (P21 plan, step 6): the
 events go through the same `job_deliveries` rows as with the worker (one delivery per consumer,
@@ -102,6 +102,7 @@ async def run_committed(
     event_ids: list[str],
     *,
     depth: int = 0,
+    exclude: tuple[str, ...] = (),
     logger: Any = None,
 ) -> None:
     """Fans out and runs the committed events, then the events their consumers commit, depth first.
@@ -114,7 +115,7 @@ async def run_committed(
     try:
         with collect_committed_events() as produced:
             await dispatcher.dispatch_events(event_ids)
-            await runner.run_events(event_ids)
+            await runner.run_events(event_ids, exclude=exclude)
     except Exception as error:
         log.error("inline dispatch failed", code=type(error).__name__, error=str(error)[:200])
         return
@@ -124,7 +125,7 @@ async def run_committed(
     if following is None:
         log.error("inline dispatch depth exceeded", outcome="inline_depth_exceeded")
         return
-    await run_committed(dispatcher, runner, produced, depth=following, logger=log)
+    await run_committed(dispatcher, runner, produced, depth=following, exclude=exclude, logger=log)
 
 
 def next_depth(depth: int) -> int | None:

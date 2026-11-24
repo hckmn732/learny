@@ -113,3 +113,7 @@ Toutes les validations de `docs/engineering/testing.md` §7 passent ; aucune tab
 ## 15. Décisions et hypothèses
 
 ADR-0022 fixe RLS partout ; ADR-0035 fixe la frontière programme partagé/données privées. Les politiques des migrations antérieures sont renforcées par une nouvelle migration, jamais réécrites après fusion. ADR-0248 précise le contenu de cette migration additive (`0026_rls_policies.sql`), les helpers d'appartenance `security definer`, la matrice d'inventaire et le harnais d'isolation A/B/C.
+
+## Amendements
+
+- **2026-11-23, ADR-2039** — les constantes du tableau de bord sont alignées sur l'inventaire généré : 60 tables publiques, 60 sous RLS, 60 forcées, 73 politiques, répartition 7/46/7.

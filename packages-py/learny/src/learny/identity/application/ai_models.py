@@ -1,7 +1,7 @@
 """Assignment of a personal model to an AI task (SPEC-505 ET-4; SPEC-2201).
 
-Port of `assignTaskModel` (`packages/services/src/ai/qualify-model.ts`): the credential must belong
-to the learner and the model must be one of the models of that key; the assignment is immediate.
+The credential must belong to the learner and the model must be one of the models of that key; the
+assignment is immediate.
 """
 
 from collections.abc import Mapping

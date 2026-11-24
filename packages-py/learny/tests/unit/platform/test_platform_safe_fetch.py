@@ -1,8 +1,6 @@
 """[SPEC-2203] Anti-SSRF guard, robots.txt and bounds of the safe retrieval.
 
-Ported from `packages/core/src/net/{safe-fetch,safe-fetch-edges,assert-public-url,ip-ranges}.test.ts`
-and `packages/ingestion/test/integration/ssrf.test.ts`: no test opens a socket, the transport is
-injected and the DNS seam resolves a fixed public address.
+No test opens a socket, the transport is injected and the DNS seam resolves a fixed public address.
 """
 
 import asyncio

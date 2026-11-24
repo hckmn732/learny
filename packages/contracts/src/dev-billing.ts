@@ -39,16 +39,6 @@ export const billingDevRoutes = {
     summary: 'Route de démonstration : échec de paiement, résiliation ou rejeu simulés (SPEC-210).',
     errors: ['NOT_FOUND', 'CONFLICT'],
   }),
-  devStripeEvents: defineRoute({
-    id: 'dev.stripe.events',
-    method: 'GET',
-    path: '/api/v1/dev/sdd/stripe/events',
-    auth: 'user',
-    output: StripeEventsOutput,
-    successStatus: 200,
-    summary: 'Route de démonstration : historique des webhooks Stripe simulés (SPEC-210).',
-    errors: ['CONFLICT'],
-  }),
   devStripeCheckoutPay: defineRoute({
     id: 'dev.stripe.checkoutPay',
     method: 'POST',
@@ -72,5 +62,6 @@ export const billingDevRoutes = {
     errors: ['NOT_FOUND', 'CONFLICT'],
   }),
 } as const;
-export const { devStripeSimulate, devStripeEvents, devStripeCheckoutPay, devStripeCheckoutCancel } =
+// ADR-2041: the simulated checkout and portal of the Stripe test pages stay; the event list goes.
+export const { devStripeSimulate, devStripeCheckoutPay, devStripeCheckoutCancel } =
   billingDevRoutes;

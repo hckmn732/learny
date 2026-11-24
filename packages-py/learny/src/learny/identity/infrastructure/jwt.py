@@ -96,16 +96,19 @@ class JwtVerifier:
         return cast("str | bytes", key)
 
     def _check_times(self, payload: Mapping[str, Any]) -> None:
-        """`exp`, `nbf` and `iat` are compared with the injected clock, not the system clock."""
+        """`exp` and `nbf` are compared with the injected clock, not the system clock.
+
+        `iat` is deliberately not validated: `jose.jwtVerify` only checks `exp` and `nbf` unless
+        `maxTokenAge` is requested, and Supabase mints `iat` from the Auth server clock. Rejecting a
+        future `iat` would refuse every valid session whenever the injected clock lags behind the
+        Auth server (ADR-2008, SPEC-2101, CA-2).
+        """
         now = self._clock.now().timestamp()
         expires = payload.get("exp")
         if not isinstance(expires, (int, float)) or expires <= now:
             raise _unauthenticated()
         not_before = payload.get("nbf")
         if isinstance(not_before, (int, float)) and not_before > now:
-            raise _unauthenticated()
-        issued_at = payload.get("iat")
-        if isinstance(issued_at, (int, float)) and issued_at > now + 60:
             raise _unauthenticated()
 
     async def refresh_jwks(self, *, force: bool = False) -> None:
@@ -135,7 +138,11 @@ def _actor_from_claims(payload: Mapping[str, Any], transport: Transport) -> Acto
     if not isinstance(user_id, str) or user_id == "":
         raise _unauthenticated()
     email = payload.get("email")
-    confirmed = payload.get("email_confirmed_at") is not None or payload.get("confirmed") is True
+    # `identityFromClaims` of a Supabase access token carries no
+    # `email_confirmed_at` when the account is confirmed, so an absent claim means confirmed. A
+    # token the Auth server signed exists only for an account it created; confirmation is enforced
+    # at sign-in (`EMAIL_NOT_CONFIRMED`) and rechecked by `assert_fresh` (ADR-2008 parity).
+    confirmed = payload.get("email_confirmed_at") is not False
     return Actor(
         user_id=user_id,
         email=email if isinstance(email, str) else "",

@@ -1,11 +1,8 @@
 """Development fixtures of the SDD demonstration pages (SPEC-2302).
 
-Port of `@learny/db/testing` (`packages/db/src/testing/index.ts` and `programme.ts`). The
-demonstration pages build a fixture, measure it and answer the shape of their TypeScript loader;
-every write uses the owner role inside a transaction that is always rolled back, so a page never
-mutates the database. The module is reached only through the demonstration handlers, themselves
-behind the `ENABLE_SDD_PAGES` guard, and the callers allowed to open a service transaction are
-listed in `learny.shared.db.privileged`.
+The module is reached only through the demonstration handlers, themselves behind the
+`ENABLE_SDD_PAGES` guard, and the callers allowed to open a service transaction are listed in
+`learny.shared.db.privileged`.
 """
 
 import json
@@ -93,11 +90,7 @@ async def create_user(
     timezone: str | None = None,
     meta: Mapping[str, Any] | None = None,
 ) -> DevUser:
-    """Inserts the Auth user; the profile row is created by the database trigger.
-
-    The TypeScript factory draws a random local part; the demonstrations pass the address their
-    page displays, derived from the fixed clock of the request, so nothing is random here.
-    """
+    """Inserts the Auth user; the profile row is created by the database trigger."""
     metadata: dict[str, Any] = {
         "first_name": first_name,
         "last_name": last_name,
@@ -323,7 +316,7 @@ async def join_group(conn: Any, group_id: str, user_id: str, *, joined_at: str) 
 
 
 def json_value(value: Any) -> Any:
-    """A `jsonb` column decoded the way the TypeScript driver returns it."""
+    """A `jsonb` column decoded the way the driver returns it."""
     if isinstance(value, str):
         return json.loads(value)
     return value

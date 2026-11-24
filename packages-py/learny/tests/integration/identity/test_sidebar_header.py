@@ -1,4 +1,4 @@
-"""[SPEC-2201] Header and sidebar (port of header.ts, sidebar.ts and views read SQL)."""
+"""[SPEC-2201] Header and sidebar."""
 
 from typing import Any
 

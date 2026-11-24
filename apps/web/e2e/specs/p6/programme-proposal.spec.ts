@@ -1,6 +1,6 @@
 import { fileURLToPath } from 'node:url';
 
-import { closeDb, serviceDb, sql } from '@learny/db';
+import { closeDb, serviceDb, sql } from '@learny/testing/db';
 import { expect, test } from '@learny/testing/playwright';
 import { createTestSession, deleteTestSession, type TestSession } from '@learny/testing/supabase';
 import { compareRegions, expectScreenshotBaseline, expectTokens } from '@learny/testing/visual';

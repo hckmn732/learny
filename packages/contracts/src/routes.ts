@@ -10,11 +10,9 @@ import { brickRoutes } from './bricks';
 import { cadrageRoutes, formationRoutes } from './cadrage';
 import { courseRoutes } from './course';
 import { courseReadingRoutes } from './course-reading';
-import { devRoutes } from './dev';
 import { billingDevRoutes } from './dev-billing';
 import { devJobsRoutes } from './dev-jobs';
-import { devMigrationRoutes } from './dev-migration';
-import { devSddMigrationRoutes } from './dev-sdd-migration';
+import { devSddStripeCheckout } from './dev-sdd-migration';
 import { devEmailRoutes, emailRoutes } from './email';
 import { exerciseRoutes } from './exercises';
 import { finalReviewRoutes } from './final-review';
@@ -28,25 +26,24 @@ import { legalRoutes } from './legal';
 import { meRoutes } from './me';
 import { examRoutes } from './mock-exams';
 import { automationRoutes } from './moteur-d-automatismes';
-import { notificationRoutes, notificationsDevRoutes } from './notifications';
+import { notificationRoutes } from './notifications';
 import { notificationsGenerationDevRoutes } from './notifications-generation-des-rappels';
 import { notionGraphRoutes } from './notion-graph';
 import { offlineRoutes } from './offline';
 import { parametresModelesRoutes } from './parametres-modeles-d-ia';
 import { parametresNotificationsRoutes } from './parametres-notifications';
 import { parametresRoutes } from './parametres-onglets-et-profil';
-import { personalDataDevRoutes, personalDataRoutes } from './personal-data';
+import { personalDataRoutes } from './personal-data';
 import { programmeRoutes } from './programme';
-import { pushDevRoutes, pushRoutes } from './push';
+import { pushRoutes } from './push';
 import { remediationRoutes } from './quiz-result';
 import { moduleRoutes } from './resources';
 import { reviewRoutes } from './review';
 import { searchRoutes } from './search';
-import { securityRoutes } from './security';
 import { seriesMilestoneRoutes } from './serie-regularite-et-jalons-interface';
 import { sidebarRoutes } from './sidebar';
 import { tutorChatRoutes } from './tutor-chat';
-import { uploadsDevRoutes, uploadsRoutes } from './uploads';
+import { uploadsRoutes } from './uploads';
 import { warmupRoutes } from './warmup';
 
 // Registry of every route (SPEC-201 ET-1). Each domain exports its routes; they are merged here.
@@ -58,14 +55,9 @@ export const ROUTES = {
   ...legalRoutes,
   ...authRoutes,
   ...meRoutes,
-  ...devRoutes,
-  ...devMigrationRoutes,
-  ...devSddMigrationRoutes,
-  ...securityRoutes,
+  devSddStripeCheckout,
   ...uploadsRoutes,
-  ...uploadsDevRoutes,
   ...pushRoutes,
-  ...pushDevRoutes,
   ...devJobsRoutes,
   ...searchRoutes,
   ...headerRoutes,
@@ -90,10 +82,8 @@ export const ROUTES = {
   ...emailRoutes,
   ...devEmailRoutes,
   ...notificationRoutes,
-  ...notificationsDevRoutes,
   ...notificationsGenerationDevRoutes,
   ...personalDataRoutes,
-  ...personalDataDevRoutes,
   ...aiCredentialRoutes,
   ...gapRoutes,
   ...notionGraphRoutes,

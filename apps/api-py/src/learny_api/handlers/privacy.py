@@ -2,7 +2,7 @@
 
 One `@handler("<route id>")` per operation, no logic: the body is the generated contract model and
 the use case lives in `learny.privacy`. `me.export.read?download=1` answers a 302 to a fresh signed
-URL, exactly like the TypeScript handler.
+URL.
 """
 
 from typing import Any, cast

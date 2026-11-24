@@ -1156,63 +1156,6 @@ class CoursesProgressParams(BaseModel):
     )
 
 
-class DevCronHourlyTickBody(BaseModel):
-    at: (
-        constr(
-            pattern=r'^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d:[0-5]\d(?:\.\d+)?(?:Z|([+-](?:[01]\d|2[0-3]):[0-5]\d)))$'
-        )
-        | None
-    ) = None
-
-
-class User(BaseModel):
-    model_config = ConfigDict(
-        extra='forbid',
-    )
-    localDate: constr(pattern=r'^\d{4}-\d{2}-\d{2}$')
-    localStart: constr(pattern=r'^\d{2}:\d{2}$')
-    localWeekday: conint(ge=1, le=7)
-    timezone: str
-    userId: constr(
-        pattern=r'^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$'
-    )
-    windowEnd: constr(
-        pattern=r'^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d:[0-5]\d(?:\.\d+)?(?:Z|([+-](?:[01]\d|2[0-3]):[0-5]\d)))$'
-    )
-    windowStart: constr(
-        pattern=r'^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d:[0-5]\d(?:\.\d+)?(?:Z|([+-](?:[01]\d|2[0-3]):[0-5]\d)))$'
-    )
-
-
-class DevCronHourlyTickOutput(BaseModel):
-    model_config = ConfigDict(
-        extra='forbid',
-    )
-    tickAt: constr(
-        pattern=r'^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d:[0-5]\d(?:\.\d+)?(?:Z|([+-](?:[01]\d|2[0-3]):[0-5]\d)))$'
-    )
-    users: list[User]
-
-
-class Fail(StrEnum):
-    business = 'business'
-    crash = 'crash'
-
-
-class DevEchoBody(BaseModel):
-    fail: Fail | None = None
-    message: constr(min_length=1, max_length=200)
-
-
-class DevEchoOutput(BaseModel):
-    model_config = ConfigDict(
-        extra='forbid',
-    )
-    counter: conint(ge=-9007199254740991, le=9007199254740991)
-    message: str
-    receivedAt: str
-
-
 class Item1(BaseModel):
     model_config = ConfigDict(
         extra='forbid',
@@ -1236,64 +1179,6 @@ class DevEmailOutboxPurgeOutput(BaseModel):
         extra='forbid',
     )
     items: list[Item1]
-
-
-class Category(StrEnum):
-    service = 'service'
-    transactional = 'transactional'
-
-
-class Template(StrEnum):
-    welcome = 'welcome'
-    daily_digest = 'daily_digest'
-    reminder = 'reminder'
-    weekly_review = 'weekly_review'
-    ai_task_failed = 'ai_task_failed'
-    export_ready = 'export_ready'
-    deletion_scheduled = 'deletion_scheduled'
-    deletion_completed = 'deletion_completed'
-
-
-class Tone(StrEnum):
-    vous = 'vous'
-    tu = 'tu'
-
-
-class DevEmailPreviewOutput(BaseModel):
-    model_config = ConfigDict(
-        extra='forbid',
-    )
-    category: Category
-    headers: dict[str, str]
-    html: str
-    subject: str
-    template: Template
-    text: str
-    tone: Tone
-
-
-class DevEmailPreviewQuery(BaseModel):
-    template: Template
-    tone: Tone
-
-
-class DevEmailSendBody(BaseModel):
-    template: Template
-    tone: Tone
-
-
-class Transport(StrEnum):
-    resend = 'resend'
-    smtp = 'smtp'
-    memory = 'memory'
-
-
-class DevEmailSendOutput(BaseModel):
-    model_config = ConfigDict(
-        extra='forbid',
-    )
-    messageId: str
-    transport: Transport
 
 
 class Step(BaseModel):
@@ -1343,37 +1228,6 @@ class DevEventsDemoStartOutput(BaseModel):
         extra='forbid',
     )
     jobId: str
-
-
-class DevEventsOutboxOutput(BaseModel):
-    model_config = ConfigDict(
-        extra='forbid',
-    )
-    failed: conint(ge=0, le=9007199254740991)
-    pending: conint(ge=0, le=9007199254740991)
-    sent: conint(ge=0, le=9007199254740991)
-
-
-class Item3(BaseModel):
-    model_config = ConfigDict(
-        extra='forbid',
-    )
-    id: str
-    label: str
-    position: conint(ge=-9007199254740991, le=9007199254740991)
-
-
-class DevItemsOutput(BaseModel):
-    model_config = ConfigDict(
-        extra='forbid',
-    )
-    items: list[Item3]
-    nextCursor: str | None
-
-
-class DevItemsQuery(BaseModel):
-    cursor: constr(min_length=1, max_length=512) | None = None
-    limit: conint(ge=1, le=100) | None = 20
 
 
 class Quiz(BaseModel):
@@ -1480,713 +1334,6 @@ class DevNotificationsGenerateOutput(BaseModel):
     reminder: Reminder | None
 
 
-class MaxPerDay(IntEnum):
-    integer_3 = 3
-    integer_5 = 5
-    integer_8 = 8
-
-
-class Settings(BaseModel):
-    channelEmail: bool
-    channelPush: bool
-    maxPerDay: MaxPerDay
-    quietEnd: constr(pattern=r'^\d{2}:\d{2}$')
-    quietStart: constr(pattern=r'^\d{2}:\d{2}$')
-    typeCourse: bool
-    typeGap: bool
-    typePlanning: bool
-    typeRelaunch: bool
-    typeRevision: bool
-    typeValidation: bool
-    weekendQuiet: bool
-
-
-class Type3(StrEnum):
-    validation_soon = 'validation_soon'
-    course_ready = 'course_ready'
-    global_quiz_today = 'global_quiz_today'
-    new_gap = 'new_gap'
-    session_planned = 'session_planned'
-    module_validated = 'module_validated'
-    session_to_reschedule = 'session_to_reschedule'
-    weekly_review = 'weekly_review'
-    milestone = 'milestone'
-    ai_cost_alert = 'ai_cost_alert'
-    ai_task_failed = 'ai_task_failed'
-    export_ready = 'export_ready'
-    group_invitation = 'group_invitation'
-    daily_digest = 'daily_digest'
-    relaunch = 'relaunch'
-    planning_adjusted = 'planning_adjusted'
-
-
-class DevNotifyBody(BaseModel):
-    at: constr(
-        pattern=r'^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d:[0-5]\d(?:\.\d+)?(?:Z|([+-](?:[01]\d|2[0-3]):[0-5]\d)))$'
-    )
-    dedupeKey: constr(min_length=1, max_length=200) | None = None
-    settings: Settings
-    tone: Tone
-    type: Type3
-
-
-class Channel(StrEnum):
-    email = 'email'
-    push = 'push'
-
-
-class Status8(StrEnum):
-    scheduled = 'scheduled'
-    sent = 'sent'
-    deferred_quiet = 'deferred_quiet'
-    capped = 'capped'
-    failed = 'failed'
-    skipped_pref = 'skipped_pref'
-
-
-class Delivery(BaseModel):
-    model_config = ConfigDict(
-        extra='forbid',
-    )
-    channel: Channel
-    error: str | None
-    scheduledFor: (
-        constr(
-            pattern=r'^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d:[0-5]\d(?:\.\d+)?(?:Z|([+-](?:[01]\d|2[0-3]):[0-5]\d)))$'
-        )
-        | None
-    )
-    status: Status8
-
-
-class HeldMaxPerDay(IntEnum):
-    integer_3 = 3
-    integer_5 = 5
-    integer_8 = 8
-
-
-class Digest(BaseModel):
-    model_config = ConfigDict(
-        extra='forbid',
-    )
-    heldCount: conint(ge=0, le=9007199254740991)
-    heldMaxPerDay: HeldMaxPerDay
-    heldTitles: list[str]
-
-
-class Notification1(BaseModel):
-    model_config = ConfigDict(
-        extra='forbid',
-    )
-    body: str
-    createdAt: constr(
-        pattern=r'^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d:[0-5]\d(?:\.\d+)?(?:Z|([+-](?:[01]\d|2[0-3]):[0-5]\d)))$'
-    )
-    href: str
-    icon: str
-    id: constr(
-        pattern=r'^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$'
-    )
-    title: str
-    type: Type3
-
-
-class DevNotifyOutput(BaseModel):
-    model_config = ConfigDict(
-        extra='forbid',
-    )
-    created: bool
-    deliveries: list[Delivery]
-    digest: Digest
-    notification: Notification1
-
-
-class Email(BaseModel):
-    model_config = ConfigDict(
-        extra='forbid',
-    )
-    at: constr(
-        pattern=r'^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d:[0-5]\d(?:\.\d+)?(?:Z|([+-](?:[01]\d|2[0-3]):[0-5]\d)))$'
-    )
-    template: str
-    to: str
-
-
-class DevPersonalDataDeletionCancelOutput(BaseModel):
-    model_config = ConfigDict(
-        extra='forbid',
-    )
-    emails: list[Email]
-    scheduledFor: (
-        constr(
-            pattern=r'^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d:[0-5]\d(?:\.\d+)?(?:Z|([+-](?:[01]\d|2[0-3]):[0-5]\d)))$'
-        )
-        | None
-    )
-
-
-class DevPersonalDataDeletionScheduleOutput(BaseModel):
-    model_config = ConfigDict(
-        extra='forbid',
-    )
-    emails: list[Email]
-    scheduledFor: (
-        constr(
-            pattern=r'^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d:[0-5]\d(?:\.\d+)?(?:Z|([+-](?:[01]\d|2[0-3]):[0-5]\d)))$'
-        )
-        | None
-    )
-
-
-class AuthStatus(StrEnum):
-    supprimé = 'supprimé'
-    présent = 'présent'
-
-
-class Table(BaseModel):
-    model_config = ConfigDict(
-        extra='forbid',
-    )
-    remaining: conint(ge=0, le=9007199254740991)
-    table: str
-
-
-class DevPersonalDataExecuteOutput(BaseModel):
-    model_config = ConfigDict(
-        extra='forbid',
-    )
-    authStatus: AuthStatus
-    emails: list[Email]
-    scheduledFor: constr(
-        pattern=r'^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d:[0-5]\d(?:\.\d+)?(?:Z|([+-](?:[01]\d|2[0-3]):[0-5]\d)))$'
-    )
-    tables: list[Table]
-
-
-class Status9(StrEnum):
-    queued = 'queued'
-    running = 'running'
-    done = 'done'
-    failed = 'failed'
-
-
-class Export(BaseModel):
-    model_config = ConfigDict(
-        extra='forbid',
-    )
-    createdAt: constr(
-        pattern=r'^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d:[0-5]\d(?:\.\d+)?(?:Z|([+-](?:[01]\d|2[0-3]):[0-5]\d)))$'
-    )
-    downloadUrl: str | None = None
-    expiresAt: (
-        constr(
-            pattern=r'^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d:[0-5]\d(?:\.\d+)?(?:Z|([+-](?:[01]\d|2[0-3]):[0-5]\d)))$'
-        )
-        | None
-    )
-    id: constr(
-        pattern=r'^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$'
-    )
-    sizeBytes: conint(ge=0, le=9007199254740991) | None
-    status: Status9
-
-
-class DevPersonalDataExportOutput(BaseModel):
-    model_config = ConfigDict(
-        extra='forbid',
-    )
-    durationMs: conint(ge=0, le=9007199254740991)
-    emails: list[Email]
-    export: Export
-    tree: list[str]
-
-
-class Outcome(StrEnum):
-    success = 'success'
-    missing = 'missing'
-    gone = 'gone'
-    transient = 'transient'
-
-
-class Attempt(BaseModel):
-    model_config = ConfigDict(
-        extra='forbid',
-    )
-    failureCount: conint(ge=0, le=9007199254740991)
-    outcome: Outcome
-    removed: bool
-    statusCode: conint(ge=-9007199254740991, le=9007199254740991)
-
-
-class Status10(StrEnum):
-    sent = 'sent'
-    failed = 'failed'
-    skipped_pref = 'skipped_pref'
-
-
-class Delivery1(BaseModel):
-    model_config = ConfigDict(
-        extra='forbid',
-    )
-    error: str | None
-    sentAt: (
-        constr(
-            pattern=r'^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d:[0-5]\d(?:\.\d+)?(?:Z|([+-](?:[01]\d|2[0-3]):[0-5]\d)))$'
-        )
-        | None
-    )
-    status: Status10
-
-
-class Payload(BaseModel):
-    model_config = ConfigDict(
-        extra='forbid',
-    )
-    body: str
-    icon: str
-    tag: str
-    title: str
-    url: str
-
-
-class DevPushSendOutput(BaseModel):
-    model_config = ConfigDict(
-        extra='forbid',
-    )
-    attempts: list[Attempt]
-    delivery: Delivery1
-    notificationId: constr(
-        pattern=r'^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$'
-    )
-    payload: Payload
-    remainingSubscriptions: conint(ge=0, le=9007199254740991)
-
-
-class Profile3(StrEnum):
-    default = 'default'
-    ai = 'ai'
-    auth = 'auth'
-
-
-class DevRateLimitBurstBody(BaseModel):
-    profile: Profile3
-
-
-class DevRateLimitBurstOutput(BaseModel):
-    model_config = ConfigDict(
-        extra='forbid',
-    )
-    accepted: conint(ge=-9007199254740991, le=9007199254740991)
-    limit: conint(ge=-9007199254740991, le=9007199254740991)
-    profile: Profile3
-    refused: conint(ge=-9007199254740991, le=9007199254740991)
-    remaining: conint(ge=-9007199254740991, le=9007199254740991)
-    retryAfterSeconds: conint(ge=-9007199254740991, le=9007199254740991) | None
-
-
-class Mode(StrEnum):
-    same = 'same'
-    foreign = 'foreign'
-
-
-class DevRateLimitOriginBody(BaseModel):
-    mode: Mode
-
-
-class DevRateLimitOriginOutput(BaseModel):
-    model_config = ConfigDict(
-        extra='forbid',
-    )
-    code: str | None
-    detail: str | None
-    status: conint(ge=-9007199254740991, le=9007199254740991)
-
-
-class DevRateLimitPurgeOutput(BaseModel):
-    model_config = ConfigDict(
-        extra='forbid',
-    )
-    idempotencyKeys: conint(ge=-9007199254740991, le=9007199254740991)
-    rateLimitBuckets: conint(ge=-9007199254740991, le=9007199254740991)
-
-
-class DevSddApiCoverageOutput(BaseModel):
-    model_config = ConfigDict(
-        extra='forbid',
-    )
-    drift: conint(ge=0, le=9007199254740991)
-    duplicates: conint(ge=0, le=9007199254740991)
-    files: conint(ge=0, le=9007199254740991)
-    generated: conint(ge=0, le=9007199254740991)
-    registry: conint(ge=0, le=9007199254740991)
-    specialDrift: list[str]
-    specials: conint(ge=0, le=9007199254740991)
-    standard: conint(ge=0, le=9007199254740991)
-    uncovered: list[str]
-
-
-class DevSddAuthProxyOutput(BaseModel):
-    model_config = ConfigDict(
-        extra='forbid',
-    )
-    ok: Literal[True]
-
-
-class DevSddSpec007DemoOutput(RootModel[Any]):
-    root: Any
-
-
-class DevSddSpec009DemoOutput(RootModel[Any]):
-    root: Any
-
-
-class DevSddSpec1004DemoOutput(RootModel[Any]):
-    root: Any
-
-
-class DevSddSpec101DemoOutput(RootModel[Any]):
-    root: Any
-
-
-class DevSddSpec102CreateBody(BaseModel):
-    action: str | None = None
-    apiKey: str | None = None
-    baseUrl: str | None = None
-    brickId: str | None = None
-    decision: str | None = None
-    id: str | None = None
-    model: str | None = None
-    provider: str | None = None
-    reason: str | None = None
-    scenario: str | None = None
-    spend: str | None = None
-    task: str | None = None
-    title: str | None = None
-    url: str | None = None
-
-
-class DevSddSpec102CreateOutput(RootModel[Any]):
-    root: Any
-
-
-class DevSddSpec102DemoOutput(RootModel[Any]):
-    root: Any
-
-
-class DevSddSpec102RemoveBody(BaseModel):
-    action: str | None = None
-    apiKey: str | None = None
-    baseUrl: str | None = None
-    brickId: str | None = None
-    decision: str | None = None
-    id: str | None = None
-    model: str | None = None
-    provider: str | None = None
-    reason: str | None = None
-    scenario: str | None = None
-    spend: str | None = None
-    task: str | None = None
-    title: str | None = None
-    url: str | None = None
-
-
-class DevSddSpec102RemoveOutput(RootModel[Any]):
-    root: Any
-
-
-class DevSddSpec103DemoOutput(RootModel[Any]):
-    root: Any
-
-
-class DevSddSpec104DemoOutput(RootModel[Any]):
-    root: Any
-
-
-class DevSddSpec105DemoOutput(RootModel[Any]):
-    root: Any
-
-
-class DevSddSpec106DemoOutput(RootModel[Any]):
-    root: Any
-
-
-class DevSddSpec107DemoOutput(RootModel[Any]):
-    root: Any
-
-
-class DevSddSpec108DemoOutput(RootModel[Any]):
-    root: Any
-
-
-class DevSddSpec109DemoOutput(RootModel[Any]):
-    root: Any
-
-
-class DevSddSpec110DemoOutput(RootModel[Any]):
-    root: Any
-
-
-class DevSddSpec111DemoOutput(RootModel[Any]):
-    root: Any
-
-
-class DevSddSpec112DemoOutput(RootModel[Any]):
-    root: Any
-
-
-class DevSddSpec113DemoOutput(RootModel[Any]):
-    root: Any
-
-
-class DevSddSpec114DemoOutput(RootModel[Any]):
-    root: Any
-
-
-class DevSddSpec115DemoOutput(RootModel[Any]):
-    root: Any
-
-
-class DevSddSpec1203DemoOutput(RootModel[Any]):
-    root: Any
-
-
-class DevSddSpec1301DemoOutput(RootModel[Any]):
-    root: Any
-
-
-class DevSddSpec202DemoOutput(RootModel[Any]):
-    root: Any
-
-
-class DevSddSpec411DemoOutput(RootModel[Any]):
-    root: Any
-
-
-class DevSddSpec501CorrectBody(BaseModel):
-    action: str | None = None
-    apiKey: str | None = None
-    baseUrl: str | None = None
-    brickId: str | None = None
-    decision: str | None = None
-    id: str | None = None
-    model: str | None = None
-    provider: str | None = None
-    reason: str | None = None
-    scenario: str | None = None
-    spend: str | None = None
-    task: str | None = None
-    title: str | None = None
-    url: str | None = None
-
-
-class DevSddSpec501CorrectOutput(RootModel[Any]):
-    root: Any
-
-
-class DevSddSpec501CreateBody(BaseModel):
-    action: str | None = None
-    apiKey: str | None = None
-    baseUrl: str | None = None
-    brickId: str | None = None
-    decision: str | None = None
-    id: str | None = None
-    model: str | None = None
-    provider: str | None = None
-    reason: str | None = None
-    scenario: str | None = None
-    spend: str | None = None
-    task: str | None = None
-    title: str | None = None
-    url: str | None = None
-
-
-class DevSddSpec501CreateOutput(RootModel[Any]):
-    root: Any
-
-
-class DevSddSpec501DemoOutput(RootModel[Any]):
-    root: Any
-
-
-class DevSddSpec501ReportBody(BaseModel):
-    action: str | None = None
-    apiKey: str | None = None
-    baseUrl: str | None = None
-    brickId: str | None = None
-    decision: str | None = None
-    id: str | None = None
-    model: str | None = None
-    provider: str | None = None
-    reason: str | None = None
-    scenario: str | None = None
-    spend: str | None = None
-    task: str | None = None
-    title: str | None = None
-    url: str | None = None
-
-
-class DevSddSpec501ReportOutput(RootModel[Any]):
-    root: Any
-
-
-class DevSddSpec504CallBody(BaseModel):
-    action: str | None = None
-    apiKey: str | None = None
-    baseUrl: str | None = None
-    brickId: str | None = None
-    decision: str | None = None
-    id: str | None = None
-    model: str | None = None
-    provider: str | None = None
-    reason: str | None = None
-    scenario: str | None = None
-    spend: str | None = None
-    task: str | None = None
-    title: str | None = None
-    url: str | None = None
-
-
-class DevSddSpec504CallOutput(RootModel[Any]):
-    root: Any
-
-
-class DevSddSpec504DemoOutput(RootModel[Any]):
-    root: Any
-
-
-class DevSddSpec505CreateBody(BaseModel):
-    action: str | None = None
-    apiKey: str | None = None
-    baseUrl: str | None = None
-    brickId: str | None = None
-    decision: str | None = None
-    id: str | None = None
-    model: str | None = None
-    provider: str | None = None
-    reason: str | None = None
-    scenario: str | None = None
-    spend: str | None = None
-    task: str | None = None
-    title: str | None = None
-    url: str | None = None
-
-
-class DevSddSpec505CreateOutput(RootModel[Any]):
-    root: Any
-
-
-class DevSddSpec505DeleteBody(BaseModel):
-    action: str | None = None
-    apiKey: str | None = None
-    baseUrl: str | None = None
-    brickId: str | None = None
-    decision: str | None = None
-    id: str | None = None
-    model: str | None = None
-    provider: str | None = None
-    reason: str | None = None
-    scenario: str | None = None
-    spend: str | None = None
-    task: str | None = None
-    title: str | None = None
-    url: str | None = None
-
-
-class DevSddSpec505DeleteOutput(RootModel[Any]):
-    root: Any
-
-
-class DevSddSpec505DemoOutput(RootModel[Any]):
-    root: Any
-
-
-class DevSddSpec506RunBody(BaseModel):
-    action: str | None = None
-    apiKey: str | None = None
-    baseUrl: str | None = None
-    brickId: str | None = None
-    decision: str | None = None
-    id: str | None = None
-    model: str | None = None
-    provider: str | None = None
-    reason: str | None = None
-    scenario: str | None = None
-    spend: str | None = None
-    task: str | None = None
-    title: str | None = None
-    url: str | None = None
-
-
-class DevSddSpec506RunOutput(RootModel[Any]):
-    root: Any
-
-
-class DevSddSpec508DemoOutput(RootModel[Any]):
-    root: Any
-
-
-class DevSddSpec509DemoOutput(RootModel[Any]):
-    root: Any
-
-
-class DevSddSpec510DemoOutput(RootModel[Any]):
-    root: Any
-
-
-class DevSddSpec511DemoOutput(RootModel[Any]):
-    root: Any
-
-
-class DevSddSpec512DecideBody(BaseModel):
-    action: str | None = None
-    apiKey: str | None = None
-    baseUrl: str | None = None
-    brickId: str | None = None
-    decision: str | None = None
-    id: str | None = None
-    model: str | None = None
-    provider: str | None = None
-    reason: str | None = None
-    scenario: str | None = None
-    spend: str | None = None
-    task: str | None = None
-    title: str | None = None
-    url: str | None = None
-
-
-class DevSddSpec512DecideOutput(RootModel[Any]):
-    root: Any
-
-
-class DevSddSpec512DemoOutput(RootModel[Any]):
-    root: Any
-
-
-class DevSddSpec512SuggestBody(BaseModel):
-    action: str | None = None
-    apiKey: str | None = None
-    baseUrl: str | None = None
-    brickId: str | None = None
-    decision: str | None = None
-    id: str | None = None
-    model: str | None = None
-    provider: str | None = None
-    reason: str | None = None
-    scenario: str | None = None
-    spend: str | None = None
-    task: str | None = None
-    title: str | None = None
-    url: str | None = None
-
-
-class DevSddSpec512SuggestOutput(RootModel[Any]):
-    root: Any
-
-
-class DevSddSpec711DemoOutput(RootModel[Any]):
-    root: Any
-
-
 class DevSddStripeSessionBody(BaseModel):
     action: str | None = None
     apiKey: str | None = None
@@ -2230,25 +1377,6 @@ class DevStripeCheckoutPayOutput(BaseModel):
     redirectTo: constr(min_length=1, max_length=512)
 
 
-class Item4(BaseModel):
-    model_config = ConfigDict(
-        extra='forbid',
-    )
-    at: constr(
-        pattern=r'^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d:[0-5]\d(?:\.\d+)?(?:Z|([+-](?:[01]\d|2[0-3]):[0-5]\d)))$'
-    )
-    eventId: str
-    result: Result
-    type: str
-
-
-class DevStripeEventsOutput(BaseModel):
-    model_config = ConfigDict(
-        extra='forbid',
-    )
-    items: list[Item4]
-
-
 class Action(StrEnum):
     payment_failed = 'payment-failed'
     cancel = 'cancel'
@@ -2264,37 +1392,6 @@ class DevStripeSimulateOutput(BaseModel):
         extra='forbid',
     )
     result: Result
-
-
-class Case(StrEnum):
-    pdf_limit = 'pdf-limit'
-    pdf_too_many_pages = 'pdf-too-many-pages'
-    image_limit = 'image-limit'
-    image_too_large = 'image-too-large'
-    executable_as_png = 'executable-as-png'
-    note_too_long = 'note-too-long'
-    chapter_full = 'chapter-full'
-    quota_reached = 'quota-reached'
-
-
-class DevUploadSimulationBody(BaseModel):
-    case: Case
-
-
-class Kind3(StrEnum):
-    pdf = 'pdf'
-    image = 'image'
-
-
-class DevUploadSimulationOutput(BaseModel):
-    model_config = ConfigDict(
-        extra='forbid',
-    )
-    accepted: Literal[True]
-    case: Case
-    kind: Kind3
-    pages: conint(ge=1, le=9007199254740991) | None
-    sizeBytes: conint(ge=0, le=9007199254740991)
 
 
 class EmailUnsubscribeOutput(BaseModel):
@@ -2449,7 +1546,7 @@ class Feedback1(BaseModel):
     title: Title | None = None
 
 
-class Type5(StrEnum):
+class Type3(StrEnum):
     choice_question = 'choice_question'
     cloze = 'cloze'
     matching = 'matching'
@@ -2480,11 +1577,11 @@ class Question(BaseModel):
     payload: Any
     position: conint(ge=1, le=9007199254740991)
     response: Any | None = None
-    type: Type5
+    type: Type3
     typeLabel: constr(min_length=1)
 
 
-class Status11(StrEnum):
+class Status8(StrEnum):
     in_progress = 'in_progress'
     submitted = 'submitted'
     graded = 'graded'
@@ -2516,7 +1613,7 @@ class ExamAttemptsGetOutput(BaseModel):
     startedAt: constr(
         pattern=r'^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d:[0-5]\d(?:\.\d+)?(?:Z|([+-](?:[01]\d|2[0-3]):[0-5]\d)))$'
     )
-    status: Status11
+    status: Status8
     threshold: conint(ge=1, le=100)
     total: conint(ge=1, le=9007199254740991)
 
@@ -2614,7 +1711,7 @@ class ExamAttemptsResultOutput(BaseModel):
     plan: list[constr(min_length=1)]
     review: list[ReviewItem]
     score: confloat(ge=0.0, le=100.0)
-    status: Status11
+    status: Status8
     studied: Studied
     threshold: conint(ge=1, le=100)
     timeUsedMin: conint(ge=0, le=9007199254740991)
@@ -2633,7 +1730,7 @@ class ExamAttemptsSubmitOutput(BaseModel):
         extra='forbid',
     )
     markedCount: conint(ge=0, le=9007199254740991)
-    status: Status11
+    status: Status8
     unansweredCount: conint(ge=0, le=9007199254740991)
 
 
@@ -2716,7 +1813,7 @@ class LastAttempt(BaseModel):
         pattern=r'^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$'
     )
     score: confloat(ge=0.0, le=100.0) | None
-    status: Status11
+    status: Status8
 
 
 class NextExam(BaseModel):
@@ -2825,7 +1922,7 @@ class Correction4(BaseModel):
     verdict: Verdict1
 
 
-class Status15(StrEnum):
+class Status12(StrEnum):
     in_progress = 'in_progress'
     graded = 'graded'
 
@@ -2869,7 +1966,7 @@ class Submission3(BaseModel):
     rows: list[dict[str, constr(max_length=2000)]]
 
 
-class Attempt1(BaseModel):
+class Attempt(BaseModel):
     model_config = ConfigDict(
         extra='forbid',
     )
@@ -2885,7 +1982,7 @@ class Attempt1(BaseModel):
     startedAt: constr(
         pattern=r'^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d:[0-5]\d(?:\.\d+)?(?:Z|([+-](?:[01]\d|2[0-3]):[0-5]\d)))$'
     )
-    status: Status15
+    status: Status12
     submission: Submission | Submission1 | Submission2 | Submission3 | None
     submittedAt: (
         constr(
@@ -2972,7 +2069,7 @@ class Option1(BaseModel):
     value: constr(min_length=1, max_length=40)
 
 
-class Type6(StrEnum):
+class Type4(StrEnum):
     text = 'text'
     number = 'number'
     select = 'select'
@@ -2985,7 +2082,7 @@ class Column(BaseModel):
     key: constr(min_length=1, max_length=40)
     label: constr(min_length=1, max_length=60)
     options: list[Option1] | None = Field(None, max_length=20, min_length=1)
-    type: Type6
+    type: Type4
 
 
 class FieldModel(BaseModel):
@@ -2995,7 +2092,7 @@ class FieldModel(BaseModel):
     key: constr(min_length=1, max_length=40)
     label: constr(min_length=1, max_length=60)
     options: list[Option1] | None = Field(None, max_length=20, min_length=1)
-    type: Type6
+    type: Type4
 
 
 class Production3(BaseModel):
@@ -3032,7 +2129,7 @@ class ExercisesDetailOutput(BaseModel):
     model_config = ConfigDict(
         extra='forbid',
     )
-    attempt: Attempt1 | None
+    attempt: Attempt | None
     exerciseId: constr(
         pattern=r'^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$'
     )
@@ -3179,7 +2276,7 @@ class ExercisesStartOutput(BaseModel):
     )
     hintsUsed: conint(ge=0, le=2)
     maxScore: conint(ge=0, le=10)
-    status: Status15
+    status: Status12
 
 
 class ExercisesStartParams(BaseModel):
@@ -3301,7 +2398,7 @@ class FormationsArchiveBody(BaseModel):
     ) = None
 
 
-class Outcome1(StrEnum):
+class Outcome(StrEnum):
     applied = 'applied'
     unchanged = 'unchanged'
     limit = 'limit'
@@ -3315,7 +2412,7 @@ class Accent(StrEnum):
     teal = 'teal'
 
 
-class Status17(StrEnum):
+class Status14(StrEnum):
     active = 'active'
     paused = 'paused'
 
@@ -3332,7 +2429,7 @@ class Formation1(BaseModel):
     moduleCount: conint(ge=0, le=9007199254740991)
     monogram: constr(min_length=1, max_length=3)
     progressPercent: conint(ge=0, le=100)
-    status: Status17
+    status: Status14
     title: constr(min_length=1, max_length=120)
 
 
@@ -3354,7 +2451,7 @@ class FormationsArchiveOutput(BaseModel):
     model_config = ConfigDict(
         extra='forbid',
     )
-    outcome: Outcome1
+    outcome: Outcome
     pausedFormationId: (
         constr(
             pattern=r'^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$'
@@ -3416,7 +2513,7 @@ class State5(StrEnum):
     done = 'done'
 
 
-class Profile5(BaseModel):
+class Profile3(BaseModel):
     model_config = ConfigDict(
         extra='forbid',
     )
@@ -3437,13 +2534,13 @@ class Cadrage(BaseModel):
     messages: list[Message6]
     pendingQuestion: PendingQuestion3 | None
     profile: dict[
-        Literal['scope', 'starting_point', 'target_level', 'volume', 'dates'], Profile5
+        Literal['scope', 'starting_point', 'target_level', 'volume', 'dates'], Profile3
     ]
     questionsAsked: conint(ge=0, le=5)
     title: constr(min_length=1, max_length=120)
 
 
-class Status18(StrEnum):
+class Status15(StrEnum):
     cadrage = 'cadrage'
     programme_proposed = 'programme_proposed'
     active = 'active'
@@ -3459,7 +2556,7 @@ class Formation2(BaseModel):
     id: constr(
         pattern=r'^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$'
     )
-    status: Status18
+    status: Status15
     title: constr(min_length=1, max_length=120)
 
 
@@ -3480,7 +2577,7 @@ class FormationsCurrentBody(BaseModel):
     )
 
 
-class Status19(StrEnum):
+class Status16(StrEnum):
     active = 'active'
     paused = 'paused'
 
@@ -3497,7 +2594,7 @@ class Formation3(BaseModel):
     moduleCount: conint(ge=0, le=9007199254740991)
     monogram: constr(min_length=1, max_length=3)
     progressPercent: conint(ge=0, le=100)
-    status: Status19
+    status: Status16
     title: constr(min_length=1, max_length=120)
 
 
@@ -3542,7 +2639,7 @@ class Gap2(BaseModel):
     trainingHref: constr(min_length=1, max_length=2048)
 
 
-class Mode1(StrEnum):
+class Mode(StrEnum):
     light = 'light'
     stopped = 'stopped'
 
@@ -3553,11 +2650,11 @@ class Maintenance(BaseModel):
     )
     dailyMinutes: conint(ge=1, le=60)
     dueOnly: bool
-    mode: Mode1 | None
+    mode: Mode | None
     reminders: bool
 
 
-class Kind4(StrEnum):
+class Kind3(StrEnum):
     module_validated = 'module_validated'
     notions_100 = 'notions_100'
     streak_30 = 'streak_30'
@@ -3582,7 +2679,7 @@ class Milestone(BaseModel):
         pattern=r'^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$'
     )
     key: constr(min_length=1, max_length=120)
-    kind: Kind4
+    kind: Kind3
     label: constr(min_length=1, max_length=160)
 
 
@@ -3826,7 +2923,7 @@ class FormationsGroupGetParams(BaseModel):
     )
 
 
-class Status20(StrEnum):
+class Status17(StrEnum):
     cadrage = 'cadrage'
     programme_proposed = 'programme_proposed'
     active = 'active'
@@ -3835,14 +2932,14 @@ class Status20(StrEnum):
     archived = 'archived'
 
 
-class Item5(BaseModel):
+class Item3(BaseModel):
     model_config = ConfigDict(
         extra='forbid',
     )
     id: constr(
         pattern=r'^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$'
     )
-    status: Status20
+    status: Status17
     title: constr(min_length=1, max_length=120)
 
 
@@ -3850,7 +2947,7 @@ class FormationsListOutput(BaseModel):
     model_config = ConfigDict(
         extra='forbid',
     )
-    items: list[Item5]
+    items: list[Item3]
 
 
 class FormationsMaintenanceBody(BaseModel):
@@ -3863,7 +2960,7 @@ class FormationsMaintenanceBody(BaseModel):
         )
         | None
     ) = None
-    mode: Mode1
+    mode: Mode
 
 
 class Gap3(BaseModel):
@@ -3892,7 +2989,7 @@ class Maintenance1(BaseModel):
     )
     dailyMinutes: conint(ge=1, le=60)
     dueOnly: bool
-    mode: Mode1 | None
+    mode: Mode | None
     reminders: bool
 
 
@@ -3915,7 +3012,7 @@ class Milestone1(BaseModel):
         pattern=r'^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$'
     )
     key: constr(min_length=1, max_length=120)
-    kind: Kind4
+    kind: Kind3
     label: constr(min_length=1, max_length=160)
 
 
@@ -4005,7 +3102,7 @@ class FormationsPauseBody(BaseModel):
     ) = None
 
 
-class Status21(StrEnum):
+class Status18(StrEnum):
     active = 'active'
     paused = 'paused'
 
@@ -4022,7 +3119,7 @@ class Formation4(BaseModel):
     moduleCount: conint(ge=0, le=9007199254740991)
     monogram: constr(min_length=1, max_length=3)
     progressPercent: conint(ge=0, le=100)
-    status: Status21
+    status: Status18
     title: constr(min_length=1, max_length=120)
 
 
@@ -4044,7 +3141,7 @@ class FormationsPauseOutput(BaseModel):
     model_config = ConfigDict(
         extra='forbid',
     )
-    outcome: Outcome1
+    outcome: Outcome
     pausedFormationId: (
         constr(
             pattern=r'^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$'
@@ -4089,7 +3186,7 @@ class Blocked(BaseModel):
     title: constr(min_length=1, max_length=160)
 
 
-class Kind6(StrEnum):
+class Kind5(StrEnum):
     shift_end = 'shift_end'
     increase_volume = 'increase_volume'
     lighten = 'lighten'
@@ -4103,7 +3200,7 @@ class Option3(BaseModel):
     currentHoursPerDay: confloat(ge=1.0, le=24.0)
     extraDays: conint(ge=0, le=9007199254740991) | None
     feasible: bool
-    kind: Kind6
+    kind: Kind5
     newHoursPerDay: confloat(ge=1.0, le=24.0) | None
     projectedEndDate: constr(pattern=r'^\d{4}-\d{2}-\d{2}$') | None
     reason: constr(min_length=1, max_length=200) | None
@@ -4130,7 +3227,7 @@ class FormationsReplanOptionsParams(BaseModel):
     )
 
 
-class Outcome3(StrEnum):
+class Outcome2(StrEnum):
     applied = 'applied'
     unchanged = 'unchanged'
     consent_required = 'consent_required'
@@ -4152,7 +3249,7 @@ class FormationsReplanOutput(BaseModel):
         pattern=r'^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$'
     )
     hoursPerDay: confloat(ge=1.0, le=24.0)
-    outcome: Outcome3
+    outcome: Outcome2
     planVersion: constr(min_length=1, max_length=120)
 
 
@@ -4180,7 +3277,7 @@ class FormationsResumeBody(BaseModel):
     ) = None
 
 
-class Outcome4(StrEnum):
+class Outcome3(StrEnum):
     applied = 'applied'
     unchanged = 'unchanged'
     limit = 'limit'
@@ -4198,7 +3295,7 @@ class Formation5(BaseModel):
     moduleCount: conint(ge=0, le=9007199254740991)
     monogram: constr(min_length=1, max_length=3)
     progressPercent: conint(ge=0, le=100)
-    status: Status21
+    status: Status18
     title: constr(min_length=1, max_length=120)
 
 
@@ -4220,7 +3317,7 @@ class FormationsResumeOutput(BaseModel):
     model_config = ConfigDict(
         extra='forbid',
     )
-    outcome: Outcome4
+    outcome: Outcome3
     pausedFormationId: (
         constr(
             pattern=r'^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$'
@@ -4243,7 +3340,7 @@ class FormationsUpdateBody(BaseModel):
     title: constr(min_length=1, max_length=120) | None = None
 
 
-class Status23(StrEnum):
+class Status20(StrEnum):
     cadrage = 'cadrage'
     programme_proposed = 'programme_proposed'
     active = 'active'
@@ -4259,7 +3356,7 @@ class FormationsUpdateOutput(BaseModel):
     id: constr(
         pattern=r'^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$'
     )
-    status: Status23
+    status: Status20
     title: constr(min_length=1, max_length=120)
 
 
@@ -4297,7 +3394,7 @@ class RecommendedAction(StrEnum):
     practice_exercise = 'practice_exercise'
 
 
-class Kind7(StrEnum):
+class Kind6(StrEnum):
     quiz = 'quiz'
     exercise = 'exercise'
 
@@ -4307,10 +3404,10 @@ class Training(BaseModel):
         extra='forbid',
     )
     href: constr(min_length=1, max_length=2048)
-    kind: Kind7
+    kind: Kind6
 
 
-class Item6(BaseModel):
+class Item4(BaseModel):
     model_config = ConfigDict(
         extra='forbid',
     )
@@ -4362,7 +3459,7 @@ class GapsListOutput(BaseModel):
     generatedAt: constr(
         pattern=r'^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d:[0-5]\d(?:\.\d+)?(?:Z|([+-](?:[01]\d|2[0-3]):[0-5]\d)))$'
     )
-    items: list[Item6]
+    items: list[Item4]
     nature: Nature | None
     nextReviewAt: (
         constr(
@@ -4565,7 +3662,7 @@ class Components(BaseModel):
     database: Database
 
 
-class Status24(StrEnum):
+class Status21(StrEnum):
     ok = 'ok'
     degraded = 'degraded'
 
@@ -4580,7 +3677,7 @@ class HealthGetOutput(BaseModel):
     commit: constr(min_length=1, max_length=64)
     components: Components
     database: Database
-    status: Status24
+    status: Status21
     version: constr(min_length=1, max_length=64)
 
 
@@ -4619,7 +3716,7 @@ class CompletedItem(BaseModel):
     weeks: conint(ge=0, le=9007199254740991) | None
 
 
-class Tone4(StrEnum):
+class Tone(StrEnum):
     green = 'green'
     indigo = 'indigo'
     violet = 'violet'
@@ -4631,7 +3728,7 @@ class ModuleStatus(BaseModel):
         extra='forbid',
     )
     label: constr(min_length=1, max_length=40)
-    tone: Tone4
+    tone: Tone
 
 
 class NextActivity(BaseModel):
@@ -4642,7 +3739,7 @@ class NextActivity(BaseModel):
     when: constr(min_length=1, max_length=60)
 
 
-class Status25(StrEnum):
+class Status22(StrEnum):
     active = 'active'
     paused = 'paused'
     programme_proposed = 'programme_proposed'
@@ -4667,7 +3764,7 @@ class OngoingItem(BaseModel):
     nextActivity: NextActivity | None
     primaryAction: bool
     progressPercent: conint(ge=0, le=100)
-    status: Status25
+    status: Status22
     subtitle: constr(min_length=1, max_length=200)
     title: constr(min_length=1, max_length=120)
 
@@ -4715,7 +3812,7 @@ class PrimaryAction(BaseModel):
     label: constr(min_length=1, max_length=80)
 
 
-class Kind8(StrEnum):
+class Kind7(StrEnum):
     contributions = 'contributions'
     course = 'course'
     exercise = 'exercise'
@@ -4739,7 +3836,7 @@ class State8(StrEnum):
     upcoming = 'upcoming'
 
 
-class Status26(StrEnum):
+class Status23(StrEnum):
     planned = 'planned'
     done = 'done'
     missed = 'missed'
@@ -4765,7 +3862,7 @@ class Slot1(BaseModel):
     id: constr(
         pattern=r'^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$'
     )
-    kind: Kind8
+    kind: Kind7
     meta: constr(max_length=1000) | None
     minutesUntil: conint(ge=0, le=9007199254740991) | None
     moduleId: (
@@ -4778,7 +3875,7 @@ class Slot1(BaseModel):
         pattern=r'^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d:[0-5]\d(?:\.\d+)?(?:Z|([+-](?:[01]\d|2[0-3]):[0-5]\d)))$'
     )
     state: State8
-    status: Status26
+    status: Status23
     time: constr(pattern=r'^\d{2}:\d{2}$')
     title: constr(min_length=1, max_length=200)
 
@@ -4873,7 +3970,7 @@ class ConnectionStatus(StrEnum):
     unknown = 'unknown'
 
 
-class Status27(StrEnum):
+class Status24(StrEnum):
     untested = 'untested'
     qualified = 'qualified'
     failed = 'failed'
@@ -4904,7 +4001,7 @@ class MeAiCredentialsCreateOutput(BaseModel):
         )
         | None
     )
-    status: Status27
+    status: Status24
 
 
 class MeAiCredentialsDeleteParams(BaseModel):
@@ -4926,7 +4023,7 @@ class MeAiCredentialsDiscoverOutput(BaseModel):
     modelIds: list[constr(min_length=1, max_length=120)] = Field(..., max_length=500)
 
 
-class Item7(BaseModel):
+class Item5(BaseModel):
     model_config = ConfigDict(
         extra='forbid',
     )
@@ -4951,14 +4048,14 @@ class Item7(BaseModel):
         )
         | None
     )
-    status: Status27
+    status: Status24
 
 
 class MeAiCredentialsListOutput(BaseModel):
     model_config = ConfigDict(
         extra='forbid',
     )
-    items: list[Item7] = Field(..., max_length=10)
+    items: list[Item5] = Field(..., max_length=10)
 
 
 class Task(StrEnum):
@@ -5019,7 +4116,7 @@ class ReserveCode(StrEnum):
     CHECK_TIMEOUT = 'CHECK_TIMEOUT'
 
 
-class Status29(StrEnum):
+class Status26(StrEnum):
     compatible = 'compatible'
     reserve = 'reserve'
 
@@ -5039,7 +4136,7 @@ class MeAiCredentialsQualifyOutput2(BaseModel):
     reasons: list[Reason2] = Field(..., max_length=4)
     requiredCapabilities: list[RequiredCapability] = Field(..., max_length=5)
     reserveCodes: list[ReserveCode] = Field(..., max_length=4)
-    status: Status29
+    status: Status26
     task: Task
 
 
@@ -5052,7 +4149,7 @@ class Issue(BaseModel):
     path: constr(max_length=300)
 
 
-class Status30(StrEnum):
+class Status27(StrEnum):
     passed = 'passed'
     failed = 'failed'
 
@@ -5064,7 +4161,7 @@ class Brick(BaseModel):
     durationMs: conint(ge=0, le=9007199254740991)
     errorCode: constr(min_length=1, max_length=80) | None
     issues: list[Issue] = Field(..., max_length=20)
-    status: Status30
+    status: Status27
     type: constr(min_length=1, max_length=64)
 
 
@@ -5079,12 +4176,12 @@ class Capabilities(BaseModel):
     web_search: bool
 
 
-class Status31(StrEnum):
+class Status28(StrEnum):
     qualified = 'qualified'
     failed = 'failed'
 
 
-class Status32(StrEnum):
+class Status29(StrEnum):
     passed = 'passed'
     failed = 'failed'
 
@@ -5103,7 +4200,7 @@ class Step1(BaseModel):
     durationMs: conint(ge=0, le=9007199254740991)
     errorCode: constr(min_length=1, max_length=80) | None
     modelVersion: constr(min_length=1, max_length=200)
-    status: Status32
+    status: Status29
     step: Step2
 
 
@@ -5129,7 +4226,7 @@ class MeAiCredentialsQualifyOutput3(BaseModel):
     startedAt: constr(
         pattern=r'^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d:[0-5]\d(?:\.\d+)?(?:Z|([+-](?:[01]\d|2[0-3]):[0-5]\d)))$'
     )
-    status: Status31
+    status: Status28
     steps: list[Step1] = Field(..., max_length=4, min_length=4)
 
 
@@ -5168,7 +4265,7 @@ class Failure(BaseModel):
     step: Step3
 
 
-class Status33(StrEnum):
+class Status30(StrEnum):
     qualified = 'qualified'
     unqualified = 'unqualified'
     pending = 'pending'
@@ -5196,7 +4293,7 @@ class Provider5(BaseModel):
         )
         | None
     )
-    status: Status33
+    status: Status30
 
 
 class Reason3(BaseModel):
@@ -5207,7 +4304,7 @@ class Reason3(BaseModel):
     message: constr(min_length=1, max_length=300)
 
 
-class Status34(StrEnum):
+class Status31(StrEnum):
     compatible = 'compatible'
     reserve = 'reserve'
 
@@ -5227,7 +4324,7 @@ class Compatibility(BaseModel):
     reasons: list[Reason3] = Field(..., max_length=4)
     requiredCapabilities: list[RequiredCapability] = Field(..., max_length=5)
     reserveCodes: list[ReserveCode] = Field(..., max_length=4)
-    status: Status34
+    status: Status31
     task: Task
 
 
@@ -5350,7 +4447,7 @@ class Failure1(BaseModel):
     step: Step3
 
 
-class Status35(StrEnum):
+class Status32(StrEnum):
     qualified = 'qualified'
     unqualified = 'unqualified'
     pending = 'pending'
@@ -5378,7 +4475,7 @@ class Provider9(BaseModel):
         )
         | None
     )
-    status: Status35
+    status: Status32
 
 
 class Reason4(BaseModel):
@@ -5389,7 +4486,7 @@ class Reason4(BaseModel):
     message: constr(min_length=1, max_length=300)
 
 
-class Status36(StrEnum):
+class Status33(StrEnum):
     compatible = 'compatible'
     reserve = 'reserve'
 
@@ -5409,7 +4506,7 @@ class Compatibility2(BaseModel):
     reasons: list[Reason4] = Field(..., max_length=4)
     requiredCapabilities: list[RequiredCapability] = Field(..., max_length=5)
     reserveCodes: list[ReserveCode] = Field(..., max_length=4)
-    status: Status36
+    status: Status33
     task: Task6
 
 
@@ -5534,7 +4631,7 @@ class Automation(StrEnum):
     pause = 'pause'
 
 
-class Status37(StrEnum):
+class Status34(StrEnum):
     pending_consent = 'pending_consent'
     applied = 'applied'
     declined = 'declined'
@@ -5569,7 +4666,7 @@ class MeAutomationActionsAcceptOutput(BaseModel):
     kind: constr(pattern=r'^[a-z][a-z0-9_]*$', min_length=1, max_length=80)
     payload: dict[str, Any]
     requiresConsent: bool
-    status: Status37
+    status: Status34
     summary: constr(min_length=1)
     undoPayload: dict[str, Any] | None
 
@@ -5606,7 +4703,7 @@ class MeAutomationActionsDeclineOutput(BaseModel):
     kind: constr(pattern=r'^[a-z][a-z0-9_]*$', min_length=1, max_length=80)
     payload: dict[str, Any]
     requiresConsent: bool
-    status: Status37
+    status: Status34
     summary: constr(min_length=1)
     undoPayload: dict[str, Any] | None
 
@@ -5617,7 +4714,7 @@ class MeAutomationActionsDeclineParams(BaseModel):
     )
 
 
-class Item8(BaseModel):
+class Item6(BaseModel):
     model_config = ConfigDict(
         extra='forbid',
     )
@@ -5643,7 +4740,7 @@ class Item8(BaseModel):
     kind: constr(pattern=r'^[a-z][a-z0-9_]*$', min_length=1, max_length=80)
     payload: dict[str, Any]
     requiresConsent: bool
-    status: Status37
+    status: Status34
     summary: constr(min_length=1)
     undoPayload: dict[str, Any] | None
 
@@ -5652,7 +4749,7 @@ class MeAutomationActionsListOutput(BaseModel):
     model_config = ConfigDict(
         extra='forbid',
     )
-    items: list[Item8]
+    items: list[Item6]
     nextCursor: str | None
     weekCount: conint(ge=0, le=9007199254740991)
 
@@ -5676,7 +4773,7 @@ class MeAutomationActionsListQuery(BaseModel):
         )
         | None
     ) = None
-    status: Status37 | None = None
+    status: Status34 | None = None
 
 
 class MeAutomationActionsUndoOutput(BaseModel):
@@ -5705,7 +4802,7 @@ class MeAutomationActionsUndoOutput(BaseModel):
     kind: constr(pattern=r'^[a-z][a-z0-9_]*$', min_length=1, max_length=80)
     payload: dict[str, Any]
     requiresConsent: bool
-    status: Status37
+    status: Status34
     summary: constr(min_length=1)
     undoPayload: dict[str, Any] | None
 
@@ -5716,7 +4813,7 @@ class MeAutomationActionsUndoParams(BaseModel):
     )
 
 
-class Item9(BaseModel):
+class Item7(BaseModel):
     model_config = ConfigDict(
         extra='forbid',
     )
@@ -5735,7 +4832,7 @@ class MeAutomationsListOutput(BaseModel):
     model_config = ConfigDict(
         extra='forbid',
     )
-    items: list[Item9]
+    items: list[Item7]
     paused: bool
 
 
@@ -5769,7 +4866,7 @@ class MeDeletionScheduleOutput(BaseModel):
     )
 
 
-class Status42(StrEnum):
+class Status39(StrEnum):
     queued = 'queued'
     running = 'running'
     done = 'done'
@@ -5794,7 +4891,7 @@ class MeExportReadOutput(BaseModel):
         pattern=r'^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$'
     )
     sizeBytes: conint(ge=0, le=9007199254740991) | None
-    status: Status42
+    status: Status39
 
 
 class MeExportReadParams(BaseModel):
@@ -5814,7 +4911,7 @@ class MeExportRequestOutput(BaseModel):
     exportId: constr(
         pattern=r'^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$'
     )
-    status: Status42
+    status: Status39
 
 
 class CourseLanguage(StrEnum):
@@ -5895,6 +4992,12 @@ class Channels(BaseModel):
     app: Literal[True]
     browser: bool
     email: bool
+
+
+class MaxPerDay(IntEnum):
+    integer_3 = 3
+    integer_5 = 5
+    integer_8 = 8
 
 
 class Quiet(BaseModel):
@@ -6018,7 +5121,7 @@ class Preferences(BaseModel):
     studyDays: list[conint(ge=1, le=7)] = Field(..., max_length=7, min_length=1)
 
 
-class Profile6(BaseModel):
+class Profile4(BaseModel):
     model_config = ConfigDict(
         extra='forbid',
     )
@@ -6062,7 +5165,7 @@ class MeOnboardingGetOutput(BaseModel):
         extra='forbid',
     )
     preferences: Preferences
-    profile: Profile6
+    profile: Profile4
     reminders: Reminders
 
 
@@ -6126,7 +5229,7 @@ class Diagnostic1(BaseModel):
     ]
 
 
-class Status44(StrEnum):
+class Status41(StrEnum):
     none = 'none'
     active = 'active'
     ended = 'ended'
@@ -6152,7 +5255,7 @@ class MePauseDiagnosticOutput(BaseModel):
     ]
     returnDue: bool
     startsOn: constr(pattern=r'^\d{4}-\d{2}-\d{2}$') | None
-    status: Status44
+    status: Status41
 
 
 class MePauseEndOutput(BaseModel):
@@ -6175,7 +5278,7 @@ class MePauseEndOutput(BaseModel):
     ]
     returnDue: bool
     startsOn: constr(pattern=r'^\d{4}-\d{2}-\d{2}$') | None
-    status: Status44
+    status: Status41
 
 
 class MePauseGetOutput(BaseModel):
@@ -6198,7 +5301,7 @@ class MePauseGetOutput(BaseModel):
     ]
     returnDue: bool
     startsOn: constr(pattern=r'^\d{4}-\d{2}-\d{2}$') | None
-    status: Status44
+    status: Status41
 
 
 class MePauseStartBody(BaseModel):
@@ -6229,7 +5332,7 @@ class MePauseStartOutput(BaseModel):
     ]
     returnDue: bool
     startsOn: constr(pattern=r'^\d{4}-\d{2}-\d{2}$') | None
-    status: Status44
+    status: Status41
 
 
 class MePreferencesGetOutput(BaseModel):
@@ -6256,14 +5359,14 @@ class MePreferencesUpdateOutput(BaseModel):
     studyDays: list[conint(ge=1, le=7)] = Field(..., max_length=7, min_length=1)
 
 
-class Status48(StrEnum):
+class Status45(StrEnum):
     queued = 'queued'
     running = 'running'
     done = 'done'
     failed = 'failed'
 
 
-class Export1(BaseModel):
+class Export(BaseModel):
     model_config = ConfigDict(
         extra='forbid',
     )
@@ -6280,7 +5383,7 @@ class Export1(BaseModel):
         pattern=r'^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$'
     )
     sizeBytes: conint(ge=0, le=9007199254740991) | None
-    status: Status48
+    status: Status45
 
 
 class Me(BaseModel):
@@ -6336,7 +5439,7 @@ class MeProfileGetOutput(BaseModel):
         )
         | None
     )
-    export: Export1 | None
+    export: Export | None
     me: Me
     rhythm: Rhythm
     updatedAt: constr(
@@ -6365,7 +5468,7 @@ class MeProfileUpdateBody(BaseModel):
     tutorTone: TutorTone | None = None
 
 
-class Export2(BaseModel):
+class Export1(BaseModel):
     model_config = ConfigDict(
         extra='forbid',
     )
@@ -6382,7 +5485,7 @@ class Export2(BaseModel):
         pattern=r'^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$'
     )
     sizeBytes: conint(ge=0, le=9007199254740991) | None
-    status: Status48
+    status: Status45
 
 
 class Me1(BaseModel):
@@ -6438,7 +5541,7 @@ class MeProfileUpdateOutput(BaseModel):
         )
         | None
     )
-    export: Export2 | None
+    export: Export1 | None
     me: Me1
     rhythm: Rhythm2
     updatedAt: constr(
@@ -6495,7 +5598,7 @@ class AtRiskNotion(BaseModel):
     )
 
 
-class Channel1(StrEnum):
+class Channel(StrEnum):
     app = 'app'
     app_email = 'app_email'
 
@@ -6519,7 +5622,7 @@ class Retention3(BaseModel):
     successful: conint(ge=0, le=9007199254740991)
 
 
-class Status50(StrEnum):
+class Status47(StrEnum):
     pending_consent = 'pending_consent'
     applied = 'applied'
     declined = 'declined'
@@ -6540,7 +5643,7 @@ class Review(BaseModel):
     atRiskNotions: list[AtRiskNotion]
     availabilityHref: constr(pattern=r'^\/(?!\/)')
     availabilityQuestion: bool
-    channel: Channel1
+    channel: Channel
     createdAt: constr(
         pattern=r'^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d:[0-5]\d(?:\.\d+)?(?:Z|([+-](?:[01]\d|2[0-3]):[0-5]\d)))$'
     )
@@ -6551,7 +5654,7 @@ class Review(BaseModel):
     receivedLabel: constr(min_length=1, max_length=80)
     retention: Retention3
     retentionLabel: constr(min_length=1, max_length=40)
-    status: Status50
+    status: Status47
     studyLabel: constr(min_length=1, max_length=20)
     studyMinutes: conint(ge=0, le=9007199254740991)
     summary: constr(min_length=1)
@@ -6639,7 +5742,7 @@ class Citation(BaseModel):
     )
 
 
-class Kind9(StrEnum):
+class Kind8(StrEnum):
     text = 'text'
     flash_question = 'flash_question'
     dont_confuse = 'dont_confuse'
@@ -6664,7 +5767,7 @@ class Section(BaseModel):
     id: constr(
         pattern=r'^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$'
     )
-    kind: Kind9
+    kind: Kind8
     notionIds: list[
         constr(
             pattern=r'^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$'
@@ -6676,7 +5779,7 @@ class Section(BaseModel):
     version: conint(ge=1, le=9007199254740991)
 
 
-class Status51(StrEnum):
+class Status48(StrEnum):
     none = 'none'
     generating = 'generating'
     ready = 'ready'
@@ -6710,7 +5813,7 @@ class Feedback2(BaseModel):
     verdict: Verdict3
 
 
-class Status52(StrEnum):
+class Status49(StrEnum):
     corrected = 'corrected'
     deferred = 'deferred'
 
@@ -6732,7 +5835,7 @@ class Summary1(BaseModel):
     id: constr(
         pattern=r'^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$'
     )
-    status: Status52
+    status: Status49
     text: constr(min_length=1, max_length=2000)
 
 
@@ -6777,7 +5880,7 @@ class Course1(BaseModel):
     readingMinutes: conint(ge=1, le=9007199254740991)
     resourceCount: conint(ge=0, le=9007199254740991)
     sections: list[Section]
-    status: Status51
+    status: Status48
     suggestions: list[Suggestion4]
     summary: Summary1 | None
     tutorGap: constr(max_length=200) | None
@@ -6795,7 +5898,7 @@ class Formation6(BaseModel):
     title: constr(min_length=1, max_length=200)
 
 
-class Status53(StrEnum):
+class Status50(StrEnum):
     none = 'none'
     generating = 'generating'
     ready = 'ready'
@@ -6807,7 +5910,7 @@ class Generation(BaseModel):
         extra='forbid',
     )
     error: constr(max_length=2000) | None
-    status: Status53
+    status: Status50
     version: conint(ge=1, le=9007199254740991) | None
 
 
@@ -6899,7 +6002,7 @@ class Counts(BaseModel):
     storageUsedBytes: conint(ge=0, le=9007199254740991)
 
 
-class Status54(StrEnum):
+class Status51(StrEnum):
     locked = 'locked'
     open = 'open'
     validated = 'validated'
@@ -6916,12 +6019,12 @@ class Module4(BaseModel):
     plannedStart: constr(pattern=r'^\d{4}-\d{2}-\d{2}$')
     position: conint(ge=1, le=9007199254740991)
     positionTotal: conint(ge=1, le=9007199254740991)
-    status: Status54
+    status: Status51
     threshold: conint(ge=0, le=100)
     title: constr(min_length=1, max_length=200)
 
 
-class Kind10(StrEnum):
+class Kind9(StrEnum):
     note = 'note'
     pdf = 'pdf'
     web = 'web'
@@ -6932,7 +6035,7 @@ class Kind10(StrEnum):
     video = 'video'
 
 
-class Status55(StrEnum):
+class Status52(StrEnum):
     queued = 'queued'
     processing = 'processing'
     ready = 'ready'
@@ -6951,10 +6054,10 @@ class Resource(BaseModel):
     id: constr(
         pattern=r'^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$'
     )
-    kind: Kind10
+    kind: Kind9
     pages: conint(ge=1, le=9007199254740991) | None
     sizeBytes: conint(ge=0, le=9007199254740991) | None
-    status: Status55
+    status: Status52
     title: constr(min_length=1, max_length=200)
     updatedAt: constr(
         pattern=r'^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d:[0-5]\d(?:\.\d+)?(?:Z|([+-](?:[01]\d|2[0-3]):[0-5]\d)))$'
@@ -7014,7 +6117,7 @@ class Group4(StrEnum):
     earlier = 'earlier'
 
 
-class Type8(StrEnum):
+class Type6(StrEnum):
     validation_soon = 'validation_soon'
     course_ready = 'course_ready'
     global_quiz_today = 'global_quiz_today'
@@ -7033,7 +6136,7 @@ class Type8(StrEnum):
     planning_adjusted = 'planning_adjusted'
 
 
-class Item10(BaseModel):
+class Item8(BaseModel):
     model_config = ConfigDict(
         extra='forbid',
     )
@@ -7055,14 +6158,14 @@ class Item10(BaseModel):
         | None
     )
     title: constr(min_length=1, max_length=120)
-    type: Type8
+    type: Type6
 
 
 class NotificationsListOutput(BaseModel):
     model_config = ConfigDict(
         extra='forbid',
     )
-    items: list[Item10]
+    items: list[Item8]
     timezone: constr(min_length=1)
     total: conint(ge=0, le=9007199254740991)
     unreadCount: conint(ge=0, le=9007199254740991)
@@ -7119,7 +6222,7 @@ class Gap4(BaseModel):
     )
 
 
-class Kind11(StrEnum):
+class Kind10(StrEnum):
     formation = 'formation'
     contains = 'contains'
     prerequisite = 'prerequisite'
@@ -7134,11 +6237,11 @@ class Link(BaseModel):
     )
     from_: constr(min_length=1, max_length=64) = Field(..., alias='from')
     id: constr(min_length=1, max_length=128)
-    kind: Kind11
+    kind: Kind10
     to: constr(min_length=1, max_length=64)
 
 
-class Kind12(StrEnum):
+class Kind11(StrEnum):
     formation = 'formation'
     module = 'module'
     notion = 'notion'
@@ -7161,7 +6264,7 @@ class Node(BaseModel):
     gapHref: constr(min_length=1, max_length=2048) | None
     gapNature: GapNature | None
     id: constr(min_length=1, max_length=64)
-    kind: Kind12
+    kind: Kind11
     label: constr(min_length=1, max_length=200)
     mastery: confloat(ge=0.0, le=100.0) | None
     masteryStatus: MasteryStatus | None
@@ -7277,7 +6380,7 @@ class State9(StrEnum):
     withdrawn = 'withdrawn'
 
 
-class Type9(StrEnum):
+class Type7(StrEnum):
     recall_card = 'recall_card'
     choice_question = 'choice_question'
     cloze = 'cloze'
@@ -7287,7 +6390,7 @@ class Type9(StrEnum):
     open_question = 'open_question'
 
 
-class Item11(BaseModel):
+class Item9(BaseModel):
     model_config = ConfigDict(
         extra='forbid',
     )
@@ -7312,10 +6415,10 @@ class Item11(BaseModel):
     scopeLabel: constr(min_length=1)
     state: State9
     tech: constr(min_length=1)
-    type: Type9
+    type: Type7
 
 
-class Mode4(StrEnum):
+class Mode3(StrEnum):
     full = 'full'
     micro = 'micro'
 
@@ -7353,7 +6456,7 @@ class Smoothing(BaseModel):
     targetRetention: confloat(ge=0.0, le=1.0)
 
 
-class Status56(StrEnum):
+class Status53(StrEnum):
     in_progress = 'in_progress'
     completed = 'completed'
     empty = 'empty'
@@ -7384,8 +6487,8 @@ class Session(BaseModel):
         pattern=r'^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$'
     )
     header: Header
-    items: list[Item11]
-    mode: Mode4
+    items: list[Item9]
+    mode: Mode3
     modeOptions: ModeOptions
     note: str
     rationale: list[RationaleItem] = Field(..., max_length=3)
@@ -7396,7 +6499,7 @@ class Session(BaseModel):
         | None
     )
     smoothing: Smoothing | None
-    status: Status56
+    status: Status53
     summary: Any
     tuned: list[TunedItem]
 
@@ -7500,14 +6603,14 @@ class Code4(StrEnum):
     FORBIDDEN = 'FORBIDDEN'
 
 
-class Status57(StrEnum):
+class Status54(StrEnum):
     applied = 'applied'
     duplicate = 'duplicate'
     conflict = 'conflict'
     rejected = 'rejected'
 
 
-class Result3(BaseModel):
+class Result2(BaseModel):
     model_config = ConfigDict(
         extra='forbid',
     )
@@ -7522,14 +6625,14 @@ class Result3(BaseModel):
         )
         | None
     ) = None
-    status: Status57
+    status: Status54
 
 
 class OfflineSyncOutput(BaseModel):
     model_config = ConfigDict(
         extra='forbid',
     )
-    results: list[Result3]
+    results: list[Result2]
 
 
 class Error4(BaseModel):
@@ -7579,7 +6682,7 @@ class Chapter3(BaseModel):
     title: constr(min_length=1, max_length=160)
 
 
-class Status58(StrEnum):
+class Status55(StrEnum):
     locked = 'locked'
     open = 'open'
     validated = 'validated'
@@ -7596,7 +6699,7 @@ class Module5(BaseModel):
     plannedEnd: constr(pattern=r'^\d{4}-\d{2}-\d{2}$')
     plannedStart: constr(pattern=r'^\d{4}-\d{2}-\d{2}$')
     position: conint(ge=1, le=100)
-    status: Status58 | None
+    status: Status55 | None
     threshold: conint(ge=60, le=95)
     title: constr(min_length=1, max_length=160)
 
@@ -7692,7 +6795,7 @@ class Module6(BaseModel):
     plannedEnd: constr(pattern=r'^\d{4}-\d{2}-\d{2}$')
     plannedStart: constr(pattern=r'^\d{4}-\d{2}-\d{2}$')
     position: conint(ge=1, le=100)
-    status: Status58 | None
+    status: Status55 | None
     threshold: conint(ge=60, le=95)
     title: constr(min_length=1, max_length=160)
 
@@ -7771,7 +6874,7 @@ class Module7(BaseModel):
     plannedEnd: constr(pattern=r'^\d{4}-\d{2}-\d{2}$')
     plannedStart: constr(pattern=r'^\d{4}-\d{2}-\d{2}$')
     position: conint(ge=1, le=100)
-    status: Status58 | None
+    status: Status55 | None
     threshold: conint(ge=60, le=95)
     title: constr(min_length=1, max_length=160)
 
@@ -7841,7 +6944,7 @@ class CalendarItem(BaseModel):
     quizKind: QuizKind
     quizOn: constr(pattern=r'^\d{4}-\d{2}-\d{2}$')
     start: constr(pattern=r'^\d{4}-\d{2}-\d{2}$')
-    status: Status58
+    status: Status55
     title: constr(min_length=1, max_length=160)
 
 
@@ -7861,7 +6964,7 @@ class Chapter6(BaseModel):
     title: constr(min_length=1, max_length=160)
 
 
-class Status62(StrEnum):
+class Status59(StrEnum):
     active = 'active'
     paused = 'paused'
     completed = 'completed'
@@ -7878,7 +6981,7 @@ class Formation9(BaseModel):
     )
     objectives: list[constr(min_length=1, max_length=200)]
     startDate: constr(pattern=r'^\d{4}-\d{2}-\d{2}$') | None
-    status: Status62
+    status: Status59
     threshold: conint(ge=60, le=95)
     title: constr(min_length=1, max_length=120)
     volumeHours: conint(ge=1, le=2000) | None
@@ -7905,7 +7008,7 @@ class Indicators(BaseModel):
     weeks: conint(ge=1, le=104)
 
 
-class Status63(StrEnum):
+class Status60(StrEnum):
     locked = 'locked'
     open = 'open'
     validated = 'validated'
@@ -7926,7 +7029,7 @@ class Module8(BaseModel):
     quizKind: QuizKind
     quizOn: constr(pattern=r'^\d{4}-\d{2}-\d{2}$')
     score: confloat(ge=0.0, le=100.0) | None
-    status: Status63
+    status: Status60
     threshold: conint(ge=60, le=95)
     title: constr(min_length=1, max_length=160)
     unlockAfterPosition: conint(ge=1, le=99) | None
@@ -8004,7 +7107,7 @@ class Module9(BaseModel):
     plannedEnd: constr(pattern=r'^\d{4}-\d{2}-\d{2}$')
     plannedStart: constr(pattern=r'^\d{4}-\d{2}-\d{2}$')
     position: conint(ge=1, le=100)
-    status: Status63 | None
+    status: Status60 | None
     threshold: conint(ge=60, le=95)
     title: constr(min_length=1, max_length=160)
 
@@ -8090,7 +7193,7 @@ class Module10(BaseModel):
     plannedEnd: constr(pattern=r'^\d{4}-\d{2}-\d{2}$')
     plannedStart: constr(pattern=r'^\d{4}-\d{2}-\d{2}$')
     position: conint(ge=1, le=100)
-    status: Status63 | None
+    status: Status60 | None
     threshold: conint(ge=60, le=95)
     title: constr(min_length=1, max_length=160)
 
@@ -8413,7 +7516,7 @@ class State10(StrEnum):
     checked = 'checked'
 
 
-class Type10(StrEnum):
+class Type8(StrEnum):
     choice_question = 'choice_question'
     cloze = 'cloze'
     matching = 'matching'
@@ -8439,11 +7542,11 @@ class Question1(BaseModel):
     position: conint(ge=1, le=9007199254740991)
     response: Any | None = None
     state: State10
-    type: Type10
+    type: Type8
     typeLabel: constr(min_length=1)
 
 
-class Status66(StrEnum):
+class Status63(StrEnum):
     in_progress = 'in_progress'
     submitted = 'submitted'
     graded = 'graded'
@@ -8475,7 +7578,7 @@ class QuizAttemptsGetOutput(BaseModel):
     startedAt: constr(
         pattern=r'^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d:[0-5]\d(?:\.\d+)?(?:Z|([+-](?:[01]\d|2[0-3]):[0-5]\d)))$'
     )
-    status: Status66
+    status: Status63
     submittedAt: (
         constr(
             pattern=r'^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d:[0-5]\d(?:\.\d+)?(?:Z|([+-](?:[01]\d|2[0-3]):[0-5]\d)))$'
@@ -8562,7 +7665,7 @@ class PerNotionItem(BaseModel):
     total: conint(ge=0, le=9007199254740991)
 
 
-class Status67(StrEnum):
+class Status64(StrEnum):
     none = 'none'
     preparing = 'preparing'
     ready = 'ready'
@@ -8575,7 +7678,7 @@ class Remediation(BaseModel):
         extra='forbid',
     )
     href: str | None
-    status: Status67
+    status: Status64
 
 
 class Reason6(StrEnum):
@@ -8599,7 +7702,7 @@ class Retry(BaseModel):
     remediationRequired: bool
 
 
-class Status68(StrEnum):
+class Status65(StrEnum):
     in_progress = 'in_progress'
     submitted = 'submitted'
     graded = 'graded'
@@ -8629,7 +7732,7 @@ class QuizAttemptsResultOutput(BaseModel):
     remediation: Remediation
     retry: Retry
     score: confloat(ge=0.0, le=100.0) | None
-    status: Status68
+    status: Status65
     threshold: conint(ge=60, le=95)
 
 
@@ -8644,7 +7747,7 @@ class QuizAttemptsSubmitOutput(BaseModel):
         extra='forbid',
     )
     pendingOpenCount: conint(ge=0, le=9007199254740991)
-    status: Status68
+    status: Status65
 
 
 class QuizAttemptsSubmitParams(BaseModel):
@@ -8757,7 +7860,7 @@ class Question2(BaseModel):
     position: conint(ge=1, le=9007199254740991)
     response: Any | None = None
     state: State10
-    type: Type10
+    type: Type8
     typeLabel: constr(min_length=1)
 
 
@@ -8776,7 +7879,7 @@ class Gap8(BaseModel):
     textMd: constr(min_length=1)
 
 
-class Status70(StrEnum):
+class Status67(StrEnum):
     none = 'none'
     preparing = 'preparing'
     ready = 'ready'
@@ -8808,7 +7911,7 @@ class RemediationGetOutput(BaseModel):
         )
         | None
     )
-    status: Status70
+    status: Status67
 
 
 class RemediationGetParams(BaseModel):
@@ -8854,13 +7957,13 @@ class ResourcesCreateBody(
     root: ResourcesCreateBody1 | ResourcesCreateBody2 | ResourcesCreateBody3
 
 
-class Kind13(StrEnum):
+class Kind12(StrEnum):
     note = 'note'
     web = 'web'
     youtube = 'youtube'
 
 
-class Status71(StrEnum):
+class Status68(StrEnum):
     queued = 'queued'
     processing = 'processing'
     ready = 'ready'
@@ -8874,8 +7977,8 @@ class ResourcesCreateOutput(BaseModel):
     id: constr(
         pattern=r'^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$'
     )
-    kind: Kind13
-    status: Status71
+    kind: Kind12
+    status: Status68
     title: str
 
 
@@ -8891,7 +7994,7 @@ class ResourcesDeleteParams(BaseModel):
     )
 
 
-class Kind14(StrEnum):
+class Kind13(StrEnum):
     pdf = 'pdf'
     image = 'image'
 
@@ -8903,11 +8006,11 @@ class ResourcesFinalizeOutput(BaseModel):
     id: constr(
         pattern=r'^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$'
     )
-    kind: Kind14
+    kind: Kind13
     mime: str
     pages: conint(ge=1, le=9007199254740991) | None
     sizeBytes: conint(ge=0, le=9007199254740991)
-    status: Status71
+    status: Status68
 
 
 class ResourcesFinalizeParams(BaseModel):
@@ -8949,7 +8052,7 @@ class ResourcesRenameOutput(BaseModel):
     id: constr(
         pattern=r'^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$'
     )
-    status: Status71
+    status: Status68
     title: constr(min_length=1, max_length=200)
     updatedAt: constr(
         pattern=r'^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d:[0-5]\d(?:\.\d+)?(?:Z|([+-](?:[01]\d|2[0-3]):[0-5]\d)))$'
@@ -8971,7 +8074,7 @@ class ResourcesRetryOutput(BaseModel):
     id: constr(
         pattern=r'^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$'
     )
-    status: Status71
+    status: Status68
     updatedAt: constr(
         pattern=r'^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d:[0-5]\d(?:\.\d+)?(?:Z|([+-](?:[01]\d|2[0-3]):[0-5]\d)))$'
     )
@@ -9074,7 +8177,7 @@ class State12(StrEnum):
     withdrawn = 'withdrawn'
 
 
-class Type12(StrEnum):
+class Type10(StrEnum):
     recall_card = 'recall_card'
     choice_question = 'choice_question'
     cloze = 'cloze'
@@ -9084,7 +8187,7 @@ class Type12(StrEnum):
     open_question = 'open_question'
 
 
-class Item12(BaseModel):
+class Item10(BaseModel):
     model_config = ConfigDict(
         extra='forbid',
     )
@@ -9109,10 +8212,10 @@ class Item12(BaseModel):
     scopeLabel: constr(min_length=1)
     state: State12
     tech: constr(min_length=1)
-    type: Type12
+    type: Type10
 
 
-class Status75(StrEnum):
+class Status72(StrEnum):
     in_progress = 'in_progress'
     completed = 'completed'
     empty = 'empty'
@@ -9135,8 +8238,8 @@ class ReviewGlobalQuizTodayOutput(BaseModel):
         pattern=r'^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$'
     )
     header: Header
-    items: list[Item12]
-    mode: Mode4
+    items: list[Item10]
+    mode: Mode3
     modeOptions: ModeOptions
     note: str
     rationale: list[RationaleItem] = Field(..., max_length=3)
@@ -9147,7 +8250,7 @@ class ReviewGlobalQuizTodayOutput(BaseModel):
         | None
     )
     smoothing: Smoothing | None
-    status: Status75
+    status: Status72
     summary: Any
     tuned: list[TunedItem]
 
@@ -9159,7 +8262,7 @@ class ReviewGlobalQuizTodayParams(BaseModel):
 
 
 class ReviewGlobalQuizTodayQuery(BaseModel):
-    mode: Mode4 | None = 'full'
+    mode: Mode3 | None = 'full'
 
 
 class Highlight(BaseModel):
@@ -9178,7 +8281,7 @@ class TitleHighlight(BaseModel):
     start: conint(ge=0, le=9007199254740991)
 
 
-class Item13(BaseModel):
+class Item11(BaseModel):
     model_config = ConfigDict(
         extra='forbid',
     )
@@ -9192,7 +8295,7 @@ class Item13(BaseModel):
     titleHighlights: list[TitleHighlight]
 
 
-class Kind15(StrEnum):
+class Kind14(StrEnum):
     notion = 'notion'
     chapter = 'chapter'
     formation = 'formation'
@@ -9202,8 +8305,8 @@ class Group5(BaseModel):
     model_config = ConfigDict(
         extra='forbid',
     )
-    items: list[Item13]
-    kind: Kind15
+    items: list[Item11]
+    kind: Kind14
     label: str
     total: conint(ge=0, le=9007199254740991)
 
@@ -9224,13 +8327,13 @@ class SearchGlobalQuery(BaseModel):
     )
 
 
-class Kind16(StrEnum):
+class Kind15(StrEnum):
     module_validated = 'module_validated'
     notions_100 = 'notions_100'
     streak_30 = 'streak_30'
 
 
-class Item14(BaseModel):
+class Item12(BaseModel):
     model_config = ConfigDict(
         extra='forbid',
     )
@@ -9249,7 +8352,7 @@ class Item14(BaseModel):
         pattern=r'^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$'
     )
     key: constr(min_length=1, max_length=120)
-    kind: Kind16
+    kind: Kind15
     label: constr(min_length=1, max_length=160)
 
 
@@ -9258,7 +8361,7 @@ class NextMilestone(BaseModel):
         extra='forbid',
     )
     key: constr(min_length=1, max_length=120)
-    kind: Kind16
+    kind: Kind15
     label: constr(min_length=1, max_length=120)
     remaining: conint(ge=0, le=9007199254740991)
 
@@ -9267,7 +8370,7 @@ class SeriesMilestonesOutput(BaseModel):
     model_config = ConfigDict(
         extra='forbid',
     )
-    items: list[Item14] = Field(..., max_length=500)
+    items: list[Item12] = Field(..., max_length=500)
     nextMilestone: NextMilestone | None
     timezone: constr(min_length=1)
 
@@ -9286,12 +8389,12 @@ class NextMilestone1(BaseModel):
         extra='forbid',
     )
     key: constr(min_length=1, max_length=120)
-    kind: Kind16
+    kind: Kind15
     label: constr(min_length=1, max_length=120)
     remaining: conint(ge=0, le=9007199254740991)
 
 
-class Status76(StrEnum):
+class Status73(StrEnum):
     done = 'done'
     none = 'none'
     neutral = 'neutral'
@@ -9302,7 +8405,7 @@ class RegularityItem(BaseModel):
         extra='forbid',
     )
     date: constr(pattern=r'^\d{4}-\d{2}-\d{2}$')
-    status: Status76
+    status: Status73
 
 
 class SeriesStreakOutput(BaseModel):
@@ -9316,7 +8419,7 @@ class SeriesStreakOutput(BaseModel):
     timezone: constr(min_length=1)
 
 
-class Status77(StrEnum):
+class Status74(StrEnum):
     active = 'active'
     paused = 'paused'
 
@@ -9333,7 +8436,7 @@ class CurrentFormation(BaseModel):
     moduleCount: conint(ge=0, le=9007199254740991)
     monogram: constr(min_length=1, max_length=3)
     progressPercent: conint(ge=0, le=100)
-    status: Status77
+    status: Status74
     title: constr(min_length=1, max_length=120)
 
 
@@ -9349,11 +8452,11 @@ class Formation10(BaseModel):
     moduleCount: conint(ge=0, le=9007199254740991)
     monogram: constr(min_length=1, max_length=3)
     progressPercent: conint(ge=0, le=100)
-    status: Status77
+    status: Status74
     title: constr(min_length=1, max_length=120)
 
 
-class Status79(StrEnum):
+class Status76(StrEnum):
     done = 'done'
     none = 'none'
     neutral = 'neutral'
@@ -9364,7 +8467,7 @@ class RegularityItem1(BaseModel):
         extra='forbid',
     )
     date: constr(pattern=r'^\d{4}-\d{2}-\d{2}$')
-    status: Status79
+    status: Status76
 
 
 class Streak(BaseModel):
@@ -9397,7 +8500,7 @@ class SidebarUpdateBody(BaseModel):
     ) = None
 
 
-class Status80(StrEnum):
+class Status77(StrEnum):
     active = 'active'
     paused = 'paused'
 
@@ -9414,7 +8517,7 @@ class CurrentFormation1(BaseModel):
     moduleCount: conint(ge=0, le=9007199254740991)
     monogram: constr(min_length=1, max_length=3)
     progressPercent: conint(ge=0, le=100)
-    status: Status80
+    status: Status77
     title: constr(min_length=1, max_length=120)
 
 
@@ -9430,11 +8533,11 @@ class Formation11(BaseModel):
     moduleCount: conint(ge=0, le=9007199254740991)
     monogram: constr(min_length=1, max_length=3)
     progressPercent: conint(ge=0, le=100)
-    status: Status80
+    status: Status77
     title: constr(min_length=1, max_length=120)
 
 
-class Status82(StrEnum):
+class Status79(StrEnum):
     done = 'done'
     none = 'none'
     neutral = 'neutral'
@@ -9445,7 +8548,7 @@ class RegularityItem2(BaseModel):
         extra='forbid',
     )
     date: constr(pattern=r'^\d{4}-\d{2}-\d{2}$')
-    status: Status82
+    status: Status79
 
 
 class Streak1(BaseModel):
@@ -9546,7 +8649,7 @@ class BlockedModule1(BaseModel):
     title: constr(min_length=1, max_length=160)
 
 
-class Status83(StrEnum):
+class Status80(StrEnum):
     active = 'active'
     paused = 'paused'
     completed = 'completed'
@@ -9560,11 +8663,11 @@ class Formation12(BaseModel):
         pattern=r'^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$'
     )
     sigle: constr(min_length=1, max_length=8)
-    status: Status83
+    status: Status80
     title: constr(min_length=1)
 
 
-class Kind19(StrEnum):
+class Kind18(StrEnum):
     contributions = 'contributions'
     course = 'course'
     exercise = 'exercise'
@@ -9579,7 +8682,7 @@ class Kind19(StrEnum):
     weekly_review = 'weekly_review'
 
 
-class Status84(StrEnum):
+class Status81(StrEnum):
     planned = 'planned'
     done = 'done'
     missed = 'missed'
@@ -9607,7 +8710,7 @@ class Slot2(BaseModel):
     id: constr(
         pattern=r'^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$'
     )
-    kind: Kind19
+    kind: Kind18
     meta: constr(max_length=1000) | None
     moduleId: (
         constr(
@@ -9621,7 +8724,7 @@ class Slot2(BaseModel):
     startsAt: constr(
         pattern=r'^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d:[0-5]\d(?:\.\d+)?(?:Z|([+-](?:[01]\d|2[0-3]):[0-5]\d)))$'
     )
-    status: Status84
+    status: Status81
     title: constr(min_length=1)
     typeLabel: constr(min_length=1)
 
@@ -9669,7 +8772,7 @@ class MovedSlot(BaseModel):
     id: constr(
         pattern=r'^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$'
     )
-    kind: Kind19
+    kind: Kind18
     meta: constr(max_length=1000) | None
     moduleId: (
         constr(
@@ -9683,7 +8786,7 @@ class MovedSlot(BaseModel):
     startsAt: constr(
         pattern=r'^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d:[0-5]\d(?:\.\d+)?(?:Z|([+-](?:[01]\d|2[0-3]):[0-5]\d)))$'
     )
-    status: Status84
+    status: Status81
     title: constr(min_length=1)
     typeLabel: constr(min_length=1)
 
@@ -9707,7 +8810,7 @@ class SlotsMoveParams(BaseModel):
     )
 
 
-class Status86(StrEnum):
+class Status83(StrEnum):
     imported = 'imported'
     dismissed = 'dismissed'
 
@@ -9725,7 +8828,7 @@ class SuggestionsDismissOutput(BaseModel):
         )
         | None
     )
-    status: Status86
+    status: Status83
 
 
 class SuggestionsDismissParams(BaseModel):
@@ -9747,7 +8850,7 @@ class SuggestionsImportOutput(BaseModel):
         )
         | None
     )
-    status: Status86
+    status: Status83
 
 
 class SuggestionsImportParams(BaseModel):
@@ -9800,7 +8903,7 @@ class Tag(StrEnum):
     prerequisite = 'prerequisite'
 
 
-class Item15(BaseModel):
+class Item13(BaseModel):
     model_config = ConfigDict(
         extra='forbid',
     )
@@ -9815,7 +8918,7 @@ class Item15(BaseModel):
     tag: Tag
 
 
-class Kind21(StrEnum):
+class Kind20(StrEnum):
     course = 'course'
     exercise = 'exercise'
     validation_quiz = 'validation_quiz'
@@ -9828,7 +8931,7 @@ class NextSession(BaseModel):
         extra='forbid',
     )
     href: constr(min_length=1)
-    kind: Kind21
+    kind: Kind20
     startsAt: constr(
         pattern=r'^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d:[0-5]\d(?:\.\d+)?(?:Z|([+-](?:[01]\d|2[0-3]):[0-5]\d)))$'
     )
@@ -9839,7 +8942,7 @@ class Scope(StrEnum):
     yesterday = 'yesterday'
 
 
-class Status88(StrEnum):
+class Status85(StrEnum):
     todo = 'todo'
     in_progress = 'in_progress'
     done = 'done'
@@ -9856,11 +8959,11 @@ class WarmupsAnswersCreateOutput(BaseModel):
     formationId: constr(
         pattern=r'^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$'
     )
-    items: list[Item15]
+    items: list[Item13]
     nextSession: NextSession
     reviewRemaining: bool | None = None
     scope: Scope
-    status: Status88
+    status: Status85
 
 
 class WarmupsAnswersCreateParams(BaseModel):
@@ -9869,7 +8972,7 @@ class WarmupsAnswersCreateParams(BaseModel):
     )
 
 
-class Item17(BaseModel):
+class Item15(BaseModel):
     model_config = ConfigDict(
         extra='forbid',
     )
@@ -9889,13 +8992,13 @@ class NextSession1(BaseModel):
         extra='forbid',
     )
     href: constr(min_length=1)
-    kind: Kind21
+    kind: Kind20
     startsAt: constr(
         pattern=r'^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d:[0-5]\d(?:\.\d+)?(?:Z|([+-](?:[01]\d|2[0-3]):[0-5]\d)))$'
     )
 
 
-class Item16(BaseModel):
+class Item14(BaseModel):
     model_config = ConfigDict(
         extra='forbid',
     )
@@ -9906,15 +9009,15 @@ class Item16(BaseModel):
     formationId: constr(
         pattern=r'^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$'
     )
-    items: list[Item17]
+    items: list[Item15]
     nextSession: NextSession1
     reviewRemaining: bool | None = None
     scope: Scope
-    status: Status88
+    status: Status85
 
 
 class WarmupsTodayGetOutput(BaseModel):
     model_config = ConfigDict(
         extra='forbid',
     )
-    items: list[Item16]
+    items: list[Item14]

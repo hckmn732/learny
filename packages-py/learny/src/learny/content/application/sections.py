@@ -1,10 +1,10 @@
 """Report and correct a generated course section (SPEC-609 EF-4, ET-2, ET-4, BR-COU-09).
 
-Port of `packages/services/src/courses/{edit,report}-section.ts`: a learner correction archives the
-previous state through the `archive_course_section_revision` trigger, increments the section version
-and reactivates the bank bricks its report suspended. `expectedVersion` is the optimistic guard: a
-stale reader receives 409 and the current version, never a silent overwrite. A report keeps the
-section readable, suspends the bank bricks of its notions and is idempotent per request key.
+A learner correction archives the previous state through the `archive_course_section_revision`
+trigger, increments the section version and reactivates the bank bricks its report suspended.
+`expectedVersion` is the optimistic guard: a stale reader receives 409 and the current version,
+never a silent overwrite. A report keeps the section readable, suspends the bank bricks of its
+notions and is idempotent per request key.
 """
 
 import re

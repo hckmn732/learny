@@ -3,47 +3,33 @@
 # recette (IA, Stripe, notifications), l'horloge figée et Mailpit comme SMTP.
 # Aucune valeur de secret n'est écrite ici, seulement des noms de variables lues dans Coolify.
 
+# Contrat d'environnement du backend Python (ADR-2042) : APP_ENV=local et l'horloge figée donnent
+# les modes simulés (IA, Stripe, push), le SMTP Mailpit, les jobs par le worker et le limiteur coupé.
 x-py-environment: &py-environment
   APP_ENV: ${APP_ENV:-local}
-  LOG_LEVEL: ${LOG_LEVEL:-info}
   APP_VERSION: ${APP_VERSION:-}
   GIT_COMMIT: ${GIT_COMMIT:-}
   DATABASE_URL: postgresql://postgres:${POSTGRES_PASSWORD:?}@db:5432/postgres
-  DATABASE_POOL_MAX: ${PY_DATABASE_POOL_MAX:-5}
-  SUPABASE_URL: ${LEARNY_PUBLIC_SUPABASE_URL:?}
-  SUPABASE_ANON_KEY: ${NEXT_PUBLIC_SUPABASE_ANON_KEY:?}
+  NEXT_PUBLIC_SUPABASE_URL: ${LEARNY_PUBLIC_SUPABASE_URL:?}
+  NEXT_PUBLIC_SUPABASE_ANON_KEY: ${NEXT_PUBLIC_SUPABASE_ANON_KEY:?}
   SUPABASE_SERVICE_ROLE_KEY: ${SUPABASE_SERVICE_ROLE_KEY:?}
   SUPABASE_JWT_SECRET: ${SUPABASE_JWT_SECRET:?}
   NEXT_PUBLIC_APP_URL: ${LEARNY_PUBLIC_APP_URL:?}
-  ALLOWED_ORIGINS: ${ALLOWED_ORIGINS:-}
   API_PROXY_SECRET: ${API_PROXY_SECRET:?}
-  TRUST_PROXY: ${TRUST_PROXY:-true}
   APP_ENCRYPTION_KEY: ${APP_ENCRYPTION_KEY:?}
   APP_ENCRYPTION_KEY_PREVIOUS: ${APP_ENCRYPTION_KEY_PREVIOUS:-}
-  RATE_LIMIT_IP_SECRET: ${RATE_LIMIT_IP_SECRET:?}
-  RATE_LIMIT_MODE: ${RATE_LIMIT_MODE:-off}
   CLOCK_FIXED_AT: ${CLOCK_FIXED_AT:-2026-11-11T12:20:00Z}
-  LLM_MODE: ${LLM_MODE:-mock}
-  ANTHROPIC_API_KEY: ${ANTHROPIC_API_KEY:-}
   VOYAGE_API_KEY: ${VOYAGE_API_KEY:-}
   SEARCH_API_KEY: ${SEARCH_API_KEY:-}
-  EMAIL_MODE: ${EMAIL_MODE:-smtp}
   EMAIL_FROM: ${EMAIL_FROM:-Learny QA <qa@learny.test>}
   EMAIL_LINK_SECRET: ${EMAIL_LINK_SECRET:?}
   RESEND_API_KEY: ${RESEND_API_KEY:-}
   SMTP_HOST: ${SMTP_HOST:-mailpit}
-  SMTP_PORT: ${SMTP_PORT:-1025}
-  PUSH_MODE: ${PUSH_MODE:-mock}
-  NEXT_PUBLIC_VAPID_PUBLIC_KEY: ${NEXT_PUBLIC_VAPID_PUBLIC_KEY:-}
   VAPID_PRIVATE_KEY: ${VAPID_PRIVATE_KEY:-}
-  VAPID_SUBJECT: ${VAPID_SUBJECT:-mailto:qa@learny.test}
-  STRIPE_MODE: ${STRIPE_MODE:-mock}
   STRIPE_SECRET_KEY: ${STRIPE_SECRET_KEY:-}
   STRIPE_WEBHOOK_SECRET: ${STRIPE_WEBHOOK_SECRET:-}
   STRIPE_PRICE_ID: ${STRIPE_PRICE_ID:-}
-  SENTRY_DSN: ${SENTRY_DSN:-}
   ENABLE_SDD_PAGES: ${ENABLE_SDD_PAGES:-true}
-  OWNERSHIP_OVERRIDES: ${OWNERSHIP_OVERRIDES:-}
 
 services:
   api-py:
@@ -53,7 +39,7 @@ services:
     command:
       - sh
       - -c
-      - exec uvicorn learny_api.main:app --host 0.0.0.0 --port 8000 --workers "$${PY_API_WORKERS:-2}"
+      - exec uvicorn learny_api.main:app --host 0.0.0.0 --port 8000 --workers 2
     user: '1001:1001'
     read_only: true
     tmpfs:
@@ -63,16 +49,12 @@ services:
     cap_drop: [ALL]
     environment:
       <<: *py-environment
-      PY_API_WORKERS: ${PY_API_WORKERS:-2}
-      PY_HONO_UPSTREAM_URL: http://api:3001
     expose:
       - '8000'
     depends_on:
       seed:
         condition: service_completed_successfully
       db:
-        condition: service_healthy
-      api:
         condition: service_healthy
     healthcheck:
       test:
@@ -110,9 +92,8 @@ services:
     cap_drop: [ALL]
     environment:
       <<: *py-environment
-      JOBS_MODE: worker
-      PY_WORKER_CONCURRENCY: ${PY_WORKER_CONCURRENCY:-8}
-      PY_WORKER_HEALTH_PORT: ${PY_WORKER_HEALTH_PORT:-8081}
+      # Port standard du serveur de santé du worker (sondé par Coolify uniquement).
+      PORT: '8081'
     depends_on:
       seed:
         condition: service_completed_successfully
@@ -123,7 +104,7 @@ services:
         - CMD-SHELL
         - >-
           python -c "import os, sys, urllib.request;
-          port = os.environ['PY_WORKER_HEALTH_PORT'];
+          port = os.environ['PORT'];
           urls = [f'http://127.0.0.1:{port}/health/live', f'http://127.0.0.1:{port}/health/ready'];
           sys.exit(0 if all(urllib.request.urlopen(url, timeout=3).status == 200 for url in urls) else 1)"
       interval: 10s

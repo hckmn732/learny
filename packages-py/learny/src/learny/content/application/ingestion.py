@@ -1,11 +1,11 @@
 """Ingestion of a note, a PDF or a remote source (SPEC-509 EF-1 to EF-5, SPEC-510).
 
-Port of `packages/ingestion/src/process-resource.ts` as a resumable use case: the five durable
-stages (load, extract, chunk, embed, finalize) each re-read the persisted state of the resource and
-skip work that is already done, and the finalization replaces the previous passages in one
-transaction, so a failure never leaves a partial set. A duplicate delivery finds the completed
-marker and does nothing; a transient provider outage leaves the resource `processing` for the next
-attempt (CL-3); a permanent extraction failure ends in `failed` with a readable code (BR-APP-07).
+The five durable stages (load, extract, chunk, embed, finalize) each re-read the persisted state of
+the resource and skip work that is already done, and the finalization replaces the previous passages
+in one transaction, so a failure never leaves a partial set. A duplicate delivery finds the
+completed marker and does nothing; a transient provider outage leaves the resource `processing` for
+the next attempt (CL-3); a permanent extraction failure ends in `failed` with a readable code
+(BR-APP-07).
 
 The stage seam (`StepRunner`) is the one the worker wires in SPEC-2207. It is not a generic step
 engine: every stage below decides from the database row whether it has work left.

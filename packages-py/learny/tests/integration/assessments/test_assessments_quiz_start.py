@@ -1,8 +1,8 @@
 """[SPEC-2202] Creation of a validation quiz attempt (SPEC-611, EF-1, EF-8, ET-2, ET-6).
 
-Port of the useful cases of `packages/services/src/quiz/start.ts`: the single running attempt of the
-module is resumed, a locked module never opens, an empty or exhausted bank returns `preparing`
-without creating anything, and the retry gate refuses a new attempt inside its delay.
+The single running attempt of the module is resumed, a locked module never opens, an empty or
+exhausted bank returns `preparing` without creating anything, and the retry gate refuses a new
+attempt inside its delay.
 """
 
 import json

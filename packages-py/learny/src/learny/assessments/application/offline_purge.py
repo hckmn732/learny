@@ -1,9 +1,7 @@
 """Nightly purge of the offline synchronisation receipts (SPEC-801 ET-6, ADR-0200).
 
-Port of `packages/db/src/repositories/offline-receipts.ts` (`purgeOfflineReceipts`) and of the
-`offline-receipts-purge` function: the receipts created more than 30 days ago are deleted. The
-comparison is strict and the instant comes from the injected clock, so a replay of the same tick
-purges nothing twice.
+The receipts created more than 30 days ago are deleted. The comparison is strict and the instant
+comes from the injected clock, so a replay of the same tick purges nothing twice.
 """
 
 from collections.abc import Mapping

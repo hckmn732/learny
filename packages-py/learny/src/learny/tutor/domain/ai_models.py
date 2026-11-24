@@ -1,10 +1,4 @@
-"""Pure projections of the " Modeles d'IA " tab (SPEC-2204, port of `parametres-modeles-d-ia.ts`).
-
-One function per pure helper of the TypeScript service: the task capabilities come from the single
-task table, a model is selectable as soon as its key owns it (compatibility stays additive and
-task-specific), a deleted key makes its tasks unavailable instead of falling back to another model
-(CL-3), and the card never exposes more than the mask, the status and the region flag (BR-IA-03).
-"""
+"""Pure projections of the " Modeles d'IA " tab (SPEC-2204)."""
 
 from collections.abc import Mapping, Sequence
 from datetime import datetime

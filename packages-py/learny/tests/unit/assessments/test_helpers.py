@@ -1,8 +1,6 @@
 """[SPEC-2202] Helpers of the brick contract (SPEC-502 ET-1, ET-4, ET-5, EF-7, EF-10).
 
-Ported from `packages/bricks/src/types/{instruction/response,instruction/table-checks,timer/state,
-scoring/compute}.test.ts`. Every expected value is the recording of the TypeScript engine taken on
-2026-11-21 from the same inputs.
+Every expected value is the reference recordings.
 """
 
 import json

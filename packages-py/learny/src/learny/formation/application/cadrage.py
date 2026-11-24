@@ -1,8 +1,8 @@
 """Scoping chat use cases (SPEC-604 EF-1, EF-4 to EF-11; BR-FOR-01, BR-FOR-03, ADR-0162).
 
-Port of `cadrage/{get,create,post,complete}.ts`. The learner message is committed in its own
-transaction, the model is called outside any transaction, then the validated turn is committed in a
-second transaction: a failed tutor turn keeps the answer and can be retried without losing it.
+The learner message is committed in its own transaction, the model is called outside any
+transaction, then the validated turn is committed in a second transaction: a failed tutor turn keeps
+the answer and can be retried without losing it.
 """
 
 from collections.abc import Mapping, Sequence
@@ -17,6 +17,7 @@ from learny.formation.application.tutor import (
 from learny.formation.domain import cadrage as rules
 from learny.formation.infrastructure import queries
 from learny.identity.domain.actor import Actor
+from learny.platform.llm.resolve import resolve_task_model
 from learny.shared.db.uow import Tx
 from learny.shared.errors import AppError
 from learny.shared.locale_fr.details import (
@@ -116,6 +117,9 @@ async def create_formation(deps: FormationDeps, actor: Actor, body: Mapping[str,
     )
     scenario = rules.cadrage_scenario(title, 0)
     try:
+        # SPEC-709: the tutor runs only on the personal model chosen for the `tutor` task.
+        async with deps.db.user_tx(actor) as tx:
+            await resolve_task_model(tx, actor.user_id, "tutor")
         result = await run_cadrage_turn(
             deps.llm,
             tutor=tutor,
@@ -291,6 +295,9 @@ async def post_cadrage_message(
                 _count_learner(rows) + 1,
             )
 
+    # SPEC-709: the answer is committed; the tutor still needs the model chosen for its task.
+    async with deps.db.user_tx(actor) as tx:
+        await resolve_task_model(tx, actor.user_id, "tutor")
     tutor = TutorProfile(tone=str(prepared["tone"]), course_language=str(prepared["courseLanguage"]))
     scenario = rules.cadrage_scenario(prepared["title"], prepared["learnerAnswers"])
     result = await run_cadrage_turn(

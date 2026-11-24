@@ -10,8 +10,6 @@ import { expect, test } from '@learny/testing/playwright';
 import { createTestSession, deleteTestSession, supabaseLocalEnv } from '@learny/testing/supabase';
 
 const DEFAULT_ORIGIN = 'http://127.0.0.1:3100';
-const PAGE = '/_dev/sdd/SPEC-2301';
-const TITLE = 'Déploiement Coolify, bascule progressive et rollback';
 // ADR-0047: the stack runs on the frozen instant. GoTrue signs a freshly issued token with the real
 // `iat`; the facade rightly refuses a token dated after its injected clock, so the external client
 // token is signed with the local JWT secret and dated on the frozen instant. Same secret, same
@@ -92,57 +90,3 @@ test('un client Bearer externe est servi par la façade Python @SPEC-2301', asyn
   }
 });
 
-test('conformité visuelle de la bascule @SPEC-2301 @visual', async ({
-  page,
-  axeCheck,
-  captureEvidence,
-}) => {
-  await page.goto(PAGE);
-  await expect(page.getByRole('heading', { level: 1 })).toHaveText(TITLE);
-
-  // CA-1 (local part) — the four counters, read from the committed ownership table.
-  const scope = page.getByTestId('spec-2301-scope');
-  await expect(scope).toContainText('Opérations servies par Python');
-  await expect(scope).toContainText('190 / 217');
-  await expect(scope).toContainText('Routes spéciales servies par Python');
-  await expect(scope).toContainText('29 / 32');
-  await expect(scope).toContainText('Consommateurs Python');
-  await expect(scope).toContainText('23 / 23');
-  await expect(scope).toContainText('Crons Python');
-  await expect(scope).toContainText('2 / 2');
-  await expect(page.getByTestId('spec-2301-relayed')).toContainText(
-    '27 opérations et 3 routes spéciales restent relayées',
-  );
-
-  // EF-2 — the cutover state of every context of the inventory.
-  const contexts = page.getByTestId('spec-2301-contexts').locator('li');
-  await expect(contexts).toHaveCount(10);
-  await expect(page.getByTestId('spec-2301-contexts')).toContainText('learning');
-  await expect(page.getByTestId('spec-2301-contexts')).toContainText(
-    'lectures 8 / 8 · mutations 7 / 7',
-  );
-  await expect(page.getByTestId('spec-2301-contexts')).toContainText(
-    'partiel : entrées différées',
-  );
-  await expect(page.getByTestId('spec-2301-states')).toContainText('8 contextes');
-  await expect(page.getByTestId('spec-2301-states')).toContainText('dev, identity');
-
-  // EF-2, EF-3 — the guarantees of the tool and of the drain.
-  await expect(page.getByTestId('spec-2301-cutover')).toContainText('Canary en lecture');
-  await expect(page.getByTestId('spec-2301-cutover')).toContainText('Un seul écrivain');
-  await expect(page.getByTestId('spec-2301-cutover')).toContainText('Drain du worker');
-  await expect(page.getByTestId('spec-2301-cutover')).toContainText('Rollback');
-  await expect(page.getByTestId('spec-2301-proofs')).toContainText('x-served-by: learny-api');
-  await expect(page.getByTestId('spec-2301-proofs')).toContainText('ADR-2009');
-
-  await axeCheck();
-  await captureEvidence('spec-2301-desktop');
-  await page.setViewportSize({ width: 390, height: 844 });
-  expect(
-    await page.evaluate(
-      () => document.documentElement.scrollWidth - document.documentElement.clientWidth,
-    ),
-  ).toBeLessThanOrEqual(0);
-  await axeCheck();
-  await captureEvidence('spec-2301-mobile');
-});

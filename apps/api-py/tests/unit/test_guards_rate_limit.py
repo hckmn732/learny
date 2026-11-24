@@ -1,4 +1,4 @@
-"""[SPEC-2101] Postgres token-bucket limiter, ported from SPEC-208 and ADR-0213."""
+"""[SPEC-2101] Postgres token-bucket limiter (SPEC-208, ADR-0213)."""
 
 from collections.abc import AsyncIterator, Mapping, Sequence
 from contextlib import asynccontextmanager

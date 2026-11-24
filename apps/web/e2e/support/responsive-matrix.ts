@@ -2,7 +2,7 @@
 // demonstration learner Alex; the two anonymous screens are the public entry points.
 import type { Page } from '@playwright/test';
 
-import { demoChapterId, demoFormationId, demoId, demoModuleId } from '@learny/db/seed/fixtures';
+import { demoChapterId, demoFormationId, demoId, demoModuleId } from '@learny/testing/db-factories';
 
 export interface ResponsiveWidth {
   name: string;

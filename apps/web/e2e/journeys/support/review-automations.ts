@@ -12,10 +12,9 @@ import { randomUUID } from 'node:crypto';
 import type { BrowserContext, Page } from '@playwright/test';
 
 import { activeLegalVersions } from '@learny/config';
-import { serviceDb, sql, type DbTx } from '@learny/db';
-import { createTestProgramme } from '@learny/db/testing';
 import { createBrick, createNotionState, createScheduleSlot } from '@learny/testing';
 import { FIXED_TIME_ISO } from '@learny/testing/clock';
+import { createTestProgramme, serviceDb, sql, type DbTx } from '@learny/testing/db';
 import { createTestSession, deleteTestSession, type TestSession } from '@learny/testing/supabase';
 
 export const NOW_ISO = FIXED_TIME_ISO;

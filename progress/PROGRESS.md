@@ -1,19 +1,19 @@
 # Progression du projet Learny
 
-> Généré par `node tools/sdd/status.mjs` le 2026-11-24T01:36:28.766Z. Ne pas éditer à la main.
+> Généré par `node tools/sdd/status.mjs` le 2026-11-24T05:59:25.644Z. Ne pas éditer à la main.
 
 ## Synthèse
 
 | Indicateur | Valeur |
 |---|---|
 | Spécifications | 175 (V1 : 124, V2 : 8, migration : 43) |
-| Terminées | 142 |
-| En cours | 0 |
-| Prêtes | 1 |
-| En attente de dépendances | 32 |
-| Bloquées | 0 |
+| Terminées | 154 |
+| En cours | 1 |
+| Prêtes | 0 |
+| En attente de dépendances | 19 |
+| Bloquées | 1 |
 | Bloquées par une dépendance | 0 |
-| **Avancement global** | **81.1 %** |
+| **Avancement global** | **88.0 %** |
 | Avancement V1 | 99.2 % |
 | Piste active | mobile |
 | Prochaine action | stuck |
@@ -36,9 +36,9 @@
 | P11 | Migration — application API autonome | 0/3 | CP-11 | ⏳ |
 | P12 | Migration — bascule du web sur l’API | 0/3 | CP-12 | ⏳ |
 | P13 | Migration — API multi-clients et clôture | 0/2 | CP-13 | ⏳ |
-| P20 | Migration Python — inventaire, contrat et socle | 0/3 | CP-20 | ⏳ |
-| P21 | Migration Python — données, identité et worker | 0/2 | CP-21 | ⏳ |
-| P22 | Migration Python — domaines métier | 0/7 | CP-22 | ⏳ |
+| P20 | Migration Python — inventaire, contrat et socle | 3/3 | CP-20 | ✅ 2026-11-21 cp-20 |
+| P21 | Migration Python — données, identité et worker | 2/2 | CP-21 | ✅ 2026-11-23 cp-21 |
+| P22 | Migration Python — domaines métier | 7/7 | CP-22 | ✅ 2026-11-23 cp-22 |
 | P23 | Migration Python — bascule et retrait du backend TypeScript | 0/2 | CP-23 | ⏳ |
 | P30 | Mobile — socle Expo, design system natif et données | 3/3 | CP-30 | ✅ 2026-11-22 cp-30 |
 | P31 | Mobile — accès et coquille | 2/2 | CP-31 | ✅ 2026-11-23 cp-31 |
@@ -195,20 +195,20 @@
 | [SPEC-1203](../specs/p12-migration-bascule/SPEC-1203-pages-de-demonstration-via-l-api-et-web-sans-dependance-serveur.md) | Pages de démonstration via l’API et web sans dépendance serveur | P12 | ⏳ waiting | 0 | — | SPEC-1202 |
 | [SPEC-1301](../specs/p13-migration-multi-clients/SPEC-1301-api-prete-pour-les-clients-natifs.md) | API prête pour les clients natifs | P13 | ⏳ waiting | 0 | — | SPEC-1203 |
 | [SPEC-1302](../specs/p13-migration-multi-clients/SPEC-1302-cloture-de-la-migration-et-retour-sur-main.md) | Clôture de la migration et retour sur main | P13 | ⏳ waiting | 0 | — | SPEC-1301 |
-| [SPEC-2001](../specs/p20-python-socle/SPEC-2001-inventaire-parite-oracles.md) | Inventaire, matrice de parité et oracles de référence | P20 | 🟢 ready | 0 | — | — |
-| [SPEC-2002](../specs/p20-python-socle/SPEC-2002-contrat-openapi-sdk.md) | Contrat OpenAPI source unique et SDK TypeScript généré | P20 | ⏳ waiting | 0 | — | SPEC-2001 |
-| [SPEC-2003](../specs/p20-python-socle/SPEC-2003-socle-python-facade.md) | Socle Python FastAPI, outillage SDD et façade de coexistence | P20 | ⏳ waiting | 0 | — | SPEC-2001 |
-| [SPEC-2101](../specs/p21-python-donnees/SPEC-2101-donnees-identite-rls.md) | Connexion PostgreSQL, identité, RLS et Storage en Python | P21 | ⏳ waiting | 0 | — | SPEC-2002, SPEC-2003 |
-| [SPEC-2102](../specs/p21-python-donnees/SPEC-2102-outbox-worker.md) | Outbox et worker Python remplaçant Inngest | P21 | ⏳ waiting | 0 | — | SPEC-2101 |
-| [SPEC-2201](../specs/p22-python-domaines/SPEC-2201-domaines-identite-formation.md) | Domaines Identity & Access et Formation & Programme en Python | P22 | ⏳ waiting | 0 | — | SPEC-2101, SPEC-2102 |
-| [SPEC-2202](../specs/p22-python-domaines/SPEC-2202-domaines-apprentissage-evaluations.md) | Domaines Learning State & Planning et Assessments en Python | P22 | ⏳ waiting | 0 | — | SPEC-2201 |
-| [SPEC-2203](../specs/p22-python-domaines/SPEC-2203-domaine-contenu-ingestion.md) | Domaine Content & Retrieval et ingestion en Python | P22 | ⏳ waiting | 0 | — | SPEC-2201 |
-| [SPEC-2204](../specs/p22-python-domaines/SPEC-2204-domaine-tuteur-sse.md) | Domaine Tutor & Conversations et flux SSE IA en Python | P22 | ⏳ waiting | 0 | — | SPEC-2202, SPEC-2203 |
-| [SPEC-2205](../specs/p22-python-domaines/SPEC-2205-domaine-engagement.md) | Domaine Engagement : notifications et automatismes en Python | P22 | ⏳ waiting | 0 | — | SPEC-2202 |
-| [SPEC-2207](../specs/p22-python-domaines/SPEC-2207-bascule-jobs-crons-demos.md) | Bascule des jobs, des crons et des routes de démonstration vers Python | P22 | ⏳ waiting | 0 | — | SPEC-2206 |
-| [SPEC-2206](../specs/p22-python-domaines/SPEC-2206-domaines-facturation-confidentialite.md) | Domaines Billing & Entitlements et Privacy & Accounts en Python | P22 | ⏳ waiting | 0 | — | SPEC-2201, SPEC-2203, SPEC-2204, SPEC-2205 |
-| [SPEC-2301](../specs/p23-python-bascule/SPEC-2301-deploiement-bascule-rollback.md) | Déploiement Coolify, bascule progressive et rollback | P23 | ⏳ waiting | 0 | — | SPEC-2207 |
-| [SPEC-2302](../specs/p23-python-bascule/SPEC-2302-retrait-backend-typescript.md) | Non-régression complète et retrait du backend TypeScript | P23 | ⏳ waiting | 0 | — | SPEC-2301 |
+| [SPEC-2001](../specs/p20-python-socle/SPEC-2001-inventaire-parite-oracles.md) | Inventaire, matrice de parité et oracles de référence | P20 | ✅ done | 0 | ✓lint ✓typecheck ✓build ✓unit ✓integration ✓e2e ✓visual ✓acceptance | — |
+| [SPEC-2002](../specs/p20-python-socle/SPEC-2002-contrat-openapi-sdk.md) | Contrat OpenAPI source unique et SDK TypeScript généré | P20 | ✅ done | 0 | ✓lint ✓typecheck ✓build ✓unit ✓integration ✓e2e ✓visual ✓acceptance | SPEC-2001 |
+| [SPEC-2003](../specs/p20-python-socle/SPEC-2003-socle-python-facade.md) | Socle Python FastAPI, outillage SDD et façade de coexistence | P20 | ✅ done | 0 | ✓lint ✓typecheck ✓build ✓unit ✓integration ✓e2e ✓visual ✓acceptance | SPEC-2001 |
+| [SPEC-2101](../specs/p21-python-donnees/SPEC-2101-donnees-identite-rls.md) | Connexion PostgreSQL, identité, RLS et Storage en Python | P21 | ✅ done | 0 | ✓lint ✓typecheck ✓build ✓unit ✓integration ✓e2e ✓visual ✓acceptance | SPEC-2002, SPEC-2003 |
+| [SPEC-2102](../specs/p21-python-donnees/SPEC-2102-outbox-worker.md) | Outbox et worker Python remplaçant Inngest | P21 | ✅ done | 0 | ✓lint ✓typecheck ✓build ✓unit ✓integration ✓e2e ✓visual ✓acceptance | SPEC-2101 |
+| [SPEC-2201](../specs/p22-python-domaines/SPEC-2201-domaines-identite-formation.md) | Domaines Identity & Access et Formation & Programme en Python | P22 | ✅ done | 0 | ✓lint ✓typecheck ✓build ✓unit ✓integration ✓e2e ✓visual ✓acceptance | SPEC-2101, SPEC-2102 |
+| [SPEC-2202](../specs/p22-python-domaines/SPEC-2202-domaines-apprentissage-evaluations.md) | Domaines Learning State & Planning et Assessments en Python | P22 | ✅ done | 0 | ✓lint ✓typecheck ✓build ✓unit ✓integration ✓e2e ✓visual ✓acceptance | SPEC-2201 |
+| [SPEC-2203](../specs/p22-python-domaines/SPEC-2203-domaine-contenu-ingestion.md) | Domaine Content & Retrieval et ingestion en Python | P22 | ✅ done | 0 | ✓lint ✓typecheck ✓build ✓unit ✓integration ✓e2e ✓visual ✓acceptance | SPEC-2201 |
+| [SPEC-2204](../specs/p22-python-domaines/SPEC-2204-domaine-tuteur-sse.md) | Domaine Tutor & Conversations et flux SSE IA en Python | P22 | ✅ done | 0 | ✓lint ✓typecheck ✓build ✓unit ✓integration ✓e2e ✓visual ✓acceptance | SPEC-2202, SPEC-2203 |
+| [SPEC-2205](../specs/p22-python-domaines/SPEC-2205-domaine-engagement.md) | Domaine Engagement : notifications et automatismes en Python | P22 | ✅ done | 0 | ✓lint ✓typecheck ✓build ✓unit ✓integration ✓e2e ✓visual ✓acceptance | SPEC-2202 |
+| [SPEC-2207](../specs/p22-python-domaines/SPEC-2207-bascule-jobs-crons-demos.md) | Bascule des jobs, des crons et des routes de démonstration vers Python | P22 | ✅ done | 0 | ✓lint ✓typecheck ✓build ✓unit ✓integration ✓e2e ✓visual ✓acceptance | SPEC-2206 |
+| [SPEC-2206](../specs/p22-python-domaines/SPEC-2206-domaines-facturation-confidentialite.md) | Domaines Billing & Entitlements et Privacy & Accounts en Python | P22 | ✅ done | 0 | ✓lint ✓typecheck ✓build ✓unit ✓integration ✓e2e ✓visual ✓acceptance | SPEC-2201, SPEC-2203, SPEC-2204, SPEC-2205 |
+| [SPEC-2301](../specs/p23-python-bascule/SPEC-2301-deploiement-bascule-rollback.md) | Déploiement Coolify, bascule progressive et rollback | P23 | ⛔ blocked | 1 | ✓lint ✓typecheck ✓build ✓unit ✓integration ✓e2e ✓visual ✓acceptance | SPEC-2207 |
+| [SPEC-2302](../specs/p23-python-bascule/SPEC-2302-retrait-backend-typescript.md) | Non-régression complète et retrait du backend TypeScript | P23 | 🔄 in_progress | 1 | — | SPEC-2301 |
 | [SPEC-3001](../specs/p30-mobile-socle/SPEC-3001-application-expo-monorepo-et-outillage-sdd-mobile.md) | Application Expo, intégration au monorepo et outillage SDD mobile | P30 | ✅ done | 0 | ✓lint ✓typecheck ✓unit ✓integration ✓e2e ✓visual ✓acceptance | — |
 | [SPEC-3002](../specs/p30-mobile-socle/SPEC-3002-theme-jetons-et-composants-natifs.md) | Thème, jetons et composants natifs iOS et Android | P30 | ✅ done | 0 | ✓lint ✓typecheck ✓unit ✓integration ✓e2e ✓visual ✓acceptance | SPEC-3001 |
 | [SPEC-3003](../specs/p30-mobile-socle/SPEC-3003-client-d-api-session-et-cache-hors-ligne.md) | Client d'API, session sécurisée et cache hors ligne | P30 | ✅ done | 0 | ✓lint ✓typecheck ✓unit ✓integration ✓e2e ✓visual ✓acceptance | SPEC-3001 |
@@ -229,6 +229,6 @@
 
 ## Anomalies et blocages
 
-Aucun.
+- SPEC-2301 (blocked) : staging Coolify non fourni par le porteur : CA-1/CA-2/CA-3/CA-4 non mesurables (ADR-2009, CL-3)
 
 Détails : [anomalies.md](anomalies.md), [blockers.md](blockers.md).

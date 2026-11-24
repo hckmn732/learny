@@ -1,9 +1,8 @@
 """[SPEC-2202] Attempt, submission and result of a mock exam (SPEC-614, EF-1 to EF-4).
 
-Port of the useful cases of `packages/services/src/mock-exams/attempt.ts`: the single running exam
-of a formation is resumed, a guide format must be confirmed first, the answers are graded by code
-once, the deadline is an absolute instant with a five-second tolerance, and the result separates the
-studied score from the diagnostic one.
+The single running exam of a formation is resumed, a guide format must be confirmed first, the
+answers are graded by code once, the deadline is an absolute instant with a five-second tolerance,
+and the result separates the studied score from the diagnostic one.
 """
 
 import json

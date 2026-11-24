@@ -101,3 +101,7 @@ Définition commune de `docs/engineering/testing.md` §7 : lint, typecheck, buil
 - ADR applicables : ADR-1001, ADR-2001, ADR-2005, ADR-2008, ADR-2011, ADR-0017, ADR-2006, ADR-2014.
 - ADR-2014 (événement interne `job/daily-digest`, abandon des limites de débit).
 - Hors périmètre : refonte visuelle ou fonctionnelle, changement de schéma sans ADR, clients mobiles, specs gelées par ADR-2001.
+
+## Amendements
+
+- **2026-11-23, ADR-2039** — les compteurs du tableau de bord sont alignés sur `api/ownership.yaml` : 201 opérations Python sur 217 et 19 entrées encore relayées ; les deux libellés devenus faux sont remplacés.

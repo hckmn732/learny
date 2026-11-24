@@ -1,9 +1,8 @@
-"""Rules and projection of the scoping chat (SPEC-604, port of `cadrage/state.ts`,
-`cadrage/apply-tutor-turn.ts`, `cadrage/scenario.ts` and `tutor/cadrage/schema.ts`).
+"""Rules and projection of the scoping chat (SPEC-604).
 
 The tutor proposes a `CadrageTurn`; `apply_turn` decides what is stored: the five questions ceiling,
-the waiting rubric, bounded profile values and deduplicated objectives. Nothing here reads the
-clock or touches the database, so the rules are unit-testable in isolation.
+the waiting rubric, bounded profile values and deduplicated objectives. Nothing here reads the clock
+or touches the database, so the rules are unit-testable in isolation.
 """
 
 import json

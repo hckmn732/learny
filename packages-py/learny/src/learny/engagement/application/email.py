@@ -1,5 +1,4 @@
-"""Sending of one e-mail to a learner (SPEC-2205, ported from `packages/notifications/src/email/send.ts`
-and `packages/jobs/src/functions/email-welcome.ts`).
+"""Sending of one e-mail to a learner (SPEC-2205).
 
 The profile is read with the owner role (authorised usage: the address and the tone of the
 recipient). `send_email` never checks `channel_email`: the caller does (SPEC-209), the welcome

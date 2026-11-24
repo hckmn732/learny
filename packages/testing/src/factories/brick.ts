@@ -1,7 +1,7 @@
 // Brick factory (SPEC-115 EF-6). Creates a personal brick and its immutable version 1.
 import { createHash, randomUUID } from 'node:crypto';
 
-import { sql, type DbTx } from '@learny/db';
+import { sql, type DbTx } from '../db';
 
 import { assertFormationAccess, assertNotionsBelongTo, insert, type IdRow } from './helpers';
 

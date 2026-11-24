@@ -101,7 +101,7 @@ export async function createTestSession(options: TestSessionOptions = {}): Promi
   // active legal versions. A learner who signed up through the UI already accepted them, and the
   // admin API of the fixture does not run the signup form: mirror that state here.
   const { activeLegalVersions } = await import('@learny/config');
-  const { serviceDb, sql } = await import('@learny/db');
+  const { serviceDb, sql } = await import('./db');
   const versions = activeLegalVersions();
   await serviceDb().execute(sql`
     insert into public.legal_acceptances (user_id, document, version)
@@ -136,7 +136,7 @@ export async function createDemoSession(userId: string, email: string): Promise<
   const { url, anonKey, serviceRoleKey } = supabaseLocalEnv();
   const admin = createClient(url, serviceRoleKey, { auth: { persistSession: false } });
   const password = `pw-${randomBytes(12).toString('hex')}`;
-  const { serviceDb, sql } = await import('@learny/db');
+  const { serviceDb, sql } = await import('./db');
   await serviceDb().execute(sql`
     insert into auth.identities (id, user_id, provider, provider_id, identity_data, created_at, updated_at)
     values (
@@ -198,7 +198,7 @@ export async function createProfileUser(
     user_metadata: { timezone: options.timezone ?? 'Europe/Paris' },
   });
   if (created.error !== null) throw new Error(`createUser : ${created.error.message}`);
-  const { serviceDb, sql } = await import('@learny/db');
+  const { serviceDb, sql } = await import('./db');
   await serviceDb().execute(sql`
     update public.profiles set onboarding_step = ${options.onboardingStep ?? 'done'}::onboarding_step
     where id = ${created.data.user.id}::uuid
@@ -208,6 +208,6 @@ export async function createProfileUser(
 
 /** Deletes every user whose e-mail starts with `prefix` (cascades to their rows). */
 export async function deleteUsersByEmailPrefix(prefix: string): Promise<void> {
-  const { serviceDb, sql } = await import('@learny/db');
+  const { serviceDb, sql } = await import('./db');
   await serviceDb().execute(sql`delete from auth.users where email like ${`${prefix}%`}`);
 }

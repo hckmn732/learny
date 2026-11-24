@@ -13,44 +13,48 @@ from typing import Any
 
 import structlog
 import uvicorn
-from learny.shared.config import Settings
+from learny.shared.config import Settings, load_settings
 from learny.shared.deps import Deps, build_deps
-from learny.shared.ownership import Ownership, load_ownership_for_worker
 
-from learny_worker.consumers import active_consumers
+from learny_worker.consumers import CONSUMERS
 from learny_worker.dispatcher import Dispatcher
 from learny_worker.health import create_health_app
 from learny_worker.runner import Runner
 from learny_worker.scheduler import Scheduler
 
 STOP_TIMEOUT_SECONDS = 45
+# Tuning of the loops (ADR-2042): constants of the code, identical in every environment.
+DISPATCH_INTERVAL_MS = 500
+DISPATCH_BATCH_SIZE = 100
+WORKER_CONCURRENCY = 8
+WORKER_POLL_INTERVAL_MS = 500
+SCHEDULER_RETRY_INTERVAL_S = 15
+SCHEDULER_POLL_INTERVAL_S = 20
 
 
-def build(settings: Settings, ownership: Ownership, deps: Deps | None = None) -> dict[str, Any]:
+def build(settings: Settings, deps: Deps | None = None) -> dict[str, Any]:
     """Builds the loops; exposed so the integration tests can drive them without a process."""
     resolved = deps or build_deps(settings)
-    consumers = active_consumers(ownership)
+    consumers = CONSUMERS
     return {
         "deps": resolved,
         "consumers": consumers,
         "dispatcher": Dispatcher(
             resolved,
-            ownership,
-            interval_ms=settings.py_dispatch_interval_ms,
-            batch_size=settings.py_dispatch_batch_size,
+            interval_ms=DISPATCH_INTERVAL_MS,
+            batch_size=DISPATCH_BATCH_SIZE,
             consumers=consumers,
         ),
         "runner": Runner(
             resolved,
             consumers,
-            concurrency=settings.py_worker_concurrency,
-            poll_interval_ms=settings.py_worker_poll_interval_ms,
+            concurrency=WORKER_CONCURRENCY,
+            poll_interval_ms=WORKER_POLL_INTERVAL_MS,
         ),
         "scheduler": Scheduler(
             resolved,
-            ownership,
-            retry_interval_s=settings.py_scheduler_retry_interval_s,
-            poll_interval_s=settings.py_scheduler_poll_interval_s,
+            retry_interval_s=SCHEDULER_RETRY_INTERVAL_S,
+            poll_interval_s=SCHEDULER_POLL_INTERVAL_S,
         ),
     }
 
@@ -66,7 +70,7 @@ async def serve(settings: Settings, loops: dict[str, Any]) -> None:
     logger.info(
         "worker started",
         consumers=[consumer.name for consumer in loops["consumers"]],
-        concurrency=settings.py_worker_concurrency,
+        concurrency=WORKER_CONCURRENCY,
     )
     server = _health_server(settings, loops["deps"])
     tasks = [
@@ -92,12 +96,13 @@ async def serve(settings: Settings, loops: dict[str, Any]) -> None:
 
 
 def _health_server(settings: Settings, deps: Deps) -> uvicorn.Server | None:
-    if settings.py_worker_health_port <= 0:
+    """The health server listens on the standard `PORT` when the deployment sets one."""
+    if settings.port <= 0:
         return None
     config = uvicorn.Config(
         create_health_app(deps),
         host="127.0.0.1",
-        port=settings.py_worker_health_port,
+        port=settings.port,
         log_level="warning",
         access_log=False,
     )
@@ -108,21 +113,14 @@ async def run(settings: Settings) -> None:
     """Builds the dependencies, runs the loops, and closes the pool on the way out."""
     deps = build_deps(settings)
     try:
-        ownership = load_ownership_for_worker()
-        await serve(settings, build(settings, ownership, deps))
+        await serve(settings, build(settings, deps))
     finally:
         await deps.db.close()
 
 
 def main() -> int:
     """Entry point of the worker process."""
-    settings = Settings()
-    if settings.jobs_mode != "worker":
-        structlog.get_logger("learny.worker").warning(
-            "worker not started: the jobs mode runs the consumers elsewhere",
-            jobsMode=settings.jobs_mode,
-        )
-        return 0
+    settings = load_settings()
     try:
         asyncio.run(run(settings))
     except KeyboardInterrupt:

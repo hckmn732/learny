@@ -5,11 +5,7 @@ import { parse } from 'yaml';
 import { DEPLOY_WORKFLOW, readText } from './lib.mjs';
 
 export const DEPLOY_JOBS = Object.freeze(['preview', 'production']);
-export const DEPLOY_SCRIPTS = Object.freeze([
-  'tools/deploy/check.mjs',
-  'tools/deploy/migrate.mjs',
-  'tools/deploy/sync-inngest.mjs',
-]);
+export const DEPLOY_SCRIPTS = Object.freeze(['tools/deploy/check.mjs', 'tools/deploy/migrate.mjs']);
 
 const ACTION_REF = /^[A-Za-z0-9_.-]+\/[A-Za-z0-9_.-]+@(?:v\d+|\d+\.\d+\.\d+|[0-9a-f]{40})$/;
 
@@ -172,7 +168,6 @@ export function validateDeployWorkflow(doc) {
       errors.push('La preview ne doit référencer aucun secret PRODUCTION_* (EF-2).');
     }
     checkOrder(preview, errors, 'preview', false);
-    checkApiFirst(preview, errors, 'preview');
     checkCheckout(preview, errors, 'preview');
   }
 
@@ -209,7 +204,6 @@ export function validateDeployWorkflow(doc) {
       errors.push('La production doit déployer Vercel avec --prod.');
     }
     checkOrder(production, errors, 'production', true);
-    checkApiFirst(production, errors, 'production');
     checkCheckout(production, errors, 'production');
   }
 
@@ -253,10 +247,9 @@ function checkOrder(job, errors, id, production) {
   const positions = {
     check: indexOfRun(job, 'tools/deploy/check.mjs'),
     migrate: indexOfRun(job, 'tools/deploy/migrate.mjs'),
-    sync: indexOfRun(job, 'tools/deploy/sync-inngest.mjs'),
-    apiVercel: runsOf(job).findIndex((run) => run.includes('vercel') && run.includes('apps/api')),
     webVercel: runsOf(job).findIndex(
-      (run) => run.includes('vercel') && !run.includes('apps/api') && run.includes('API_INTERNAL_URL'),
+      (run) =>
+        run.includes('vercel') && !run.includes('apps/api') && run.includes('API_INTERNAL_URL'),
     ),
     smoke: indexOfRun(job, 'curl --fail'),
   };
@@ -273,15 +266,6 @@ function checkOrder(job, errors, id, production) {
   if (positions.check >= 0 && positions.migrate >= 0 && positions.check > positions.migrate) {
     errors.push('Le contrôle de configuration doit précéder la migration.');
   }
-  if (positions.migrate >= 0 && positions.sync >= 0 && positions.migrate > positions.sync) {
-    errors.push('La migration doit précéder la synchronisation Inngest.');
-  }
-  if (positions.apiVercel >= 0 && positions.sync >= 0 && positions.apiVercel > positions.sync) {
-    errors.push('Le déploiement API doit précéder la synchronisation Inngest.');
-  }
-  if (positions.sync >= 0 && positions.webVercel >= 0 && positions.sync > positions.webVercel) {
-    errors.push('La synchronisation Inngest doit précéder le déploiement web.');
-  }
   if (positions.webVercel >= 0 && positions.smoke >= 0 && positions.webVercel > positions.smoke) {
     errors.push('Le déploiement web doit précéder le contrôle de fumée.');
   }
@@ -293,29 +277,10 @@ function checkOrder(job, errors, id, production) {
   }
 }
 
-function checkApiFirst(job, errors, id) {
-  const runs = runsOf(job);
-  const combined = `${runs.join('\n')}\n${jobRaw(job)}`;
-  if (!combined.includes('VERCEL_API_PROJECT_ID')) {
-    errors.push(`Le job ${id} doit exiger le projet Vercel learny-api.`);
-  }
-  if (!combined.includes('steps.deploy_api.outputs.url')) {
-    errors.push(`Le job ${id} doit transmettre l’URL de l’API au web.`);
-  }
-  if (!combined.includes('API_PROXY_SECRET')) {
-    errors.push(`Le job ${id} doit transmettre API_PROXY_SECRET au web.`);
-  }
-  if (!combined.includes('Le projet Vercel learny-api n’est pas configuré')) {
-    errors.push(`Le job ${id} doit échouer explicitement si learny-api n’est pas configuré.`);
-  }
-}
-
 export const DEPLOY_JOB_STEPS = Object.freeze({
   check: 'Vérifier la configuration',
   backup: 'Point de restauration',
   migrate: 'Migration Supabase',
-  sync: 'Synchronisation Inngest',
-  api: 'Déploiement API Vercel',
   web: 'Déploiement web Vercel',
   smoke: 'Contrôle de fumée',
 });

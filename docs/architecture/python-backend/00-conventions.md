@@ -22,25 +22,28 @@ uv.lock                        # committed; `uv sync --frozen` everywhere
 api/
   openapi.yaml                 # contract source (SPEC-2002), with x-learny extensions
   errors.json                  # error catalog: code -> {status, title, type} (generated once from TS)
-  events.schema.json           # 49 event payload schemas (generated once from TS)
-  ownership.yaml               # owner (ts|py) per operation, special route, consumer, cron (ADR-2005)
+  events.schema.json           # event payload schemas (generated once from TS)
+  inventory.json               # final inventory of the Python backend (SPEC-2302)
   contract-exceptions.yaml     # accepted contract deviations, each with an ADR id (normally empty)
   oracles/                     # parity scenarios + recordings (SPEC-2001)
 apps/api-py/
   pyproject.toml               # project "learny-api"
   src/learny_api/
     main.py                    # create_app(); `learny_api.main:app` for uvicorn
-    pipeline.py                # the generic contract pipeline (§6)
-    relay.py                   # transparent relay to Hono for ts-owned entries (spikes.md §A)
-    ownership.py               # loads/validates api/ownership.yaml (+ OWNERSHIP_OVERRIDES env)
+    pipeline.py                # the generic contract pipeline (§6), the only HTTP transport
     auth.py                    # HTTP identity resolution -> learny.identity.public
     sse.py                     # AI SDK UI message stream v1 writer
+    validate.py                # Zod-shaped validation errors over Pydantic models
+    contract_files.py          # location of api/ in a checkout and in the container
+    inline_jobs.py             # JOBS_MODE=inline middleware (tests)
+    guards/                    # origin, rate limit, idempotency
     generated/                 # NEVER edited by hand
       routes.py                # RouteSpec table from openapi.yaml
       models.py                # Pydantic models from openapi.yaml
-      events.py                # Pydantic models from events.schema.json
     handlers/                  # one module per context: identity.py, formation.py, ...
-    special/                   # health.py, openapi.py, auth_callback.py, unsubscribe.py, dev_*.py
+    special/                   # the routes outside the generic pipeline (§6): auth_callback.py,
+                               # sprints.py, dev_email.py, dev_events.py, dev_stripe.py, guards.py
+    dev_demos/                 # helpers of the development routes (SPEC-2207)
   tests/{unit,integration}/
 apps/worker-py/
   pyproject.toml               # project "learny-worker"
@@ -50,6 +53,8 @@ apps/worker-py/
     runner.py                  # claim / lease / execute / retry loop
     scheduler.py               # cron ticks under an advisory lock
     consumers.py               # CONSUMERS registry (one line per consumer)
+    drain.py                   # graceful shutdown
+    health.py                  # worker health file / port
     inline.py                  # JOBS_MODE=inline execution used by API in tests
   tests/{unit,integration}/
 packages-py/learny/
@@ -188,7 +193,8 @@ async def submit_attempt(call: Call) -> object:
 - Request bodies are read as bytes (1 MiB cap → 413), parsed with `json.loads`, validated with the generated model in **strict mode for JSON bodies**, lax for path/query (strings), producing a Zod-shaped `errors[]` through `locale_fr/validation.py`.
 - Output is validated against the generated output model; failure → 500 problem with `contract_violation` logged (same as TS).
 - `formations.access` is forced to 204 (TS quirk) — keep it.
-- FastAPI is used to host the app; routes are registered with `app.add_api_route(path, endpoint, methods=[m], include_in_schema=False)`. `/openapi.json` and `/api/v1/openapi.json` serve the contract file converted to JSON exactly like today.
+- FastAPI is used to host the app and nothing else; routes are registered with `app.add_api_route(path, endpoint, methods=[m], include_in_schema=False)` and `openapi_url=None`: no application serves the contract any more (the TypeScript backend did, SPEC-2302 removed it). `api/openapi.yaml` stays the source, the generated table and the SDK are its consumers.
+- `pipeline.install` refuses to start when an operation of `ROUTES` has no handler (`RuntimeError`), and `special.install` registers the routes outside the generic pipeline first (a development route must refuse before any authentication). `apps/api-py/tests/unit/test_route_coverage.py` pins both, with `api/inventory.json`.
 - Response headers: `x-request-id`, `cache-control: no-store` for user routes, `server-timing: app;dur=N`, merged cookies/extra headers, `x-served-by: learny-api`.
 
 ## 7. Data conventions
@@ -203,14 +209,25 @@ async def submit_attempt(call: Call) -> object:
 
 ## 8. Configuration
 
-`learny.shared.config.Settings(BaseSettings)` reads the **existing env var names** (no renaming): `DATABASE_URL`, `DATABASE_POOL_MAX`, `SUPABASE_URL`, `SUPABASE_ANON_KEY`, `SUPABASE_SERVICE_ROLE_KEY`, `SUPABASE_JWT_SECRET`, `SUPABASE_JWKS_URL`, `APP_ENV`, `APP_ENCRYPTION_KEY(_PREVIOUS)`, `API_PROXY_SECRET(_PREVIOUS)`, `TRUST_PROXY`, `ALLOWED_ORIGINS`, `NEXT_PUBLIC_APP_URL`, `RATE_LIMIT_MODE`, `RATE_LIMIT_IP_SECRET`, `CLOCK_FIXED_AT`, `LLM_MODE`, `JOBS_MODE`, `EMAIL_MODE`, `STRIPE_MODE`, `PUSH_MODE`, `VOYAGE_API_KEY`, `SEARCH_API_KEY`, `ENABLE_SDD_PAGES`, `SENTRY_DSN`… — the agent copies the full list from the TS config readers (`packages/config`, `packages/*/src/**/env*.ts`). New variables only for Python-specific needs, prefixed `PY_` (e.g. `PY_HONO_UPSTREAM_URL` for the facade, `OWNERSHIP_OVERRIDES`). Same production guards as TS (e.g. `LLM_MODE=mock`, `JOBS_MODE=inline`, `RATE_LIMIT_MODE=off` refused in production).
+`learny.shared.config.Settings(BaseSettings)` reads **only** `ENVIRONMENT_VARIABLES`, the closed list
+of ADR-2042: `APP_ENV`, `NEXT_PUBLIC_APP_URL`, `DATABASE_URL`, `NEXT_PUBLIC_SUPABASE_URL`,
+`NEXT_PUBLIC_SUPABASE_ANON_KEY`, `SUPABASE_SERVICE_ROLE_KEY`, `SUPABASE_JWT_SECRET`,
+`APP_ENCRYPTION_KEY(_PREVIOUS)`, `API_PROXY_SECRET(_PREVIOUS)`, `EMAIL_LINK_SECRET`, `EMAIL_FROM`,
+`RESEND_API_KEY`, `VAPID_PRIVATE_KEY`, `STRIPE_SECRET_KEY`, `STRIPE_WEBHOOK_SECRET`,
+`STRIPE_PRICE_ID`, `VOYAGE_API_KEY`, `SEARCH_API_KEY`, plus the optional `SMTP_HOST`,
+`ALLOW_LOCAL_MODELS`, `ENABLE_SDD_PAGES`, `CLOCK_FIXED_AT`, `GIT_COMMIT`, `APP_VERSION` and the
+standard `CI`/`PORT`. The coexistence variables (`PY_HONO_UPSTREAM_URL`, `OWNERSHIP_OVERRIDES`) are
+gone with the relay (SPEC-2302). Same production guards as before (`LLM_MODE=mock`,
+`JOBS_MODE=inline`, `RATE_LIMIT_MODE=off` refused in production).
+
+**Amended by ADR-2042 (2026-11-23):** `Settings` reads only `ENVIRONMENT_VARIABLES` (18 contract variables plus optional rotation, SMTP target, local models, test/QA switches and build metadata). The Supabase names are the public ones (`NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY`); `LLM_MODE`, `EMAIL_MODE`, `PUSH_MODE`, `JOBS_MODE`, `RATE_LIMIT_MODE` derive from `APP_ENV`/`CLOCK_FIXED_AT`, `STRIPE_MODE` from the secret key, `RATE_LIMIT_IP_SECRET` from `APP_ENCRYPTION_KEY`, the VAPID public key and subject from `VAPID_PRIVATE_KEY`/`EMAIL_FROM`; `PY_*` tuning, pool size, SMTP port, JWT audience/JWKS/issuer, legal versions and `TRUST_PROXY`/`ALLOWED_ORIGINS` are constants. No new variable without amending ADR-2042.
 
 ## 9. Logging and observability
 
 - structlog JSON to stdout; one access line per request with the **same field names as the TS request log** (copy from `packages/http/src/route-handler.ts`), `request_id` bound in contextvars.
 - Never log tokens, cookies, API keys, prompts, model outputs or personal data (redaction processor with the same key list as TS).
 - Sentry initialised from `SENTRY_DSN`, same environment/release tags as `apps/api/src/sentry.ts`.
-- Health: `/health` (always 200 `{status, version, commit}`) and `/api/v1/health` (DB probe 2 s, 503 when degraded) with identical bodies. Worker exposes `/health/live` and `/health/ready` on `PY_WORKER_HEALTH_PORT` for Coolify only.
+- Health: `/health` (always 200 `{status, version, commit}`) and `/api/v1/health` (DB probe 2 s, 503 when degraded) with identical bodies. Worker exposes `/health/live` and `/health/ready` on the standard `PORT` for Coolify only (ADR-2042).
 
 ## 10. Testing conventions
 

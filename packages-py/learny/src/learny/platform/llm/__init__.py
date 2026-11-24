@@ -60,6 +60,7 @@ from learny.platform.llm.qualification import (
     parse_report,
     qualification_registry,
 )
+from learny.platform.llm.resolve import ResolvedModel, resolve_task_model
 from learny.platform.llm.tasks import (
     AI_TASKS,
     STREAMING_OUTPUT_THRESHOLD,
@@ -109,6 +110,7 @@ __all__ = [
     "ProviderRegion",
     "QualificationReport",
     "RegisteredFixture",
+    "ResolvedModel",
     "StepFinishReason",
     "StepInput",
     "StepOutput",
@@ -145,6 +147,7 @@ __all__ = [
     "parse_report",
     "provider_region",
     "qualification_registry",
+    "resolve_task_model",
     "same_fingerprint",
     "select_fixture",
     "strip_markers",

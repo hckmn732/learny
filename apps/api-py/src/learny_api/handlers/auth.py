@@ -1,4 +1,4 @@
-"""HTTP handlers of the authentication operations (SPEC-2207, port of `implementations/auth.ts`).
+"""HTTP handlers of the authentication operations (SPEC-2207).
 
 One `@handler` per operation, no logic: the request-scoped values come from the URL and the
 settings, and the use case appends its `Set-Cookie` headers through the pipeline's header bag.

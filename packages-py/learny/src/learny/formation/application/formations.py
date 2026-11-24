@@ -1,8 +1,8 @@
 """Formation management use cases (SPEC-615 ET-1, SPEC-618 EF-1 to EF-3; BR-FOR-10, BR-FOR-15).
 
-Port of `formations/{access,archive,pause,switch-current,state}.ts`. Every query runs on the
-learner's RLS transaction, so a formation of another owner is indistinguishable from a missing one,
-and every transition is serialised by a per-learner advisory lock.
+Every query runs on the learner's RLS transaction, so a formation of another owner is
+indistinguishable from a missing one, and every transition is serialised by a per-learner advisory
+lock.
 """
 
 from collections.abc import Mapping, Sequence

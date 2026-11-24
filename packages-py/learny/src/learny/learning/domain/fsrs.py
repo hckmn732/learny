@@ -273,7 +273,7 @@ def _utc_days(start_ms: int, end_ms: int) -> int:
 
 
 class _Scheduler:
-    """One review of one card at one instant: the port of `AbstractScheduler` + `BasicScheduler`."""
+    """One review of one card at one instant: the scheduling ladder of the card."""
 
     def __init__(self, card: SerializedFsrsCard, now_ms: int, params: FsrsParams) -> None:
         self.params = params

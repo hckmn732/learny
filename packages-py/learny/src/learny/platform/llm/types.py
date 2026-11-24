@@ -1,4 +1,4 @@
-"""Public value types of `learny.platform.llm` (SPEC-2201, port of `packages/llm/src/types.ts`)."""
+"""Public value types of `learny.platform.llm` (SPEC-2201)."""
 
 from dataclasses import dataclass, field
 from typing import Any, Literal

@@ -1,12 +1,11 @@
 """Personal AI keys and the " Modeles d'IA " tab (SPEC-2204).
 
-Ports of `packages/services/src/ai/credentials-service.ts`, `packages/services/src/ai/qualify-model.ts`
-(route-reachable part) and `packages/services/src/parametres-modeles-d-ia.ts`: one function per
-service function, `(deps, actor, ...)`, explicit ports and no framework. A plaintext key never
-leaves the server: creation encrypts it with the BYOK envelope of `learny.platform.llm.credentials`,
-the DTO only carries the mask and the fingerprint, and the qualification probes go through the
-injected gateway (simulated in tests, ADR-0048). Every read and write of a learner's row runs under
-RLS: another learner's identifier is a 404, never a leak (CL-1).
+Ports (route-reachable part): one function per service function, `(deps, actor,...)`, explicit ports
+and no framework. A plaintext key never leaves the server: creation encrypts it with the BYOK
+envelope of `learny.platform.llm.credentials`, the DTO only carries the mask and the fingerprint,
+and the qualification probes go through the injected gateway (simulated in tests, ADR-0048). Every
+read and write of a learner's row runs under RLS: another learner's identifier is a 404, never a
+leak (CL-1).
 """
 
 import os
@@ -144,6 +143,7 @@ async def discover_credential_models(
         provider,
         api_key=api_key if isinstance(api_key, str) else None,
         base_url=base_url if isinstance(base_url, str) else None,
+        mode=deps.settings.llm_mode,
     )
     if not model_ids:
         raise AppError("AI_PROVIDER_ERROR", texts.PROVIDER_NO_MODELS, status=502)

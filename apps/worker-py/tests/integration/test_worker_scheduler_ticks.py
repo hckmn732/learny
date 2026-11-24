@@ -15,8 +15,7 @@ from factories.db_support import rolled_back
 from factories.engagement_deps import EngagementTransactions, engagement_deps
 from factories.identity_support import create_user
 from learny.shared.db.uow import Database
-from learny.shared.ownership import Owner
-from learny_worker.scheduler import CRON_HOURLY, CRON_NIGHTLY, Scheduler
+from learny_worker.scheduler import Scheduler
 from sqlalchemy import text
 
 pytestmark = pytest.mark.spec("SPEC-2207")
@@ -43,11 +42,6 @@ class LockableTransactions(EngagementTransactions):
         self.engine = engine
 
 
-class Ownership:
-    def __init__(self, crons: dict[str, Owner]) -> None:
-        self.crons = crons
-
-
 def lockable_deps(tx: Any, engine: Any, now: datetime) -> Any:
     deps = engagement_deps(tx, now=now)
     deps.db = LockableTransactions(tx, engine)
@@ -63,7 +57,6 @@ async def active_learner(tx: Any, first_name: str) -> str:
 def scheduler(tx: Any, engine: Any, now: datetime = TICK, *, poll: float = 60.0) -> Scheduler:
     return Scheduler(
         lockable_deps(tx, engine, now),
-        Ownership({CRON_HOURLY: "py", CRON_NIGHTLY: "py"}),
         retry_interval_s=0.05,
         poll_interval_s=poll,
     )

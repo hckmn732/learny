@@ -1,14 +1,12 @@
 """Durable correction of one submitted validation attempt (SPEC-611 ET-8, BR-QUI-04, CL-6).
 
-Port of `runQuizGrade` (`packages/services/src/quiz/submit.ts`) and of the `quiz-grade` function:
-the open answers are corrected first, then the score and the verdict are computed, then the
-learning result is applied and `quiz/graded` is queued. Every step is idempotent, so a replayed
-delivery of `quiz/submitted` never produces a second event: the attempt status is the state guard
-and the event identifier is `quiz-graded:<attemptId>`.
+The open answers are corrected first, then the score and the verdict are computed, then the learning
+result is applied and `quiz/graded` is queued. Every step is idempotent, so a replayed delivery of
+`quiz/submitted` never produces a second event: the attempt status is the state guard and the event
+identifier is `quiz-graded:<attemptId>`.
 
 The handler is a thin orchestrator: every rule stays in the step it delegates to
-(`grade_open_answers`, `finalize_attempt`, `apply_learning_result`), exactly like the TypeScript
-function that only chains the services.
+(`grade_open_answers`, `finalize_attempt`, `apply_learning_result`).
 """
 
 from collections.abc import Mapping

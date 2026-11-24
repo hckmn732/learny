@@ -1,9 +1,4 @@
-"""[SPEC-2207] Health probe: safe build metadata, bounded database probe and answer document.
-
-The cases replay the ones of `packages/api-routes/src/deps/health.test.ts`: every value falls back
-to a safe default, a failure is a status and never an error message, and the status is 503 only
-when the database is unavailable.
-"""
+"""[SPEC-2207] Health probe: safe build metadata, bounded database probe and answer document."""
 
 import asyncio
 

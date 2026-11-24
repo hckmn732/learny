@@ -1,1 +1,1 @@
-"""Read-only aggregations across contexts (home, header, sidebar, search)."""
+"""Read-only aggregations across contexts: the header, the sidebar and the home screen."""

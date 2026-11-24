@@ -1,27 +1,25 @@
 """[SPEC-2202] Prompt and mock fixture of the remediation plan (SPEC-612 ET-4, ADR-0048).
 
 The structured plan is produced by `learny.platform.llm` with the same task, prompt identifier and
-mock fixture as the TypeScript service; the simulated model cannot know the runtime notion
-identifiers, so an unknown identifier is aligned on the input order. The selection of the questions
-follows the nature of the gap and never replays a seen fingerprint.
+mock fixture; the simulated model cannot know the runtime notion identifiers, so an unknown
+identifier is aligned on the input order. The selection of the questions follows the nature of the
+gap and never replays a seen fingerprint.
 """
 
 import json
-from pathlib import Path
 from types import SimpleNamespace
 from typing import Any, cast
 
 import pytest
 from learny.assessments.application import remediation as service
 from learny.platform.llm.gateway import MockGateway
-from learny.platform.llm.mock import load_registry
+from learny.platform.llm.mock import fixtures_directory, load_registry
 from learny.shared.locale_fr import assessments as texts
 from pydantic import ValidationError
 
 pytestmark = pytest.mark.spec("SPEC-2202")
 
-ROOT = Path(__file__).resolve().parents[5]
-FIXTURE = ROOT / "packages" / "llm" / "fixtures" / "gaps" / "remediation-plan-sap-m3.json"
+FIXTURE = fixtures_directory() / "gaps" / "remediation-plan-sap-m3.json"
 
 NOTION_A = "11111111-1111-4111-8111-111111111111"
 NOTION_B = "22222222-2222-4222-8222-222222222222"

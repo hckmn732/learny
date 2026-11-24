@@ -25,7 +25,7 @@ DELETE_AUTH_USER = text("delete from auth.users where email = :email")
 
 
 def sqlstate_of(error: BaseException) -> str:
-    """The SQLSTATE of a refused statement, or `unknown` (port of `failureOf().code`)."""
+    """The SQLSTATE of a refused statement, or `unknown`."""
     current: BaseException | None = error
     for _ in range(8):
         if current is None:
@@ -39,7 +39,7 @@ def sqlstate_of(error: BaseException) -> str:
 
 
 def failure_message(error: BaseException) -> str:
-    """The innermost message of a refused statement (port of `failureOf().message`)."""
+    """The innermost message of a refused statement."""
     messages: list[str] = []
     current: BaseException | None = error
     for _ in range(8):
@@ -61,7 +61,7 @@ async def probe(
     """Runs one statement inside a savepoint and returns its SQLSTATE and message.
 
     The savepoint is always rolled back on failure, so the surrounding transaction keeps going and
-    the demonstration can measure several limits in a row (port of `attempt`).
+    the demonstration can measure several limits in a row.
     """
     await conn.execute(text(f"savepoint {name}"))
     try:
@@ -126,7 +126,7 @@ async def rolled_back(deps: Any) -> AsyncIterator[Tx]:
 
     The demonstrations build a fixture, measure it and show the result; nothing they write may
     survive the request. The transaction is opened on the shared engine and rolled back here, so a
-    page never mutates the database, exactly like the TypeScript helper.
+    page never mutates the database.
     """
     async with deps.db.engine.connect() as connection:
         transaction = await connection.begin()

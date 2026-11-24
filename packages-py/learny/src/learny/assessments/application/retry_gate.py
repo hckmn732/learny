@@ -1,10 +1,9 @@
 """Delay and remediation gate of a new validation attempt (SPEC-612 ET-5, SPEC-715 EF-5).
 
-Port of `packages/services/src/quiz/retry-gate.ts` and of the `checkRetryAllowed` guard. The
-authoritative values come from the latest applied `remediation_ready` action of the module, whose
-payload freezes the delay and the mode of the failed attempt; without an action the settings row and
-the latest failed attempt keep the documented fallback. The refusal detail is rendered in the
-learner zone, like `formatUserDate`.
+The authoritative values come from the latest applied `remediation_ready` action of the module,
+whose payload freezes the delay and the mode of the failed attempt; without an action the settings
+row and the latest failed attempt keep the documented fallback. The refusal detail is rendered in
+the learner zone, like `formatUserDate`.
 """
 
 from collections.abc import Mapping

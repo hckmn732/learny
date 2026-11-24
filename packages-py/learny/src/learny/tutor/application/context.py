@@ -1,8 +1,8 @@
 """Reads and assembles the context sent to the tutor (SPEC-610 ET-4, BR-TUT-02, ADR-0178).
 
-Port of `buildContext` in `packages/services/src/tutor-chat/context.ts`: the values are re-read under
-the caller's RLS client and handed to the pure `assemble_context` of the domain. At most six SQL
-queries per build, all inside one short read transaction that is closed before any model call.
+The values are re-read under the caller's RLS client and handed to the pure `assemble_context` of
+the domain. At most six SQL queries per build, all inside one short read transaction that is closed
+before any model call.
 """
 
 import json

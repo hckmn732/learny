@@ -1,8 +1,7 @@
 """Code grading of a categorization (SPEC-502 ET-3, BR-MEM-05).
 
 An item placed in the category of another notion becomes a confusion (CA-2); an unknown or
-notion-less category only an error. Pure port of
-`packages/bricks/src/types/categorization/grade.ts`.
+notion-less category only an error.
 """
 
 from collections.abc import Mapping

@@ -1,8 +1,7 @@
 """[SPEC-2202] Registry and architecture of the brick contract (SPEC-501 ET-1).
 
-Ported from `packages/bricks/src/registry.test.ts` and `architecture.test.ts`: the thirteen types
-all have a definition, the grading mode is fixed by BR-BRI-08, and no pure module imports a model
-SDK, a database driver or a web framework (CA-7).
+The thirteen types all have a definition, the grading mode is fixed by BR-BRI-08, and no pure module
+imports a model SDK, a database driver or a web framework (CA-7).
 """
 
 import ast
@@ -130,4 +129,4 @@ def test_the_domain_reads_no_clock_and_no_global_randomness() -> None:
 
 def test_the_domain_tree_is_complete() -> None:
     names = {file.stem for file in (DOMAIN / "bricks").glob("*.py")}
-    assert {"registry", "schema", "checks", "references", "validate", "public", "grade"} <= names
+    assert {"registry", "schema", "checks", "references", "validate", "public_payload", "grade"} <= names

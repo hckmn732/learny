@@ -1,10 +1,10 @@
 """Deferred correction of the open answers of a validation attempt (SPEC-611 ET-8, CL-6).
 
-Port of `packages/services/src/quiz/grade-open.ts`: one structured tutor call per pending open
-answer, three attempts per answer (ADR-0017), then the answer stays pending and the learner is
-notified. The learner text and the expected elements are escaped before they enter the prompt, so
-they can never define an instruction. The grader is an injected port: the integration suite passes
-a deterministic one and the default reads the committed fixture (`LLM_MODE=mock`).
+One structured tutor call per pending open answer, three attempts per answer (ADR-0017), then the
+answer stays pending and the learner is notified. The learner text and the expected elements are
+escaped before they enter the prompt, so they can never define an instruction. The grader is an
+injected port: the integration suite passes a deterministic one and the default reads the committed
+fixture (`LLM_MODE=mock`).
 """
 
 import json
@@ -20,6 +20,7 @@ from learny.assessments.domain.bricks.schema import parse_payload
 from learny.assessments.infrastructure import queries
 from learny.engagement import public as engagement
 from learny.identity.domain.actor import Actor
+from learny.platform.llm.resolve import resolve_task_model
 from learny.platform.llm.tasks import AiTask
 from learny.platform.llm.types import StepInput, SystemPart
 from learny.shared.errors import AppError
@@ -83,7 +84,7 @@ def escape_data(value: str) -> str:
 
 
 def prompt_of(item: Mapping[str, Any], response: str) -> str:
-    """The user prompt of one answer, verbatim from `promptOf` in TypeScript."""
+    """The user prompt of one answer."""
     payload, _ = parse_payload("open_question", item.get("payload"))
     expected = [] if payload is None else list(payload["expectedElements"])
     criteria = [] if payload is None else list(payload["criteria"])
@@ -133,6 +134,10 @@ async def default_open_answer_grader(
     item: Mapping[str, Any],
 ) -> OpenGrade:
     """The structured tutor correction through the gateway (`LLM_MODE=mock` in tests)."""
+    # SPEC-504 / BR-IA-02: the platform provides no model, so the job resolves the learner's own
+    # qualified `tutor` model first; without it the correction stays pending (CL-6).
+    async with deps.db.service_tx() as tx:
+        await resolve_task_model(tx, str(context.get("userId") or ""), TUTOR_TASK)
     generated = await deps.llm.object(
         TUTOR_TASK,
         texts.OPEN_GRADE_PROMPT_ID,
@@ -210,6 +215,7 @@ async def grade_open_answers(
     for answer in open_answers:
         item = items[answer["position"] - 1]
         incoming = {
+            "userId": user_id,
             "brickVersionId": str(answer["brick_version_id"]),
             "notionLabel": item.get("notionLabel") or "Notion",
             "type": "open_question",

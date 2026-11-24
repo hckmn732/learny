@@ -1,4 +1,4 @@
-"""`run_at` of the exam deadline (SPEC-2207, port of `exam-deadline.ts`).
+"""`run_at` of the exam deadline (SPEC-2207).
 
 The consumer runs at `deadlineAt + 5 s`; a deadline already passed runs immediately, so a late
 delivery never waits for a scheduled instant in the past.

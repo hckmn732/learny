@@ -41,12 +41,15 @@ const DESKTOP = { ...devices['Desktop Chrome'], ...COMMON, viewport: { width: 14
 // Shared worktrees may already run a server on the default port: allow an isolated run.
 const PORT = Number(process.env.PLAYWRIGHT_PORT ?? 3100);
 const BASE_URL = `http://127.0.0.1:${String(PORT)}`;
-// SPEC-2003 / ADR-2018: the Python facade sits on PORT+1 and relays to Hono on PORT+12, because
-// the SPEC-006 end-to-end test starts its own Next server on PORT+2 and that port cannot change.
+// SPEC-2003 / ADR-2018: the Python facade sits on PORT+1, because the SPEC-006 end-to-end test
+// starts its own Next server on PORT+2 and that port cannot change.
 const FACADE_PORT = PORT + 1;
-const API_PORT = PORT + 12;
-const HONO_URL = `http://127.0.0.1:${String(API_PORT)}`;
 const API_INTERNAL_URL = `http://127.0.0.1:${String(FACADE_PORT)}`;
+// The SPEC-301 test starts a second web server from its own process: the child inherits
+// `process.env`, so the relay target and the proxy secret must be exported here, not only in
+// the `webServer` block (the health route relays to the API since SPEC-1203).
+process.env.API_INTERNAL_URL ??= API_INTERNAL_URL;
+process.env.API_PROXY_SECRET ??= 'learny-test-only-api-proxy-secret-value';
 // SPEC-2102: the Python worker is the fourth process of the stack; its health server proves it is
 // alive before the end-to-end test emits an event. A dedicated port, like the other three.
 const WORKER_PORT = PORT + 3;
@@ -153,51 +156,18 @@ export default defineConfig({
         ...TEST_SERVER_ENV,
         DATABASE_URL:
           process.env.DATABASE_URL ?? 'postgresql://postgres:postgres@127.0.0.1:54322/postgres',
-        PY_WORKER_HEALTH_PORT: String(WORKER_PORT),
-        // The Python settings read SUPABASE_URL / SUPABASE_ANON_KEY, mapped from the public names
-        // exactly like docker/compose.coolify-py.yml (Storage, Auth admin and export jobs).
-        SUPABASE_URL: process.env.NEXT_PUBLIC_SUPABASE_URL ?? 'http://127.0.0.1:54321',
-        SUPABASE_ANON_KEY: process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ?? '',
-        SUPABASE_SERVICE_ROLE_KEY: process.env.SUPABASE_SERVICE_ROLE_KEY ?? '',
-        SUPABASE_JWT_SECRET: process.env.SUPABASE_JWT_SECRET ?? '',
-        JOBS_MODE: 'worker',
-        APP_ENV: 'test',
-      },
-    },
-    {
-      // The upstream must be healthy before the facade is probed: Playwright starts
-      // the servers in this order and waits for each readiness URL in turn (SPEC-2003).
-      command: 'pnpm --filter @learny/api dev',
-      url: `${HONO_URL}/health`,
-      reuseExistingServer:
-        process.env.PLAYWRIGHT_REUSE_SERVER === '1' ||
-        (!process.env.CI && process.env.PLAYWRIGHT_REUSE_SERVER !== '0'),
-      timeout: 120000,
-      env: {
-        ...TEST_SERVER_ENV,
-        // Playwright replaces the environment of the command: the database and the Supabase keys
-        // must be repeated here or the health probe reports `degraded` (SPEC-2003).
-        DATABASE_URL:
-          process.env.DATABASE_URL ?? 'postgresql://postgres:postgres@127.0.0.1:54322/postgres',
+        // ADR-2042: the worker health server listens on the standard PORT.
+        PORT: String(WORKER_PORT),
+        // The Python settings read the public Supabase names, like the web (ADR-2042).
         NEXT_PUBLIC_SUPABASE_URL: process.env.NEXT_PUBLIC_SUPABASE_URL ?? 'http://127.0.0.1:54321',
         NEXT_PUBLIC_SUPABASE_ANON_KEY: process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ?? '',
         SUPABASE_SERVICE_ROLE_KEY: process.env.SUPABASE_SERVICE_ROLE_KEY ?? '',
         SUPABASE_JWT_SECRET: process.env.SUPABASE_JWT_SECRET ?? '',
-        PORT: String(API_PORT),
-        API_PORT: String(API_PORT),
-        APP_ENCRYPTION_KEY: TEST_ENCRYPTION_KEY,
-        ENABLE_SDD_PAGES: 'true',
         APP_ENV: 'test',
-        API_PROXY_SECRET: 'learny-test-only-api-proxy-secret-value',
-        // SPEC-2207: the Python worker runs every consumer and cron of the table, so Hono no
-        // longer mounts `/api/inngest` (ADR-2014, flip procedure step 2 of the P22 plan).
-        LEARNY_API_ROLE: 'api',
-        JOBS_MODE: 'inline',
-        TRUST_PROXY: 'true',
       },
     },
     {
-      // SPEC-2003: the web only talks to the facade; every operation is still relayed to Hono.
+      // SPEC-2302: the web only talks to the facade, which serves the whole contract.
       command: `uv run uvicorn learny_api.main:app --host 127.0.0.1 --port ${String(FACADE_PORT)}`,
       url: `${API_INTERNAL_URL}/health`,
       cwd: ROOT,
@@ -206,33 +176,26 @@ export default defineConfig({
       env: {
         ...TEST_SERVER_ENV,
         // SPEC-2204: BYOK encryption is served by the Python facade, which reads the keyring at
-        // request time; it receives the same test-only key as the web and Hono.
+        // request time; it receives the same test-only key as the web.
         APP_ENCRYPTION_KEY: TEST_ENCRYPTION_KEY,
-        PY_HONO_UPSTREAM_URL: HONO_URL,
         // The facade health probes the database only when DATABASE_URL is set explicitly.
         DATABASE_URL:
           process.env.DATABASE_URL ?? 'postgresql://postgres:postgres@127.0.0.1:54322/postgres',
-        // The Python settings read SUPABASE_URL / SUPABASE_ANON_KEY, mapped from the public names
-        // exactly like docker/compose.coolify-py.yml (Storage, Auth admin and export jobs).
-        SUPABASE_URL: process.env.NEXT_PUBLIC_SUPABASE_URL ?? 'http://127.0.0.1:54321',
-        SUPABASE_ANON_KEY: process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ?? '',
+        // The Python settings read the public Supabase names, like the web (ADR-2042).
+        NEXT_PUBLIC_SUPABASE_URL: process.env.NEXT_PUBLIC_SUPABASE_URL ?? 'http://127.0.0.1:54321',
+        NEXT_PUBLIC_SUPABASE_ANON_KEY: process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ?? '',
         SUPABASE_SERVICE_ROLE_KEY: process.env.SUPABASE_SERVICE_ROLE_KEY ?? '',
         SUPABASE_JWT_SECRET: process.env.SUPABASE_JWT_SECRET ?? '',
+        // ADR-2042: APP_ENV=test with the frozen clock of TEST_SERVER_ENV derives the simulated
+        // Stripe gateway (SPEC-2206), the inline consumers of the facade (P21 plan step 6) and the
+        // limiter switched off (ADR-0336); the relay secret makes TRUST_PROXY unnecessary.
         APP_ENV: 'test',
         // SPEC-2201: the facade serves the operations owned by `py`, so it must trust the web
-        // relay exactly like Hono does (SPEC-208 origin guard) — same secret, same forwarded host.
+        // relay (SPEC-208 origin guard) — same secret, same forwarded host.
         API_PROXY_SECRET: 'learny-test-only-api-proxy-secret-value',
-        TRUST_PROXY: 'true',
-        // SPEC-2206: the billing routes owned by `py` resolve the simulated Stripe gateway
-        // explicitly. `STRIPE_MODE=mock` needs no key and opens no socket (`build_stripe_gateway`);
-        // the webhook tolerance and the error codes are those of ADR-2031.
-        STRIPE_MODE: 'mock',
         // SPEC-2207: the demonstration routes are served by the Python facade, so it needs the
-        // same development flag as the web and Hono or `devOnly` answers 404 to every page.
+        // same development flag as the web or `devOnly` answers 404 to every page.
         ENABLE_SDD_PAGES: 'true',
-        // P21 plan step 6: the facade runs the consumers of the events a request commits before it
-        // answers, as Hono's inline jobs did; the worker still runs the crons and anything else.
-        JOBS_MODE: 'inline',
       },
     },
     {

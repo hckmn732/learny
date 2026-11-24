@@ -10,7 +10,7 @@ import { fileURLToPath } from 'node:url';
 
 import type { Page } from '@playwright/test';
 
-import { closeDb, serviceDb, sql } from '@learny/db';
+import { closeDb, serviceDb, sql } from '@learny/testing/db';
 import {
   DEMO_USERS,
   demoChapterId,
@@ -18,7 +18,7 @@ import {
   demoId,
   demoModuleId,
   demoUserId,
-} from '@learny/db/seed/fixtures';
+} from '@learny/testing/db-factories';
 import { expect, restoreDemoData, test } from '@learny/testing/playwright';
 import { createDemoSession } from '@learny/testing/supabase';
 import {

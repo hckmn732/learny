@@ -1,9 +1,6 @@
 """SQL of the identity context (SPEC-2201).
 
-Every statement is copied from the TypeScript service it replaces (`packages/services/src/me.ts`,
-`header.ts`, `sidebar.ts`, `onboarding/*.ts`, `legal/accept.ts`, `parametres-onglets-et-profil.ts`,
-`ai/qualify-model.ts`): same tables, same columns, same `order by`, and `${x}` placeholders become
-bound `:x` parameters. Nothing here reads the clock: an instant is always a parameter.
+Nothing here reads the clock: an instant is always a parameter.
 """
 
 import json

@@ -1,6 +1,6 @@
 // Sessions des 50 utilisateurs de charge (SPEC-804 EF-4, ET-3). Lancé par `run-k6.mjs` avec `tsx` :
 // stdout reçoit un cookie et l'identifiant de formation valide pour chaque utilisateur.
-import { PERF_CREDENTIALS } from '../../packages/db/src/seed/perf-credentials';
+import { PERF_CREDENTIALS } from '../../packages/testing/src/db/seed/perf-credentials';
 import { createDemoSession } from '../../packages/testing/src/supabase';
 
 import { perfFormationId, perfUserId } from './perf-identifiers';

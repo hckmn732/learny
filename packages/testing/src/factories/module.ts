@@ -1,5 +1,5 @@
 // Module factory with its chapters (SPEC-115 EF-6). Positions are contiguous per formation.
-import { sql, type DbTx } from '@learny/db';
+import { sql, type DbTx } from '../db';
 
 import { assertFormationAccess, insert, type IdRow } from './helpers';
 

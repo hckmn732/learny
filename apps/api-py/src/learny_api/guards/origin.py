@@ -1,9 +1,8 @@
 """Origin check of the mutations of /api/v1 (SPEC-2101 step 3, ADR-0213).
 
-Port of `packages/services/src/security/origin-guard.ts` and of the trusted-proxy helpers of
-`packages/http/src/security.ts`. A mutation must come from the application or from an origin listed
-in `ALLOWED_ORIGINS`; origins are compared exactly, after normalisation, with no wildcard and no
-suffix match. Forwarded headers are trusted only through the relay secret, verified in constant time.
+A mutation must come from the application or from an origin listed in `ALLOWED_ORIGINS`; origins are
+compared exactly, after normalisation, with no wildcard and no suffix match. Forwarded headers are
+trusted only through the relay secret, verified in constant time.
 """
 
 import hashlib

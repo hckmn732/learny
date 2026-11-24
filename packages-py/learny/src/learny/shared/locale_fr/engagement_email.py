@@ -1,5 +1,5 @@
-# packages/notifications/emails/*.tsx et src/templates/email-props.ts — textes des gabarits e-mail,
-# copiés au mot près. Ce module est la seule source des libellés du canal e-mail.
+# French texts of the e-mail templates and of their props, copied verbatim. This module is the
+# only source of the labels of the e-mail channel.
 CTA_LABEL = "Ouvrir"
 DATE_TODAY = "aujourd’hui"
 WEEK_THIS = "cette semaine"
@@ -135,7 +135,7 @@ EMAIL_FOOTER = {
     "tu": "Tu reçois cet e-mail parce que tu as un compte Learny.",
 }
 
-# packages/notifications/src/email/{config,transports}*.ts — service messages of the channel.
+# service messages of the channel.
 LINK_SECRET_REQUIRED = "Configuration e-mail invalide : EMAIL_LINK_SECRET est obligatoire."
 RESEND_KEY_REQUIRED = "Configuration e-mail invalide : EMAIL_MODE=resend exige RESEND_API_KEY."
 SMTP_FAILED = "Envoi SMTP impossible."
@@ -145,8 +145,8 @@ ACTIVITY_TIME_FALLBACK = "00:00"
 ACTIVITY_TITLE_FALLBACK = "Activité"
 TOKEN_INVALID_USER = "Identifiant utilisateur invalide pour le jeton."
 
-# packages/notifications/emails/{deletion-scheduled,deletion-completed,export-ready}.tsx - the
-# transactional e-mails of SPEC-211, ported by SPEC-2206. Two tones, no unsubscribe link (ADR-0032).
+# the
+# transactional e-mails of SPEC-211, SPEC-2206. Two tones, no unsubscribe link (ADR-0032).
 DELETION_SCHEDULED_SUBJECT = {
     "vous": "Suppression de votre compte programmée le {scheduledLabel}",
     "tu": "Suppression de ton compte programmée le {scheduledLabel}",

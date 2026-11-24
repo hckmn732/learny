@@ -1,9 +1,7 @@
 """Thin GoTrue client (SPEC-2101 step 2, SPEC-202 ET-2).
 
-One httpx client for the Supabase Auth endpoints the TypeScript auth routes use: magic link,
-password sign-up and sign-in, resend, logout, user and the admin endpoints. No Supabase Python SDK
-(00-conventions section 5). Errors are translated by `map_gotrue_error`, exactly like
-`packages/services/src/auth/gotrue-errors.ts`.
+No Supabase Python SDK (00-conventions section 5). Errors are translated by `map_gotrue_error`,
+exactly.
 """
 
 import re
@@ -175,11 +173,7 @@ class GoTrueClient:
     async def sign_up(
         self, email: str, password: str, data: dict[str, Any]
     ) -> tuple[GoTrueUser | None, GoTrueSession | None]:
-        """Creates an account; the caller maps `user_already_exists` to the same answer.
-
-        A sign-up that GoTrue answers with a session (confirmations disabled) also yields that
-        session, because the cookie of the TypeScript client is then written as well.
-        """
+        """Creates an account; the caller maps `user_already_exists` to the same answer."""
         payload = await self._send(
             "POST", "/auth/v1/signup", body={"email": email, "password": password, "data": data}
         )

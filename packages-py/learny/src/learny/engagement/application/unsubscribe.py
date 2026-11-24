@@ -1,4 +1,4 @@
-"""One-click unsubscribe (SPEC-2205, ported from `packages/services/src/email/unsubscribe.ts`).
+"""One-click unsubscribe (SPEC-2205).
 
 The only public write of the API: it accepts the signed token alone, updates
 `notification_settings.channel_email` with the owner role (authorised usage) and never reveals the

@@ -1,11 +1,9 @@
 """[SPEC-2207] The two tasks of the scheduler: hourly fan-out and nightly tick (CA-1, CL-2)."""
 
-from dataclasses import dataclass, field
 from datetime import UTC, datetime
 from typing import Any
 
 import pytest
-from learny.shared.ownership import Owner
 from learny_worker.scheduler import (
     CRON_HOURLY,
     CRON_NIGHTLY,
@@ -20,12 +18,6 @@ USER = "0b6f2a7e-9a3c-4c1c-8a55-3d1f6f1d2a01"
 USER_2 = "3f1c8a5e-5d0e-4a0b-9a6e-7b2c4d9e1f02"
 
 
-@dataclass
-class FakeOwnership:
-    crons: dict[str, Owner] = field(default_factory=dict)
-    consumers: dict[str, Owner] = field(default_factory=dict)
-
-
 def at(hour: int, minute: int, second: int = 0) -> datetime:
     return datetime(2026, 11, 11, hour, minute, second, tzinfo=UTC)
 
@@ -36,7 +28,6 @@ def learner(user_id: str, timezone: str = "Europe/Paris") -> dict[str, Any]:
 
 def build(
     *outcomes: Any,
-    crons: dict[str, Owner] | None = None,
     now: datetime | None = None,
 ) -> tuple[Scheduler, FakeDatabase, RecordingLogger]:
     database = FakeDatabase()
@@ -44,8 +35,7 @@ def build(
         database.conn = RecordingConnection(list(outcomes))
     logger = RecordingLogger()
     deps = FakeDeps(db=database, clock=FakeClock(now or at(5, 5)), logger=logger)
-    owned: dict[str, Owner] = {CRON_HOURLY: "py", CRON_NIGHTLY: "py"} if crons is None else crons
-    return Scheduler(deps, FakeOwnership(crons=owned), logger=logger), database, logger
+    return Scheduler(deps, logger=logger), database, logger
 
 
 def emitted(database: FakeDatabase) -> list[tuple[str, dict[str, Any]]]:
@@ -116,12 +106,12 @@ async def test_the_hourly_task_emits_the_tick_without_any_learner() -> None:
     assert emitted(database) == [(CRON_HOURLY, {"tickAt": "2026-11-11T05:05:00.000Z"})]
 
 
-async def test_the_nightly_task_emits_only_the_nightly_tick() -> None:
-    scheduler, database, _ = build(crons={CRON_NIGHTLY: "py"}, now=at(1, 30))
+async def test_the_nightly_tick_is_emitted_at_one_thirty() -> None:
+    scheduler, database, _ = build(now=at(1, 30))
     emitted_ids = await scheduler.emit_due()
 
-    assert emitted_ids == ["nightly:2026-11-11"]
-    assert emitted(database) == [(CRON_NIGHTLY, {"runDate": "2026-11-11"})]
+    assert "nightly:2026-11-11" in emitted_ids
+    assert (CRON_NIGHTLY, {"runDate": "2026-11-11"}) in emitted(database)
 
 
 async def test_the_hourly_task_runs_on_the_truncated_instant() -> None:
@@ -139,13 +129,6 @@ async def test_a_replayed_period_emits_nothing_twice() -> None:
     # The same instant again: the period is already covered, so nothing is emitted.
     assert await scheduler.emit_due() == []
     assert len([name for name, _ in emitted(database) if name == CRON_HOURLY]) == 1
-
-
-async def test_an_idle_scheduler_neither_expires_nor_emits() -> None:
-    scheduler, database, _ = build(crons={CRON_HOURLY: "ts", CRON_NIGHTLY: "ts"})
-    assert await scheduler.emit_due() == []
-    assert database.conn.statements() == []
-    assert emitted(database) == []
 
 
 async def test_an_invalid_time_zone_is_skipped_without_failing_the_tick() -> None:

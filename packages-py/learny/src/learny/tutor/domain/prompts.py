@@ -1,9 +1,6 @@
 """Versioned prompt sources and the contextual discussion prompt (SPEC-610 ET-4, ADR-0072).
 
-Port of `packages/tutor/src/chat/prompt.ts`: the English Markdown files of
-`packages/tutor/prompts/` stay the source of truth, read at startup with their front-matter
-`version`, and the code only substitutes the learner profile and appends the included context keys
-(SPEC-2302 removes the TypeScript copy). The `<context>` block is data, never an instruction.
+The `<context>` block is data, never an instruction.
 """
 
 import re
@@ -38,13 +35,8 @@ class BuiltPrompt:
 
 
 def prompts_directory() -> Path:
-    """`TUTOR_PROMPTS_DIR` when set, else the checkout's `packages/tutor/prompts`."""
-    import os
-
-    override = os.environ.get("TUTOR_PROMPTS_DIR")
-    if override:
-        return Path(override)
-    return Path(__file__).resolve().parents[6] / "packages" / "tutor" / "prompts"
+    """The versioned prompts shipped with the package (ADR-2042: no environment override)."""
+    return Path(__file__).resolve().parents[1] / "prompts"
 
 
 def parse_prompt(task: str, text: str) -> PromptSource:

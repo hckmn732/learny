@@ -7,56 +7,36 @@
 # déploiement — le Compose résolu contient bien les deux services.
 #
 # Une image, deux commandes : `docker/api-py.Dockerfile` (SPEC-2003). Aucune valeur de secret
-# n'est écrite ici, seulement des noms de variables lues dans Coolify. La façade démarre en relais :
-# tout ce que `api/ownership.yaml` laisse à `ts` est renvoyé à Hono (`PY_HONO_UPSTREAM_URL`).
+# n'est écrite ici, seulement des noms de variables lues dans Coolify. La façade sert tout le
+# contrat : plus de relais ni de table d'ownership (SPEC-2302).
 
-# Mêmes noms de variables que le TypeScript, plus les variables `PY_*` (docs/operations/coolify.md).
+# Contrat d'environnement du backend Python (ADR-2042) : seules ces variables sont lues ; les
+# modes (IA, e-mail, push, Stripe, jobs, limiteur) sont dérivés d'APP_ENV, le reste est constant.
 x-py-environment: &py-environment
   APP_ENV: production
-  LOG_LEVEL: ${LOG_LEVEL:-info}
   APP_VERSION: ${APP_VERSION:-}
   GIT_COMMIT: ${GIT_COMMIT:-}
   DATABASE_URL: postgresql://postgres:${POSTGRES_PASSWORD:?}@db:5432/postgres
-  # Budget de connexions (plan P23, étape 1) : pooler >= api répliques x PY_API_WORKERS x
-  # DATABASE_POOL_MAX + worker répliques x DATABASE_POOL_MAX + Hono pendant la coexistence.
-  DATABASE_POOL_MAX: ${PY_DATABASE_POOL_MAX:-5}
-  SUPABASE_URL: ${LEARNY_PUBLIC_SUPABASE_URL:?}
-  SUPABASE_ANON_KEY: ${NEXT_PUBLIC_SUPABASE_ANON_KEY:?}
+  NEXT_PUBLIC_SUPABASE_URL: ${LEARNY_PUBLIC_SUPABASE_URL:?}
+  NEXT_PUBLIC_SUPABASE_ANON_KEY: ${NEXT_PUBLIC_SUPABASE_ANON_KEY:?}
   SUPABASE_SERVICE_ROLE_KEY: ${SUPABASE_SERVICE_ROLE_KEY:?}
   SUPABASE_JWT_SECRET: ${SUPABASE_JWT_SECRET:?}
   NEXT_PUBLIC_APP_URL: ${LEARNY_PUBLIC_APP_URL:?}
-  ALLOWED_ORIGINS: ${ALLOWED_ORIGINS:-}
   API_PROXY_SECRET: ${API_PROXY_SECRET:?}
-  TRUST_PROXY: 'true'
   APP_ENCRYPTION_KEY: ${APP_ENCRYPTION_KEY:?}
   APP_ENCRYPTION_KEY_PREVIOUS: ${APP_ENCRYPTION_KEY_PREVIOUS:-}
-  RATE_LIMIT_IP_SECRET: ${RATE_LIMIT_IP_SECRET:?}
-  LLM_MODE: live
-  ANTHROPIC_API_KEY: ${ANTHROPIC_API_KEY:-}
   VOYAGE_API_KEY: ${VOYAGE_API_KEY:?}
   SEARCH_API_KEY: ${SEARCH_API_KEY:-}
-  EMAIL_MODE: ${EMAIL_MODE:-resend}
   EMAIL_FROM: ${EMAIL_FROM:?}
   EMAIL_LINK_SECRET: ${EMAIL_LINK_SECRET:?}
-  RESEND_API_KEY: ${RESEND_API_KEY:-}
-  SMTP_HOST: ${SMTP_HOST:?}
-  SMTP_PORT: ${SMTP_PORT:?}
-  PUSH_MODE: live
-  NEXT_PUBLIC_VAPID_PUBLIC_KEY: ${NEXT_PUBLIC_VAPID_PUBLIC_KEY:?}
+  RESEND_API_KEY: ${RESEND_API_KEY:?}
   VAPID_PRIVATE_KEY: ${VAPID_PRIVATE_KEY:?}
-  VAPID_SUBJECT: ${VAPID_SUBJECT:?}
-  STRIPE_MODE: ${STRIPE_MODE:-live}
   STRIPE_SECRET_KEY: ${STRIPE_SECRET_KEY:?}
   STRIPE_WEBHOOK_SECRET: ${STRIPE_WEBHOOK_SECRET:?}
   STRIPE_PRICE_ID: ${STRIPE_PRICE_ID:?}
-  SENTRY_DSN: ${SENTRY_DSN:-}
-  ENABLE_SDD_PAGES: 'false'
-  # Surcharge produite par `node tools/deploy/cutover.mjs`, jamais saisie à la main.
-  OWNERSHIP_OVERRIDES: ${OWNERSHIP_OVERRIDES:-}
 
 services:
-  # Façade Python : opérations `py`, relais `ts`. Le web ne pointe ici qu'à l'étape 1 de la bascule
-  # (`API_INTERNAL_URL=http://api-py:8000`) ; le retour à `http://api:3001` est le rollback immédiat.
+  # Façade Python : elle sert toutes les opérations du contrat (`API_INTERNAL_URL=http://api-py:8000`).
   api-py:
     build:
       context: ..
@@ -64,7 +44,7 @@ services:
     command:
       - sh
       - -c
-      - exec uvicorn learny_api.main:app --host 0.0.0.0 --port 8000 --workers "$${PY_API_WORKERS:-2}"
+      - exec uvicorn learny_api.main:app --host 0.0.0.0 --port 8000 --workers 2
     user: '1001:1001'
     read_only: true
     tmpfs:
@@ -74,17 +54,12 @@ services:
     cap_drop: [ALL]
     environment:
       <<: *py-environment
-      PY_API_WORKERS: ${PY_API_WORKERS:-2}
-      # Position de repli : tout ce qui reste `ts` est relayé à Hono, en-têtes et corps inchangés.
-      PY_HONO_UPSTREAM_URL: http://api:3001
     expose:
       - '8000'
     depends_on:
       migrate:
         condition: service_completed_successfully
       db:
-        condition: service_healthy
-      api:
         condition: service_healthy
     healthcheck:
       test:
@@ -123,9 +98,8 @@ services:
     cap_drop: [ALL]
     environment:
       <<: *py-environment
-      JOBS_MODE: worker
-      PY_WORKER_CONCURRENCY: ${PY_WORKER_CONCURRENCY:-8}
-      PY_WORKER_HEALTH_PORT: ${PY_WORKER_HEALTH_PORT:-8081}
+      # Port standard du serveur de santé du worker (sondé par Coolify uniquement).
+      PORT: '8081'
     depends_on:
       migrate:
         condition: service_completed_successfully
@@ -136,7 +110,7 @@ services:
         - CMD-SHELL
         - >-
           python -c "import os, sys, urllib.request;
-          port = os.environ['PY_WORKER_HEALTH_PORT'];
+          port = os.environ['PORT'];
           urls = [f'http://127.0.0.1:{port}/health/live', f'http://127.0.0.1:{port}/health/ready'];
           sys.exit(0 if all(urllib.request.urlopen(url, timeout=3).status == 200 for url in urls) else 1)"
       interval: 10s

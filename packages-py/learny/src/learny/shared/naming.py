@@ -1,9 +1,8 @@
 """Display derivations shared by the identity and formation contexts (SPEC-2201).
 
-Port of `accentOf` and `formationMonogram` (`packages/services/src/sidebar.ts`,
-`packages/db/src/formation-monogram.ts`). Both lived in `learny.identity.application.sidebar`;
-they move here because the formation context writes the same values, and 00-conventions section 2
-forbids duplicating a derivation in the caller (ADR-0162 keeps the stored value authoritative).
+Both lived in `learny.identity.application.sidebar`; they move here because the formation context
+writes the same values, and 00-conventions section 2 forbids duplicating a derivation in the caller
+(ADR-0162 keeps the stored value authoritative).
 """
 
 import re

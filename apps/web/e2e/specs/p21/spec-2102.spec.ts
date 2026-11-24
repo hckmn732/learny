@@ -4,13 +4,12 @@
 // owned by TypeScript (`sdd-demo-pipeline`), so the event it writes stays undispatched by Hono and
 // the Python worker fans it out to its own consumer `devtools.demo_job`. The proof is the delivery
 // row: one per (event, consumer), claimed once, completed once.
-import { closeDb, serviceDb, sql } from '@learny/db';
+import { closeDb, serviceDb, sql } from '@learny/testing/db';
 import { expect, test } from '@learny/testing/playwright';
 import { createTestSession, deleteTestSession, type TestSession } from '@learny/testing/supabase';
 
 // Same-origin mutation from the API request context (SPEC-208 origin guard).
 const ORIGIN = 'http://127.0.0.1:3100';
-const DEMO = '/_dev/sdd/SPEC-2102';
 const DEMO_ROUTE = '/api/v1/dev/sdd/events/demo';
 const POLL_TIMEOUT_MS = 20_000;
 
@@ -82,22 +81,3 @@ test('traite un événement de bout en bout via le worker @SPEC-2102', async ({ 
   expect(rows[0]).toEqual({ total: 1, dispatched: 1 });
 });
 
-test('conformité visuelle du worker durable @SPEC-2102 @visual', async ({
-  page,
-  axeCheck,
-  captureEvidence,
-}) => {
-  await page.goto(DEMO);
-  await expect(page.getByRole('heading', { level: 1 })).toHaveText(
-    'Outbox et worker Python remplaçant Inngest',
-  );
-  await expect(page.getByTestId('spec-2102-pipeline')).toContainText('job_deliveries');
-  await expect(page.getByTestId('spec-2102-guarantees')).toContainText('skip locked');
-  await expect(page.getByTestId('spec-2102-scheduler')).toContainText('pg_try_advisory_lock');
-  await expect(page.getByTestId('spec-2102-ownership')).toContainText('devtools.demo_job');
-  await axeCheck();
-  await captureEvidence('spec-2102-desktop');
-  await page.setViewportSize({ width: 390, height: 844 });
-  await axeCheck();
-  await captureEvidence('spec-2102-mobile');
-});

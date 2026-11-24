@@ -1,9 +1,9 @@
 """Weekly review of the automations (SPEC-720, BR-AUT-09, ADR-0190, ADR-0047).
 
-Ported from `packages/automations/src/automatisme-9-bilan-de-la-semaine.ts`: the review needs no
-consent, the notification is the effect and the journal row is the durable trace, so `apply` and
-`undo` are absent. The one line is deterministic and every number comes from the payload the
-producer wrote; a missing measure stays `null` and reads "Non disponible", never a fake 0.
+The review needs no consent, the notification is the effect and the journal row is the durable
+trace, so `apply` and `undo` are absent. The one line is deterministic and every number comes from
+the payload the producer wrote; a missing measure stays `null` and reads "Non disponible", never a
+fake 0.
 """
 
 from learny.engagement.domain.automations.definitions.labels import clip, number_or, string_of

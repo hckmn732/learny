@@ -1,0 +1,6 @@
+// API interne de la seed de démonstration (SPEC-115 ET-1, ET-2).
+export * from './demo';
+export * from '../../db-factories/demo-fixtures';
+export * from './demo-guard';
+export * from './perf';
+export * from './perf-credentials';

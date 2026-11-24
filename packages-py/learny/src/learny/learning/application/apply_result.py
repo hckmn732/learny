@@ -1,10 +1,10 @@
 """Transactional application of one corrected answer to the learning state (SPEC-411).
 
-Port of `packages/services/src/learning/{apply-result,apply-review}.ts`. The service stays an
-orchestrator: every pedagogical decision (FSRS grade, mastery, gap nature, clearance) is delegated
-to `learny.learning.domain.*`; this module reads the locked rows, feeds the engine and persists its
-outputs inside the caller's transaction. The journal tables are written through the security-definer
-functions, so a learner never gains a direct write policy (ADR-0112 section 4).
+The service stays an orchestrator: every pedagogical decision (FSRS grade, mastery, gap nature,
+clearance) is delegated to `learny.learning.domain.*`; this module reads the locked rows, feeds the
+engine and persists its outputs inside the caller's transaction. The journal tables are written
+through the security-definer functions, so a learner never gains a direct write policy (ADR-0112
+section 4).
 """
 
 from collections.abc import Mapping, Sequence

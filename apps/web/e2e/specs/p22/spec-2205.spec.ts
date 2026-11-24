@@ -2,13 +2,12 @@
 // operations exercised here are the inbox counter, the settings of the notifications tab and the
 // read mutation: the parity recorder replays the two reads against the recorded Hono responses,
 // this test proves the same contract through the web and the facade with a real session.
-import { serviceDb } from '@learny/db';
 import { createNotification } from '@learny/testing';
+import { serviceDb } from '@learny/testing/db';
 import { expect, test } from '@learny/testing/playwright';
 import { createTestSession, deleteTestSession } from '@learny/testing/supabase';
 
 const DEFAULT_ORIGIN = 'http://127.0.0.1:3100';
-const DEMO = '/_dev/sdd/SPEC-2205';
 
 test('sert les opérations engagement depuis Python @SPEC-2205', async ({ request, baseURL }) => {
   const origin = baseURL ?? DEFAULT_ORIGIN;
@@ -109,54 +108,3 @@ test('sert les opérations engagement depuis Python @SPEC-2205', async ({ reques
   }
 });
 
-test('conformité visuelle du domaine engagement @SPEC-2205 @visual', async ({
-  page,
-  axeCheck,
-  captureEvidence,
-}) => {
-  await page.goto(DEMO);
-  await expect(page.getByRole('heading', { level: 1 })).toHaveText(
-    'Domaine engagement, notifications et automatismes en Python',
-  );
-  await expect(page.getByTestId('spec-2205-scope')).toContainText('Opérations du périmètre');
-  await expect(page.getByTestId('spec-2205-scope')).toContainText('21');
-  await expect(page.getByTestId('spec-2205-scope')).toContainText('Servies par Python');
-  await expect(page.getByTestId('spec-2205-scope')).toContainText('Encore relayées à Hono');
-  await expect(page.getByTestId('spec-2205-scope-jobs')).toContainText(
-    'quatre cas d’usage de job',
-  );
-  await expect(page.getByTestId('spec-2205-operations').locator('li')).toHaveCount(21);
-  await expect(page.getByTestId('spec-2205-operations')).toContainText(
-    'notifications.unreadCount',
-  );
-  await expect(page.getByTestId('spec-2205-operations')).toContainText('me.pause.diagnostic');
-  await expect(page.getByTestId('spec-2205-inbox')).toContainText('notifications.list');
-  await expect(page.getByTestId('spec-2205-inbox')).toContainText(
-    'me.notificationSettings.get',
-  );
-  await expect(page.getByTestId('spec-2205-routing')).toContainText('deferred_quiet');
-  await expect(page.getByTestId('spec-2205-routing')).toContainText('[21:00, 08:00)');
-  await expect(page.getByTestId('spec-2205-routing')).toContainText('Plafonds 3 / 5 / 8');
-  await expect(page.getByTestId('spec-2205-templates').locator('li')).toHaveCount(16);
-  await expect(page.getByTestId('spec-2205-templates')).toContainText('planning_adjusted');
-  await expect(page.getByTestId('spec-2205-templates')).toContainText('× 2 tonalités');
-  await expect(page.getByTestId('spec-2205-automations')).toContainText('plafond_quiz');
-  await expect(page.getByTestId('spec-2205-automations')).toContainText('accept');
-  await expect(page.getByTestId('spec-2205-automations')).toContainText('decline');
-  await expect(page.getByTestId('spec-2205-automations')).toContainText('undo');
-  await expect(page.getByTestId('spec-2205-jobs').locator('li')).toHaveCount(4);
-  await expect(page.getByTestId('spec-2205-jobs')).toContainText('ensure_practice_exercise');
-  await expect(page.getByTestId('spec-2205-jobs')).toContainText('plan_daily_digests');
-  await expect(page.getByTestId('spec-2205-jobs')).toContainText('send_daily_digest');
-  await expect(page.getByTestId('spec-2205-jobs')).toContainText(
-    'sync_validation_quiz_reminders',
-  );
-  await expect(page.getByTestId('spec-2205-jobs-wiring')).toContainText('SPEC-2207');
-  await expect(page.getByTestId('spec-2205-guarantees')).toContainText('Parité contractuelle');
-  await expect(page.getByTestId('spec-2205-guarantees')).toContainText('RLS');
-  await axeCheck();
-  await captureEvidence('spec-2205-desktop');
-  await page.setViewportSize({ width: 390, height: 844 });
-  await axeCheck();
-  await captureEvidence('spec-2205-mobile');
-});

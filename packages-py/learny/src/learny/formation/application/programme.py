@@ -1,9 +1,8 @@
 """Proposed and active programme use cases (SPEC-605 EF-1 to EF-5, SPEC-606 EF-1 to EF-4).
 
-Port of `programme/{state,get,generate,adjust,import,validate,get-active-programme}.ts` and of
-`programme/progress.ts`. The tutor call runs outside any transaction; the write of a version and the
-status transition are one transaction guarded by the programme advisory lock and the expected
-version. Modules and planning rows are never touched before the validation.
+The tutor call runs outside any transaction; the write of a version and the status transition are
+one transaction guarded by the programme advisory lock and the expected version. Modules and
+planning rows are never touched before the validation.
 """
 
 import json
@@ -387,6 +386,9 @@ async def get_programme_state(
 ) -> dict[str, Any]:
     """ET-3 - the same GET route serves the proposed programme and the active one."""
     version = query.get("version")
+    # `event_outbox` is RLS-protected and has no `authenticated` policy: the completion marker is
+    # read with the service role, exactly like `cadrage._already_completed` (SPEC-605, SPEC-203).
+    completed = await _already_cadrage_completed(deps, formation_id)
     async with deps.db.user_tx(actor) as tx:
         formation = await queries.read_programme_formation(tx, actor.user_id, formation_id, access="member")
         if formation is None:
@@ -401,8 +403,18 @@ async def get_programme_state(
                 formation,
             )
         return await read_programme_state(
-            tx, actor.user_id, formation_id, version=None if version is None else int(version)
+            tx,
+            actor.user_id,
+            formation_id,
+            version=None if version is None else int(version),
+            completed=completed,
         )
+
+
+async def _already_cadrage_completed(deps: FormationDeps, formation_id: str) -> bool:
+    """`cadrageAlreadyCompleted`: the outbox marker is read with the service role (RLS-protected)."""
+    async with deps.db.service_tx() as tx:
+        return await queries.cadrage_completed(tx, formation_id)
 
 
 def search_context(title: str, scope: str | None) -> str:

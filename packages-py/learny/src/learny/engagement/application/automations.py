@@ -1,9 +1,7 @@
 """Automation settings, journal and expiration (SPEC-2205, SPEC-711 ET-5 and BR-AUT-12).
 
-Ported from `listMyAutomations`, `updateMyAutomationSetting`, `listMyAutomationActions` and
-`expirePendingActions` of `packages/automations/src/moteur-d-automatismes.ts`. Every read and every
-write of the learner runs in ONE transaction under the learner's RLS (ET-3): a foreign identifier is
-simply absent, never a disclosure (CL-1). The domain rules live in
+Every read and every write of the learner runs in ONE transaction under the learner's RLS (ET-3): a
+foreign identifier is simply absent, never a disclosure (CL-1). The domain rules live in
 `learny.engagement.domain.automations`; this module only loads, applies and projects.
 """
 
@@ -167,8 +165,7 @@ async def list_my_automation_actions(
 async def expire_due_automation_actions(deps: EngagementDeps) -> int:
     """CL-3 - the hourly tick: expires the pending actions whose `expiresAt` has passed.
 
-    Ported from `expirePendingActions` and wired to the worker in SPEC-2207. It runs on the service
-    role because it sweeps every learner, exactly like the TypeScript `engine.sdb` tick.
+    It runs on the service role because it sweeps every learner.
     """
     now = deps.clock.now()
     async with deps.db.service_tx() as tx:
@@ -186,11 +183,9 @@ __all__ = [
 
 
 # --- decisions of the learner (EF-2, EF-3, ET-5, CL-1 to CL-4) ----------------------------------
-#
-# Ported from `acceptAutomationAction`, `declineAutomationAction` and `undoAutomationAction` of
-# `packages/automations/src/moteur-d-automatismes.ts`. One transaction under the learner's RLS:
-# the row is locked first, a foreign identifier is a 404, a replayed decision returns the committed
-# answer with no second effect, and the definition decides the effects the use case executes.
+# One transaction under the learner's RLS: the row is locked first, a foreign identifier is a
+# 404, a replayed decision returns the committed answer with no second effect, and the definition
+# decides the effects the use case executes.
 
 
 def _registry() -> Any:
@@ -404,4 +399,60 @@ async def undo_automation_action(deps: EngagementDeps, actor: Actor, action_id: 
             {"userId": actor.user_id, "actionId": row.id, "automation": row.automation},
             event_id=f"automation-action-undone:{row.id}",
         )
-        return action_to_dto(row)
+    # ADR-0191 section 3 - the proposal comes back right after the undo, on a suffixed dedupe key;
+    # the undone row stays in the journal (BR-AUT-12). A failing proposal never cancels the undo.
+    if definition is not None and definition.repropose_after_undo and current.status == "applied":
+        await _repropose_after_undo(deps, actor, current, definition, now, time_zone, tone)
+    return action_to_dto(row)
+
+
+async def _repropose_after_undo(
+    deps: EngagementDeps,
+    actor: Actor,
+    current: queries.AutomationActionRow,
+    definition: Any,
+    now: Any,
+    time_zone: str,
+    tone: str,
+) -> None:
+    """Writes the new pending proposal on the service role."""
+    payload = {
+        key: value
+        for key, value in dict(current.payload).items()
+        if key not in ("chosenStartsAt", "appliedAt", "choice")
+    }
+    base_key = str(payload.get("dedupeKey") or definition.key)
+    payload["dedupeKey"] = f"{base_key}#undo:{to_epoch_ms(now)}"
+    view = _view(
+        queries.AutomationActionRow(
+            id=current.id,
+            formation_id=current.formation_id,
+            automation=current.automation,
+            kind=current.kind,
+            summary=current.summary,
+            payload=payload,
+            undo_payload=None,
+            requires_consent=current.requires_consent,
+            status="pending_consent",
+            decided_at=None,
+            created_at=now,
+        )
+    )
+    summary = definition.explain(view, tone, time_zone)
+    try:
+        async with deps.db.service_tx() as tx:
+            await queries.insert_reproposed_action(
+                tx,
+                user_id=actor.user_id,
+                formation_id=current.formation_id,
+                automation=current.automation,
+                kind=current.kind,
+                summary=summary,
+                payload=payload,
+                requires_consent=current.requires_consent,
+                now=now,
+            )
+    except Exception:
+        logger = getattr(deps, "logger", None)
+        if logger is not None:
+            logger.warn("automation repropose failed", outcome="repropose_failed")

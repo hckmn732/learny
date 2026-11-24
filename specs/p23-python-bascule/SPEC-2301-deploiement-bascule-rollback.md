@@ -101,3 +101,7 @@ Définition commune de `docs/engineering/testing.md` §7 : lint, typecheck, buil
 - ADR applicables : ADR-1001, ADR-2001, ADR-2005, ADR-2008, ADR-2011, ADR-0041, ADR-2007, ADR-2009.
 - ADR-2007, ADR-2009.
 - Hors périmètre : refonte visuelle ou fonctionnelle, changement de schéma sans ADR, clients mobiles, specs gelées par ADR-2001.
+
+## Amendements
+
+- **2026-11-23, ADR-2039** — les compteurs de la bascule sont alignés sur `api/ownership.yaml` : 201 opérations Python sur 217 et 16 opérations relayées (plus 3 routes spéciales).

@@ -1,10 +1,9 @@
 """Daily offline pack (SPEC-801 ET-5, EF-4; ADR-0200).
 
-Port of `packages/services/src/offline/pack.ts`. The pack reuses the review session of the day so
-the offline screen shows exactly the items of the online one, then attaches the full payload of
-every brick version (correct answers included) so the browser can grade locally. It adds up to
-twenty recall cards of notions due tomorrow. No AI call: a notion without an existing recall card is
-simply omitted (BR-IA-09).
+The pack reuses the review session of the day so the offline screen shows exactly the items of the
+online one, then attaches the full payload of every brick version (correct answers included) so the
+browser can grade locally. It adds up to twenty recall cards of notions due tomorrow. No AI call: a
+notion without an existing recall card is simply omitted (BR-IA-09).
 """
 
 from collections.abc import Mapping

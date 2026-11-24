@@ -1,9 +1,9 @@
 """Read model of the course screen (SCR-07, SPEC-608 EF-1 to EF-5, BR-COU-03/10/11).
 
-Port of `packages/services/src/courses/get-course.ts`: everything runs under the caller's RLS
-transaction with an explicit owner filter, so a foreign module is a plain 404. The page receives the
-current ready version of the module, the selected chapter, its typed sections with their verified
-citations and, for a base course, the pending resource suggestions.
+Everything runs under the caller's RLS transaction with an explicit owner filter, so a foreign
+module is a plain 404. The page receives the current ready version of the module, the selected
+chapter, its typed sections with their verified citations and, for a base course, the pending
+resource suggestions.
 """
 
 import json

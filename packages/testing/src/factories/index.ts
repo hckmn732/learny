@@ -1,5 +1,5 @@
 // Factories of the P1 domains (SPEC-115 EF-6). Every factory runs on a `DbTx`, returned IDs are
-// the created rows, and a caller normally wraps it in `withRollback` from `@learny/db/testing`.
+// the created rows, and a caller normally wraps it in `withRollback` from `@learny/testing/db`.
 export * from './attempt';
 export * from './brick';
 export * from './course';

@@ -1,21 +1,18 @@
-"""[SPEC-2102] Consumer registry: ownership filtering, payload validation, subscriptions."""
+"""[SPEC-2102] Consumer registry: payload validation, subscriptions."""
 
 import re
-from dataclasses import dataclass, field
 from datetime import datetime
 
 import pytest
 from learny.shared.clock import Clock
 from learny.shared.outbox.errors import PermanentJobError
 from learny.shared.outbox.events import Event
-from learny.shared.ownership import Owner
 from learny.shared.time import parse_iso
 from learny_worker.consumers import (
     CONSUMERS,
     DEMO_CONSUMER,
     DEMO_EVENT,
     Consumer,
-    active_consumers,
     demo_job,
     subscribed,
     validate_demo_event,
@@ -26,12 +23,6 @@ pytestmark = pytest.mark.spec("SPEC-2102")
 
 NAME = re.compile(r"^[a-z]+(\.[a-z0-9_]+)+$")
 FIXED = parse_iso("2026-11-11T12:20:00Z")
-
-
-@dataclass
-class FakeOwnership:
-    consumers: dict[str, Owner] = field(default_factory=dict)
-    crons: dict[str, Owner] = field(default_factory=dict)
 
 
 def event(data: dict[str, object] | None = None, name: str = DEMO_EVENT) -> Event:
@@ -59,21 +50,6 @@ def test_the_demo_consumer_is_declared() -> None:
     demo = next(consumer for consumer in CONSUMERS if consumer.name == DEMO_CONSUMER)
     assert demo.on == DEMO_EVENT
     assert demo.validate is validate_demo_event
-
-
-def test_a_python_owned_consumer_is_active() -> None:
-    ownership = FakeOwnership(consumers={DEMO_CONSUMER: "py"})
-    assert [consumer.name for consumer in active_consumers(ownership)] == [DEMO_CONSUMER]
-
-
-def test_a_typescript_owned_consumer_is_never_active() -> None:
-    # CA-3: an event owned by Inngest is never consumed by the Python worker.
-    ownership = FakeOwnership(consumers={DEMO_CONSUMER: "ts"})
-    assert active_consumers(ownership) == ()
-
-
-def test_an_undeclared_consumer_is_not_active() -> None:
-    assert active_consumers(FakeOwnership()) == ()
 
 
 def test_subscriptions_are_filtered_by_event_name() -> None:

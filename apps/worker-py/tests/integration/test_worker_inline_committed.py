@@ -1,8 +1,8 @@
 """[SPEC-2102] `JOBS_MODE=inline`: the API runs the events a request committed before answering.
 
-P21 plan, step 6 (port of the inline branch of `withTransaction`): the committed events are fanned
-out and executed through the same `job_deliveries` rows as with the worker, depth first, delays
-ignored, a failed attempt retried at once. Every event created by a test is deleted afterwards.
+P21 plan, step 6: the committed events are fanned out and executed through the same `job_deliveries`
+rows as with the worker, depth first, delays ignored, a failed attempt retried at once. Every event
+created by a test is deleted afterwards.
 """
 
 import uuid
@@ -15,7 +15,6 @@ import pytest
 from learny.shared.clock import Clock
 from learny.shared.db.uow import Database, collect_committed_events
 from learny.shared.outbox.events import Event
-from learny.shared.ownership import Owner
 from learny.shared.time import parse_iso
 from learny_worker.consumers import Consumer
 from learny_worker.dispatcher import Dispatcher
@@ -29,12 +28,6 @@ pytestmark = pytest.mark.spec("SPEC-2102")
 FIXED = parse_iso("2026-11-11T12:20:00Z")
 FIRST_EVENT = "sdd/demo-requested"
 SECOND_EVENT = "sdd/inline-follow-up"
-
-
-@dataclass
-class Ownership:
-    consumers: dict[str, Owner] = field(default_factory=dict)
-    crons: dict[str, Owner] = field(default_factory=dict)
 
 
 @dataclass
@@ -69,8 +62,7 @@ async def events(database: Database) -> AsyncIterator[list[str]]:
 
 def loops(database: Database, *consumers: Consumer) -> tuple[Dispatcher, Runner]:
     deps = Deps(db=database, clock=FakeClock(FIXED), logger=RecordingLogger())
-    ownership = Ownership(consumers={consumer.name: "py" for consumer in consumers})
-    return Dispatcher(deps, ownership, consumers=consumers), Runner(deps, consumers)
+    return Dispatcher(deps, consumers=consumers), Runner(deps, consumers)
 
 
 async def delivery(database: Database, event_id: str, consumer: str) -> dict[str, Any]:
@@ -163,3 +155,24 @@ async def test_follow_up_events_delays_and_retries(events: list[str], database: 
     assert second.runs == [follow_up, follow_up]
     assert await delivery(database, event_id, "inline.first") == {"status": "done", "attempts": 1}
     assert await delivery(database, follow_up, "inline.second") == {"status": "done", "attempts": 2}
+
+
+async def test_worker_only_consumers_are_left_for_the_worker(events: list[str], database: Database) -> None:
+    inline = Recorder()
+    worker_only = Recorder()
+    inline_consumer = Consumer(name="inline.first", on=FIRST_EVENT, run=inline.run)
+    export_consumer = Consumer(name="privacy.run_data_export", on=FIRST_EVENT, run=worker_only.run)
+    dispatcher, runner = loops(database, inline_consumer, export_consumer)
+    event_id = new_id(events)
+    async with database.service_tx() as tx:
+        await tx.emit(FIRST_EVENT, {"n": 1}, event_id=event_id)
+
+    await run_committed(dispatcher, runner, [event_id], exclude=("privacy.run_data_export",))
+
+    assert inline.runs == [event_id]
+    assert worker_only.runs == []
+    assert await delivery(database, event_id, "inline.first") == {"status": "done", "attempts": 1}
+    assert await delivery(database, event_id, "privacy.run_data_export") == {
+        "status": "pending",
+        "attempts": 0,
+    }

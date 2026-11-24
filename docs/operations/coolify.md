@@ -1,8 +1,8 @@
 # Production sur Coolify — pile complète
 
 Ce guide met Learny en production sur un serveur **Coolify** avec **une seule ressource** qui
-contient tout : Supabase (Postgres, Auth, PostgREST, Storage, Kong), Inngest, le api, le web, les
-migrations et les modèles d'e-mails. Tous les services partagent le réseau Docker que Coolify crée
+contient tout : Supabase (Postgres, Auth, PostgREST, Storage, Kong), la façade et le worker Python,
+le web, les migrations et les modèles d'e-mails. Tous les services partagent le réseau Docker que Coolify crée
 pour la ressource : ils se joignent par leur nom de service (`db`, `auth`, `kong`…).
 
 Fichiers de référence :
@@ -10,7 +10,8 @@ Fichiers de référence :
 - `docker/compose.coolify.yml` — la pile déployée par Coolify ;
 - `docker/coolify-support.Dockerfile` — images d'appoint qui embarquent la configuration
   versionnée (Coolify ne monte pas les fichiers du dépôt) ;
-- `docker/web.Dockerfile`, `docker/api.Dockerfile` — les images applicatives.
+- `docker/web.Dockerfile` et `docker/api-py.Dockerfile` (une image, deux commandes : `api-py` et
+  `worker-py`, SPEC-2003).
 
 L'architecture et les images épinglées sont celles de la pile auto-hébergée
 (`docs/operations/self-hosting.md`, SPEC-012) ; les décisions propres à Coolify sont consignées
@@ -27,13 +28,14 @@ reste décrite dans `docs/operations/deployment.md`.
 | `auth` | Supabase Auth (GoTrue) | non (via Kong) |
 | `rest` | PostgREST | non (via Kong) |
 | `storage` | Supabase Storage, fichiers sur volume | non (via Kong) |
-| `api` | jobs Inngest : IA, e-mails, automatismes | non |
-| `inngest` | Inngest auto-hébergé (SQLite) | non |
+| `api-py` | façade FastAPI : tout le contrat (156 opérations, 11 routes spéciales) | non (via `web`) |
+| `worker-py` | worker Python : outbox, livraisons, crons | non |
 | `migrate` | job unique : applique `supabase/migrations`, puis s'arrête | non |
 | `auth-templates` | sert les modèles d'e-mails lus par `auth` | non |
 
-Volumes nommés : `db-data` (base), `storage-data` (fichiers déposés), `inngest-data` (historique
-des jobs). Ils portent les données : ne les supprimez jamais sans sauvegarde vérifiée.
+Volumes nommés : `db-data` (base) et `storage-data` (fichiers déposés). Ils portent les données :
+ne les supprimez jamais sans sauvegarde vérifiée. L'historique des jobs vit dans l'outbox
+PostgreSQL (`event_outbox`, `job_deliveries`), donc dans `db-data`.
 
 ## 1. Prérequis
 
@@ -85,8 +87,8 @@ ensuite sans procédure :
    - service `web` : `https://learny.exemple.fr:3000` ;
    - service `kong` : `https://api.learny.exemple.fr:8000`.
 
-   Aucun domaine pour les autres services, en particulier `inngest` (interface sans
-   authentification) et `db`.
+   Aucun domaine pour les autres services, en particulier `api-py`/`worker-py` (joignables par le
+   réseau interne) et `db`.
 5. **Variables d'environnement** : section 4. Coolify bloque le déploiement tant qu'une variable
    obligatoire (`${VAR:?}` dans le Compose) est vide.
 6. **Advanced** : désactivez *Inject Build Args to Dockerfile*. Par défaut, Coolify ajoute toutes
@@ -159,15 +161,17 @@ livré, 7 à 40 caractères hexadécimaux, affichée par `/api/v1/health`). Ne r
 à `SOURCE_COMMIT` : Coolify y met `unknown` quand le commit n'est pas inclus au build, et
 l'application refuse alors de démarrer.
 
-Le Compose fixe le reste : `APP_ENV=production`, `LLM_MODE=live`, `PUSH_MODE=live`,
-`JOBS_MODE=inngest`, `EMAIL_MODE=resend`, `TRUST_PROXY=true` (derrière le proxy Coolify) et
-`ENABLE_SDD_PAGES=false`.
+Le Compose fixe le reste : `APP_ENV=production`, `ENABLE_SDD_PAGES=false`. Depuis ADR-2042, les
+modes ne se saisissent plus : `LLM_MODE`/`PUSH_MODE` valent `live` hors local et test, `EMAIL_MODE`
+vaut `resend` sauf `SMTP_HOST`, `JOBS_MODE` vaut `worker` (le worker ne le consulte pas),
+`RATE_LIMIT_MODE` vaut `on`, `TRUST_PROXY` est désactivé (le secret du proxy authentifie
+`api-py`).
 
 ## 5. Premier déploiement et vérifications
 
-Coolify construit sept images (le build Next.js du web prend plusieurs minutes), puis démarre la
+Coolify construit les images (le build Next.js du web prend plusieurs minutes), puis démarre la
 pile dans l'ordre des dépendances : `db` → `storage` → `migrate` → `auth`, `rest` → `kong` ;
-`inngest` → `api` ; enfin `web`. Au premier démarrage, `db` initialise le volume et donne aux
+`api-py` et `worker-py` ; enfin `web`. Au premier démarrage, `db` initialise le volume et donne aux
 rôles Supabase le mot de passe `POSTGRES_PASSWORD`.
 
 1. **Migrations** : les logs de `migrate` se terminent par
@@ -209,7 +213,7 @@ inexploitable) et testez une restauration sur une machine isolée.
 avant le démarrage du nouveau web et du nouveau api ; si l'une échoue, ils ne démarrent pas.
 Prévoyez donc une courte coupure possible et une sauvegarde récente.
 
-**Images tierces** : les versions de Supabase et d'Inngest sont épinglées (dans le Compose et dans
+**Images tierces** : les versions de Supabase sont épinglées (dans le Compose et dans
 `docker/coolify-support.Dockerfile`), alignées sur `docker/compose.selfhost.yml`. Une montée de
 version se fait en changeant explicitement les tags, après lecture des notes de version et une
 sauvegarde ; jamais `latest`.
@@ -250,7 +254,6 @@ le job refuse une empreinte différente.
   capacités Linux.
 - Supabase Studio n'est pas inclus. Pour inspecter la base :
   `docker exec -it db-<uuid> psql -U postgres -d postgres`.
-- Inngest stocke ses données dans SQLite, sur un seul nœud.
 - Ce déploiement ne passe pas par `.github/workflows/deploy.yml` (Vercel) : les contrôles de
   région de `tools/deploy/check.mjs` ne s'appliquent pas. La région d'hébergement et les
   obligations de confidentialité (BR-PLA-04) sont celles de votre serveur.
@@ -258,21 +261,19 @@ le job refuse une empreinte différente.
 
 ## 10. Services Python de la bascule (SPEC-2301)
 
-La bascule vers l'API et le worker Python (ADR-2007) ajoute **deux services à la même image**,
-`docker/api-py.Dockerfile` (SPEC-2003), aux côtés de `api` (Hono), `web` et `migrate`. Ils sont
-déclarés dans un fichier inclus par la pile — `docker/compose.coolify-py.yml` pour la production,
+Le backend est **uniquement Python** (SPEC-2302, ADR-2043) : **deux services à la même image**,
+`docker/api-py.Dockerfile` (SPEC-2003), aux côtés de `web` et `migrate`. Ils sont déclarés dans un
+fichier inclus par la pile — `docker/compose.coolify-py.yml` pour la production,
 `docker/compose.coolify-qa-py.yml` pour la QA — et `docker/compose.coolify.yml` / `-qa.yml` portent
 `include:`. Coolify déploie donc une seule ressource : le Compose résolu contient bien `api-py` et
-`worker-py`. Le fichier inclus garde la page `/_dev/sdd/SPEC-1103` (qui énumère les services du
-fichier principal) et sa ligne de base visuelle inchangées (ADR-1001, ADR-2008). Ils sont
-désactivés de fait tant que `web` n'a pas basculé son `API_INTERNAL_URL` : la façade démarre en
-**relais pur** vers Hono, et tout ce qui reste `ts` dans `api/ownership.yaml` lui est renvoyé tel
-quel (ADR-2005).
+`worker-py`, et aucun service Hono ni Inngest. Le web pointe déjà sur
+`API_INTERNAL_URL=http://api-py:8000` (SPEC-2301) : il n'y a plus de bascule par contexte ni de
+relais.
 
 | Service | Rôle | Commande | Sonde | Port interne |
 |---|---|---|---|---|
-| `api-py` | façade FastAPI : opérations `py`, relais `ts` | `uvicorn learny_api.main:app --port 8000 --workers $PY_API_WORKERS` | `GET /health` | 8000 |
-| `worker-py` | outbox, livraisons, planificateur singleton | `python -m learny_worker` | `GET /health/live` et `/health/ready` sur `PY_WORKER_HEALTH_PORT` | 8081 (sondes locales au conteneur) |
+| `api-py` | façade FastAPI : tout le contrat | `uvicorn learny_api.main:app --port 8000 --workers 2` | `GET /health` | 8000 |
+| `worker-py` | outbox, livraisons, planificateur singleton | `python -m learny_worker` | `GET /health/live` et `/health/ready` sur le port standard `PORT` | 8081 (sondes locales au conteneur) |
 
 - **Une image, deux commandes** : la CI construit `docker/api-py.Dockerfile` à chaque commit
   (`.github/workflows/ci.yml`), et Coolify construit la même image depuis le Compose ; aucun
@@ -281,24 +282,31 @@ quel (ADR-2005).
   (`deploy.resources.limits`), redémarrage `unless-stopped`, système de fichiers en lecture seule,
   `no-new-privileges`, toutes capacités Linux retirées.
 - **Budget de connexions** : le pooler doit accepter au moins
-  `répliques api × PY_API_WORKERS × DATABASE_POOL_MAX + répliques worker × DATABASE_POOL_MAX + Hono`.
-  Départs : `PY_API_WORKERS=2`, `PY_DATABASE_POOL_MAX=5` (soit 35 connexions avec un worker et Hono).
+  `répliques api × 2 processus × 5 connexions + répliques worker × 5` : 2 processus uvicorn
+  et un pool de 5 connexions sont des constantes du code depuis ADR-2042 (soit 15 connexions avec un
+  worker, 25 avec deux).
 - **Migrations** : le job `migrate` reste un singleton (`restart: 'no'`, image cible `migrate`) et
   `api-py`/`worker-py` attendent `service_completed_successfully`. Pour Supabase géré, le job de
   release est verrouillé : `flock /tmp/learny-migrate.lock node tools/deploy/migrate.mjs --env staging`.
-- **Variables** : mêmes noms que le TypeScript, plus les variables `PY_*` (`PY_API_WORKERS`,
-  `PY_DATABASE_POOL_MAX`, `PY_WORKER_CONCURRENCY`, `PY_WORKER_HEALTH_PORT`, `PY_HONO_UPSTREAM_URL`)
-  et `OWNERSHIP_OVERRIDES`. **Aucune valeur de secret n'est écrite dans le dépôt** : la liste des
+- **Variables** (ADR-2042) : le backend Python ne lit que le contrat de
+  `learny.shared.config.ENVIRONMENT_VARIABLES` — `APP_ENV`, `NEXT_PUBLIC_APP_URL`, `DATABASE_URL`,
+  `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY`, `SUPABASE_SERVICE_ROLE_KEY`,
+  `SUPABASE_JWT_SECRET`, `APP_ENCRYPTION_KEY`, `API_PROXY_SECRET`, `EMAIL_LINK_SECRET`, `EMAIL_FROM`,
+  `RESEND_API_KEY`, `VAPID_PRIVATE_KEY`, `STRIPE_SECRET_KEY`, `STRIPE_WEBHOOK_SECRET`,
+  `STRIPE_PRICE_ID`, `VOYAGE_API_KEY`, `SEARCH_API_KEY` et les facultatives (rotation `*_PREVIOUS`,
+  `SMTP_HOST`, `ALLOW_LOCAL_MODELS`, `ENABLE_SDD_PAGES`, `CLOCK_FIXED_AT`, `GIT_COMMIT`,
+  `APP_VERSION`). Les modes
+  (IA, push, e-mail, jobs, limiteur) sont dérivés d'`APP_ENV`, le mode Stripe de la clé secrète
+  (`sk_live_` : live, autre : test), la clé du limiteur d'`APP_ENCRYPTION_KEY`, la clé publique
+  et le sujet VAPID de `VAPID_PRIVATE_KEY` et d'`EMAIL_FROM` ; le réglage du worker, la taille du
+  pool et le nombre de processus sont des constantes. **Aucune valeur de secret n'est écrite dans le dépôt** : la liste des
   noms est dans l'ancre `x-py-environment` des fichiers inclus (`docker/compose.coolify-py.yml`,
   `docker/compose.coolify-qa-py.yml`), les valeurs restent dans Coolify.
-- **Surcharge de propriété** : `OWNERSHIP_OVERRIDES` n'est jamais saisie à la main, elle est
-  produite par `node tools/deploy/cutover.mjs` (voir `docs/operations/python-cutover.md`) et lue au
-  démarrage de `api-py` : chaque changement exige un redéploiement du service.
-- **Bascule du web** : `API_INTERNAL_URL=http://api-py:8000` sur `web`, puis redéploiement. Le
-  retour à `http://api:3001` est le rollback immédiat de cette étape ; la configuration versionnée
-  reste volontairement sur Hono.
+- **Rollback** : le retour à l'image précédente (`ghcr.io/<owner>/learny-py:<sha>` antérieur) sur
+  `api-py` **et** `worker-py`, sans changement de variables ; il n'y a plus de rollback par
+  contexte ni de retour vers Hono (la pile ne le contient plus).
 
-Les commandes de bascule, de drain, de rollback et de restauration sont dans
+Les commandes de déploiement, de santé, de drain, de rollback et de restauration sont dans
 `docs/operations/python-cutover.md`. Les mesures de charge, de canary et de restauration se font sur
 le staging fourni par le porteur (ADR-2009) ; tant qu'il manque, SPEC-2301 est bloquée `--external`
 et le reste est prouvé en local.

@@ -1,10 +1,9 @@
 """Course generation: the pure rules of the module-to-course pipeline (SPEC-608, SPEC-2207).
 
-Port of the pure half of `packages/tutor/src/course/{generate,run}.ts`: the section kind written in
-the database, the anchor of a section, its data and its text, the media of a citation, the passages
-selected inside the course context budget, the validation and the normalisation of one chapter
-draft, the ordered ends of a notion link, and the deterministic identifiers of the version and of
-the two notifications. No IO, no clock, no model call.
+The section kind written in the database, the anchor of a section, its data and its text, the media
+of a citation, the passages selected inside the course context budget, the validation and the
+normalisation of one chapter draft, the ordered ends of a notion link, and the deterministic
+identifiers of the version and of the two notifications. No IO, no clock, no model call.
 """
 
 import json
@@ -158,12 +157,7 @@ def uuid_array(ids: Collection[str]) -> str:
 
 
 def js_slice(text: str, limit: int) -> str:
-    """`String.prototype.slice`: the first `limit` UTF-16 units, on a code point boundary.
-
-    A limit that falls inside an astral character keeps the whole character where TypeScript would
-    return a lone surrogate: such a title cannot be stored as UTF-8, so the divergence is accepted
-    (the oracle leaves that case out).
-    """
+    """`String.prototype.slice`: the first `limit` UTF-16 units, on a code point boundary."""
     if text.isascii():
         return text[:limit]
     units = 0

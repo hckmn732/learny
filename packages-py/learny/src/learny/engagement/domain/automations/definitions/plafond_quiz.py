@@ -1,9 +1,8 @@
 """Smoothed and capped global quiz of the automations (SPEC-718, BR-AUT-07, ADR-0190, ADR-0047).
 
-Ported from `packages/automations/src/automatisme-7-quiz-global-plafonne-et-lisse.ts`: the session
-is the effect and a started session already froze its snapshot, so `apply` writes nothing and there
-is no undo (the service reopens the deferred notions from the deterministic draw on the next read).
-Only the one-line explanation is decided here, for every status of the journal.
+The session is the effect and a started session already froze its snapshot, so `apply` writes
+nothing and there is no undo (the service reopens the deferred notions from the deterministic draw
+on the next read). Only the one-line explanation is decided here, for every status of the journal.
 """
 
 from learny.engagement.domain.automations.definitions.labels import (

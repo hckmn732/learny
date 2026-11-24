@@ -1,10 +1,9 @@
 """Self-service export (SPEC-211 EF-1, EF-2, ET-1, ET-3, CL-1, CL-2, CL-5; ADR-0044).
 
-Port of `packages/services/src/personal-data/export.ts`. The creation runs in one transaction with
-the outbox: a learner never ends up with a queued row and no event. The three-exports-a-day limit
-uses the learner's local civil day, and a job already queued or running is returned as is (double
-click: one job, one e-mail). Reads and the signed URL go through the owner's row-level security;
-another learner's identifier is a plain 404.
+The creation runs in one transaction with the outbox: a learner never ends up with a queued row and
+no event. The three-exports-a-day limit uses the learner's local civil day, and a job already queued
+or running is returned as is (double click: one job, one e-mail). Reads and the signed URL go
+through the owner's row-level security; another learner's identifier is a plain 404.
 """
 
 from typing import Any

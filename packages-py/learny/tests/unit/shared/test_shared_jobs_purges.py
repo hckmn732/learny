@@ -1,9 +1,4 @@
-"""Bounds of the purge jobs, without any database (SPEC-2207, port of the TypeScript cutoffs).
-
-Every retained instant is derived from the injected clock, so these tests freeze it and compare
-the cutoffs with the exact boundaries of the source: strictly older is deleted, the boundary
-itself is kept.
-"""
+"""Bounds of the purge jobs, without any database (SPEC-2207)."""
 
 from datetime import timedelta
 

@@ -1,9 +1,8 @@
-"""Built-in secret scanner (port of `packages/config/src/secret-patterns.ts`, ADR-0103).
+"""Built-in secret scanner (ADR-0103).
 
 The `_dev` tooling endpoint scans the text a demonstration form carries and returns one finding per
 matched span; the first pattern wins when several overlap, and the preview is masked, so a scanned
-secret never leaves this module in clear. The file-name predicate of the TypeScript module is not
-ported: the Python backend never walks the repository, the CI tool keeps that half.
+secret never leaves this module in clear.
 """
 
 import re

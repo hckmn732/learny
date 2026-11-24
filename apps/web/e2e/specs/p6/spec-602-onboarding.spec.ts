@@ -5,7 +5,7 @@ import { fileURLToPath } from 'node:url';
 
 import { createClient } from '@supabase/supabase-js';
 
-import { closeDb, serviceDb, sql } from '@learny/db';
+import { closeDb, serviceDb, sql } from '@learny/testing/db';
 import { expect, test } from '@learny/testing/playwright';
 import { deleteTestSession, supabaseLocalEnv } from '@learny/testing/supabase';
 import {

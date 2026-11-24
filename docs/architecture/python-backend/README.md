@@ -24,8 +24,8 @@ Written in English on purpose: the Python backend is English-only (ADR-2011).
 | Models | Pydantic models **generated** from the contract; they are the DTOs (no parallel DTO layer) | ADR-2012 |
 | Persistence | SQLAlchemy 2 Core async + psycopg 3, SQL written explicitly (`text()`), no ORM mapping, same schema and migrations | ADR-2013 |
 | Identity/RLS | Local JWT verification, transaction-local claims + `set local role authenticated`, closed list of privileged use cases | ADR-2010 |
-| Async jobs | Home-made worker: `event_outbox` → `job_deliveries` fan-out, leases with `FOR UPDATE SKIP LOCKED`, all consumers flipped together in SPEC-2207 | ADR-2006, ADR-2014 |
-| Coexistence | Python facade in front of Hono, `api/ownership.yaml` gives one owner per operation/consumer | ADR-2005 |
+| Async jobs | Home-made worker: `event_outbox` → `job_deliveries` fan-out, leases with `FOR UPDATE SKIP LOCKED`, 23 consumers and 2 cron ticks, all Python | ADR-2006, ADR-2014 |
+| Single runtime | The FastAPI facade and the Python worker serve the whole contract; there is no relay and no ownership table (retired by SPEC-2302) | ADR-2005, ADR-2043 |
 | Libraries | Fixed list, no frameworks on top (no LangChain, no LiteLLM, no DI container, no ORM) | ADR-2015 |
 | Language | Code, comments, logs, tests, docstrings in English; user-facing French strings isolated in `locale_fr` modules and templates, byte-identical to today | ADR-2011 |
 | Hosting | Coolify (API + worker), web unchanged | ADR-2007 |
@@ -33,7 +33,7 @@ Written in English on purpose: the Python backend is English-only (ADR-2011).
 
 ## Golden rules (memorise these)
 
-1. **Parity first.** The TypeScript behaviour on `main` is the oracle. If this canvas and the TS code disagree on an observable behaviour, the TS behaviour wins and you record an ADR (`node tools/sdd/adr.mjs new …`).
+1. **Parity first.** The oracles (e2e, visual, accessibility, HTTP contract, `tools/parity`) are the reference. The TypeScript backend is gone, so a disagreement with an oracle is a Python bug: fix the Python, never the test (ADR-2008).
 2. **Port, don't redesign.** Translate the behaviour and the SQL, not the TypeScript file structure. No new features, no "improvements" visible to users.
 3. **Boring code.** Functions over classes, explicit parameters over magic, one way to do each thing. The anti-patterns list in 00-conventions §4 is binding.
 4. **Never edit an oracle.** E2E, visual, accessibility and HTTP-contract tests are frozen (ADR-2008). Fix the Python, never the test.

@@ -1,4 +1,4 @@
-"""[SPEC-2003] Problem+json rendering matches the TypeScript backend (ADR-2008)."""
+"""[SPEC-2003] Problem+json rendering of the API contract (ADR-2008)."""
 
 from pathlib import Path
 
@@ -57,7 +57,7 @@ def test_errors_are_not_merged_outside_the_three_validation_codes() -> None:
 
 
 def test_retry_after_never_reaches_the_body() -> None:
-    # `retryAfterSec` drives the `Retry-After` header of packages/http/src/problem.ts, not the body.
+    # `retryAfterSec` drives the `Retry-After` header of, not the body.
     problem = to_problem(AppError("RATE_LIMITED", "too many", retry_after=2), "req-5", CATALOG)
     assert "retryAfterSec" not in problem
     assert "retry_after" not in problem

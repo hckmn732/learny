@@ -1,9 +1,8 @@
 """Idempotent POST (SPEC-2101 step 3, SPEC-201 ET-4, ADR-0120, ADR-0219).
 
-Port of `packages/http/src/idempotency.ts` and of the idempotency repositories of
-`packages/db/src/repositories/idempotency.ts`. The reservation is committed before the service runs,
-so a concurrent request with the same key sees it (409 while in progress). A success or a 4xx is
-kept for replays during 24 h; a 5xx or an exception releases the reservation so the client can retry.
+The reservation is committed before the service runs, so a concurrent request with the same key sees
+it (409 while in progress). A success or a 4xx is kept for replays during 24 h; a 5xx or an
+exception releases the reservation so the client can retry.
 """
 
 import hashlib
@@ -151,9 +150,8 @@ def _record(row: Any) -> IdempotencyRecord:
 
 
 class IdempotencyStore:
-    """Opens one service transaction per call, like `serviceDb().transaction` in TypeScript."""
-
     def __init__(self, db: Database, clock: Clock) -> None:
+        """Opens one service transaction per call."""
         self._db = db
         self._clock = clock
 

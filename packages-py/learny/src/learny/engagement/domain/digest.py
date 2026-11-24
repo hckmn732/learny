@@ -1,8 +1,7 @@
-"""Pure rules of the daily digest (SPEC-2205, ported from `packages/notifications/src/digest.ts`).
+"""Pure rules of the daily digest (SPEC-2205).
 
 The digest lists the activities of the learner's local day (at most twenty, the rest summarised in
-`plannedLabel`) and the notifications capped the previous local day (at most ten titles). The
-duration rounding is the `Math.round` of the TypeScript, applied to a positive difference.
+`plannedLabel`) and the notifications capped the previous local day (at most ten titles).
 """
 
 import math
@@ -55,7 +54,7 @@ def js_round(value: float) -> int:
 
 
 def minutes_between(start: datetime, end: datetime) -> int:
-    """Whole minutes between two instants, rounded like the TypeScript difference."""
+    """Whole minutes between two instants, rounded."""
     return js_round((to_epoch_ms(end) - to_epoch_ms(start)) / MS_PER_MINUTE)
 
 

@@ -16,12 +16,15 @@ TABLE_CHECK_BALANCED = "\u2713 Pi\u00e8ce \u00e9quilibr\u00e9e"
 TABLE_CHECK_DIFFERENCE = "\u00c9cart : {amount}"
 TABLE_CHECK_EURO = "{amount} \u20ac"
 
-# --- bricks (packages/services/src/bricks/brick-service.ts) ---------------------------------------
+# bricks --------------------------------------
 
 BRICK_DATA_INVALID = "Les donn\u00e9es envoy\u00e9es sont invalides."
 BRICK_INVALID = "La brique est invalide."
 FORMATION_NOT_FOUND = "Formation introuvable."
 BRICK_NOT_FOUND = "Brique introuvable."
+BRICK_VERSION_NOT_FOUND = "Version de brique introuvable."
+BRICK_NOT_CREATED = "Brique non cr\u00e9\u00e9e."
+BRICK_STORED_PAYLOAD_INVALID = "La charge stock\u00e9e de la brique est invalide."
 BRICK_RETIRED = "Cette brique a \u00e9t\u00e9 retir\u00e9e."
 BRICK_VERSION_OUTDATED = "Version obsol\u00e8te : la brique est en version {version}."
 BRICK_CHANGED_MEANWHILE = "La brique a \u00e9t\u00e9 modifi\u00e9e entre-temps."
@@ -29,7 +32,7 @@ BRICK_CURRENT_VERSION_MISSING = "Version courante de la brique introuvable."
 BRICK_REPORT_NOT_CREATED = "Signalement non cr\u00e9\u00e9."
 BRICK_VERSION_NOT_CREATED = "Version de brique non cr\u00e9\u00e9e."
 
-# --- quiz attempts (packages/services/src/quiz/check.ts) -------------------------------------------
+# quiz attempts ------------------------------------------
 
 QUIZ_ATTEMPT_INVALID_ID = "Identifiant de tentative invalide."
 QUIZ_ATTEMPT_NOT_FOUND = "Tentative introuvable."
@@ -53,7 +56,7 @@ QUIZ_TYPE_OPEN = "Question ouverte"
 QUIZ_DEFAULT_NOTION_LABEL = "Notion"
 
 
-# --- mock exams (packages/services/src/mock-exams/attempt.ts) --------------------------------------
+# mock exams -------------------------------------
 
 EXAM_ATTEMPT_NOT_FOUND = "Examen introuvable."
 EXAM_ATTEMPT_CLOSED = "Cet examen est termin\u00e9."
@@ -63,7 +66,7 @@ EXAM_POSITION_UNKNOWN = "Cette question n\u2019existe pas dans l\u2019examen."
 EXAM_QUESTION_UNREADABLE = "La question jou\u00e9e est illisible."
 EXAM_RESPONSE_MISMATCH = "La r\u00e9ponse ne correspond pas \u00e0 la question."
 
-# --- exam format and introduction (packages/services/src/mock-exams/format.ts) ---------------------
+# exam format and introduction --------------------
 
 EXAM_FORMATION_INVALID_ID = "Identifiant de formation invalide."
 EXAM_FORMATION_NOT_FOUND = "Formation introuvable."
@@ -71,7 +74,7 @@ EXAM_FORMAT_NOT_CONFIRMED = "Confirmez le format extrait de votre guide avant de
 EXAM_NO_PROGRAMME = "Cette formation n\u2019a pas encore de programme."
 EXAM_NO_QUESTION_AVAILABLE = "Aucune question d\u2019examen n\u2019est disponible."
 
-# --- exam attempts (packages/services/src/mock-exams/attempt.ts) -----------------------------------
+# exam attempts ----------------------------------
 
 EXAM_ATTEMPT_INVALID_ID = "Identifiant de tentative invalide."
 EXAM_NOT_GRADED = "Cet examen n\u2019est pas encore corrig\u00e9."
@@ -94,13 +97,13 @@ EXAM_PLAN_DIAGNOSTIC = (
     "sans p\u00e9naliser {label}."
 )
 
-# --- retry gate of a validation attempt (packages/services/src/quiz/retry-guard.ts) ---------------
+# retry gate of a validation attempt --------------
 
 RETRY_REMEDIATION_DETAIL = "Terminez d\u2019abord la rem\u00e9diation cibl\u00e9e."
 RETRY_AVAILABLE_AT = "Nouvelle tentative possible {label}."
 RETRY_NOT_AVAILABLE = "La nouvelle tentative n\u2019est pas encore disponible."
 
-# --- result of a validation attempt (packages/services/src/quiz/result.ts) ------------------------
+# result of a validation attempt -----------------------
 
 RESULT_GAP_DEFAULT_LABEL = "Lacune"
 RESULT_EVIDENCE_CONFUSION = "Confondue avec une autre notion dans vos r\u00e9ponses."
@@ -128,7 +131,7 @@ GAP_PROPOSALS = {
 REMEDIATION_MAX_GAPS = 3
 """REMEDIATION_RULES.maxGaps (ADR-0173)."""
 
-# --- creation of a validation attempt (packages/services/src/quiz/start.ts) -----------------------
+# creation of a validation attempt ----------------------
 
 QUIZ_MODULE_INVALID_ID = "Identifiant de module invalide."
 QUIZ_MODULE_NOT_FOUND = "Module introuvable."
@@ -138,7 +141,7 @@ QUIZ_NO_QUESTION_FOR_MODULE = "Aucune question disponible pour ce module."
 QUIZ_ACTIVITY_NOT_CREATED = "Activit\u00e9 non cr\u00e9\u00e9e."
 QUIZ_ATTEMPT_NOT_CREATED = "Tentative non cr\u00e9\u00e9e."
 
-# --- submission of a validation attempt (packages/services/src/quiz/submit.ts) --------------------
+# submission of a validation attempt -------------------
 
 QUIZ_NOT_SUBMITTED = "Cette tentative n\u2019est pas soumise."
 QUIZ_NOT_MODIFIABLE = "Cette tentative n\u2019est plus modifiable."
@@ -146,7 +149,7 @@ QUIZ_UNCHECKED = "Toutes les questions doivent \u00eatre v\u00e9rifi\u00e9es."
 QUIZ_UNCHECKED_HINT = "V\u00e9rifiez cette question avant de terminer."
 
 
-# --- practice exercises (packages/services/src/exercises/{attempt-service,exercise-store,
+# practice exercises (
 # grade-exercise,validate-production}.ts, SPEC-613) ------------------------------------------------
 
 EXERCISE_INVALID_ID = "Identifiant d\u2019exercice invalide."
@@ -196,7 +199,7 @@ EXERCISE_NEXT_STEP_RETRY = (
     "Vos lacunes sont \u00e0 jour."
 )
 
-# --- targeted remediation (packages/services/src/remediation/index.ts, SPEC-612, ADR-0173) --------
+# targeted remediation ( SPEC-612, ADR-0173) -------
 
 REMEDIATION_MODULE_INVALID_ID = "Identifiant de module invalide."
 REMEDIATION_MODULE_NOT_FOUND = "Module introuvable."
@@ -248,7 +251,7 @@ REMEDIATION_SYSTEM_PROMPT = "\n".join(
 )
 """REMEDIATION_SYSTEM_PROMPT: the system prompt of `defaultRemediationPlanGenerator`."""
 
-# --- deferred correction of an open answer (packages/services/src/quiz/{grade-open,submit}.ts) ------
+# deferred correction of an open answer -----
 
 OPEN_GRADE_PROMPT_ID = "tutor.grade-open"
 OPEN_GRADE_SCENARIO = "grade-open-good"

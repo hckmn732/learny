@@ -1,8 +1,7 @@
 """Shared helpers of the six grade modules: rounding, outcome assembly and response issues.
 
-Pure and synchronous; importing a model SDK here is forbidden by the architecture test (CA-7).
-Port of `packages/bricks/src/{grade-support,grade}.ts`: they live in their own module so the type
-graders and the dispatcher never form an import cycle.
+Pure and synchronous; importing a model SDK here is forbidden by the architecture test (CA-7). They
+live in their own module so the type graders and the dispatcher never form an import cycle.
 """
 
 import math
@@ -14,7 +13,7 @@ from learny.shared.jsmath import js_round
 from learny.shared.locale_fr import assessments as texts
 
 EPSILON = 2.220446049250313e-16
-"""`Number.EPSILON`, added by `round2` before rounding like the TypeScript helper."""
+"""`Number.EPSILON`, added by `round2` before rounding."""
 
 
 class BrickGradeError(Exception):

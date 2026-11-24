@@ -1,4 +1,4 @@
-"""Pure rules of the validation-quiz reminders (SPEC-2205, from `packages/notifications/src/producers`).
+"""Pure rules of the validation-quiz reminders.
 
 A reminder is requested forty minutes before the planned quiz, with the zone of the profile, and is
 transmitted to `notify` as `eligibleAt`; the dedupe key contains the slot and its exact start, so a

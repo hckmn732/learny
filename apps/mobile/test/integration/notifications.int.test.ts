@@ -12,8 +12,6 @@
 import { createClient } from '@supabase/supabase-js';
 import { beforeAll, describe, expect, it } from 'vitest';
 
-import type { DevNotifySettings } from '@learny/contracts';
-
 import { createMobileApiClient } from '../../src/api/client';
 
 const ENV = process.env as Record<string, string | undefined>;
@@ -23,21 +21,6 @@ const ANON_KEY = ENV.MOBILE_SUPABASE_ANON_KEY ?? ENV.NEXT_PUBLIC_SUPABASE_ANON_K
 const API_URL = ENV.MOBILE_API_URL ?? 'http://127.0.0.1:3001';
 const DEMO_EMAIL = ENV.MOBILE_DEMO_EMAIL ?? 'alex.perrin@demo.learny.test';
 const DEMO_PASSWORD = ENV.MOBILE_DEMO_PASSWORD ?? 'learny-demo-3003';
-
-const SETTINGS: DevNotifySettings = {
-  channelEmail: true,
-  channelPush: false,
-  typeRevision: true,
-  typeValidation: true,
-  typeCourse: true,
-  typeGap: true,
-  typePlanning: true,
-  typeRelaunch: true,
-  quietStart: '21:00',
-  quietEnd: '08:00',
-  weekendQuiet: true,
-  maxPerDay: 8,
-};
 
 async function signedInClient() {
   if (ANON_KEY === '') {
@@ -96,21 +79,18 @@ describe('[SPEC-3102] centre de notifications contre la pile locale', () => {
   });
 
   it('marque une notification lue, sans seconde écriture (CA-2)', async () => {
-    const created = await client.api.devNotify({
-      body: {
-        type: 'weekly_review',
-        tone: 'vous',
-        at: '2026-11-11T12:20:00.000Z',
-        settings: SETTINGS,
-        dedupeKey: 'spec-3102-integration-lecture',
-      },
-    });
+    // ADR-2041: the dev notify route is retired; the demonstration seed provides the notification.
+    const page = await client.api.notificationsList({ query: { filter: 'all', limit: 50 } });
+    const target = page.items.find((item) => item.readAt === null) ?? page.items[0];
+    expect(target).toBeDefined();
+    if (target === undefined) return;
+    const wasUnread = target.readAt === null;
     const before = await client.api.notificationsUnreadCount({});
 
-    const read = await client.api.notificationRead({ params: { id: created.notification.id } });
-    expect(read.unreadCount).toBe(Math.max(0, before.count - (created.created ? 1 : 0)));
+    const read = await client.api.notificationRead({ params: { id: target.id } });
+    expect(read.unreadCount).toBe(Math.max(0, before.count - (wasUnread ? 1 : 0)));
 
-    const again = await client.api.notificationRead({ params: { id: created.notification.id } });
+    const again = await client.api.notificationRead({ params: { id: target.id } });
     expect(again.unreadCount).toBe(read.unreadCount);
   });
 

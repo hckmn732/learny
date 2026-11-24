@@ -1,8 +1,8 @@
-"""[SPEC-801] Server sync order, clamp and expiry (ported from `sync.test.ts`).
+"""[SPEC-801] Server sync order, clamp and expiry.
 
 The batch is applied in `answeredAt` order, an answer can never be in the future, and an answer
-older than the local day of the activity or seven days is `EXPIRED`. Each case is the Python port of
-a Vitest case of `packages/services/src/offline/sync.test.ts`.
+older than the local day of the activity or seven days is `EXPIRED`. Each case replays one
+reference case of the offline sync.
 """
 
 from typing import Any
@@ -21,7 +21,7 @@ NOW = parse_iso("2026-11-11T12:20:00Z")
 
 
 def entry(client_id: str, answered_at: str) -> dict[str, Any]:
-    """The `entry` fixture of the TypeScript test, unchanged."""
+    """The `entry` fixture of the reference suite, unchanged."""
     return {
         "clientId": client_id,
         "kind": "complete",

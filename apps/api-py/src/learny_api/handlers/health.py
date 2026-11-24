@@ -1,8 +1,8 @@
-"""HTTP handler of the health probe (SPEC-2207, port of `special/health.ts`).
+"""HTTP handler of the health probe (SPEC-2207).
 
 The probe is the only `py` operation whose answer is not a contract document: the handler returns
 the `Response` of SPEC-006 EF-2, so the pipeline adds the request id, the timing and the
-`x-served-by` header exactly like the TypeScript `routeHandler` does for a direct response.
+`x-served-by` header.
 """
 
 from typing import Any

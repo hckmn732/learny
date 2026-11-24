@@ -1,10 +1,9 @@
 """Public push endpoint of a browser subscription (SPEC-205 EF-1, CL-3, ET-3).
 
-Port of `isPublicPushEndpoint` (`packages/contracts/src/push.ts`). The rule is a Zod refinement of
-the contract, which the generated Pydantic model cannot express: OpenAPI keeps only the string
-length, so the facade applies it after validation, like the other contract refinements. The check is
-syntactic, without any DNS lookup: the live transport never follows a redirection and never contacts
-a private address.
+The rule is a Zod refinement of the contract, which the generated Pydantic model cannot express:
+OpenAPI keeps only the string length, so the facade applies it after validation, like the other
+contract refinements. The check is syntactic, without any DNS lookup: the live transport never
+follows a redirection and never contacts a private address.
 """
 
 import re

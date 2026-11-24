@@ -3,10 +3,10 @@
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { z } from 'zod';
 
-import { ROUTES } from '@learny/contracts';
 import { AppError, isAppError } from '@learny/core';
 
 import { createApiClient } from './client';
+import { devEcho } from './test-routes';
 
 const Item = z.object({ id: z.string(), title: z.string() });
 
@@ -175,7 +175,7 @@ describe('[SPEC-1002] api client', () => {
       fetch: fetchMock,
       onUnauthorized: () => Promise.resolve(true),
     });
-    const result = await client.callApi(ROUTES.devEcho, { body: { message: 'hi' } });
+    const result = await client.callApi(devEcho, { body: { message: 'hi' } });
     expect(result.counter).toBe(1);
     const keys = fetchMock.mock.calls.map(
       (call) => (call[1]?.headers as Record<string, string>)['Idempotency-Key'],

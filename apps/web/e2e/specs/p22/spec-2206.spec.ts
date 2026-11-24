@@ -8,7 +8,6 @@ import { expect, test } from '@learny/testing/playwright';
 import { createTestSession, deleteTestSession } from '@learny/testing/supabase';
 
 const DEFAULT_ORIGIN = 'http://127.0.0.1:3100';
-const DEMO = '/_dev/sdd/SPEC-2206';
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/;
 // ADR-0047: the four test servers share the same frozen instant, so the deadlines are exact.
 const FIXED_NOW = '2026-11-11T12:20:00.000Z';
@@ -109,47 +108,3 @@ test('sert la facturation et la confidentialité depuis Python @SPEC-2206', asyn
   }
 });
 
-test('conformité visuelle des domaines facturation et confidentialité @SPEC-2206 @visual', async ({
-  page,
-  axeCheck,
-  captureEvidence,
-}) => {
-  await page.goto(DEMO);
-  await expect(page.getByRole('heading', { level: 1 })).toHaveText(
-    'Domaines billing et privacy, abonnements et données personnelles en Python',
-  );
-  await expect(page.getByTestId('spec-2206-scope')).toContainText('Opérations du périmètre');
-  await expect(page.getByTestId('spec-2206-scope')).toContainText('8');
-  await expect(page.getByTestId('spec-2206-scope')).toContainText('Servies par Python');
-  await expect(page.getByTestId('spec-2206-scope')).toContainText('Encore relayées à Hono');
-  await expect(page.getByTestId('spec-2206-scope')).toContainText('Lectures / écritures');
-  await expect(page.getByTestId('spec-2206-scope')).toContainText('2 / 6');
-  await expect(page.getByTestId('spec-2206-scope-jobs')).toContainText(
-    'trois cas d’usage de job',
-  );
-  await expect(page.getByTestId('spec-2206-operations').locator('li')).toHaveCount(8);
-  await expect(page.getByTestId('spec-2206-operations')).toContainText('billing.webhook');
-  await expect(page.getByTestId('spec-2206-operations')).toContainText('me.export.read');
-  await expect(page.getByTestId('spec-2206-operations')).toContainText('me.deletion.cancel');
-  await expect(page.getByTestId('spec-2206-entitlements')).toContainText('Cinq statuts');
-  await expect(page.getByTestId('spec-2206-entitlements')).toContainText('past_due');
-  await expect(page.getByTestId('spec-2206-entitlements')).toContainText('Aucune période de grâce');
-  await expect(page.getByTestId('spec-2206-webhook')).toContainText('300 s');
-  await expect(page.getByTestId('spec-2206-webhook')).toContainText('ADR-2031');
-  await expect(page.getByTestId('spec-2206-webhook')).toContainText('duplicate');
-  await expect(page.getByTestId('spec-2206-export')).toContainText('20 tables');
-  await expect(page.getByTestId('spec-2206-export')).toContainText('URL signée de 600 s');
-  await expect(page.getByTestId('spec-2206-export')).toContainText('EXPORT_EXPIRED');
-  await expect(page.getByTestId('spec-2206-export')).toContainText('grâce de 24 h');
-  await expect(page.getByTestId('spec-2206-deletion')).toContainText('J+30');
-  await expect(page.getByTestId('spec-2206-deletion')).toContainText('Annulation');
-  await expect(page.getByTestId('spec-2206-deletion')).toContainText('204');
-  await expect(page.getByTestId('spec-2206-guarantees')).toContainText('Parité contractuelle');
-  await expect(page.getByTestId('spec-2206-guarantees')).toContainText('vecteurs d’oracle');
-  await expect(page.getByTestId('spec-2206-guarantees')).toContainText('import-linter');
-  await axeCheck();
-  await captureEvidence('spec-2206-desktop');
-  await page.setViewportSize({ width: 390, height: 844 });
-  await axeCheck();
-  await captureEvidence('spec-2206-mobile');
-});

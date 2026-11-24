@@ -150,16 +150,3 @@ export const PushDemoSendOutput = z.object({
 });
 export type PushDemoSendOutput = z.infer<typeof PushDemoSendOutput>;
 
-export const devPushSend = defineRoute({
-  id: 'dev.pushSend',
-  method: 'POST',
-  path: '/api/v1/dev/sdd/push/send',
-  auth: 'user',
-  output: PushDemoSendOutput,
-  successStatus: 201,
-  summary:
-    'Route de démonstration : crée une notification de l’utilisateur courant et l’envoie par le canal push simulé (SPEC-205).',
-  errors: ['VALIDATION_FAILED', 'NOT_FOUND'],
-});
-
-export const pushDevRoutes = { devPushSend } as const;

@@ -1,6 +1,4 @@
-"""Daily digest of the learner (SPEC-2205, from `packages/notifications/src/digest.ts`).
-
-`plan_daily_digests` is the planning half of the `notifications-daily-digest` job: it selects the
+"""`plan_daily_digests` is the planning half of the `notifications-daily-digest` job: it selects the
 active learners whose `digest_time` falls in the local window of the tick and returns the instant at
 which each digest is due. `send_daily_digest` is the sending half: it reads the local day's agenda
 and the capped notifications of the previous day, then delegates the write to `notify`, whose dedupe

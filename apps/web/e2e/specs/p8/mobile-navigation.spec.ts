@@ -1,7 +1,7 @@
 // SPEC-802 — mobile navigation and full-screen panels (EF-2, EF-3, EF-5, EF-6, CA-3, CA-4).
 // The `mobile` project runs this file; the desktop project skips it explicitly.
-import { closeDb } from '@learny/db';
-import { DEMO_USERS, demoChapterId, demoFormationId, demoModuleId, demoUserId } from '@learny/db/seed/fixtures';
+import { closeDb } from '@learny/testing/db';
+import { DEMO_USERS, demoChapterId, demoFormationId, demoModuleId, demoUserId } from '@learny/testing/db-factories';
 import { expect, restoreDemoData, test } from '@learny/testing/playwright';
 import { createDemoSession, type TestSession } from '@learny/testing/supabase';
 

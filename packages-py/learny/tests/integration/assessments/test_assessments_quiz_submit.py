@@ -1,9 +1,9 @@
 """[SPEC-2202] Submission and final score of a validation attempt (SPEC-611, EF-7, ET-7, ET-8).
 
-Port of the useful cases of `packages/services/src/quiz/submit.ts`: the submission commits the
-answers and `quiz/submitted` together, a second submission relaunches the correction with a distinct
-event identifier, an unchecked question blocks the submission, and `finalize_attempt` computes the
-score, the per-notion detail and the verdict without any client-supplied value.
+The submission commits the answers and `quiz/submitted` together, a second submission relaunches the
+correction with a distinct event identifier, an unchecked question blocks the submission, and
+`finalize_attempt` computes the score, the per-notion detail and the verdict without any
+client-supplied value.
 """
 
 import json

@@ -1,7 +1,7 @@
-"""[SPEC-2206] Layout of the personal-data archive (ported from `zip-layout.test.ts`, SPEC-211 CA-1).
+"""[SPEC-2206] Layout of the personal-data archive (SPEC-211, CA-1).
 
-Slugs, module numbering, collisions suffixed `-2`, hostile names neutralised, `settings.json` without
-any secret, French size and date labels.
+Slugs, module numbering, collisions suffixed `-2`, hostile names neutralised, `settings.json`
+without any secret, French size and date labels.
 """
 
 import pytest

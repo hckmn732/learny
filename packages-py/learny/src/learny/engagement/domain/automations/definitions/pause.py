@@ -1,9 +1,8 @@
 """Global pause and return of the automations (SPEC-721, BR-AUT-10, ADR-0016, ADR-0190).
 
-Ported from `packages/automations/src/definitions/pause.ts`: the nightly effect that ends a due
-pause once, resumes the formations the global pause froze and draws the ten-minute diagnostic. The
-transition itself belongs to the pause service; the definition only decides it through `EndPause`,
-so the domain stays free of IO.
+The nightly effect that ends a due pause once, resumes the formations the global pause froze and
+draws the ten-minute diagnostic. The transition itself belongs to the pause service; the definition
+only decides it through `EndPause`, so the domain stays free of IO.
 """
 
 from learny.engagement.domain.automations.definitions.labels import string_of

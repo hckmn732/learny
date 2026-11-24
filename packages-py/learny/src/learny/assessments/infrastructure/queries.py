@@ -1,11 +1,6 @@
 """SQL of the assessments context (SPEC-2202).
 
-Every statement is copied from the TypeScript service it replaces (`bricks/brick-service.ts`,
-`quiz/*.ts`, ...): same tables, same columns, same `order by`, same `for update` and same advisory
-locks. `${x}` placeholders become bound `:x` parameters and nothing here reads the clock.
-
-The aliases are snake_case because Python reads them as mappings; the TypeScript `sql` template
-quotes camelCase aliases for the same reason.
+`${x}` placeholders become bound `:x` parameters and nothing here reads the clock.
 """
 
 from collections.abc import Mapping, Sequence
@@ -22,12 +17,12 @@ def row_of(found: Any) -> dict[str, Any]:
 
 
 def _uuid_list(statement: Any) -> Any:
-    """`in (${uuidList(ids)})` of the TypeScript template: one `uuid[]` parameter, same semantics."""
+    """One `uuid[]` parameter for the `in (...)` list of the statement."""
     return statement
 
 
 # --------------------------------------------------------------------------------------------------
-# bricks.correct / bricks.report (packages/services/src/bricks/brick-service.ts, SPEC-501 ET-8)
+# bricks.correct / bricks.report
 # --------------------------------------------------------------------------------------------------
 
 READ_FORMATION_OWNER = text(
@@ -53,6 +48,36 @@ LOCK_BRICK = text(
         on v.brick_id = b.id and v.version = b.current_version
      where b.id = cast(:brick_id as uuid)
      for update of b
+    """
+)
+
+INSERT_BRICK = text(
+    """
+    insert into public.bricks (
+      owner_id, formation_id, type, notion_ids, purpose, status, current_version
+    ) values (
+      cast(:owner_id as uuid),
+      cast(:formation_id as uuid),
+      :type,
+      cast(:notion_ids as uuid[]),
+      :purpose,
+      'active',
+      1
+    )
+    returning id::text as id
+    """
+)
+
+READ_PUBLIC_BRICK = text(
+    """
+    select b.id::text as brick_id,
+           v.id::text as version_id,
+           b.type::text as type,
+           b.notion_ids::text[] as notion_ids,
+           v.payload as payload
+      from public.brick_versions v
+      join public.bricks b on b.id = v.brick_id
+     where v.id = cast(:version_id as uuid) and b.owner_id = cast(:user_id as uuid)
     """
 )
 
@@ -133,7 +158,7 @@ MARK_BRICK_REPORTED = text(
     """
 )
 
-# --- reference resolver (packages/services/src/bricks/reference-resolver.ts) ----------------------
+# --- reference resolver ----------------------
 
 RESOLVE_EXISTING_NOTION_IDS = _uuid_list(
     text(
@@ -231,6 +256,37 @@ async def insert_brick_version(
     )
     found = result.mappings().first()
     return None if found is None else str(found["id"])
+
+
+async def insert_brick(
+    tx: Tx,
+    *,
+    owner_id: str,
+    formation_id: str,
+    type_name: str,
+    notion_ids: Sequence[str],
+    purpose: str,
+) -> str | None:
+    """EF-1 - the brick envelope, version 1 being inserted in the same transaction."""
+    result = await tx.conn.execute(
+        INSERT_BRICK,
+        {
+            "owner_id": owner_id,
+            "formation_id": formation_id,
+            "type": type_name,
+            "notion_ids": "{" + ",".join(notion_ids) + "}",
+            "purpose": purpose,
+        },
+    )
+    found = result.mappings().first()
+    return None if found is None else str(found["id"])
+
+
+async def read_public_brick(tx: Tx, *, user_id: str, version_id: str) -> Mapping[str, Any] | None:
+    """EF-6 - one owned version and the envelope of its brick."""
+    result = await tx.conn.execute(READ_PUBLIC_BRICK, {"user_id": user_id, "version_id": version_id})
+    found = result.mappings().first()
+    return None if found is None else row_of(found)
 
 
 async def update_brick_current_version(
@@ -339,7 +395,7 @@ async def resolve_existing_brick_ids(tx: Tx, user_id: str, formation_id: str, id
 
 
 # --------------------------------------------------------------------------------------------------
-# offline.pack (packages/services/src/offline/pack.ts, SPEC-801 ET-5, EF-4)
+# offline.pack
 # --------------------------------------------------------------------------------------------------
 
 READ_OFFLINE_PROFILE = text(
@@ -437,7 +493,7 @@ async def read_offline_extra_cards(
 
 # --------------------------------------------------------------------------------------------------
 # quiz.attempts.get / quiz.answers.save / quiz.answers.check
-# (packages/services/src/quiz/check.ts, SPEC-611 EF-1 to EF-7)
+#
 # --------------------------------------------------------------------------------------------------
 
 READ_QUIZ_ATTEMPT = text(
@@ -624,7 +680,7 @@ async def update_quiz_answer_checked(
 
 # --------------------------------------------------------------------------------------------------
 # exam.answers.save / exam.questions.mark
-# (packages/services/src/mock-exams/attempt.ts, SPEC-614 EF-2, ET-4, BR-PRA-03)
+#
 # --------------------------------------------------------------------------------------------------
 
 READ_EXAM_ATTEMPT = text(
@@ -735,7 +791,7 @@ async def update_exam_marked_positions(tx: Tx, attempt_id: str, positions: str) 
 
 # --------------------------------------------------------------------------------------------------
 # exam.intro / exam.format.confirm
-# (packages/services/src/mock-exams/format.ts, SPEC-614 EF-1, EF-5, ET-3; BR-PRA-05)
+#
 # --------------------------------------------------------------------------------------------------
 
 READ_EXAM_FORMATION = text(
@@ -1028,7 +1084,7 @@ async def read_slot_times(tx: Tx, slot_id: str) -> Mapping[str, Any] | None:
 
 # --------------------------------------------------------------------------------------------------
 # exam.attempts.create / get / submit / result
-# (packages/services/src/mock-exams/attempt.ts, SPEC-614 EF-1 to EF-4, ET-4, ET-5, ADR-0172)
+#
 # --------------------------------------------------------------------------------------------------
 
 LOCK_EXAM_START = text("select pg_advisory_xact_lock(hashtextextended(:key, 0))")
@@ -1303,7 +1359,7 @@ async def update_exam_graded_attempt(
 
 # --------------------------------------------------------------------------------------------------
 # Retry gate of a new validation attempt
-# (packages/services/src/quiz/retry-gate.ts, SPEC-612 ET-5, SPEC-715 EF-5, ADR-0173, ADR-0190)
+#
 # --------------------------------------------------------------------------------------------------
 
 READ_RETRY_IN_PROGRESS = text(
@@ -1421,7 +1477,7 @@ async def read_retry_timezone(tx: Tx, user_id: str) -> str | None:
 
 
 # --------------------------------------------------------------------------------------------------
-# quiz.attempts.create (packages/services/src/quiz/start.ts, SPEC-611 EF-1, EF-8, ET-6, BR-QUI-01)
+# quiz.attempts.create
 # --------------------------------------------------------------------------------------------------
 
 LOCK_QUIZ_START = text("select pg_advisory_xact_lock(hashtextextended(:key, 0))")
@@ -1695,7 +1751,7 @@ async def read_applied_remediation_action(tx: Tx, user_id: str, module_id: str) 
 
 # --------------------------------------------------------------------------------------------------
 # quiz.attempts.submit and finalize
-# (packages/services/src/quiz/submit.ts, SPEC-611 EF-7, ET-7, ET-8, CL-3, CL-6)
+#
 # --------------------------------------------------------------------------------------------------
 
 READ_SUBMIT_ATTEMPT = text(
@@ -1806,7 +1862,7 @@ async def update_quiz_graded(
 
 
 # --------------------------------------------------------------------------------------------------
-# quiz.attempts.result (packages/services/src/quiz/result.ts, SPEC-612 EF-1 to EF-5, BR-QUI-05)
+# quiz.attempts.result
 # --------------------------------------------------------------------------------------------------
 
 READ_RESULT_ATTEMPT = text(
@@ -1987,7 +2043,7 @@ async def read_result_remediation(
 
 
 # --------------------------------------------------------------------------------------------------
-# exercises (packages/services/src/exercises/{exercise-store,attempt-service}.ts, SPEC-613)
+# exercises
 # --------------------------------------------------------------------------------------------------
 
 READ_EXERCISE = text(
@@ -2342,7 +2398,7 @@ async def increment_exercise_hints(tx: Tx, *, attempt_id: str, user_id: str) -> 
 
 
 # --------------------------------------------------------------------------------------------------
-# remediation (packages/services/src/remediation/index.ts, SPEC-612, ADR-0173)
+# remediation
 # --------------------------------------------------------------------------------------------------
 
 READ_REMEDIATION_MODULE = text(
@@ -2770,7 +2826,7 @@ async def archive_remediation_activity(tx: Tx, activity_id: str) -> None:
 
 
 # --------------------------------------------------------------------------------------------------
-# offline.sync (packages/services/src/offline/sync.ts, SPEC-801 ET-6 to ET-8, ADR-0200)
+# offline.sync
 # --------------------------------------------------------------------------------------------------
 
 READ_SYNC_RECEIPT = text(
