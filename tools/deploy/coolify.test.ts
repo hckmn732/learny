@@ -47,7 +47,68 @@ function healthcheck(service: Service): { test: string[] } {
 }
 
 /** A committed secret would be a literal value: every entry is an interpolation or a fixed mode. */
-const ALLOWED_LITERAL = /^(production|live|mock|resend|smtp|on|off|true|false|worker|\d+)$/;
+// ADR-4007: the QA stack also fixes its Mailpit host and its sender address.
+const ALLOWED_LITERAL =
+  /^(production|live|mock|resend|smtp|on|off|true|false|worker|mailpit|qa@learny\.test|\d+)$/;
+
+// ADR-4007: variables removed from the deployed contract (derived, constant or deleted).
+const REMOVED = [
+  'INNGEST_EVENT_KEY',
+  'INNGEST_SIGNING_KEY',
+  'LLM_MODE',
+  'STRIPE_MODE',
+  'EMAIL_MODE',
+  'RATE_LIMIT_MODE',
+  'PUSH_MODE',
+  'JOBS_MODE',
+  'ANTHROPIC_API_KEY',
+  'RATE_LIMIT_IP_SECRET',
+  'API_PROXY_SECRET',
+  'API_PROXY_SECRET_PREVIOUS',
+  'EMAIL_LINK_SECRET',
+  'VAPID_PRIVATE_KEY',
+  'VAPID_SUBJECT',
+  'NEXT_PUBLIC_VAPID_PUBLIC_KEY',
+  'LEGAL_ENTITY_NAME',
+  'LEGAL_ENTITY_ADDRESS',
+  'LEGAL_CONTACT_EMAIL',
+  'LEGAL_HOST_NAME',
+  'LEGAL_CGU_VERSION',
+  'LEGAL_PRIVACY_VERSION',
+  'LEARNY_API_ROLE',
+  'TRUST_PROXY',
+  'ALLOWED_ORIGINS',
+  'SENTRY_DSN',
+  'NEXT_PUBLIC_SENTRY_DSN',
+  'SMTP_PORT',
+  'SMTP_USER',
+  'SMTP_PASS',
+  'SMTP_ADMIN_EMAIL',
+  'SMTP_SENDER_NAME',
+  'EMBEDDING_DIM',
+  'DATABASE_POOL_MAX',
+  'DB_LOG_QUERIES',
+  'PGRST_DB_SCHEMAS',
+  'STORAGE_FILE_SIZE_LIMIT',
+  'GOTRUE_DISABLE_SIGNUP',
+  'LOG_LEVEL',
+] as const;
+const LITERAL_KEYS = new Set<string>(['PGRST_DB_SCHEMAS', 'GOTRUE_DISABLE_SIGNUP', 'LOG_LEVEL']);
+
+describe.each(STACKS)('[SPEC-2301] $base - contrat minimal (ADR-4007)', ({ base }) => {
+  const { text, doc } = readYaml(base);
+  it('never interpolates nor declares a removed variable', () => {
+    const interpolated = new Set([...text.matchAll(/\$\{([A-Z0-9_]+)/g)].map((m) => m[1]));
+    for (const name of REMOVED) {
+      expect(interpolated.has(name), `${base} : ${name}`).toBe(false);
+      // A few names stay as literal values of the stack (ADR-4007): only their interpolation goes.
+      if (LITERAL_KEYS.has(name)) continue;
+      for (const [id, svc] of Object.entries(doc.services)) {
+        expect(Object.keys(environment(svc)), `${base} ${id} : ${name}`).not.toContain(name);
+      }
+    }
+  });
+});
 
 describe.each(STACKS)('[SPEC-2301] $base — services Python de la bascule', ({ base, overlay }) => {
   const stack = readYaml(base);

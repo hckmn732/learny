@@ -18,56 +18,15 @@ x-logging: &logging
 x-app-environment: &app-environment
   NODE_ENV: production
   APP_ENV: ${APP_ENV:-production}
-  LOG_LEVEL: ${LOG_LEVEL:-info}
+  LOG_LEVEL: info
   APP_VERSION: ${APP_VERSION:-dev}
   GIT_COMMIT: ${GIT_COMMIT:?GIT_COMMIT est obligatoire (git rev-parse HEAD)}
   API_INTERNAL_URL: http://api-py:8000
-  API_PROXY_SECRET: ${API_PROXY_SECRET:?API_PROXY_SECRET est obligatoire}
-  LEARNY_API_ROLE: all
   NEXT_PUBLIC_APP_URL: ${LEARNY_PUBLIC_APP_URL:?LEARNY_PUBLIC_APP_URL est obligatoire}
   NEXT_PUBLIC_SUPABASE_URL: ${LEARNY_PUBLIC_SUPABASE_URL:?LEARNY_PUBLIC_SUPABASE_URL est obligatoire}
   NEXT_PUBLIC_SUPABASE_ANON_KEY: ${NEXT_PUBLIC_SUPABASE_ANON_KEY:?NEXT_PUBLIC_SUPABASE_ANON_KEY est obligatoire}
-  SUPABASE_SERVICE_ROLE_KEY: ${SUPABASE_SERVICE_ROLE_KEY:?SUPABASE_SERVICE_ROLE_KEY est obligatoire}
-  SUPABASE_JWT_SECRET: ${SUPABASE_JWT_SECRET:?SUPABASE_JWT_SECRET est obligatoire}
-  DATABASE_URL: postgresql://postgres:${POSTGRES_PASSWORD:?POSTGRES_PASSWORD est obligatoire}@db:5432/postgres
-  DATABASE_POOL_MAX: ${DATABASE_POOL_MAX:-10}
-  DB_LOG_QUERIES: ${DB_LOG_QUERIES:-false}
   APP_ENCRYPTION_KEY: ${APP_ENCRYPTION_KEY:?APP_ENCRYPTION_KEY est obligatoire}
   APP_ENCRYPTION_KEY_PREVIOUS: ${APP_ENCRYPTION_KEY_PREVIOUS:-}
-  RATE_LIMIT_IP_SECRET: ${RATE_LIMIT_IP_SECRET:?RATE_LIMIT_IP_SECRET est obligatoire}
-  TRUST_PROXY: ${TRUST_PROXY:-true}
-  ALLOWED_ORIGINS: ${ALLOWED_ORIGINS:-}
-  LLM_MODE: ${LLM_MODE:-mock}
-  ANTHROPIC_API_KEY: ${ANTHROPIC_API_KEY:-}
-  ALLOW_LOCAL_MODELS: ${ALLOW_LOCAL_MODELS:-false}
-  VOYAGE_API_KEY: ${VOYAGE_API_KEY:-}
-  EMBEDDING_DIM: ${EMBEDDING_DIM:-1024}
-  SEARCH_API_KEY: ${SEARCH_API_KEY:-}
-  JOBS_MODE: ${JOBS_MODE:-inline}
-  EMAIL_MODE: ${EMAIL_MODE:-smtp}
-  SMTP_HOST: ${SMTP_HOST:-mailpit}
-  SMTP_PORT: ${SMTP_PORT:-1025}
-  EMAIL_FROM: ${EMAIL_FROM:-Learny <bonjour@learny.example>}
-  RESEND_API_KEY: ${RESEND_API_KEY:-}
-  EMAIL_LINK_SECRET: ${EMAIL_LINK_SECRET:?EMAIL_LINK_SECRET est obligatoire}
-  NEXT_PUBLIC_VAPID_PUBLIC_KEY: ${NEXT_PUBLIC_VAPID_PUBLIC_KEY:-}
-  VAPID_PRIVATE_KEY: ${VAPID_PRIVATE_KEY:-}
-  VAPID_SUBJECT: ${VAPID_SUBJECT:-mailto:bonjour@learny.example}
-  PUSH_MODE: ${PUSH_MODE:-mock}
-  STRIPE_MODE: ${STRIPE_MODE:-mock}
-  STRIPE_SECRET_KEY: ${STRIPE_SECRET_KEY:-}
-  STRIPE_WEBHOOK_SECRET: ${STRIPE_WEBHOOK_SECRET:-}
-  STRIPE_PRICE_ID: ${STRIPE_PRICE_ID:-}
-  NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY: ${NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY:-}
-  SENTRY_DSN: ${SENTRY_DSN:-}
-  NEXT_PUBLIC_SENTRY_DSN: ${NEXT_PUBLIC_SENTRY_DSN:-}
-  SENTRY_AUTH_TOKEN: ${SENTRY_AUTH_TOKEN:-}
-  LEGAL_ENTITY_NAME: ${LEGAL_ENTITY_NAME:-}
-  LEGAL_ENTITY_ADDRESS: ${LEGAL_ENTITY_ADDRESS:-}
-  LEGAL_CONTACT_EMAIL: ${LEGAL_CONTACT_EMAIL:-}
-  LEGAL_HOST_NAME: ${LEGAL_HOST_NAME:-}
-  LEGAL_CGU_VERSION: ${LEGAL_CGU_VERSION:-2026-11-11}
-  LEGAL_PRIVACY_VERSION: ${LEGAL_PRIVACY_VERSION:-2026-11-11}
   ENABLE_SDD_PAGES: 'false'
   CLOCK_FIXED_AT: ${CLOCK_FIXED_AT:-}
 
@@ -135,13 +94,12 @@ services:
       GOTRUE_DB_NAMESPACE: auth
       GOTRUE_DB_MIGRATIONS_PATH: /usr/local/etc/auth/migrations
       GOTRUE_MAILER_AUTOCONFIRM: ${GOTRUE_MAILER_AUTOCONFIRM:-false}
-      GOTRUE_SMTP_HOST: ${SMTP_HOST:-mailpit}
-      GOTRUE_SMTP_PORT: ${SMTP_PORT:-1025}
-      GOTRUE_SMTP_ADMIN_EMAIL: ${SMTP_ADMIN_EMAIL:-bonjour@learny.example}
-      GOTRUE_SMTP_SENDER_NAME: ${SMTP_SENDER_NAME:-Learny}
-      GOTRUE_SMTP_USER: ${SMTP_USER:-}
-      GOTRUE_SMTP_PASS: ${SMTP_PASS:-}
-      GOTRUE_DISABLE_SIGNUP: ${GOTRUE_DISABLE_SIGNUP:-false}
+      # Mailpit local (ADR-4007) : le SMTP n'est plus une variable de la pile.
+      GOTRUE_SMTP_HOST: mailpit
+      GOTRUE_SMTP_PORT: '1025'
+      GOTRUE_SMTP_ADMIN_EMAIL: bonjour@learny.example
+      GOTRUE_SMTP_SENDER_NAME: Learny
+      GOTRUE_DISABLE_SIGNUP: 'false'
     healthcheck:
       test: ['CMD', 'wget', '--no-verbose', '--tries=1', '--spider', 'http://127.0.0.1:9999/health']
       interval: 5s
@@ -161,7 +119,7 @@ services:
         condition: service_completed_successfully
     environment:
       PGRST_DB_URI: postgres://authenticator:${POSTGRES_PASSWORD:?POSTGRES_PASSWORD est obligatoire}@db:5432/postgres
-      PGRST_DB_SCHEMAS: ${PGRST_DB_SCHEMAS:-public,storage,graphql_public}
+      PGRST_DB_SCHEMAS: public,storage,graphql_public
       PGRST_DB_ANON_ROLE: anon
       PGRST_DB_USE_LEGACY_GUCS: 'false'
       PGRST_JWT_SECRET: ${SUPABASE_JWT_SECRET:?SUPABASE_JWT_SECRET est obligatoire}
@@ -181,7 +139,8 @@ services:
       PGRST_JWT_SECRET: ${SUPABASE_JWT_SECRET:?SUPABASE_JWT_SECRET est obligatoire}
       DATABASE_URL: postgres://supabase_storage_admin:${POSTGRES_PASSWORD:?POSTGRES_PASSWORD est obligatoire}@db:5432/postgres
       POSTGREST_URL: http://rest:3000
-      FILE_SIZE_LIMIT: ${STORAGE_FILE_SIZE_LIMIT:-52428800}
+      # BR-APP-02 : 50 Mo.
+      FILE_SIZE_LIMIT: '52428800'
       STORAGE_BACKEND: file
       FILE_STORAGE_BACKEND_PATH: /var/lib/storage
       TENANT_ID: stub
@@ -254,7 +213,6 @@ services:
     environment:
       <<: *app-environment
       API_INTERNAL_URL: http://api-py:8000
-      API_PROXY_SECRET: ${API_PROXY_SECRET:?API_PROXY_SECRET est obligatoire}
     ports:
       - '${LEARNY_WEB_PORT:-8080}:3000'
     depends_on:
@@ -280,8 +238,8 @@ services:
     restart: unless-stopped
     logging: *logging
 
-  # Optional local mail catcher. Production must configure a real SMTP/Resend transport in
-  # `.env.selfhost` before exposing the stack (EF-2, CL-6).
+  # Local mail catcher: the self-hosted stack sends every e-mail (application and Supabase Auth)
+  # to Mailpit (ADR-4007); start it with the `local` profile.
   mailpit:
     image: axllent/mailpit:v1.33.1
     profiles: ['local']
@@ -327,21 +285,16 @@ services:
       SUPABASE_SERVICE_ROLE_KEY: ${SUPABASE_SERVICE_ROLE_KEY:?SUPABASE_SERVICE_ROLE_KEY est obligatoire}
       SUPABASE_JWT_SECRET: ${SUPABASE_JWT_SECRET:?SUPABASE_JWT_SECRET est obligatoire}
       NEXT_PUBLIC_APP_URL: ${LEARNY_PUBLIC_APP_URL:?LEARNY_PUBLIC_APP_URL est obligatoire}
-      API_PROXY_SECRET: ${API_PROXY_SECRET:?API_PROXY_SECRET est obligatoire}
-      API_PROXY_SECRET_PREVIOUS: ${API_PROXY_SECRET_PREVIOUS:-}
       APP_ENCRYPTION_KEY: ${APP_ENCRYPTION_KEY:?APP_ENCRYPTION_KEY est obligatoire}
       APP_ENCRYPTION_KEY_PREVIOUS: ${APP_ENCRYPTION_KEY_PREVIOUS:-}
-      EMAIL_FROM: ${EMAIL_FROM:-Learny <bonjour@learny.example>}
-      EMAIL_LINK_SECRET: ${EMAIL_LINK_SECRET:?EMAIL_LINK_SECRET est obligatoire}
-      SMTP_HOST: ${SMTP_HOST:-mailpit}
+      EMAIL_FROM: ${EMAIL_FROM:-bonjour@learny.example}
+      SMTP_HOST: mailpit
       RESEND_API_KEY: ${RESEND_API_KEY:-}
-      VAPID_PRIVATE_KEY: ${VAPID_PRIVATE_KEY:-}
       VOYAGE_API_KEY: ${VOYAGE_API_KEY:-}
       SEARCH_API_KEY: ${SEARCH_API_KEY:-}
       STRIPE_SECRET_KEY: ${STRIPE_SECRET_KEY:-}
       STRIPE_WEBHOOK_SECRET: ${STRIPE_WEBHOOK_SECRET:-}
       STRIPE_PRICE_ID: ${STRIPE_PRICE_ID:-}
-      SENTRY_DSN: ${SENTRY_DSN:-}
     expose:
       - '8000'
     depends_on:
@@ -390,20 +343,16 @@ services:
       SUPABASE_SERVICE_ROLE_KEY: ${SUPABASE_SERVICE_ROLE_KEY:?SUPABASE_SERVICE_ROLE_KEY est obligatoire}
       SUPABASE_JWT_SECRET: ${SUPABASE_JWT_SECRET:?SUPABASE_JWT_SECRET est obligatoire}
       NEXT_PUBLIC_APP_URL: ${LEARNY_PUBLIC_APP_URL:?LEARNY_PUBLIC_APP_URL est obligatoire}
-      API_PROXY_SECRET: ${API_PROXY_SECRET:?API_PROXY_SECRET est obligatoire}
       APP_ENCRYPTION_KEY: ${APP_ENCRYPTION_KEY:?APP_ENCRYPTION_KEY est obligatoire}
-      EMAIL_FROM: ${EMAIL_FROM:-Learny <bonjour@learny.example>}
-      EMAIL_LINK_SECRET: ${EMAIL_LINK_SECRET:?EMAIL_LINK_SECRET est obligatoire}
-      SMTP_HOST: ${SMTP_HOST:-mailpit}
+      EMAIL_FROM: ${EMAIL_FROM:-bonjour@learny.example}
+      SMTP_HOST: mailpit
       RESEND_API_KEY: ${RESEND_API_KEY:-}
-      VAPID_PRIVATE_KEY: ${VAPID_PRIVATE_KEY:-}
       VOYAGE_API_KEY: ${VOYAGE_API_KEY:-}
       SEARCH_API_KEY: ${SEARCH_API_KEY:-}
       STRIPE_SECRET_KEY: ${STRIPE_SECRET_KEY:-}
       STRIPE_WEBHOOK_SECRET: ${STRIPE_WEBHOOK_SECRET:-}
       STRIPE_PRICE_ID: ${STRIPE_PRICE_ID:-}
       PORT: '8081'
-      SENTRY_DSN: ${SENTRY_DSN:-}
     expose:
       - '8081'
     depends_on:

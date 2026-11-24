@@ -196,11 +196,11 @@ export function validateResolvedConfig(config) {
     }
   }
   const webEnv = services.web?.environment ?? {};
-  if (webEnv.DATABASE_URL === undefined) errors.push('config résolue : web sans DATABASE_URL');
   if (webEnv.ENABLE_SDD_PAGES !== 'false' && webEnv.ENABLE_SDD_PAGES !== '0') {
     errors.push('config résolue : les pages SDD doivent être désactivées');
   }
-  for (const name of ['API_INTERNAL_URL', 'API_PROXY_SECRET']) {
+  // ADR-4007: the relay secret is derived from APP_ENCRYPTION_KEY.
+  for (const name of ['API_INTERNAL_URL', 'APP_ENCRYPTION_KEY']) {
     if (webEnv[name] === undefined) errors.push(`config résolue : web sans ${name}`);
   }
   for (const name of ['db', 'auth', 'rest', 'storage']) {
