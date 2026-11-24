@@ -2,14 +2,17 @@
 //
 // Un seul parcours d'arbre pour tous les écrans : le test `test/a11y/screens.test.tsx` rend chaque
 // écran avec les données de démonstration puis appelle `auditScreen`. Aucune règle n'est recopiée
-// écran par écran, donc une cible ajoutée demain est auditée sans toucher au test.
+// écran par écran, donc une cible ajoutée plus tard est auditée sans modifier le test.
 //
-// Trois familles de règles :
-//   1. rôle : toute cible interactive expose un `accessibilityRole` (bouton, lien, onglet…)
-//   2. libellé : toute cible annonce un texte lisible (libellé explicite, texte enfant ou valeur)
-//   3. cible tactile : une dimension déclarée atteint le minimum de la plateforme (48 dp Android,
-//      44 pt iOS), `hitSlop` compris (canevas § 3).
-import type { ReactTestInstance } from 'react-test-renderer';
+// Quatre familles de règles :
+//   1. rôle : toute cible interactive expose un `accessibilityRole` (bouton, lien, onglet…) ;
+//   2. libellé : toute cible annonce un texte lisible (libellé explicite, texte enfant ou valeur) ;
+//   3. état : un interrupteur, une case ou un bouton radio annonce `accessibilityState.checked` ;
+//   4. cible tactile : une dimension déclarée atteint le minimum de la plateforme (48 dp Android,
+//      44 pt iOS), `hitSlop` compris (canevas § 3) ; une hauteur connue est toujours vérifiée.
+//
+// L'écran doit annoncer au moins un titre (`accessibilityRole="header"`) : c'est le repère de
+// navigation d'un lecteur d'écran (BR-PLA-03, ordre de lecture).
 import type { RenderResult } from '@testing-library/react-native';
 import { Platform, StyleSheet } from 'react-native';
 
@@ -33,49 +36,57 @@ export interface A11yViolation {
   readonly detail: string;
 }
 
-/** Résultat d'un audit : violations et nombre de cibles examinées. */
+/** Résultat d'un audit : violations, cibles examinées, titres annoncés. */
 export interface A11yAudit {
   readonly violations: readonly A11yViolation[];
   readonly interactive: number;
   readonly labeled: number;
-  /** L'ecran annonce au moins un titre (repere de navigation d'un lecteur d'ecran). */
   readonly headers: number;
+}
+
+/**
+ * Nœud de l'arbre de rendu, tel qu'il est parcouru : la forme minimale dont l'audit a besoin.
+ * Le type de `react-test-renderer` n'est pas une dépendance directe du paquet mobile ; cette forme
+ * locale évite de dépendre de son implémentation.
+ */
+export interface TestNode {
+  readonly type?: unknown;
+  readonly props?: Record<string, unknown>;
+  readonly children?: (TestNode | string | null | undefined)[];
 }
 
 interface Props {
   readonly accessibilityRole?: unknown;
   readonly accessibilityLabel?: unknown;
-  readonly accessible?: unknown;
+  readonly accessibilityState?: unknown;
   readonly accessibilityElementsHidden?: unknown;
   readonly importantForAccessibility?: unknown;
   readonly onPress?: unknown;
   readonly style?: unknown;
   readonly hitSlop?: unknown;
-  readonly children?: unknown;
-  readonly value?: unknown;
-  readonly placeholder?: unknown;
   readonly testID?: unknown;
+  readonly value?: unknown;
 }
 
-function propsOf(node: ReactTestInstance): Props {
-  return node.props as Props;
+function propsOf(node: TestNode): Props {
+  return node.props ?? {};
 }
 
-function testIdOf(node: ReactTestInstance): string {
+function testIdOf(node: TestNode): string {
   const { testID } = propsOf(node);
   return typeof testID === 'string' ? testID : '<sans testID>';
 }
 
 /** Texte lisible porté par un nœud ou l'un de ses descendants. */
-function textOf(node: ReactTestInstance): string {
+function textOf(node: TestNode): string {
   const chunks: string[] = [];
-  const walk = (current: ReactTestInstance): void => {
+  const walk = (current: TestNode): void => {
     for (const child of current.children ?? []) {
       if (typeof child === 'string') {
         chunks.push(child);
         continue;
       }
-      walk(child);
+      if (child !== null && child !== undefined) walk(child);
     }
   };
   walk(node);
@@ -107,8 +118,8 @@ interface FlatStyle {
   minHeight?: number | string;
 }
 
-/** Hauteur et largeur effectives déclarées, `hitSlop` compris (0 quand rien n'est déclaré). */
-export function targetSize(node: ReactTestInstance): {
+/** Taille effective d'un nœud, `hitSlop` compris, et dimensions réellement déclarées. */
+export function targetSize(node: TestNode): {
   width: number;
   height: number;
   hasWidth: boolean;
@@ -121,8 +132,8 @@ export function targetSize(node: ReactTestInstance): {
   return {
     width: width + hitSlopSum(props.hitSlop, 'horizontal'),
     height: height + hitSlopSum(props.hitSlop, 'vertical'),
-    // Une dimension non declaree est inconnue : le noeud occupe la place que son parent lui donne
-    // (rangee pleine largeur, texte au fil du flux) et le hitSlop seul ne la mesure pas.
+    // Une dimension non déclarée est inconnue : le nœud occupe la place que son parent lui donne
+    // (rangée pleine largeur, texte au fil du flux) et le `hitSlop` seul ne la mesure pas.
     hasWidth: width > 0,
     hasHeight: height > 0,
   };
@@ -138,21 +149,18 @@ function isHidden(props: Props): boolean {
   );
 }
 
-/** Parcourt l'arbre rendu et renvoie les écarts des trois familles de règles. */
+/** Parcourt l'arbre rendu et renvoie les écarts des quatre familles de règles. */
 export function auditScreen(view: RenderResult, minTarget: number = MIN_TARGET): A11yAudit {
   const violations: A11yViolation[] = [];
   let interactive = 0;
   let labeled = 0;
   let headers = 0;
-  /** Plus grande cible de la chaîne interactive, transmise aux descendants. */
-  let next: { width: number; height: number } = { width: 0, height: 0 };
 
   const walk = (
-    node: ReactTestInstance | null | undefined,
+    node: TestNode | null | undefined,
     inherited: { width: number; height: number } = { width: 0, height: 0 },
   ): void => {
     if (node === null || node === undefined) return;
-    next = inherited;
     const props = propsOf(node);
     if (isHidden(props)) return;
 
@@ -162,10 +170,10 @@ export function auditScreen(view: RenderResult, minTarget: number = MIN_TARGET):
 
     if (role === 'header') headers += 1;
 
-    // Un interrupteur, une case ou un bouton radio annonce son etat : sans `accessibilityState`,
-    // TalkBack lit « Bouton » sans dire s'il est coche (BR-PLA-03).
+    // Un interrupteur, une case ou un bouton radio annonce son état : sans `accessibilityState`,
+    // TalkBack lit « Bouton » sans dire s'il est coché (BR-PLA-03).
     if (role === 'switch' || role === 'checkbox' || role === 'radio') {
-      const state = (props as { accessibilityState?: { checked?: unknown } }).accessibilityState;
+      const state = props.accessibilityState as { checked?: unknown } | undefined;
       if (state === undefined || typeof state.checked !== 'boolean') {
         violations.push({
           testID: testIdOf(node),
@@ -175,24 +183,27 @@ export function auditScreen(view: RenderResult, minTarget: number = MIN_TARGET):
       }
     }
 
+    /** Plus grande dimension de la chaîne interactive, transmise aux descendants. */
+    let next = inherited;
+
     if (isInteractive) {
       interactive += 1;
-      const id = testIdOf(node);
-      const explicit = typeof props.accessibilityLabel === 'string' ? props.accessibilityLabel.trim() : '';
+      const explicit =
+        typeof props.accessibilityLabel === 'string' ? props.accessibilityLabel.trim() : '';
       const value = typeof props.value === 'string' ? props.value.trim() : '';
       const text = textOf(node);
       const announced = [explicit, value, text].find((candidate) => candidate !== '') ?? '';
 
       if (role === undefined) {
         violations.push({
-          testID: id,
+          testID: testIdOf(node),
           rule: 'role',
           detail: 'cible interactive sans accessibilityRole',
         });
       }
       if (announced === '') {
         violations.push({
-          testID: id,
+          testID: testIdOf(node),
           rule: 'label',
           detail: 'cible interactive sans libellé annoncé (bouton d’icône muet ?)',
         });
@@ -200,32 +211,28 @@ export function auditScreen(view: RenderResult, minTarget: number = MIN_TARGET):
         labeled += 1;
       }
 
-      // Une cible peut atteindre le minimum par son conteneur pressable (un texte dans un bouton
-      // de 48 dp) : la mesure retient la plus grande dimension de la chaîne interactive.
+      // Une cible peut atteindre le minimum par son conteneur pressable (un texte dans un bouton de
+      // 48 dp) : la mesure retient la plus grande dimension de la chaîne interactive.
       const own = targetSize(node);
       const size = {
         width: Math.max(own.width, inherited.width),
         height: Math.max(own.height, inherited.height),
       };
-      // Une dimension qu'aucun nœud de la chaîne ne déclare n'est pas mesurable : elle est ignorée
-      // (une rangée pleine largeur n'a pas de largeur explicite et satisfait toujours la règle).
-      const known = {
-        width: own.hasWidth || inherited.width > 0,
-        height: own.hasHeight || inherited.height > 0,
-      };
       next = {
         width: own.hasWidth ? size.width : inherited.width,
         height: own.hasHeight ? size.height : inherited.height,
       };
-      // Largeur : seuls les controles qui la declarent sont mesures (bouton d'icone, puce) ; une
-      // rangee pleine largeur occupe la largeur de son parent. Hauteur : des qu'elle est connue.
+
+      // Largeur : seuls les contrôles qui la déclarent sont mesurés (bouton d'icône, puce) ; une
+      // rangée pleine largeur occupe la largeur de son parent. Hauteur : dès qu'elle est connue.
+      const heightKnown = own.hasHeight || inherited.height > 0;
       for (const [axis, measure, measurable] of [
         ['largeur', size.width, own.hasWidth],
-        ['hauteur', size.height, known.height],
+        ['hauteur', size.height, heightKnown],
       ] as const) {
         if (measurable && measure > 0 && measure < minTarget) {
           violations.push({
-            testID: id,
+            testID: testIdOf(node),
             rule: 'target',
             detail: `${axis} ${String(Math.round(measure))} < ${String(minTarget)}`,
           });
@@ -238,15 +245,15 @@ export function auditScreen(view: RenderResult, minTarget: number = MIN_TARGET):
     }
   };
 
-  // RNTL 14 expose la racine sous `root` ; `UNSAFE_root` n'est plus alimenté.
-  const root = (view as unknown as { root?: ReactTestInstance }).root;
+  const root = (view as unknown as { root?: TestNode }).root;
   if (root === undefined) throw new Error('Racine de rendu absente : audit impossible.');
   walk(root);
+
   if (headers === 0) {
     violations.push({
-      testID: '<ecran>',
+      testID: '<écran>',
       rule: 'header',
-      detail: 'aucun titre annonce (accessibilityRole="header")',
+      detail: 'aucun titre annoncé (accessibilityRole="header")',
     });
   }
   return { violations, interactive, labeled, headers };

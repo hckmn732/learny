@@ -6,7 +6,6 @@
 // porte sur l'écran réellement livré et non sur une variante de test.
 import { AGENDA, ALTERNATIVES } from '../agenda/fixtures';
 import { courseScreen } from '../cours/fixtures';
-import { me, activeProgramme, courseProgress, sidebar } from '../programme/fixtures';
 import {
   GAPS as PROFILE_GAPS,
   HOME as PROFILE_HOME,
@@ -17,6 +16,8 @@ import {
   STREAK as PROFILE_STREAK,
   SUBSCRIPTION,
 } from '../profil/fixtures';
+import { me, activeProgramme, courseProgress, sidebar } from '../programme/fixtures';
+
 
 const noop = (): void => undefined;
 const resolved = (): Promise<void> => Promise.resolve();

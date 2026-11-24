@@ -242,7 +242,14 @@ const styles = StyleSheet.create({
     gap: theme.spacing.md,
     padding: theme.spacing.lg,
   },
-  reveal: { alignSelf: 'flex-start', minHeight: 44, justifyContent: 'center' },
+  // SPEC-3502 BR-PLA-02 — cible tactile de la plateforme (48 dp Android, 44 pt iOS) : la valeur
+  // était figée à 44, hauteur iOS, et n'atteignait donc pas le minimum Android (audit a11y).
+  reveal: {
+    alignSelf: 'flex-start',
+    minHeight: theme.touchTarget.height,
+    justifyContent: 'center',
+    paddingVertical: theme.spacing.xs,
+  },
   confusion: {
     backgroundColor: theme.colors.orangeSoft,
     borderRadius: radius.card,

@@ -76,9 +76,11 @@ describe('[SPEC-3502] configuration de production', () => {
     const filters = production.android?.intentFilters ?? [];
     expect(filters).toHaveLength(1);
     expect(filters[0]?.autoVerify).toBe(true);
-    const paths = (filters[0]?.data ?? []).map((entry) =>
-      typeof entry === 'string' ? entry : (entry.pathPrefix ?? ''),
-    );
+    const data = (filters[0]?.data ?? []) as unknown as readonly (
+      | string
+      | { readonly pathPrefix?: string }
+    )[];
+    const paths = data.map((entry) => (typeof entry === 'string' ? entry : (entry.pathPrefix ?? '')));
     expect(paths).toEqual(['/auth/mobile', '/api/v1/auth/callback']);
   });
 

@@ -15,14 +15,15 @@ import { CourseScreen } from '../../src/features/cours/CourseScreen';
 import { AboutScreen } from '../../src/features/profil/AboutScreen';
 import { IdentityScreen } from '../../src/features/profil/IdentityScreen';
 import { ModelsScreen } from '../../src/features/profil/ModelsScreen';
-import { RhythmScreen } from '../../src/features/profil/RhythmScreen';
-import { SubscriptionScreen } from '../../src/features/profil/SubscriptionScreen';
 import { NotificationsScreen } from '../../src/features/profil/NotificationsScreen';
 import { PrivacyScreen } from '../../src/features/profil/PrivacyScreen';
 import { ProfileScreen } from '../../src/features/profil/ProfileScreen';
+import { RhythmScreen } from '../../src/features/profil/RhythmScreen';
 import { SecurityScreen } from '../../src/features/profil/SecurityScreen';
+import { SubscriptionScreen } from '../../src/features/profil/SubscriptionScreen';
 import { ProgrammeScreen } from '../../src/features/programme/ProgrammeScreen';
 import { auditScreen, MIN_TARGET } from '../utils/a11yAudit';
+
 
 const noop = (): void => undefined;
 
@@ -64,23 +65,32 @@ jest.mock('../../src/api/registry', () => ({
   setApiClient: () => undefined,
 }));
 
-jest.mock('../../src/auth/session', () => require('./demo').session);
+type Demo = typeof import('./demo');
+const demoModule = (): Demo => jest.requireActual<Demo>('./demo');
+const demoOf = <K extends keyof Demo>(key: K): Demo[K] => demoModule()[key];
 
-jest.mock('../../src/data/home', () => require('./demo').home);
-jest.mock('../../src/data/use-programme', () => require('./demo').programme);
-jest.mock('../../src/data/use-agenda', () => require('./demo').agenda);
-jest.mock('../../src/data/course', () => require('./demo').course);
-jest.mock('../../src/data/profile', () => require('./demo').profile);
-jest.mock('../../src/data/pause', () => require('./demo').pause);
-jest.mock('../../src/data/subscription', () => require('./demo').subscription);
-jest.mock('../../src/data/task-models', () => require('./demo').taskModels);
-jest.mock('../../src/data/notification-settings', () => require('./demo').notificationSettings);
-jest.mock('../../src/data/review', () => require('./demo').review);
-jest.mock('../../src/data/warmup', () => require('./demo').warmup);
+jest.mock('../../src/auth/session', () => demoOf('session'));
+jest.mock('../../src/data/home', () => demoOf('home'));
+jest.mock('../../src/data/use-programme', () => demoOf('programme'));
+jest.mock('../../src/data/use-agenda', () => demoOf('agenda'));
+jest.mock('../../src/data/course', () => demoOf('course'));
+jest.mock('../../src/data/profile', () => demoOf('profile'));
+jest.mock('../../src/data/pause', () => demoOf('pause'));
+jest.mock('../../src/data/subscription', () => demoOf('subscription'));
+jest.mock('../../src/data/task-models', () => demoOf('taskModels'));
+jest.mock('../../src/data/notification-settings', () => demoOf('notificationSettings'));
+jest.mock('../../src/data/review', () => demoOf('review'));
+jest.mock('../../src/data/warmup', () => demoOf('warmup'));
 
 jest.mock('../../src/features/shell/use-shell', () => {
-  const actual = jest.requireActual('../../src/features/shell/use-shell');
-  return { ...actual, ...require('./demo').shell };
+  const demo = demoOf('shell');
+  return {
+    ...jest.requireActual('../../src/features/shell/use-shell'),
+    useHeader: () => demo.useHeader(),
+    useUnreadCount: () => demo.useUnreadCount(),
+    useOnboarding: () => demo.useOnboarding(),
+    useFormations: () => demo.useFormations(),
+  };
 });
 
 jest.mock('../../src/notifications/use-device-channel', () => ({
@@ -141,7 +151,16 @@ describe('[SPEC-3502] audit d’accessibilité des écrans', () => {
   });
 
   it('Cours : en-tête, corps, sommaire et tuteur', async () => {
-    const view = await renderScreen(<CourseScreen />, 'course-screen');
+    const view = await renderScreen(
+      <CourseScreen
+        moduleId="00000000-0000-4000-8000-000000000003"
+        chapterId="00000000-0000-4000-8000-0000000000c3"
+        onBack={() => undefined}
+        onOpenChapter={() => undefined}
+        onOpenWeb={() => undefined}
+      />,
+      'course-screen',
+    );
     expectAccessibleScreen(view, 'cours');
   });
 
