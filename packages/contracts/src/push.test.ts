@@ -50,8 +50,9 @@ const FCM_TOKEN = 'fcm-instance:APA91b-registration_value';
 describe('[SPEC-3501] PushSubscriptionBody — discriminated union', () => {
   it('accepte le corps historique du navigateur et suppose `webpush`', () => {
     const parsed = PushSubscriptionBody.parse(WEBPUSH_BODY);
+    const browser = parsed as { endpoint?: string };
     expect(parsed.kind).toBe('webpush');
-    expect(parsed.endpoint).toBe(WEBPUSH_BODY.endpoint);
+    expect(browser.endpoint).toBe(WEBPUSH_BODY.endpoint);
   });
 
   it('accepte `webpush` explicite, avec expiration et userAgent', () => {
@@ -71,9 +72,10 @@ describe('[SPEC-3501] PushSubscriptionBody — discriminated union', () => {
       platform: 'ios',
       deviceName: 'iPhone de Camille',
     });
+    const native = parsed as { platform?: string; deviceName?: string };
     expect(parsed.kind).toBe('apns');
-    expect(parsed.platform).toBe('ios');
-    expect(parsed.deviceName).toBe('iPhone de Camille');
+    expect(native.platform).toBe('ios');
+    expect(native.deviceName).toBe('iPhone de Camille');
   });
 
   it('accepte un abonnement FCM sans plateforme et rogne le nom de l’appareil', () => {
@@ -82,9 +84,10 @@ describe('[SPEC-3501] PushSubscriptionBody — discriminated union', () => {
       token: FCM_TOKEN,
       deviceName: '  Pixel 6a  ',
     });
+    const native = parsed as { platform?: string; deviceName?: string };
     expect(parsed.kind).toBe('fcm');
-    expect(parsed.platform).toBeUndefined();
-    expect(parsed.deviceName).toBe('Pixel 6a');
+    expect(native.platform).toBeUndefined();
+    expect(native.deviceName).toBe('Pixel 6a');
   });
 
   it.each([
