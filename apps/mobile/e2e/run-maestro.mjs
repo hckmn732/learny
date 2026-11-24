@@ -100,7 +100,7 @@ function config(argv) {
 
 /** `SPEC-3xxx` of the campaign: its report and evidence live under its name (CL-3). */
 function specOf(tags) {
-  return tags.find((tag) => /^SPEC-3\d{3}$/.test(tag)) ?? null;
+  return tags.find((tag) => /^SPEC-[34]\d{3}$/.test(tag)) ?? null;
 }
 
 function run(cmd, args, options = {}) {
@@ -345,7 +345,9 @@ async function main() {
   }
   const spec = specOf(cfg.tags);
   if (spec === null) {
-    console.error(`✖ aucun flux SPEC-3xxx dans les étiquettes ${cfg.tags.join(', ')}.`);
+    console.error(
+      `✖ aucun flux SPEC-3xxx ou SPEC-4xxx dans les étiquettes ${cfg.tags.join(', ')}.`,
+    );
     return 2;
   }
 

@@ -14,7 +14,8 @@ tags:
     visible:
       id: sdd-health
     timeout: 30000
-- openLink: learnly://connexion?demo=1
+- tapOn:
+    id: sdd-login-e2e
 - waitForAnimationToEnd:
     timeout: 5000
 - runFlow:
@@ -28,8 +29,20 @@ tags:
     visible:
       id: tab-aujourdhui
     timeout: 60000
-# « Ouvrir avec Learny » : le fichier arrive par un intent externe (file:// poussé par le setup).
-- openLink: 'learny://partage?uri=file%3A%2F%2F%2Fsdcard%2FAndroid%2Fdata%2Ffr.learny.app%2Fcache%2FManuel.pdf&name=Manuel.pdf&type=application%2Fpdf'
+- tapOn:
+    id: simple-card-drop-action
+- extendedWaitUntil:
+    visible:
+      id: simple-deposit-screen
+    timeout: 15000
+# Réception d'un fichier partagé : le pont `/partage` conserve l'URI puis rouvre le dépôt.
+- scrollUntilVisible:
+    element:
+      id: simple-share-fixture
+    direction: DOWN
+    timeout: 15000
+- tapOn:
+    id: simple-share-fixture
 - extendedWaitUntil:
     visible:
       id: simple-deposit-screen

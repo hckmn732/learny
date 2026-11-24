@@ -8,8 +8,6 @@ import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
 
-import { createClient } from '@supabase/supabase-js';
-
 const SDK = process.env.ANDROID_SDK_ROOT ?? process.env.ANDROID_HOME ?? '/opt/android-sdk';
 const ROOT = path.resolve(path.dirname(new URL(import.meta.url).pathname), '..', '..', '..', '..');
 
@@ -107,52 +105,79 @@ run([
   'file:///sdcard/Download/TD.pdf',
 ]);
 
+/** Prépare un compte (mot de passe + identité) avec le script éprouvé de la piste mobile. */
+function ensureAuth(email, password) {
+  const script = path.join(ROOT, 'apps', 'mobile', 'e2e', 'prepare-demo-user.mjs');
+  const prepared = spawnSync(process.execPath, [script], {
+    encoding: 'utf8',
+    env: {
+      ...process.env,
+      MOBILE_DEMO_EMAIL: email,
+      MOBILE_DEMO_PASSWORD: password,
+      NEXT_PUBLIC_SUPABASE_URL: env.NEXT_PUBLIC_SUPABASE_URL ?? 'http://127.0.0.1:54321',
+      SUPABASE_SERVICE_ROLE_KEY: env.SUPABASE_SERVICE_ROLE_KEY ?? '',
+    },
+  });
+  if (prepared.status !== 0) {
+    throw new Error(
+      (prepared.stderr || prepared.stdout || '').trim().split('\n').pop() ?? 'compte non préparé',
+    );
+  }
+}
+
+/** Identifiant d'un compte par son e-mail. */
+function userIdOf(email) {
+  const found = spawnSync(
+    'docker',
+    [
+      'exec',
+      'supabase_db_learny',
+      'psql',
+      '-U',
+      'postgres',
+      '-d',
+      'postgres',
+      '-tAc',
+      `select id from auth.users where email = '${email}'`,
+    ],
+    { encoding: 'utf8' },
+  );
+  const id = (found.stdout ?? '').trim();
+  if (id === '') throw new Error(`compte introuvable : ${email}`);
+  return id;
+}
+
 /** Crée (ou remet à zéro) un compte de campagne à partir du compte de démonstration. */
 async function prepareUser({ email, password, withModels }) {
-  const url = env.NEXT_PUBLIC_SUPABASE_URL ?? 'http://127.0.0.1:54321';
-  const service = env.SUPABASE_SERVICE_ROLE_KEY ?? '';
   const demoEmail = env.MOBILE_DEMO_EMAIL ?? 'alex.perrin@demo.learny.test';
-  if (service === '')
-    throw new Error('SUPABASE_SERVICE_ROLE_KEY absente : comptes de campagne non préparés.');
-  const admin = createClient(url, service, { auth: { persistSession: false } });
-  const listed = await admin.auth.admin.listUsers({ page: 1, perPage: 1000 });
-  if (listed.error !== null) throw new Error(listed.error.message);
-  let user = listed.data.users.find((candidate) => candidate.email === email);
-  if (user === undefined) {
-    const created = await admin.auth.admin.createUser({ email, password, email_confirm: true });
-    if (created.error !== null) throw new Error(created.error.message);
-    user = created.data.user;
-  }
-  const updated = await admin.auth.admin.updateUserById(user.id, { password, email_confirm: true });
-  if (updated.error !== null) throw new Error(updated.error.message);
+  ensureAuth(email, password);
+  const id = userIdOf(email);
   const models = withModels
     ? `
-    delete from public.ai_task_models where user_id = '${user.id}'::uuid;
-    delete from public.ai_credentials where user_id = '${user.id}'::uuid;
+    delete from public.ai_task_models where user_id = '${id}'::uuid;
+    delete from public.ai_credentials where user_id = '${id}'::uuid;
     insert into public.ai_credentials (id, user_id, provider, label, base_url, model_ids, encrypted_key, key_last4, status, qualification, outside_eu, qualified_at, created_at, updated_at)
-    select gen_random_uuid(), '${user.id}'::uuid, provider, label, base_url, model_ids, encrypted_key, key_last4, status, qualification, outside_eu, qualified_at, created_at, updated_at
+    select gen_random_uuid(), '${id}'::uuid, provider, label, base_url, model_ids, encrypted_key, key_last4, status, qualification, outside_eu, qualified_at, created_at, updated_at
     from public.ai_credentials where user_id = (select id from auth.users where email = '${demoEmail}');
     insert into public.ai_task_models (user_id, task, credential_id, model_id)
-    select '${user.id}'::uuid, t.task, cnew.id, t.model_id
+    select '${id}'::uuid, t.task, cnew.id, t.model_id
     from public.ai_task_models t
     join public.ai_credentials cold on cold.id = t.credential_id
-    join public.ai_credentials cnew on cnew.user_id = '${user.id}'::uuid and cnew.provider = cold.provider and cnew.label = cold.label
+    join public.ai_credentials cnew on cnew.user_id = '${id}'::uuid and cnew.provider = cold.provider and cnew.label = cold.label
     where t.user_id = (select id from auth.users where email = '${demoEmail}');
     insert into public.ai_task_models (user_id, task, credential_id, model_id)
-    select '${user.id}'::uuid, 'simple_analysis', id, 'demo-model'
-    from public.ai_credentials where user_id = '${user.id}'::uuid
+    select '${id}'::uuid, 'simple_analysis', id, 'demo-model'
+    from public.ai_credentials where user_id = '${id}'::uuid
     on conflict (user_id, task) do nothing;
     `
     : `
-    delete from public.ai_task_models where user_id = '${user.id}'::uuid;
-    delete from public.ai_credentials where user_id = '${user.id}'::uuid;
+    delete from public.ai_task_models where user_id = '${id}'::uuid;
+    delete from public.ai_credentials where user_id = '${id}'::uuid;
     `;
   const sql = `
-    insert into auth.identities (id, user_id, provider, provider_id, identity_data, created_at, updated_at)
-    values (gen_random_uuid(), '${user.id}'::uuid, 'email', '${user.id}', jsonb_build_object('sub', '${user.id}', 'email', '${email}', 'email_verified', true), now(), now())
-    on conflict (provider_id, provider) do nothing;
+    delete from public.formations where owner_id = '${id}'::uuid;
     insert into public.profiles (id, email, first_name, last_name, course_language, tutor_tone, timezone, onboarding_step, onboarding_completed_at, terms_version, terms_accepted_at)
-    select '${user.id}'::uuid, '${email}', first_name, last_name, course_language, tutor_tone, timezone, onboarding_step, onboarding_completed_at, terms_version, terms_accepted_at
+    select '${id}'::uuid, '${email}', first_name, last_name, course_language, tutor_tone, timezone, onboarding_step, onboarding_completed_at, terms_version, terms_accepted_at
     from public.profiles where id = (select id from auth.users where email = '${demoEmail}')
     on conflict (id) do update set
       onboarding_step = excluded.onboarding_step,
@@ -164,7 +189,7 @@ async function prepareUser({ email, password, withModels }) {
       timezone = excluded.timezone,
       current_formation_id = null;
     insert into public.legal_acceptances (user_id, document, version, accepted_at)
-    select '${user.id}'::uuid, document, version, accepted_at from public.legal_acceptances
+    select '${id}'::uuid, document, version, accepted_at from public.legal_acceptances
     where user_id = (select id from auth.users where email = '${demoEmail}')
     on conflict do nothing;
     ${models}
@@ -190,15 +215,21 @@ async function prepareUser({ email, password, withModels }) {
   if (psql.status !== 0) throw new Error((psql.stderr || psql.stdout || '').trim());
 }
 
-await prepareUser({
-  email: env.MOBILE_NOKEY_EMAIL ?? 'nokey@demo.learny.test',
-  password: env.MOBILE_NOKEY_PASSWORD ?? 'learny-nokey-4003',
-  withModels: false,
-});
+// Le compte de démonstration est réparé d'abord : les comptes de campagne en copient le profil,
+// les acceptations et les modèles.
+ensureAuth(
+  env.MOBILE_DEMO_EMAIL ?? 'alex.perrin@demo.learny.test',
+  env.MOBILE_DEMO_PASSWORD ?? 'learny-demo-3003',
+);
 await prepareUser({
   email: env.MOBILE_E2E_EMAIL ?? 'parcours4003@demo.learny.test',
-  password: env.MOBILE_E2E_PASSWORD ?? 'learny-e2e-4003',
+  password: env.MOBILE_E2E_PASSWORD ?? 'learny-demo-3003',
   withModels: true,
+});
+await prepareUser({
+  email: env.MOBILE_NOKEY_EMAIL ?? 'nokey@demo.learny.test',
+  password: env.MOBILE_NOKEY_PASSWORD ?? 'learny-demo-3003',
+  withModels: false,
 });
 console.log(
   '✔ fixtures SPEC-4003 : Manuel.pdf et TD.pdf dans Téléchargements, comptes de campagne prêts',

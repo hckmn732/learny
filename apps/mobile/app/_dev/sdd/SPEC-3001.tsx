@@ -65,6 +65,13 @@ export default function Spec3001Route() {
       <Link href="/_dev/ui" testID="sdd-ui-link" style={styles.galleryLink}>
         Galerie des composants
       </Link>
+      {/* SPEC-4003 — comptes de la campagne Maestro (builds SDD uniquement). */}
+      <Link href="/connexion?demo=e2e" testID="sdd-login-e2e" style={styles.galleryLink}>
+        Connexion parcours (e2e)
+      </Link>
+      <Link href="/connexion?demo=nokey" testID="sdd-login-nokey" style={styles.galleryLink}>
+        Connexion sans clé (e2e)
+      </Link>
       <SddSpecPage
         appVersion={appVersion()}
         runtimeVersion={runtimeVersion()}

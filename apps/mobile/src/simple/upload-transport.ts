@@ -71,9 +71,18 @@ export function simpleUploadTransport(formationId: string): UploadTransport {
     );
 
     const anonKey = configResult.ok ? configResult.config.supabaseAnonKey : '';
+    // Un URI `file:///sdcard/…` vient du partage externe : il est d'abord copié dans le cache
+    // interne, seul espace que la tâche d'envoi peut lire sans permission de stockage.
+    let uri = task.uri;
+    if (uri.startsWith('file:///sdcard/') && FileSystem.cacheDirectory !== null) {
+      const extension = task.name.includes('.') ? task.name.split('.').pop() : 'bin';
+      const target = `${FileSystem.cacheDirectory}simple-${task.id}.${String(extension)}`;
+      await FileSystem.copyAsync({ from: uri, to: target });
+      uri = target;
+    }
     const upload = FileSystem.createUploadTask(
       deviceUploadUrl(created.uploadUrl),
-      task.uri,
+      uri,
       {
         httpMethod: 'PUT',
         uploadType: FileSystem.FileSystemUploadType.BINARY_CONTENT,

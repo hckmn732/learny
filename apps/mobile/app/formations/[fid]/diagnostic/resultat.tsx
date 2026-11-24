@@ -37,18 +37,37 @@ export default function DiagnosticResultRoute() {
 
   const proposalState =
     programme.data !== null && !isActiveProgramme(programme.data) ? programme.data : null;
+  const active =
+    programme.data !== null && isActiveProgramme(programme.data) ? programme.data : null;
   const proposal = proposalState?.proposal ?? null;
+  const fallbackModule = active?.modules[0] ?? null;
+  const fallbackChapter =
+    fallbackModule === null
+      ? null
+      : (active?.chapters.find((chapter) => chapter.moduleId === fallbackModule.id) ?? null);
+  const first =
+    proposal?.modules[0] ??
+    (fallbackModule === null
+      ? null
+      : {
+          position: fallbackModule.position,
+          title: fallbackModule.title,
+          plannedEnd: fallbackModule.plannedEnd,
+          pageFrom: null,
+          pageTo: null,
+          chapters: fallbackChapter === null ? [] : [fallbackChapter],
+        });
   const acquired = result.data?.acquiredModuleIds ?? [];
   const total = attempt.data?.total ?? 0;
   const score = skipped ? null : (result.data?.score ?? null);
   const line = scoreLine({ skipped, score, total });
-  const first = proposal?.modules[0] ?? null;
   const generation = simple.data?.generation ?? [];
   const generationModule =
     first === null
       ? null
       : (generation.find((module) => module.position === first.position) ?? null);
-  const course = useModuleCourse(generationModule?.moduleId ?? null);
+  const moduleId = generationModule?.moduleId ?? active?.modules[0]?.id ?? null;
+  const course = useModuleCourse(moduleId);
   const chapter = first?.chapters[0] ?? null;
   const pages =
     first !== null &&
@@ -61,15 +80,13 @@ export default function DiagnosticResultRoute() {
   const minutes = course.data?.course?.readingMinutes ?? null;
 
   const start = (): void => {
-    if (generationModule === null) {
+    if (moduleId === null) {
       router.push('/programme');
       return;
     }
     const selected = course.data?.selectedChapterId ?? null;
     router.push(
-      selected === null
-        ? `/cours/${generationModule.moduleId}`
-        : `/cours/${generationModule.moduleId}?chapitre=${selected}`,
+      selected === null ? `/cours/${moduleId}` : `/cours/${moduleId}?chapitre=${selected}`,
     );
   };
 

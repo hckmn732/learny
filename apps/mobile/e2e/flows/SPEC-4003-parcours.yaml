@@ -13,7 +13,8 @@ tags:
     visible:
       id: sdd-health
     timeout: 30000
-- openLink: learnly://connexion?demo=1
+- tapOn:
+    id: sdd-login-e2e
 - waitForAnimationToEnd:
     timeout: 5000
 - runFlow:
@@ -89,6 +90,7 @@ tags:
 - tapOn:
     id: simple-motivation
 - inputText: 'Examen de comptabilité en juin'
+- hideKeyboard
 - tapOn:
     id: simple-create
 # EF-4 — l'analyse : les quatre étapes et les chapitres trouvés.

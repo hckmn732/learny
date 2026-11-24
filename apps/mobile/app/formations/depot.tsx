@@ -3,8 +3,8 @@
 // The learner picks documents, photos or a link locally; « Créer ma formation » creates the
 // formation once, writes the persisted queue and hands over to `[fid]/depot`, which uploads and
 // starts the analysis. A share received before sign-in is already in the store and is added here.
-import { useRouter } from 'expo-router';
-import { useEffect, useState } from 'react';
+import { useFocusEffect, useRouter } from 'expo-router';
+import { useCallback, useState } from 'react';
 import {
   Alert,
   KeyboardAvoidingView,
@@ -21,6 +21,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { fr } from '@learny/i18n';
 
 import { messageFor } from '../../src/api/errors';
+import { configResult } from '../../src/config';
 import { FileRow } from '../../src/simple/FileRow';
 import { pickDocuments, pickPagePhotos } from '../../src/simple/pickers';
 import { readPendingShare, clearPendingShare } from '../../src/simple/share-intake';
@@ -63,34 +64,43 @@ export default function DepositRoute() {
 
   const append = (incoming: readonly UploadTask[]): void => {
     setTasks((current) => {
+      // Le partage peut être lu deux fois (pont `/partage` et écouteur global) : un même document
+      // n'est ajouté qu'une fois.
+      const fresh = incoming.filter(
+        (task) => !current.some((entry) => entry.name === task.name && entry.kind === task.kind),
+      );
       const room = Math.max(0, MAX_SOURCES - current.length);
-      if (incoming.length > room) notify(t.tooMany);
-      return [...current, ...incoming.slice(0, room)];
+      if (fresh.length > room) notify(t.tooMany);
+      return [...current, ...fresh.slice(0, room)];
     });
   };
 
-  useEffect(() => {
-    let cancelled = false;
-    void readPendingShare().then((shared) => {
-      if (cancelled || shared === null) return;
-      append([
-        fileTask({
-          uri: shared.uri,
-          name: shared.name,
-          mime: shared.mime,
-          sizeBytes: shared.sizeBytes,
-          role: 'course',
-        }),
-      ]);
-      void clearPendingShare();
-      notify(t.sharedAdded);
-    });
-    return () => {
-      cancelled = true;
-    };
-    // `append` is stable enough: it only closes over the setter and the toast.
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  // Le partage peut arriver alors que l'écran est déjà monté (retour de `/partage`) : la lecture
+  // est donc refaite à chaque focus, pas seulement au montage.
+  useFocusEffect(
+    useCallback(() => {
+      let cancelled = false;
+      void readPendingShare().then((shared) => {
+        if (cancelled || shared === null) return;
+        append([
+          fileTask({
+            uri: shared.uri,
+            name: shared.name,
+            mime: shared.mime,
+            sizeBytes: shared.sizeBytes,
+            role: 'course',
+          }),
+        ]);
+        void clearPendingShare();
+        notify(t.sharedAdded);
+      });
+      return () => {
+        cancelled = true;
+      };
+      // `append` et `notify` ne dépendent que des setters de l'écran.
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []),
+  );
 
   const pick = async (source: 'files' | 'camera' | 'library'): Promise<void> => {
     try {
@@ -283,6 +293,19 @@ export default function DepositRoute() {
           <Text variant="caption" tone="muted">
             {t.tip}
           </Text>
+          {configResult.ok && configResult.config.enableSddPages ? (
+            <Button
+              label="Simuler un partage"
+              variant="text"
+              size="sm"
+              onPress={() => {
+                router.push(
+                  '/partage?uri=file%3A%2F%2F%2Fsdcard%2FAndroid%2Fdata%2Ffr.learny.app%2Fcache%2FManuel.pdf&name=Manuel.pdf&type=application%2Fpdf',
+                );
+              }}
+              testID="simple-share-fixture"
+            />
+          ) : null}
         </ScrollView>
 
         <View style={[styles.footer, { paddingBottom: insets.bottom + theme.spacing.md }]}>

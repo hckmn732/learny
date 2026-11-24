@@ -14,7 +14,8 @@ tags:
     visible:
       id: sdd-health
     timeout: 30000
-- openLink: learnly://connexion?demo=1
+- tapOn:
+    id: sdd-login-nokey
 - waitForAnimationToEnd:
     timeout: 5000
 - runFlow:
@@ -28,13 +29,22 @@ tags:
     visible:
       id: tab-aujourdhui
     timeout: 60000
-- openLink: 'learny://partage?uri=file%3A%2F%2F%2Fsdcard%2FAndroid%2Fdata%2Ffr.learny.app%2Fcache%2FManuel.pdf&name=Manuel.pdf&type=application%2Fpdf'
+- tapOn:
+    id: simple-card-drop-action
 - extendedWaitUntil:
     visible:
       id: simple-deposit-screen
-    timeout: 30000
-- assertVisible:
-    id: simple-file-0
+    timeout: 15000
+- tapOn:
+    id: simple-dropzone
+- waitForAnimationToEnd:
+    timeout: 5000
+- tapOn:
+    text: 'Manuel.pdf'
+- extendedWaitUntil:
+    visible:
+      id: simple-file-0
+    timeout: 20000
 - takeScreenshot: SPEC-4003-sans-cle
 - tapOn:
     id: simple-create
