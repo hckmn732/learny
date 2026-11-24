@@ -28,6 +28,7 @@ tags:
       id: tab-aujourdhui
     timeout: 60000
 # EF-1 — la section « Nouvelle formation » et sa carte citron.
+- takeScreenshot: z-SPEC-4003-etape-1
 - scrollUntilVisible:
     element:
       id: simple-card-drop
@@ -39,6 +40,7 @@ tags:
     visible:
       id: simple-deposit-screen
     timeout: 15000
+- takeScreenshot: z-SPEC-4003-etape-2
 # EF-2 — premier document : le cours. Le sélecteur natif Android s'ouvre sur « Récents » ; le
 # fichier poussé par `e2e/setup/SPEC-4003-fixtures.mjs` est dans Téléchargements.
 - tapOn:
@@ -96,6 +98,7 @@ tags:
     timeout: 60000
 - assertVisible:
     id: simple-chapters-found
+- takeScreenshot: z-SPEC-4003-etape-3
 # EF-6 — l'aperçu du programme.
 - extendedWaitUntil:
     visible:
@@ -115,6 +118,7 @@ tags:
     visible:
       id: diagnostic-progress
     timeout: 60000
+- takeScreenshot: z-SPEC-4003-etape-5
 - assertVisible:
     id: diagnostic-skip
 - tapOn:
@@ -124,9 +128,11 @@ tags:
     visible:
       id: simple-result-screen
     timeout: 60000
+- takeScreenshot: z-SPEC-4003-etape-6
 - assertVisible:
     id: simple-ready-card
 - assertVisible:
     id: simple-generation
+- takeScreenshot: z-SPEC-4003-etape-4
 - assertVisible:
     id: simple-ready-start

@@ -29,7 +29,7 @@ tags:
       id: tab-aujourdhui
     timeout: 60000
 # « Ouvrir avec Learny » : le fichier arrive par un intent externe (file:// poussé par le setup).
-- openLink: file:///sdcard/Download/Manuel.pdf
+- openLink: 'learny://partage?uri=file%3A%2F%2F%2Fsdcard%2FAndroid%2Fdata%2Ffr.learny.app%2Fcache%2FManuel.pdf&name=Manuel.pdf&type=application%2Fpdf'
 - extendedWaitUntil:
     visible:
       id: simple-deposit-screen

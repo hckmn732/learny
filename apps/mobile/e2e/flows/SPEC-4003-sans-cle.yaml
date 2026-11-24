@@ -28,13 +28,14 @@ tags:
     visible:
       id: tab-aujourdhui
     timeout: 60000
-- openLink: file:///sdcard/Download/Manuel.pdf
+- openLink: 'learny://partage?uri=file%3A%2F%2F%2Fsdcard%2FAndroid%2Fdata%2Ffr.learny.app%2Fcache%2FManuel.pdf&name=Manuel.pdf&type=application%2Fpdf'
 - extendedWaitUntil:
     visible:
       id: simple-deposit-screen
     timeout: 30000
 - assertVisible:
     id: simple-file-0
+- takeScreenshot: SPEC-4003-sans-cle
 - tapOn:
     id: simple-create
 - extendedWaitUntil:
