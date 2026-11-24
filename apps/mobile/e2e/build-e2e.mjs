@@ -16,7 +16,7 @@ const APP_DIR = path.resolve(HERE, '..');
 const ROOT = path.resolve(APP_DIR, '..', '..');
 const ANDROID_DIR = path.join(APP_DIR, 'android');
 const APK = path.join(ANDROID_DIR, 'app', 'build', 'outputs', 'apk', 'release', 'app-release.apk');
-const MIN_FREE_BYTES = 4 * 1024 ** 3;
+const MIN_FREE_BYTES = Number(process.env.MOBILE_BUILD_MIN_FREE_GB ?? 4) * 1024 ** 3;
 
 function readEnvFile() {
   const file = path.join(APP_DIR, 'e2e', 'e2e.env');

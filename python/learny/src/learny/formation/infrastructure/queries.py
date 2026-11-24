@@ -2259,8 +2259,8 @@ INSERT_SIMPLE_RESOURCE = text(
     values (
       cast(:resource as uuid), cast(:owner as uuid), cast(:formation as uuid), null,
       cast(:kind as public.resource_kind), :title, :path, :url, :mime,
-      -- SPEC-4001 : un fichier n'a pas de taille avant sa finalisation, qui mesure les octets
-      -- réellement reçus ; un lien garde la taille déclarée (0).
+      -- SPEC-4001: a file has no size before its finalization, which measures the received
+      -- bytes; a link keeps the declared size.
       case when cast(:path as text) is null then cast(:size as bigint) else null end,
       cast(:metadata as jsonb)
     )

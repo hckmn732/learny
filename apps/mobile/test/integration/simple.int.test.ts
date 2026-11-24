@@ -23,6 +23,31 @@ let client: ReturnType<typeof createMobileApiClient>;
 let formationId = '';
 let resourceId = '';
 
+/** Un PDF d'une page, valide pour l'extracteur et pour la mesure de la finalisation. */
+function onePagePdf(): Uint8Array {
+  const content = 'BT /F1 18 Tf 72 720 Td (Cours de comptabilite) Tj ET';
+  const objects = [
+    '<< /Type /Catalog /Pages 2 0 R >>',
+    '<< /Type /Pages /Kids [3 0 R] /Count 1 >>',
+    '<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 4 0 R >> >> /Contents 5 0 R >>',
+    '<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>',
+    `<< /Length ${String(content.length)} >>\nstream\n${content}\nendstream`,
+  ];
+  let body = '%PDF-1.4\n';
+  const offsets: number[] = [0];
+  objects.forEach((object, index) => {
+    offsets[index + 1] = body.length;
+    body += `${String(index + 1)} 0 obj\n${object}\nendobj\n`;
+  });
+  const xref = body.length;
+  body += `xref\n0 ${String(objects.length + 1)}\n0000000000 65535 f \n`;
+  for (let index = 1; index <= objects.length; index += 1) {
+    body += `${String(offsets[index]).padStart(10, '0')} 00000 n \n`;
+  }
+  body += `trailer\n<< /Size ${String(objects.length + 1)} /Root 1 0 R >>\nstartxref\n${String(xref)}\n%%EOF\n`;
+  return new TextEncoder().encode(body);
+}
+
 beforeAll(async () => {
   if (ANON_KEY === '') {
     throw new Error('Clé anonyme Supabase absente : sourcer .env.local.');
@@ -87,5 +112,33 @@ describe('[SPEC-4003] client API du mode simple (intégration)', () => {
     expect(corrected.role).toBe('course');
     const state = await client.api.simpleGet({ params: { fid: formationId } });
     expect(state.sources.some((source) => source.resourceId === resourceId)).toBe(true);
+  });
+
+  it('réserve, envoie et finalise un PDF : la taille est mesurée à la finalisation (EF-2)', async () => {
+    const bytes = onePagePdf();
+    const upload = await client.api.simpleUpload({
+      params: { fid: formationId },
+      body: {
+        fileName: 'Cours.pdf',
+        mime: 'application/pdf',
+        sizeBytes: bytes.byteLength,
+        role: 'course',
+      },
+    });
+    expect(upload.role).toBe('course');
+    const put = await fetch(upload.uploadUrl, {
+      method: 'PUT',
+      headers: {
+        apikey: ANON_KEY,
+        'content-type': 'application/pdf',
+      },
+      body: bytes,
+    });
+    expect(put.status).toBe(200);
+    const finalized = await client.api.resourcesFinalize({ params: { rid: upload.resourceId } });
+    expect(finalized.kind).toBe('pdf');
+    expect(finalized.sizeBytes).toBe(bytes.byteLength);
+    expect(finalized.pages).toBe(1);
+    await client.api.resourcesDelete({ params: { rid: upload.resourceId } });
   });
 });
