@@ -1,9 +1,11 @@
 # ADR-2042 — Contrat d'environnement réduit du backend Python : variables conservées, dérivées et constantes
 
-- **Statut** : Acceptée
+- **Statut** : Acceptée — amendée par ADR-4007
 - **Origine** : Déduite (pendant l'implémentation, sans sollicitation de l'utilisateur)
 - **Date** : 2026-11-23
-- **Liens** : SPEC-009, ADR-0227, ADR-0336, ADR-2005, ADR-2006, ADR-2011, ADR-2040, SPEC-2302
+- **Liens** : SPEC-009, ADR-0227, ADR-0336, ADR-2005, ADR-2006, ADR-2011, ADR-2040, SPEC-2302, ADR-4007
+
+> Amendée par ADR-4007 (2026-11-24) : le contrat déployé se réduit encore. `API_PROXY_SECRET`, `EMAIL_LINK_SECRET`, `VAPID_PRIVATE_KEY` et `RATE_LIMIT_IP_SECRET` dérivent d'`APP_ENCRYPTION_KEY`, l'identité légale et les versions des documents sont des constantes de `packages/config/src/product.ts`, et `SENTRY_DSN`/`NEXT_PUBLIC_SENTRY_DSN` ne sont plus fournies par les piles (le web les lit encore si on les lui donne). Les dérivations, les constantes et les suppressions décidées ici restent valides pour le backend Python.
 
 ## Contexte
 

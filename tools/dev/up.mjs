@@ -30,10 +30,10 @@ if (supabaseCode !== 0) {
   process.exit(supabaseCode);
 }
 
-console.log('→ Inngest Dev Server et Mailpit (docker compose)');
+console.log('→ Mailpit (docker compose)');
 const composeCode = run('docker', ['compose', '-f', COMPOSE_FILE, 'up', '-d', '--wait']);
 if (composeCode !== 0) {
-  console.error('✖ docker compose a échoué. Vérifiez les ports 8288, 1025 et 8025.');
+  console.error('✖ docker compose a échoué. Vérifiez les ports 1025 et 8025.');
   process.exit(composeCode);
 }
 

@@ -13,7 +13,7 @@ if (docker) {
 let code = 0;
 const compose = run('docker', ['compose', '-f', COMPOSE_FILE, 'down', '--remove-orphans']);
 if (compose !== 0) {
-  console.error('✖ arrêt d’Inngest/Mailpit en échec (docker compose down).');
+  console.error('✖ arrêt de Mailpit en échec (docker compose down).');
   code = compose;
 }
 

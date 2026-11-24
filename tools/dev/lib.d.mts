@@ -8,7 +8,6 @@ export const LOCAL_HOSTS: Set<string>;
 export const STACK: {
   supabaseApi: number;
   postgres: number;
-  inngest: number;
   mailpitSmtp: number;
   mailpitUi: number;
   web: number;
@@ -17,7 +16,6 @@ export const STACK: {
 export function serviceUrls(env?: NodeJS.ProcessEnv): {
   supabase: string;
   postgres: string;
-  inngest: string;
   mailpit: string;
   web: string;
   api: string;
