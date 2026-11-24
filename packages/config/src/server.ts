@@ -27,7 +27,6 @@ export { PUBLIC_ENV_KEYS, parsePublicEnv, publicEnvSchema } from './env-public';
 export type { PublicEnv, PublicEnvKey } from './env-public';
 export {
   APP_ENVS,
-  API_ROLES,
   EMAIL_MODES,
   EnvConfigError,
   LLM_MODES,
@@ -36,7 +35,6 @@ export {
 } from './env-shared';
 export type {
   AppEnv,
-  ApiRole,
   EmailMode,
   EnvInput,
   EnvIssue,

@@ -48,7 +48,9 @@ export async function startServer(env = process.env) {
   }
   const commonEnv = {
     ...process.env,
-    API_PROXY_SECRET: 'learny-test-only-api-proxy-secret-value',
+    // ADR-4007: web and facade derive the same relay secret from the same master key.
+    APP_ENCRYPTION_KEY:
+      process.env.APP_ENCRYPTION_KEY || 'BwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwc=', // learny-test-only
     ...env,
   };
   // The Python facade serves every operation (ADR-2001, ADR-2005): no TypeScript runtime left.
@@ -65,7 +67,7 @@ export async function startServer(env = process.env) {
     ],
     {
       cwd: ROOT,
-      env: { ...commonEnv, PORT: String(PERF_API_PORT), API_PORT: String(PERF_API_PORT) },
+      env: { ...commonEnv, PORT: String(PERF_API_PORT) },
       stdio: ['ignore', 'pipe', 'pipe'],
     },
   );

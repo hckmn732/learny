@@ -100,7 +100,6 @@ beforeAll(async () => {
   }
   webPort = await freePort();
   const apiPort = await freePort();
-  const inngestPort = await freePort();
   fs.mkdirSync(EVIDENCE, { recursive: true });
   for (const artifact of [
     'build-web.txt',
@@ -117,37 +116,22 @@ beforeAll(async () => {
   const values: Record<string, string> = {
     ...secrets,
     APP_ENV: 'production',
-    // SPEC-009 rejects simulated modes and plain-HTTP public URLs in production. The stack is
-    // local, so these are placeholder credentials: no provider is contacted by the probes.
-    LLM_MODE: 'live',
-    ANTHROPIC_API_KEY: placeholder('anthropic'),
+    // SPEC-009 rejects plain-HTTP public URLs in production and the modes are derived from
+    // APP_ENV (ADR-4007). The stack is local: these placeholder credentials reach no provider.
     VOYAGE_API_KEY: placeholder('voyage'),
     RESEND_API_KEY: placeholder('resend'),
-    STRIPE_MODE: 'test',
     STRIPE_SECRET_KEY: placeholder('stripe-secret'),
     STRIPE_WEBHOOK_SECRET: placeholder('stripe-webhook'),
     STRIPE_PRICE_ID: placeholder('stripe-price'),
     NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY: placeholder('stripe-public'),
-    PUSH_MODE: 'live',
-    NEXT_PUBLIC_VAPID_PUBLIC_KEY: placeholder('vapid-public'),
-    VAPID_PRIVATE_KEY: placeholder('vapid-private'),
-    VAPID_SUBJECT: 'mailto:test@learny.example',
-    LEGAL_ENTITY_NAME: 'Learny Test',
-    LEGAL_ENTITY_ADDRESS: '1 rue du Test, Paris',
-    LEGAL_CONTACT_EMAIL: 'test@learny.example',
-    LEGAL_HOST_NAME: 'learny.example',
     LEARNY_PUBLIC_APP_URL: `https://localhost:${String(webPort)}`,
     LEARNY_PUBLIC_SUPABASE_URL: `https://localhost:${String(apiPort)}`,
     LEARNY_WEB_PORT: String(webPort),
     LEARNY_SUPABASE_PORT: String(apiPort),
-    LEARNY_INNGEST_PORT: String(inngestPort),
     LEARNY_WEB_IMAGE: WEB_IMAGE,
     LEARNY_API_IMAGE: API_IMAGE,
     GIT_COMMIT,
     APP_VERSION,
-    SMTP_HOST: 'mailpit',
-    SMTP_PORT: '1025',
-    EMAIL_MODE: 'smtp',
   };
   fs.mkdirSync(path.dirname(ENV_FILE), { recursive: true });
   fs.writeFileSync(

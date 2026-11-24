@@ -16,7 +16,6 @@ export const PUBLIC_ENV_KEYS = [
   'NEXT_PUBLIC_APP_URL',
   'NEXT_PUBLIC_SUPABASE_URL',
   'NEXT_PUBLIC_SUPABASE_ANON_KEY',
-  'NEXT_PUBLIC_VAPID_PUBLIC_KEY',
   'NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY',
   'NEXT_PUBLIC_SENTRY_DSN',
 ] as const;
@@ -30,7 +29,6 @@ export const publicEnvSchema = z.strictObject({
   NEXT_PUBLIC_APP_URL: serviceUrl.optional(),
   NEXT_PUBLIC_SUPABASE_URL: serviceUrl.optional(),
   NEXT_PUBLIC_SUPABASE_ANON_KEY: publicToken.optional(),
-  NEXT_PUBLIC_VAPID_PUBLIC_KEY: publicToken.optional(),
   NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY: publicToken.optional(),
   NEXT_PUBLIC_SENTRY_DSN: serviceUrl.optional(),
 });
@@ -38,7 +36,8 @@ export const publicEnvSchema = z.strictObject({
 export type PublicEnv = z.infer<typeof publicEnvSchema>;
 
 /**
- * Keeps the six white-listed keys and nothing else: a stray `NEXT_PUBLIC_*` variable can never
+ * Keeps the five white-listed keys (the VAPID public key is derived on the server, ADR-4007)
+ * and nothing else: a stray `NEXT_PUBLIC_*` variable can never
  * reach the browser through this object (EF-2).
  */
 export function parsePublicEnv(raw: EnvInput = {}): PublicEnv {

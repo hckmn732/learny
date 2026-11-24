@@ -54,12 +54,8 @@ export function generateSecrets(now) {
     SUPABASE_JWT_SECRET: jwtSecret,
     NEXT_PUBLIC_SUPABASE_ANON_KEY: keys.anon,
     SUPABASE_SERVICE_ROLE_KEY: keys.service,
-    INNGEST_EVENT_KEY: crypto.randomBytes(24).toString('hex'),
-    INNGEST_SIGNING_KEY: crypto.randomBytes(32).toString('hex'),
+    // ADR-4007: the relay, e-mail link, VAPID and rate-limit secrets derive from this key.
     APP_ENCRYPTION_KEY: crypto.randomBytes(32).toString('base64'),
-    API_PROXY_SECRET: crypto.randomBytes(32).toString('hex'),
-    RATE_LIMIT_IP_SECRET: crypto.randomBytes(32).toString('hex'),
-    EMAIL_LINK_SECRET: crypto.randomBytes(32).toString('hex'),
   };
 }
 

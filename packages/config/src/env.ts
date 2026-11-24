@@ -1,16 +1,15 @@
 // Server environment: the single validation point for every runtime variable (SPEC-009, ET-1).
 // Imported through `@learny/config/server` only, never by a client component (ET-6).
+//
+// ADR-4007: the contract is minimal. The service modes are derived by the Python backend from
+// `APP_ENV` (ADR-2042), the internal secrets are subkeys of `APP_ENCRYPTION_KEY`, the legal
+// identity is a code constant: none of them is a variable any more.
 import { z } from 'zod';
 
 import { PUBLIC_ENV_KEYS, publicEnvSchema } from './env-public';
 import {
-  API_ROLES,
   APP_ENVS,
-  EMAIL_MODES,
   EnvConfigError,
-  LLM_MODES,
-  PUSH_MODES,
-  STRIPE_MODES,
   isIanaTimeZone,
   isInternalServiceUrl,
   isServiceUrl,
@@ -21,7 +20,7 @@ import {
   type EnvIssue,
 } from './env-shared';
 
-/** Server-only variables: never exported by the package root (EF-2, ET-6). */
+/** Server-only variables still read at runtime: never exported by the package root (EF-2, ET-6). */
 export const SERVER_ENV_KEYS = [
   'NODE_ENV',
   'APP_ENV',
@@ -31,79 +30,47 @@ export const SERVER_ENV_KEYS = [
   'APP_VERSION',
   'GIT_COMMIT',
   'API_INTERNAL_URL',
-  'API_PROXY_SECRET',
-  'API_PROXY_SECRET_PREVIOUS',
-  'LEARNY_API_ROLE',
-  'API_PORT',
-  'RATE_LIMIT_IP_SECRET',
-  'RATE_LIMIT_MODE',
-  'TRUST_PROXY',
-  'ALLOWED_ORIGINS',
   'SUPABASE_SERVICE_ROLE_KEY',
   'SUPABASE_JWT_SECRET',
-  'SUPABASE_JWKS_URL',
   'DATABASE_URL',
-  'DATABASE_POOL_MAX',
-  'DB_LOG_QUERIES',
-  'LLM_MODE',
-  'ANTHROPIC_API_KEY',
-  'LLM_LIVE_TESTS',
   'ALLOW_LOCAL_MODELS',
   'VOYAGE_API_KEY',
-  'EMBEDDING_DIM',
   'SEARCH_API_KEY',
-  'JOBS_MODE',
-  'INNGEST_EVENT_KEY',
-  'INNGEST_SIGNING_KEY',
-  'INNGEST_DEV',
-  'EMAIL_MODE',
   'SMTP_HOST',
-  'SMTP_PORT',
   'EMAIL_FROM',
   'RESEND_API_KEY',
-  'EMAIL_LINK_SECRET',
-  'MAILPIT_URL',
-  'VAPID_PRIVATE_KEY',
-  'VAPID_SUBJECT',
-  'PUSH_MODE',
-  'STRIPE_MODE',
   'STRIPE_SECRET_KEY',
   'STRIPE_WEBHOOK_SECRET',
   'STRIPE_PRICE_ID',
   'SENTRY_DSN',
-  'SENTRY_AUTH_TOKEN',
-  'LEGAL_ENTITY_NAME',
-  'LEGAL_ENTITY_ADDRESS',
-  'LEGAL_CONTACT_EMAIL',
-  'LEGAL_HOST_NAME',
-  'LEGAL_CGU_VERSION',
-  'LEGAL_PRIVACY_VERSION',
   'CLOCK_FIXED_AT',
   'ENABLE_SDD_PAGES',
-  'DEEPGRAM_API_KEY',
 ] as const;
 
 export type ServerEnvKey = (typeof SERVER_ENV_KEYS)[number];
 
 /**
- * Variables of the toolchain (pnpm, Playwright, SDD scripts) kept in `.env.example` but outside the
- * runtime schema: the application never reads them (ET-5, ADR-0226).
+ * Variables of the toolchain (pnpm, Playwright, test clients, SDD scripts, Compose) kept in
+ * `.env.example` but outside the runtime schema: the application never reads them (ET-5).
  */
 export const TOOLING_ENV_KEYS = [
   'SDD_PUSH',
   'E2E_SKIP_BUILD',
   'CHROME_PATH',
+  // ADR-0048: the test runners refuse any value but `mock` (packages/testing, assertMockLlm).
+  'LLM_MODE',
+  // Mailpit API read by the authentication test helpers (packages/testing).
+  'MAILPIT_URL',
+  // Pool size and SQL logging of the test database client (packages/testing).
+  'DATABASE_POOL_MAX',
+  'DB_LOG_QUERIES',
   // Self-hosted stack (SPEC-012): consumed by Docker Compose and the image builds, not by the app.
   'LEARNY_PUBLIC_APP_URL',
   'LEARNY_PUBLIC_SUPABASE_URL',
   'LEARNY_WEB_PORT',
   'LEARNY_SUPABASE_PORT',
-  'LEARNY_INNGEST_PORT',
   'LEARNY_MAILPIT_SMTP_PORT',
   'LEARNY_MAILPIT_UI_PORT',
-  // Supabase Auth SMTP sender name used by the self-hosted Compose file (SPEC-012).
-  'SMTP_SENDER_NAME',
-  'SMTP_ADMIN_EMAIL',
   // Postgres superuser password consumed by the self-hosted Compose file (SPEC-012).
   'POSTGRES_PASSWORD',
 ] as const;
@@ -116,64 +83,37 @@ export const RUNTIME_ENV_KEYS: readonly string[] = [...SERVER_ENV_KEYS, ...PUBLI
 
 export const DOCUMENTED_ENV_KEYS: readonly string[] = [...RUNTIME_ENV_KEYS, ...TOOLING_ENV_KEYS];
 
-/** Required for `APP_ENV=production` (ET-3). Sentry stays optional unless enabled (ADR-0226). */
+/** Required for `APP_ENV=production` (ET-3, ADR-4007). Sentry and web search stay optional. */
 export const PRODUCTION_REQUIRED_KEYS = [
   'NEXT_PUBLIC_APP_URL',
   'NEXT_PUBLIC_SUPABASE_URL',
   'NEXT_PUBLIC_SUPABASE_ANON_KEY',
   'SUPABASE_SERVICE_ROLE_KEY',
+  'SUPABASE_JWT_SECRET',
   'DATABASE_URL',
   'APP_ENCRYPTION_KEY',
-  'INNGEST_EVENT_KEY',
-  'INNGEST_SIGNING_KEY',
-  'VOYAGE_API_KEY',
+  'API_INTERNAL_URL',
+  'EMAIL_FROM',
   'RESEND_API_KEY',
-  'NEXT_PUBLIC_VAPID_PUBLIC_KEY',
-  'VAPID_PRIVATE_KEY',
-  'VAPID_SUBJECT',
   'STRIPE_SECRET_KEY',
   'STRIPE_WEBHOOK_SECRET',
   'STRIPE_PRICE_ID',
   'NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY',
-  'RATE_LIMIT_IP_SECRET',
-  'EMAIL_LINK_SECRET',
-  'LEGAL_ENTITY_NAME',
-  'LEGAL_ENTITY_ADDRESS',
-  'LEGAL_CONTACT_EMAIL',
-  'LEGAL_HOST_NAME',
-  'API_INTERNAL_URL',
-  'API_PROXY_SECRET',
+  'VOYAGE_API_KEY',
 ] as const;
 
 const STATIC_DEFAULTS = {
   LOG_LEVEL: 'info',
-  TRUST_PROXY: 'false',
-  RATE_LIMIT_MODE: 'on',
-  DATABASE_POOL_MAX: '10',
-  DB_LOG_QUERIES: 'false',
-  LLM_LIVE_TESTS: '0',
   ALLOW_LOCAL_MODELS: 'false',
-  EMBEDDING_DIM: '1024',
-  INNGEST_DEV: '0',
   ENABLE_SDD_PAGES: 'false',
-  LEGAL_CGU_VERSION: '2026-11-11',
-  LEGAL_PRIVACY_VERSION: '2026-11-11',
 } as const;
 
 /** Documented defaults: local and test run without any provider key (EF-1). */
 export function envDefaults(appEnv: AppEnv): Record<string, string> {
-  const simulated = appEnv === 'local' || appEnv === 'test';
   return {
     ...STATIC_DEFAULTS,
-    API_PORT: '3001',
-    LEARNY_API_ROLE: 'all',
     ...(appEnv === 'production' ? {} : { API_INTERNAL_URL: 'http://127.0.0.1:3001' }),
     APP_ENV: appEnv,
-    LLM_MODE: simulated ? 'mock' : 'live',
-    STRIPE_MODE: appEnv === 'production' ? 'live' : appEnv === 'preview' ? 'test' : 'mock',
-    EMAIL_MODE: simulated ? (appEnv === 'test' ? 'memory' : 'smtp') : 'resend',
-    PUSH_MODE: simulated ? 'mock' : 'live',
-    JOBS_MODE: appEnv === 'test' ? 'inline' : 'inngest',
   };
 }
 
@@ -188,14 +128,6 @@ const booleanString = z.preprocess(
   z.enum(['true', 'false']).transform((value) => value === 'true'),
 );
 
-function integer(min: number, max: number) {
-  return z.preprocess(
-    (value: unknown) =>
-      typeof value === 'string' && /^\d+$/.test(value.trim()) ? Number(value.trim()) : value,
-    z.number().int().min(min).max(max),
-  );
-}
-
 const serviceUrl = z.string().refine(isServiceUrl, 'invalid-url');
 const internalServiceUrl = z.string().refine(isInternalServiceUrl, 'invalid-url');
 const nonEmpty = z.string().min(1);
@@ -205,7 +137,6 @@ const encryptionKey = z
   .string()
   .regex(/^[A-Za-z0-9+/]+={0,2}$/, 'base64')
   .refine((value) => Buffer.from(value, 'base64').length === 32, 'aes-256-key');
-const emailAddress = z.string().regex(/^[^@\s<>]+@[^@\s<>]+\.[^@\s<>]+$/, 'email');
 const emailFrom = z
   .string()
   .regex(/^([^<>]*<[^@\s<>]+@[^@\s<>]+\.[^@\s<>]+>|[^@\s<>]+@[^@\s<>]+\.[^@\s<>]+)$/, 'from');
@@ -213,7 +144,6 @@ const isoInstant = z
   .string()
   .regex(/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(\.\d+)?(Z|[+-]\d{2}:\d{2})$/, 'instant')
   .refine((value) => !Number.isNaN(Date.parse(value)), 'instant');
-const isoDate = z.string().regex(/^\d{4}-\d{2}-\d{2}$/, 'date');
 const version = z.string().regex(/^[0-9A-Za-z][0-9A-Za-z.+-]{0,63}$/, 'version');
 const commit = z.string().regex(/^[0-9a-f]{7,40}$/i, 'commit');
 
@@ -227,68 +157,26 @@ const serverFields = {
   APP_VERSION: version.optional(),
   GIT_COMMIT: commit.optional(),
   API_INTERNAL_URL: internalServiceUrl.optional(),
-  API_PROXY_SECRET: z.string().min(32).regex(/^\S+$/, 'no-whitespace').optional(),
-  API_PROXY_SECRET_PREVIOUS: z.string().min(32).regex(/^\S+$/, 'no-whitespace').optional(),
-  LEARNY_API_ROLE: enumOf(API_ROLES),
-  API_PORT: integer(1, 65535),
-  RATE_LIMIT_IP_SECRET: z.string().min(32).optional(),
-  /** QA only (`APP_ENV=local`, refusée en production) : `'off'` remplace le limiteur par le no-op. */
-  RATE_LIMIT_MODE: enumOf(['on', 'off']),
-  TRUST_PROXY: booleanString,
-  ALLOWED_ORIGINS: z
-    .string()
-    .refine((value) => value.split(',').every((origin) => isServiceUrl(origin.trim())), 'origins')
-    .optional(),
   SUPABASE_SERVICE_ROLE_KEY: secret.optional(),
   SUPABASE_JWT_SECRET: secret.optional(),
-  SUPABASE_JWKS_URL: serviceUrl.optional(),
   DATABASE_URL: z
     .string()
     .regex(/^postgres(ql)?:\/\/\S+$/, 'postgres-url')
     .optional(),
-  DATABASE_POOL_MAX: integer(1, 100),
-  DB_LOG_QUERIES: booleanString,
-  LLM_MODE: enumOf(LLM_MODES),
-  ANTHROPIC_API_KEY: secret.optional(),
-  LLM_LIVE_TESTS: enumOf(['0', '1']),
   ALLOW_LOCAL_MODELS: booleanString,
   VOYAGE_API_KEY: secret.optional(),
-  EMBEDDING_DIM: integer(1, 8192),
   SEARCH_API_KEY: secret.optional(),
-  JOBS_MODE: enumOf(['inngest', 'inline']),
-  INNGEST_EVENT_KEY: secret.optional(),
-  INNGEST_SIGNING_KEY: secret.optional(),
-  INNGEST_DEV: enumOf(['0', '1']),
-  EMAIL_MODE: enumOf(EMAIL_MODES),
   SMTP_HOST: nonEmpty.optional(),
-  SMTP_PORT: integer(1, 65535).optional(),
   EMAIL_FROM: emailFrom.optional(),
   RESEND_API_KEY: secret.optional(),
-  EMAIL_LINK_SECRET: z.string().min(32).optional(),
-  MAILPIT_URL: serviceUrl.optional(),
-  VAPID_PRIVATE_KEY: secret.optional(),
-  VAPID_SUBJECT: z
-    .string()
-    .refine((value) => /^mailto:[^@\s]+@[^@\s]+$/.test(value) || isServiceUrl(value), 'subject')
-    .optional(),
-  PUSH_MODE: enumOf(PUSH_MODES),
-  STRIPE_MODE: enumOf(STRIPE_MODES),
   STRIPE_SECRET_KEY: secret.optional(),
   STRIPE_WEBHOOK_SECRET: secret.optional(),
   STRIPE_PRICE_ID: secret.optional(),
   SENTRY_DSN: serviceUrl.optional(),
-  SENTRY_AUTH_TOKEN: secret.optional(),
-  LEGAL_ENTITY_NAME: nonEmpty.optional(),
-  LEGAL_ENTITY_ADDRESS: nonEmpty.optional(),
-  LEGAL_CONTACT_EMAIL: emailAddress.optional(),
-  LEGAL_HOST_NAME: nonEmpty.optional(),
-  LEGAL_CGU_VERSION: isoDate,
-  LEGAL_PRIVACY_VERSION: isoDate,
   CLOCK_FIXED_AT: isoInstant.optional(),
   // EF-4: only the exact string `true` enables the demo pages; any other value disables them
   // (the runtime guard of SPEC-006 keeps answering 404 instead of crashing).
   ENABLE_SDD_PAGES: z.preprocess(trimmed, z.string()).transform((value) => value === 'true'),
-  DEEPGRAM_API_KEY: secret.optional(),
 } as const;
 
 // Public variables are carried by the server configuration object too (mail links, redirects):
@@ -297,35 +185,20 @@ const serverEnvShape = { ...serverFields, ...publicEnvSchema.shape };
 
 const serverEnvBase = z.object(serverEnvShape);
 
-/** Mode matrix and production requirements: replayable in one pass, one error, no value (EF-1, EF-3). */
+/** Production requirements: replayable in one pass, one error, no value (EF-1, EF-3). */
 function checkEnvironment(value: z.infer<typeof serverEnvBase>, ctx: z.RefinementCtx): void {
   const report = (name: string, code: EnvIssue['code']): void => {
     ctx.addIssue({ code: 'custom', path: [name], message: code });
   };
   const field = (name: string): unknown => (value as Record<string, unknown>)[name];
 
-  if (value.APP_ENV === 'test') {
-    // A test environment never reaches a provider (CL-3, ADR-0048).
-    if (value.LLM_MODE !== 'mock') report('LLM_MODE', 'incompatible');
-    if (value.STRIPE_MODE !== 'mock') report('STRIPE_MODE', 'incompatible');
-    if (value.EMAIL_MODE !== 'memory') report('EMAIL_MODE', 'incompatible');
-    if (value.PUSH_MODE !== 'mock') report('PUSH_MODE', 'incompatible');
-    if (value.LLM_LIVE_TESTS !== '0') report('LLM_LIVE_TESTS', 'incompatible');
-  }
-
   if (value.APP_ENV === 'production') {
     for (const name of PRODUCTION_REQUIRED_KEYS) {
       if (field(name) === undefined) report(name, 'missing');
     }
-    if (value.LLM_MODE === 'mock') report('LLM_MODE', 'forbidden');
-    if (value.RATE_LIMIT_MODE === 'off') report('RATE_LIMIT_MODE', 'forbidden');
-    if (value.STRIPE_MODE === 'mock') report('STRIPE_MODE', 'forbidden');
-    if (value.EMAIL_MODE === 'memory') report('EMAIL_MODE', 'forbidden');
-    if (value.PUSH_MODE === 'mock') report('PUSH_MODE', 'forbidden');
     if (value.ENABLE_SDD_PAGES) report('ENABLE_SDD_PAGES', 'forbidden');
-    if (value.DB_LOG_QUERIES) report('DB_LOG_QUERIES', 'forbidden');
-    if (value.JOBS_MODE === 'inline') report('JOBS_MODE', 'forbidden');
-    if (value.INNGEST_DEV === '1') report('INNGEST_DEV', 'forbidden');
+    // ADR-0047: a frozen clock is a test and QA device only, like in the Python backend.
+    if (value.CLOCK_FIXED_AT !== undefined) report('CLOCK_FIXED_AT', 'forbidden');
     for (const name of ['NEXT_PUBLIC_APP_URL', 'NEXT_PUBLIC_SUPABASE_URL'] as const) {
       const url = field(name);
       if (typeof url === 'string' && !url.startsWith('https://')) report(name, 'incompatible');
@@ -354,18 +227,12 @@ function assertKeys(scope: string, shape: Record<string, unknown>, keys: readonl
 assertKeys('ENV', serverEnvShape, RUNTIME_ENV_KEYS);
 
 /**
- * Validates the server environment and returns a typed object.
- * `appEnv` overrides `APP_ENV` (startup wiring); production fails on the first run with every
- * missing or invalid variable named, never a value (EF-1, CL-1).
+ * Validates the server environment and returns a typed object. Unknown variables (retired ones
+ * included) are ignored. `appEnv` overrides `APP_ENV` (startup wiring); production fails on the
+ * first run with every missing or invalid variable named, never a value (EF-1, CL-1).
  */
 export function parseServerEnv(raw: EnvInput = {}, appEnv?: AppEnv): ServerEnv {
   const input = normalizeEnv(raw);
-  if (
-    input.LEARNY_API_ROLE !== undefined &&
-    !(API_ROLES as readonly string[]).includes(input.LEARNY_API_ROLE)
-  ) {
-    throw new Error(`LEARNY_API_ROLE invalide : valeurs permises : ${API_ROLES.join(', ')}.`);
-  }
   const requested = appEnv ?? input.APP_ENV ?? 'local';
   const effectiveEnv = isAppEnv(requested) ? requested : 'local';
   // Defaults first, then the provided values: an empty variable falls back to its documented

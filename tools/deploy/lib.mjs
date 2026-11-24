@@ -29,9 +29,7 @@ export const PREVIEW_REQUIRED_KEYS = Object.freeze([
   'DATABASE_URL',
   'APP_ENCRYPTION_KEY',
   'RESEND_API_KEY',
-  'EMAIL_LINK_SECRET',
   'API_INTERNAL_URL',
-  'API_PROXY_SECRET',
 ]);
 
 const HEADERS = Object.freeze({

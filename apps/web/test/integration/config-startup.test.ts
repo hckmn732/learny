@@ -60,7 +60,7 @@ describe('[SPEC-009] startup web', () => {
 
     expect(result.status).toBe(0);
     expect(result.stdout).toContain('web:local');
-    expect(getServerEnv({ APP_ENV: 'local' }).LLM_MODE).toBe('mock');
+    expect(getServerEnv({ APP_ENV: 'local' }).ALLOW_LOCAL_MODELS).toBe(false);
     expect(getPublicEnv({})).toEqual({});
   }, 60000);
 
@@ -68,7 +68,7 @@ describe('[SPEC-009] startup web', () => {
     const result = startWeb({
       APP_ENV: 'production',
       DATABASE_URL: 'postgresql://learny:learny-test-only-LEAK@db.example:5432/learny',
-      ANTHROPIC_API_KEY: 'sk-ant-learny-test-only-LEAK', // learny-test-only
+      RESEND_API_KEY: 're-learny-test-only-LEAK', // learny-test-only
     });
     const output = `${result.stdout}\n${result.stderr}`;
 

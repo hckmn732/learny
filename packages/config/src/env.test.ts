@@ -8,9 +8,8 @@ import {
   parseServerEnv,
 } from './env';
 import { PUBLIC_ENV_KEYS, parsePublicEnv } from './env-public';
-import { APP_ENVS, EnvConfigError, type AppEnv } from './env-shared';
+import { APP_ENVS, EnvConfigError } from './env-shared';
 
-// learny-test-only: a 32-byte AES-256-GCM key, public on purpose (never a real secret).
 // learny-test-only: 32 zero-free bytes, base64 encoded (not a secret).
 const KEY_32_BYTES = 'BwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwc=';
 const KEY_BYTES = Buffer.from(KEY_32_BYTES, 'base64');
@@ -19,33 +18,60 @@ const KEY_BYTES = Buffer.from(KEY_32_BYTES, 'base64');
 const PRODUCTION_ENV: Record<string, string> = {
   APP_ENV: 'production',
   API_INTERNAL_URL: 'https://api.learny.example',
-  API_PROXY_SECRET: 'learny-test-only-api-proxy-secret-value',
   NEXT_PUBLIC_APP_URL: 'https://learny.example',
   NEXT_PUBLIC_SUPABASE_URL: 'https://learny-test-only.supabase.co',
   NEXT_PUBLIC_SUPABASE_ANON_KEY: 'anon-learni-test-only',
-  NEXT_PUBLIC_VAPID_PUBLIC_KEY: 'vapid-public-learny-test-only',
   NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY: 'pk_live_learny-test-only',
   SUPABASE_SERVICE_ROLE_KEY: 'service-role-learny-test-only',
-  SUPABASE_JWKS_URL: 'https://learny-test-only.supabase.co/auth/v1/.well-known/jwks.json',
+  SUPABASE_JWT_SECRET: 'jwt-secret-learny-test-only',
   DATABASE_URL: 'postgresql://learny:learny-test-only@db.example:5432/learny',
   APP_ENCRYPTION_KEY: 'BwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwcHBwc=', // learny-test-only
-  INNGEST_EVENT_KEY: 'event-key-learny-test-only',
-  INNGEST_SIGNING_KEY: 'signkey-learny-test-only',
-  ANTHROPIC_API_KEY: 'sk-ant-learny-test-only',
   VOYAGE_API_KEY: 'pa-learny-test-only',
+  EMAIL_FROM: 'bonjour@learny.example',
   RESEND_API_KEY: 're-learny-test-only',
-  VAPID_PRIVATE_KEY: 'vapid-private-learny-test-only',
-  VAPID_SUBJECT: 'mailto:bonjour@learny.local',
   STRIPE_SECRET_KEY: 'sk_live_learny-test-only',
   STRIPE_WEBHOOK_SECRET: 'whsec_learny-test-only',
   STRIPE_PRICE_ID: 'price_learny-test-only',
-  RATE_LIMIT_IP_SECRET: 'learny-test-only-rate-limit-ip-secret',
-  EMAIL_LINK_SECRET: 'learny-test-only-email-link-secret-value',
-  LEGAL_ENTITY_NAME: 'Learny (apprentissage)',
-  LEGAL_ENTITY_ADDRESS: '1 rue de la Connaissance, 75001 Paris',
-  LEGAL_CONTACT_EMAIL: 'bonjour@learny.example',
-  LEGAL_HOST_NAME: 'learny.example',
 };
+
+/** ADR-4007: retired variables, derived or constant now; the schema ignores them. */
+const RETIRED = [
+  'STRIPE_MODE',
+  'EMAIL_MODE',
+  'PUSH_MODE',
+  'JOBS_MODE',
+  'RATE_LIMIT_MODE',
+  'INNGEST_EVENT_KEY',
+  'INNGEST_SIGNING_KEY',
+  'INNGEST_DEV',
+  'ANTHROPIC_API_KEY',
+  'DEEPGRAM_API_KEY',
+  'API_PORT',
+  'LEARNY_API_ROLE',
+  'SUPABASE_JWKS_URL',
+  'TRUST_PROXY',
+  'ALLOWED_ORIGINS',
+  'API_PROXY_SECRET',
+  'API_PROXY_SECRET_PREVIOUS',
+  'RATE_LIMIT_IP_SECRET',
+  'EMAIL_LINK_SECRET',
+  'VAPID_PRIVATE_KEY',
+  'VAPID_SUBJECT',
+  'NEXT_PUBLIC_VAPID_PUBLIC_KEY',
+  'SMTP_PORT',
+  'EMBEDDING_DIM',
+  'LLM_LIVE_TESTS',
+  'SENTRY_AUTH_TOKEN',
+  'LEGAL_ENTITY_NAME',
+  'LEGAL_ENTITY_ADDRESS',
+  'LEGAL_CONTACT_EMAIL',
+  'LEGAL_HOST_NAME',
+  'LEGAL_CGU_VERSION',
+  'LEGAL_PRIVACY_VERSION',
+  'LEARNY_INNGEST_PORT',
+  'SMTP_SENDER_NAME',
+  'SMTP_ADMIN_EMAIL',
+] as const;
 
 function caught(run: () => unknown): EnvConfigError {
   try {
@@ -59,25 +85,12 @@ function caught(run: () => unknown): EnvConfigError {
 
 describe('[SPEC-009] environment', () => {
   it('accepts the four application environments with documented defaults (EF-3)', () => {
-    const expected: Record<AppEnv, { llm: string; email: string; stripe: string; push: string }> = {
-      local: { llm: 'mock', email: 'smtp', stripe: 'mock', push: 'mock' },
-      test: { llm: 'mock', email: 'memory', stripe: 'mock', push: 'mock' },
-      preview: { llm: 'live', email: 'resend', stripe: 'test', push: 'live' },
-      production: { llm: 'live', email: 'resend', stripe: 'live', push: 'live' },
-    };
-
     for (const appEnv of APP_ENVS) {
       const env =
         appEnv === 'production' ? parseServerEnv(PRODUCTION_ENV) : parseServerEnv({}, appEnv);
       expect(env.APP_ENV).toBe(appEnv);
-      expect({
-        llm: env.LLM_MODE,
-        email: env.EMAIL_MODE,
-        stripe: env.STRIPE_MODE,
-        push: env.PUSH_MODE,
-      }).toEqual(expected[appEnv]);
-      expect(typeof env.TRUST_PROXY).toBe('boolean');
-      expect(env.DATABASE_POOL_MAX).toBe(10);
+      expect(env.LOG_LEVEL).toBe('info');
+      expect(env.ALLOW_LOCAL_MODELS).toBe(false);
     }
   });
 
@@ -87,31 +100,16 @@ describe('[SPEC-009] environment', () => {
     expect(env.APP_ENV).toBe('production');
     expect(env.ENABLE_SDD_PAGES).toBe(false);
     expect(env.NEXT_PUBLIC_APP_URL).toBe('https://learny.example');
-    expect(env.LEGAL_CONTACT_EMAIL).toBe('bonjour@learny.example');
     expect(Buffer.from(env.APP_ENCRYPTION_KEY ?? '', 'base64')).toEqual(KEY_BYTES);
   });
 
-  it('accepts an optional previous proxy secret for rotation [SPEC-1302]', () => {
-    const previous = 'learny-test-only-api-proxy-secret-previous';
-    const env = parseServerEnv({ ...PRODUCTION_ENV, API_PROXY_SECRET_PREVIOUS: previous });
-    expect(env.API_PROXY_SECRET_PREVIOUS).toBe(previous);
-    expect(() => parseServerEnv({ ...PRODUCTION_ENV, API_PROXY_SECRET_PREVIOUS: 'short' })).toThrow(
-      EnvConfigError,
-    );
-  });
-
-  it('rejects a simulated mode in test before any provider starts (CL-3)', () => {
-    for (const overrides of [
-      { LLM_MODE: 'live' },
-      { STRIPE_MODE: 'live' },
-      { EMAIL_MODE: 'smtp' },
-      { PUSH_MODE: 'live' },
-      { LLM_LIVE_TESTS: '1' },
-    ]) {
-      const error = caught(() => parseServerEnv({ ...overrides }, 'test'));
-      expect(error.names).toEqual(Object.keys(overrides));
-      expect(error.issues[0]?.code).toBe('incompatible');
+  it('documents none of the retired variables and ignores them (ADR-4007)', () => {
+    for (const name of RETIRED) {
+      expect(DOCUMENTED_ENV_KEYS, name).not.toContain(name);
     }
+    const env = parseServerEnv({ ...PRODUCTION_ENV, LLM_MODE: 'mock', API_PROXY_SECRET: 'x' });
+    expect(Object.hasOwn(env, 'LLM_MODE')).toBe(false);
+    expect(Object.hasOwn(env, 'API_PROXY_SECRET')).toBe(false);
   });
 
   it('names every missing production variable in a single error (EF-1, CL-1)', () => {
@@ -136,15 +134,15 @@ describe('[SPEC-009] environment', () => {
     const leaky = {
       ...PRODUCTION_ENV,
       APP_ENCRYPTION_KEY: 'not-a-key-SuperSecretValue', // learny-test-only
-      ANTHROPIC_API_KEY: 'sk-ant-SuperSecretValue', // learny-test-only
+      RESEND_API_KEY: ' re-SuperSecretValue ', // learny-test-only
       DATABASE_URL: 'postgresql://learny:SuperSecretValue@db.example:5432/learny',
     };
     const error = caught(() => parseServerEnv(leaky));
     const serialized = `${error.message}\n${JSON.stringify(error.issues)}`;
 
     expect(error.names).toContain('APP_ENCRYPTION_KEY');
+    expect(error.names).toContain('RESEND_API_KEY');
     expect(serialized).not.toContain('SuperSecretValue');
-    expect(serialized).not.toContain('sk-ant-');
   });
 
   it('rejects an encryption key of 31 or 33 bytes and never generates a replacement (CL-2)', () => {
@@ -160,18 +158,21 @@ describe('[SPEC-009] environment', () => {
     );
   });
 
-  it('refuses SDD pages in production even with an otherwise valid environment (CL-4)', () => {
+  it('refuses SDD pages and a frozen clock in production (CL-4, ADR-0047)', () => {
     const error = caught(() => parseServerEnv({ ...PRODUCTION_ENV, ENABLE_SDD_PAGES: 'true' }));
     expect(error.names).toEqual(['ENABLE_SDD_PAGES']);
     expect(error.issues[0]?.code).toBe('forbidden');
     expect(parseServerEnv({ ENABLE_SDD_PAGES: 'true' }, 'local').ENABLE_SDD_PAGES).toBe(true);
+    const clock = caught(() =>
+      parseServerEnv({ ...PRODUCTION_ENV, CLOCK_FIXED_AT: '2026-11-11T12:20:00Z' }),
+    );
+    expect(clock.issues).toEqual([{ name: 'CLOCK_FIXED_AT', code: 'forbidden' }]);
   });
 
   it('only enables the SDD pages with the exact string true (EF-4)', () => {
     expect(parseServerEnv({ ENABLE_SDD_PAGES: 'true' }).ENABLE_SDD_PAGES).toBe(true);
     expect(parseServerEnv({ ENABLE_SDD_PAGES: 'false' }).ENABLE_SDD_PAGES).toBe(false);
     expect(parseServerEnv({}).ENABLE_SDD_PAGES).toBe(false);
-    // Any other value disables the pages, exactly like the runtime guard of SPEC-006.
     for (const value of ['1', 'TRUE', 'yes']) {
       expect(parseServerEnv({ ENABLE_SDD_PAGES: value }).ENABLE_SDD_PAGES).toBe(false);
     }
@@ -186,7 +187,6 @@ describe('[SPEC-009] environment', () => {
         'NEXT_PUBLIC_APP_URL',
       ]);
     }
-    // Production requires HTTPS even on a local host.
     expect(
       caught(() =>
         parseServerEnv({
@@ -213,12 +213,22 @@ describe('[SPEC-009] environment', () => {
     }
   });
 
+  it('accepts a bare sender address or a named one (ADR-4007)', () => {
+    expect(parseServerEnv({ EMAIL_FROM: 'bonjour@learny.example' }).EMAIL_FROM).toBe(
+      'bonjour@learny.example',
+    );
+    expect(parseServerEnv({ EMAIL_FROM: 'Learny <bonjour@learny.example>' }).EMAIL_FROM).toBe(
+      'Learny <bonjour@learny.example>',
+    );
+    expect(caught(() => parseServerEnv({ EMAIL_FROM: 'nope' })).names).toEqual(['EMAIL_FROM']);
+  });
+
   it('keeps a secret with surrounding spaces invalid instead of cleaning it (CL-7)', () => {
     const error = caught(() =>
-      parseServerEnv({ ...PRODUCTION_ENV, ANTHROPIC_API_KEY: ' sk-ant-learny-test-only ' }),
+      parseServerEnv({ ...PRODUCTION_ENV, STRIPE_SECRET_KEY: ' sk_live_learny-test-only ' }),
     );
-    expect(error.names).toEqual(['ANTHROPIC_API_KEY']);
-    expect(error.message).not.toContain('sk-ant');
+    expect(error.names).toEqual(['STRIPE_SECRET_KEY']);
+    expect(error.message).not.toContain('sk_live');
   });
 
   it('validates documented values and the time zone without logging them (ET-2)', () => {
@@ -236,10 +246,9 @@ describe('[SPEC-009] environment', () => {
 
   it('lets the caller force the application environment at startup (EF-1)', () => {
     expect(parseServerEnv({ APP_ENV: 'local' }, 'test').APP_ENV).toBe('test');
-    expect(parseServerEnv({}, 'preview').EMAIL_MODE).toBe('resend');
   });
 
-  it('exports only the six public variables and no server field (EF-2, CA-2)', () => {
+  it('exports only the five public variables and no server field (EF-2, CA-2)', () => {
     const pub = parsePublicEnv({
       NEXT_PUBLIC_APP_URL: 'http://localhost:3000',
       NEXT_PUBLIC_SUPABASE_URL: 'https://learny-test-only.supabase.co',
@@ -249,16 +258,16 @@ describe('[SPEC-009] environment', () => {
       NEXT_PUBLIC_SENTRY_DSN: 'https://learny-test-only.sentry.io/1',
       NEXT_PUBLIC_UNKNOWN_CACHE: 'ignored',
       APP_ENCRYPTION_KEY: 'learny-test-only-not-public',
-      ANTHROPIC_API_KEY: 'sk-ant-learny-test-only',
       SUPABASE_SERVICE_ROLE_KEY: 'service-role-learny-test-only',
-      VAPID_PRIVATE_KEY: 'vapid-private-learny-test-only',
       STRIPE_SECRET_KEY: 'sk_live_learny-test-only',
     });
 
     expect(Object.keys(pub).sort()).toEqual([...PUBLIC_ENV_KEYS].sort());
+    expect(PUBLIC_ENV_KEYS).toHaveLength(5);
     const serialized = JSON.stringify(pub);
     for (const name of SERVER_ENV_KEYS) expect(Object.hasOwn(pub, name), name).toBe(false);
     expect(serialized).not.toContain('learny-test-only-not-public');
+    expect(serialized).not.toContain('vapid-learny-test-only');
     expect(parsePublicEnv({}).NEXT_PUBLIC_APP_URL).toBeUndefined();
   });
 
@@ -273,26 +282,5 @@ describe('[SPEC-009] environment', () => {
     expect(all).toEqual([...SERVER_ENV_KEYS, ...PUBLIC_ENV_KEYS, ...TOOLING_ENV_KEYS]);
     for (const key of PUBLIC_ENV_KEYS) expect(key.startsWith('NEXT_PUBLIC_')).toBe(true);
     for (const key of SERVER_ENV_KEYS) expect(key.startsWith('NEXT_PUBLIC_')).toBe(false);
-  });
-});
-
-describe('[SPEC-203] JOBS_MODE', () => {
-  it('vaut inngest par défaut et inline dans l’environnement de test (EF-6)', () => {
-    expect(parseServerEnv({}, 'local').JOBS_MODE).toBe('inngest');
-    expect(parseServerEnv({}, 'preview').JOBS_MODE).toBe('inngest');
-    expect(parseServerEnv({}, 'test').JOBS_MODE).toBe('inline');
-    expect(parseServerEnv({ JOBS_MODE: 'inline' }, 'local').JOBS_MODE).toBe('inline');
-  });
-
-  it('refuse JOBS_MODE=inline en production : échec au démarrage (§14)', () => {
-    const error = caught(() => parseServerEnv({ ...PRODUCTION_ENV, JOBS_MODE: 'inline' }));
-    expect(error.issues).toEqual([{ name: 'JOBS_MODE', code: 'forbidden' }]);
-    expect(error.message).not.toContain('inline');
-    expect(parseServerEnv({ ...PRODUCTION_ENV, JOBS_MODE: 'inngest' }).JOBS_MODE).toBe('inngest');
-  });
-
-  it('refuse une valeur inconnue', () => {
-    const error = caught(() => parseServerEnv({ JOBS_MODE: 'cloud' }, 'local'));
-    expect(error.names).toEqual(['JOBS_MODE']);
   });
 });

@@ -5,9 +5,7 @@ export type EnvInput = Readonly<Record<string, string | undefined>>;
 
 /** Application environments (EF-3). */
 export const APP_ENVS = ['local', 'test', 'preview', 'production'] as const;
-export const API_ROLES = ['all', 'api', 'jobs'] as const;
 export type AppEnv = (typeof APP_ENVS)[number];
-export type ApiRole = (typeof API_ROLES)[number];
 
 /** Service modes (EF-3). A simulated mode is refused where the specification forbids it. */
 export const LLM_MODES = ['mock', 'live'] as const;
@@ -97,8 +95,12 @@ export function isInternalServiceUrl(value: string): boolean {
   }
   if (url.protocol !== 'http:' && url.protocol !== 'https:') return false;
   if (url.username !== '' || url.password !== '') return false;
-  return url.hostname !== '' && (url.pathname === '' || url.pathname === '/') &&
-    url.search === '' && url.hash === '';
+  return (
+    url.hostname !== '' &&
+    (url.pathname === '' || url.pathname === '/') &&
+    url.search === '' &&
+    url.hash === ''
+  );
 }
 
 export function isIanaTimeZone(value: string): boolean {

@@ -48,17 +48,13 @@ jobs:
       DATABASE_URL: ${{ secrets.PREVIEW_DATABASE_URL }}
       SUPABASE_DB_URL: ${{ secrets.PREVIEW_SUPABASE_DB_URL }}
       APP_ENCRYPTION_KEY: ${{ secrets.PREVIEW_APP_ENCRYPTION_KEY }}
-      ANTHROPIC_API_KEY: ${{ secrets.PREVIEW_ANTHROPIC_API_KEY }}
       RESEND_API_KEY: ${{ secrets.PREVIEW_RESEND_API_KEY }}
-      RATE_LIMIT_IP_SECRET: ${{ secrets.PREVIEW_RATE_LIMIT_IP_SECRET }}
-      EMAIL_LINK_SECRET: ${{ secrets.PREVIEW_EMAIL_LINK_SECRET }}
       SUPABASE_ACCESS_TOKEN: ${{ secrets.PREVIEW_SUPABASE_ACCESS_TOKEN }}
       SUPABASE_REGION: ${{ vars.PREVIEW_SUPABASE_REGION }}
       VERCEL_TOKEN: ${{ secrets.PREVIEW_VERCEL_TOKEN }}
       VERCEL_ORG_ID: ${{ vars.VERCEL_ORG_ID }}
       VERCEL_PROJECT_ID: ${{ vars.PREVIEW_VERCEL_PROJECT_ID }}
       API_INTERNAL_URL: ${{ vars.PREVIEW_API_URL }}
-      API_PROXY_SECRET: ${{ secrets.PREVIEW_API_PROXY_SECRET }}
     steps:
       - name: Extraire la ref validée par la CI
         uses: actions/checkout@v4
@@ -87,8 +83,8 @@ jobs:
         id: deploy
         run: |
           test -n "$API_INTERNAL_URL"
-          test -n "$API_PROXY_SECRET"
-          url="$(pnpm dlx "vercel@$VERCEL_CLI_VERSION" deploy --yes --token "$VERCEL_TOKEN" --env "API_INTERNAL_URL=$API_INTERNAL_URL" --env "API_PROXY_SECRET=$API_PROXY_SECRET" --meta "githubCommitSha=$GIT_COMMIT" --meta "githubCommitRef=${{ github.event.workflow_run.head_branch }}")"
+          test -n "$APP_ENCRYPTION_KEY"
+          url="$(pnpm dlx "vercel@$VERCEL_CLI_VERSION" deploy --yes --token "$VERCEL_TOKEN" --env "API_INTERNAL_URL=$API_INTERNAL_URL" --env "APP_ENCRYPTION_KEY=$APP_ENCRYPTION_KEY" --meta "githubCommitSha=$GIT_COMMIT" --meta "githubCommitRef=${{ github.event.workflow_run.head_branch }}")"
           test -n "$url"
           echo "url=$url" >> "$GITHUB_OUTPUT"
           echo "Preview fournie par Vercel : $url" >> "$GITHUB_STEP_SUMMARY"
@@ -122,28 +118,18 @@ jobs:
       SUPABASE_ACCESS_TOKEN: ${{ secrets.PRODUCTION_SUPABASE_ACCESS_TOKEN }}
       PRODUCTION_SUPABASE_BACKUP_REFERENCE: ${{ secrets.PRODUCTION_SUPABASE_BACKUP_REFERENCE }}
       APP_ENCRYPTION_KEY: ${{ secrets.PRODUCTION_APP_ENCRYPTION_KEY }}
-      ANTHROPIC_API_KEY: ${{ secrets.PRODUCTION_ANTHROPIC_API_KEY }}
       VOYAGE_API_KEY: ${{ secrets.PRODUCTION_VOYAGE_API_KEY }}
       RESEND_API_KEY: ${{ secrets.PRODUCTION_RESEND_API_KEY }}
-      NEXT_PUBLIC_VAPID_PUBLIC_KEY: ${{ vars.PRODUCTION_VAPID_PUBLIC_KEY }}
-      VAPID_PRIVATE_KEY: ${{ secrets.PRODUCTION_VAPID_PRIVATE_KEY }}
-      VAPID_SUBJECT: ${{ vars.PRODUCTION_VAPID_SUBJECT }}
+      EMAIL_FROM: ${{ vars.PRODUCTION_EMAIL_FROM }}
       STRIPE_SECRET_KEY: ${{ secrets.PRODUCTION_STRIPE_SECRET_KEY }}
       STRIPE_WEBHOOK_SECRET: ${{ secrets.PRODUCTION_STRIPE_WEBHOOK_SECRET }}
       STRIPE_PRICE_ID: ${{ vars.PRODUCTION_STRIPE_PRICE_ID }}
       NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY: ${{ vars.PRODUCTION_STRIPE_PUBLISHABLE_KEY }}
-      RATE_LIMIT_IP_SECRET: ${{ secrets.PRODUCTION_RATE_LIMIT_IP_SECRET }}
-      EMAIL_LINK_SECRET: ${{ secrets.PRODUCTION_EMAIL_LINK_SECRET }}
-      LEGAL_ENTITY_NAME: ${{ vars.PRODUCTION_LEGAL_ENTITY_NAME }}
-      LEGAL_ENTITY_ADDRESS: ${{ vars.PRODUCTION_LEGAL_ENTITY_ADDRESS }}
-      LEGAL_CONTACT_EMAIL: ${{ vars.PRODUCTION_LEGAL_CONTACT_EMAIL }}
-      LEGAL_HOST_NAME: ${{ vars.PRODUCTION_LEGAL_HOST_NAME }}
       SUPABASE_REGION: ${{ vars.PRODUCTION_SUPABASE_REGION }}
       VERCEL_TOKEN: ${{ secrets.PRODUCTION_VERCEL_TOKEN }}
       VERCEL_ORG_ID: ${{ vars.VERCEL_ORG_ID }}
       VERCEL_PROJECT_ID: ${{ vars.PRODUCTION_VERCEL_PROJECT_ID }}
       API_INTERNAL_URL: ${{ vars.PRODUCTION_API_URL }}
-      API_PROXY_SECRET: ${{ secrets.PRODUCTION_API_PROXY_SECRET }}
     steps:
       - name: Extraire la ref validée par la CI
         uses: actions/checkout@v4
@@ -178,8 +164,8 @@ jobs:
         id: deploy
         run: |
           test -n "$API_INTERNAL_URL"
-          test -n "$API_PROXY_SECRET"
-          url="$(pnpm dlx "vercel@$VERCEL_CLI_VERSION" deploy --yes --prod --token "$VERCEL_TOKEN" --env "API_INTERNAL_URL=$API_INTERNAL_URL" --env "API_PROXY_SECRET=$API_PROXY_SECRET" --meta "githubCommitSha=$GIT_COMMIT")"
+          test -n "$APP_ENCRYPTION_KEY"
+          url="$(pnpm dlx "vercel@$VERCEL_CLI_VERSION" deploy --yes --prod --token "$VERCEL_TOKEN" --env "API_INTERNAL_URL=$API_INTERNAL_URL" --env "APP_ENCRYPTION_KEY=$APP_ENCRYPTION_KEY" --meta "githubCommitSha=$GIT_COMMIT")"
           test -n "$url"
           echo "url=$url" >> "$GITHUB_OUTPUT"
           echo "Production fournie par Vercel : $url" >> "$GITHUB_STEP_SUMMARY"

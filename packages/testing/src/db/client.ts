@@ -16,6 +16,7 @@ import * as schema from '@learny/db/schema';
 
 /** Local Supabase database (SPEC-008), used when DATABASE_URL is not exported. */
 export const DEFAULT_DATABASE_URL = 'postgresql://postgres:postgres@127.0.0.1:54322/postgres';
+const DEFAULT_POOL_MAX = 10;
 
 /** Message appended to every connection failure, so a stalled local stack is actionable (CL-5). */
 export const DATABASE_HINT = 'Base locale injoignable : lancer pnpm dev:up';
@@ -172,10 +173,12 @@ let service: DatabaseHandle | undefined;
 function serviceHandle(): DatabaseHandle {
   if (service !== undefined) return service;
   const env = parseServerEnv(process.env);
-  const logQueries = env.DB_LOG_QUERIES && env.NODE_ENV !== 'production';
+  // Tooling variables of the test client (ADR-4007): outside the runtime schema.
+  const logQueries = process.env.DB_LOG_QUERIES === 'true' && env.NODE_ENV !== 'production';
+  const poolMax = Number.parseInt(process.env.DATABASE_POOL_MAX ?? '', 10);
   service = createPostgresDatabase({
     url: env.DATABASE_URL ?? DEFAULT_DATABASE_URL,
-    max: env.DATABASE_POOL_MAX,
+    max: Number.isInteger(poolMax) && poolMax > 0 ? poolMax : DEFAULT_POOL_MAX,
     logQueries,
   });
   return service;
