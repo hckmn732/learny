@@ -4,9 +4,9 @@ import { describe, expect, it } from 'vitest';
 import { parseJunit, pytestVerdict, selectPythonTests, stepSummary } from '../../pytest.mjs';
 
 const FILES = [
-  'packages-py/learny/tests/unit/shared/test_jsonx.py',
-  'packages-py/learny/tests/integration/db/test_rls.py',
-  'apps/api-py/tests/unit/test_relay.py',
+  'python/learny/tests/unit/shared/test_jsonx.py',
+  'python/learny/tests/integration/db/test_rls.py',
+  'apps/api/tests/unit/test_relay.py',
   'tools/sdd/validate.mjs',
   'node_modules/pkg/test_unit.py',
   '.venv/lib/python3.13/site-packages/x/test_ignored.py',
@@ -15,11 +15,11 @@ const FILES = [
 describe('[SPEC-2003] pytest step of validate.mjs', () => {
   it('splits unit and integration python files and ignores everything else (CA-3)', () => {
     expect(selectPythonTests(FILES, 'unit')).toEqual([
-      'apps/api-py/tests/unit/test_relay.py',
-      'packages-py/learny/tests/unit/shared/test_jsonx.py',
+      'apps/api/tests/unit/test_relay.py',
+      'python/learny/tests/unit/shared/test_jsonx.py',
     ]);
     expect(selectPythonTests(FILES, 'integration')).toEqual([
-      'packages-py/learny/tests/integration/db/test_rls.py',
+      'python/learny/tests/integration/db/test_rls.py',
     ]);
   });
 

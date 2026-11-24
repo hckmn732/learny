@@ -7,7 +7,7 @@ import pytest
 pytestmark = pytest.mark.spec("SPEC-2003")
 
 ROOT = Path(__file__).resolve().parents[5]
-SCANNED_TREES = ("packages-py", "apps/api-py", "apps/worker-py")
+SCANNED_TREES = ("python", "apps/api", "apps/worker")
 EXEMPT_DIRECTORIES = ("locale_fr", "generated", ".venv", "__pycache__")
 FRENCH_MARKERS = (" de la ", " introuvable", "Une erreur", " est ", " dans ", " pour ")
 
@@ -42,7 +42,7 @@ def test_python_sources_outside_locale_fr_are_ascii_english() -> None:
 
 
 def test_french_strings_are_isolated_in_locale_fr() -> None:
-    locale = ROOT / "packages-py" / "learny" / "src" / "learny" / "shared" / "locale_fr"
+    locale = ROOT / "python" / "learny" / "src" / "learny" / "shared" / "locale_fr"
     files = sorted(locale.rglob("*.py"))
     assert files, "locale_fr must hold the user-facing strings"
     assert any(any(ord(character) > 127 for character in file.read_text("utf-8")) for file in files)

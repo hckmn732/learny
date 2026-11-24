@@ -297,7 +297,7 @@ const outputs = cases.map(([key, kind, status, payload, tone]) => {
 });
 
 writeFileSync(
-  new URL('../../packages-py/learny/tests/fixtures/engagement_definitions.json', import.meta.url),
+  new URL('../../python/learny/tests/fixtures/engagement_definitions.json', import.meta.url),
   `${JSON.stringify({ version: 1, generatedAt: '2026-11-11T12:20:00.000Z', cases: outputs }, null, 2)}\n`,
 );
 process.stdout.write(`Wrote ${String(outputs.length)} definition vectors\n`);

@@ -109,7 +109,7 @@ Root `pyproject.toml`:
 
 ```toml
 [tool.uv.workspace]
-members = ["packages-py/learny", "apps/api-py", "apps/worker-py"]
+members = ["python/learny", "apps/api", "apps/worker"]
 
 [tool.ruff]
 target-version = "py313"
@@ -137,15 +137,15 @@ Each member has its own `pyproject.toml` (hatchling, `src/` layout). Dependencie
 
 ### Step 2 — Root scripts and validate.mjs
 
-- `package.json`: `py:sync` (`uv sync --frozen`), `py:lint` (`uv run ruff format --check . && uv run ruff check . && uv run lint-imports`), `py:typecheck` (`uv run mypy packages-py apps/api-py apps/worker-py`), `py:test:unit`, `py:test:int`, `py:codegen` (`uv run python -m learny_api.codegen --check`). Append `py:lint` + `py:codegen` to `lint`, `py:typecheck` to `typecheck`.
+- `package.json`: `py:sync` (`uv sync --frozen`), `py:lint` (`uv run ruff format --check . && uv run ruff check . && uv run lint-imports`), `py:typecheck` (`uv run mypy python apps/api apps/worker`), `py:test:unit`, `py:test:int`, `py:codegen` (`uv run python -m learny_api.codegen --check`). Append `py:lint` + `py:codegen` to `lint`, `py:typecheck` to `typecheck`.
 - `tools/sdd/validate.mjs`: after the Vitest unit/integration steps, select tracked `*.py` files under `tests/unit` / `tests/integration` that contain `[SPEC-xxxx]`; run `uv run pytest <files> --junitxml=test-results/sdd/<spec>/py-<kind>.xml`; parse the XML (count `<testcase>`, `<failure>`, `<error>`, `<skipped>`); the `unit`/`integration` validation passes when (Vitest part passes or has no tagged test) **and** (pytest part passes or has no tagged file) **and** at least one tagged test passed overall. Copy the XML into `evidence/<spec>/`. Add unit tests for this logic in `tools/sdd/test/unit/`.
 - CI (`ci.yml`): `astral-sh/setup-uv` (pinned SHA), `uv sync --frozen`, Python lint/typecheck/unit in `quality`; Python integration in the `integration` job after `db:reset`.
 
-### Step 3 — Shared foundation modules (`packages-py/learny/src/learny/shared/`)
+### Step 3 — Shared foundation modules (`python/learny/src/learny/shared/`)
 
 `config.py` (Settings, 00-conventions §8), `clock.py` (Clock protocol, SystemClock, FixedClock, `from_env`), `jsonx.py` (dumps, canonical, js_number — with vectors from SPEC-2001), `jsmath.py`, `errors.py` (AppError, catalog loader from `api/errors.json`, `to_problem()` port of `packages/core/src/errors.ts` `toProblem`), `locale_fr/` (errors titles generated, validation messages from the zod-fr vectors), `logging.py` (structlog setup + redaction), `ids.py`, `deps.py` (Deps dataclass; fields not yet needed are `None`).
 
-### Step 4 — Codegen (`apps/api-py/src/learny_api/codegen.py`)
+### Step 4 — Codegen (`apps/api/src/learny_api/codegen.py`)
 
 Runs datamodel-codegen with the options validated in spikes.md §F, on the named component schemas of `api/openapi.yaml`:
 
@@ -191,7 +191,7 @@ Steps 3–9 call into `learny.identity.public` / `learny.shared` functions that 
 
 ### Step 7 — Docker
 
-`docker/api-py.Dockerfile`: `ghcr.io/astral-sh/uv:python3.13-bookworm-slim` builder (`uv sync --frozen --no-dev --no-editable`), `python:3.13-slim-bookworm` runtime, non-root user, `ENV PYTHONDONTWRITEBYTECODE=1 PYTHONUNBUFFERED=1`, entrypoints `uvicorn learny_api.main:app --host 0.0.0.0 --port 8000 --workers ${PY_API_WORKERS:-2} --timeout-graceful-shutdown 30` and `python -m learny_worker`. Build twice in CI and compare the image config digest of the venv layer (reproducibility check of CA-4).
+`docker/api.Dockerfile`: `ghcr.io/astral-sh/uv:python3.13-bookworm-slim` builder (`uv sync --frozen --no-dev --no-editable`), `python:3.13-slim-bookworm` runtime, non-root user, `ENV PYTHONDONTWRITEBYTECODE=1 PYTHONUNBUFFERED=1`, entrypoints `uvicorn learny_api.main:app --host 0.0.0.0 --port 8000 --workers ${PY_API_WORKERS:-2} --timeout-graceful-shutdown 30` and `python -m learny_worker`. Build twice in CI and compare the image config digest of the venv layer (reproducibility check of CA-4).
 
 ### Pitfalls
 - Starlette `StreamingResponse(headers=dict)` drops duplicate `Set-Cookie`: always set `raw_headers`.

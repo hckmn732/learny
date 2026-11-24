@@ -2,7 +2,7 @@
 
 - **Statut** : Acceptée
 - **Origine** : Déduite (session de recette du 18 novembre 2026 sur la pile de QA, rapport
-  `qa-bugs-2026-11-18-analyse-et-plan.md`)
+  `docs/engineering/qa-bugs-2026-11-18-analyse-et-plan.md`)
 - **Date** : 2026-11-18
 - **Liens** : SPEC-115, SPEC-712, SPEC-715, SPEC-504, SPEC-208, SPEC-012, ADR-0250, ADR-0322,
   ADR-0330, ADR-0047

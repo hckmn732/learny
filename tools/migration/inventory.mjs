@@ -5,13 +5,13 @@ import { execFileSync } from 'node:child_process';
 // sources*, never a TypeScript registry. It proves CA-3 and EF-4 of SPEC-2302:
 //
 //   - every operation of `api/openapi.yaml` has a Python handler (`@handler("<id>")` of
-//     `apps/api-py/src/learny_api/handlers/*`) or is installed by the special registry of
-//     `apps/api-py/src/learny_api/special/*` (routes outside the generic pipeline);
+//     `apps/api/src/learny_api/handlers/*`) or is installed by the special registry of
+//     `apps/api/src/learny_api/special/*` (routes outside the generic pipeline);
 //   - every event consumer comes from `learny_worker/consumers.py` and every cron tick from
 //     `learny_worker/scheduler.py`, i.e. the Python worker;
 //   - no TypeScript backend package nor app subsists in the tree.
 //
-// `api/inventory.json` stays the committed artefact: `apps/api-py/tests/unit/test_route_coverage.py`
+// `api/inventory.json` stays the committed artefact: `apps/api/tests/unit/test_route_coverage.py`
 // compares it to the installed routes, `packages/api-sdk/src/schema.test.ts` to the generated SDK and
 // `tools/parity/run.ts` to its scenario paths.
 //
@@ -35,11 +35,11 @@ export const ROOT = process.env.MIGRATION_ROOT
 /** Contract artefacts and Python sources this inventory is built from. */
 export const CONTRACT_FILE = 'api/openapi.yaml';
 export const EVENTS_FILE = 'api/events.schema.json';
-export const HANDLERS_DIR = 'apps/api-py/src/learny_api/handlers';
-export const SPECIAL_DIR = 'apps/api-py/src/learny_api/special';
-export const CONSUMERS_FILE = 'apps/worker-py/src/learny_worker/consumers.py';
-export const SCHEDULER_FILE = 'apps/worker-py/src/learny_worker/scheduler.py';
-export const TEST_DIRS = ['packages-py', 'apps/api-py', 'apps/worker-py'];
+export const HANDLERS_DIR = 'apps/api/src/learny_api/handlers';
+export const SPECIAL_DIR = 'apps/api/src/learny_api/special';
+export const CONSUMERS_FILE = 'apps/worker/src/learny_worker/consumers.py';
+export const SCHEDULER_FILE = 'apps/worker/src/learny_worker/scheduler.py';
+export const TEST_DIRS = ['python', 'apps/api', 'apps/worker'];
 export const INVENTORY_JSON = 'api/inventory.json';
 export const INVENTORY_MD = 'evidence/SPEC-2302/inventory.md';
 
@@ -79,6 +79,9 @@ export const SPEC_BY_CONTEXT = {
  * TypeScript backend paths SPEC-2302 removes (`apps/api`, `apps/worker`, the eleven server
  * packages). A path that reappears is a regression of EF-2.
  */
+// Paths of the retired TypeScript backend. `apps/api` and `apps/worker` are the *Python* apps
+// since the tree rename: the check below only treats a path as a regression when git still tracks
+// a TypeScript file under it, so a Python application reusing the directory is not a leftover.
 export const REMOVED_PATHS = [
   'apps/api',
   'apps/worker',
@@ -369,20 +372,23 @@ export function pythonCrons(consumers = [], root = ROOT) {
   return crons.sort((left, right) => String(left.event).localeCompare(String(right.event)));
 }
 
-/** Paths of the removed TypeScript backend that still exist (a non-empty list is a regression). */
+/** Paths where a TypeScript backend file survives (a non-empty list is a regression). */
 export function remainingTsPaths(root = ROOT) {
-  // A leftover `node_modules` or `.turbo` directory is a local build artefact, not source: the
-  // tracked content is what ships, so a removed package only counts as present when git still
-  // tracks a file under it. `git ls-files` is authoritative and works in any worktree.
+  // A leftover `node_modules` or `.turbo` directory is a local build artefact, not source, and
+  // `apps/api` / `apps/worker` now host the Python applications. A path only counts as a regression
+  // when git still tracks a TypeScript source, a `package.json` or a `tsconfig.json` under it:
+  // `git ls-files` is authoritative and works in any worktree.
+  const TYPESCRIPT_FILE = /\.(ts|tsx)$|(^|\/)package\.json$|(^|\/)tsconfig[^/]*\.json$/;
   const tracked = (relativePath) => {
     try {
-      return (
-        execFileSync('git', ['ls-files', '--', relativePath], {
-          cwd: root,
-          encoding: 'utf8',
-          stdio: ['ignore', 'pipe', 'ignore'],
-        }).trim().length > 0
-      );
+      const files = execFileSync('git', ['ls-files', '--', relativePath], {
+        cwd: root,
+        encoding: 'utf8',
+        stdio: ['ignore', 'pipe', 'ignore'],
+      })
+        .split('\n')
+        .filter(Boolean);
+      return files.some((file) => TYPESCRIPT_FILE.test(file));
     } catch {
       return exists(root, relativePath);
     }

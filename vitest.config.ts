@@ -69,6 +69,16 @@ export default defineConfig({
         },
       },
       {
+        // Checks that read the production build (apps/web/.next): run after `pnpm build` only,
+        // never in the pre-push unit run.
+        extends: true,
+        test: {
+          name: 'build',
+          include: ['apps/web/test/build/**/*.test.ts'],
+          environment: 'node',
+        },
+      },
+      {
         extends: true,
         test: {
           name: 'integration',

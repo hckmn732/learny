@@ -5,7 +5,7 @@ import sys
 from pathlib import Path
 
 TESTS = Path(__file__).resolve().parent
-WORKER_TESTS = Path(__file__).resolve().parents[3] / "packages-py" / "learny" / "tests"
+WORKER_TESTS = Path(__file__).resolve().parents[3] / "python" / "learny" / "tests"
 for entry in (str(TESTS), str(WORKER_TESTS)):
     if entry not in sys.path:
         sys.path.insert(0, entry)

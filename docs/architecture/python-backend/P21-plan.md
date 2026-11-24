@@ -59,7 +59,7 @@ class Database:
 - `infrastructure/gotrue.py`: thin httpx client for the GoTrue endpoints the TS auth routes use (password grant, OTP/magic link, signup, logout, user, admin). No Supabase Python SDK.
 - `application/authenticate.py`: `authenticate(deps, headers) -> Actor | None` (Bearer first, then cookies; invalid Bearer → `AppError("UNAUTHENTICATED")`), `assert_fresh(deps, actor)`, `assert_legal_acceptance(deps, actor)` (port of the TS legal check, 422 `LEGAL_ACCEPTANCE_REQUIRED`).
 
-### Step 3 — HTTP guards (`apps/api-py/src/learny_api/guards/`)
+### Step 3 — HTTP guards (`apps/api/src/learny_api/guards/`)
 
 Fill the pipeline stubs from SPEC-2003, porting the TS files line by line:
 - `origin.py` ← `packages/services/src/security/origin-guard.ts` + `packages/http/src/security.ts` (exempt paths, Bearer-without-Origin exemption, `Sec-Fetch-Site`, proxy secret with `_PREVIOUS`, `hmac.compare_digest`).
@@ -116,7 +116,7 @@ alter table public.job_deliveries force row level security;   -- no policy: serv
 
 TypeScript ignores both; the TS dispatcher keeps using `sent_at`. `nightly-outbox-cleanup` cascades to deliveries.
 
-### Step 2 — Consumer registry (`apps/worker-py/src/learny_worker/consumers.py`)
+### Step 2 — Consumer registry (`apps/worker/src/learny_worker/consumers.py`)
 
 ```python
 @dataclass(frozen=True)

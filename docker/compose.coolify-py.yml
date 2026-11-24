@@ -6,7 +6,7 @@
 # ligne de base visuelle d'une autre spécification (ADR-1001, ADR-2008), sans rien cacher du
 # déploiement — le Compose résolu contient bien les deux services.
 #
-# Une image, deux commandes : `docker/api-py.Dockerfile` (SPEC-2003). Aucune valeur de secret
+# Une image, deux commandes : `docker/api.Dockerfile` (SPEC-2003). Aucune valeur de secret
 # n'est écrite ici, seulement des noms de variables lues dans Coolify. La façade sert tout le
 # contrat : plus de relais ni de table d'ownership (SPEC-2302).
 
@@ -40,7 +40,7 @@ services:
   api-py:
     build:
       context: ..
-      dockerfile: docker/api-py.Dockerfile
+      dockerfile: docker/api.Dockerfile
     command:
       - sh
       - -c
@@ -87,7 +87,7 @@ services:
   worker-py:
     build:
       context: ..
-      dockerfile: docker/api-py.Dockerfile
+      dockerfile: docker/api.Dockerfile
     command: ['python', '-m', 'learny_worker']
     user: '1001:1001'
     read_only: true

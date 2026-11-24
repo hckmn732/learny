@@ -19,9 +19,9 @@ Normatif pour `learny.platform.llm`, `learny.tutor` et `learny.content`. Décisi
 - Accès : `learny.platform.llm.gateway` parle à chaque fournisseur en HTTP (Anthropic, OpenAI, Mistral, DeepSeek et toute API compatible), `catalog.py` liste les modèles et `discovery.py` les découvre avec la clé de l'utilisateur (ADR-0019, ADR-2031).
 - Fonctions propres à Anthropic utilisées quand le fournisseur est Anthropic : outils stricts, sorties structurées, citations sur documents, API Files pour les PDF, recherche web serveur, mise en cache (`cacheControl` sur le contexte stable), API Batches pour les banques, réflexion adaptative (`thinking: { type: 'adaptive' }`) avec effort par tâche.
 - Pour les autres fournisseurs, les substituts sont : recherche web via `SEARCH_API_KEY` (Tavily par défaut, ADR-0048), citations reconstruites par le code (chaque passage généré référence des `chunkId` vérifiés), texte PDF extrait à l'ingestion.
-- `LLM_MODE` : `live` (production), `mock` (tests et CI ; défaut en local sans clé). En `mock`, `learny.platform.llm.mock` rejoue des **fixtures** déterministes (`packages-py/learny/src/learny/platform/llm/fixtures/<task>/<scenario>.json`), sélectionnées par une clé de scénario calculée sur l'entrée (ADR-0048). Aucun test automatisé n'appelle un vrai fournisseur ; un jeu de tests « live » optionnel est activé par `LLM_LIVE_TESTS=1`.
+- `LLM_MODE` : `live` (production), `mock` (tests et CI ; défaut en local sans clé). En `mock`, `learny.platform.llm.mock` rejoue des **fixtures** déterministes (`python/learny/src/learny/platform/llm/fixtures/<task>/<scenario>.json`), sélectionnées par une clé de scénario calculée sur l'entrée (ADR-0048). Aucun test automatisé n'appelle un vrai fournisseur ; un jeu de tests « live » optionnel est activé par `LLM_LIVE_TESTS=1`.
 
-## 3. Registre d'actions du tuteur (`packages-py/learny/src/learny/tutor/domain/`)
+## 3. Registre d'actions du tuteur (`python/learny/src/learny/tutor/domain/`)
 
 Une action = un fichier exportant `{ name, description, inputSchema (Zod), outputSchema, guard(ctx, input), execute(ctx, input) }`. Les outils sont déclarés au modèle en mode strict.
 

@@ -96,7 +96,7 @@ export function readManagedConfig(root = ROOT) {
       'HOSTING_REGIONS ou EU_REGIONS est illisible dans packages/config/src/platform.ts.',
     );
   }
-  const envSource = readText(path.join(root, 'packages-py/learny/src/learny/shared/config.py'));
+  const envSource = readText(path.join(root, 'python/learny/src/learny/shared/config.py'));
   if (envSource === null) throw new Error('learny/shared/config.py est absent.');
   const productionRequiredKeys = parsePythonStringTuple(envSource, 'PRODUCTION_REQUIRED_ENV');
   if (productionRequiredKeys === null) {

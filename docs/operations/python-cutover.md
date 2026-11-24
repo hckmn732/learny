@@ -18,7 +18,7 @@ export APP_URL=https://<domaine-du-web>
 export API_URL=https://<domaine-de-api-py>
 ```
 
-L'image est unique (`docker/api-py.Dockerfile`, SPEC-2003) et la CI la construit à chaque commit
+L'image est unique (`docker/api.Dockerfile`, SPEC-2003) et la CI la construit à chaque commit
 (`.github/workflows/ci.yml`, `ghcr.io/<owner>/learny-py:<sha>`).
 
 ## 1. Déployer une version

@@ -306,7 +306,7 @@ services:
     image: ${LEARNY_API_IMAGE:-learny-api-py:dev}
     build:
       context: ..
-      dockerfile: docker/api-py.Dockerfile
+      dockerfile: docker/api.Dockerfile
       args:
         GIT_COMMIT: ${GIT_COMMIT:?GIT_COMMIT est obligatoire (git rev-parse HEAD)}
         APP_VERSION: ${APP_VERSION:-dev}
@@ -368,7 +368,7 @@ services:
     image: ${LEARNY_API_IMAGE:-learny-api-py:dev}
     build:
       context: ..
-      dockerfile: docker/api-py.Dockerfile
+      dockerfile: docker/api.Dockerfile
       args:
         GIT_COMMIT: ${GIT_COMMIT:?GIT_COMMIT est obligatoire (git rev-parse HEAD)}
         APP_VERSION: ${APP_VERSION:-dev}

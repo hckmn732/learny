@@ -15,7 +15,7 @@ from pydantic import BaseModel
 pytestmark = pytest.mark.spec("SPEC-2201")
 
 ROOT = Path(__file__).resolve().parents[4]
-GENERATED = ROOT / "apps" / "api-py" / "src" / "learny_api" / "generated"
+GENERATED = ROOT / "apps" / "api" / "src" / "learny_api" / "generated"
 ARTEFACTS = ("__init__.py", "models.py", "routes.py")
 
 

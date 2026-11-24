@@ -262,6 +262,7 @@ Origine : **Validée** = décision prise avec le porteur du projet ; **Déduite*
 | [ADR-2041](ADR-2041-retrait-des-pages-de-demonstration-sdd-et-des-routes-dev.md) | Retrait des pages de démonstration SDD et des routes _dev | Déduite | ADR-0049, ADR-2008, ADR-2036, SPEC-2302 |
 | [ADR-2042](ADR-2042-contrat-d-environnement-reduit-du-backend-python-variables-c.md) | Contrat d'environnement réduit du backend Python : variables conservées, dérivées et constantes | Déduite | SPEC-009, ADR-0227, ADR-0336, ADR-2005, ADR-2006, ADR-2011, ADR-2040, SPEC-2302 |
 | [ADR-2043](ADR-2043-backend-100-python-retrait-du-backend-typescript.md) | Backend 100 % Python, retrait du backend TypeScript | Déduite | SPEC-2302, ADR-2001, ADR-2005, ADR-2006, ADR-2008, ADR-2012, ADR-2019, ADR-2035, ADR-2041, ADR-2042 |
+| [ADR-2044](ADR-2044-renommage-de-l-arborescence-apps-api-apps-worker-et-python-l.md) | Renommage de l arborescence apps/api, apps/worker et python/learny | Déduite | ADR-2043, SPEC-2302 |
 | [ADR-3001](ADR-3001-piste-sdd-mobile-et-branche-mobile.md) | Piste SDD « mobile » sur la branche `mobile` | Validée | ADR-1004, ADR-1006, ADR-2001, SPEC-3001 |
 | [ADR-3002](ADR-3002-perimetre-v1-de-l-application-mobile-compagnon.md) | Périmètre V1 de l'application mobile : compagnon d'apprentissage | Déduite | ADR-0005, ADR-1004, SPEC-3102 |
 | [ADR-3003](ADR-3003-maquette-mobile-de-reference-et-corrections-normatives.md) | Maquette mobile de référence et corrections normatives | Déduite | ADR-0034, SPEC-3002, SPEC-3304, SPEC-3305 |

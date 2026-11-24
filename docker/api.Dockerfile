@@ -10,9 +10,9 @@ ENV UV_COMPILE_BYTECODE=0 \
     UV_PYTHON_DOWNLOADS=never
 
 COPY pyproject.toml uv.lock .python-version ./
-COPY packages-py ./packages-py
-COPY apps/api-py ./apps/api-py
-COPY apps/worker-py ./apps/worker-py
+COPY python ./python
+COPY apps/api ./apps/api
+COPY apps/worker ./apps/worker
 RUN uv sync --frozen --no-dev --no-editable
 
 FROM python:3.13-slim-bookworm AS runtime

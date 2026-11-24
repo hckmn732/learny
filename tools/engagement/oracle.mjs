@@ -233,7 +233,7 @@ const VARIANTS = {
 };
 
 writeFileSync(
-  'packages-py/learny/tests/fixtures/engagement_domain.json',
+  'python/learny/tests/fixtures/engagement_domain.json',
   `${JSON.stringify(
     {
       types: TYPES,
