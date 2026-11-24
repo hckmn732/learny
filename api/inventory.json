@@ -14,9 +14,9 @@
     "consumers": 23,
     "crons": 2,
     "events": 15,
-    "handlers": 156,
-    "gaps": 109,
-    "operationsWithoutHandler": 1,
+    "handlers": 157,
+    "gaps": 108,
+    "operationsWithoutHandler": 0,
     "specialWithoutInstall": 0,
     "consumersWithoutEvent": 0,
     "unknownEvents": 0,
@@ -495,12 +495,15 @@
       "summary": "Configuration publique des clients : Supabase, web, VAPID et Stripe (ADR-4007).",
       "context": "dev",
       "spec": "SPEC-2207",
-      "handler": null,
+      "handler": "apps/api/src/learny_api/handlers/public_config.py",
       "installedBy": "pipeline",
       "specialModule": null,
-      "tests": [],
-      "gap": true,
-      "served": false
+      "tests": [
+        "apps/api/tests/integration/test_public_config_route.py",
+        "apps/api/tests/unit/test_public_config.py"
+      ],
+      "gap": false,
+      "served": true
     },
     {
       "key": "conversations.get",
@@ -3025,7 +3028,7 @@
       "legalAcceptance": false,
       "validationStatus": 400,
       "successStatus": 204,
-      "summary": "Retire l’abonnement Web Push du navigateur courant (SPEC-205). Idempotent : une suppression répétée répond 204.",
+      "summary": "Retire l’abonnement push de l’appareil courant : Web Push (SPEC-205) ou jeton natif (SPEC-3501). Idempotent : une suppression répétée répond 204.",
       "context": "engagement",
       "spec": "SPEC-2205",
       "handler": "apps/api/src/learny_api/handlers/engagement.py",
@@ -3050,7 +3053,7 @@
       "legalAcceptance": false,
       "validationStatus": 400,
       "successStatus": 200,
-      "summary": "Enregistre ou rafraîchit l’abonnement Web Push du navigateur courant (SPEC-205). Idempotent sur le point de terminaison.",
+      "summary": "Enregistre ou rafraîchit l’abonnement push de l’appareil courant : Web Push du navigateur (SPEC-205) ou jeton natif APNs/FCM (SPEC-3501). Idempotent sur le point de terminaison ou le jeton.",
       "context": "engagement",
       "spec": "SPEC-2205",
       "handler": "apps/api/src/learny_api/handlers/engagement.py",
@@ -4351,6 +4354,6 @@
     }
   ],
   "python": {
-    "testFiles": 238
+    "testFiles": 242
   }
 }
