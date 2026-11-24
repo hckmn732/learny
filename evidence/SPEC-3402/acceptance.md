@@ -69,3 +69,21 @@ flock /tmp/learny-emulator.lock flock /tmp/learny-gradle.lock \
 flock /tmp/learny-emulator.lock pnpm -s test:e2e:mobile --tags SPEC-3402
 node tools/sdd/validate.mjs SPEC-3402 --skip-build --skip-campaign
 ```
+
+## 5. Sortie de `validate.mjs` (2026-11-24)
+
+```
+✔ lint
+✔ typecheck
+✔ unit — 15 Vitest + 12 Jest test(s) [SPEC-3402] réussi(s), 0 échec(s)
+✔ integration — 2 test(s) réussi(s)
+✔ e2e — 1 flux réussi(s), 0 échec(s), 1 vidéo(s)
+✔ visual — 1 flux @visual réussi(s) (mode mockup)
+✔ acceptance — 4/4 critères ✅
+✔ SPEC-3402 : toutes les validations sont réussies.
+```
+
+Campagne complète : 54 suites Jest / 308 tests verts (toutes spécifications mobiles) ; le fichier
+préexistant hors périmètre `apps/web/test/unit/bundle-split.test.ts` reste rouge (décision du
+porteur). L'inventaire `api/inventory.json` a été régénéré (`chore` séparé) pour intégrer
+`id-token.int.test.ts`.
