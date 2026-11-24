@@ -57,6 +57,9 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
   icon: './assets/icon.png',
   ios: {
     bundleIdentifier: 'fr.learny.app',
+    // SPEC-3402 ET-2 — « Sign in with Apple » is enabled on the identifier (entitlement), and the
+    // native button of `expo-apple-authentication` is used on iOS (EF-1).
+    usesAppleSignIn: true,
     // SPEC-3101 ET-3 — the universal link of the web application, served by
     // `apps/web/public/.well-known/apple-app-site-association`.
     associatedDomains: linkHost === null ? [] : [`applinks:${linkHost}`],
@@ -97,6 +100,17 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
     // SPEC-3003 ET-1 — the encryption key of the session cache lives in the platform keychain:
     // the plugin keeps it out of the Android backups (`allowBackup` rules).
     'expo-secure-store',
+    // SPEC-3402 ET-2 — Google Sign-In native. The identifiers are public and come from the
+    // porteur; the iOS URL scheme has the shape Google requires even before the real client
+    // exists, so a build never fails on a missing development credential. No secret is involved.
+    [
+      '@react-native-google-signin/google-signin',
+      {
+        iosUrlScheme:
+          (process.env.EXPO_PUBLIC_GOOGLE_IOS_URL_SCHEME as string | undefined) ??
+          'com.googleusercontent.apps.unconfigured-learndev',
+      },
+    ],
     [
       'expo-font',
       {

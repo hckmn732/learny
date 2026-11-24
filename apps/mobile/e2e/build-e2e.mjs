@@ -47,6 +47,13 @@ const env = {
   CI: '1',
 };
 
+// SPEC-3402 ET-3 — an e2e build is the only one that swaps the Apple and Google windows for the
+// simulated provider. The account is the one `e2e/prepare-oauth-user.mjs` provisions just before
+// the campaign; its password is inlined in the bundle of this build only, never in a real one.
+env.EXPO_PUBLIC_SDD_OAUTH_MOCK = '1';
+env.EXPO_PUBLIC_SDD_OAUTH_EMAIL = env.MOBILE_OAUTH_EMAIL ?? '';
+env.EXPO_PUBLIC_SDD_OAUTH_PASSWORD = env.MOBILE_OAUTH_PASSWORD ?? '';
+
 const REQUIRED = [
   'EXPO_PUBLIC_API_URL',
   'EXPO_PUBLIC_SUPABASE_URL',

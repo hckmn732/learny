@@ -121,6 +121,15 @@ export const mobile = {
     passwordMin: '12 caractères minimum',
     forgot: 'Mot de passe oublié ?',
     divider: 'ou',
+    // SPEC-3402 — fournisseurs Apple et Google (ADR-3011, ADR-3006 § 3).
+    providers: {
+      apple: 'Continuer avec Apple',
+      google: 'Continuer avec Google',
+      unavailable: 'Cette méthode de connexion n’est pas disponible pour le moment.',
+      accountExists:
+        'Un compte existe déjà avec cette adresse. Connectez-vous avec votre mot de passe ou un lien de connexion.',
+      legalRequired: 'Acceptez les conditions d’utilisation pour continuer.',
+    },
     showPassword: 'Afficher le mot de passe',
     submitBusyLogin: 'Connexion…',
     submitBusySignup: 'Création…',

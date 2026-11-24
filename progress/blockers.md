@@ -59,3 +59,20 @@
   accepter un client natif authentifié par Bearer comme preuve d'origine suffisante, ou exempter
   explicitement les routes `auth.*` et `me.*` sur présentation d'un `Authorization` valide.
 - **Consigné par** : agent SPEC-3101, dans `evidence/SPEC-3101/acceptance.md` (écart 3).
+
+## B-004 — SPEC-3402 : identifiants OAuth Apple et Google non fournis (2026-11-23)
+
+- **Contexte** : l'essai réel de `signInWithIdToken` exige un compte développeur Apple (Services ID,
+  clé, `usesAppleSignIn` signé) et des clients OAuth Google (web, iOS, Android), fournis par le
+  porteur. Aucun n'est disponible sur la VM ; la configuration Supabase locale est partagée et ne
+  peut être ni modifiée ni redémarrée (BRIEF-PARALLEL § 2).
+- **Comportement livré** : boutons conformes aux règles des stores (bouton système Apple sur iOS,
+  marque Google quatre couleurs), flux `expo-auth-session`/`expo-apple-authentication` et
+  `@react-native-google-signin/google-signin`, nonce haché, annulation silencieuse, erreurs
+  traduites, double appui bloqué, acceptation des CGU avant l'accès. Les builds e2e utilisent un
+  fournisseur simulé (`src/auth/providers/mock.ts`) et un compte de campagne recréé sans CGU.
+- **Preuves** : `evidence/SPEC-3402/acceptance.md` (CA-1 à CA-4), rapports Vitest/Jest/intégration,
+  flux Maestro et comparaison visuelle à 11,23 %.
+- **Portée** : l'échange réel avec Apple et Google n'est pas prouvé ; à rejouer sur appareil dès que
+  les identifiants sont fournis, sans changement de code attendu. Consigné aussi comme écart 1 de
+  `evidence/SPEC-3402/acceptance.md`.
