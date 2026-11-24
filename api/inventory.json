@@ -9,13 +9,13 @@
     "apps/worker/src/learny_worker/scheduler.py"
   ],
   "counts": {
-    "operations": 157,
+    "operations": 165,
     "special": 11,
-    "consumers": 23,
+    "consumers": 25,
     "crons": 2,
-    "events": 15,
-    "handlers": 157,
-    "gaps": 108,
+    "events": 17,
+    "handlers": 165,
+    "gaps": 114,
     "operationsWithoutHandler": 0,
     "specialWithoutInstall": 0,
     "consumersWithoutEvent": 0,
@@ -943,6 +943,57 @@
       "served": true
     },
     {
+      "key": "diagnostic.create",
+      "id": "diagnostic.create",
+      "method": "POST",
+      "path": "/api/v1/formations/{fid}/diagnostic",
+      "auth": "user",
+      "rateLimit": "default",
+      "idempotent": true,
+      "requiresIdempotencyKey": false,
+      "freshAuth": false,
+      "legalAcceptance": false,
+      "validationStatus": 400,
+      "successStatus": 201,
+      "summary": "Crée le diagnostic global facultatif : une à deux questions par module, générées depuis les résumés (SPEC-4001).",
+      "context": "dev",
+      "spec": "SPEC-2207",
+      "handler": "apps/api/src/learny_api/handlers/simple.py",
+      "installedBy": "pipeline",
+      "specialModule": null,
+      "tests": [
+        "apps/api/tests/integration/test_simple_mode.py"
+      ],
+      "gap": false,
+      "served": true
+    },
+    {
+      "key": "diagnostic.skip",
+      "id": "diagnostic.skip",
+      "method": "POST",
+      "path": "/api/v1/formations/{fid}/diagnostic/skip",
+      "auth": "user",
+      "rateLimit": "default",
+      "idempotent": false,
+      "requiresIdempotencyKey": false,
+      "freshAuth": false,
+      "legalAcceptance": false,
+      "validationStatus": 400,
+      "successStatus": 204,
+      "summary": "Passe le diagnostic : la tentative est abandonnée et rien n’est validé (SPEC-4001).",
+      "context": "dev",
+      "spec": "SPEC-2207",
+      "handler": "apps/api/src/learny_api/handlers/simple.py",
+      "installedBy": "pipeline",
+      "specialModule": null,
+      "tests": [
+        "apps/api/tests/integration/test_simple_mode.py",
+        "apps/api/tests/unit/test_contract_artifacts.py"
+      ],
+      "gap": false,
+      "served": true
+    },
+    {
       "key": "email.unsubscribe",
       "id": "email.unsubscribe",
       "method": "POST",
@@ -1618,6 +1669,75 @@
       "served": true
     },
     {
+      "key": "formations.simple.analysis",
+      "id": "formations.simple.analysis",
+      "method": "POST",
+      "path": "/api/v1/formations/{fid}/simple/analysis",
+      "auth": "user",
+      "rateLimit": "default",
+      "idempotent": true,
+      "requiresIdempotencyKey": false,
+      "freshAuth": false,
+      "legalAcceptance": false,
+      "validationStatus": 400,
+      "successStatus": 202,
+      "summary": "Lance l’analyse des documents déposés et met en file l’événement simple.analysis.requested (SPEC-4001).",
+      "context": "dev",
+      "spec": "SPEC-2207",
+      "handler": "apps/api/src/learny_api/handlers/simple.py",
+      "installedBy": "pipeline",
+      "specialModule": null,
+      "tests": [],
+      "gap": true,
+      "served": true
+    },
+    {
+      "key": "formations.simple.create",
+      "id": "formations.simple.create",
+      "method": "POST",
+      "path": "/api/v1/formations/simple",
+      "auth": "user",
+      "rateLimit": "default",
+      "idempotent": true,
+      "requiresIdempotencyKey": false,
+      "freshAuth": false,
+      "legalAcceptance": true,
+      "validationStatus": 400,
+      "successStatus": 201,
+      "summary": "Crée une formation en mode simple (titre provisoire, motivation facultative) et sa ligne d’analyse au statut collecting (SPEC-4001).",
+      "context": "dev",
+      "spec": "SPEC-2207",
+      "handler": "apps/api/src/learny_api/handlers/simple.py",
+      "installedBy": "pipeline",
+      "specialModule": null,
+      "tests": [],
+      "gap": true,
+      "served": true
+    },
+    {
+      "key": "formations.simple.get",
+      "id": "formations.simple.get",
+      "method": "GET",
+      "path": "/api/v1/formations/{fid}/simple",
+      "auth": "user",
+      "rateLimit": "default",
+      "idempotent": false,
+      "requiresIdempotencyKey": false,
+      "freshAuth": false,
+      "legalAcceptance": false,
+      "validationStatus": 400,
+      "successStatus": 200,
+      "summary": "Renvoie l’état de la préparation : statut, quatre étapes, sections détectées, sources, erreur et version proposée (SPEC-4001).",
+      "context": "dev",
+      "spec": "SPEC-2207",
+      "handler": "apps/api/src/learny_api/handlers/simple.py",
+      "installedBy": "pipeline",
+      "specialModule": null,
+      "tests": [],
+      "gap": true,
+      "served": true
+    },
+    {
       "key": "formations.update",
       "id": "formations.update",
       "method": "PATCH",
@@ -1630,7 +1750,7 @@
       "legalAcceptance": true,
       "validationStatus": 400,
       "successStatus": 200,
-      "summary": "Met à jour le titre d’une formation pendant le cadrage (SPEC-604 EF-11).",
+      "summary": "Met à jour le titre d’une formation ou son échéance (SPEC-604 EF-11, SPEC-4001 EF-8).",
       "context": "formation",
       "spec": "SPEC-2201",
       "handler": "apps/api/src/learny_api/handlers/formation.py",
@@ -3413,6 +3533,29 @@
       "served": true
     },
     {
+      "key": "resources.role",
+      "id": "resources.role",
+      "method": "PATCH",
+      "path": "/api/v1/resources/{rid}/role",
+      "auth": "user",
+      "rateLimit": "default",
+      "idempotent": false,
+      "requiresIdempotencyKey": false,
+      "freshAuth": false,
+      "legalAcceptance": false,
+      "validationStatus": 400,
+      "successStatus": 200,
+      "summary": "Corrige le rôle deviné d’un document avant le lancement de l’analyse (SPEC-4001).",
+      "context": "dev",
+      "spec": "SPEC-2207",
+      "handler": "apps/api/src/learny_api/handlers/simple.py",
+      "installedBy": "pipeline",
+      "specialModule": null,
+      "tests": [],
+      "gap": true,
+      "served": true
+    },
+    {
       "key": "review.answer",
       "id": "review.answer",
       "method": "POST",
@@ -3640,6 +3783,52 @@
       "context": "learning",
       "spec": "SPEC-2202",
       "handler": "apps/api/src/learny_api/handlers/learning.py",
+      "installedBy": "pipeline",
+      "specialModule": null,
+      "tests": [],
+      "gap": true,
+      "served": true
+    },
+    {
+      "key": "sources.links.create",
+      "id": "sources.links.create",
+      "method": "POST",
+      "path": "/api/v1/formations/{fid}/sources/links",
+      "auth": "user",
+      "rateLimit": "default",
+      "idempotent": true,
+      "requiresIdempotencyKey": false,
+      "freshAuth": false,
+      "legalAcceptance": false,
+      "validationStatus": 400,
+      "successStatus": 201,
+      "summary": "Dépose un lien de page web ou de vidéo YouTube comme document de la formation (SPEC-4001).",
+      "context": "dev",
+      "spec": "SPEC-2207",
+      "handler": "apps/api/src/learny_api/handlers/simple.py",
+      "installedBy": "pipeline",
+      "specialModule": null,
+      "tests": [],
+      "gap": true,
+      "served": true
+    },
+    {
+      "key": "sources.uploads.create",
+      "id": "sources.uploads.create",
+      "method": "POST",
+      "path": "/api/v1/formations/{fid}/sources/uploads",
+      "auth": "user",
+      "rateLimit": "default",
+      "idempotent": true,
+      "requiresIdempotencyKey": false,
+      "freshAuth": false,
+      "legalAcceptance": false,
+      "validationStatus": 400,
+      "successStatus": 201,
+      "summary": "Réserve un document de la formation, devine son rôle et renvoie une URL d’envoi signée (SPEC-4001).",
+      "context": "dev",
+      "spec": "SPEC-2207",
+      "handler": "apps/api/src/learny_api/handlers/simple.py",
       "installedBy": "pipeline",
       "specialModule": null,
       "tests": [],
@@ -4043,6 +4232,26 @@
       "module": "apps/worker/src/learny_worker/consumers.py"
     },
     {
+      "name": "formation.simple_analysis",
+      "event": "simple.analysis.requested",
+      "run": "formation_simple_analysis",
+      "context": "formation",
+      "timeoutS": null,
+      "maxAttempts": null,
+      "delayed": false,
+      "module": "apps/worker/src/learny_worker/consumers.py"
+    },
+    {
+      "name": "formation.simple_generation",
+      "event": "simple.generation.requested",
+      "run": "formation_simple_generation",
+      "context": "formation",
+      "timeoutS": 600,
+      "maxAttempts": null,
+      "delayed": false,
+      "module": "apps/worker/src/learny_worker/consumers.py"
+    },
+    {
       "name": "formation.unlock_module",
       "event": "quiz/graded",
       "run": "formation_unlock_module",
@@ -4296,6 +4505,20 @@
       "inCatalog": true
     },
     {
+      "name": "simple.analysis.requested",
+      "consumers": [
+        "formation.simple_analysis"
+      ],
+      "inCatalog": true
+    },
+    {
+      "name": "simple.generation.requested",
+      "consumers": [
+        "formation.simple_generation"
+      ],
+      "inCatalog": true
+    },
+    {
       "name": "user/signed-up",
       "consumers": [
         "engagement.send_welcome_email"
@@ -4354,6 +4577,6 @@
     }
   ],
   "python": {
-    "testFiles": 242
+    "testFiles": 248
   }
 }

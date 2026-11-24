@@ -252,3 +252,7 @@ SEARCH_WEB_UNAVAILABLE_MESSAGE = (
     "La recherche web est momentanément indisponible. Réessayez plus tard ou continuez sans source web."
 )
 SOURCE_WEB_LABEL = "Source web"
+
+# SPEC-4001 EF-2 — documents déposés en mode simple (DOCX, TXT, Markdown).
+NOT_A_DOCUMENT = "Ce fichier n’est pas un document lisible."
+DOCUMENT_EMPTY = "Ce document ne contient aucun texte."

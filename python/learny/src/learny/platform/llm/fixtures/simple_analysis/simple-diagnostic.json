@@ -1,0 +1,20 @@
+{
+  "task": "simple_analysis",
+  "scenario": "simple-diagnostic",
+  "promptId": "simple_analysis.simple_analysis",
+  "promptVersion": 1,
+  "description": "Questions du diagnostic global, une à deux par module, déterministes (SPEC-4001 EF-10).",
+  "steps": [
+    {
+      "type": "text",
+      "text": "{\"questions\": [{\"stem\": \"Quelle notion structure le module ?\", \"correct\": \"La notion principale du module\", \"wrong\": [\"Une notion d’un autre module\", \"Aucune notion du document\"]}, {\"stem\": \"Quelle application le module vise-t-il ?\", \"correct\": \"Une application directe du document\", \"wrong\": [\"Un exemple hors document\", \"Une notion supprimée\"]}]}",
+      "usage": {
+        "inputTokens": 420,
+        "outputTokens": 120,
+        "cacheReadTokens": 0,
+        "cacheWriteTokens": 0
+      },
+      "latencyMs": 140
+    }
+  ]
+}

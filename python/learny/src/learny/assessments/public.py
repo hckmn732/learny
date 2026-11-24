@@ -9,6 +9,10 @@ from learny.assessments.application.bricks import (
     get_public_brick,
     report_brick,
 )
+from learny.assessments.application.diagnostic import (
+    create_diagnostic_attempt,
+    grade_diagnostic_attempt,
+)
 from learny.assessments.application.exam_attempts import (
     get_exam_attempt,
     get_exam_result,
@@ -60,6 +64,7 @@ __all__ = [
     "confirm_exam_format",
     "correct_brick",
     "create_brick",
+    "create_diagnostic_attempt",
     "ensure_mock_exam_slots",
     "finalize_attempt",
     "get_attempt",
@@ -70,6 +75,7 @@ __all__ = [
     "get_public_brick",
     "get_quiz_result",
     "get_remediation",
+    "grade_diagnostic_attempt",
     "grade_open_answers",
     "grade_quiz",
     "mark_exam_question",

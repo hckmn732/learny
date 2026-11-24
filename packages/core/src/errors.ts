@@ -44,8 +44,18 @@ export const ERROR_CATALOG = {
   QUALIFICATION_IN_PROGRESS: { status: 409, title: 'Qualification déjà en cours' },
   AI_MODEL_NOT_QUALIFIED: { status: 422, title: 'Modèle personnel non qualifié' },
   AI_UNAVAILABLE: { status: 422, title: 'IA indisponible pour cette tâche' },
+  AI_NOT_CONFIGURED: { status: 409, title: 'Aucun modèle choisi pour une tâche requise' },
   AI_TASK_FAILED: { status: 503, title: 'Le tuteur n’a pas pu répondre' },
   CADRAGE_INCOMPLETE: { status: 422, title: 'Cadrage incomplet' },
+  SIMPLE_NO_COURSE_SOURCE: { status: 422, title: 'Aucun document de cours prêt' },
+  SIMPLE_TOO_MANY_SOURCES: { status: 422, title: 'Dix documents au plus' },
+  SIMPLE_ANALYSIS_LOCKED: { status: 409, title: 'Analyse déjà lancée' },
+  SIMPLE_NOT_SIMPLE: { status: 409, title: 'Formation hors du mode simple' },
+  DIAGNOSTIC_ALREADY_DONE: { status: 409, title: 'Diagnostic déjà réalisé' },
+  DIAGNOSTIC_NO_CHECK: {
+    status: 409,
+    title: 'Correction immédiate indisponible pendant le diagnostic',
+  },
   PROGRAMME_INCOMPLETE: { status: 422, title: 'Programme incomplet' },
   AI_KEY_INVALID: { status: 422, title: 'Clé IA invalide' },
   AI_RATE_LIMITED: { status: 429, title: 'Fournisseur IA saturé' },
@@ -127,6 +137,8 @@ export interface AppErrorExtra {
   availableAt?: string;
   /** SPEC-715 EF-5 — the mandatory remediation must be finished before a new attempt. */
   remediationRequired?: boolean;
+  /** SPEC-4001 ET-2 — structured details of a business refusal (`AI_NOT_CONFIGURED.tasks`). */
+  details?: Record<string, unknown>;
   /** Product link explaining how to restore the service (SPEC-504 EF-2). */
   link?: string;
   /** Personal key that caused the failure, for the qualification flow (SPEC-504 CL-2). */

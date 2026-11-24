@@ -8,8 +8,8 @@ import { defineRoute } from './define-route';
 // The tutor output (draft) has no positions: the service numbers it. A stored proposal and every
 // API answer carry positions so a duplicate or a missing order is rejected before any write.
 
-/** BR-FOR-04 — the tutor proposed it, or the learner imported and the tutor structured it. */
-export const PROGRAMME_SOURCES = ['generated', 'imported'] as const;
+/** BR-FOR-04 — the tutor proposed it, the learner imported it, or it comes from the documents. */
+export const PROGRAMME_SOURCES = ['generated', 'imported', 'document'] as const;
 export const ProgrammeSource = z.enum(PROGRAMME_SOURCES);
 export type ProgrammeSource = z.infer<typeof ProgrammeSource>;
 
@@ -41,6 +41,9 @@ const chapterShape = {
   position: z.number().int().min(1).max(100),
   title: z.string().trim().min(1).max(160),
   notions: z.array(ProgrammeNotionSchema).min(1).max(30),
+  /** SPEC-4001 EF-7 — pages of the deposited document this chapter comes from. */
+  pageFrom: z.number().int().min(1).nullable().optional(),
+  pageTo: z.number().int().min(1).nullable().optional(),
 };
 
 /** A chapter never carries the same notion twice (accent and case insensitive). */
@@ -73,6 +76,9 @@ const moduleShape = {
     .max(PROGRAMME_THRESHOLD.max)
     .default(PROGRAMME_THRESHOLD.default),
   chapters: z.array(ProgrammeChapterSchema).min(1).max(40),
+  /** SPEC-4001 EF-7 — pages of the deposited document this module comes from. */
+  pageFrom: z.number().int().min(1).nullable().optional(),
+  pageTo: z.number().int().min(1).nullable().optional(),
 };
 
 export const ProgrammeModuleSchema = z.strictObject(moduleShape);
@@ -109,6 +115,8 @@ export type ProgrammeProposalPayload = z.infer<typeof ProgrammeProposalPayloadSc
 const draftChapterShape = {
   title: z.string().trim().min(1).max(160),
   notions: z.array(ProgrammeNotionSchema).min(1).max(30),
+  pageFrom: z.number().int().min(1).nullable().optional(),
+  pageTo: z.number().int().min(1).nullable().optional(),
 };
 
 const draftChapterSchema = z.strictObject(draftChapterShape).superRefine((chapter, ctx) => {
@@ -127,6 +135,8 @@ const draftModuleShape = {
     .max(PROGRAMME_THRESHOLD.max)
     .default(PROGRAMME_THRESHOLD.default),
   chapters: z.array(draftChapterSchema).min(1).max(40),
+  pageFrom: z.number().int().min(1).nullable().optional(),
+  pageTo: z.number().int().min(1).nullable().optional(),
 };
 
 export const ProgrammeDraftModuleSchema = z.strictObject(draftModuleShape);

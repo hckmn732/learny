@@ -45,6 +45,20 @@ from learny.formation.application.programme import (
     validate_proposal,
 )
 from learny.formation.application.search import search_user_content
+from learny.formation.application.simple.analysis import launch_analysis, run_analysis
+from learny.formation.application.simple.create import create_simple_formation
+from learny.formation.application.simple.diagnostic import (
+    apply_acquired_modules,
+    create_diagnostic,
+    skip_diagnostic,
+)
+from learny.formation.application.simple.generation import list_generation_modules
+from learny.formation.application.simple.sources import (
+    create_simple_link,
+    create_simple_upload,
+    set_resource_role,
+)
+from learny.formation.application.simple.status import read_simple_state
 from learny.formation.application.tutor import TutorProfile, build_tutor_prompt
 from learny.formation.application.unlock_module import unlock_module
 from learny.formation.domain import cadrage as cadrage_rules
@@ -70,6 +84,7 @@ __all__ = [
     "active_formations_for_limit",
     "active_limit_decision",
     "adjust_proposal",
+    "apply_acquired_modules",
     "archive_formation",
     "build_management_state",
     "build_proposal_dto",
@@ -78,8 +93,12 @@ __all__ = [
     "cadrage_rules",
     "can_access_formation",
     "complete_cadrage",
+    "create_diagnostic",
     "create_formation",
     "create_formation_group",
+    "create_simple_formation",
+    "create_simple_link",
+    "create_simple_upload",
     "generate_proposal",
     "get_cadrage_page_state",
     "get_cadrage_state",
@@ -89,8 +108,10 @@ __all__ = [
     "get_programme_state",
     "group_rules",
     "import_proposal",
+    "launch_analysis",
     "leave_formation_group",
     "list_formations",
+    "list_generation_modules",
     "local_day",
     "next_current_formation",
     "pause_formation",
@@ -99,11 +120,15 @@ __all__ = [
     "read_active_programme",
     "read_management_state",
     "read_programme_state",
+    "read_simple_state",
     "remove_member_from_group",
     "resume_formation",
     "rotate_group_code",
+    "run_analysis",
     "search_rules",
     "search_user_content",
+    "set_resource_role",
+    "skip_diagnostic",
     "switch_current_formation",
     "to_managed_formation",
     "transition_for",

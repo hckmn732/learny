@@ -12,7 +12,7 @@ CATALOG = load_catalog(ROOT / "api" / "errors.json")
 
 
 def test_catalog_covers_the_contract() -> None:
-    assert len(CATALOG) == 104
+    assert len(CATALOG) == 111
     assert CATALOG["UNAUTHENTICATED"].status == 401
     assert CATALOG["UNAUTHENTICATED"].type.startswith("https://learny.app/errors/")
 

@@ -20,4 +20,5 @@ export * from './ai-billing';
 export * from './offline';
 export * from './privacy-search';
 export * from './groups';
+export * from './simple-mode';
 export * from './events';

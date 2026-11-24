@@ -86,6 +86,7 @@ def test_the_five_documented_operations_without_a_json_output() -> None:
         "auth.resend",
         "auth.signOut",
         "conversations.messages",
+        "diagnostic.skip",
         "email.unsubscribe.page",
         "formations.access",
         "me.ai.credentials.delete",

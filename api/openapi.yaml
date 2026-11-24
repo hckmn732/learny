@@ -2506,6 +2506,34 @@ components:
       required:
         - result
       type: object
+    DiagnosticCreateOutput:
+      additionalProperties: false
+      properties:
+        attemptId:
+          format: uuid
+          pattern: ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$
+          type: string
+      required:
+        - attemptId
+      type: object
+    DiagnosticCreateParams:
+      properties:
+        fid:
+          format: uuid
+          pattern: ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$
+          type: string
+      required:
+        - fid
+      type: object
+    DiagnosticSkipParams:
+      properties:
+        fid:
+          format: uuid
+          pattern: ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$
+          type: string
+      required:
+        - fid
+      type: object
     EmailUnsubscribeOutput:
       additionalProperties: false
       properties:
@@ -4830,10 +4858,24 @@ components:
         formation:
           additionalProperties: false
           properties:
+            creationMode:
+              enum:
+                - tutor
+                - simple
+              type: string
             id:
               format: uuid
               pattern: ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$
               type: string
+            simpleStatus:
+              anyOf:
+                - enum:
+                    - collecting
+                    - analysing
+                    - proposed
+                    - failed
+                  type: string
+                - type: "null"
             status:
               enum:
                 - cadrage
@@ -5608,10 +5650,24 @@ components:
           items:
             additionalProperties: false
             properties:
+              creationMode:
+                enum:
+                  - tutor
+                  - simple
+                type: string
               id:
                 format: uuid
                 pattern: ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$
                 type: string
+              simpleStatus:
+                anyOf:
+                  - enum:
+                      - collecting
+                      - analysing
+                      - proposed
+                      - failed
+                    type: string
+                  - type: "null"
               status:
                 enum:
                   - cadrage
@@ -6437,9 +6493,607 @@ components:
       required:
         - fid
       type: object
+    FormationsSimpleAnalysisOutput:
+      additionalProperties: false
+      description: État complet de la préparation d’une formation en mode simple.
+      properties:
+        chaptersFound:
+          items:
+            additionalProperties: false
+            description: Une section détectée dans le document de cours.
+            properties:
+              position:
+                maximum: 9007199254740991
+                minimum: 1
+                type: integer
+              title:
+                maxLength: 160
+                minLength: 1
+                type: string
+            required:
+              - position
+              - title
+            type: object
+          maxItems: 100
+          type: array
+        error:
+          anyOf:
+            - additionalProperties: false
+              description: Erreur de l’analyse, affichée avec son renvoi vers l’action de reprise (CL-3).
+              properties:
+                code:
+                  minLength: 1
+                  type: string
+                message:
+                  minLength: 1
+                  type: string
+              required:
+                - code
+                - message
+              type: object
+            - type: "null"
+        formationId:
+          format: uuid
+          pattern: ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$
+          type: string
+        generation:
+          items:
+            additionalProperties: false
+            description: État de génération d’un module validé (EF-12).
+            properties:
+              moduleId:
+                format: uuid
+                pattern: ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$
+                type: string
+              position:
+                maximum: 9007199254740991
+                minimum: 1
+                type: integer
+              state:
+                enum:
+                  - acquired
+                  - ready
+                  - generating
+                  - queued
+                type: string
+              title:
+                maxLength: 160
+                minLength: 1
+                type: string
+            required:
+              - moduleId
+              - position
+              - title
+              - state
+            type: object
+          maxItems: 20
+          type: array
+        motivation:
+          anyOf:
+            - maxLength: 300
+              type: string
+            - type: "null"
+        proposalVersion:
+          anyOf:
+            - maximum: 9007199254740991
+              minimum: 1
+              type: integer
+            - type: "null"
+        sources:
+          items:
+            additionalProperties: false
+            description: Un document déposé, son rôle et son état de traitement.
+            properties:
+              kind:
+                enum:
+                  - pdf
+                  - image
+                  - web
+                  - youtube
+                type: string
+              pages:
+                anyOf:
+                  - maximum: 9007199254740991
+                    minimum: 1
+                    type: integer
+                  - type: "null"
+              resourceId:
+                format: uuid
+                pattern: ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$
+                type: string
+              role:
+                enum:
+                  - course
+                  - exercises
+                  - exam_papers
+                  - other
+                type: string
+              status:
+                enum:
+                  - queued
+                  - processing
+                  - ready
+                  - failed
+                type: string
+              title:
+                maxLength: 200
+                minLength: 1
+                type: string
+            required:
+              - resourceId
+              - title
+              - kind
+              - role
+              - pages
+              - status
+            type: object
+          maxItems: 10
+          type: array
+        status:
+          enum:
+            - collecting
+            - analysing
+            - proposed
+            - failed
+          type: string
+        steps:
+          items:
+            additionalProperties: false
+            description: Une étape de l’analyse, avec son détail lisible.
+            properties:
+              detail:
+                anyOf:
+                  - maxLength: 500
+                    type: string
+                  - type: "null"
+              key:
+                enum:
+                  - read
+                  - structure
+                  - practice
+                  - programme
+                type: string
+              state:
+                enum:
+                  - todo
+                  - running
+                  - done
+                type: string
+            required:
+              - key
+              - state
+              - detail
+            type: object
+          maxItems: 4
+          minItems: 4
+          type: array
+        title:
+          maxLength: 120
+          minLength: 1
+          type: string
+      required:
+        - formationId
+        - title
+        - status
+        - motivation
+        - steps
+        - chaptersFound
+        - sources
+        - error
+        - proposalVersion
+      type: object
+    FormationsSimpleAnalysisParams:
+      properties:
+        fid:
+          format: uuid
+          pattern: ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$
+          type: string
+      required:
+        - fid
+      type: object
+    FormationsSimpleCreateBody:
+      additionalProperties: false
+      description: Création d’une formation en mode simple.
+      properties:
+        motivation:
+          maxLength: 300
+          type: string
+      type: object
+    FormationsSimpleCreateOutput:
+      additionalProperties: false
+      description: État complet de la préparation d’une formation en mode simple.
+      properties:
+        chaptersFound:
+          items:
+            additionalProperties: false
+            description: Une section détectée dans le document de cours.
+            properties:
+              position:
+                maximum: 9007199254740991
+                minimum: 1
+                type: integer
+              title:
+                maxLength: 160
+                minLength: 1
+                type: string
+            required:
+              - position
+              - title
+            type: object
+          maxItems: 100
+          type: array
+        error:
+          anyOf:
+            - additionalProperties: false
+              description: Erreur de l’analyse, affichée avec son renvoi vers l’action de reprise (CL-3).
+              properties:
+                code:
+                  minLength: 1
+                  type: string
+                message:
+                  minLength: 1
+                  type: string
+              required:
+                - code
+                - message
+              type: object
+            - type: "null"
+        formationId:
+          format: uuid
+          pattern: ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$
+          type: string
+        generation:
+          items:
+            additionalProperties: false
+            description: État de génération d’un module validé (EF-12).
+            properties:
+              moduleId:
+                format: uuid
+                pattern: ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$
+                type: string
+              position:
+                maximum: 9007199254740991
+                minimum: 1
+                type: integer
+              state:
+                enum:
+                  - acquired
+                  - ready
+                  - generating
+                  - queued
+                type: string
+              title:
+                maxLength: 160
+                minLength: 1
+                type: string
+            required:
+              - moduleId
+              - position
+              - title
+              - state
+            type: object
+          maxItems: 20
+          type: array
+        motivation:
+          anyOf:
+            - maxLength: 300
+              type: string
+            - type: "null"
+        proposalVersion:
+          anyOf:
+            - maximum: 9007199254740991
+              minimum: 1
+              type: integer
+            - type: "null"
+        sources:
+          items:
+            additionalProperties: false
+            description: Un document déposé, son rôle et son état de traitement.
+            properties:
+              kind:
+                enum:
+                  - pdf
+                  - image
+                  - web
+                  - youtube
+                type: string
+              pages:
+                anyOf:
+                  - maximum: 9007199254740991
+                    minimum: 1
+                    type: integer
+                  - type: "null"
+              resourceId:
+                format: uuid
+                pattern: ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$
+                type: string
+              role:
+                enum:
+                  - course
+                  - exercises
+                  - exam_papers
+                  - other
+                type: string
+              status:
+                enum:
+                  - queued
+                  - processing
+                  - ready
+                  - failed
+                type: string
+              title:
+                maxLength: 200
+                minLength: 1
+                type: string
+            required:
+              - resourceId
+              - title
+              - kind
+              - role
+              - pages
+              - status
+            type: object
+          maxItems: 10
+          type: array
+        status:
+          enum:
+            - collecting
+            - analysing
+            - proposed
+            - failed
+          type: string
+        steps:
+          items:
+            additionalProperties: false
+            description: Une étape de l’analyse, avec son détail lisible.
+            properties:
+              detail:
+                anyOf:
+                  - maxLength: 500
+                    type: string
+                  - type: "null"
+              key:
+                enum:
+                  - read
+                  - structure
+                  - practice
+                  - programme
+                type: string
+              state:
+                enum:
+                  - todo
+                  - running
+                  - done
+                type: string
+            required:
+              - key
+              - state
+              - detail
+            type: object
+          maxItems: 4
+          minItems: 4
+          type: array
+        title:
+          maxLength: 120
+          minLength: 1
+          type: string
+      required:
+        - formationId
+        - title
+        - status
+        - motivation
+        - steps
+        - chaptersFound
+        - sources
+        - error
+        - proposalVersion
+      type: object
+    FormationsSimpleGetOutput:
+      additionalProperties: false
+      description: État complet de la préparation d’une formation en mode simple.
+      properties:
+        chaptersFound:
+          items:
+            additionalProperties: false
+            description: Une section détectée dans le document de cours.
+            properties:
+              position:
+                maximum: 9007199254740991
+                minimum: 1
+                type: integer
+              title:
+                maxLength: 160
+                minLength: 1
+                type: string
+            required:
+              - position
+              - title
+            type: object
+          maxItems: 100
+          type: array
+        error:
+          anyOf:
+            - additionalProperties: false
+              description: Erreur de l’analyse, affichée avec son renvoi vers l’action de reprise (CL-3).
+              properties:
+                code:
+                  minLength: 1
+                  type: string
+                message:
+                  minLength: 1
+                  type: string
+              required:
+                - code
+                - message
+              type: object
+            - type: "null"
+        formationId:
+          format: uuid
+          pattern: ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$
+          type: string
+        generation:
+          items:
+            additionalProperties: false
+            description: État de génération d’un module validé (EF-12).
+            properties:
+              moduleId:
+                format: uuid
+                pattern: ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$
+                type: string
+              position:
+                maximum: 9007199254740991
+                minimum: 1
+                type: integer
+              state:
+                enum:
+                  - acquired
+                  - ready
+                  - generating
+                  - queued
+                type: string
+              title:
+                maxLength: 160
+                minLength: 1
+                type: string
+            required:
+              - moduleId
+              - position
+              - title
+              - state
+            type: object
+          maxItems: 20
+          type: array
+        motivation:
+          anyOf:
+            - maxLength: 300
+              type: string
+            - type: "null"
+        proposalVersion:
+          anyOf:
+            - maximum: 9007199254740991
+              minimum: 1
+              type: integer
+            - type: "null"
+        sources:
+          items:
+            additionalProperties: false
+            description: Un document déposé, son rôle et son état de traitement.
+            properties:
+              kind:
+                enum:
+                  - pdf
+                  - image
+                  - web
+                  - youtube
+                type: string
+              pages:
+                anyOf:
+                  - maximum: 9007199254740991
+                    minimum: 1
+                    type: integer
+                  - type: "null"
+              resourceId:
+                format: uuid
+                pattern: ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$
+                type: string
+              role:
+                enum:
+                  - course
+                  - exercises
+                  - exam_papers
+                  - other
+                type: string
+              status:
+                enum:
+                  - queued
+                  - processing
+                  - ready
+                  - failed
+                type: string
+              title:
+                maxLength: 200
+                minLength: 1
+                type: string
+            required:
+              - resourceId
+              - title
+              - kind
+              - role
+              - pages
+              - status
+            type: object
+          maxItems: 10
+          type: array
+        status:
+          enum:
+            - collecting
+            - analysing
+            - proposed
+            - failed
+          type: string
+        steps:
+          items:
+            additionalProperties: false
+            description: Une étape de l’analyse, avec son détail lisible.
+            properties:
+              detail:
+                anyOf:
+                  - maxLength: 500
+                    type: string
+                  - type: "null"
+              key:
+                enum:
+                  - read
+                  - structure
+                  - practice
+                  - programme
+                type: string
+              state:
+                enum:
+                  - todo
+                  - running
+                  - done
+                type: string
+            required:
+              - key
+              - state
+              - detail
+            type: object
+          maxItems: 4
+          minItems: 4
+          type: array
+        title:
+          maxLength: 120
+          minLength: 1
+          type: string
+      required:
+        - formationId
+        - title
+        - status
+        - motivation
+        - steps
+        - chaptersFound
+        - sources
+        - error
+        - proposalVersion
+      type: object
+    FormationsSimpleGetParams:
+      properties:
+        fid:
+          format: uuid
+          pattern: ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$
+          type: string
+      required:
+        - fid
+      type: object
     FormationsUpdateBody:
       additionalProperties: false
       properties:
+        endDate:
+          anyOf:
+            - pattern: ^\d{4}-\d{2}-\d{2}$
+              type: string
+            - type: "null"
         title:
           maxLength: 120
           minLength: 1
@@ -6448,10 +7102,24 @@ components:
     FormationsUpdateOutput:
       additionalProperties: false
       properties:
+        creationMode:
+          enum:
+            - tutor
+            - simple
+          type: string
         id:
           format: uuid
           pattern: ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$
           type: string
+        simpleStatus:
+          anyOf:
+            - enum:
+                - collecting
+                - analysing
+                - proposed
+                - failed
+              type: string
+            - type: "null"
         status:
           enum:
             - cadrage
@@ -13266,6 +13934,18 @@ components:
                               maxItems: 30
                               minItems: 1
                               type: array
+                            pageFrom:
+                              anyOf:
+                                - maximum: 9007199254740991
+                                  minimum: 1
+                                  type: integer
+                                - type: "null"
+                            pageTo:
+                              anyOf:
+                                - maximum: 9007199254740991
+                                  minimum: 1
+                                  type: integer
+                                - type: "null"
                             position:
                               maximum: 100
                               minimum: 1
@@ -13290,6 +13970,18 @@ components:
                         maxItems: 8
                         minItems: 1
                         type: array
+                      pageFrom:
+                        anyOf:
+                          - maximum: 9007199254740991
+                            minimum: 1
+                            type: integer
+                          - type: "null"
+                      pageTo:
+                        anyOf:
+                          - maximum: 9007199254740991
+                            minimum: 1
+                            type: integer
+                          - type: "null"
                       plannedEnd:
                         pattern: ^\d{4}-\d{2}-\d{2}$
                         type: string
@@ -13339,6 +14031,7 @@ components:
                   enum:
                     - generated
                     - imported
+                    - document
                   type: string
                 summary:
                   anyOf:
@@ -13367,6 +14060,7 @@ components:
                         enum:
                           - generated
                           - imported
+                          - document
                         type: string
                       version:
                         maximum: 9007199254740991
@@ -13501,6 +14195,18 @@ components:
                               maxItems: 30
                               minItems: 1
                               type: array
+                            pageFrom:
+                              anyOf:
+                                - maximum: 9007199254740991
+                                  minimum: 1
+                                  type: integer
+                                - type: "null"
+                            pageTo:
+                              anyOf:
+                                - maximum: 9007199254740991
+                                  minimum: 1
+                                  type: integer
+                                - type: "null"
                             position:
                               maximum: 100
                               minimum: 1
@@ -13525,6 +14231,18 @@ components:
                         maxItems: 8
                         minItems: 1
                         type: array
+                      pageFrom:
+                        anyOf:
+                          - maximum: 9007199254740991
+                            minimum: 1
+                            type: integer
+                          - type: "null"
+                      pageTo:
+                        anyOf:
+                          - maximum: 9007199254740991
+                            minimum: 1
+                            type: integer
+                          - type: "null"
                       plannedEnd:
                         pattern: ^\d{4}-\d{2}-\d{2}$
                         type: string
@@ -13574,6 +14292,7 @@ components:
                   enum:
                     - generated
                     - imported
+                    - document
                   type: string
                 summary:
                   anyOf:
@@ -13602,6 +14321,7 @@ components:
                         enum:
                           - generated
                           - imported
+                          - document
                         type: string
                       version:
                         maximum: 9007199254740991
@@ -13728,6 +14448,18 @@ components:
                                   maxItems: 30
                                   minItems: 1
                                   type: array
+                                pageFrom:
+                                  anyOf:
+                                    - maximum: 9007199254740991
+                                      minimum: 1
+                                      type: integer
+                                    - type: "null"
+                                pageTo:
+                                  anyOf:
+                                    - maximum: 9007199254740991
+                                      minimum: 1
+                                      type: integer
+                                    - type: "null"
                                 position:
                                   maximum: 100
                                   minimum: 1
@@ -13752,6 +14484,18 @@ components:
                             maxItems: 8
                             minItems: 1
                             type: array
+                          pageFrom:
+                            anyOf:
+                              - maximum: 9007199254740991
+                                minimum: 1
+                                type: integer
+                              - type: "null"
+                          pageTo:
+                            anyOf:
+                              - maximum: 9007199254740991
+                                minimum: 1
+                                type: integer
+                              - type: "null"
                           plannedEnd:
                             pattern: ^\d{4}-\d{2}-\d{2}$
                             type: string
@@ -13801,6 +14545,7 @@ components:
                       enum:
                         - generated
                         - imported
+                        - document
                       type: string
                     summary:
                       anyOf:
@@ -13829,6 +14574,7 @@ components:
                             enum:
                               - generated
                               - imported
+                              - document
                             type: string
                           version:
                             maximum: 9007199254740991
@@ -14304,6 +15050,18 @@ components:
                               maxItems: 30
                               minItems: 1
                               type: array
+                            pageFrom:
+                              anyOf:
+                                - maximum: 9007199254740991
+                                  minimum: 1
+                                  type: integer
+                                - type: "null"
+                            pageTo:
+                              anyOf:
+                                - maximum: 9007199254740991
+                                  minimum: 1
+                                  type: integer
+                                - type: "null"
                             position:
                               maximum: 100
                               minimum: 1
@@ -14328,6 +15086,18 @@ components:
                         maxItems: 8
                         minItems: 1
                         type: array
+                      pageFrom:
+                        anyOf:
+                          - maximum: 9007199254740991
+                            minimum: 1
+                            type: integer
+                          - type: "null"
+                      pageTo:
+                        anyOf:
+                          - maximum: 9007199254740991
+                            minimum: 1
+                            type: integer
+                          - type: "null"
                       plannedEnd:
                         pattern: ^\d{4}-\d{2}-\d{2}$
                         type: string
@@ -14377,6 +15147,7 @@ components:
                   enum:
                     - generated
                     - imported
+                    - document
                   type: string
                 summary:
                   anyOf:
@@ -14405,6 +15176,7 @@ components:
                         enum:
                           - generated
                           - imported
+                          - document
                         type: string
                       version:
                         maximum: 9007199254740991
@@ -14540,6 +15312,18 @@ components:
                               maxItems: 30
                               minItems: 1
                               type: array
+                            pageFrom:
+                              anyOf:
+                                - maximum: 9007199254740991
+                                  minimum: 1
+                                  type: integer
+                                - type: "null"
+                            pageTo:
+                              anyOf:
+                                - maximum: 9007199254740991
+                                  minimum: 1
+                                  type: integer
+                                - type: "null"
                             position:
                               maximum: 100
                               minimum: 1
@@ -14564,6 +15348,18 @@ components:
                         maxItems: 8
                         minItems: 1
                         type: array
+                      pageFrom:
+                        anyOf:
+                          - maximum: 9007199254740991
+                            minimum: 1
+                            type: integer
+                          - type: "null"
+                      pageTo:
+                        anyOf:
+                          - maximum: 9007199254740991
+                            minimum: 1
+                            type: integer
+                          - type: "null"
                       plannedEnd:
                         pattern: ^\d{4}-\d{2}-\d{2}$
                         type: string
@@ -14613,6 +15409,7 @@ components:
                   enum:
                     - generated
                     - imported
+                    - document
                   type: string
                 summary:
                   anyOf:
@@ -14641,6 +15438,7 @@ components:
                         enum:
                           - generated
                           - imported
+                          - document
                         type: string
                       version:
                         maximum: 9007199254740991
@@ -15444,6 +16242,13 @@ components:
       additionalProperties: false
       description: Résultat complet de la tentative, prêt pour SCR-09.
       properties:
+        acquiredModuleIds:
+          items:
+            format: uuid
+            pattern: ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$
+            type: string
+          maxItems: 20
+          type: array
         attemptId:
           format: uuid
           pattern: ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$
@@ -16402,6 +17207,46 @@ components:
         - updatedAt
       type: object
     ResourcesRetryParams:
+      properties:
+        rid:
+          format: uuid
+          pattern: ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$
+          type: string
+      required:
+        - rid
+      type: object
+    ResourcesRoleBody:
+      additionalProperties: false
+      properties:
+        role:
+          enum:
+            - course
+            - exercises
+            - exam_papers
+            - other
+          type: string
+      required:
+        - role
+      type: object
+    ResourcesRoleOutput:
+      additionalProperties: false
+      properties:
+        resourceId:
+          format: uuid
+          pattern: ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$
+          type: string
+        role:
+          enum:
+            - course
+            - exercises
+            - exam_papers
+            - other
+          type: string
+      required:
+        - resourceId
+        - role
+      type: object
+    ResourcesRoleParams:
       properties:
         rid:
           format: uuid
@@ -17944,6 +18789,136 @@ components:
           type: string
       required:
         - sid
+      type: object
+    SourcesLinksCreateBody:
+      additionalProperties: false
+      description: Dépôt d’un lien de cours ou d’exercices.
+      properties:
+        role:
+          enum:
+            - course
+            - exercises
+            - exam_papers
+            - other
+          type: string
+        url:
+          format: uri
+          maxLength: 2048
+          type: string
+      required:
+        - url
+      type: object
+    SourcesLinksCreateOutput:
+      additionalProperties: false
+      description: Ressource de lien créée avec son rôle deviné ou demandé.
+      properties:
+        kind:
+          enum:
+            - web
+            - youtube
+          type: string
+        resourceId:
+          format: uuid
+          pattern: ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$
+          type: string
+        role:
+          enum:
+            - course
+            - exercises
+            - exam_papers
+            - other
+          type: string
+        status:
+          enum:
+            - queued
+            - processing
+            - ready
+            - failed
+          type: string
+        title:
+          maxLength: 200
+          minLength: 1
+          type: string
+      required:
+        - resourceId
+        - kind
+        - title
+        - status
+        - role
+      type: object
+    SourcesLinksCreateParams:
+      properties:
+        fid:
+          format: uuid
+          pattern: ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$
+          type: string
+      required:
+        - fid
+      type: object
+    SourcesUploadsCreateBody:
+      additionalProperties: false
+      description: "Dépôt d’un fichier de cours : nom, type annoncé, taille et rôle."
+      properties:
+        fileName:
+          maxLength: 200
+          minLength: 1
+          type: string
+        mime:
+          maxLength: 127
+          minLength: 1
+          type: string
+        role:
+          enum:
+            - course
+            - exercises
+            - exam_papers
+            - other
+          type: string
+        sizeBytes:
+          maximum: 9007199254740991
+          minimum: 1
+          type: integer
+      required:
+        - fileName
+        - mime
+        - sizeBytes
+      type: object
+    SourcesUploadsCreateOutput:
+      additionalProperties: false
+      description: URL d’envoi signée et rôle retenu pour le document.
+      properties:
+        expiresAt:
+          format: date-time
+          pattern: ^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d:[0-5]\d(?:\.\d+)?(?:Z|([+-](?:[01]\d|2[0-3]):[0-5]\d)))$
+          type: string
+        resourceId:
+          format: uuid
+          pattern: ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$
+          type: string
+        role:
+          enum:
+            - course
+            - exercises
+            - exam_papers
+            - other
+          type: string
+        uploadUrl:
+          format: uri
+          type: string
+      required:
+        - resourceId
+        - uploadUrl
+        - expiresAt
+        - role
+      type: object
+    SourcesUploadsCreateParams:
+      properties:
+        fid:
+          format: uuid
+          pattern: ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$
+          type: string
+      required:
+        - fid
       type: object
     SuggestionsDismissOutput:
       additionalProperties: false
@@ -21377,6 +22352,97 @@ paths:
         requiresIdempotencyKey: false
         successStatus: 201
         validationStatus: 400
+  /api/v1/formations/simple:
+    post:
+      operationId: formations.simple.create
+      parameters:
+        - in: header
+          name: Idempotency-Key
+          required: true
+          schema:
+            pattern: ^[A-Za-z0-9_-]{8,128}$
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/FormationsSimpleCreateBody"
+        required: true
+      responses:
+        "201":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/FormationsSimpleCreateOutput"
+          description: Succès
+        "400":
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetails"
+          description: Erreur (RFC 9457)
+        "401":
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetails"
+          description: Erreur (RFC 9457)
+        "403":
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetails"
+          description: Erreur (RFC 9457)
+        "404":
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetails"
+          description: Erreur (RFC 9457)
+        "409":
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetails"
+          description: Erreur (RFC 9457)
+        "413":
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetails"
+          description: Erreur (RFC 9457)
+        "422":
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetails"
+          description: Erreur (RFC 9457)
+        "429":
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetails"
+          description: Erreur (RFC 9457)
+        "500":
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetails"
+          description: Erreur (RFC 9457)
+      security:
+        - bearerAuth: []
+        - cookieAuth: []
+      summary: Crée une formation en mode simple (titre provisoire, motivation facultative) et sa ligne d’analyse au statut collecting (SPEC-4001).
+      x-learny:
+        auth: user
+        freshAuth: false
+        id: formations.simple.create
+        idempotent: true
+        legalAcceptance: true
+        rateLimit: default
+        requiresIdempotencyKey: false
+        successStatus: 201
+        validationStatus: 400
   /api/v1/formations/{fid}:
     patch:
       operationId: formations.update
@@ -21434,7 +22500,7 @@ paths:
       security:
         - bearerAuth: []
         - cookieAuth: []
-      summary: Met à jour le titre d’une formation pendant le cadrage (SPEC-604 EF-11).
+      summary: Met à jour le titre d’une formation ou son échéance (SPEC-604 EF-11, SPEC-4001 EF-8).
       x-learny:
         auth: user
         freshAuth: false
@@ -21865,6 +22931,156 @@ paths:
         rateLimit: ai
         requiresIdempotencyKey: false
         successStatus: 200
+        validationStatus: 400
+  /api/v1/formations/{fid}/diagnostic:
+    post:
+      operationId: diagnostic.create
+      parameters:
+        - in: path
+          name: fid
+          required: true
+          schema:
+            format: uuid
+            pattern: ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$
+            type: string
+        - in: header
+          name: Idempotency-Key
+          required: true
+          schema:
+            pattern: ^[A-Za-z0-9_-]{8,128}$
+            type: string
+      responses:
+        "201":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DiagnosticCreateOutput"
+          description: Succès
+        "400":
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetails"
+          description: Erreur (RFC 9457)
+        "401":
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetails"
+          description: Erreur (RFC 9457)
+        "403":
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetails"
+          description: Erreur (RFC 9457)
+        "404":
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetails"
+          description: Erreur (RFC 9457)
+        "409":
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetails"
+          description: Erreur (RFC 9457)
+        "429":
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetails"
+          description: Erreur (RFC 9457)
+        "500":
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetails"
+          description: Erreur (RFC 9457)
+      security:
+        - bearerAuth: []
+        - cookieAuth: []
+      summary: "Crée le diagnostic global facultatif : une à deux questions par module, générées depuis les résumés (SPEC-4001)."
+      x-learny:
+        auth: user
+        freshAuth: false
+        id: diagnostic.create
+        idempotent: true
+        legalAcceptance: false
+        rateLimit: default
+        requiresIdempotencyKey: false
+        successStatus: 201
+        validationStatus: 400
+  /api/v1/formations/{fid}/diagnostic/skip:
+    post:
+      operationId: diagnostic.skip
+      parameters:
+        - in: path
+          name: fid
+          required: true
+          schema:
+            format: uuid
+            pattern: ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$
+            type: string
+      responses:
+        "204":
+          description: Succès
+        "400":
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetails"
+          description: Erreur (RFC 9457)
+        "401":
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetails"
+          description: Erreur (RFC 9457)
+        "403":
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetails"
+          description: Erreur (RFC 9457)
+        "404":
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetails"
+          description: Erreur (RFC 9457)
+        "409":
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetails"
+          description: Erreur (RFC 9457)
+        "429":
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetails"
+          description: Erreur (RFC 9457)
+        "500":
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetails"
+          description: Erreur (RFC 9457)
+      security:
+        - bearerAuth: []
+        - cookieAuth: []
+      summary: "Passe le diagnostic : la tentative est abandonnée et rien n’est validé (SPEC-4001)."
+      x-learny:
+        auth: user
+        freshAuth: false
+        id: diagnostic.skip
+        idempotent: false
+        legalAcceptance: false
+        rateLimit: default
+        requiresIdempotencyKey: false
+        successStatus: 204
         validationStatus: 400
   /api/v1/formations/{fid}/final-review:
     get:
@@ -23432,6 +24648,350 @@ paths:
         rateLimit: default
         requiresIdempotencyKey: false
         successStatus: 200
+        validationStatus: 400
+  /api/v1/formations/{fid}/simple:
+    get:
+      operationId: formations.simple.get
+      parameters:
+        - in: path
+          name: fid
+          required: true
+          schema:
+            format: uuid
+            pattern: ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$
+            type: string
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/FormationsSimpleGetOutput"
+          description: Succès
+        "400":
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetails"
+          description: Erreur (RFC 9457)
+        "401":
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetails"
+          description: Erreur (RFC 9457)
+        "403":
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetails"
+          description: Erreur (RFC 9457)
+        "404":
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetails"
+          description: Erreur (RFC 9457)
+        "409":
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetails"
+          description: Erreur (RFC 9457)
+        "429":
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetails"
+          description: Erreur (RFC 9457)
+        "500":
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetails"
+          description: Erreur (RFC 9457)
+      security:
+        - bearerAuth: []
+        - cookieAuth: []
+      summary: "Renvoie l’état de la préparation : statut, quatre étapes, sections détectées, sources, erreur et version proposée (SPEC-4001)."
+      x-learny:
+        auth: user
+        freshAuth: false
+        id: formations.simple.get
+        idempotent: false
+        legalAcceptance: false
+        rateLimit: default
+        requiresIdempotencyKey: false
+        successStatus: 200
+        validationStatus: 400
+  /api/v1/formations/{fid}/simple/analysis:
+    post:
+      operationId: formations.simple.analysis
+      parameters:
+        - in: path
+          name: fid
+          required: true
+          schema:
+            format: uuid
+            pattern: ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$
+            type: string
+        - in: header
+          name: Idempotency-Key
+          required: true
+          schema:
+            pattern: ^[A-Za-z0-9_-]{8,128}$
+            type: string
+      responses:
+        "202":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/FormationsSimpleAnalysisOutput"
+          description: Succès
+        "400":
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetails"
+          description: Erreur (RFC 9457)
+        "401":
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetails"
+          description: Erreur (RFC 9457)
+        "403":
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetails"
+          description: Erreur (RFC 9457)
+        "404":
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetails"
+          description: Erreur (RFC 9457)
+        "409":
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetails"
+          description: Erreur (RFC 9457)
+        "422":
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetails"
+          description: Erreur (RFC 9457)
+        "429":
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetails"
+          description: Erreur (RFC 9457)
+        "500":
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetails"
+          description: Erreur (RFC 9457)
+      security:
+        - bearerAuth: []
+        - cookieAuth: []
+      summary: Lance l’analyse des documents déposés et met en file l’événement simple.analysis.requested (SPEC-4001).
+      x-learny:
+        auth: user
+        freshAuth: false
+        id: formations.simple.analysis
+        idempotent: true
+        legalAcceptance: false
+        rateLimit: default
+        requiresIdempotencyKey: false
+        successStatus: 202
+        validationStatus: 400
+  /api/v1/formations/{fid}/sources/links:
+    post:
+      operationId: sources.links.create
+      parameters:
+        - in: path
+          name: fid
+          required: true
+          schema:
+            format: uuid
+            pattern: ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$
+            type: string
+        - in: header
+          name: Idempotency-Key
+          required: true
+          schema:
+            pattern: ^[A-Za-z0-9_-]{8,128}$
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SourcesLinksCreateBody"
+        required: true
+      responses:
+        "201":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SourcesLinksCreateOutput"
+          description: Succès
+        "400":
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetails"
+          description: Erreur (RFC 9457)
+        "401":
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetails"
+          description: Erreur (RFC 9457)
+        "403":
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetails"
+          description: Erreur (RFC 9457)
+        "404":
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetails"
+          description: Erreur (RFC 9457)
+        "409":
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetails"
+          description: Erreur (RFC 9457)
+        "422":
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetails"
+          description: Erreur (RFC 9457)
+        "429":
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetails"
+          description: Erreur (RFC 9457)
+        "500":
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetails"
+          description: Erreur (RFC 9457)
+      security:
+        - bearerAuth: []
+        - cookieAuth: []
+      summary: Dépose un lien de page web ou de vidéo YouTube comme document de la formation (SPEC-4001).
+      x-learny:
+        auth: user
+        freshAuth: false
+        id: sources.links.create
+        idempotent: true
+        legalAcceptance: false
+        rateLimit: default
+        requiresIdempotencyKey: false
+        successStatus: 201
+        validationStatus: 400
+  /api/v1/formations/{fid}/sources/uploads:
+    post:
+      operationId: sources.uploads.create
+      parameters:
+        - in: path
+          name: fid
+          required: true
+          schema:
+            format: uuid
+            pattern: ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$
+            type: string
+        - in: header
+          name: Idempotency-Key
+          required: true
+          schema:
+            pattern: ^[A-Za-z0-9_-]{8,128}$
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SourcesUploadsCreateBody"
+        required: true
+      responses:
+        "201":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SourcesUploadsCreateOutput"
+          description: Succès
+        "400":
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetails"
+          description: Erreur (RFC 9457)
+        "401":
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetails"
+          description: Erreur (RFC 9457)
+        "403":
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetails"
+          description: Erreur (RFC 9457)
+        "404":
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetails"
+          description: Erreur (RFC 9457)
+        "409":
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetails"
+          description: Erreur (RFC 9457)
+        "422":
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetails"
+          description: Erreur (RFC 9457)
+        "429":
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetails"
+          description: Erreur (RFC 9457)
+        "500":
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetails"
+          description: Erreur (RFC 9457)
+      security:
+        - bearerAuth: []
+        - cookieAuth: []
+      summary: Réserve un document de la formation, devine son rôle et renvoie une URL d’envoi signée (SPEC-4001).
+      x-learny:
+        auth: user
+        freshAuth: false
+        id: sources.uploads.create
+        idempotent: true
+        legalAcceptance: false
+        rateLimit: default
+        requiresIdempotencyKey: false
+        successStatus: 201
         validationStatus: 400
   /api/v1/groups/{gid}/leave:
     post:
@@ -28202,6 +29762,86 @@ paths:
         freshAuth: false
         id: resources.retry
         idempotent: true
+        legalAcceptance: false
+        rateLimit: default
+        requiresIdempotencyKey: false
+        successStatus: 200
+        validationStatus: 400
+  /api/v1/resources/{rid}/role:
+    patch:
+      operationId: resources.role
+      parameters:
+        - in: path
+          name: rid
+          required: true
+          schema:
+            format: uuid
+            pattern: ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ResourcesRoleBody"
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ResourcesRoleOutput"
+          description: Succès
+        "400":
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetails"
+          description: Erreur (RFC 9457)
+        "401":
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetails"
+          description: Erreur (RFC 9457)
+        "403":
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetails"
+          description: Erreur (RFC 9457)
+        "404":
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetails"
+          description: Erreur (RFC 9457)
+        "409":
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetails"
+          description: Erreur (RFC 9457)
+        "429":
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetails"
+          description: Erreur (RFC 9457)
+        "500":
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetails"
+          description: Erreur (RFC 9457)
+      security:
+        - bearerAuth: []
+        - cookieAuth: []
+      summary: Corrige le rôle deviné d’un document avant le lancement de l’analyse (SPEC-4001).
+      x-learny:
+        auth: user
+        freshAuth: false
+        id: resources.role
+        idempotent: false
         legalAcceptance: false
         rateLimit: default
         requiresIdempotencyKey: false

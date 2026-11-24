@@ -14,6 +14,8 @@ from datetime import datetime
 from typing import Any
 
 import structlog
+from learny.engagement.infrastructure.email import MemoryEmailTransport
+from learny.engagement.infrastructure.push import MockPushTransport
 from learny.platform.llm.gateway import MockGateway
 from learny.platform.llm.mock import load_registry
 from learny.shared.clock import FixedClock
@@ -21,6 +23,7 @@ from learny.shared.config import Settings
 from learny.shared.db.uow import Tx
 from sqlalchemy import text
 
+from factories.engagement_deps import email_config
 from factories.identity_support import FIXED, SavepointTransactions
 
 
@@ -55,6 +58,26 @@ class FormationTransactions(SavepointTransactions):
         await conn.execute(text(f"release savepoint {name}"))
 
 
+class FakeStorage:
+    """A Storage gateway that only signs deterministic URLs (SPEC-4001 upload sources)."""
+
+    def __init__(self) -> None:
+        self.calls: list[tuple[str, str]] = []
+
+    async def sign_upload(self, bucket: str, path: str, access_token: str, expires_in_seconds: int) -> str:
+        self.calls.append((bucket, path))
+        return f"https://storage.test/{bucket}/{path}"
+
+    async def sign_read(self, bucket: str, path: str, access_token: str, expires_in_seconds: int) -> str:
+        return f"https://storage.test/{bucket}/{path}"
+
+    async def remove(self, bucket: str, path: str, access_token: str) -> None:
+        return None
+
+    async def list(self, bucket: str, path: str, access_token: str) -> list[Any]:
+        return []
+
+
 @dataclass
 class FormationTestDeps:
     """The dependency bundle the formation use cases see; a `Deps` satisfies the same protocol."""
@@ -64,16 +87,24 @@ class FormationTestDeps:
     db: FormationTransactions
     llm: MockGateway
     logger: Any
+    storage: FakeStorage
+    email_config: Any
+    email: MemoryEmailTransport
+    push: MockPushTransport
 
 
 def formation_deps(tx: Tx, *, now: datetime = FIXED) -> FormationTestDeps:
     """Builds the stand-in bundle around an already open seed transaction."""
     return FormationTestDeps(
-        settings=Settings(),
+        settings=Settings(supabase_jwt_secret=("test" + "-storage-signing-material")),
         clock=FixedClock(now),
         db=FormationTransactions(tx),
         llm=MockGateway(load_registry()),
         logger=structlog.get_logger("learny.test"),
+        storage=FakeStorage(),
+        email_config=email_config(),
+        email=MemoryEmailTransport(FixedClock(now)),
+        push=MockPushTransport(FixedClock(now).now),
     )
 
 

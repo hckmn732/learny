@@ -722,6 +722,23 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/formations/simple": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Crée une formation en mode simple (titre provisoire, motivation facultative) et sa ligne d’analyse au statut collecting (SPEC-4001). */
+        post: operations["formations.simple.create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/formations/{fid}": {
         parameters: {
             query?: never;
@@ -735,7 +752,7 @@ export interface paths {
         delete?: never;
         options?: never;
         head?: never;
-        /** Met à jour le titre d’une formation pendant le cadrage (SPEC-604 EF-11). */
+        /** Met à jour le titre d’une formation ou son échéance (SPEC-604 EF-11, SPEC-4001 EF-8). */
         patch: operations["formations.update"];
         trace?: never;
     };
@@ -819,6 +836,40 @@ export interface paths {
         put?: never;
         /** Envoie une réponse au tuteur et renvoie le cadrage à jour (SPEC-604). */
         post: operations["cadrage.message"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/formations/{fid}/diagnostic": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Crée le diagnostic global facultatif : une à deux questions par module, générées depuis les résumés (SPEC-4001). */
+        post: operations["diagnostic.create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/formations/{fid}/diagnostic/skip": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Passe le diagnostic : la tentative est abandonnée et rien n’est validé (SPEC-4001). */
+        post: operations["diagnostic.skip"];
         delete?: never;
         options?: never;
         head?: never;
@@ -1143,6 +1194,74 @@ export interface paths {
         put?: never;
         /** Reprend une formation, la replanifie depuis le jour local et applique la limite de trois (SPEC-618). */
         post: operations["formations.resume"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/formations/{fid}/simple": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Renvoie l’état de la préparation : statut, quatre étapes, sections détectées, sources, erreur et version proposée (SPEC-4001). */
+        get: operations["formations.simple.get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/formations/{fid}/simple/analysis": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Lance l’analyse des documents déposés et met en file l’événement simple.analysis.requested (SPEC-4001). */
+        post: operations["formations.simple.analysis"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/formations/{fid}/sources/links": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Dépose un lien de page web ou de vidéo YouTube comme document de la formation (SPEC-4001). */
+        post: operations["sources.links.create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/formations/{fid}/sources/uploads": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Réserve un document de la formation, devine son rôle et renvoie une URL d’envoi signée (SPEC-4001). */
+        post: operations["sources.uploads.create"];
         delete?: never;
         options?: never;
         head?: never;
@@ -2150,6 +2269,23 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/resources/{rid}/role": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        /** Corrige le rôle deviné d’un document avant le lancement de l’analyse (SPEC-4001). */
+        patch: operations["resources.role"];
+        trace?: never;
+    };
     "/api/v1/resources/{rid}/url": {
         parameters: {
             query?: never;
@@ -3090,6 +3226,18 @@ export interface components {
             /** @enum {string} */
             result: "applied" | "duplicate" | "stale" | "ignored" | "unknown_customer";
         };
+        DiagnosticCreateOutput: {
+            /** Format: uuid */
+            attemptId: string;
+        };
+        DiagnosticCreateParams: {
+            /** Format: uuid */
+            fid: string;
+        };
+        DiagnosticSkipParams: {
+            /** Format: uuid */
+            fid: string;
+        };
         EmailUnsubscribeOutput: {
             /** @constant */
             ok: true;
@@ -3759,8 +3907,11 @@ export interface components {
                 title: string;
             };
             formation: {
+                /** @enum {string} */
+                creationMode?: "tutor" | "simple";
                 /** Format: uuid */
                 id: string;
+                simpleStatus?: ("collecting" | "analysing" | "proposed" | "failed") | null;
                 /** @enum {string} */
                 status: "cadrage" | "programme_proposed" | "active" | "paused" | "completed" | "archived";
                 title: string;
@@ -3966,8 +4117,11 @@ export interface components {
         };
         FormationsListOutput: {
             items: {
+                /** @enum {string} */
+                creationMode?: "tutor" | "simple";
                 /** Format: uuid */
                 id: string;
+                simpleStatus?: ("collecting" | "analysing" | "proposed" | "failed") | null;
                 /** @enum {string} */
                 status: "cadrage" | "programme_proposed" | "active" | "paused" | "completed" | "archived";
                 title: string;
@@ -4186,12 +4340,163 @@ export interface components {
             /** Format: uuid */
             fid: string;
         };
+        /** @description État complet de la préparation d’une formation en mode simple. */
+        FormationsSimpleAnalysisOutput: {
+            chaptersFound: {
+                position: number;
+                title: string;
+            }[];
+            error: {
+                code: string;
+                message: string;
+            } | null;
+            /** Format: uuid */
+            formationId: string;
+            generation?: {
+                /** Format: uuid */
+                moduleId: string;
+                position: number;
+                /** @enum {string} */
+                state: "acquired" | "ready" | "generating" | "queued";
+                title: string;
+            }[];
+            motivation: string | null;
+            proposalVersion: number | null;
+            sources: {
+                /** @enum {string} */
+                kind: "pdf" | "image" | "web" | "youtube";
+                pages: number | null;
+                /** Format: uuid */
+                resourceId: string;
+                /** @enum {string} */
+                role: "course" | "exercises" | "exam_papers" | "other";
+                /** @enum {string} */
+                status: "queued" | "processing" | "ready" | "failed";
+                title: string;
+            }[];
+            /** @enum {string} */
+            status: "collecting" | "analysing" | "proposed" | "failed";
+            steps: {
+                detail: string | null;
+                /** @enum {string} */
+                key: "read" | "structure" | "practice" | "programme";
+                /** @enum {string} */
+                state: "todo" | "running" | "done";
+            }[];
+            title: string;
+        };
+        FormationsSimpleAnalysisParams: {
+            /** Format: uuid */
+            fid: string;
+        };
+        /** @description Création d’une formation en mode simple. */
+        FormationsSimpleCreateBody: {
+            motivation?: string;
+        };
+        /** @description État complet de la préparation d’une formation en mode simple. */
+        FormationsSimpleCreateOutput: {
+            chaptersFound: {
+                position: number;
+                title: string;
+            }[];
+            error: {
+                code: string;
+                message: string;
+            } | null;
+            /** Format: uuid */
+            formationId: string;
+            generation?: {
+                /** Format: uuid */
+                moduleId: string;
+                position: number;
+                /** @enum {string} */
+                state: "acquired" | "ready" | "generating" | "queued";
+                title: string;
+            }[];
+            motivation: string | null;
+            proposalVersion: number | null;
+            sources: {
+                /** @enum {string} */
+                kind: "pdf" | "image" | "web" | "youtube";
+                pages: number | null;
+                /** Format: uuid */
+                resourceId: string;
+                /** @enum {string} */
+                role: "course" | "exercises" | "exam_papers" | "other";
+                /** @enum {string} */
+                status: "queued" | "processing" | "ready" | "failed";
+                title: string;
+            }[];
+            /** @enum {string} */
+            status: "collecting" | "analysing" | "proposed" | "failed";
+            steps: {
+                detail: string | null;
+                /** @enum {string} */
+                key: "read" | "structure" | "practice" | "programme";
+                /** @enum {string} */
+                state: "todo" | "running" | "done";
+            }[];
+            title: string;
+        };
+        /** @description État complet de la préparation d’une formation en mode simple. */
+        FormationsSimpleGetOutput: {
+            chaptersFound: {
+                position: number;
+                title: string;
+            }[];
+            error: {
+                code: string;
+                message: string;
+            } | null;
+            /** Format: uuid */
+            formationId: string;
+            generation?: {
+                /** Format: uuid */
+                moduleId: string;
+                position: number;
+                /** @enum {string} */
+                state: "acquired" | "ready" | "generating" | "queued";
+                title: string;
+            }[];
+            motivation: string | null;
+            proposalVersion: number | null;
+            sources: {
+                /** @enum {string} */
+                kind: "pdf" | "image" | "web" | "youtube";
+                pages: number | null;
+                /** Format: uuid */
+                resourceId: string;
+                /** @enum {string} */
+                role: "course" | "exercises" | "exam_papers" | "other";
+                /** @enum {string} */
+                status: "queued" | "processing" | "ready" | "failed";
+                title: string;
+            }[];
+            /** @enum {string} */
+            status: "collecting" | "analysing" | "proposed" | "failed";
+            steps: {
+                detail: string | null;
+                /** @enum {string} */
+                key: "read" | "structure" | "practice" | "programme";
+                /** @enum {string} */
+                state: "todo" | "running" | "done";
+            }[];
+            title: string;
+        };
+        FormationsSimpleGetParams: {
+            /** Format: uuid */
+            fid: string;
+        };
         FormationsUpdateBody: {
+            endDate?: string | null;
             title?: string;
         };
         FormationsUpdateOutput: {
+            /** @enum {string} */
+            creationMode?: "tutor" | "simple";
             /** Format: uuid */
             id: string;
+            simpleStatus?: ("collecting" | "analysing" | "proposed" | "failed") | null;
             /** @enum {string} */
             status: "cadrage" | "programme_proposed" | "active" | "paused" | "completed" | "archived";
             title: string;
@@ -5959,10 +6264,14 @@ export interface components {
                             definition: string;
                             label: string;
                         }[];
+                        pageFrom?: number | null;
+                        pageTo?: number | null;
                         position: number;
                         title: string;
                     }[];
                     objectives: string[];
+                    pageFrom?: number | null;
+                    pageTo?: number | null;
                     plannedEnd: string;
                     plannedStart: string;
                     position: number;
@@ -5974,7 +6283,7 @@ export interface components {
                 /** @enum {string} */
                 proposalStatus: "proposed" | "active";
                 /** @enum {string} */
-                source: "generated" | "imported";
+                source: "generated" | "imported" | "document";
                 summary: string | null;
                 title: string;
                 version: number;
@@ -5983,7 +6292,7 @@ export interface components {
                     createdAt: string;
                     current: boolean;
                     /** @enum {string} */
-                    source: "generated" | "imported";
+                    source: "generated" | "imported" | "document";
                     version: number;
                 }[];
                 volumeHours: number | null;
@@ -6018,10 +6327,14 @@ export interface components {
                             definition: string;
                             label: string;
                         }[];
+                        pageFrom?: number | null;
+                        pageTo?: number | null;
                         position: number;
                         title: string;
                     }[];
                     objectives: string[];
+                    pageFrom?: number | null;
+                    pageTo?: number | null;
                     plannedEnd: string;
                     plannedStart: string;
                     position: number;
@@ -6033,7 +6346,7 @@ export interface components {
                 /** @enum {string} */
                 proposalStatus: "proposed" | "active";
                 /** @enum {string} */
-                source: "generated" | "imported";
+                source: "generated" | "imported" | "document";
                 summary: string | null;
                 title: string;
                 version: number;
@@ -6042,7 +6355,7 @@ export interface components {
                     createdAt: string;
                     current: boolean;
                     /** @enum {string} */
-                    source: "generated" | "imported";
+                    source: "generated" | "imported" | "document";
                     version: number;
                 }[];
                 volumeHours: number | null;
@@ -6073,10 +6386,14 @@ export interface components {
                             definition: string;
                             label: string;
                         }[];
+                        pageFrom?: number | null;
+                        pageTo?: number | null;
                         position: number;
                         title: string;
                     }[];
                     objectives: string[];
+                    pageFrom?: number | null;
+                    pageTo?: number | null;
                     plannedEnd: string;
                     plannedStart: string;
                     position: number;
@@ -6088,7 +6405,7 @@ export interface components {
                 /** @enum {string} */
                 proposalStatus: "proposed" | "active";
                 /** @enum {string} */
-                source: "generated" | "imported";
+                source: "generated" | "imported" | "document";
                 summary: string | null;
                 title: string;
                 version: number;
@@ -6097,7 +6414,7 @@ export interface components {
                     createdAt: string;
                     current: boolean;
                     /** @enum {string} */
-                    source: "generated" | "imported";
+                    source: "generated" | "imported" | "document";
                     version: number;
                 }[];
                 volumeHours: number | null;
@@ -6215,10 +6532,14 @@ export interface components {
                             definition: string;
                             label: string;
                         }[];
+                        pageFrom?: number | null;
+                        pageTo?: number | null;
                         position: number;
                         title: string;
                     }[];
                     objectives: string[];
+                    pageFrom?: number | null;
+                    pageTo?: number | null;
                     plannedEnd: string;
                     plannedStart: string;
                     position: number;
@@ -6230,7 +6551,7 @@ export interface components {
                 /** @enum {string} */
                 proposalStatus: "proposed" | "active";
                 /** @enum {string} */
-                source: "generated" | "imported";
+                source: "generated" | "imported" | "document";
                 summary: string | null;
                 title: string;
                 version: number;
@@ -6239,7 +6560,7 @@ export interface components {
                     createdAt: string;
                     current: boolean;
                     /** @enum {string} */
-                    source: "generated" | "imported";
+                    source: "generated" | "imported" | "document";
                     version: number;
                 }[];
                 volumeHours: number | null;
@@ -6273,10 +6594,14 @@ export interface components {
                             definition: string;
                             label: string;
                         }[];
+                        pageFrom?: number | null;
+                        pageTo?: number | null;
                         position: number;
                         title: string;
                     }[];
                     objectives: string[];
+                    pageFrom?: number | null;
+                    pageTo?: number | null;
                     plannedEnd: string;
                     plannedStart: string;
                     position: number;
@@ -6288,7 +6613,7 @@ export interface components {
                 /** @enum {string} */
                 proposalStatus: "proposed" | "active";
                 /** @enum {string} */
-                source: "generated" | "imported";
+                source: "generated" | "imported" | "document";
                 summary: string | null;
                 title: string;
                 version: number;
@@ -6297,7 +6622,7 @@ export interface components {
                     createdAt: string;
                     current: boolean;
                     /** @enum {string} */
-                    source: "generated" | "imported";
+                    source: "generated" | "imported" | "document";
                     version: number;
                 }[];
                 volumeHours: number | null;
@@ -6546,6 +6871,7 @@ export interface components {
         };
         /** @description Résultat complet de la tentative, prêt pour SCR-09. */
         QuizAttemptsResultOutput: {
+            acquiredModuleIds?: string[];
             /** Format: uuid */
             attemptId: string;
             attemptNo: number;
@@ -6832,6 +7158,20 @@ export interface components {
             updatedAt: string;
         };
         ResourcesRetryParams: {
+            /** Format: uuid */
+            rid: string;
+        };
+        ResourcesRoleBody: {
+            /** @enum {string} */
+            role: "course" | "exercises" | "exam_papers" | "other";
+        };
+        ResourcesRoleOutput: {
+            /** Format: uuid */
+            resourceId: string;
+            /** @enum {string} */
+            role: "course" | "exercises" | "exam_papers" | "other";
+        };
+        ResourcesRoleParams: {
             /** Format: uuid */
             rid: string;
         };
@@ -7244,6 +7584,52 @@ export interface components {
         SlotsMoveParams: {
             /** Format: uuid */
             sid: string;
+        };
+        /** @description Dépôt d’un lien de cours ou d’exercices. */
+        SourcesLinksCreateBody: {
+            /** @enum {string} */
+            role?: "course" | "exercises" | "exam_papers" | "other";
+            /** Format: uri */
+            url: string;
+        };
+        /** @description Ressource de lien créée avec son rôle deviné ou demandé. */
+        SourcesLinksCreateOutput: {
+            /** @enum {string} */
+            kind: "web" | "youtube";
+            /** Format: uuid */
+            resourceId: string;
+            /** @enum {string} */
+            role: "course" | "exercises" | "exam_papers" | "other";
+            /** @enum {string} */
+            status: "queued" | "processing" | "ready" | "failed";
+            title: string;
+        };
+        SourcesLinksCreateParams: {
+            /** Format: uuid */
+            fid: string;
+        };
+        /** @description Dépôt d’un fichier de cours : nom, type annoncé, taille et rôle. */
+        SourcesUploadsCreateBody: {
+            fileName: string;
+            mime: string;
+            /** @enum {string} */
+            role?: "course" | "exercises" | "exam_papers" | "other";
+            sizeBytes: number;
+        };
+        /** @description URL d’envoi signée et rôle retenu pour le document. */
+        SourcesUploadsCreateOutput: {
+            /** Format: date-time */
+            expiresAt: string;
+            /** Format: uuid */
+            resourceId: string;
+            /** @enum {string} */
+            role: "course" | "exercises" | "exam_papers" | "other";
+            /** Format: uri */
+            uploadUrl: string;
+        };
+        SourcesUploadsCreateParams: {
+            /** Format: uuid */
+            fid: string;
         };
         SuggestionsDismissOutput: {
             /** Format: uuid */
@@ -10700,6 +11086,113 @@ export interface operations {
             };
         };
     };
+    "formations.simple.create": {
+        parameters: {
+            query?: never;
+            header: {
+                "Idempotency-Key": string;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["FormationsSimpleCreateBody"];
+            };
+        };
+        responses: {
+            /** @description Succès */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["FormationsSimpleCreateOutput"];
+                };
+            };
+            /** @description Erreur (RFC 9457) */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["ProblemDetails"];
+                };
+            };
+            /** @description Erreur (RFC 9457) */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["ProblemDetails"];
+                };
+            };
+            /** @description Erreur (RFC 9457) */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["ProblemDetails"];
+                };
+            };
+            /** @description Erreur (RFC 9457) */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["ProblemDetails"];
+                };
+            };
+            /** @description Erreur (RFC 9457) */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["ProblemDetails"];
+                };
+            };
+            /** @description Erreur (RFC 9457) */
+            413: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["ProblemDetails"];
+                };
+            };
+            /** @description Erreur (RFC 9457) */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["ProblemDetails"];
+                };
+            };
+            /** @description Erreur (RFC 9457) */
+            429: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["ProblemDetails"];
+                };
+            };
+            /** @description Erreur (RFC 9457) */
+            500: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["ProblemDetails"];
+                };
+            };
+        };
+    };
     "formations.update": {
         parameters: {
             query?: never;
@@ -11219,6 +11712,176 @@ export interface operations {
             };
             /** @description Erreur (RFC 9457) */
             503: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["ProblemDetails"];
+                };
+            };
+        };
+    };
+    "diagnostic.create": {
+        parameters: {
+            query?: never;
+            header: {
+                "Idempotency-Key": string;
+            };
+            path: {
+                fid: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Succès */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["DiagnosticCreateOutput"];
+                };
+            };
+            /** @description Erreur (RFC 9457) */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["ProblemDetails"];
+                };
+            };
+            /** @description Erreur (RFC 9457) */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["ProblemDetails"];
+                };
+            };
+            /** @description Erreur (RFC 9457) */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["ProblemDetails"];
+                };
+            };
+            /** @description Erreur (RFC 9457) */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["ProblemDetails"];
+                };
+            };
+            /** @description Erreur (RFC 9457) */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["ProblemDetails"];
+                };
+            };
+            /** @description Erreur (RFC 9457) */
+            429: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["ProblemDetails"];
+                };
+            };
+            /** @description Erreur (RFC 9457) */
+            500: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["ProblemDetails"];
+                };
+            };
+        };
+    };
+    "diagnostic.skip": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                fid: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Succès */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+            /** @description Erreur (RFC 9457) */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["ProblemDetails"];
+                };
+            };
+            /** @description Erreur (RFC 9457) */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["ProblemDetails"];
+                };
+            };
+            /** @description Erreur (RFC 9457) */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["ProblemDetails"];
+                };
+            };
+            /** @description Erreur (RFC 9457) */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["ProblemDetails"];
+                };
+            };
+            /** @description Erreur (RFC 9457) */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["ProblemDetails"];
+                };
+            };
+            /** @description Erreur (RFC 9457) */
+            429: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["ProblemDetails"];
+                };
+            };
+            /** @description Erreur (RFC 9457) */
+            500: {
                 headers: {
                     [name: string]: unknown;
                 };
@@ -12839,6 +13502,387 @@ export interface operations {
             };
             /** @description Erreur (RFC 9457) */
             401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["ProblemDetails"];
+                };
+            };
+            /** @description Erreur (RFC 9457) */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["ProblemDetails"];
+                };
+            };
+            /** @description Erreur (RFC 9457) */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["ProblemDetails"];
+                };
+            };
+            /** @description Erreur (RFC 9457) */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["ProblemDetails"];
+                };
+            };
+            /** @description Erreur (RFC 9457) */
+            429: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["ProblemDetails"];
+                };
+            };
+            /** @description Erreur (RFC 9457) */
+            500: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["ProblemDetails"];
+                };
+            };
+        };
+    };
+    "formations.simple.get": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                fid: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Succès */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["FormationsSimpleGetOutput"];
+                };
+            };
+            /** @description Erreur (RFC 9457) */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["ProblemDetails"];
+                };
+            };
+            /** @description Erreur (RFC 9457) */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["ProblemDetails"];
+                };
+            };
+            /** @description Erreur (RFC 9457) */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["ProblemDetails"];
+                };
+            };
+            /** @description Erreur (RFC 9457) */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["ProblemDetails"];
+                };
+            };
+            /** @description Erreur (RFC 9457) */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["ProblemDetails"];
+                };
+            };
+            /** @description Erreur (RFC 9457) */
+            429: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["ProblemDetails"];
+                };
+            };
+            /** @description Erreur (RFC 9457) */
+            500: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["ProblemDetails"];
+                };
+            };
+        };
+    };
+    "formations.simple.analysis": {
+        parameters: {
+            query?: never;
+            header: {
+                "Idempotency-Key": string;
+            };
+            path: {
+                fid: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Succès */
+            202: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["FormationsSimpleAnalysisOutput"];
+                };
+            };
+            /** @description Erreur (RFC 9457) */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["ProblemDetails"];
+                };
+            };
+            /** @description Erreur (RFC 9457) */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["ProblemDetails"];
+                };
+            };
+            /** @description Erreur (RFC 9457) */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["ProblemDetails"];
+                };
+            };
+            /** @description Erreur (RFC 9457) */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["ProblemDetails"];
+                };
+            };
+            /** @description Erreur (RFC 9457) */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["ProblemDetails"];
+                };
+            };
+            /** @description Erreur (RFC 9457) */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["ProblemDetails"];
+                };
+            };
+            /** @description Erreur (RFC 9457) */
+            429: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["ProblemDetails"];
+                };
+            };
+            /** @description Erreur (RFC 9457) */
+            500: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["ProblemDetails"];
+                };
+            };
+        };
+    };
+    "sources.links.create": {
+        parameters: {
+            query?: never;
+            header: {
+                "Idempotency-Key": string;
+            };
+            path: {
+                fid: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["SourcesLinksCreateBody"];
+            };
+        };
+        responses: {
+            /** @description Succès */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SourcesLinksCreateOutput"];
+                };
+            };
+            /** @description Erreur (RFC 9457) */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["ProblemDetails"];
+                };
+            };
+            /** @description Erreur (RFC 9457) */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["ProblemDetails"];
+                };
+            };
+            /** @description Erreur (RFC 9457) */
+            403: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["ProblemDetails"];
+                };
+            };
+            /** @description Erreur (RFC 9457) */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["ProblemDetails"];
+                };
+            };
+            /** @description Erreur (RFC 9457) */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["ProblemDetails"];
+                };
+            };
+            /** @description Erreur (RFC 9457) */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["ProblemDetails"];
+                };
+            };
+            /** @description Erreur (RFC 9457) */
+            429: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["ProblemDetails"];
+                };
+            };
+            /** @description Erreur (RFC 9457) */
+            500: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["ProblemDetails"];
+                };
+            };
+        };
+    };
+    "sources.uploads.create": {
+        parameters: {
+            query?: never;
+            header: {
+                "Idempotency-Key": string;
+            };
+            path: {
+                fid: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["SourcesUploadsCreateBody"];
+            };
+        };
+        responses: {
+            /** @description Succès */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SourcesUploadsCreateOutput"];
+                };
+            };
+            /** @description Erreur (RFC 9457) */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["ProblemDetails"];
+                };
+            };
+            /** @description Erreur (RFC 9457) */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["ProblemDetails"];
+                };
+            };
+            /** @description Erreur (RFC 9457) */
+            403: {
                 headers: {
                     [name: string]: unknown;
                 };
@@ -18082,6 +19126,95 @@ export interface operations {
             };
             /** @description Erreur (RFC 9457) */
             401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["ProblemDetails"];
+                };
+            };
+            /** @description Erreur (RFC 9457) */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["ProblemDetails"];
+                };
+            };
+            /** @description Erreur (RFC 9457) */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["ProblemDetails"];
+                };
+            };
+            /** @description Erreur (RFC 9457) */
+            429: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["ProblemDetails"];
+                };
+            };
+            /** @description Erreur (RFC 9457) */
+            500: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["ProblemDetails"];
+                };
+            };
+        };
+    };
+    "resources.role": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                rid: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ResourcesRoleBody"];
+            };
+        };
+        responses: {
+            /** @description Succès */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ResourcesRoleOutput"];
+                };
+            };
+            /** @description Erreur (RFC 9457) */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["ProblemDetails"];
+                };
+            };
+            /** @description Erreur (RFC 9457) */
+            401: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["ProblemDetails"];
+                };
+            };
+            /** @description Erreur (RFC 9457) */
+            403: {
                 headers: {
                     [name: string]: unknown;
                 };

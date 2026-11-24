@@ -47,7 +47,17 @@ export const AI_PROVIDERS = [
 export const CREDENTIAL_STATUSES = ['untested', 'qualified', 'failed'] as const;
 
 /** EF-2 — one task per learner; the five V1 task families of ADR-0018. */
-export const AI_TASKS = ['programme', 'course', 'gaps', 'tutor', 'light'] as const;
+export const AI_TASKS = [
+  'programme',
+  'course',
+  'gaps',
+  'tutor',
+  'light',
+  'simple_analysis',
+] as const;
+
+/** ADR-4003, SPEC-4001 — tasks offered by the model selector (SPEC-4002 adds the sixth row). */
+export const SELECTABLE_AI_TASKS = ['programme', 'course', 'gaps', 'tutor', 'light'] as const;
 
 /** EF-3 — outcome of a call, including refusals and caps that never reach a provider. */
 export const AI_CALL_STATUSES = ['ok', 'error', 'refused', 'capped', 'invalid_output'] as const;

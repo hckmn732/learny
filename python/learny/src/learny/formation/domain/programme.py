@@ -77,6 +77,9 @@ class _Chapters:
 
     title: str = Field(min_length=1, max_length=160)
     notions: list[ProgrammeNotion] = Field(min_length=1, max_length=MAX_NOTIONS)
+    # SPEC-4001 EF-7 - the page range of the deposited document this chapter comes from.
+    pageFrom: int | None = Field(default=None, ge=1)
+    pageTo: int | None = Field(default=None, ge=1)
 
     @field_validator("title", mode="before")
     @classmethod
@@ -111,6 +114,9 @@ class _Modules:
     plannedEnd: str = Field(pattern=DATE_PATTERN)
     threshold: int = Field(default=THRESHOLD_DEFAULT, ge=THRESHOLD_MIN, le=THRESHOLD_MAX)
     chapters: list[Any]
+    # SPEC-4001 EF-7 - the page range of the deposited document this module comes from.
+    pageFrom: int | None = Field(default=None, ge=1)
+    pageTo: int | None = Field(default=None, ge=1)
 
     @field_validator("title", mode="before")
     @classmethod
@@ -334,11 +340,15 @@ def normalize_draft(raw: Any) -> dict[str, Any]:
                 "plannedStart": module.plannedStart,
                 "plannedEnd": module.plannedEnd,
                 "threshold": module.threshold,
+                "pageFrom": module.pageFrom,
+                "pageTo": module.pageTo,
                 "chapters": [
                     {
                         "position": chapter_index + 1,
                         "title": chapter.title,
                         "notions": [notion.model_dump() for notion in chapter.notions],
+                        "pageFrom": chapter.pageFrom,
+                        "pageTo": chapter.pageTo,
                     }
                     for chapter_index, chapter in enumerate(module.chapters)
                 ],

@@ -1,6 +1,6 @@
 import { z } from 'zod';
 
-import { IsoDateTime, Uuid } from './common';
+import { CivilDate, IsoDateTime, Uuid } from './common';
 import { defineRoute } from './define-route';
 
 // Contracts of the cadrage by chat (SPEC-604 EF-1 to EF-13, ET-1; BR-FOR-01 to BR-FOR-03).
@@ -83,6 +83,10 @@ export const FormationSummary = z.object({
   id: Uuid,
   title: z.string().min(1).max(120),
   status: z.enum(['cadrage', 'programme_proposed', 'active', 'paused', 'completed', 'archived']),
+  /** ADR-4003 D2, BR-FOR-16 — « Continuer » distingue le mode simple du mode tuteur. */
+  creationMode: z.enum(['tutor', 'simple']).optional(),
+  /** BR-FOR-16 — état de l'analyse en mode simple, absent en mode tuteur. */
+  simpleStatus: z.enum(['collecting', 'analysing', 'proposed', 'failed']).nullable().optional(),
 });
 export type FormationSummary = z.infer<typeof FormationSummary>;
 
@@ -92,9 +96,11 @@ export type FormationsList = z.infer<typeof FormationsList>;
 export const FormationPatchInput = z
   .strictObject({
     title: z.string().trim().min(1).max(120).optional(),
+    /** EF-8 — the exam deadline; `null` removes it and restores the learner's rhythm. */
+    endDate: CivilDate.nullable().optional(),
   })
-  .refine((value) => value.title !== undefined, {
-    message: 'Indiquez le titre de la formation.',
+  .refine((value) => value.title !== undefined || value.endDate !== undefined, {
+    message: 'Indiquez le titre ou l’échéance de la formation.',
   });
 export type FormationPatchInput = z.infer<typeof FormationPatchInput>;
 
@@ -181,7 +187,8 @@ export const formationRoutes = {
     body: FormationPatchInput,
     output: FormationPatchOutput,
     successStatus: 200,
-    summary: 'Met à jour le titre d’une formation pendant le cadrage (SPEC-604 EF-11).',
+    summary:
+      'Met à jour le titre d’une formation ou son échéance (SPEC-604 EF-11, SPEC-4001 EF-8).',
     errors: ['VALIDATION_FAILED', 'NOT_FOUND', 'UNAUTHENTICATED', 'INTERNAL_ERROR'],
   }),
 } as const;

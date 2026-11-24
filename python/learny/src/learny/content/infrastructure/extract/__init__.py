@@ -4,6 +4,7 @@ One module per source kind; every extractor returns the same `ExtractedContent` 
 passage pipeline never knows where the text came from.
 """
 
+from learny.content.infrastructure.extract.document import DOCX_MIME, extract_document
 from learny.content.infrastructure.extract.image import (
     IMAGE_PROMPT_ID,
     IMAGE_SCENARIO,
@@ -53,6 +54,7 @@ from learny.content.infrastructure.extract.youtube import (
 
 __all__ = [
     "DEFAULT_PDF_LIMITS",
+    "DOCX_MIME",
     "IMAGE_LIMITS",
     "IMAGE_PROMPT_ID",
     "IMAGE_SCENARIO",
@@ -74,6 +76,7 @@ __all__ = [
     "YoutubeProvider",
     "create_llm_vision_reader",
     "default_youtube_provider",
+    "extract_document",
     "extract_image",
     "extract_image_document",
     "extract_note",

@@ -1,0 +1,66 @@
+{
+  "task": "programme",
+  "scenario": "simple-document",
+  "promptId": "programme.programme",
+  "promptVersion": 2,
+  "description": "Programme tiré d’un document : textes du programme et objectifs par module (SPEC-4001 EF-7).",
+  "steps": [
+    {
+      "type": "object",
+      "object": {
+        "description": "Programme tiré du document déposé par l’apprenant.",
+        "volumeHours": 12,
+        "summary": "Le programme suit la structure du document : chaque section donne un module, découpé en chapitres de vingt à quarante-cinq minutes. Les exercices déposés alimentent les validations.",
+        "modules": [
+          {
+            "title": "Module du document",
+            "objectives": ["Situer la notion dans le document", "Appliquer la notion"],
+            "plannedStart": "2026-11-11",
+            "plannedEnd": "2026-11-12",
+            "threshold": 80,
+            "chapters": [
+              {
+                "title": "Chapitre du document",
+                "notions": [
+                  {
+                    "label": "Notion principale",
+                    "definition": "Notion centrale de la section du document."
+                  },
+                  {
+                    "label": "Définition clé",
+                    "definition": "Définition à retenir telle qu’elle figure dans le document."
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "title": "Module du document",
+            "objectives": ["Relier deux notions du document", "Justifier une réponse"],
+            "plannedStart": "2026-11-13",
+            "plannedEnd": "2026-11-14",
+            "threshold": 80,
+            "chapters": [
+              {
+                "title": "Chapitre du document",
+                "notions": [
+                  {
+                    "label": "Application",
+                    "definition": "Mise en pratique de la notion dans un cas du document."
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      "usage": {
+        "inputTokens": 1200,
+        "outputTokens": 800,
+        "cacheReadTokens": 0,
+        "cacheWriteTokens": 0
+      },
+      "latencyMs": 300
+    }
+  ]
+}

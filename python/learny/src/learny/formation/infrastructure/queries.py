@@ -359,10 +359,13 @@ INSERT_FORMATION = text(
 
 LIST_OWNED_FORMATIONS = text(
     """
-    select id::text as id, title, status::text as status
-      from public.formations
-     where owner_id = cast(:user_id as uuid)
-     order by created_at desc
+    select f.id::text as id, f.title, f.status::text as status,
+           f.creation_mode::text as creation_mode,
+           sa.status::text as simple_status
+      from public.formations f
+      left join public.simple_analyses sa on sa.formation_id = f.id
+     where f.owner_id = cast(:user_id as uuid)
+     order by f.created_at desc
     """
 )
 
@@ -374,7 +377,8 @@ UPDATE_FORMATION_TITLE = text(
            updated_at = cast(:now as timestamptz)
      where id = cast(:formation_id as uuid)
        and owner_id = cast(:user_id as uuid)
-    returning id::text as id, title, status::text as status
+    returning id::text as id, title, status::text as status,
+              creation_mode::text as creation_mode
     """
 )
 
@@ -709,7 +713,8 @@ READ_PROGRAMME_FORMATION_OWNER = text(
            start_date::text as start_date,
            end_date::text as end_date,
            default_threshold,
-           course_language::text as course_language
+           course_language::text as course_language,
+           creation_mode::text as creation_mode
       from public.formations
      where id = cast(:formation_id as uuid)
        and owner_id = cast(:user_id as uuid)
@@ -729,7 +734,8 @@ READ_PROGRAMME_FORMATION_MEMBER = text(
            start_date::text as start_date,
            end_date::text as end_date,
            default_threshold,
-           course_language::text as course_language
+           course_language::text as course_language,
+           creation_mode::text as creation_mode
       from public.formations
      where id = cast(:formation_id as uuid)
      limit 1
@@ -2144,3 +2150,565 @@ async def activate_formation(
             "now": now,
         },
     )
+
+
+# --------------------------------------------------------------------------------------------------
+# Simple mode (SPEC-4001): creation, sources, analysis state, generation (EF-1 to EF-12).
+# --------------------------------------------------------------------------------------------------
+
+READ_SIMPLE_FORMATION = text(
+    """
+    select f.id::text as id,
+           f.owner_id::text as owner_id,
+           f.title,
+           f.status::text as status,
+           f.creation_mode::text as creation_mode,
+           f.simple_motivation,
+           f.objectives::text[] as objectives,
+           f.volume_hours,
+           f.start_date,
+           f.end_date,
+           sa.status::text as analysis_status,
+           sa.steps,
+           sa.chapters_found,
+           sa.section_summaries,
+           sa.error_code,
+           sa.error_message,
+           sa.diagnostic_status
+      from public.formations f
+      left join public.simple_analyses sa on sa.formation_id = f.id
+     where f.id = cast(:formation_id as uuid)
+       and f.owner_id = cast(:user_id as uuid)
+     limit 1
+    """
+)
+
+READ_SIMPLE_ANALYSIS = text(
+    """
+    select sa.formation_id::text as formation_id,
+           sa.owner_id::text as owner_id,
+           sa.status::text as status,
+           sa.steps,
+           sa.chapters_found,
+           sa.section_summaries,
+           sa.error_code,
+           sa.error_message,
+           sa.diagnostic_status
+      from public.simple_analyses sa
+     where sa.formation_id = cast(:formation_id as uuid)
+     limit 1
+    """
+)
+
+LIST_SIMPLE_SOURCES = text(
+    """
+    select r.id::text as id,
+           r.title,
+           r.kind::text as kind,
+           r.status::text as status,
+           r.mime,
+           r.size_bytes,
+           r.metadata
+      from public.resources r
+     where r.formation_id = cast(:formation_id as uuid)
+       and r.chapter_id is null
+       and r.deleted_at is null
+     order by r.created_at asc, r.title asc
+    """
+)
+
+COUNT_SIMPLE_SOURCES = text(
+    """
+    select count(*)::int as total
+      from public.resources r
+     where r.formation_id = cast(:formation_id as uuid)
+       and r.chapter_id is null
+       and r.deleted_at is null
+    """
+)
+
+INSERT_SIMPLE_FORMATION = text(
+    """
+    insert into public.formations (
+      owner_id, title, objectives, status, creation_mode, simple_motivation,
+      course_language, monogram, accent_color
+    )
+    values (
+      cast(:owner as uuid), :title, '{}'::public.formation_objective[],
+      'cadrage', 'simple', :motivation, cast(:language as public.course_language),
+      :monogram, cast(:accent as public.formation_accent)
+    )
+    returning id::text as id
+    """
+)
+
+INSERT_SIMPLE_ANALYSIS = text(
+    """
+    insert into public.simple_analyses (formation_id, owner_id, status, steps)
+    values (cast(:formation as uuid), cast(:owner as uuid), 'collecting', cast(:steps as jsonb))
+    on conflict (formation_id) do nothing
+    """
+)
+
+INSERT_SIMPLE_RESOURCE = text(
+    """
+    insert into public.resources (
+      id, owner_id, formation_id, chapter_id, kind, title, storage_path, url, mime,
+      size_bytes, metadata
+    )
+    values (
+      cast(:resource as uuid), cast(:owner as uuid), cast(:formation as uuid), null,
+      cast(:kind as public.resource_kind), :title, :path, :url, :mime, :size,
+      cast(:metadata as jsonb)
+    )
+    returning id::text as id
+    """
+)
+
+UPDATE_ANALYSIS_STATUS = text(
+    """
+    update public.simple_analyses
+       set status = cast(:status as public.simple_status),
+           steps = coalesce(cast(:steps as jsonb), steps),
+           chapters_found = coalesce(cast(:chapters as jsonb), chapters_found),
+           section_summaries = coalesce(cast(:summaries as jsonb), section_summaries),
+           error_code = :error_code,
+           error_message = :error_message,
+           updated_at = cast(:now as timestamptz)
+     where formation_id = cast(:formation as uuid)
+    """
+)
+
+UPDATE_DIAGNOSTIC_STATUS = text(
+    """
+    update public.simple_analyses
+       set diagnostic_status = :status,
+           updated_at = cast(:now as timestamptz)
+     where formation_id = cast(:formation as uuid)
+    """
+)
+
+UPDATE_RESOURCE_ROLE = text(
+    """
+    update public.resources r
+       set metadata = jsonb_set(r.metadata, '{role}', to_jsonb(cast(:role as text)), true),
+           updated_at = cast(:now as timestamptz)
+     where r.id = cast(:resource as uuid)
+       and r.owner_id = cast(:user_id as uuid)
+       and r.deleted_at is null
+    returning r.id::text as id
+    """
+)
+
+READ_RESOURCE_SCOPE = text(
+    """
+    select r.id::text as id,
+           r.formation_id::text as formation_id,
+           r.owner_id::text as owner_id,
+           r.kind::text as kind,
+           r.metadata,
+           f.creation_mode::text as creation_mode,
+           sa.status::text as analysis_status,
+           sa.diagnostic_status
+      from public.resources r
+      join public.formations f on f.id = r.formation_id
+      left join public.simple_analyses sa on sa.formation_id = r.formation_id
+     where r.id = cast(:resource as uuid)
+       and r.owner_id = cast(:user_id as uuid)
+       and r.deleted_at is null
+     limit 1
+    """
+)
+
+READ_LATEST_PROPOSAL_VERSION = text(
+    """
+    select coalesce(max(version), 0)::int as version
+      from public.programme_proposals
+     where formation_id = cast(:formation as uuid)
+    """
+)
+
+READ_GENERATION_MODULES = text(
+    """
+    select m.id::text as id,
+           m.position,
+           m.title,
+           m.status::text as status,
+           (select c.status::text
+              from public.courses c
+             where c.module_id = m.id
+               and c.is_current
+             order by c.version desc
+             limit 1) as course_status
+      from public.modules m
+     where m.formation_id = cast(:formation as uuid)
+     order by m.position asc
+    """
+)
+
+READ_SIMPLE_MODULES = text(
+    """
+    select m.id::text as id,
+           m.position,
+           m.title,
+           m.status::text as status,
+           m.validated_at,
+           m.planned_start::text as planned_start,
+           m.planned_end::text as planned_end
+      from public.modules m
+     where m.formation_id = cast(:formation as uuid)
+     order by m.position asc
+    """
+)
+
+READ_FORMATION_OBJECTIVES = text(
+    """
+    update public.formations
+       set objectives = cast(:objectives as public.formation_objective[]),
+           end_date = cast(:end_date as date),
+           updated_at = cast(:now as timestamptz)
+     where id = cast(:formation as uuid)
+       and owner_id = cast(:user_id as uuid)
+    returning id::text as id, title, status::text as status,
+              objectives::text[] as objectives, end_date
+    """
+)
+
+COUNT_IN_PROGRESS_DIAGNOSTIC = text(
+    """
+    select at.id::text as id
+      from public.attempts at
+      join public.activities act on act.id = at.activity_id
+     where act.formation_id = cast(:formation as uuid)
+       and act.kind = 'diagnostic'
+       and at.user_id = cast(:user as uuid)
+       and at.status = 'in_progress'
+     order by at.started_at desc
+     limit 1
+    """
+)
+
+ABANDON_DIAGNOSTIC = text(
+    """
+    update public.attempts at
+       set status = 'abandoned'
+      from public.activities act
+     where act.id = at.activity_id
+       and act.formation_id = cast(:formation as uuid)
+       and act.kind = 'diagnostic'
+       and at.user_id = cast(:user as uuid)
+       and at.status = 'in_progress'
+    """
+)
+
+
+async def read_simple_formation(tx: Tx, user_id: str, formation_id: str) -> Mapping[str, Any] | None:
+    """The formation and its analysis row, only for the owner (404 otherwise)."""
+    result = await tx.conn.execute(READ_SIMPLE_FORMATION, {"user_id": user_id, "formation_id": formation_id})
+    found = result.mappings().all()
+    return None if not found else row_of(found[0])
+
+
+async def read_simple_analysis(tx: Tx, formation_id: str) -> Mapping[str, Any] | None:
+    """The analysis row of a formation, read with the service role by the worker."""
+    result = await tx.conn.execute(READ_SIMPLE_ANALYSIS, {"formation_id": formation_id})
+    found = result.mappings().all()
+    return None if not found else row_of(found[0])
+
+
+async def list_simple_sources(tx: Tx, formation_id: str) -> list[Mapping[str, Any]]:
+    """The formation-level documents, oldest first."""
+    result = await tx.conn.execute(LIST_SIMPLE_SOURCES, {"formation_id": formation_id})
+    return [row_of(row) for row in result.mappings().all()]
+
+
+async def count_simple_sources(tx: Tx, formation_id: str) -> int:
+    """EF-2 - the number of deposited documents of the formation."""
+    result = await tx.conn.execute(COUNT_SIMPLE_SOURCES, {"formation_id": formation_id})
+    return int(result.mappings().all()[0]["total"])
+
+
+async def insert_simple_formation(
+    tx: Tx,
+    user_id: str,
+    *,
+    title: str,
+    motivation: str | None,
+    language: str,
+    monogram: str,
+    accent: str,
+) -> str | None:
+    """EF-1 - the formation row, `creation_mode = 'simple'` and `status = 'cadrage'`."""
+    result = await tx.conn.execute(
+        INSERT_SIMPLE_FORMATION,
+        {
+            "owner": user_id,
+            "title": title,
+            "motivation": motivation,
+            "language": language,
+            "monogram": monogram,
+            "accent": accent,
+        },
+    )
+    found = result.mappings().all()
+    return None if not found else str(found[0]["id"])
+
+
+async def insert_simple_analysis(tx: Tx, formation_id: str, user_id: str, steps: str) -> None:
+    """EF-1 - the single analysis row of the formation, at `collecting`."""
+    await tx.conn.execute(
+        INSERT_SIMPLE_ANALYSIS,
+        {"formation": formation_id, "owner": user_id, "steps": steps},
+    )
+
+
+async def insert_simple_resource(
+    tx: Tx,
+    *,
+    resource_id: str,
+    user_id: str,
+    formation_id: str,
+    kind: str,
+    title: str,
+    path: str | None,
+    url: str | None,
+    mime: str,
+    size_bytes: int,
+    metadata: str,
+) -> str | None:
+    """EF-2, EF-3 - a formation-level source (`chapter_id` null) with its role in `metadata`."""
+    result = await tx.conn.execute(
+        INSERT_SIMPLE_RESOURCE,
+        {
+            "resource": resource_id,
+            "owner": user_id,
+            "formation": formation_id,
+            "kind": kind,
+            "title": title,
+            "path": path,
+            "url": url,
+            "mime": mime,
+            "size": size_bytes,
+            "metadata": metadata,
+        },
+    )
+    found = result.mappings().all()
+    return None if not found else str(found[0]["id"])
+
+
+async def update_analysis_status(
+    tx: Tx,
+    formation_id: str,
+    *,
+    status: str,
+    steps: str | None,
+    chapters: str | None,
+    summaries: str | None,
+    error_code: str | None,
+    error_message: str | None,
+    now: str,
+) -> None:
+    """EF-7, CL-3 - one step of the analysis is persisted before the next one runs."""
+    await tx.conn.execute(
+        UPDATE_ANALYSIS_STATUS,
+        {
+            "formation": formation_id,
+            "status": status,
+            "steps": steps,
+            "chapters": chapters,
+            "summaries": summaries,
+            "error_code": error_code,
+            "error_message": error_message,
+            "now": now,
+        },
+    )
+
+
+async def update_diagnostic_status(tx: Tx, formation_id: str, status: str, now: str) -> None:
+    """EF-11 - the diagnostic is proposed only once: done or skipped."""
+    await tx.conn.execute(
+        UPDATE_DIAGNOSTIC_STATUS,
+        {"formation": formation_id, "status": status, "now": now},
+    )
+
+
+async def update_resource_role(tx: Tx, user_id: str, resource_id: str, role: str, now: str) -> bool:
+    """EF-4 - the learner corrects the guessed role of one document."""
+    result = await tx.conn.execute(
+        UPDATE_RESOURCE_ROLE,
+        {"user_id": user_id, "resource": resource_id, "role": role, "now": now},
+    )
+    return len(result.mappings().all()) > 0
+
+
+async def read_resource_scope(tx: Tx, user_id: str, resource_id: str) -> Mapping[str, Any] | None:
+    """The formation, mode and analysis status of one resource of the caller."""
+    result = await tx.conn.execute(READ_RESOURCE_SCOPE, {"user_id": user_id, "resource": resource_id})
+    found = result.mappings().all()
+    return None if not found else row_of(found[0])
+
+
+async def latest_proposal_version(tx: Tx, formation_id: str) -> int:
+    """The version of the proposal the analysis stored, or zero."""
+    result = await tx.conn.execute(READ_LATEST_PROPOSAL_VERSION, {"formation": formation_id})
+    return int(result.mappings().all()[0]["version"])
+
+
+async def read_generation_modules(tx: Tx, formation_id: str) -> list[Mapping[str, Any]]:
+    """EF-12 - the modules and the current course status of each, in position order."""
+    result = await tx.conn.execute(READ_GENERATION_MODULES, {"formation": formation_id})
+    return [row_of(row) for row in result.mappings().all()]
+
+
+async def read_simple_modules(tx: Tx, formation_id: str) -> list[Mapping[str, Any]]:
+    """The modules of the active structure, in position order."""
+    result = await tx.conn.execute(READ_SIMPLE_MODULES, {"formation": formation_id})
+    return [row_of(row) for row in result.mappings().all()]
+
+
+async def update_formation_deadline(
+    tx: Tx,
+    user_id: str,
+    formation_id: str,
+    *,
+    objectives: Sequence[str],
+    end_date: str | None,
+    now: str,
+) -> Mapping[str, Any] | None:
+    """EF-8 - the objective list and the end of the plan follow the deadline."""
+    result = await tx.conn.execute(
+        READ_FORMATION_OBJECTIVES,
+        {
+            "user_id": user_id,
+            "formation": formation_id,
+            "objectives": list(objectives),
+            "end_date": end_date,
+            "now": now,
+        },
+    )
+    found = result.mappings().all()
+    return None if not found else row_of(found[0])
+
+
+async def find_in_progress_diagnostic(tx: Tx, user_id: str, formation_id: str) -> str | None:
+    """EF-11 - an interrupted diagnostic is resumed instead of duplicated."""
+    result = await tx.conn.execute(COUNT_IN_PROGRESS_DIAGNOSTIC, {"user": user_id, "formation": formation_id})
+    found = result.mappings().all()
+    return None if not found else str(found[0]["id"])
+
+
+async def abandon_diagnostics(tx: Tx, user_id: str, formation_id: str) -> None:
+    """EF-11 - `skip` abandons the in-progress diagnostic attempt."""
+    await tx.conn.execute(ABANDON_DIAGNOSTIC, {"user": user_id, "formation": formation_id})
+
+
+UPDATE_SIMPLE_PROPOSAL_FORMATION = text(
+    """
+    update public.formations
+       set status = cast(:status as public.formation_status),
+           title = coalesce(:title, title),
+           objectives = cast(:objectives as public.formation_objective[]),
+           cadrage_profile = cast(:profile as jsonb),
+           description = coalesce(description, :description),
+           volume_hours = coalesce(:volume_hours, volume_hours),
+           start_date = cast(:start_date as date),
+           end_date = cast(:end_date as date),
+           default_threshold = :threshold,
+           updated_at = cast(:now as timestamptz)
+     where id = cast(:formation_id as uuid)
+       and owner_id = cast(:user_id as uuid)
+    """
+)
+
+
+async def update_simple_proposal_formation(
+    tx: Tx,
+    user_id: str,
+    formation_id: str,
+    *,
+    status: str,
+    payload: Mapping[str, Any],
+    profile: Mapping[str, Any],
+    title: str | None,
+    objectives: Sequence[str],
+    now: datetime,
+) -> None:
+    """EF-7 - the simple-mode proposal fills the deduced scoping profile and the title."""
+    modules = payload["modules"]
+    await tx.conn.execute(
+        UPDATE_SIMPLE_PROPOSAL_FORMATION,
+        {
+            "formation_id": formation_id,
+            "user_id": user_id,
+            "status": status,
+            "title": title,
+            "objectives": list(objectives),
+            "profile": json.dumps(profile, ensure_ascii=False),
+            "description": payload.get("description"),
+            "volume_hours": payload.get("volumeHours"),
+            "start_date": modules[0].get("plannedStart"),
+            "end_date": modules[-1].get("plannedEnd"),
+            "threshold": modules[0].get("threshold") or 80,
+            "now": now,
+        },
+    )
+
+
+INSERT_CHAPTER_SOURCE = text(
+    """
+    insert into public.chapter_sources (chapter_id, resource_id, formation_id, page_from, page_to)
+    values (
+      cast(:chapter as uuid), cast(:resource as uuid), cast(:formation as uuid),
+      :page_from, :page_to
+    )
+    on conflict (chapter_id, resource_id) do nothing
+    """
+)
+
+INSERT_CHAPTER_PROGRESS_DONE = text(
+    """
+    insert into public.chapter_progress (
+      user_id, chapter_id, contributions_status, done_at, updated_at
+    )
+    values (
+      cast(:user as uuid), cast(:chapter as uuid), 'done',
+      cast(:now as timestamptz), cast(:now as timestamptz)
+    )
+    on conflict (user_id, chapter_id) do update
+       set contributions_status = 'done',
+           done_at = coalesce(public.chapter_progress.done_at, cast(:now as timestamptz)),
+           updated_at = cast(:now as timestamptz)
+    """
+)
+
+
+async def insert_chapter_source(
+    tx: Tx,
+    *,
+    chapter_id: str,
+    resource_id: str,
+    formation_id: str,
+    page_from: int | None,
+    page_to: int | None,
+) -> None:
+    """EF-9 - the page range of the document each chapter comes from."""
+    await tx.conn.execute(
+        INSERT_CHAPTER_SOURCE,
+        {
+            "chapter": chapter_id,
+            "resource": resource_id,
+            "formation": formation_id,
+            "page_from": page_from,
+            "page_to": page_to,
+        },
+    )
+
+
+async def mark_chapter_contributions_done(tx: Tx, user_id: str, chapter_id: str, now: str) -> None:
+    """EF-9, BR-APP-04 - in simple mode no chapter waits for a declared completion."""
+    await tx.conn.execute(INSERT_CHAPTER_PROGRESS_DONE, {"user": user_id, "chapter": chapter_id, "now": now})
+
+
+async def list_generation_modules(tx: Tx, formation_id: str) -> list[Mapping[str, Any]]:
+    """EF-12 - the modules and their current course state, read by the generation job."""
+    return await read_generation_modules(tx, formation_id)

@@ -220,9 +220,16 @@ async def get_quiz_result(deps: AssessmentDeps, actor: Actor, attempt_id: str) -
             if passed is False and score is not None
             else None
         )
+        config = attempt.get("config")
+        acquired = (
+            [str(value) for value in config.get("acquiredModuleIds") or []]
+            if isinstance(config, Mapping) and isinstance(config.get("acquiredModuleIds"), list)
+            else []
+        )
         return {
             "attemptId": attempt_id,
             "attemptNo": int(attempt["attempt_no"]),
+            "acquiredModuleIds": acquired,
             "module": {
                 "id": module_id,
                 "position": int(attempt["position"]),

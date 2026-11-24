@@ -41,7 +41,8 @@ def test_the_registry_declares_valid_names_and_events() -> None:
     assert CONSUMERS
     for consumer in CONSUMERS:
         assert NAME.match(consumer.name), consumer.name
-        assert "/" in consumer.on
+        # SPEC-4001 - simple mode names its events with dots, the rest of the catalogue with slashes.
+        assert "/" in consumer.on or consumer.on.startswith("simple."), consumer.on
         assert consumer.max_attempts >= 1
         assert consumer.timeout_s > 0
 

@@ -61,6 +61,9 @@ PLAN: dict[str, str] = {
     "tutor.prepare_remediation": "quiz/graded",
     "tutor.prepare_requested_remediation": "remediation/requested",
     "engagement.send_daily_digest": DAILY_DIGEST_EVENT,
+    # SPEC-4001 - simple mode: document analysis and progressive generation.
+    "formation.simple_analysis": "simple.analysis.requested",
+    "formation.simple_generation": "simple.generation.requested",
 }
 
 VALID_PAYLOADS: dict[str, dict[str, Any]] = {
@@ -102,6 +105,9 @@ VALID_PAYLOADS: dict[str, dict[str, Any]] = {
     "tutor.prepare_remediation": {"userId": USER, "moduleId": MODULE, "passed": False},
     "tutor.prepare_requested_remediation": {"userId": USER, "moduleId": MODULE},
     "engagement.send_daily_digest": {"userId": USER, "at": AT},
+    # SPEC-4001 - simple mode.
+    "formation.simple_analysis": {"userId": USER, "formationId": FORMATION},
+    "formation.simple_generation": {"userId": USER, "formationId": FORMATION},
 }
 
 
@@ -116,13 +122,14 @@ def event(name: str, data: dict[str, Any], event_id: str = "spec-2207:event") ->
 def test_the_registry_declares_the_consumers_of_the_plan() -> None:
     declared = {consumer.name: consumer.on for consumer in CONSUMERS if consumer.name != DEMO_CONSUMER}
     assert declared == PLAN
-    assert len(declared) == 22
+    assert len(declared) == 24
 
 
 def test_every_consumer_has_a_valid_name_and_options() -> None:
     for consumer in CONSUMERS:
         assert NAME.match(consumer.name), consumer.name
-        assert "/" in consumer.on
+        # SPEC-4001 - simple mode names its events with dots, the rest of the catalogue with slashes.
+        assert "/" in consumer.on or consumer.on.startswith("simple."), consumer.on
         assert consumer.timeout_s > 0
         assert consumer.max_attempts >= 1
         assert consumer.tags["context"]

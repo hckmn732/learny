@@ -22,6 +22,11 @@ PNG_SIGNATURE: Final = b"\x89PNG\r\n\x1a\n"
 JPEG_SIGNATURE: Final = b"\xff\xd8\xff"
 HEIF_BRANDS: Final = (b"heic", b"heix", b"hevc", b"hevx", b"mif1", b"msf1", b"heif")
 
+# SPEC-4001 EF-2 - text documents of simple mode: DOCX, plain text and Markdown.
+DOCX_MIME: Final = "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+TEXT_MIME: Final = "text/plain"
+MARKDOWN_MIME: Final = "text/markdown"
+
 
 @dataclass(frozen=True, slots=True)
 class DetectedFile:
@@ -62,8 +67,35 @@ def count_pdf_pages(data: bytes) -> int:
         raise AppError("UNSUPPORTED_TYPE", texts.PDF_UNREADABLE) from None
 
 
-def detect_upload(data: bytes, kind: str) -> DetectedFile:
+def detect_document(data: bytes) -> str:
+    """EF-2 (SPEC-4001): the real type of a deposited text document, from its bytes."""
+    if data[:2] == b"PK":
+        try:
+            import io
+            import zipfile
+
+            with zipfile.ZipFile(io.BytesIO(data)) as archive:
+                if "word/document.xml" in archive.namelist():
+                    return DOCX_MIME
+        except (zipfile.BadZipFile, OSError):
+            pass
+    try:
+        text = data.decode("utf-8")
+    except UnicodeDecodeError:
+        raise AppError("UNSUPPORTED_TYPE", texts.NOT_A_DOCUMENT) from None
+    if "\u0000" in text:
+        raise AppError("UNSUPPORTED_TYPE", texts.NOT_A_DOCUMENT)
+    printable = sum(1 for char in text if char.isprintable() or char in "\n\r\t")
+    if len(text) > 0 and printable < len(text) * 0.95:
+        raise AppError("UNSUPPORTED_TYPE", texts.NOT_A_DOCUMENT)
+    markdown = text.lstrip().startswith(("#", "-", "*", ">", "```"))
+    return MARKDOWN_MIME if markdown else TEXT_MIME
+
+
+def detect_upload(data: bytes, kind: str, *, document: bool = False) -> DetectedFile:
     """EF-2: checks the real bytes against the kind the resource was created for."""
+    if document:
+        return DetectedFile(mime=detect_document(data), pages=None)
     mime = detect_mime(data)
     if kind == "pdf":
         if mime != PDF_MIME_TYPE:

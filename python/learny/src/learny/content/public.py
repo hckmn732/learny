@@ -34,6 +34,11 @@ from learny.content.application.resources import (
     retry_resource,
     uploaded_event_id,
 )
+from learny.content.application.section_detection import (
+    DocumentSection,
+    detect_sections,
+    read_pdf_bookmarks,
+)
 from learny.content.application.sections import (
     edit_course_section,
     reactivate_bricks,
@@ -54,10 +59,12 @@ from learny.content.domain.retrieval import (
     select_context,
     text_overlap_ratio,
 )
+from learny.content.infrastructure.queries import list_resource_chunks
 
 __all__ = [
     "ContentDeps",
     "CourseSummaryFeedback",
+    "DocumentSection",
     "IngestionPorts",
     "assert_uuid",
     "chapter_counts",
@@ -71,6 +78,7 @@ __all__ = [
     "default_ports",
     "delete_resource",
     "deny_or_missing",
+    "detect_sections",
     "dismiss_suggestion",
     "edit_course_section",
     "embed_texts",
@@ -85,9 +93,11 @@ __all__ = [
     "get_module_screen",
     "get_signed_read_url",
     "import_suggestion",
+    "list_resource_chunks",
     "merge_progress",
     "process_resource",
     "reactivate_bricks",
+    "read_pdf_bookmarks",
     "reading_percent",
     "record_course_progress",
     "rename_resource",

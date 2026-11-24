@@ -7,6 +7,7 @@ the use case lives in `learny.assessments`.
 from typing import Any, cast
 
 from learny.assessments import public as assessments
+from learny.formation.application.simple import diagnostic as simple
 from learny.shared.jsonx import dumps
 from starlette.responses import Response
 
@@ -157,7 +158,17 @@ async def quiz_attempts_result(call: Call) -> Any:
 
 @handler("quiz.attempts.submit")
 async def quiz_attempts_submit(call: Call) -> Any:
-    return await assessments.submit_attempt(call.deps, _actor(call), _params(call)["aid"])
+    """The diagnostic is graded at submission, then its acquired modules are validated (SPEC-4001)."""
+    result = await assessments.submit_attempt(call.deps, _actor(call), _params(call)["aid"])
+    diagnostic = result.pop("_diagnostic", None)
+    if isinstance(diagnostic, dict):
+        await simple.apply_acquired_modules(
+            call.deps,
+            _actor(call),
+            str(diagnostic["formationId"]),
+            [str(value) for value in diagnostic.get("acquiredModuleIds") or []],
+        )
+    return result
 
 
 @handler("quiz.answers.save")

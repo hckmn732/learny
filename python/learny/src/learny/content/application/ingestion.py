@@ -252,6 +252,23 @@ async def _extract(
         return image_document.content, None
     if resource.kind != "pdf":
         raise IngestionError("RESOURCE_UNSUPPORTED", texts.RESOURCE_UNSUPPORTED.format(kind=resource.kind))
+    if resource.metadata.get("sourceKind") == "document":
+        # SPEC-4001 EF-2 - a DOCX, TXT or Markdown source is read as one text document.
+        from learny.content.infrastructure.extract import extract_document
+
+        if resource.storage_path is None:
+            raise _source_missing()
+        raw = await ports.read_file(
+            ReadFileInput(
+                owner_id=resource.owner_id,
+                resource_id=resource.id,
+                storage_path=resource.storage_path,
+                max_bytes=ports.limits.max_bytes,
+            )
+        )
+        if raw is None or len(raw) == 0:
+            raise _source_missing()
+        return extract_document(raw, resource.mime or "text/plain"), None
     if resource.storage_path is None:
         raise _source_missing()
     if resource.size_bytes is not None and resource.size_bytes > ports.limits.max_bytes:
