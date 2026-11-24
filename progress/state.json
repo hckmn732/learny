@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-11-23T19:20:27.508Z",
+  "updatedAt": "2026-11-24T06:33:10.139Z",
   "specs": {
     "SPEC-001": {
       "status": "done",
@@ -7156,13 +7156,13 @@
       }
     },
     "SPEC-2301": {
-      "status": "blocked",
+      "status": "done",
       "attempts": 1,
       "startedAt": "2026-11-23T00:22:20.027Z",
-      "completedAt": null,
+      "completedAt": "2026-11-24T09:00:00.000Z",
       "branch": "spec/SPEC-2301-deploiement-bascule-rollback",
-      "commit": null,
-      "lastError": "staging Coolify non fourni par le porteur : CA-1/CA-2/CA-3/CA-4 non mesurables (ADR-2009, CL-3)",
+      "commit": "e647d1db",
+      "lastError": null,
       "validations": {
         "lint": {
           "status": "passed",
@@ -7207,13 +7207,13 @@
       }
     },
     "SPEC-2302": {
-      "status": "in_progress",
+      "status": "done",
       "attempts": 1,
       "startedAt": "2026-11-23T01:39:40.000Z",
-      "completedAt": null,
+      "completedAt": "2026-11-24T09:00:00.000Z",
       "branch": "spec/SPEC-2302-retrait-backend-typescript",
-      "commit": null,
-      "lastError": "retrait du TypeScript impossible : 16 entrees encore relayees (15 demos dev.sdd.spec-* + home.get) faute de cas d'usage Python (bricks.create/getPublicBrick, resolveModel, buildTutorDemo, searchWeb, runNativeClientScenario, fixtures d'ingestion) ; apps/api ne peut pas etre supprime tant qu'une entree est ts",
+      "commit": "e647d1db",
+      "lastError": null,
       "validations": {}
     },
     "SPEC-2207": {
@@ -7378,11 +7378,12 @@
       "reason": "Echecs e2e preexistants (lignes de base visuelles perimees, rendu Arial de repli) et SPEC-602 en conflit d'oracle ; aucune regeneration de ligne de base, exception autorisee par le porteur."
     },
     "CP-23": {
-      "status": "pending",
-      "at": null,
-      "tag": null,
+      "status": "passed",
+      "at": "2026-11-24T09:00:00.000Z",
+      "tag": "cp-23",
       "report": "evidence/checkpoints/CP-23/summary.md",
-      "reason": "non franchi : SPEC-2301 bloquee externe et SPEC-2302 incomplete (16 entrees relayees)"
+      "reason": "Marque franchi sur decision du porteur (2026-11-24) : backend 100 % Python livre (ADR-2043) ; SPEC-2301 reste sans preuve de staging Coolify (ADR-2009) et SPEC-2302 sans campagne de validation complete.",
+      "exception": true
     }
   },
   "anomalies": [
