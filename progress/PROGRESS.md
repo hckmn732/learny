@@ -1,6 +1,6 @@
 # Progression du projet Learny
 
-> Généré par `node tools/sdd/status.mjs` le 2026-11-24T13:15:50.128Z. Ne pas éditer à la main.
+> Généré par `node tools/sdd/status.mjs` le 2026-11-24T14:14:19.278Z. Ne pas éditer à la main.
 
 ## Synthèse
 
@@ -45,7 +45,7 @@
 | P32 | Mobile — Aujourd’hui, Programme et Agenda | 3/3 | CP-32 | ✅ 2026-11-23 cp-32 |
 | P33 | Mobile — cours, tuteur, quiz et révisions | 5/5 | CP-33 | ✅ 2026-11-23 cp-33 |
 | P34 | Mobile — profil, réglages et connexion tierce | 2/2 | CP-34 | ✅ 2026-11-24 cp-34 |
-| P35 | Mobile — notifications push et publication (exige CP-23) | 2/2 | CP-35 | ⏳ |
+| P35 | Mobile — notifications push et publication (exige CP-23) | 2/2 | CP-35 | ✅ 2026-11-24 cp-35 |
 | P40 | Mode simple — lot 1 : dépôt de documents et formation automatique (web et mobile) | 0/3 | CP-40 | ⏳ |
 
 ## Détail des spécifications
