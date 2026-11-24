@@ -19,6 +19,11 @@
     "title": "Modèle personnel non qualifié",
     "type": "https://learny.app/errors/ai-model-not-qualified"
   },
+  "AI_NOT_CONFIGURED": {
+    "status": 409,
+    "title": "Aucun modèle choisi pour une tâche requise",
+    "type": "https://learny.app/errors/ai-not-configured"
+  },
   "AI_PROVIDER_ERROR": {
     "status": 503,
     "title": "Fournisseur IA indisponible",
@@ -108,6 +113,16 @@
     "status": 404,
     "title": "Clé personnelle introuvable",
     "type": "https://learny.app/errors/credential-not-found"
+  },
+  "DIAGNOSTIC_ALREADY_DONE": {
+    "status": 409,
+    "title": "Diagnostic déjà réalisé",
+    "type": "https://learny.app/errors/diagnostic-already-done"
+  },
+  "DIAGNOSTIC_NO_CHECK": {
+    "status": 409,
+    "title": "Correction immédiate indisponible pendant le diagnostic",
+    "type": "https://learny.app/errors/diagnostic-no-check"
   },
   "EMAIL_NOT_CONFIRMED": {
     "status": 403,
@@ -433,6 +448,26 @@
     "status": 422,
     "title": "Session déjà clôturée",
     "type": "https://learny.app/errors/session-closed"
+  },
+  "SIMPLE_ANALYSIS_LOCKED": {
+    "status": 409,
+    "title": "Analyse déjà lancée",
+    "type": "https://learny.app/errors/simple-analysis-locked"
+  },
+  "SIMPLE_NOT_SIMPLE": {
+    "status": 409,
+    "title": "Formation hors du mode simple",
+    "type": "https://learny.app/errors/simple-not-simple"
+  },
+  "SIMPLE_NO_COURSE_SOURCE": {
+    "status": 422,
+    "title": "Aucun document de cours prêt",
+    "type": "https://learny.app/errors/simple-no-course-source"
+  },
+  "SIMPLE_TOO_MANY_SOURCES": {
+    "status": 422,
+    "title": "Dix documents au plus",
+    "type": "https://learny.app/errors/simple-too-many-sources"
   },
   "TEXT_EMPTY": {
     "status": 422,

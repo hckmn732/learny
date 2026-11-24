@@ -20,6 +20,7 @@ export * from './openapi';
 export * from './routes';
 export * from './security';
 export * from './uploads';
+export * from './simple-mode';
 export * from './push';
 export * from './notifications';
 export * from './notifications-generation-des-rappels';

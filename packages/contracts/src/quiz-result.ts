@@ -69,6 +69,8 @@ export const QuizResultDto = z
         title: z.string().min(1),
       })
       .nullable(),
+    /** SPEC-4001 EF-10 — modules validated by a diagnostic attempt, empty for a validation quiz. */
+    acquiredModuleIds: z.array(Uuid).max(20).default([]),
     history: z.array(AttemptHistoryEntry).max(50),
     gaps: z.array(GapCardDto).max(10),
     mastered: z.array(z.strictObject({ notionId: Uuid, label: z.string().min(1) })).max(100),

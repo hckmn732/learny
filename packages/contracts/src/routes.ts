@@ -43,6 +43,7 @@ import { reviewRoutes } from './review';
 import { searchRoutes } from './search';
 import { seriesMilestoneRoutes } from './serie-regularite-et-jalons-interface';
 import { sidebarRoutes } from './sidebar';
+import { simpleModeRoutes } from './simple-mode';
 import { tutorChatRoutes } from './tutor-chat';
 import { uploadsRoutes } from './uploads';
 import { warmupRoutes } from './warmup';
@@ -59,6 +60,7 @@ export const ROUTES = {
   ...meRoutes,
   devSddStripeCheckout,
   ...uploadsRoutes,
+  ...simpleModeRoutes,
   ...pushRoutes,
   ...devJobsRoutes,
   ...searchRoutes,

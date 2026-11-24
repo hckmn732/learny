@@ -110,6 +110,9 @@ export const EVENTS = {
     formationId: Uuid,
     validatedAt: IsoDateTime,
   }),
+  // SPEC-4001 — mode simple : analyse des documents déposés, puis génération progressive du cours.
+  'simple.analysis.requested': z.object({ userId: Uuid, formationId: Uuid }),
+  'simple.generation.requested': z.object({ userId: Uuid, formationId: Uuid }),
   'formation/paused': z.object({ userId: Uuid, formationId: Uuid, pausedAt: IsoDateTime }),
   'formation/resumed': z.object({ userId: Uuid, formationId: Uuid, resumedOn: CivilDate }),
   'formation/completed': z.object({
