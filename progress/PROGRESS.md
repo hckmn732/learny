@@ -1,22 +1,22 @@
 # Progression du projet Learny
 
-> Généré par `node tools/sdd/status.mjs` le 2026-11-24T05:59:25.644Z. Ne pas éditer à la main.
+> Généré par `node tools/sdd/status.mjs` le 2026-11-24T06:41:01.745Z. Ne pas éditer à la main.
 
 ## Synthèse
 
 | Indicateur | Valeur |
 |---|---|
 | Spécifications | 175 (V1 : 124, V2 : 8, migration : 43) |
-| Terminées | 154 |
-| En cours | 1 |
-| Prêtes | 0 |
-| En attente de dépendances | 19 |
-| Bloquées | 1 |
+| Terminées | 156 |
+| En cours | 0 |
+| Prêtes | 1 |
+| En attente de dépendances | 18 |
+| Bloquées | 0 |
 | Bloquées par une dépendance | 0 |
-| **Avancement global** | **88.0 %** |
+| **Avancement global** | **89.1 %** |
 | Avancement V1 | 99.2 % |
 | Piste active | mobile |
-| Prochaine action | stuck |
+| Prochaine action | start SPEC-3501 — Notifications push natives (FCM et APNs) |
 
 ## Phases et checkpoints
 
@@ -39,7 +39,7 @@
 | P20 | Migration Python — inventaire, contrat et socle | 3/3 | CP-20 | ✅ 2026-11-21 cp-20 |
 | P21 | Migration Python — données, identité et worker | 2/2 | CP-21 | ✅ 2026-11-23 cp-21 |
 | P22 | Migration Python — domaines métier | 7/7 | CP-22 | ✅ 2026-11-23 cp-22 |
-| P23 | Migration Python — bascule et retrait du backend TypeScript | 0/2 | CP-23 | ⏳ |
+| P23 | Migration Python — bascule et retrait du backend TypeScript | 2/2 | CP-23 | ✅ 2026-11-24 cp-23 |
 | P30 | Mobile — socle Expo, design system natif et données | 3/3 | CP-30 | ✅ 2026-11-22 cp-30 |
 | P31 | Mobile — accès et coquille | 2/2 | CP-31 | ✅ 2026-11-23 cp-31 |
 | P32 | Mobile — Aujourd’hui, Programme et Agenda | 3/3 | CP-32 | ✅ 2026-11-23 cp-32 |
@@ -207,8 +207,8 @@
 | [SPEC-2205](../specs/p22-python-domaines/SPEC-2205-domaine-engagement.md) | Domaine Engagement : notifications et automatismes en Python | P22 | ✅ done | 0 | ✓lint ✓typecheck ✓build ✓unit ✓integration ✓e2e ✓visual ✓acceptance | SPEC-2202 |
 | [SPEC-2207](../specs/p22-python-domaines/SPEC-2207-bascule-jobs-crons-demos.md) | Bascule des jobs, des crons et des routes de démonstration vers Python | P22 | ✅ done | 0 | ✓lint ✓typecheck ✓build ✓unit ✓integration ✓e2e ✓visual ✓acceptance | SPEC-2206 |
 | [SPEC-2206](../specs/p22-python-domaines/SPEC-2206-domaines-facturation-confidentialite.md) | Domaines Billing & Entitlements et Privacy & Accounts en Python | P22 | ✅ done | 0 | ✓lint ✓typecheck ✓build ✓unit ✓integration ✓e2e ✓visual ✓acceptance | SPEC-2201, SPEC-2203, SPEC-2204, SPEC-2205 |
-| [SPEC-2301](../specs/p23-python-bascule/SPEC-2301-deploiement-bascule-rollback.md) | Déploiement Coolify, bascule progressive et rollback | P23 | ⛔ blocked | 1 | ✓lint ✓typecheck ✓build ✓unit ✓integration ✓e2e ✓visual ✓acceptance | SPEC-2207 |
-| [SPEC-2302](../specs/p23-python-bascule/SPEC-2302-retrait-backend-typescript.md) | Non-régression complète et retrait du backend TypeScript | P23 | 🔄 in_progress | 1 | — | SPEC-2301 |
+| [SPEC-2301](../specs/p23-python-bascule/SPEC-2301-deploiement-bascule-rollback.md) | Déploiement Coolify, bascule progressive et rollback | P23 | ✅ done | 1 | ✓lint ✓typecheck ✓build ✓unit ✓integration ✓e2e ✓visual ✓acceptance | SPEC-2207 |
+| [SPEC-2302](../specs/p23-python-bascule/SPEC-2302-retrait-backend-typescript.md) | Non-régression complète et retrait du backend TypeScript | P23 | ✅ done | 1 | — | SPEC-2301 |
 | [SPEC-3001](../specs/p30-mobile-socle/SPEC-3001-application-expo-monorepo-et-outillage-sdd-mobile.md) | Application Expo, intégration au monorepo et outillage SDD mobile | P30 | ✅ done | 0 | ✓lint ✓typecheck ✓unit ✓integration ✓e2e ✓visual ✓acceptance | — |
 | [SPEC-3002](../specs/p30-mobile-socle/SPEC-3002-theme-jetons-et-composants-natifs.md) | Thème, jetons et composants natifs iOS et Android | P30 | ✅ done | 0 | ✓lint ✓typecheck ✓unit ✓integration ✓e2e ✓visual ✓acceptance | SPEC-3001 |
 | [SPEC-3003](../specs/p30-mobile-socle/SPEC-3003-client-d-api-session-et-cache-hors-ligne.md) | Client d'API, session sécurisée et cache hors ligne | P30 | ✅ done | 0 | ✓lint ✓typecheck ✓unit ✓integration ✓e2e ✓visual ✓acceptance | SPEC-3001 |
@@ -224,11 +224,11 @@
 | [SPEC-3305](../specs/p33-mobile-apprentissage/SPEC-3305-reviser-quiz-global-echauffement-hors-ligne.md) | Réviser — quiz global, échauffement et jeu hors ligne | P33 | ✅ done | 0 | ✓lint ✓typecheck ✓unit ✓integration ✓e2e ✓visual ✓acceptance | SPEC-3301, SPEC-3201 |
 | [SPEC-3401](../specs/p34-mobile-compte/SPEC-3401-profil-reglages-et-confidentialite.md) | Profil, réglages, pause et confidentialité | P34 | ✅ done | 0 | ✓lint ✓typecheck ✓unit ✓integration ✓e2e ✓visual ✓acceptance | SPEC-3102 |
 | [SPEC-3402](../specs/p34-mobile-compte/SPEC-3402-connexion-avec-apple-et-google.md) | Connexion avec Apple et Google | P34 | ✅ done | 1 | ✓lint ✓typecheck ✓unit ✓integration ✓e2e ✓visual ✓acceptance | SPEC-3101 |
-| [SPEC-3501](../specs/p35-mobile-notifications-livraison/SPEC-3501-notifications-push-natives.md) | Notifications push natives (FCM et APNs) | P35 | ⏳ waiting | 0 | — | SPEC-3401 |
+| [SPEC-3501](../specs/p35-mobile-notifications-livraison/SPEC-3501-notifications-push-natives.md) | Notifications push natives (FCM et APNs) | P35 | 🟢 ready | 0 | — | SPEC-3401 |
 | [SPEC-3502](../specs/p35-mobile-notifications-livraison/SPEC-3502-accessibilite-performances-et-publication.md) | Accessibilité, performances et publication sur les stores | P35 | ⏳ waiting | 0 | — | SPEC-3203, SPEC-3303, SPEC-3304, SPEC-3305, SPEC-3402, SPEC-3501 |
 
 ## Anomalies et blocages
 
-- SPEC-2301 (blocked) : staging Coolify non fourni par le porteur : CA-1/CA-2/CA-3/CA-4 non mesurables (ADR-2009, CL-3)
+Aucun.
 
 Détails : [anomalies.md](anomalies.md), [blockers.md](blockers.md).
