@@ -1,0 +1,44 @@
+[
+  {
+    "id": "landmark-unique",
+    "impact": "moderate",
+    "tags": [
+      "cat.semantics",
+      "best-practice"
+    ],
+    "description": "Ensure landmarks are unique",
+    "help": "Landmarks should have a unique role or role/label/title (i.e. accessible name) combination",
+    "helpUrl": "https://dequeuniversity.com/rules/axe/4.14/landmark-unique?application=playwright",
+    "nodes": [
+      {
+        "any": [
+          {
+            "id": "landmark-is-unique",
+            "data": {
+              "role": "complementary",
+              "accessibleText": null
+            },
+            "relatedNodes": [
+              {
+                "html": "<aside class=\"flex flex-col gap-14\">",
+                "target": [
+                  ".items-start > aside"
+                ]
+              }
+            ],
+            "impact": "moderate",
+            "message": "The landmark must have a unique aria-label, aria-labelledby, or title to make landmarks distinguishable"
+          }
+        ],
+        "all": [],
+        "none": [],
+        "impact": "moderate",
+        "html": "<aside data-sidebar=\"\" data-testid=\"sidebar\" class=\"box-border flex-col gap-10 bg-ink px-12 py-16 text-white hidden nav:sticky nav:top-0 nav:flex nav:h-screen nav:w-sidebar nav:shrink-0\">",
+        "target": [
+          ".px-12"
+        ],
+        "failureSummary": "Fix any of the following:\n  The landmark must have a unique aria-label, aria-labelledby, or title to make landmarks distinguishable"
+      }
+    ]
+  }
+]

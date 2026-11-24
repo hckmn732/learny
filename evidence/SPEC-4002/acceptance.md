@@ -17,6 +17,13 @@ rejoué de bout en bout dans Chromium (vidéo), comparé aux maquettes de `desig
 | visual | 4 tests `@SPEC-4002 @visual` (6 étapes + état sans clé en bureau, dépôt et aperçu en mobile web) |
 | acceptance | ce fichier |
 
+Non-régression exécutée sous `flock /tmp/learny-sdd-db.lock` :
+`pnpm test:e2e --grep "@SPEC-603|@SPEC-604|@SPEC-605|@SPEC-611" --update-snapshots`
+→ **19 réussis, 0 échec** (bureau et mobile web). Deux lignes de base de l'accueil sont
+régénérées (section « Commencer une formation » et bouton de dialogue, EF-1) ; l'assertion de
+SPEC-603 sur le lien « Nouvelle formation » devient la vérification du bouton et de la boîte de
+dialogue, les autres assertions de l'écran sont inchangées.
+
 ## Critères d'acceptation
 
 - ✅ **CA-1** — Depuis l'accueil, déposer un cours et un TD, lancer l'analyse, valider et commencer
