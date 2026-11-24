@@ -7,9 +7,12 @@ import { createElement } from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 
+import { LEGAL_IDENTITY, legalConfig } from '@learny/config';
+
 import CguPage from '../../app/legal/cgu/page';
 import ConfidentialitePage from '../../app/legal/confidentialite/page';
 import MentionsPage from '../../app/legal/mentions/page';
+import { LegalPage } from '../../components/legal/LegalPage';
 import { decideRoute } from '../../lib/route-guard';
 import { SITE_FOOTER_LINKS } from '../../lib/site-footer-links';
 
@@ -118,10 +121,10 @@ describe('[SPEC-806] legal routes', () => {
   });
 
   it('CA-1, ET-2 — une valeur hostile reste du texte assaini, jamais du HTML brut', () => {
-    vi.stubEnv('LEGAL_ENTITY_NAME', '<img src=x onerror=alert(1)>');
-    const html = renderToStaticMarkup(createElement(MentionsPage));
+    // ADR-4007: the identity is a code constant, injected here as the page would receive it.
+    const config = legalConfig({ ...LEGAL_IDENTITY, entityName: '<img src=x onerror=alert(1)>' });
+    const html = renderToStaticMarkup(createElement(LegalPage, { document: 'mentions', config }));
     expect(html).not.toContain('<img');
     expect(html).not.toContain('onerror=');
-    vi.unstubAllEnvs();
   });
 });

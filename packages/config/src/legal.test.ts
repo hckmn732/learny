@@ -5,10 +5,10 @@ import {
   LegalConfigError,
   activeLegalVersions,
   isCurrentVersion,
-  legalConfigFromEnv,
+  legalConfig,
   parseLegalConfig,
 } from './legal';
-import { LEGAL_VERSIONS } from './product';
+import { LEGAL_IDENTITY, LEGAL_VERSIONS } from './product';
 
 const COMPLETE = {
   LEGAL_ENTITY_NAME: 'Learny Éditions SAS',
@@ -82,14 +82,29 @@ describe('[SPEC-806] legal configuration', () => {
     );
   });
 
-  it('CA-3 — les versions actives viennent de l’environnement et la comparaison est stricte', () => {
-    const versions = activeLegalVersions({
-      LEGAL_CGU_VERSION: '2027-01-01',
-      LEGAL_PRIVACY_VERSION: '2027-02-02',
+  it('CA-3 — les versions actives sont les constantes du code et la comparaison est stricte', () => {
+    const versions = activeLegalVersions();
+    expect(versions).toEqual(LEGAL_VERSIONS);
+    expect(isCurrentVersion(LEGAL_VERSIONS.cgu, versions.cgu)).toBe(true);
+    expect(isCurrentVersion('2027-01-01', versions.cgu)).toBe(false);
+  });
+
+  it('ADR-4007 — l’identité vient de la constante du code, jamais de l’environnement', () => {
+    process.env.LEGAL_ENTITY_NAME = 'Ignorée';
+    try {
+      expect(JSON.stringify(legalConfig())).not.toContain('Ignorée');
+      expect(legalConfig().identity).toEqual(LEGAL_IDENTITY);
+    } finally {
+      delete process.env.LEGAL_ENTITY_NAME;
+    }
+    const complete = legalConfig({
+      entityName: COMPLETE.LEGAL_ENTITY_NAME,
+      entityAddress: COMPLETE.LEGAL_ENTITY_ADDRESS,
+      contactEmail: COMPLETE.LEGAL_CONTACT_EMAIL,
+      hostName: COMPLETE.LEGAL_HOST_NAME,
     });
-    expect(versions).toEqual({ cgu: '2027-01-01', privacy: '2027-02-02' });
-    expect(isCurrentVersion('2027-01-01', versions.cgu)).toBe(true);
-    expect(isCurrentVersion('2026-11-11', versions.cgu)).toBe(false);
-    expect(legalConfigFromEnv(COMPLETE).complete).toBe(true);
+    expect(complete.complete).toBe(true);
+    const partial = legalConfig({ ...complete.identity, hostName: LEGAL_PLACEHOLDER });
+    expect(partial.missingIdentity).toEqual(['LEGAL_HOST_NAME']);
   });
 });

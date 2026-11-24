@@ -7,7 +7,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 
-import { legalConfigFromEnv, type LegalConfig } from '@learny/config';
+import { legalConfig, type LegalConfig } from '@learny/config';
 
 /**
  * Directory holding the legal templates: `docs/legal` searched from the working directory
@@ -95,7 +95,7 @@ export function substituteLegalVariables(template: string, config: LegalConfig):
 export function parseLegalDocument(
   key: LegalPageKey,
   template: string,
-  config: LegalConfig = legalConfigFromEnv(),
+  config: LegalConfig = legalConfig(),
 ): LegalDocumentView {
   const meta: Record<string, string> = {};
   const contentLines: string[] = [];
@@ -171,5 +171,5 @@ export function loadLegalDocument(
   options: { root?: string; config?: LegalConfig } = {},
 ): LegalDocumentView {
   const template = readTemplate(key, options.root);
-  return parseLegalDocument(key, template, options.config ?? legalConfigFromEnv());
+  return parseLegalDocument(key, template, options.config ?? legalConfig());
 }
