@@ -58,6 +58,10 @@ env.EXPO_PUBLIC_SDD_OAUTH_PASSWORD = env.MOBILE_OAUTH_PASSWORD ?? '';
 // getDevicePushTokenAsync. The registration, the API call and the switch are the real ones; only
 // the token is simulated, and this flag never exists in a production build (ADR-3007 §5).
 env.EXPO_PUBLIC_SDD_PUSH_MOCK = '1';
+// Destination interne de la notification locale du flux de toucher (SPEC-3501 CA-3) : la tentative
+// preparee par `e2e/sql/SPEC-3501-seed-quiz.sql`, a identifiant fixe. Aucune valeur de production.
+env.EXPO_PUBLIC_SDD_PUSH_HREF =
+  env.MOBILE_PUSH_HREF ?? '/quiz/35010000-0000-4000-8000-000000000001';
 
 const REQUIRED = [
   'EXPO_PUBLIC_API_URL',

@@ -68,8 +68,8 @@ tags:
     optional: true
 - waitForAnimationToEnd:
     timeout: 5000
-# La page de démonstration programme la notification locale de même charge (EF-2).
-- openLink: learny://_dev/sdd/push?href=/quiz/35010000-0000-4000-8000-000000000001
+# La page de démonstration programme la notification locale de même charge (EF-2) ; sa destination\n# interne (/quiz/<tentative> du seed) est portée par le build e2e, pas par une chaîne de requête.
+- openLink: learny://_dev/sdd/push
 - extendedWaitUntil:
     visible:
       id: sdd-push-status

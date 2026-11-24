@@ -14,7 +14,10 @@ import { ANDROID_CHANNEL_ID, prepareNotificationChannel } from '../../../src/not
 import { theme } from '../../../src/theme';
 import { Text } from '../../../src/ui/Text';
 
-const DEFAULT_HREF = '/aujourdhui';
+// Destination interne de la notification de démonstration : portée par le build e2e (comme le
+// compte du fournisseur simulé, ADR-3402 ET-3), jamais une valeur de production.
+const DEFAULT_HREF =
+  (process.env.EXPO_PUBLIC_SDD_PUSH_HREF as string | undefined) ?? '/aujourdhui';
 const DEFAULT_TITLE = 'Quiz de validation';
 const DEFAULT_BODY = 'Il vous reste 40 minutes avant la fermeture du quiz.';
 
