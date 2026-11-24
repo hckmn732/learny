@@ -45,6 +45,9 @@ export const formationObjective = pgEnum('formation_objective', [
   'project',
 ]);
 
+/** ADR-4003 D2 — a formation is built by the tutor or from deposited documents (SPEC-4001). */
+export const formationCreationMode = pgEnum('formation_creation_mode', ['tutor', 'simple']);
+
 /** BR-FOR-01, BR-FOR-11, BR-FOR-12 — lifecycle of a formation. */
 export const formationStatus = pgEnum('formation_status', [
   'cadrage',
@@ -84,7 +87,7 @@ export const cadrageKey = pgEnum('cadrage_key', [
 export const importKind = pgEnum('import_kind', ['file', 'text']);
 
 /** BR-FOR-04 — origin of a stored programme proposal version. */
-export const programmeSource = pgEnum('programme_source', ['generated', 'imported']);
+export const programmeSource = pgEnum('programme_source', ['generated', 'imported', 'document']);
 
 /** BR-FOR-07 — module status (mirror of the owner's `module_progress`). */
 export const moduleStatus = pgEnum('module_status', ['locked', 'open', 'validated']);
@@ -96,6 +99,7 @@ export const contribStatus = pgEnum('contrib_status', ['in_progress', 'done']);
 export const linkKind = pgEnum('link_kind', ['prerequisite', 'confusion', 'tutor']);
 
 export const FORMATION_OBJECTIVES = formationObjective.enumValues;
+export const FORMATION_CREATION_MODES = formationCreationMode.enumValues;
 export const FORMATION_STATUSES = formationStatus.enumValues;
 export const FORMATION_ACCENTS = formationAccent.enumValues;
 export const MAINTENANCE_MODES = maintenanceMode.enumValues;
@@ -128,6 +132,10 @@ export const formations = pgTable(
       .notNull()
       .default(sql`'{}'::public.formation_objective[]`),
     status: formationStatus('status').notNull().default('cadrage'),
+    /** ADR-4003 D2 — simple mode skips the scoping conversation (BR-FOR-01, BR-FOR-02). */
+    creationMode: formationCreationMode('creation_mode').notNull().default('tutor'),
+    /** EF-1 — optional motivation of at most 300 characters, simple mode only. */
+    simpleMotivation: text('simple_motivation'),
     cadrageProfile: jsonb('cadrage_profile').$type<CadrageProfile>().notNull().default({}),
     volumeHours: smallint('volume_hours'),
     startDate: date('start_date', { mode: 'string' }),
@@ -161,6 +169,14 @@ export const formations = pgTable(
       sql`${table.studyOverride} is null or jsonb_typeof(${table.studyOverride}) = 'object'`,
     ),
     check('formations_default_threshold_check', sql`${table.defaultThreshold} between 60 and 95`),
+    check(
+      'formations_simple_motivation_length_check',
+      sql`${table.simpleMotivation} is null or char_length(${table.simpleMotivation}) <= 300`,
+    ),
+    check(
+      'formations_simple_motivation_mode_check',
+      sql`${table.simpleMotivation} is null or ${table.creationMode} = 'simple'`,
+    ),
     check(
       'formations_exam_format_check',
       sql`${table.examFormat} is null or jsonb_typeof(${table.examFormat}) = 'object'`,

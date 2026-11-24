@@ -533,6 +533,60 @@
       }
     },
     {
+      "table": "simple_analyses",
+      "category": "personal",
+      "scenario": "personal-row",
+      "probeColumn": "owner_id",
+      "policies": [
+        "simple_analyses_owner_all"
+      ],
+      "owner": {
+        "select": true,
+        "insert": true,
+        "update": true,
+        "delete": true
+      },
+      "member": {
+        "select": false,
+        "insert": false,
+        "update": false,
+        "delete": false
+      },
+      "nonMember": {
+        "select": false,
+        "insert": false,
+        "update": false,
+        "delete": false
+      }
+    },
+    {
+      "table": "chapter_sources",
+      "category": "personal",
+      "scenario": "personal-row",
+      "probeColumn": "formation_id",
+      "policies": [
+        "chapter_sources_owner_all"
+      ],
+      "owner": {
+        "select": true,
+        "insert": true,
+        "update": true,
+        "delete": true
+      },
+      "member": {
+        "select": false,
+        "insert": false,
+        "update": false,
+        "delete": false
+      },
+      "nonMember": {
+        "select": false,
+        "insert": false,
+        "update": false,
+        "delete": false
+      }
+    },
+    {
       "table": "module_progress",
       "category": "personal",
       "scenario": "personal-row",
@@ -1637,7 +1691,7 @@
   ],
   "categoryCounts": {
     "shared-programme": 7,
-    "personal": 46,
+    "personal": 48,
     "service": 7
   },
   "policyNames": [
@@ -1655,6 +1709,7 @@
     "bricks_owner_all",
     "cadrage_messages_owner_all",
     "chapter_progress_owner_all",
+    "chapter_sources_owner_all",
     "chapter_summaries_owner_all",
     "chapters_member_select",
     "chapters_owner_all",
@@ -1710,6 +1765,7 @@
     "resources_owner_all",
     "review_logs_owner_select",
     "schedule_slots_owner_all",
+    "simple_analyses_owner_all",
     "study_preferences_owner_all",
     "subscriptions_owner_select",
     "tutor_conversations_owner_all",

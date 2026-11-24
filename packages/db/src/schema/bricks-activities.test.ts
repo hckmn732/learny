@@ -86,6 +86,7 @@ describe('[SPEC-106] brick schema', () => {
       'self_test',
       'scripted_dialogue',
       'project_step',
+      'diagnostic',
     ]);
     expect(ACTIVITY_STATUSES).toEqual(['draft', 'ready', 'archived']);
     expect(ATTEMPT_STATUSES).toEqual([

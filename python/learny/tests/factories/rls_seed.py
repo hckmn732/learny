@@ -687,6 +687,24 @@ async def create_seed(conn: Any) -> Seed:
         formation=formation,
         user=a,
     )
+    owned["simple_analyses"] = a
+    await conn.execute(
+        text(
+            "insert into public.simple_analyses (formation_id, owner_id, status, steps) "
+            "values (cast(:formation as uuid), cast(:user as uuid), 'collecting', '[]'::jsonb)"
+        ),
+        {"formation": formation, "user": a},
+    )
+    owned["chapter_sources"] = formation
+    await conn.execute(
+        text(
+            "insert into public.chapter_sources "
+            "(chapter_id, resource_id, formation_id, page_from, page_to) "
+            "values (cast(:chapter as uuid), cast(:resource as uuid), "
+            "cast(:formation as uuid), 1, 2)"
+        ),
+        {"chapter": chapter1, "resource": resource_id, "formation": formation},
+    )
     owned["notion_links"] = await identifier(
         conn,
         """
@@ -829,6 +847,32 @@ async def _programme_imports(conn: Any, s: Seed) -> None:
             "values (cast(:formation as uuid), cast(:user as uuid), 'text', 'forge')"
         ),
         {"formation": s.programme.formation_id, "user": s.a},
+    )
+
+
+@foreign("simple_analyses")
+async def _simple_analyses(conn: Any, s: Seed) -> None:
+    await conn.execute(
+        text(
+            "insert into public.simple_analyses (formation_id, owner_id, status, steps) "
+            "values (cast(:formation as uuid), cast(:user as uuid), 'collecting', '[]'::jsonb)"
+        ),
+        {"formation": s.programme.formation_id, "user": s.a},
+    )
+
+
+@foreign("chapter_sources")
+async def _chapter_sources(conn: Any, s: Seed) -> None:
+    await conn.execute(
+        text(
+            "insert into public.chapter_sources (chapter_id, resource_id, formation_id) "
+            "values (cast(:chapter as uuid), cast(:resource as uuid), cast(:formation as uuid))"
+        ),
+        {
+            "chapter": s.programme.chapter_ids[0],
+            "resource": s.resource_id,
+            "formation": s.programme.formation_id,
+        },
     )
 
 

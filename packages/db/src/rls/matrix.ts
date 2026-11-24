@@ -136,6 +136,9 @@ export const RLS_MATRIX: readonly RlsTableMatrix[] = [
   personal('programme_proposals', 'id', ['programme_proposals_owner_all']),
   personal('programme_change_requests', 'id', ['programme_change_requests_owner_all']),
   personal('chapter_progress', 'user_id', ['chapter_progress_owner_all']),
+  // SPEC-4001 — mode simple : l'analyse et les plages de pages restent privées au propriétaire.
+  personal('simple_analyses', 'owner_id', ['simple_analyses_owner_all']),
+  personal('chapter_sources', 'formation_id', ['chapter_sources_owner_all']),
   personal('module_progress', 'user_id', ['module_progress_owner_all']),
 
   // Ressources et passages (SPEC-104).

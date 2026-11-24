@@ -87,6 +87,7 @@ export const activityKind = pgEnum('activity_kind', [
   'self_test',
   'scripted_dialogue',
   'project_step',
+  'diagnostic',
 ]);
 
 /** EF-3 — an activity is a draft until its items are checked, then ready, later archived. */

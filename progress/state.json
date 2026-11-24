@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-11-24T14:14:19.276Z",
+  "updatedAt": "2026-11-24T17:46:48.915Z",
   "specs": {
     "SPEC-001": {
       "status": "done",
@@ -8050,11 +8050,11 @@
       }
     },
     "SPEC-4001": {
-      "status": "pending",
+      "status": "in_progress",
       "attempts": 0,
-      "startedAt": null,
+      "startedAt": "2026-11-24T17:46:48.915Z",
       "completedAt": null,
-      "branch": null,
+      "branch": "spec/SPEC-4001-mode-simple-backend-et-contrat",
       "commit": null,
       "lastError": null,
       "validations": {}

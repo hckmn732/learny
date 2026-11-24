@@ -393,6 +393,20 @@
       "when": 1795509640343,
       "tag": "0056_futuristic_sebastian_shaw",
       "breakpoints": true
+    },
+    {
+      "idx": 57,
+      "version": "7",
+      "when": 1795542966731,
+      "tag": "0057_curved_sprite",
+      "breakpoints": true
+    },
+    {
+      "idx": 58,
+      "version": "7",
+      "when": 1795542983717,
+      "tag": "0058_simple_mode_rules",
+      "breakpoints": true
     }
   ]
 }
