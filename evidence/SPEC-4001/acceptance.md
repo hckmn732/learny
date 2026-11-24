@@ -37,13 +37,18 @@ Le contrat est régénéré et vérifié : `api/openapi.yaml` (165 opérations),
 
 ## Non-régression
 
-- Les suites existantes touchées par la validation du programme restent vertes : le projet
-  Vitest unitaire complet (2345 tests) et les 12 autres fichiers pytest d'intégration exécutés
-  n'ont aucun échec.
-- Rejeu ciblé des spécifications citées par la section 12 : `apps/web/e2e/specs/p6` et `p7`
-  (SPEC-605/607/608/611/618) exécutés lors de la campagne `@SPEC-605` déjà présente dans la
-  base ; les fichiers `test_programme.py` et `test_content_uploads.py` du suite pytest
-  d'intégration ont été rejoués verts après la modification de la validation du programme.
+- Le projet Vitest unitaire complet (2345 tests) est vert dans l'étape `unit`.
+- Rejeu ciblé du 2026-11-24 : `test_programme.py`, `test_content_uploads.py`,
+  `test_content_ingestion.py`, `test_facade.py` et `test_route_coverage.py` → 28 tests verts
+  après la modification de la validation du programme et la régénération du contrat.
+- Campagne Playwright `@SPEC-(605|607|608|611|618)` rejouée : **12 tests verts**, 9 échecs
+  **tous `@visual`** (comparaisons de captures), sans lien avec SPEC-4001.
+  Preuve du caractère préexistant : les mêmes captures échouent à l'identique en rejouant la
+  campagne avec le contenu de `main` appliqué au worktree (`git checkout main -- .`, build,
+  même commande) — par exemple `SCR-05-proposition-mobile` : image 390×2590 attendue contre
+  390×2547 produite, 70 187 pixels différents, valeur identique dans les deux exécutions.
+  Les écrans concernés (cours, ressources de module, quiz, gestion de formation) ne consomment
+  ni le DTO du programme ni les nouvelles routes. Aucune ligne de base n'a été régénérée.
 
 ## Décisions consignées
 
