@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-11-24T13:14:31.008Z",
+  "updatedAt": "2026-11-24T13:15:50.126Z",
   "specs": {
     "SPEC-001": {
       "status": "done",
@@ -8005,7 +8005,7 @@
     },
     "SPEC-3502": {
       "status": "done",
-      "attempts": 0,
+      "attempts": 1,
       "startedAt": "2026-11-24T11:26:35.718Z",
       "completedAt": "2026-11-24T13:14:31.004Z",
       "branch": "spec/SPEC-3502-accessibilite-performances-et-publicatio",
@@ -8253,6 +8253,13 @@
       "at": "2026-11-24T11:17:30.523Z",
       "attempts": 1,
       "reason": "identifiants APNs (cle .p8) et FCM (compte de service) absents : aucun envoi reel possible, tout le canal est livre et prouve en PUSH_MODE=mock, iOS non compilable sans macOS",
+      "external": true
+    },
+    {
+      "spec": "SPEC-3502",
+      "at": "2026-11-24T13:15:50.055Z",
+      "attempts": 1,
+      "reason": "comptes Apple Developer, Google Play et projet EAS absents, aucun macOS : builds signes, TestFlight, Google Play test interne, flux iOS et VoiceOver non mesurables ; identifiants APNs/FCM absents ; AAB non produit",
       "external": true
     }
   ]
