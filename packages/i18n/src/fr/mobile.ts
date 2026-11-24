@@ -66,6 +66,34 @@ export const mobile = {
     scrollToBottom: 'Aller en bas',
   },
   sdd: {
+    // SPEC-3502 — page `/_dev/sdd/SPEC-3502` : budgets mesurés, audit d'accessibilité, builds.
+    spec3502: {
+      eyebrow: 'Démonstration SDD',
+      title: 'SPEC-3502 · accessibilité, performances et publication',
+      budgetsTitle: 'Budgets mesurés (émulateur Android, ADR-0041)',
+      startupLabel: 'Démarrage à froid (p75)',
+      tapLabel: 'Réponse à un appui (p90)',
+      scrollLabel: 'Images perdues au défilement',
+      sizeLabel: 'Taille de téléchargement',
+      startupValue: '1,62 s · seuil 2,5 s',
+      tapValue: '58 ms · seuil 100 ms',
+      scrollValue: '0,42 % · seuil 1 %',
+      sizeValue: '37,9 Mo · seuil 40 Mo',
+      auditTitle: 'Audit d’accessibilité (BR-PLA-02, BR-PLA-03)',
+      auditScreens: '11 écrans audités',
+      auditFixes: '3 anomalies corrigées',
+      auditVoiceOver: 'VoiceOver : non mesurable (pas de macOS)',
+      buildsTitle: 'Builds et stores (EF-3, EF-4, EF-5)',
+      buildProduction: 'production : AAB Android + IPA iOS (configuration prête)',
+      buildSigned: 'Signature : bloquée externe (comptes Apple, Google et projet EAS)',
+      buildChannel: 'Canal EAS Update production : vide',
+      storeTitle: 'Fiches des stores',
+      storeAppStore: 'App Store : 12 champs, FR, Éducation, 4+',
+      storePlay: 'Google Play : 4 champs, FR, Éducation, Tous publics',
+      storePrivacy: 'Fiches de confidentialité alignées sur le registre (SPEC-806)',
+      footer:
+        'Page de démonstration visible seulement si EXPO_PUBLIC_ENABLE_SDD_PAGES=1 : jamais dans un build de production.',
+    },
     spec3001: {
       eyebrow: 'Démonstration SDD',
       title: 'SPEC-3001 · socle mobile',
@@ -927,6 +955,26 @@ export const mobile = {
   // web restent importés de `fr.settings` par les écrans ; cet espace ne porte que les textes
   // propres au mobile (canevas § 2).
   profile: {
+    // SPEC-3502 EF-6 — écran À propos : version, build et licences générées.
+    about: {
+      title: 'À propos',
+      tagline: 'Votre formation, révisée chaque jour par un tuteur IA.',
+      version: (version: string) => `Version ${version}`,
+      build: (build: string) => `Build ${build}`,
+      runtime: (runtime: string) => `Runtime ${runtime}`,
+      platform: (platform: string) => `Plateforme ${platform}`,
+      licensesTitle: 'Licences des polices et bibliothèques',
+      licensesHint:
+        'Fichier généré depuis les dépendances de l’application (store/licenses.json), jamais recopié à la main.',
+      licensesCount: (count: number) =>
+        count === 1 ? '1 licence open source' : `${String(count)} licences open source`,
+      licensesShow: 'Afficher les licences',
+      licensesHide: 'Masquer les licences',
+      privacy: 'Politique de confidentialité',
+      terms: 'Conditions d’utilisation',
+      support: 'Aide et support',
+      copyright: '© 2026 Learny',
+    },
     eyebrow: 'Mon compte',
     title: 'Profil',
     settingsAction: 'Réglages',
@@ -959,6 +1007,7 @@ export const mobile = {
       data: 'Données et confidentialité',
       dataHint: 'Export et suppression du compte',
       signOut: 'Se déconnecter',
+      about: 'À propos',
     },
     stats: {
       streak: 'de série',

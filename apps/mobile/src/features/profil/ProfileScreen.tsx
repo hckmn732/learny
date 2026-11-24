@@ -357,7 +357,15 @@ export function ProfileScreen() {
                   }}
                 />
                 <ListRow
-                  testID="profile-sign-out"
+                  testID="profile-sign-out"                <ListRow
+                  testID="profile-row-about"
+                  icon="logo"
+                  title={t.rows.about}
+                  onPress={() => {
+                    router.push('/profil/a-propos');
+                  }}
+                />
+
                   icon="logout"
                   title={t.rows.signOut}
                   onPress={signOut}
