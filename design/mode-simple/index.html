@@ -487,7 +487,7 @@ function render(){
 function fit(){
   const dw = document.getElementById('dw'), ds = document.getElementById('ds');
   if(!dw) return;
-  const w = S.view==='both' ? Math.min(dw.parentElement.clientWidth - 470, 1280) : Math.min(dw.parentElement.clientWidth - 40, 1280);
+  const w = S.view==='both' ? Math.min(dw.parentElement.clientWidth - 520, 1280) : Math.min(dw.parentElement.clientWidth - 40, 1280);
   const k = Math.max(.3, Math.min(1, w/1280));
   dw.style.width = (1280*k)+'px';
   ds.style.transform = `scale(${k})`;
