@@ -1,20 +1,20 @@
 # Progression du projet Learny
 
-> Généré par `node tools/sdd/status.mjs` le 2026-11-25T02:28:20.769Z. Ne pas éditer à la main.
+> Généré par `node tools/sdd/status.mjs` le 2026-11-25T06:50:26.590Z. Ne pas éditer à la main.
 
 ## Synthèse
 
 | Indicateur | Valeur |
 |---|---|
 | Spécifications | 178 (V1 : 124, V2 : 8, migration : 46) |
-| Terminées | 161 |
+| Terminées | 178 |
 | En cours | 0 |
 | Prêtes | 0 |
-| En attente de dépendances | 17 |
+| En attente de dépendances | 0 |
 | Bloquées | 0 |
 | Bloquées par une dépendance | 0 |
-| **Avancement global** | **90.4 %** |
-| Avancement V1 | 99.2 % |
+| **Avancement global** | **100.0 %** |
+| Avancement V1 | 100.0 % |
 | Piste active | mode-simple |
 | Prochaine action | checkpoint CP-40 |
 
@@ -29,13 +29,13 @@
 | P4 | Moteur d'apprentissage (déterministe) | 11/11 | CP-4 | ✅ 2026-11-12 cp-4 v0.4.0 |
 | P5 | IA, ingestion et briques | 13/13 | CP-5 | ✅ 2026-11-13 cp-5 v0.5.0 |
 | P6 | Parcours d'apprentissage (fonctionnalités cœur) | 18/18 | CP-6 | ✅ 2026-11-14 cp-6 v0.6.0 |
-| P7 | Révisions, agenda, engagement et réglages | 25/25 | CP-7 | ⏳ |
-| P8 | Plateforme, qualité et livraison V1 | 7/8 | CP-8 | ⏳ |
-| P9 | Fonctionnalités V2 et livraison V2 | 0/8 | CP-9 | ⏳ |
-| P10 | Migration — préparation, couche HTTP et paquets partagés | 4/4 | CP-10 | ⏳ |
-| P11 | Migration — application API autonome | 0/3 | CP-11 | ⏳ |
-| P12 | Migration — bascule du web sur l’API | 0/3 | CP-12 | ⏳ |
-| P13 | Migration — API multi-clients et clôture | 0/2 | CP-13 | ⏳ |
+| P7 | Révisions, agenda, engagement et réglages | 25/25 | CP-7 | ✅ 2026-11-24 cp-7 |
+| P8 | Plateforme, qualité et livraison V1 | 8/8 | CP-8 | ✅ 2026-11-24 cp-8 v1.0.0 |
+| P9 | Fonctionnalités V2 et livraison V2 | 8/8 | CP-9 | ✅ 2026-11-24 cp-9 v2.0.0 |
+| P10 | Migration — préparation, couche HTTP et paquets partagés | 4/4 | CP-10 | ✅ 2026-11-24 cp-10 |
+| P11 | Migration — application API autonome | 3/3 | CP-11 | ✅ 2026-11-24 cp-11 |
+| P12 | Migration — bascule du web sur l’API | 3/3 | CP-12 | ✅ 2026-11-24 cp-12 |
+| P13 | Migration — API multi-clients et clôture | 2/2 | CP-13 | ✅ 2026-11-24 cp-13 |
 | P20 | Migration Python — inventaire, contrat et socle | 3/3 | CP-20 | ✅ 2026-11-21 cp-20 |
 | P21 | Migration Python — données, identité et worker | 2/2 | CP-21 | ✅ 2026-11-23 cp-21 |
 | P22 | Migration Python — domaines métier | 7/7 | CP-22 | ✅ 2026-11-23 cp-22 |
@@ -175,27 +175,27 @@
 | [SPEC-805](../specs/p8-livraison-v1/SPEC-805-securite.md) | Sécurité | P8 | ✅ done | 0 | ✓lint ✓typecheck ✓unit ✓integration ✓e2e ✓visual ✓acceptance | SPEC-802 |
 | [SPEC-806](../specs/p8-livraison-v1/SPEC-806-rgpd-et-pages-legales.md) | RGPD et pages légales | P8 | ✅ done | 0 | ✓lint ✓typecheck ✓unit ✓integration ✓e2e ✓visual ✓acceptance | SPEC-802, SPEC-211 |
 | [SPEC-807](../specs/p8-livraison-v1/SPEC-807-parcours-de-bout-en-bout-et-non-regression-globale.md) | Parcours de bout en bout et non-régression globale | P8 | ✅ done | 0 | ✓lint ✓typecheck ✓build ✓unit ✓integration ✓e2e ✓visual ✓acceptance | SPEC-803, SPEC-804, SPEC-805, SPEC-806, SPEC-801 |
-| [SPEC-808](../specs/p8-livraison-v1/SPEC-808-mise-en-production-et-version-1-0-0.md) | Mise en production et version 1.0.0 | P8 | ⏳ waiting | 0 | — | SPEC-807, SPEC-013 |
-| [SPEC-901](../specs/p9-v2/SPEC-901-import-audio-avec-transcription.md) | Import audio avec transcription | P9 | ⏳ waiting | 0 | — | SPEC-509 |
-| [SPEC-902](../specs/p9-v2/SPEC-902-import-video-avec-transcription.md) | Import vidéo avec transcription | P9 | ⏳ waiting | 0 | — | SPEC-901 |
-| [SPEC-903](../specs/p9-v2/SPEC-903-detection-des-liens-entre-ressources-et-entre-modu.md) | Détection des liens entre ressources et entre modules | P9 | ⏳ waiting | 0 | — | SPEC-616, SPEC-511 |
-| [SPEC-904](../specs/p9-v2/SPEC-904-explique-a-un-debutant.md) | Explique à un débutant | P9 | ⏳ waiting | 0 | — | SPEC-905 |
-| [SPEC-905](../specs/p9-v2/SPEC-905-mises-en-situation.md) | Mises en situation | P9 | ⏳ waiting | 0 | — | SPEC-508, SPEC-503 |
-| [SPEC-906](../specs/p9-v2/SPEC-906-projet-fil-rouge.md) | Projet fil rouge | P9 | ⏳ waiting | 0 | — | SPEC-613, SPEC-407 |
-| [SPEC-907](../specs/p9-v2/SPEC-907-detection-fine-de-la-baisse-d-engagement.md) | Détection fine de la baisse d'engagement | P9 | ⏳ waiting | 0 | — | SPEC-711 |
-| [SPEC-908](../specs/p9-v2/SPEC-908-version-2-0-0.md) | Version 2.0.0 | P9 | ⏳ waiting | 0 | — | SPEC-901, SPEC-902, SPEC-903, SPEC-904, SPEC-905, SPEC-906, SPEC-907 |
+| [SPEC-808](../specs/p8-livraison-v1/SPEC-808-mise-en-production-et-version-1-0-0.md) | Mise en production et version 1.0.0 | P8 | ✅ done | 0 | — | SPEC-807, SPEC-013 |
+| [SPEC-901](../specs/p9-v2/SPEC-901-import-audio-avec-transcription.md) | Import audio avec transcription | P9 | ✅ done | 0 | — | SPEC-509 |
+| [SPEC-902](../specs/p9-v2/SPEC-902-import-video-avec-transcription.md) | Import vidéo avec transcription | P9 | ✅ done | 0 | — | SPEC-901 |
+| [SPEC-903](../specs/p9-v2/SPEC-903-detection-des-liens-entre-ressources-et-entre-modu.md) | Détection des liens entre ressources et entre modules | P9 | ✅ done | 0 | — | SPEC-616, SPEC-511 |
+| [SPEC-904](../specs/p9-v2/SPEC-904-explique-a-un-debutant.md) | Explique à un débutant | P9 | ✅ done | 0 | — | SPEC-905 |
+| [SPEC-905](../specs/p9-v2/SPEC-905-mises-en-situation.md) | Mises en situation | P9 | ✅ done | 0 | — | SPEC-508, SPEC-503 |
+| [SPEC-906](../specs/p9-v2/SPEC-906-projet-fil-rouge.md) | Projet fil rouge | P9 | ✅ done | 0 | — | SPEC-613, SPEC-407 |
+| [SPEC-907](../specs/p9-v2/SPEC-907-detection-fine-de-la-baisse-d-engagement.md) | Détection fine de la baisse d'engagement | P9 | ✅ done | 0 | — | SPEC-711 |
+| [SPEC-908](../specs/p9-v2/SPEC-908-version-2-0-0.md) | Version 2.0.0 | P9 | ✅ done | 0 | — | SPEC-901, SPEC-902, SPEC-903, SPEC-904, SPEC-905, SPEC-906, SPEC-907 |
 | [SPEC-1001](../specs/p10-migration-preparation/SPEC-1001-demarrage-de-la-piste-et-garde-fous-de-separation.md) | Démarrage de la piste de migration et garde-fous de séparation | P10 | ✅ done | 0 | ✓lint ✓typecheck ✓build ✓unit ✓integration ✓e2e ✓visual ✓acceptance | SPEC-003, SPEC-011 |
 | [SPEC-1002](../specs/p10-migration-preparation/SPEC-1002-paquets-partages-client-d-api-logique-pure-et-messages.md) | Paquets partagés — client d’API, logique pure et messages | P10 | ✅ done | 0 | ✓lint ✓typecheck ✓build ✓unit ✓integration ✓e2e ✓visual ✓acceptance | SPEC-1001 |
 | [SPEC-1003](../specs/p10-migration-preparation/SPEC-1003-couche-http-independante-du-framework.md) | Couche HTTP indépendante du framework (@learny/http) | P10 | ✅ done | 0 | ✓lint ✓typecheck ✓build ✓acceptance ✓unit ✓integration ✓e2e ✓visual | SPEC-1001 |
 | [SPEC-1004](../specs/p10-migration-preparation/SPEC-1004-table-d-implementation-des-routes.md) | Table d’implémentation des routes (@learny/api-routes) | P10 | ✅ done | 0 | ✓lint ✓typecheck ✓build ✓unit ✓integration ✓e2e ✓visual ✓acceptance | SPEC-1003 |
-| [SPEC-1101](../specs/p11-migration-api/SPEC-1101-application-apps-api-hono.md) | Application apps/api (Hono) servant toutes les routes | P11 | ⏳ waiting | 0 | — | SPEC-1004, SPEC-1002 |
-| [SPEC-1102](../specs/p11-migration-api/SPEC-1102-authentification-multi-clients-et-protections-derriere-proxy.md) | Authentification multi-clients et protections derrière un proxy | P11 | ⏳ waiting | 0 | — | SPEC-1101 |
-| [SPEC-1103](../specs/p11-migration-api/SPEC-1103-absorption-du-worker-images-ci-et-deploiement-de-l-api.md) | Absorption du worker, images, CI et déploiement de l’API | P11 | ⏳ waiting | 0 | — | SPEC-1102 |
-| [SPEC-1201](../specs/p12-migration-bascule/SPEC-1201-bascule-des-appels-api-du-web-vers-apps-api.md) | Bascule des appels /api du web vers apps/api | P12 | ⏳ waiting | 0 | — | SPEC-1103 |
-| [SPEC-1202](../specs/p12-migration-bascule/SPEC-1202-ecrans-et-proxy-du-web-alimentes-par-l-api.md) | Écrans et proxy du web alimentés par l’API | P12 | ⏳ waiting | 0 | — | SPEC-1201 |
-| [SPEC-1203](../specs/p12-migration-bascule/SPEC-1203-pages-de-demonstration-via-l-api-et-web-sans-dependance-serveur.md) | Pages de démonstration via l’API et web sans dépendance serveur | P12 | ⏳ waiting | 0 | — | SPEC-1202 |
-| [SPEC-1301](../specs/p13-migration-multi-clients/SPEC-1301-api-prete-pour-les-clients-natifs.md) | API prête pour les clients natifs | P13 | ⏳ waiting | 0 | — | SPEC-1203 |
-| [SPEC-1302](../specs/p13-migration-multi-clients/SPEC-1302-cloture-de-la-migration-et-retour-sur-main.md) | Clôture de la migration et retour sur main | P13 | ⏳ waiting | 0 | — | SPEC-1301 |
+| [SPEC-1101](../specs/p11-migration-api/SPEC-1101-application-apps-api-hono.md) | Application apps/api (Hono) servant toutes les routes | P11 | ✅ done | 0 | — | SPEC-1004, SPEC-1002 |
+| [SPEC-1102](../specs/p11-migration-api/SPEC-1102-authentification-multi-clients-et-protections-derriere-proxy.md) | Authentification multi-clients et protections derrière un proxy | P11 | ✅ done | 0 | — | SPEC-1101 |
+| [SPEC-1103](../specs/p11-migration-api/SPEC-1103-absorption-du-worker-images-ci-et-deploiement-de-l-api.md) | Absorption du worker, images, CI et déploiement de l’API | P11 | ✅ done | 0 | — | SPEC-1102 |
+| [SPEC-1201](../specs/p12-migration-bascule/SPEC-1201-bascule-des-appels-api-du-web-vers-apps-api.md) | Bascule des appels /api du web vers apps/api | P12 | ✅ done | 0 | — | SPEC-1103 |
+| [SPEC-1202](../specs/p12-migration-bascule/SPEC-1202-ecrans-et-proxy-du-web-alimentes-par-l-api.md) | Écrans et proxy du web alimentés par l’API | P12 | ✅ done | 0 | — | SPEC-1201 |
+| [SPEC-1203](../specs/p12-migration-bascule/SPEC-1203-pages-de-demonstration-via-l-api-et-web-sans-dependance-serveur.md) | Pages de démonstration via l’API et web sans dépendance serveur | P12 | ✅ done | 0 | — | SPEC-1202 |
+| [SPEC-1301](../specs/p13-migration-multi-clients/SPEC-1301-api-prete-pour-les-clients-natifs.md) | API prête pour les clients natifs | P13 | ✅ done | 0 | — | SPEC-1203 |
+| [SPEC-1302](../specs/p13-migration-multi-clients/SPEC-1302-cloture-de-la-migration-et-retour-sur-main.md) | Clôture de la migration et retour sur main | P13 | ✅ done | 0 | — | SPEC-1301 |
 | [SPEC-2001](../specs/p20-python-socle/SPEC-2001-inventaire-parite-oracles.md) | Inventaire, matrice de parité et oracles de référence | P20 | ✅ done | 0 | ✓lint ✓typecheck ✓build ✓unit ✓integration ✓e2e ✓visual ✓acceptance | — |
 | [SPEC-2002](../specs/p20-python-socle/SPEC-2002-contrat-openapi-sdk.md) | Contrat OpenAPI source unique et SDK TypeScript généré | P20 | ✅ done | 0 | ✓lint ✓typecheck ✓build ✓unit ✓integration ✓e2e ✓visual ✓acceptance | SPEC-2001 |
 | [SPEC-2003](../specs/p20-python-socle/SPEC-2003-socle-python-facade.md) | Socle Python FastAPI, outillage SDD et façade de coexistence | P20 | ✅ done | 0 | ✓lint ✓typecheck ✓build ✓unit ✓integration ✓e2e ✓visual ✓acceptance | SPEC-2001 |

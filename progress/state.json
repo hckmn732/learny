@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-11-25T02:28:20.764Z",
+  "updatedAt": "2026-11-25T06:50:26.567Z",
   "specs": {
     "SPEC-001": {
       "status": "done",
@@ -6221,94 +6221,103 @@
       }
     },
     "SPEC-808": {
-      "status": "pending",
+      "status": "done",
       "attempts": 0,
       "startedAt": null,
-      "completedAt": null,
+      "completedAt": "2026-11-24T21:42:47.121Z",
       "branch": null,
       "commit": null,
       "lastError": null,
-      "validations": {}
+      "validations": {},
+      "note": "Marque done sur decision du porteur (2026-11-24, ADR-0342) : cloture administrative, aucune campagne de validation rejouee."
     },
     "SPEC-901": {
-      "status": "pending",
+      "status": "done",
       "attempts": 0,
       "startedAt": null,
-      "completedAt": null,
+      "completedAt": "2026-11-24T21:42:47.121Z",
       "branch": null,
       "commit": null,
       "lastError": null,
-      "validations": {}
+      "validations": {},
+      "note": "Marque done sur decision du porteur (2026-11-24, ADR-0342) : cloture administrative, aucune campagne de validation rejouee."
     },
     "SPEC-902": {
-      "status": "pending",
+      "status": "done",
       "attempts": 0,
       "startedAt": null,
-      "completedAt": null,
+      "completedAt": "2026-11-24T21:42:47.121Z",
       "branch": null,
       "commit": null,
       "lastError": null,
-      "validations": {}
+      "validations": {},
+      "note": "Marque done sur decision du porteur (2026-11-24, ADR-0342) : cloture administrative, aucune campagne de validation rejouee."
     },
     "SPEC-903": {
-      "status": "pending",
+      "status": "done",
       "attempts": 0,
       "startedAt": null,
-      "completedAt": null,
+      "completedAt": "2026-11-24T21:42:47.121Z",
       "branch": null,
       "commit": null,
       "lastError": null,
-      "validations": {}
+      "validations": {},
+      "note": "Marque done sur decision du porteur (2026-11-24, ADR-0342) : cloture administrative, aucune campagne de validation rejouee."
     },
     "SPEC-904": {
-      "status": "pending",
+      "status": "done",
       "attempts": 0,
       "startedAt": null,
-      "completedAt": null,
+      "completedAt": "2026-11-24T21:42:47.121Z",
       "branch": null,
       "commit": null,
       "lastError": null,
-      "validations": {}
+      "validations": {},
+      "note": "Marque done sur decision du porteur (2026-11-24, ADR-0342) : cloture administrative, aucune campagne de validation rejouee."
     },
     "SPEC-905": {
-      "status": "pending",
+      "status": "done",
       "attempts": 0,
       "startedAt": null,
-      "completedAt": null,
+      "completedAt": "2026-11-24T21:42:47.121Z",
       "branch": null,
       "commit": null,
       "lastError": null,
-      "validations": {}
+      "validations": {},
+      "note": "Marque done sur decision du porteur (2026-11-24, ADR-0342) : cloture administrative, aucune campagne de validation rejouee."
     },
     "SPEC-906": {
-      "status": "pending",
+      "status": "done",
       "attempts": 0,
       "startedAt": null,
-      "completedAt": null,
+      "completedAt": "2026-11-24T21:42:47.121Z",
       "branch": null,
       "commit": null,
       "lastError": null,
-      "validations": {}
+      "validations": {},
+      "note": "Marque done sur decision du porteur (2026-11-24, ADR-0342) : cloture administrative, aucune campagne de validation rejouee."
     },
     "SPEC-907": {
-      "status": "pending",
+      "status": "done",
       "attempts": 0,
       "startedAt": null,
-      "completedAt": null,
+      "completedAt": "2026-11-24T21:42:47.121Z",
       "branch": null,
       "commit": null,
       "lastError": null,
-      "validations": {}
+      "validations": {},
+      "note": "Marque done sur decision du porteur (2026-11-24, ADR-0342) : cloture administrative, aucune campagne de validation rejouee."
     },
     "SPEC-908": {
-      "status": "pending",
+      "status": "done",
       "attempts": 0,
       "startedAt": null,
-      "completedAt": null,
+      "completedAt": "2026-11-24T21:42:47.121Z",
       "branch": null,
       "commit": null,
       "lastError": null,
-      "validations": {}
+      "validations": {},
+      "note": "Marque done sur decision du porteur (2026-11-24, ADR-0342) : cloture administrative, aucune campagne de validation rejouee."
     },
     "SPEC-1001": {
       "status": "done",
@@ -6515,84 +6524,92 @@
       }
     },
     "SPEC-1101": {
-      "status": "pending",
+      "status": "done",
       "attempts": 0,
       "startedAt": null,
-      "completedAt": null,
+      "completedAt": "2026-11-24T21:42:47.121Z",
       "branch": null,
       "commit": null,
       "lastError": null,
-      "validations": {}
+      "validations": {},
+      "note": "Marque done sur decision du porteur (2026-11-24, ADR-0342) : cloture administrative, aucune campagne de validation rejouee."
     },
     "SPEC-1102": {
-      "status": "pending",
+      "status": "done",
       "attempts": 0,
       "startedAt": null,
-      "completedAt": null,
+      "completedAt": "2026-11-24T21:42:47.121Z",
       "branch": null,
       "commit": null,
       "lastError": null,
-      "validations": {}
+      "validations": {},
+      "note": "Marque done sur decision du porteur (2026-11-24, ADR-0342) : cloture administrative, aucune campagne de validation rejouee."
     },
     "SPEC-1103": {
-      "status": "pending",
+      "status": "done",
       "attempts": 0,
       "startedAt": null,
-      "completedAt": null,
+      "completedAt": "2026-11-24T21:42:47.121Z",
       "branch": null,
       "commit": null,
       "lastError": null,
-      "validations": {}
+      "validations": {},
+      "note": "Marque done sur decision du porteur (2026-11-24, ADR-0342) : cloture administrative, aucune campagne de validation rejouee."
     },
     "SPEC-1201": {
-      "status": "pending",
+      "status": "done",
       "attempts": 0,
       "startedAt": null,
-      "completedAt": null,
+      "completedAt": "2026-11-24T21:42:47.121Z",
       "branch": null,
       "commit": null,
       "lastError": null,
-      "validations": {}
+      "validations": {},
+      "note": "Marque done sur decision du porteur (2026-11-24, ADR-0342) : cloture administrative, aucune campagne de validation rejouee."
     },
     "SPEC-1202": {
-      "status": "pending",
+      "status": "done",
       "attempts": 0,
       "startedAt": null,
-      "completedAt": null,
+      "completedAt": "2026-11-24T21:42:47.121Z",
       "branch": null,
       "commit": null,
       "lastError": null,
-      "validations": {}
+      "validations": {},
+      "note": "Marque done sur decision du porteur (2026-11-24, ADR-0342) : cloture administrative, aucune campagne de validation rejouee."
     },
     "SPEC-1203": {
-      "status": "pending",
+      "status": "done",
       "attempts": 0,
       "startedAt": null,
-      "completedAt": null,
+      "completedAt": "2026-11-24T21:42:47.121Z",
       "branch": null,
       "commit": null,
       "lastError": null,
-      "validations": {}
+      "validations": {},
+      "note": "Marque done sur decision du porteur (2026-11-24, ADR-0342) : cloture administrative, aucune campagne de validation rejouee."
     },
     "SPEC-1301": {
-      "status": "pending",
+      "status": "done",
       "attempts": 0,
       "startedAt": null,
-      "completedAt": null,
+      "completedAt": "2026-11-24T21:42:47.121Z",
       "branch": null,
       "commit": null,
       "lastError": null,
-      "validations": {}
+      "validations": {},
+      "note": "Marque done sur decision du porteur (2026-11-24, ADR-0342) : cloture administrative, aucune campagne de validation rejouee."
     },
     "SPEC-1302": {
-      "status": "pending",
+      "status": "done",
       "attempts": 0,
       "startedAt": null,
-      "completedAt": null,
+      "completedAt": "2026-11-24T21:42:47.121Z",
       "branch": null,
       "commit": null,
       "lastError": null,
-      "validations": {}
+      "validations": {},
+      "note": "Marque done sur decision du porteur (2026-11-24, ADR-0342) : cloture administrative, aucune campagne de validation rejouee."
     },
     "SPEC-2001": {
       "status": "done",
@@ -8242,46 +8259,60 @@
       "report": "evidence/checkpoints/CP-6/summary.md"
     },
     "CP-7": {
-      "status": "pending",
-      "at": null,
-      "tag": null,
-      "report": null
+      "status": "passed",
+      "at": "2026-11-24T21:42:47.121Z",
+      "tag": "cp-7",
+      "report": "evidence/checkpoints/CP-7/summary.md",
+      "exception": true,
+      "reason": "Marque franchi sur decision du porteur (2026-11-24, ADR-0342) : phase P7 complete (25/25) ; checkpoint non rejoue, cloture administrative."
     },
     "CP-8": {
-      "status": "pending",
-      "at": null,
-      "tag": null,
-      "report": null
+      "status": "passed",
+      "at": "2026-11-24T21:42:47.121Z",
+      "tag": "cp-8 v1.0.0",
+      "report": "evidence/checkpoints/CP-8/summary.md",
+      "exception": true,
+      "reason": "Marque franchi sur decision du porteur (2026-11-24, ADR-0342) : SPEC-808 (mise en production, action externe) marquee done administrativement ; le tag v1.0.0 est pose a titre administratif et n atteste pas une mise en production."
     },
     "CP-9": {
-      "status": "pending",
-      "at": null,
-      "tag": null,
-      "report": null
+      "status": "passed",
+      "at": "2026-11-24T21:42:47.121Z",
+      "tag": "cp-9 v2.0.0",
+      "report": "evidence/checkpoints/CP-9/summary.md",
+      "exception": true,
+      "reason": "Marque franchi sur decision du porteur (2026-11-24, ADR-0342) : piste V2 gelee close administrativement ; le tag v2.0.0 est pose a titre administratif."
     },
     "CP-10": {
-      "status": "pending",
-      "at": null,
-      "tag": null,
-      "report": null
+      "status": "passed",
+      "at": "2026-11-24T21:42:47.121Z",
+      "tag": "cp-10",
+      "report": "evidence/checkpoints/CP-10/summary.md",
+      "exception": true,
+      "reason": "Marque franchi sur decision du porteur (2026-11-24, ADR-0342) : piste migration Hono gelee, remplacee par python-migration (ADR-2043) ; cloture administrative."
     },
     "CP-11": {
-      "status": "pending",
-      "at": null,
-      "tag": null,
-      "report": null
+      "status": "passed",
+      "at": "2026-11-24T21:42:47.121Z",
+      "tag": "cp-11",
+      "report": "evidence/checkpoints/CP-11/summary.md",
+      "exception": true,
+      "reason": "Marque franchi sur decision du porteur (2026-11-24, ADR-0342) : piste migration Hono gelee, remplacee par python-migration (ADR-2043) ; cloture administrative."
     },
     "CP-12": {
-      "status": "pending",
-      "at": null,
-      "tag": null,
-      "report": null
+      "status": "passed",
+      "at": "2026-11-24T21:42:47.121Z",
+      "tag": "cp-12",
+      "report": "evidence/checkpoints/CP-12/summary.md",
+      "exception": true,
+      "reason": "Marque franchi sur decision du porteur (2026-11-24, ADR-0342) : piste migration Hono gelee, remplacee par python-migration (ADR-2043) ; cloture administrative."
     },
     "CP-13": {
-      "status": "pending",
-      "at": null,
-      "tag": null,
-      "report": null
+      "status": "passed",
+      "at": "2026-11-24T21:42:47.121Z",
+      "tag": "cp-13",
+      "report": "evidence/checkpoints/CP-13/summary.md",
+      "exception": true,
+      "reason": "Marque franchi sur decision du porteur (2026-11-24, ADR-0342) : piste migration Hono gelee, remplacee par python-migration (ADR-2043) ; cloture administrative."
     },
     "CP-20": {
       "status": "passed",
