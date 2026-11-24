@@ -70,7 +70,12 @@ const timed = (name, fn) => {
 
 record('lint', timed('lint', () => run('pnpm -s lint')) === 0);
 record('typecheck', timed('typecheck', () => run('pnpm -s typecheck')) === 0);
-if (wanted('build') && !process.argv.includes('--skip-build')) record('build', timed('build', () => run('pnpm -s build')) === 0);
+if (wanted('build') && !process.argv.includes('--skip-build')) {
+  // The post-build checks (Vitest project `build`, e.g. SPEC-804 bundle split) read apps/web/.next.
+  const built = timed('build', () => run('pnpm -s build')) === 0;
+  const checked = built && timed('test:build', () => run('pnpm -s test:build')) === 0;
+  record('build', checked, built && !checked ? 'contrôles post-build (pnpm test:build) en échec' : '');
+}
 const staticOk = ['lint', 'typecheck', 'build'].every((k) => results[k]?.status !== 'failed' || (k === 'build' && !wanted('build')));
 
 /** Fichiers de test qui contiennent « [SPEC-xxx] » (chemins relatifs à la racine). */
