@@ -31,6 +31,7 @@ export * from './home';
 export * from './ingestion';
 export * from './learning';
 export * from './legal';
+export * from './public-config';
 export * from './me';
 export * from './moteur-d-automatismes';
 export * from './automatisme-6-questions-transformees-en-cartes';

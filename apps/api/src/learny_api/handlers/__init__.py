@@ -17,6 +17,7 @@ from learny_api.handlers import (
     identity,
     learning,
     privacy,
+    public_config,
     tutor,
 )
 
@@ -33,5 +34,6 @@ __all__ = [
     "identity",
     "learning",
     "privacy",
+    "public_config",
     "tutor",
 ]

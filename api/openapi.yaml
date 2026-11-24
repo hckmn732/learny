@@ -1266,6 +1266,41 @@ components:
       required:
         - cid
       type: object
+    ConfigPublicOutput:
+      additionalProperties: false
+      properties:
+        stripePublishableKey:
+          anyOf:
+            - minLength: 1
+              type: string
+            - type: "null"
+        supabaseAnonKey:
+          anyOf:
+            - minLength: 1
+              type: string
+            - type: "null"
+        supabaseUrl:
+          anyOf:
+            - minLength: 1
+              type: string
+            - type: "null"
+        vapidPublicKey:
+          anyOf:
+            - minLength: 1
+              type: string
+            - type: "null"
+        webUrl:
+          anyOf:
+            - minLength: 1
+              type: string
+            - type: "null"
+      required:
+        - supabaseUrl
+        - supabaseAnonKey
+        - webUrl
+        - vapidPublicKey
+        - stripePublishableKey
+      type: object
     ConversationsGetOutput:
       additionalProperties: false
       description: Discussion d’un cours, privée et conservée par version de cours (ADR-0040).
@@ -19744,6 +19779,39 @@ paths:
         rateLimit: default
         requiresIdempotencyKey: false
         successStatus: 201
+        validationStatus: 400
+  /api/v1/config/public:
+    get:
+      operationId: config.public
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ConfigPublicOutput"
+          description: Succès
+        "429":
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetails"
+          description: Erreur (RFC 9457)
+        "500":
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ProblemDetails"
+          description: Erreur (RFC 9457)
+      summary: "Configuration publique des clients : Supabase, web, VAPID et Stripe (ADR-4007)."
+      x-learny:
+        auth: public
+        freshAuth: false
+        id: config.public
+        idempotent: false
+        legalAcceptance: false
+        rateLimit: default
+        requiresIdempotencyKey: false
+        successStatus: 200
         validationStatus: 400
   /api/v1/conversations/{id}:
     get:

@@ -35,6 +35,7 @@ import { parametresNotificationsRoutes } from './parametres-notifications';
 import { parametresRoutes } from './parametres-onglets-et-profil';
 import { personalDataRoutes } from './personal-data';
 import { programmeRoutes } from './programme';
+import { publicConfigRoutes } from './public-config';
 import { pushRoutes } from './push';
 import { remediationRoutes } from './quiz-result';
 import { moduleRoutes } from './resources';
@@ -52,6 +53,7 @@ export const ROUTES = {
   ...agendaRoutes,
   ...agendaReplanRoutes,
   ...healthRoutes,
+  ...publicConfigRoutes,
   ...legalRoutes,
   ...authRoutes,
   ...meRoutes,

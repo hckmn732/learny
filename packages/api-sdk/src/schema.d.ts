@@ -361,6 +361,23 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/config/public": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Configuration publique des clients : Supabase, web, VAPID et Stripe (ADR-4007). */
+        get: operations["config.public"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/conversations/{id}": {
         parameters: {
             query?: never;
@@ -2691,6 +2708,13 @@ export interface components {
         ChaptersSummaryParams: {
             /** Format: uuid */
             cid: string;
+        };
+        ConfigPublicOutput: {
+            stripePublishableKey: string | null;
+            supabaseAnonKey: string | null;
+            supabaseUrl: string | null;
+            vapidPublicKey: string | null;
+            webUrl: string | null;
         };
         /** @description Discussion d’un cours, privée et conservée par version de cours (ADR-0040). */
         ConversationsGetOutput: {
@@ -8902,6 +8926,44 @@ export interface operations {
                 };
                 content: {
                     "application/problem+json": components["schemas"]["ProblemDetails"];
+                };
+            };
+            /** @description Erreur (RFC 9457) */
+            429: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["ProblemDetails"];
+                };
+            };
+            /** @description Erreur (RFC 9457) */
+            500: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["ProblemDetails"];
+                };
+            };
+        };
+    };
+    "config.public": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Succès */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ConfigPublicOutput"];
                 };
             };
             /** @description Erreur (RFC 9457) */

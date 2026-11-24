@@ -692,6 +692,17 @@ class ChaptersSummaryParams(BaseModel):
     )
 
 
+class ConfigPublicOutput(BaseModel):
+    model_config = ConfigDict(
+        extra='forbid',
+    )
+    stripePublishableKey: constr(min_length=1) | None
+    supabaseAnonKey: constr(min_length=1) | None
+    supabaseUrl: constr(min_length=1) | None
+    vapidPublicKey: constr(min_length=1) | None
+    webUrl: constr(min_length=1) | None
+
+
 class Key(StrEnum):
     formation = 'formation'
     chapter = 'chapter'

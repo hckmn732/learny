@@ -9,14 +9,14 @@
     "apps/worker/src/learny_worker/scheduler.py"
   ],
   "counts": {
-    "operations": 156,
+    "operations": 157,
     "special": 11,
     "consumers": 23,
     "crons": 2,
     "events": 15,
     "handlers": 156,
-    "gaps": 108,
-    "operationsWithoutHandler": 0,
+    "gaps": 109,
+    "operationsWithoutHandler": 1,
     "specialWithoutInstall": 0,
     "consumersWithoutEvent": 0,
     "unknownEvents": 0,
@@ -478,6 +478,29 @@
       "tests": [],
       "gap": true,
       "served": true
+    },
+    {
+      "key": "config.public",
+      "id": "config.public",
+      "method": "GET",
+      "path": "/api/v1/config/public",
+      "auth": "public",
+      "rateLimit": "default",
+      "idempotent": false,
+      "requiresIdempotencyKey": false,
+      "freshAuth": false,
+      "legalAcceptance": false,
+      "validationStatus": 400,
+      "successStatus": 200,
+      "summary": "Configuration publique des clients : Supabase, web, VAPID et Stripe (ADR-4007).",
+      "context": "dev",
+      "spec": "SPEC-2207",
+      "handler": null,
+      "installedBy": "pipeline",
+      "specialModule": null,
+      "tests": [],
+      "gap": true,
+      "served": false
     },
     {
       "key": "conversations.get",
@@ -4328,6 +4351,6 @@
     }
   ],
   "python": {
-    "testFiles": 237
+    "testFiles": 238
   }
 }
