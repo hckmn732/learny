@@ -1,10 +1,7 @@
-// Profil (SPEC-3102 EF-2; the real screen arrives with SPEC-3401).
-import { fr } from '@learny/i18n';
-
-import { PlaceholderTabScreen } from '../../../src/features/shell/PlaceholderTabScreen';
+// Profil (SPEC-3401 EF-1, EF-2): the root screen of the Profil tab replaces the placeholder of
+// SPEC-3102.
+import { ProfileScreen } from '../../../src/features/profil/ProfileScreen';
 
 export default function ProfilRoute() {
-  return (
-    <PlaceholderTabScreen title={fr.mobile.shell.tabs.profile} icon="user" testID="profil-screen" />
-  );
+  return <ProfileScreen />;
 }

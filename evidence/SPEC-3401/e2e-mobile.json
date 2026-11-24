@@ -1,0 +1,81 @@
+{
+  "spec": "SPEC-3401",
+  "platform": "android",
+  "transport": "local",
+  "device": {
+    "platform": "android",
+    "model": "sdk_gphone64_x86_64",
+    "apiLevel": "35",
+    "size": "Physical size: 1080x2400"
+  },
+  "tags": [
+    "SPEC-3401"
+  ],
+  "startedAt": "2026-11-24T01:24:12.551Z",
+  "finishedAt": "2026-11-24T01:27:37.972Z",
+  "passed": 3,
+  "failed": 0,
+  "videos": 1,
+  "campaignVideo": "artifacts/campagne/campagne.mp4",
+  "visual": 1,
+  "junitCases": 3,
+  "flows": [
+    {
+      "file": "apps/mobile/e2e/flows/SPEC-3401-pause.yaml",
+      "name": "SPEC-3401 pause",
+      "tags": [
+        "SPEC-3401"
+      ],
+      "status": "passed",
+      "durationSec": 41.821,
+      "message": null,
+      "videos": [],
+      "screenshots": [],
+      "visual": null
+    },
+    {
+      "file": "apps/mobile/e2e/flows/SPEC-3401-profil.yaml",
+      "name": "SPEC-3401 profil",
+      "tags": [
+        "SPEC-3401",
+        "visual"
+      ],
+      "status": "passed",
+      "durationSec": 115.838,
+      "message": null,
+      "videos": [],
+      "screenshots": [
+        "artifacts/spec-3401-profil/SPEC-3401-profil.png"
+      ],
+      "visual": {
+        "flow": "SPEC-3401 profil",
+        "status": "passed",
+        "diffRatio": 0,
+        "capture": "/root/wt/SPEC-3401/test-results/sdd/SPEC-3401/artifacts/spec-3401-profil/SPEC-3401-profil.png",
+        "baseline": "/root/wt/SPEC-3401/apps/mobile/e2e/visual/baselines/SPEC-3401-profil.png",
+        "diff": "/root/wt/SPEC-3401/test-results/sdd/SPEC-3401/artifacts/spec-3401-profil/SPEC-3401-profil.diff.png"
+      }
+    },
+    {
+      "file": "apps/mobile/e2e/flows/SPEC-3401-suppression.yaml",
+      "name": "SPEC-3401 suppression",
+      "tags": [
+        "SPEC-3401"
+      ],
+      "status": "passed",
+      "durationSec": 43.684,
+      "message": null,
+      "videos": [],
+      "screenshots": [],
+      "visual": null
+    }
+  ],
+  "visualChecks": [
+    {
+      "flow": "SPEC-3401 profil",
+      "status": "passed",
+      "diffRatio": 0
+    }
+  ],
+  "unattributed": []
+}

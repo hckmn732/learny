@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-11-24T00:21:18.543Z",
+  "updatedAt": "2026-11-24T01:28:15.979Z",
   "specs": {
     "SPEC-001": {
       "status": "done",
@@ -7333,6 +7333,52 @@
       }
     },
     "SPEC-3401": {
+      "status": "done",
+      "attempts": 0,
+      "startedAt": "2026-11-23T23:12:39.636Z",
+      "completedAt": "2026-11-24T01:28:00.300Z",
+      "branch": "spec/SPEC-3401-profil-reglages-et-confidentialite",
+      "commit": "3dee7d89",
+      "lastError": null,
+      "validations": {
+        "lint": {
+          "status": "passed",
+          "at": "2026-11-24T01:20:21.921Z",
+          "details": ""
+        },
+        "typecheck": {
+          "status": "passed",
+          "at": "2026-11-24T01:22:29.767Z",
+          "details": ""
+        },
+        "unit": {
+          "status": "passed",
+          "at": "2026-11-24T01:24:09.165Z",
+          "details": "10 Vitest + 36 Jest test(s) [SPEC-3401] réussi(s), 0 échec(s)"
+        },
+        "integration": {
+          "status": "passed",
+          "at": "2026-11-24T01:24:10.115Z",
+          "details": "7 test(s) réussi(s), 0 échec(s)"
+        },
+        "e2e": {
+          "status": "passed",
+          "at": "2026-11-24T01:27:37.989Z",
+          "details": "3 flux réussi(s), 0 échec(s), 1 vidéo(s)"
+        },
+        "visual": {
+          "status": "passed",
+          "at": "2026-11-24T01:27:37.989Z",
+          "details": "1 flux @visual réussi(s) (mode mockup)"
+        },
+        "acceptance": {
+          "status": "passed",
+          "at": "2026-11-24T01:27:38.002Z",
+          "details": "6/6 critères ✅"
+        }
+      }
+    },
+    "SPEC-3402": {
       "status": "pending",
       "attempts": 0,
       "startedAt": null,
@@ -7341,52 +7387,6 @@
       "commit": null,
       "lastError": null,
       "validations": {}
-    },
-    "SPEC-3402": {
-      "status": "done",
-      "attempts": 1,
-      "startedAt": "2026-11-23T23:12:46.308Z",
-      "completedAt": "2026-11-24T00:21:18.541Z",
-      "branch": "spec/SPEC-3402-connexion-avec-apple-et-google",
-      "commit": "63be4e96",
-      "lastError": null,
-      "validations": {
-        "lint": {
-          "status": "passed",
-          "at": "2026-11-24T00:15:19.607Z",
-          "details": ""
-        },
-        "typecheck": {
-          "status": "passed",
-          "at": "2026-11-24T00:15:38.562Z",
-          "details": ""
-        },
-        "unit": {
-          "status": "passed",
-          "at": "2026-11-24T00:19:12.795Z",
-          "details": "15 Vitest + 12 Jest test(s) [SPEC-3402] réussi(s), 0 échec(s)"
-        },
-        "integration": {
-          "status": "passed",
-          "at": "2026-11-24T00:03:23.223Z",
-          "details": "2 test(s) réussi(s), 0 échec(s)"
-        },
-        "e2e": {
-          "status": "passed",
-          "at": "2026-11-24T00:04:34.069Z",
-          "details": "1 flux réussi(s), 0 échec(s), 1 vidéo(s)"
-        },
-        "visual": {
-          "status": "passed",
-          "at": "2026-11-24T00:04:34.070Z",
-          "details": "1 flux @visual réussi(s) (mode mockup)"
-        },
-        "acceptance": {
-          "status": "passed",
-          "at": "2026-11-24T00:19:12.848Z",
-          "details": "4/4 critères ✅"
-        }
-      }
     },
     "SPEC-3501": {
       "status": "pending",
@@ -7555,13 +7555,5 @@
       "report": null
     }
   },
-  "anomalies": [
-    {
-      "spec": "SPEC-3402",
-      "at": "2026-11-23T23:52:35.317Z",
-      "attempts": 1,
-      "reason": "identifiants OAuth Apple/Google absents (aucun compte developpeur Apple, aucun client OAuth fourni)",
-      "external": true
-    }
-  ]
+  "anomalies": []
 }

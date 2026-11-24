@@ -1,8 +1,9 @@
-// Account sheet (SPEC-3102 EF-4, BR-NAV-01, CA-4; mockup `account` of `design/app-mobile`).
+// Account sheet (SPEC-3102 EF-4, BR-NAV-01, CA-4 ; SPEC-3401 EF-5 ; mockup `account` of
+// `design/app-mobile`).
 //
 // Identity of the learner, the number of active formations in the sub-title of the sheet, the way
-// to the Profil tab, the pause of SPEC-3401 (not delivered yet: the row says it) and the
-// sign-out, which always asks for a confirmation before calling `signOut()` (BR-ACC-09).
+// to the Profil tab, the pause of SPEC-3401 (the sheet of the bounded end date) and the sign-out,
+// which always asks for a confirmation before calling `signOut()` (BR-ACC-09).
 import { useRouter } from 'expo-router';
 import { useState } from 'react';
 import { Alert, StyleSheet, View } from 'react-native';
@@ -10,11 +11,13 @@ import { Alert, StyleSheet, View } from 'react-native';
 import { fr } from '@learny/i18n';
 
 import { useSession } from '../../auth/session';
+import { useProfile } from '../../data/profile';
 import { theme } from '../../theme';
 import { Chip } from '../../ui/Chip';
 import { ListRow } from '../../ui/ListRow';
 import { Text } from '../../ui/Text';
 import { Toast } from '../../ui/Toast';
+import { PauseSheet } from '../profil/PauseSheet';
 
 import { RouteSheet } from './RouteSheet';
 import { displayNameOf, initialsOf, useHeader } from './use-shell';
@@ -27,15 +30,19 @@ export interface AccountSheetProps {
 
 const t = fr.mobile.shell.account;
 const ht = fr.shell.header;
+const profile = fr.mobile.profile;
 
 /** « Mon compte » sheet of `app/compte.tsx`. */
 export function AccountSheet({ onClose, onSignedOut }: AccountSheetProps) {
   const router = useRouter();
   const session = useSession();
   const header = useHeader();
-  const [pauseNotice, setPauseNotice] = useState(false);
+  const settings = useProfile();
+  const [pauseOpen, setPauseOpen] = useState(false);
+  const [toast, setToast] = useState<string | null>(null);
   const data = header.data;
   const formations = ht.activeFormations(data?.activeFormationCount ?? 0);
+  const timeZone = settings.data?.me.timezone ?? 'Europe/Paris';
 
   const askSignOut = (): void => {
     Alert.alert(t.signOutTitle, undefined, [
@@ -96,20 +103,34 @@ export function AccountSheet({ onClose, onSignedOut }: AccountSheetProps) {
           title={ht.pause}
           subtitle={t.pauseHint}
           onPress={() => {
-            setPauseNotice(true);
+            setPauseOpen(true);
           }}
         />
         <ListRow testID="account-sign-out" icon="logout" title={ht.signOut} onPress={askSignOut} />
       </View>
 
+      <PauseSheet
+        visible={pauseOpen}
+        onClose={() => {
+          setPauseOpen(false);
+        }}
+        onDone={(message) => {
+          setToast(message);
+        }}
+        timeZone={timeZone}
+      />
+
       <Toast
         testID="account-pause-toast"
-        visible={pauseNotice}
-        message={t.pauseUnavailable}
+        visible={toast !== null}
+        message={toast ?? ''}
         onHide={() => {
-          setPauseNotice(false);
+          setToast(null);
         }}
       />
+      <Text variant="caption" tone="muted" align="center" testID="account-pause-hint">
+        {profile.pause.body}
+      </Text>
     </RouteSheet>
   );
 }

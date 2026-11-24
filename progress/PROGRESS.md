@@ -1,6 +1,6 @@
 # Progression du projet Learny
 
-> Généré par `node tools/sdd/status.mjs` le 2026-11-24T00:21:18.545Z. Ne pas éditer à la main.
+> Généré par `node tools/sdd/status.mjs` le 2026-11-24T01:28:15.981Z. Ne pas éditer à la main.
 
 ## Synthèse
 
@@ -16,7 +16,7 @@
 | **Avancement global** | **80.6 %** |
 | Avancement V1 | 99.2 % |
 | Piste active | mobile |
-| Prochaine action | start SPEC-3401 — Profil, réglages, pause et confidentialité |
+| Prochaine action | start SPEC-3402 — Connexion avec Apple et Google |
 
 ## Phases et checkpoints
 
@@ -222,8 +222,8 @@
 | [SPEC-3303](../specs/p33-mobile-apprentissage/SPEC-3303-discussion-avec-le-tuteur.md) | Discussion avec le tuteur | P33 | ✅ done | 0 | ✓lint ✓typecheck ✓unit ✓integration ✓e2e ✓visual ✓acceptance | SPEC-3302 |
 | [SPEC-3304](../specs/p33-mobile-apprentissage/SPEC-3304-quiz-de-validation-et-resultat.md) | Quiz de validation et résultat | P33 | ✅ done | 0 | ✓lint ✓typecheck ✓unit ✓integration ✓e2e ✓visual ✓acceptance | SPEC-3301, SPEC-3202 |
 | [SPEC-3305](../specs/p33-mobile-apprentissage/SPEC-3305-reviser-quiz-global-echauffement-hors-ligne.md) | Réviser — quiz global, échauffement et jeu hors ligne | P33 | ✅ done | 0 | ✓lint ✓typecheck ✓unit ✓integration ✓e2e ✓visual ✓acceptance | SPEC-3301, SPEC-3201 |
-| [SPEC-3401](../specs/p34-mobile-compte/SPEC-3401-profil-reglages-et-confidentialite.md) | Profil, réglages, pause et confidentialité | P34 | 🟢 ready | 0 | — | SPEC-3102 |
-| [SPEC-3402](../specs/p34-mobile-compte/SPEC-3402-connexion-avec-apple-et-google.md) | Connexion avec Apple et Google | P34 | ✅ done | 1 | ✓lint ✓typecheck ✓unit ✓integration ✓e2e ✓visual ✓acceptance | SPEC-3101 |
+| [SPEC-3401](../specs/p34-mobile-compte/SPEC-3401-profil-reglages-et-confidentialite.md) | Profil, réglages, pause et confidentialité | P34 | ✅ done | 0 | ✓lint ✓typecheck ✓unit ✓integration ✓e2e ✓visual ✓acceptance | SPEC-3102 |
+| [SPEC-3402](../specs/p34-mobile-compte/SPEC-3402-connexion-avec-apple-et-google.md) | Connexion avec Apple et Google | P34 | 🟢 ready | 0 | — | SPEC-3101 |
 | [SPEC-3501](../specs/p35-mobile-notifications-livraison/SPEC-3501-notifications-push-natives.md) | Notifications push natives (FCM et APNs) | P35 | ⏳ waiting | 0 | — | SPEC-3401 |
 | [SPEC-3502](../specs/p35-mobile-notifications-livraison/SPEC-3502-accessibilite-performances-et-publication.md) | Accessibilité, performances et publication sur les stores | P35 | ⏳ waiting | 0 | — | SPEC-3203, SPEC-3303, SPEC-3304, SPEC-3305, SPEC-3402, SPEC-3501 |
 
