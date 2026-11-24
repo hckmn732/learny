@@ -186,3 +186,48 @@ async def test_the_analysis_consumer_is_idempotent(database: Database) -> None:
     assert result["first"] == "proposed"
     assert result["second"] == "proposed"
     assert result["proposals"] == 1
+
+
+async def test_the_analysis_creates_the_in_app_notification(database: Database) -> None:
+    """SPEC-4002 EF-4 - une notification in-app « Ton programme est prêt », jamais en double."""
+
+    async def run(tx: Any) -> dict[str, Any]:
+        deps, user, formation_id = await ready_formation(tx)
+        await simple_analysis.launch_analysis(deps, actor_for(user), formation_id)
+        await worker_consumers.formation_simple_analysis(deps, analysis_event(user, formation_id))
+        first = await one(
+            tx.conn,
+            "select count(*)::int as total, min(title) as title, min(href) as href, "
+            "min(type::text) as type from public.notifications where formation_id = cast(:id as uuid)",
+            id=formation_id,
+        )
+        # A replay of the consumer creates neither a second row nor a second delivery.
+        await worker_consumers.formation_simple_analysis(deps, analysis_event(user, formation_id))
+        second = await one(
+            tx.conn,
+            "select count(*)::int as total from public.notifications where formation_id = cast(:id as uuid)",
+            id=formation_id,
+        )
+        deliveries = await one(
+            tx.conn,
+            "select count(*)::int as total from public.notification_deliveries d "
+            "join public.notifications n on n.id = d.notification_id "
+            "where n.formation_id = cast(:id as uuid)",
+            id=formation_id,
+        )
+        return {
+            "count": first["total"],
+            "title": first["title"],
+            "href": first["href"],
+            "type": first["type"],
+            "replayed": second["total"],
+            "deliveries": deliveries["total"],
+        }
+
+    result = await rolled_back(database, run)
+    assert result["count"] == 1
+    assert result["title"] == "Ton programme est prêt"
+    assert result["href"] == f"/formations/{result['href'].split('/')[2]}/apercu"
+    assert result["type"] == "course_ready"
+    assert result["replayed"] == 1
+    assert result["deliveries"] == 0
