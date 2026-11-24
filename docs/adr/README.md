@@ -276,3 +276,4 @@ Origine : **Validée** = décision prise avec le porteur du projet ; **Déduite*
 | [ADR-3018](ADR-3018-environnement-mobile-sur-une-vm-unique-avec-emulateur-local.md) | Environnement mobile sur une VM unique avec émulateur local | Validée | ADR-3004, ADR-3012, ADR-3015, ADR-3016, SPEC-3001 |
 | [ADR-3020](ADR-3020-feuille-du-tuteur-mobile-sans-post-tutor-cards.md) | Feuille du tuteur mobile sans POST /tutor/cards | Déduite | SPEC-3303, SPEC-717, ADR-0193, ADR-3010, ADR-3018 |
 | [ADR-3021](ADR-3021-conformite-visuelle-du-tuteur-mobile-ligne-de-base-versionnee.md) | Conformité visuelle du tuteur : ligne de base versionnée, pas superposition à l'export | Déduite | SPEC-3303, ADR-3003, ADR-3019 |
+| [ADR-3024](ADR-3024-profil-mobile-ligne-de-base-selection-de-date-et-suppression.md) | Profil mobile : ligne de base versionnée, sélecteur de date borné et suppression bloquée côté serveur | Déduite | SPEC-3401, ADR-3001, ADR-3003, ADR-3022 |

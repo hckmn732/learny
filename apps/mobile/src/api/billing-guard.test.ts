@@ -44,7 +44,11 @@ function occurrences(pattern: RegExp): string[] {
   ]) {
     if (/\.test\.(ts|tsx)$/u.test(file)) continue;
     if (file.endsWith(path.join('api', 'billing-guard.ts'))) continue;
-    const text = fs.readFileSync(file, 'utf8');
+    // Les commentaires citent les routes pour expliquer la règle : seule la code les appellerait.
+    const text = fs
+      .readFileSync(file, 'utf8')
+      .replace(/\/\*[\s\S]*?\*\//gu, '')
+      .replace(/^\s*\/\/.*$/gmu, '');
     if (pattern.test(text)) hits.push(path.relative(APP_DIR, file));
   }
   return hits;

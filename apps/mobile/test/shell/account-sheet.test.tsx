@@ -40,6 +40,39 @@ jest.mock('../../src/api/registry', () => ({
           activeFormationCount: 3,
           unreadNotificationCount: 3,
         }),
+      // SPEC-3401 — la feuille de pause lit la pause courante et la zone du profil.
+      mePauseGet: () =>
+        Promise.resolve({
+          status: 'none',
+          startsOn: null,
+          endsOn: null,
+          diagnosticOnReturn: true,
+          endedAt: null,
+          pausedFormationIds: [],
+          returnDue: false,
+          diagnostic: null,
+        }),
+      meProfileGet: () =>
+        Promise.resolve({
+          me: {
+            id: 'user-1',
+            email: 'alex.perrin@exemple.fr',
+            firstName: 'Alex',
+            lastName: 'Perrin',
+            tutorTone: 'vous',
+            courseLanguage: 'fr',
+            timezone: 'Europe/Paris',
+            onboardingStep: 'done',
+            onboardingCompletedAt: '2026-10-28T08:05:00.000Z',
+            currentFormationId: null,
+          },
+          rhythm: { hoursPerDay: 5, studyDays: [1, 2, 3, 4, 5], preferredSlots: ['soir'] },
+          updatedAt: '2026-11-11T12:20:00.000Z',
+          createdAt: '2026-09-21T08:05:00.000Z',
+          activeFormationCount: 3,
+          deletionScheduledFor: null,
+          export: null,
+        }),
     },
   }),
 }));
@@ -91,12 +124,16 @@ describe('[SPEC-3102] feuille compte', () => {
     expect(mockRouter.replace).toHaveBeenCalledWith('/profil');
   });
 
-  it('explique que la pause arrive avec SPEC-3401', async () => {
+  // SPEC-3401 EF-5 : la ligne de pause ouvre désormais la feuille des dates de reprise ; le
+  // comportement provisoire de SPEC-3102 (annonce « à venir ») est remplacé.
+  it('ouvre la feuille de pause de SPEC-3401 (EF-5, BR-AUT-10)', async () => {
     await renderSheet();
     await fireEvent.press(screen.getByTestId('account-pause'));
     await waitFor(() => {
-      expect(screen.getByTestId('account-pause-toast')).toBeTruthy();
+      expect(screen.getByTestId('pause-sheet')).toBeTruthy();
     });
+    expect(screen.getByTestId('pause-date')).toBeTruthy();
+    expect(screen.getByTestId('pause-confirm')).toBeTruthy();
   });
 
   it('demande confirmation avant de déconnecter (CA-4)', async () => {

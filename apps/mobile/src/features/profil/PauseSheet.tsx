@@ -31,10 +31,12 @@ export interface PauseSheetProps {
   readonly onDone: (message: string) => void;
   /** Zone of the learner, for the civil days of the proposals (BR-ACC-07). */
   readonly timeZone: string;
+  /** Instant of the proposals; the application clock, never the system one (ADR-0047). */
+  readonly now?: Date;
 }
 
 /** « Mettre en pause » sheet. */
-export function PauseSheet({ visible, onClose, onDone, timeZone }: PauseSheetProps) {
+export function PauseSheet({ visible, onClose, onDone, timeZone, now }: PauseSheetProps) {
   const pause = usePause();
   const actions = usePauseActions();
   const [offset, setOffset] = useState<number>(PAUSE_OFFSETS[0]);
@@ -42,9 +44,9 @@ export function PauseSheet({ visible, onClose, onDone, timeZone }: PauseSheetPro
   const [error, setError] = useState<string | null>(null);
 
   const days = useMemo(() => {
-    const today = formatIsoDay(clock.now(), timeZone);
+    const today = formatIsoDay(now ?? clock.now(), timeZone);
     return PAUSE_OFFSETS.map((value) => ({ offset: value, day: addCivilDays(today, value) }));
-  }, [timeZone]);
+  }, [timeZone, now]);
 
   const active = isPauseActive(pause.data);
   const selected = days.find((day) => day.offset === offset) ?? days[0];
