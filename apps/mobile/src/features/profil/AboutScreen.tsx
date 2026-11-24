@@ -44,10 +44,12 @@ export function versionLabels(config: ExpoConfigLike | null): {
   const iosBuild = config?.ios?.buildNumber;
   const build =
     Platform.OS === 'ios'
-      ? typeof iosBuild === 'string'
-        ? iosBuild
-        : String(iosBuild ?? 1)
-      : String(androidCode ?? 1);
+      ? iosBuild === undefined
+        ? '1'
+        : String(iosBuild)
+      : androidCode === undefined
+        ? '1'
+        : String(androidCode);
   return {
     version: typeof config?.version === 'string' ? config.version : '1.0.0',
     build,
@@ -58,8 +60,8 @@ export function versionLabels(config: ExpoConfigLike | null): {
 interface ExpoConfigLike {
   readonly version?: unknown;
   readonly runtimeVersion?: unknown;
-  readonly android?: { readonly versionCode?: unknown };
-  readonly ios?: { readonly buildNumber?: unknown };
+  readonly android?: { readonly versionCode?: number | string };
+  readonly ios?: { readonly buildNumber?: number | string };
 }
 
 export interface AboutScreenProps {
@@ -88,7 +90,9 @@ export function AboutScreen({ manifest, onBack, onOpenWeb }: AboutScreenProps = 
         <IconButton
           name="chevronLeft"
           accessibilityLabel={fr.mobile.profile.back}
-          onPress={onBack}
+          onPress={() => {
+            onBack?.();
+          }}
           testID="about-back"
         />
         <Text variant="eyebrow" tone="muted">
@@ -102,9 +106,7 @@ export function AboutScreen({ manifest, onBack, onOpenWeb }: AboutScreenProps = 
         testID="about-scroll"
       >
         <View style={styles.card} testID="about-identity">
-          <Text variant="sectionTitle" accessibilityRole="header">
-            Learny
-          </Text>
+          <Text variant="sectionTitle">Learny</Text>
           <Text variant="rowSubtitle" tone="muted">
             {t.tagline}
           </Text>
@@ -125,9 +127,7 @@ export function AboutScreen({ manifest, onBack, onOpenWeb }: AboutScreenProps = 
         </View>
 
         <View style={styles.card} testID="about-licenses">
-          <Text variant="sectionTitle" accessibilityRole="header">
-            {t.licensesTitle}
-          </Text>
+          <Text variant="sectionTitle">{t.licensesTitle}</Text>
           <Text variant="rowSubtitle" tone="muted">
             {t.licensesHint}
           </Text>

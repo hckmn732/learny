@@ -357,7 +357,6 @@ export function ProfileScreen() {
                   }}
                 />
                 <ListRow
-                  testID="profile-sign-out"                <ListRow
                   testID="profile-row-about"
                   icon="logo"
                   title={t.rows.about}
@@ -365,7 +364,8 @@ export function ProfileScreen() {
                     router.push('/profil/a-propos');
                   }}
                 />
-
+                <ListRow
+                  testID="profile-sign-out"
                   icon="logout"
                   title={t.rows.signOut}
                   onPress={signOut}
