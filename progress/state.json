@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-11-24T01:28:15.979Z",
+  "updatedAt": "2026-11-24T01:29:12.289Z",
   "specs": {
     "SPEC-001": {
       "status": "done",
@@ -7379,14 +7379,50 @@
       }
     },
     "SPEC-3402": {
-      "status": "pending",
-      "attempts": 0,
-      "startedAt": null,
-      "completedAt": null,
-      "branch": null,
-      "commit": null,
+      "status": "done",
+      "attempts": 1,
+      "startedAt": "2026-11-23T23:12:46.308Z",
+      "completedAt": "2026-11-24T00:21:18.541Z",
+      "branch": "spec/SPEC-3402-connexion-avec-apple-et-google",
+      "commit": "63be4e96",
       "lastError": null,
-      "validations": {}
+      "validations": {
+        "lint": {
+          "status": "passed",
+          "at": "2026-11-24T00:15:19.607Z",
+          "details": ""
+        },
+        "typecheck": {
+          "status": "passed",
+          "at": "2026-11-24T00:15:38.562Z",
+          "details": ""
+        },
+        "unit": {
+          "status": "passed",
+          "at": "2026-11-24T00:19:12.795Z",
+          "details": "15 Vitest + 12 Jest test(s) [SPEC-3402] réussi(s), 0 échec(s)"
+        },
+        "integration": {
+          "status": "passed",
+          "at": "2026-11-24T00:03:23.223Z",
+          "details": "2 test(s) réussi(s), 0 échec(s)"
+        },
+        "e2e": {
+          "status": "passed",
+          "at": "2026-11-24T00:04:34.069Z",
+          "details": "1 flux réussi(s), 0 échec(s), 1 vidéo(s)"
+        },
+        "visual": {
+          "status": "passed",
+          "at": "2026-11-24T00:04:34.070Z",
+          "details": "1 flux @visual réussi(s) (mode mockup)"
+        },
+        "acceptance": {
+          "status": "passed",
+          "at": "2026-11-24T00:19:12.848Z",
+          "details": "4/4 critères ✅"
+        }
+      }
     },
     "SPEC-3501": {
       "status": "pending",
