@@ -7,7 +7,8 @@ production. A transport error is either transient (worth another attempt) or a d
 and never carries the recipient address (SPEC-204 ET-5, CL-2).
 
 The server-side configuration is validated when it is first read, before any send: a production
-process without `EMAIL_LINK_SECRET`, or a `resend` mode without `RESEND_API_KEY`, fails there.
+process without a link secret (derived from `APP_ENCRYPTION_KEY`, ADR-4007), or a `resend` mode
+without `RESEND_API_KEY`, fails there.
 """
 
 import hashlib
@@ -30,8 +31,7 @@ EmailMode = Literal["memory", "smtp", "resend"]
 
 DEFAULT_EMAIL_FROM = "Learny <bonjour@learny.app>"
 DEFAULT_APP_URL = "http://localhost:3000"
-# Development value of `.env.example`; the production configuration refuses it by requiring an
-# explicit `EMAIL_LINK_SECRET`.
+# Development value used without `APP_ENCRYPTION_KEY`; production always derives its own key.
 DEV_LINK_SECRET = "learny-test-only-email-link-secret-00000000"  # noqa: S105
 
 UNSUBSCRIBE_PATH = "/api/v1/email/unsubscribe"
@@ -97,6 +97,14 @@ def default_mode(app_env: str) -> EmailMode:
     return "resend"
 
 
+def sender_address(value: str) -> str:
+    """`EMAIL_FROM` with a display name: a bare address gets `Learny <address>` (ADR-4007)."""
+    sender = value.strip()
+    if "<" in sender:
+        return sender
+    return f"{fr.SENDER_DISPLAY_NAME} <{sender}>"
+
+
 def build_email_config(settings: Settings) -> EmailConfig:
     """Reads and validates the configuration once; an incomplete one raises before any send."""
     is_production = settings.app_env == "production"
@@ -111,7 +119,7 @@ def build_email_config(settings: Settings) -> EmailConfig:
     app_url = settings.next_public_app_url or DEFAULT_APP_URL
     return EmailConfig(
         mode=mode,
-        sender=settings.email_from or DEFAULT_EMAIL_FROM,
+        sender=sender_address(settings.email_from or DEFAULT_EMAIL_FROM),
         app_url=app_url.rstrip("/"),
         link_secret=link_secret,
         smtp_host=settings.smtp_host or "127.0.0.1",
@@ -347,4 +355,5 @@ __all__ = [
     "is_transient_status",
     "message_id_for",
     "render_template_file",
+    "sender_address",
 ]

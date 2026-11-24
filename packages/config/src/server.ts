@@ -13,6 +13,16 @@ export {
   serverEnvSchema,
 } from './env';
 export type { ServerEnv, ServerEnvKey } from './env';
+// ADR-4007: internal secrets derived from APP_ENCRYPTION_KEY (also `@learny/config/derived-secrets`,
+// the server-only entry apps/web may import).
+export {
+  apiProxySecretFromEnv,
+  deriveApiProxySecret,
+  deriveEmailLinkSecret,
+  deriveVapidPrivateKey,
+  deriveVapidPublicKey,
+  vapidPublicKeyFromEnv,
+} from './derived-secrets';
 export { PUBLIC_ENV_KEYS, parsePublicEnv, publicEnvSchema } from './env-public';
 export type { PublicEnv, PublicEnvKey } from './env-public';
 export {

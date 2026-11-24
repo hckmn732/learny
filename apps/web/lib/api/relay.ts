@@ -2,6 +2,7 @@ import { randomUUID } from 'node:crypto';
 
 import { NextResponse, type NextRequest } from 'next/server';
 
+import { apiProxySecretFromEnv } from '@learny/config/derived-secrets';
 import { AppError, toProblem } from '@learny/core';
 
 const DEFAULT_API_INTERNAL_URL = 'http://127.0.0.1:3001';
@@ -38,8 +39,9 @@ export async function relayToApi(request: NextRequest): Promise<NextResponse> {
   const target = new URL(`${request.nextUrl.pathname}${request.nextUrl.search}`, origin);
   const headers = new Headers(request.headers);
   headers.delete('x-learny-proxy-secret');
-  const secret = process.env.API_PROXY_SECRET;
-  if (secret !== undefined && secret !== '') headers.set('x-learny-proxy-secret', secret);
+  // ADR-4007: the relay secret is a subkey of APP_ENCRYPTION_KEY, never a variable of its own.
+  const secret = apiProxySecretFromEnv(process.env);
+  if (secret !== undefined) headers.set('x-learny-proxy-secret', secret);
   headers.set('x-forwarded-host', forwardedHost(request));
   headers.set('x-forwarded-proto', request.nextUrl.protocol.replace(':', ''));
   const address = forwardedFor(request);

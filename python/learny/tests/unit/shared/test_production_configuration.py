@@ -21,10 +21,8 @@ def _real_clock(monkeypatch: pytest.MonkeyPatch) -> None:
 
 VALID_ENV = {
     "APP_ENCRYPTION_KEY": "MDEyMzQ1Njc4OWFiY2RlZjAxMjM0NTY3ODlhYmNkZWY=",
-    "API_PROXY_SECRET": "learny-test-only-api-proxy-secret-value",
     "DATABASE_URL": "postgresql://postgres:postgres@db:5432/postgres",
     "EMAIL_FROM": "Learny <bonjour@learny.example>",
-    "EMAIL_LINK_SECRET": "learny-test-only-email-link-secret-value",
     "NEXT_PUBLIC_APP_URL": "https://learny.example",
     "RESEND_API_KEY": "re_test_only",
     "STRIPE_PRICE_ID": "price_test_only",
@@ -33,7 +31,6 @@ VALID_ENV = {
     "NEXT_PUBLIC_SUPABASE_ANON_KEY": "anon-test-only",
     "SUPABASE_SERVICE_ROLE_KEY": "service-test-only",
     "NEXT_PUBLIC_SUPABASE_URL": "https://project.supabase.co",
-    "VAPID_PRIVATE_KEY": "private-test-only",
     "VOYAGE_API_KEY": "voyage-test-only",
 }
 

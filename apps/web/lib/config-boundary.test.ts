@@ -9,6 +9,8 @@ import * as publicConfig from '@learny/config';
 
 const WEB_ROOT = fileURLToPath(new URL('../', import.meta.url));
 const SERVER_ENTRY = '@learny/config/server';
+// ADR-4007: the derived secrets are server-only too (node:crypto, master key).
+const DERIVED_SECRETS_ENTRY = '@learny/config/derived-secrets';
 const SKIPPED = new Set(['node_modules', '.next', 'test-results', '__screenshots__']);
 
 // Server-only symbols that must never be reachable through the package root (EF-2).
@@ -59,6 +61,14 @@ describe('[SPEC-009] config boundary', () => {
     const offenders = [...contents]
       .filter(([, source]) => /^\s*['"]use client['"];?/m.test(source.slice(0, 400)))
       .filter(([, source]) => source.includes(SERVER_ENTRY))
+      .map(([file]) => relative(file));
+    expect(offenders).toEqual([]);
+  });
+
+  it('never imports the derived secrets from a client component (ADR-4007)', () => {
+    const offenders = [...contents]
+      .filter(([, source]) => /^\s*['"]use client['"];?/m.test(source.slice(0, 400)))
+      .filter(([, source]) => source.includes(DERIVED_SECRETS_ENTRY))
       .map(([file]) => relative(file));
     expect(offenders).toEqual([]);
   });

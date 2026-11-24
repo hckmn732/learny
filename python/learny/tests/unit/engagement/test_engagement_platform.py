@@ -39,6 +39,7 @@ from learny.engagement.infrastructure.email import (
     is_rejected_email_error,
     is_transient_email_error,
     is_transient_status,
+    sender_address,
 )
 from learny.engagement.infrastructure.email_templates import (
     build_email_content,
@@ -200,6 +201,14 @@ def test_resend_requires_an_api_key() -> None:
         build_email_config(settings_with(email_mode="resend", resend_api_key=None))
     with pytest.raises(EmailConfigError):
         build_email_config(settings_with(app_env="production", email_mode="resend", email_link_secret="s"))
+
+
+def test_a_bare_sender_address_gets_the_learny_display_name() -> None:
+    assert sender_address("bonjour@learny.example") == "Learny <bonjour@learny.example>"
+    assert sender_address("  bonjour@learny.example  ") == "Learny <bonjour@learny.example>"
+    assert sender_address("Equipe <bonjour@learny.example>") == "Equipe <bonjour@learny.example>"
+    config = build_email_config(settings_with(email_from="qa@learny.example"))
+    assert config.sender == "Learny <qa@learny.example>"
 
 
 def test_sender_app_url_and_defaults() -> None:

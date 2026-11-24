@@ -135,8 +135,11 @@ EMAIL_FOOTER = {
     "tu": "Tu reçois cet e-mail parce que tu as un compte Learny.",
 }
 
+# Display name added to a bare `EMAIL_FROM` address (ADR-4007).
+SENDER_DISPLAY_NAME = "Learny"
+
 # service messages of the channel.
-LINK_SECRET_REQUIRED = "Configuration e-mail invalide : EMAIL_LINK_SECRET est obligatoire."
+LINK_SECRET_REQUIRED = "Configuration e-mail invalide : APP_ENCRYPTION_KEY est obligatoire."
 RESEND_KEY_REQUIRED = "Configuration e-mail invalide : EMAIL_MODE=resend exige RESEND_API_KEY."
 SMTP_FAILED = "Envoi SMTP impossible."
 RESEND_UNAVAILABLE = "Resend indisponible."

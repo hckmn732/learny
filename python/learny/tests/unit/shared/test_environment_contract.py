@@ -11,8 +11,12 @@ from cryptography.hazmat.primitives.asymmetric import ec
 from cryptography.hazmat.primitives.serialization import Encoding, PublicFormat
 from learny.shared.config import (
     ENVIRONMENT_VARIABLES,
+    PRODUCTION_REQUIRED_ENV,
     Settings,
+    derive_api_proxy_secret,
+    derive_email_link_secret,
     derive_rate_limit_secret,
+    derive_vapid_private_key,
     vapid_public_key_of,
     vapid_subject_of,
 )
@@ -41,6 +45,25 @@ RETIRED = (
     "SENTRY_DSN",
     "PY_HONO_UPSTREAM_URL",
     "OWNERSHIP_OVERRIDES",
+    # ADR-4007: subkeys of APP_ENCRYPTION_KEY, no longer variables.
+    "API_PROXY_SECRET",
+    "API_PROXY_SECRET_PREVIOUS",
+    "EMAIL_LINK_SECRET",
+    "VAPID_PRIVATE_KEY",
+)
+
+# Cross-language vectors (ADR-4007): `packages/config/src/derived-secrets.test.ts` asserts the same
+# values, so the web and the Python backend always agree on the derived secrets.
+VECTOR_MASTER_KEY = "MDEyMzQ1Njc4OWFiY2RlZjAxMjM0NTY3ODlhYmNkZWY="
+VECTOR_API_PROXY_SECRET = (
+    "75f53c11c2c358025613ab3c5b34ad3ae93ca6f18c529caf8f8b7dd5405c8bbe"  # learny-test-only
+)
+VECTOR_EMAIL_LINK_SECRET = (
+    "9f68ff917946afc69624718d7c7fd6598eb3f8a7e47b587d6ac7528e2cd494c3"  # learny-test-only
+)
+VECTOR_VAPID_PRIVATE_KEY = "BnerRr0ndj7dqrZK5kYg5LuIW7ZZ-LIGDrgcsrooP-s"
+VECTOR_VAPID_PUBLIC_KEY = (
+    "BNPt1zs7M-gROSNgpvuQ8eQjO6iaC2fe5CQsP5YskHe6jeue24D_XOMwKNbDPFGkIuftiFgp-doefGZt9f8Ntf0"
 )
 
 
@@ -171,13 +194,77 @@ def test_the_vapid_public_key_and_subject_are_derived(monkeypatch: pytest.Monkey
     private_b64 = base64.urlsafe_b64encode(scalar).rstrip(b"=").decode()
     point = private.public_key().public_bytes(Encoding.X962, PublicFormat.UncompressedPoint)
     expected_public = base64.urlsafe_b64encode(point).rstrip(b"=").decode()
-    monkeypatch.setenv("VAPID_PRIVATE_KEY", private_b64)
     monkeypatch.setenv("EMAIL_FROM", "Learny <bonjour@learny.example>")
 
-    settings = Settings()
+    settings = Settings(vapid_private_key=private_b64)
 
     assert vapid_public_key_of(private_b64) == expected_public
     assert settings.vapid_public_key == expected_public
     assert settings.vapid_subject == "mailto:bonjour@learny.example"
     assert vapid_subject_of("qa@learny.test") == "mailto:qa@learny.test"
     assert vapid_public_key_of("not a key") is None
+
+
+def test_the_internal_secrets_match_the_cross_language_vectors() -> None:
+    assert derive_api_proxy_secret(VECTOR_MASTER_KEY) == VECTOR_API_PROXY_SECRET
+    assert derive_email_link_secret(VECTOR_MASTER_KEY) == VECTOR_EMAIL_LINK_SECRET
+    assert derive_vapid_private_key(VECTOR_MASTER_KEY) == VECTOR_VAPID_PRIVATE_KEY
+    assert vapid_public_key_of(VECTOR_VAPID_PRIVATE_KEY) == VECTOR_VAPID_PUBLIC_KEY
+    # Surrounding spaces of the variable never change the subkeys.
+    assert derive_api_proxy_secret(f"  {VECTOR_MASTER_KEY}  ") == VECTOR_API_PROXY_SECRET
+
+
+def test_the_settings_derive_every_internal_secret_from_the_master_key(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    previous = "QkNERUZHSElKS0xNTk9QUVJTVFVWV1hZWjAxMjM0NTY="
+    monkeypatch.setenv("APP_ENCRYPTION_KEY", VECTOR_MASTER_KEY)
+    monkeypatch.setenv("APP_ENCRYPTION_KEY_PREVIOUS", previous)
+
+    settings = Settings()
+
+    assert settings.api_proxy_secret == VECTOR_API_PROXY_SECRET
+    assert settings.api_proxy_secret_previous == derive_api_proxy_secret(previous)
+    assert settings.email_link_secret == VECTOR_EMAIL_LINK_SECRET
+    assert settings.vapid_private_key == VECTOR_VAPID_PRIVATE_KEY
+    assert settings.vapid_public_key == VECTOR_VAPID_PUBLIC_KEY
+    labels = {
+        settings.rate_limit_ip_secret,
+        settings.api_proxy_secret,
+        settings.email_link_secret,
+    }
+    assert len(labels) == 3
+
+
+def test_the_derived_secrets_cannot_be_overridden_by_the_environment(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    monkeypatch.setenv("APP_ENCRYPTION_KEY", VECTOR_MASTER_KEY)
+    monkeypatch.setenv("API_PROXY_SECRET", "x" * 40)
+    monkeypatch.setenv("EMAIL_LINK_SECRET", "y" * 40)
+    monkeypatch.setenv("VAPID_PRIVATE_KEY", "z" * 43)
+
+    settings = Settings()
+
+    assert settings.api_proxy_secret == VECTOR_API_PROXY_SECRET
+    assert settings.email_link_secret == VECTOR_EMAIL_LINK_SECRET
+    assert settings.vapid_private_key == VECTOR_VAPID_PRIVATE_KEY
+    for name in ("API_PROXY_SECRET", "EMAIL_LINK_SECRET", "VAPID_PRIVATE_KEY"):
+        assert name not in PRODUCTION_REQUIRED_ENV
+
+
+def test_without_a_master_key_nothing_is_derived_and_explicit_values_win() -> None:
+    bare = Settings(app_encryption_key=None)
+    explicit = Settings(app_encryption_key=VECTOR_MASTER_KEY, api_proxy_secret="explicit-" * 4)
+
+    assert (bare.api_proxy_secret, bare.email_link_secret, bare.vapid_private_key) == (None, None, None)
+    assert bare.vapid_public_key is None
+    assert explicit.api_proxy_secret == "explicit-" * 4
+    assert explicit.email_link_secret == VECTOR_EMAIL_LINK_SECRET
+
+
+def test_the_vapid_scalar_is_always_a_valid_p256_private_key() -> None:
+    for index in range(64):
+        private = derive_vapid_private_key(f"master-{index}")
+        assert len(base64.urlsafe_b64decode(private + "=")) == 32
+        assert vapid_public_key_of(private) is not None
