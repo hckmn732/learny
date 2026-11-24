@@ -11,10 +11,12 @@
 # Coolify : application « Docker Compose » depuis le dépôt Git, Base Directory `/docker`, Docker
 # Compose Location `/compose.coolify.yml`. Guide complet : docs/operations/coolify.md.
 #
-# Les secrets viennent des variables d'environnement de la ressource Coolify (générés par
-# tools/docker/selfhost-secrets.mjs). La syntaxe `:?` bloque le déploiement tant qu'une valeur
-# obligatoire manque ; la liste reprend PRODUCTION_REQUIRED_KEYS (packages/config), que
-# l'application revérifie au démarrage. Ne jamais supprimer les volumes : ils portent les données.
+# Contrat d'environnement minimal (ADR-4007) : 7 variables obligatoires (APP_ENV est littéral),
+# 8 clés de fournisseurs et 3 facultatives (APP_ENCRYPTION_KEY_PREVIOUS, APP_VERSION, GIT_COMMIT).
+# Les secrets internes (relais web vers API, liens e-mail, VAPID, limiteur) sont dérivés
+# d'APP_ENCRYPTION_KEY ; le SMTP de Supabase Auth est celui de Resend. Les secrets Supabase sont
+# générés par tools/docker/selfhost-secrets.mjs. La syntaxe `:?` bloque le déploiement tant qu'une
+# valeur obligatoire manque. Ne jamais supprimer les volumes : ils portent les données.
 
 # SPEC-2301 — la pile de production gagne les services Python `api-py` et `worker-py`
 # (ADR-2007), déclarés dans un fichier inclus pour ne pas changer le rendu de la page
@@ -28,62 +30,22 @@ x-logging: &logging
 x-app-environment: &app-environment
   NODE_ENV: production
   APP_ENV: production
-  LOG_LEVEL: ${LOG_LEVEL:-info}
+  LOG_LEVEL: info
   APP_VERSION: ${APP_VERSION:-}
   # Empreinte du commit livré (7 à 40 caractères hexadécimaux), facultative. Pas SOURCE_COMMIT :
   # Coolify y met « unknown » quand le commit n'est pas inclus au build, valeur refusée par l'app.
   # Pas non plus en argument de build : Coolify recopie les arguments de build dans l'environnement.
   GIT_COMMIT: ${GIT_COMMIT:-}
   API_INTERNAL_URL: http://api-py:8000
-  API_PROXY_SECRET: ${API_PROXY_SECRET:?}
-  LEARNY_API_ROLE: all
   NEXT_PUBLIC_APP_URL: ${LEARNY_PUBLIC_APP_URL:?}
   NEXT_PUBLIC_SUPABASE_URL: ${LEARNY_PUBLIC_SUPABASE_URL:?}
   NEXT_PUBLIC_SUPABASE_ANON_KEY: ${NEXT_PUBLIC_SUPABASE_ANON_KEY:?}
-  SUPABASE_SERVICE_ROLE_KEY: ${SUPABASE_SERVICE_ROLE_KEY:?}
-  SUPABASE_JWT_SECRET: ${SUPABASE_JWT_SECRET:?}
-  DATABASE_URL: postgresql://postgres:${POSTGRES_PASSWORD:?}@db:5432/postgres
-  DATABASE_POOL_MAX: ${DATABASE_POOL_MAX:-10}
-  DB_LOG_QUERIES: 'false'
   APP_ENCRYPTION_KEY: ${APP_ENCRYPTION_KEY:?}
   APP_ENCRYPTION_KEY_PREVIOUS: ${APP_ENCRYPTION_KEY_PREVIOUS:-}
-  RATE_LIMIT_IP_SECRET: ${RATE_LIMIT_IP_SECRET:?}
-  TRUST_PROXY: 'true'
-  ALLOWED_ORIGINS: ${ALLOWED_ORIGINS:-}
-  LLM_MODE: live
-  ANTHROPIC_API_KEY: ${ANTHROPIC_API_KEY:-}
-  ALLOW_LOCAL_MODELS: ${ALLOW_LOCAL_MODELS:-false}
-  VOYAGE_API_KEY: ${VOYAGE_API_KEY:?}
-  EMBEDDING_DIM: ${EMBEDDING_DIM:-1024}
-  SEARCH_API_KEY: ${SEARCH_API_KEY:-}
-  JOBS_MODE: inline
-  EMAIL_MODE: ${EMAIL_MODE:-resend}
-  EMAIL_FROM: ${EMAIL_FROM:?}
-  RESEND_API_KEY: ${RESEND_API_KEY:?}
-  SMTP_HOST: ${SMTP_HOST:?}
-  SMTP_PORT: ${SMTP_PORT:?}
-  EMAIL_LINK_SECRET: ${EMAIL_LINK_SECRET:?}
-  NEXT_PUBLIC_VAPID_PUBLIC_KEY: ${NEXT_PUBLIC_VAPID_PUBLIC_KEY:?}
-  VAPID_PRIVATE_KEY: ${VAPID_PRIVATE_KEY:?}
-  VAPID_SUBJECT: ${VAPID_SUBJECT:?}
-  PUSH_MODE: live
-  STRIPE_MODE: ${STRIPE_MODE:-live}
-  STRIPE_SECRET_KEY: ${STRIPE_SECRET_KEY:?}
-  STRIPE_WEBHOOK_SECRET: ${STRIPE_WEBHOOK_SECRET:?}
-  STRIPE_PRICE_ID: ${STRIPE_PRICE_ID:?}
-  NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY: ${NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY:?}
-  SENTRY_DSN: ${SENTRY_DSN:-}
-  NEXT_PUBLIC_SENTRY_DSN: ${NEXT_PUBLIC_SENTRY_DSN:-}
-  LEGAL_ENTITY_NAME: ${LEGAL_ENTITY_NAME:?}
-  LEGAL_ENTITY_ADDRESS: ${LEGAL_ENTITY_ADDRESS:?}
-  LEGAL_CONTACT_EMAIL: ${LEGAL_CONTACT_EMAIL:?}
-  LEGAL_HOST_NAME: ${LEGAL_HOST_NAME:?}
-  LEGAL_CGU_VERSION: ${LEGAL_CGU_VERSION:-2026-11-11}
-  LEGAL_PRIVACY_VERSION: ${LEGAL_PRIVACY_VERSION:-2026-11-11}
   ENABLE_SDD_PAGES: 'false'
 
-# Contrat d'environnement du backend Python (ADR-2042) : seules ces variables sont lues ; les
-# modes (IA, e-mail, push, Stripe, jobs, limiteur) sont dérivés d'APP_ENV, le reste est constant.
+# Contrat d'environnement du backend Python (ADR-2042, ADR-4007) : seules ces variables sont lues ;
+# les modes sont dérivés d'APP_ENV, les secrets internes d'APP_ENCRYPTION_KEY, le reste est constant.
 x-py-environment: &py-environment
   APP_ENV: production
   APP_VERSION: ${APP_VERSION:-}
@@ -94,18 +56,16 @@ x-py-environment: &py-environment
   SUPABASE_SERVICE_ROLE_KEY: ${SUPABASE_SERVICE_ROLE_KEY:?}
   SUPABASE_JWT_SECRET: ${SUPABASE_JWT_SECRET:?}
   NEXT_PUBLIC_APP_URL: ${LEARNY_PUBLIC_APP_URL:?}
-  API_PROXY_SECRET: ${API_PROXY_SECRET:?}
   APP_ENCRYPTION_KEY: ${APP_ENCRYPTION_KEY:?}
   APP_ENCRYPTION_KEY_PREVIOUS: ${APP_ENCRYPTION_KEY_PREVIOUS:-}
   VOYAGE_API_KEY: ${VOYAGE_API_KEY:?}
   SEARCH_API_KEY: ${SEARCH_API_KEY:-}
   EMAIL_FROM: ${EMAIL_FROM:?}
-  EMAIL_LINK_SECRET: ${EMAIL_LINK_SECRET:?}
   RESEND_API_KEY: ${RESEND_API_KEY:?}
-  VAPID_PRIVATE_KEY: ${VAPID_PRIVATE_KEY:?}
   STRIPE_SECRET_KEY: ${STRIPE_SECRET_KEY:?}
   STRIPE_WEBHOOK_SECRET: ${STRIPE_WEBHOOK_SECRET:?}
   STRIPE_PRICE_ID: ${STRIPE_PRICE_ID:?}
+  NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY: ${NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY:?}
 
 services:
   # Backend Python (SPEC-2301, ADR-2043) : une image, deux commandes. Coolify ne suit pas
@@ -265,19 +225,20 @@ services:
       GOTRUE_JWT_AUD: authenticated
       GOTRUE_DB_NAMESPACE: auth
       GOTRUE_DB_MIGRATIONS_PATH: /usr/local/etc/auth/migrations
-      GOTRUE_DISABLE_SIGNUP: ${GOTRUE_DISABLE_SIGNUP:-false}
+      GOTRUE_DISABLE_SIGNUP: 'false'
       GOTRUE_MAILER_AUTOCONFIRM: 'false'
       # Modèles Learny (supabase/templates) : le lien mène à /api/v1/auth/callback?token_hash=…
       GOTRUE_MAILER_TEMPLATES_CONFIRMATION: http://auth-templates:8080/confirmation.html
       GOTRUE_MAILER_TEMPLATES_MAGIC_LINK: http://auth-templates:8080/magic-link.html
       GOTRUE_MAILER_SUBJECTS_CONFIRMATION: Confirmez votre adresse e-mail
       GOTRUE_MAILER_SUBJECTS_MAGIC_LINK: Votre lien de connexion à Learny
-      GOTRUE_SMTP_HOST: ${SMTP_HOST:?}
-      GOTRUE_SMTP_PORT: ${SMTP_PORT:?}
-      GOTRUE_SMTP_USER: ${SMTP_USER:-}
-      GOTRUE_SMTP_PASS: ${SMTP_PASS:-}
-      GOTRUE_SMTP_ADMIN_EMAIL: ${SMTP_ADMIN_EMAIL:?}
-      GOTRUE_SMTP_SENDER_NAME: ${SMTP_SENDER_NAME:-Learny}
+      # SMTP de Resend (ADR-4007) : même clé et même expéditeur que les e-mails de l'application.
+      GOTRUE_SMTP_HOST: smtp.resend.com
+      GOTRUE_SMTP_PORT: '465'
+      GOTRUE_SMTP_USER: resend
+      GOTRUE_SMTP_PASS: ${RESEND_API_KEY:?}
+      GOTRUE_SMTP_ADMIN_EMAIL: ${EMAIL_FROM:?}
+      GOTRUE_SMTP_SENDER_NAME: Learny
     healthcheck:
       test: ['CMD', 'wget', '--no-verbose', '--tries=1', '--spider', 'http://127.0.0.1:9999/health']
       interval: 5s
@@ -296,7 +257,7 @@ services:
         condition: service_completed_successfully
     environment:
       PGRST_DB_URI: postgres://authenticator:${POSTGRES_PASSWORD:?}@db:5432/postgres
-      PGRST_DB_SCHEMAS: ${PGRST_DB_SCHEMAS:-public,storage,graphql_public}
+      PGRST_DB_SCHEMAS: public,storage,graphql_public
       PGRST_DB_ANON_ROLE: anon
       PGRST_DB_USE_LEGACY_GUCS: 'false'
       PGRST_JWT_SECRET: ${SUPABASE_JWT_SECRET:?}
@@ -317,7 +278,8 @@ services:
       PGRST_JWT_SECRET: ${SUPABASE_JWT_SECRET:?}
       DATABASE_URL: postgres://supabase_storage_admin:${POSTGRES_PASSWORD:?}@db:5432/postgres
       POSTGREST_URL: http://rest:3000
-      FILE_SIZE_LIMIT: ${STORAGE_FILE_SIZE_LIMIT:-52428800}
+      # BR-APP-02 : 50 Mo.
+      FILE_SIZE_LIMIT: '52428800'
       STORAGE_BACKEND: file
       FILE_STORAGE_BACKEND_PATH: /var/lib/storage
       TENANT_ID: stub
@@ -404,7 +366,6 @@ services:
     environment:
       <<: *app-environment
       API_INTERNAL_URL: http://api-py:8000
-      API_PROXY_SECRET: ${API_PROXY_SECRET:?}
     expose:
       - '3000'
     depends_on:

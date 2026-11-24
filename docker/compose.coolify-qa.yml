@@ -24,94 +24,30 @@ x-logging: &logging
     max-size: '10m'
     max-file: '5'
 
-# Toutes les variables de l'application se pilotent depuis Coolify (onglet Environment Variables) :
-# la valeur après `:-` est le défaut de recette, appliqué quand la variable est absente ou vide.
-# Sans aucune variable ajoutée, la pile reste la recette figée et simulée décrite plus haut.
-# Pour une recette avec les vrais fournisseurs (APP_ENV=preview) ou en mode production, voir
-# docs/operations/coolify-qa.md §4 bis et ADR-0339 ; les combinaisons interdites sont refusées au
-# démarrage par packages/config (checkEnvironment). NODE_ENV reste figé : l'image est un build de
-# production, le mode fonctionnel passe par APP_ENV.
+# Contrat d'environnement minimal (ADR-4007) : le web ne reçoit que ce qu'il lit. La valeur après
+# `:-` est le défaut de recette, appliqué quand la variable est absente ou vide ; sans aucune
+# variable ajoutée, la pile reste la recette figée et simulée décrite plus haut. Les secrets
+# internes sont dérivés d'APP_ENCRYPTION_KEY ; les e-mails partent toujours vers Mailpit. NODE_ENV
+# reste figé : l'image est un build de production, le mode fonctionnel passe par APP_ENV.
 x-app-environment: &app-environment
   NODE_ENV: production
   # local (fournisseurs simulés) | preview (fournisseurs réels, Stripe en test) | production.
   APP_ENV: ${APP_ENV:-local}
-  LOG_LEVEL: ${LOG_LEVEL:-info}
+  LOG_LEVEL: info
   APP_VERSION: ${APP_VERSION:-}
   # Empreinte du commit livré (7 à 40 caractères hexadécimaux), facultative. Pas SOURCE_COMMIT :
   # Coolify y met « unknown » quand le commit n'est pas inclus au build, valeur refusée par l'app.
   # Pas non plus en argument de build : Coolify recopie les arguments de build dans l'environnement.
   GIT_COMMIT: ${GIT_COMMIT:-}
   API_INTERNAL_URL: http://api-py:8000
-  API_PROXY_SECRET: ${API_PROXY_SECRET:?}
-  LEARNY_API_ROLE: all
 
   # Adresses et Supabase (les trois premières sont aussi intégrées au build du web).
   NEXT_PUBLIC_APP_URL: ${LEARNY_PUBLIC_APP_URL:?}
   NEXT_PUBLIC_SUPABASE_URL: ${LEARNY_PUBLIC_SUPABASE_URL:?}
   NEXT_PUBLIC_SUPABASE_ANON_KEY: ${NEXT_PUBLIC_SUPABASE_ANON_KEY:?}
-  SUPABASE_SERVICE_ROLE_KEY: ${SUPABASE_SERVICE_ROLE_KEY:?}
-  SUPABASE_JWT_SECRET: ${SUPABASE_JWT_SECRET:?}
-  DATABASE_URL: postgresql://postgres:${POSTGRES_PASSWORD:?}@db:5432/postgres
-  DATABASE_POOL_MAX: ${DATABASE_POOL_MAX:-10}
-  DB_LOG_QUERIES: ${DB_LOG_QUERIES:-false}
 
-  # Sécurité.
   APP_ENCRYPTION_KEY: ${APP_ENCRYPTION_KEY:?}
   APP_ENCRYPTION_KEY_PREVIOUS: ${APP_ENCRYPTION_KEY_PREVIOUS:-}
-  RATE_LIMIT_IP_SECRET: ${RATE_LIMIT_IP_SECRET:?}
-  TRUST_PROXY: ${TRUST_PROXY:-true}
-  ALLOWED_ORIGINS: ${ALLOWED_ORIGINS:-}
-  # Défaut de recette : l'horloge de démonstration est figée (CLOCK_FIXED_AT), donc les seaux du
-  # limiteur de débit de SPEC-208 ne se rechargent jamais d'eux-mêmes (leur fenêtre se calcule
-  # avec l'horloge injectée) et un testeur qui épuise son quota resterait bloqué. La recette
-  # désactive donc le limiteur ; SPEC-208 reste couvert par ses tests automatisés. Avec l'horloge
-  # réelle, remettez `on` ; `off` est refusé en production (packages/config, checkEnvironment).
-  RATE_LIMIT_MODE: ${RATE_LIMIT_MODE:-off}
-
-  # IA (LLM_MODE=live exige ANTHROPIC_API_KEY ; VOYAGE_API_KEY pour les embeddings).
-  LLM_MODE: ${LLM_MODE:-mock}
-  ANTHROPIC_API_KEY: ${ANTHROPIC_API_KEY:-}
-  ALLOW_LOCAL_MODELS: ${ALLOW_LOCAL_MODELS:-false}
-  VOYAGE_API_KEY: ${VOYAGE_API_KEY:-}
-  EMBEDDING_DIM: ${EMBEDDING_DIM:-1024}
-  SEARCH_API_KEY: ${SEARCH_API_KEY:-}
-  DEEPGRAM_API_KEY: ${DEEPGRAM_API_KEY:-}
-
-  # Paiement (STRIPE_MODE=test avec des clés de test Stripe ; live = vrais paiements).
-  STRIPE_MODE: ${STRIPE_MODE:-mock}
-  STRIPE_SECRET_KEY: ${STRIPE_SECRET_KEY:-}
-  STRIPE_WEBHOOK_SECRET: ${STRIPE_WEBHOOK_SECRET:-}
-  STRIPE_PRICE_ID: ${STRIPE_PRICE_ID:-}
-  NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY: ${NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY:-}
-
-  # Notifications push (PUSH_MODE=live exige la paire VAPID).
-  PUSH_MODE: ${PUSH_MODE:-mock}
-  NEXT_PUBLIC_VAPID_PUBLIC_KEY: ${NEXT_PUBLIC_VAPID_PUBLIC_KEY:-}
-  VAPID_PRIVATE_KEY: ${VAPID_PRIVATE_KEY:-}
-  VAPID_SUBJECT: ${VAPID_SUBJECT:-mailto:qa@learny.test}
-
-  # Tâches de fond : le worker Python de la pile (ADR-2006).
-  JOBS_MODE: ${JOBS_MODE:-inline}
-
-  # E-mails : par défaut tous capturés par Mailpit (smtp) ; resend exige RESEND_API_KEY.
-  EMAIL_MODE: ${EMAIL_MODE:-smtp}
-  SMTP_HOST: ${SMTP_HOST:-mailpit}
-  SMTP_PORT: ${SMTP_PORT:-1025}
-  EMAIL_FROM: ${EMAIL_FROM:-Learny QA <qa@learny.test>}
-  EMAIL_LINK_SECRET: ${EMAIL_LINK_SECRET:?}
-  RESEND_API_KEY: ${RESEND_API_KEY:-}
-
-  # Observabilité (facultative).
-  SENTRY_DSN: ${SENTRY_DSN:-}
-  NEXT_PUBLIC_SENTRY_DSN: ${NEXT_PUBLIC_SENTRY_DSN:-}
-
-  # Mentions légales (fictives par défaut) ; versions vides = versions documentées.
-  LEGAL_ENTITY_NAME: ${LEGAL_ENTITY_NAME:-Learny (environnement de QA)}
-  LEGAL_ENTITY_ADDRESS: ${LEGAL_ENTITY_ADDRESS:-Adresse fictive de recette}
-  LEGAL_CONTACT_EMAIL: ${LEGAL_CONTACT_EMAIL:-qa@learny.test}
-  LEGAL_HOST_NAME: ${LEGAL_HOST_NAME:-Serveur Coolify de recette}
-  LEGAL_CGU_VERSION: ${LEGAL_CGU_VERSION:-}
-  LEGAL_PRIVACY_VERSION: ${LEGAL_PRIVACY_VERSION:-}
 
   # Horloge : absente ou vide = instant figé de la démo (ADR-0047) ; `real` = horloge réelle (la
   # commande des conteneurs web, api et seed retire alors la variable avant de lancer Node, qui
@@ -120,8 +56,9 @@ x-app-environment: &app-environment
   # Pages /_dev/sdd/* : seule la valeur exacte `true` les active ; refusées en production.
   ENABLE_SDD_PAGES: ${ENABLE_SDD_PAGES:-true}
 
-# Contrat d'environnement du backend Python (ADR-2042) : APP_ENV=local et l'horloge figée donnent
-# les modes simulés (IA, Stripe, push), le SMTP Mailpit, les jobs par le worker et le limiteur coupé.
+# Contrat d'environnement du backend Python (ADR-2042, ADR-4007) : APP_ENV=local et l'horloge
+# figée donnent les modes simulés (IA, Stripe, push), les jobs par le worker et le limiteur coupé ;
+# SMTP_HOST=mailpit envoie tous les e-mails vers Mailpit.
 x-py-environment: &py-environment
   APP_ENV: ${APP_ENV:-local}
   APP_VERSION: ${APP_VERSION:-}
@@ -132,20 +69,18 @@ x-py-environment: &py-environment
   SUPABASE_SERVICE_ROLE_KEY: ${SUPABASE_SERVICE_ROLE_KEY:?}
   SUPABASE_JWT_SECRET: ${SUPABASE_JWT_SECRET:?}
   NEXT_PUBLIC_APP_URL: ${LEARNY_PUBLIC_APP_URL:?}
-  API_PROXY_SECRET: ${API_PROXY_SECRET:?}
   APP_ENCRYPTION_KEY: ${APP_ENCRYPTION_KEY:?}
   APP_ENCRYPTION_KEY_PREVIOUS: ${APP_ENCRYPTION_KEY_PREVIOUS:-}
   CLOCK_FIXED_AT: ${CLOCK_FIXED_AT:-2026-11-11T12:20:00Z}
   VOYAGE_API_KEY: ${VOYAGE_API_KEY:-}
   SEARCH_API_KEY: ${SEARCH_API_KEY:-}
-  EMAIL_FROM: ${EMAIL_FROM:-Learny QA <qa@learny.test>}
-  EMAIL_LINK_SECRET: ${EMAIL_LINK_SECRET:?}
+  EMAIL_FROM: qa@learny.test
   RESEND_API_KEY: ${RESEND_API_KEY:-}
-  SMTP_HOST: ${SMTP_HOST:-mailpit}
-  VAPID_PRIVATE_KEY: ${VAPID_PRIVATE_KEY:-}
+  SMTP_HOST: mailpit
   STRIPE_SECRET_KEY: ${STRIPE_SECRET_KEY:-}
   STRIPE_WEBHOOK_SECRET: ${STRIPE_WEBHOOK_SECRET:-}
   STRIPE_PRICE_ID: ${STRIPE_PRICE_ID:-}
+  NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY: ${NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY:-}
   ENABLE_SDD_PAGES: ${ENABLE_SDD_PAGES:-true}
 
 services:
@@ -490,7 +425,6 @@ services:
     environment:
       <<: *app-environment
       API_INTERNAL_URL: http://api-py:8000
-      API_PROXY_SECRET: ${API_PROXY_SECRET:?}
     expose:
       - '3000'
     depends_on:
