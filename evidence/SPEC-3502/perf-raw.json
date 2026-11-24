@@ -1,0 +1,43 @@
+{
+  "measuredAt": "2026-11-24T12:42:17.091Z",
+  "device": {
+    "model": "sdk_gphone64_x86_64",
+    "api": "35",
+    "abi": "x86_64",
+    "resolution": "Physical size: 1080x2400"
+  },
+  "coldStart": {
+    "samples": [
+      391,
+      422,
+      393,
+      399,
+      400,
+      424,
+      428,
+      389,
+      381,
+      368
+    ],
+    "p75": 422,
+    "max": 428,
+    "todayVisible": false,
+    "adbDump": "UI hierchary dumped to: /sdcard/window.xml"
+  },
+  "tapResponse": {
+    "samplesMs": [],
+    "count": 0,
+    "p90": null,
+    "max": null
+  },
+  "scroll": {
+    "jankyFrames": 0,
+    "jankyPercent": 0,
+    "totalFrames": 0,
+    "frameTime90": 4950
+  },
+  "download": {
+    "apkMB": 37.7,
+    "aabMB": null
+  }
+}

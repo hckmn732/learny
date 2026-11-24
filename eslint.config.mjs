@@ -935,6 +935,18 @@ export default tseslint.config(
     },
   },
   {
+    // SPEC-3502 — outillage de publication : fiches des stores, générateur de licences et test de
+    // configuration. Ces fichiers sont exécutés par Node (jamais empaquetés par Metro) et lisent le
+    // disque et `node_modules` ; l'interdiction des modules Node (ET-3) vise le code de
+    // l'application, pas cet outillage hors application.
+    files: [
+      'apps/mobile/store/**/*.{ts,mjs}',
+      'apps/mobile/scripts/**/*.mjs',
+      'apps/mobile/test/integration/release-config.int.test.ts',
+    ],
+    rules: { 'no-restricted-imports': 'off' },
+  },
+  {
     // SPEC-3001 ET-4 — the application reads the time through src/lib/clock.ts only (ADR-0047).
     files: ['apps/mobile/**/*.{ts,tsx}'],
     ignores: ['apps/mobile/src/lib/clock.ts'],

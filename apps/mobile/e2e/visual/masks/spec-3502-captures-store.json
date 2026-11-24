@@ -1,0 +1,9 @@
+[
+  {
+    "x": 0,
+    "y": 0.94,
+    "width": 1,
+    "height": 0.06,
+    "why": "Indicateur d'accueil / barre de navigation système (ADR-3003 § 3) : chrome natif rendu par Android, il diffère de la référence et n'appartient à aucun contenu. La barre d'état du haut est déjà couverte par les zones natives par défaut (5 %). Aucune zone de contenu n'est masquée : les cartes de budgets, d'audit, de builds et de stores restent comparées."
+  }
+]

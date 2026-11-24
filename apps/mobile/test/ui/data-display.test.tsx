@@ -75,7 +75,9 @@ describe('[SPEC-3002] affichage de données', () => {
       await render(
         <StatCard label="Série" value="12" unit="j" onPress={onPress} testID="stat-action" />,
       );
-      expectAccessible(screen, 'stat-action', { role: 'button', label: 'Série : 12j' });
+      // SPEC-3502 BR-PLA-03 — la valeur et son unité sont séparées par une espace : TalkBack
+      // annonçait « Série : 12j ». L'étiquette est désormais « Série : 12 j ».
+      expectAccessible(screen, 'stat-action', { role: 'button', label: 'Série : 12 j' });
       await fireEvent.press(screen.getByTestId('stat-action'));
       expect(onPress).toHaveBeenCalledTimes(1);
     });

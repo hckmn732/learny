@@ -53,6 +53,8 @@ export default defineConfig({
             'apps/mobile/e2e/**/*.test.ts',
             // SPEC-3002 CA-5: the lint-rule proof runs in Node (ESLint API), not in Jest.
             'apps/mobile/test/*.test.ts',
+            // SPEC-3502 : fiches des stores et licences (Vitest Node, sans appareil).
+            'apps/mobile/store/**/*.test.ts',
             'apps/web/{app,components,lib}/**/*.test.{ts,tsx}',
             'apps/web/test/unit/**/*.test.ts',
             'apps/web/scripts/**/*.test.ts',

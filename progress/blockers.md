@@ -77,3 +77,4 @@
   les identifiants sont fournis, sans changement de code attendu. Consigné aussi comme écart 1 de
   `evidence/SPEC-3402/acceptance.md`.
 - **SPEC-3501** (2026-11-24T11:17:30.523Z, 1 tentative(s)) — identifiants APNs (cle .p8) et FCM (compte de service) absents : aucun envoi reel possible, tout le canal est livre et prouve en PUSH_MODE=mock, iOS non compilable sans macOS
+- **SPEC-3502** (2026-11-24T13:15:50.055Z, 1 tentative(s)) — comptes Apple Developer, Google Play et projet EAS absents, aucun macOS : builds signes, TestFlight, Google Play test interne, flux iOS et VoiceOver non mesurables ; identifiants APNs/FCM absents ; AAB non produit

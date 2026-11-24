@@ -357,6 +357,14 @@ export function ProfileScreen() {
                   }}
                 />
                 <ListRow
+                  testID="profile-row-about"
+                  icon="logo"
+                  title={t.rows.about}
+                  onPress={() => {
+                    router.push('/profil/a-propos');
+                  }}
+                />
+                <ListRow
                   testID="profile-sign-out"
                   icon="logout"
                   title={t.rows.signOut}

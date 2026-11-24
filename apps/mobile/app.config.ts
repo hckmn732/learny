@@ -2,6 +2,11 @@
 // `EXPO_PUBLIC_*` variables are required and validated with the same Zod schema as the
 // application (`src/config.ts`). A missing or malformed value stops the build with an explicit
 // message that lists the *keys* only — a value never appears in a log or in the manifest.
+//
+// SPEC-3502 — publication : identifiants définitifs, permissions déclarées, manifeste de
+// confidentialité iOS (`ios.privacyManifests` → `PrivacyInfo.xcprivacy` par `expo prebuild`, ET-3),
+// aucune API de suivi, aucun réglage de test. Le profil `production` d'`eas.json` ne pose aucune
+// variable de démonstration : `extra.enableSddPages` y vaut donc `false`.
 import type { ConfigContext, ExpoConfig } from 'expo/config';
 
 import { formatConfigError, parseConfig, readPublicEnv } from './src/config.ts';
@@ -13,6 +18,51 @@ import { formatConfigError, parseConfig, readPublicEnv } from './src/config.ts';
  * the token check of the visual flow compares this value with it.
  */
 const CANVAS = '#F4F4F1';
+
+/**
+ * API à raison requise du manifeste de confidentialité iOS (SPEC-3502 ET-3, BR-PLA-05). La même
+ * liste est publiée par `store/metadata.ts` (`REQUIRED_REASON_APIS`) et la fiche de confidentialité
+ * `store/privacy/app-store.md` ; `test/integration/release-config.int.test.ts` vérifie que les trois
+ * restent d'accord. Aucun suivi (`NSPrivacyTracking: false`), aucun domaine de suivi.
+ */
+const REQUIRED_REASON_APIS = [
+  {
+    NSPrivacyAccessedAPIType: 'NSPrivacyAccessedAPICategoryFileTimestamp',
+    NSPrivacyAccessedAPITypeReasons: ['C617.1'],
+  },
+  {
+    NSPrivacyAccessedAPIType: 'NSPrivacyAccessedAPICategoryUserDefaults',
+    NSPrivacyAccessedAPITypeReasons: ['CA92.1'],
+  },
+  {
+    NSPrivacyAccessedAPIType: 'NSPrivacyAccessedAPICategorySystemBootTime',
+    NSPrivacyAccessedAPITypeReasons: ['35F9.1'],
+  },
+  {
+    NSPrivacyAccessedAPIType: 'NSPrivacyAccessedAPICategoryDiskSpace',
+    NSPrivacyAccessedAPITypeReasons: ['E174.1'],
+  },
+];
+
+/**
+ * Données collectées déclarées à Apple (BR-PLA-05, ET-3). Elles décrivent exactement le registre
+ * des traitements (SPEC-806) : coordonnées, contenu utilisateur, activité, jeton de notification.
+ * Aucune n'est liée au suivi publicitaire.
+ */
+const COLLECTED_DATA_TYPES = [
+  'NSPrivacyCollectedDataTypeEmailAddress',
+  'NSPrivacyCollectedDataTypeName',
+  'NSPrivacyCollectedDataTypeOtherUserContent',
+  'NSPrivacyCollectedDataTypeProductInteraction',
+  'NSPrivacyCollectedDataTypeDeviceID',
+].map((NSPrivacyCollectedDataType) => ({
+  NSPrivacyCollectedDataType,
+  NSPrivacyCollectedDataTypeLinked: true,
+  NSPrivacyCollectedDataTypeTracking: false,
+  // Finalité unique : le fonctionnement de l'application. Aucune finalité « analytics » ni
+  // « publicité » (ET-4 : pas de télémétrie, Sentry n'est pas configuré).
+  NSPrivacyCollectedDataTypePurposes: ['NSPrivacyCollectedDataTypePurposeAppFunctionality'],
+}));
 
 const parsed = parseConfig(readPublicEnv());
 
@@ -67,10 +117,29 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
     infoPlist: {
       // The demo page talks to the local API of the development stack (ADR-3004 § 7).
       NSAppTransportSecurity: { NSAllowsLocalNetworking: true },
+      // Publication : l'application n'utilise que le chiffrement fourni par le système (HTTPS,
+      // Keychain). La déclaration évite une question bloquante à chaque revue (SPEC-3502 EF-4).
+      ITSAppUsesNonExemptEncryption: false,
+    },
+    // SPEC-3502 ET-3, BR-PLA-05 — manifeste de confidentialité (`PrivacyInfo.xcprivacy`) : API à
+    // raison requise et données collectées, aucune collecte publicitaire ni de suivi.
+    privacyManifests: {
+      NSPrivacyTracking: false,
+      NSPrivacyTrackingDomains: [],
+      NSPrivacyAccessedAPITypes: REQUIRED_REASON_APIS,
+      NSPrivacyCollectedDataTypes: COLLECTED_DATA_TYPES,
     },
   },
   android: {
     package: 'fr.learny.app',
+    // SPEC-3502 EF-4 — permissions réellement utilisées, déclarées explicitement pour la fiche
+    // Google Play (ET-3) : réseau, notifications de rappel, vibration du canal « Rappels Learny ».
+    // Aucune permission de localisation, de contacts, de caméra ni de journal d'appels.
+    permissions: [
+      'android.permission.INTERNET',
+      'android.permission.POST_NOTIFICATIONS',
+      'android.permission.VIBRATE',
+    ],
     // SPEC-3101 ET-3, EF-6 — App Links verified on the two paths a link can land on: the
     // static page `/auth/mobile` and the callback of the API carried by the e-mails.
     ...(linkHost === null
@@ -144,7 +213,7 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
   },
   extra: {
     // Read by `src/config.ts` at runtime only when the build did not inline the values; never a
-    // server secret (ADR-3004 § 1).
+    // server secret (ADR-3004 § 1). `false` in a production build (eas.json, SPEC-3502 EF-4).
     enableSddPages: sddPages,
   },
 });
