@@ -154,10 +154,10 @@ jobs:
       - name: Contrôler la pile auto-hébergée
         run: node tools/docker/check-selfhost.mjs --static
       # SPEC-2301, ADR-2007 : une seule image pour la façade et le worker Python, construite par
-      # la CI ; Coolify construit la même image depuis docker/api-py.Dockerfile.
+      # la CI ; Coolify construit la même image depuis docker/api.Dockerfile.
       - name: Construire l'image Python (façade et worker)
         run: |
-          docker build -f docker/api-py.Dockerfile -t "learny-py:${GITHUB_SHA}" .
+          docker build -f docker/api.Dockerfile -t "learny-py:${GITHUB_SHA}" .
       - name: Tests unitaires avec couverture
         run: pnpm test:unit --coverage
       - name: Publier les rapports unitaires

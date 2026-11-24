@@ -3,7 +3,7 @@
 package = false
 
 [tool.uv.workspace]
-members = ["packages-py/learny", "apps/api-py", "apps/worker-py"]
+members = ["python/learny", "apps/api", "apps/worker"]
 
 [dependency-groups]
 dev = [
@@ -23,7 +23,7 @@ target-version = "py313"
 exclude = [
   "node_modules", ".next", ".venv", "dist", "test-results", "coverage", "docs", "evidence", "design",
   # Generated from api/openapi.yaml (ADR-2012): never edited, formatted or linted by hand.
-  "apps/api-py/src/learny_api/generated",
+  "apps/api/src/learny_api/generated",
 ]
 line-length = 110
 
@@ -40,9 +40,9 @@ ignore = ["S101"] # plain asserts are the single assertion style of the test sui
 "**/locale_fr/*.py" = ["RUF001", "RUF002", "RUF003", "S105", "S106"]
 # La copie d un programme compose un `values` de paires d identifiants : seuls des fragments
 # litteraux et des parametres lies sont concatenes, jamais une valeur issue d une requete.
-"packages-py/learny/src/learny/formation/infrastructure/copy_programme.py" = ["S608"]
+"python/learny/src/learny/formation/infrastructure/copy_programme.py" = ["S608"]
 # The system clock is the one legitimate use of datetime.now(): every other module goes through it.
-"packages-py/learny/src/learny/shared/clock.py" = ["TID251"]
+"python/learny/src/learny/shared/clock.py" = ["TID251"]
 
 [tool.ruff.lint.flake8-tidy-imports.banned-api]
 "datetime.datetime.now".msg = "use deps.clock.now()"
@@ -55,11 +55,11 @@ python_version = "3.13"
 strict = true
 plugins = ["pydantic.mypy"]
 mypy_path = [
-  "packages-py/learny/src",
-  "packages-py/learny/tests",
-  "apps/api-py/src",
-  "apps/worker-py/src",
-  "apps/worker-py/tests",
+  "python/learny/src",
+  "python/learny/tests",
+  "apps/api/src",
+  "apps/worker/src",
+  "apps/worker/tests",
 ]
 exclude = ["generated/", "conftest.py"]
 
@@ -67,8 +67,8 @@ exclude = ["generated/", "conftest.py"]
 asyncio_mode = "auto"
 asyncio_default_fixture_loop_scope = "function"
 markers = ["spec(id): SDD spec id"]
-testpaths = ["packages-py", "apps/api-py", "apps/worker-py"]
-pythonpath = ["packages-py/learny/src", "apps/api-py/src", "apps/worker-py/src"]
+testpaths = ["python", "apps/api", "apps/worker"]
+pythonpath = ["python/learny/src", "apps/api/src", "apps/worker/src"]
 
 [tool.importlinter]
 root_packages = ["learny", "learny_api", "learny_worker"]

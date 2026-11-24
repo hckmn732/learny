@@ -9,9 +9,9 @@ pytestmark = pytest.mark.spec("SPEC-2101")
 
 ROOT = Path(__file__).resolve().parents[5]
 SOURCE_ROOTS = (
-    ROOT / "packages-py" / "learny" / "src",
-    ROOT / "apps" / "api-py" / "src",
-    ROOT / "apps" / "worker-py" / "src",
+    ROOT / "python" / "learny" / "src",
+    ROOT / "apps" / "api" / "src",
+    ROOT / "apps" / "worker" / "src",
 )
 # The attribute form is the call; the bare name is the definition in the unit of work.
 CALL = ".service_tx("

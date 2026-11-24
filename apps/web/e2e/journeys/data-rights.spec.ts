@@ -260,6 +260,6 @@ test('données personnelles : export complet, annulation puis effacement à J+30
 
   // SPEC-211 CL-7 â€” the nightly erasure is a Python worker job now (ADR-2006): the whole
   // itinerary (cancelled, one minute early, due) runs in
-  // packages-py/learny/tests/integration/privacy/test_personal_data.py with an injected clock.
+  // python/learny/tests/integration/privacy/test_personal_data.py with an injected clock.
   // This journey keeps what the web owns: the request, the persisted deadline and the cancel.
 });

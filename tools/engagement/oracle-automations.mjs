@@ -248,7 +248,7 @@ const PLAN_CASES = [
 ];
 
 writeFileSync(
-  'packages-py/learny/tests/fixtures/engagement_automations.json',
+  'python/learny/tests/fixtures/engagement_automations.json',
   `${JSON.stringify(
     {
       params: PARAMS_CASES.map((entry) => ({

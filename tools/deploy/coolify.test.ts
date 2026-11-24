@@ -3,7 +3,7 @@
 // The services live in an overlay included by the stack (`include:`), so the deployment is the same
 // Coolify resource while the topology page of SPEC-1103 keeps its rendered service list — its visual
 // baseline is an oracle of another specification (ADR-1001, ADR-2008). The two services come from
-// the single image of `docker/api-py.Dockerfile` and differ only by their command; every
+// the single image of `docker/api.Dockerfile` and differ only by their command; every
 // environment entry is a name (a `${…}` interpolation), never a value, so no secret is committed.
 import fs from 'node:fs';
 import path from 'node:path';
@@ -17,7 +17,7 @@ const STACKS = [
   { base: 'docker/compose.coolify.yml', overlay: './compose.coolify-py.yml' },
   { base: 'docker/compose.coolify-qa.yml', overlay: './compose.coolify-qa-py.yml' },
 ] as const;
-const PY_DOCKERFILE = 'docker/api-py.Dockerfile';
+const PY_DOCKERFILE = 'docker/api.Dockerfile';
 
 type Service = Record<string, unknown>;
 

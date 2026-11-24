@@ -125,6 +125,6 @@ const fixture = {
 };
 
 writeFileSync(
-  'packages-py/learny/tests/fixtures/engagement_jobs.json',
+  'python/learny/tests/fixtures/engagement_jobs.json',
   `${JSON.stringify(fixture, null, 2)}\n`,
 );

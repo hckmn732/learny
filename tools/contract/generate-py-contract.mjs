@@ -1,8 +1,8 @@
 // SPEC-2201 — generates the Python contract artefacts from `api/openapi.yaml` (ADR-2012).
 //
 // Two files are produced, both committed and never edited by hand:
-//   apps/api-py/src/learny_api/generated/models.py  Pydantic DTOs (datamodel-codegen, spikes.md §F)
-//   apps/api-py/src/learny_api/generated/routes.py  RouteSpec table built from the `x-learny` policy
+//   apps/api/src/learny_api/generated/models.py  Pydantic DTOs (datamodel-codegen, spikes.md §F)
+//   apps/api/src/learny_api/generated/routes.py  RouteSpec table built from the `x-learny` policy
 // `--check` regenerates into a temporary directory and compares, like `sdk:check` (ADR-2012).
 import { execFileSync } from 'node:child_process';
 import { existsSync, mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
@@ -14,7 +14,7 @@ import YAML from 'yaml';
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..', '..');
 const SOURCE = join(ROOT, 'api', 'openapi.yaml');
-const GENERATED = join(ROOT, 'apps', 'api-py', 'src', 'learny_api', 'generated');
+const GENERATED = join(ROOT, 'apps', 'api', 'src', 'learny_api', 'generated');
 const MODELS = join(GENERATED, 'models.py');
 const ROUTES = join(GENERATED, 'routes.py');
 

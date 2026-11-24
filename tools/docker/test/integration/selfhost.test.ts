@@ -165,7 +165,7 @@ beforeAll(async () => {
   // Real, observed image builds (EF-1, ET-1, CA-1).
   for (const [dockerfile, image, log] of [
     ['docker/web.Dockerfile', WEB_IMAGE, 'build-web.txt'],
-    ['docker/api-py.Dockerfile', API_IMAGE, 'build-api.txt'],
+    ['docker/api.Dockerfile', API_IMAGE, 'build-api.txt'],
   ] as const) {
     const args = ['build', '-f', dockerfile, '-t', image];
     for (const [key, value] of Object.entries(BUILD_ARGS))

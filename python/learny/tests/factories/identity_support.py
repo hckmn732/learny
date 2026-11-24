@@ -3,7 +3,7 @@
 The integration suite runs against the shared local stack. Every test seeds rows with the owner role
 inside a service transaction that `rolled_back` always reverts; the use cases then run under the
 caller's `authenticated` role, inside a savepoint so a refusal leaves the seed usable. This mirrors
-`packages-py/learny/tests/factories/db_support.as_user` without opening a second connection.
+`python/learny/tests/factories/db_support.as_user` without opening a second connection.
 """
 
 import json

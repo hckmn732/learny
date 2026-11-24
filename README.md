@@ -30,8 +30,8 @@ Avec Claude Code : `/sdd-loop` (boucle complète jusqu'à `v2.0.0`) ou `/sdd-nex
 | [`progress/`](progress) | suivi généré : `PROGRESS.md`, `state.json`, anomalies, blocages, audit |
 | [`evidence/`](evidence) | preuves de validation par spécification et par checkpoint |
 
-Le backend est **unique et Python** : `apps/api-py` est la façade FastAPI qui sert tout le contrat
-(`api/openapi.yaml`, 156 opérations et 11 routes spéciales), `apps/worker-py` est le worker
+Le backend est **unique et Python** : `apps/api` est la façade FastAPI qui sert tout le contrat
+(`api/openapi.yaml`, 156 opérations et 11 routes spéciales), `apps/worker` est le worker
 (outbox PostgreSQL, 23 consommateurs d'événements, 2 crons), et `apps/web` (Next.js) en est un
 client pur. Le TypeScript backend — `apps/api` Hono, `apps/worker` Inngest et les paquets serveur —
 a été retiré (ADR-2043, SPEC-2302) : il ne reste en TypeScript que le contrat, les clients, le

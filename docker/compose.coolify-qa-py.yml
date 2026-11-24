@@ -35,7 +35,7 @@ services:
   api-py:
     build:
       context: ..
-      dockerfile: docker/api-py.Dockerfile
+      dockerfile: docker/api.Dockerfile
     command:
       - sh
       - -c
@@ -81,7 +81,7 @@ services:
   worker-py:
     build:
       context: ..
-      dockerfile: docker/api-py.Dockerfile
+      dockerfile: docker/api.Dockerfile
     command: ['python', '-m', 'learny_worker']
     user: '1001:1001'
     read_only: true

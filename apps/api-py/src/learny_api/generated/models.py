@@ -435,9 +435,7 @@ class CadrageGetOutput(BaseModel):
     )
     messages: list[Message]
     pendingQuestion: PendingQuestion | None
-    profile: dict[
-        Literal['scope', 'starting_point', 'target_level', 'volume', 'dates'], Profile
-    ]
+    profile: dict[Literal['scope', 'starting_point', 'target_level', 'volume', 'dates'], Profile]
     questionsAsked: conint(ge=0, le=5)
     title: constr(min_length=1, max_length=120)
 
@@ -454,9 +452,7 @@ class CadrageMessageBody(BaseModel):
     )
     content: constr(min_length=1, max_length=1000) | None = None
     retry: Literal[True] | None = None
-    selections: list[constr(min_length=1, max_length=60)] | None = Field(
-        None, max_length=6, min_length=1
-    )
+    selections: list[constr(min_length=1, max_length=60)] | None = Field(None, max_length=6, min_length=1)
 
 
 class Message1(BaseModel):
@@ -507,9 +503,7 @@ class CadrageMessageOutput(BaseModel):
     )
     messages: list[Message1]
     pendingQuestion: PendingQuestion1 | None
-    profile: dict[
-        Literal['scope', 'starting_point', 'target_level', 'volume', 'dates'], Profile1
-    ]
+    profile: dict[Literal['scope', 'starting_point', 'target_level', 'volume', 'dates'], Profile1]
     questionsAsked: conint(ge=0, le=5)
     title: constr(min_length=1, max_length=120)
 
@@ -568,9 +562,7 @@ class State2(BaseModel):
     )
     messages: list[Message2]
     pendingQuestion: PendingQuestion2 | None
-    profile: dict[
-        Literal['scope', 'starting_point', 'target_level', 'volume', 'dates'], Profile2
-    ]
+    profile: dict[Literal['scope', 'starting_point', 'target_level', 'volume', 'dates'], Profile2]
     questionsAsked: conint(ge=0, le=5)
     title: constr(min_length=1, max_length=120)
 
@@ -816,9 +808,7 @@ class Context(BaseModel):
     model_config = ConfigDict(
         extra='forbid',
     )
-    include: dict[
-        Literal['formation', 'chapter', 'passage', 'resources', 'gap', 'profile'], bool
-    ]
+    include: dict[Literal['formation', 'chapter', 'passage', 'resources', 'gap', 'profile'], bool]
     passage: Passage | None = None
 
 
@@ -833,9 +823,7 @@ class ConversationsMessagesBody(BaseModel):
     model_config = ConfigDict(
         extra='forbid',
     )
-    context: Context = Field(
-        ..., description='Clés de contexte incluses et passage choisi par l’apprenant.'
-    )
+    context: Context = Field(..., description='Clés de contexte incluses et passage choisi par l’apprenant.')
     followUp: FollowUp1 | None = None
     text: constr(min_length=1, max_length=4000)
 
@@ -893,8 +881,7 @@ class ConversationsSelfTestAnswerOutput(BaseModel):
         extra='forbid',
     )
     message: Message4 = Field(
-        ...,
-        description='Message de la discussion avec le tuteur, avec ses sources, suites et Teste-moi.',
+        ..., description='Message de la discussion avec le tuteur, avec ses sources, suites et Teste-moi.'
     )
 
 
@@ -1560,9 +1547,7 @@ class Question(BaseModel):
     brickVersionId: constr(
         pattern=r'^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$'
     )
-    feedback: Feedback1 | None = Field(
-        None, description='Retour immédiat d’une question vérifiée.'
-    )
+    feedback: Feedback1 | None = Field(None, description='Retour immédiat d’une question vérifiée.')
     marked: bool
     maxScore: confloat(ge=0.0, le=100.0)
     moduleId: constr(
@@ -1844,8 +1829,7 @@ class ExamIntroOutput(BaseModel):
     diagnosticModules: list[DiagnosticModule]
     diagnosticQuestionCount: conint(ge=0, le=9007199254740991)
     format: Format = Field(
-        ...,
-        description='Format de l’examen : questions, durée, seuil et origine (guide ou défaut).',
+        ..., description='Format de l’examen : questions, durée, seuil et origine (guide ou défaut).'
     )
     formationId: constr(
         pattern=r'^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$'
@@ -2048,14 +2032,10 @@ class Check(BaseModel):
         extra='forbid',
     )
     groupColumn: constr(min_length=1, max_length=40)
-    left: list[constr(min_length=1, max_length=80)] = Field(
-        ..., max_length=10, min_length=1
-    )
+    left: list[constr(min_length=1, max_length=80)] = Field(..., max_length=10, min_length=1)
     leftLabel: constr(min_length=1, max_length=20) | None = None
     numberColumn: constr(min_length=1, max_length=40)
-    right: list[constr(min_length=1, max_length=80)] = Field(
-        ..., max_length=10, min_length=1
-    )
+    right: list[constr(min_length=1, max_length=80)] = Field(..., max_length=10, min_length=1)
     rightLabel: constr(min_length=1, max_length=20) | None = None
     sideColumnLabel: constr(min_length=1, max_length=20) | None = None
     type: Literal['sum_equal']
@@ -2533,9 +2513,7 @@ class Cadrage(BaseModel):
     )
     messages: list[Message6]
     pendingQuestion: PendingQuestion3 | None
-    profile: dict[
-        Literal['scope', 'starting_point', 'target_level', 'volume', 'dates'], Profile3
-    ]
+    profile: dict[Literal['scope', 'starting_point', 'target_level', 'volume', 'dates'], Profile3]
     questionsAsked: conint(ge=0, le=5)
     title: constr(min_length=1, max_length=120)
 
@@ -2748,20 +2726,15 @@ class FormationsFinalReviewOutput(BaseModel):
         pattern=r'^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d:[0-5]\d(?:\.\d+)?(?:Z|([+-](?:[01]\d|2[0-3]):[0-5]\d)))$'
     )
     maintenance: Maintenance = Field(
-        ...,
-        description='Effets du mode d’entretien sur le quiz global et les notifications (EF-2).',
+        ..., description='Effets du mode d’entretien sur le quiz global et les notifications (EF-2).'
     )
     mapHref: constr(min_length=1, max_length=2048)
     milestones: list[Milestone] = Field(..., max_length=500)
     modules: list[Module1] = Field(..., max_length=100)
     monogram: constr(min_length=1, max_length=3)
     programVersion: conint(ge=1, le=9007199254740991) | None
-    retention: Retention = Field(
-        ..., description='Rétention à 1 et 2 mois, jamais 0 % par défaut (CA-3).'
-    )
-    stats: Stats = Field(
-        ..., description='Cartes statistiques du bilan final (EF-1, CA-3).'
-    )
+    retention: Retention = Field(..., description='Rétention à 1 et 2 mois, jamais 0 % par défaut (CA-3).')
+    stats: Stats = Field(..., description='Cartes statistiques du bilan final (EF-1, CA-3).')
     status: Literal['completed']
     timezone: constr(min_length=1)
     updatedAt: constr(
@@ -2830,8 +2803,7 @@ class Group(BaseModel):
         pattern=r'^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$'
     )
     inviteCode: constr(pattern=r'^LRN-[A-Z2-9]{4}$') = Field(
-        ...,
-        description='Code d’invitation `LRN-XXXX` (lettres et chiffres, sans caractère ambigu).',
+        ..., description='Code d’invitation `LRN-XXXX` (lettres et chiffres, sans caractère ambigu).'
     )
     inviteLink: constr(pattern=r'^\/invitation\/LRN-[A-Z2-9]{4}$')
     maxMembers: conint(ge=2, le=10)
@@ -2891,8 +2863,7 @@ class Group1(BaseModel):
         pattern=r'^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$'
     )
     inviteCode: constr(pattern=r'^LRN-[A-Z2-9]{4}$') = Field(
-        ...,
-        description='Code d’invitation `LRN-XXXX` (lettres et chiffres, sans caractère ambigu).',
+        ..., description='Code d’invitation `LRN-XXXX` (lettres et chiffres, sans caractère ambigu).'
     )
     inviteLink: constr(pattern=r'^\/invitation\/LRN-[A-Z2-9]{4}$')
     maxMembers: conint(ge=2, le=10)
@@ -3062,20 +3033,15 @@ class FormationsMaintenanceOutput(BaseModel):
         pattern=r'^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d:[0-5]\d(?:\.\d+)?(?:Z|([+-](?:[01]\d|2[0-3]):[0-5]\d)))$'
     )
     maintenance: Maintenance1 = Field(
-        ...,
-        description='Effets du mode d’entretien sur le quiz global et les notifications (EF-2).',
+        ..., description='Effets du mode d’entretien sur le quiz global et les notifications (EF-2).'
     )
     mapHref: constr(min_length=1, max_length=2048)
     milestones: list[Milestone1] = Field(..., max_length=500)
     modules: list[Module2] = Field(..., max_length=100)
     monogram: constr(min_length=1, max_length=3)
     programVersion: conint(ge=1, le=9007199254740991) | None
-    retention: Retention = Field(
-        ..., description='Rétention à 1 et 2 mois, jamais 0 % par défaut (CA-3).'
-    )
-    stats: Stats = Field(
-        ..., description='Cartes statistiques du bilan final (EF-1, CA-3).'
-    )
+    retention: Retention = Field(..., description='Rétention à 1 et 2 mois, jamais 0 % par défaut (CA-3).')
+    stats: Stats = Field(..., description='Cartes statistiques du bilan final (EF-1, CA-3).')
     status: Literal['completed']
     timezone: constr(min_length=1)
     updatedAt: constr(
@@ -3532,8 +3498,7 @@ class Group2(BaseModel):
         pattern=r'^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$'
     )
     inviteCode: constr(pattern=r'^LRN-[A-Z2-9]{4}$') = Field(
-        ...,
-        description='Code d’invitation `LRN-XXXX` (lettres et chiffres, sans caractère ambigu).',
+        ..., description='Code d’invitation `LRN-XXXX` (lettres et chiffres, sans caractère ambigu).'
     )
     inviteLink: constr(pattern=r'^\/invitation\/LRN-[A-Z2-9]{4}$')
     maxMembers: conint(ge=2, le=10)
@@ -3596,8 +3561,7 @@ class Group3(BaseModel):
         pattern=r'^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$'
     )
     inviteCode: constr(pattern=r'^LRN-[A-Z2-9]{4}$') = Field(
-        ...,
-        description='Code d’invitation `LRN-XXXX` (lettres et chiffres, sans caractère ambigu).',
+        ..., description='Code d’invitation `LRN-XXXX` (lettres et chiffres, sans caractère ambigu).'
     )
     inviteLink: constr(pattern=r'^\/invitation\/LRN-[A-Z2-9]{4}$')
     maxMembers: conint(ge=2, le=10)
@@ -3910,15 +3874,12 @@ class InvitationsAcceptOutput(BaseModel):
         pattern=r'^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$'
     )
     formationTitle: constr(min_length=1, max_length=120)
-    memberFirstNames: list[constr(min_length=1, max_length=60)] = Field(
-        ..., max_length=9
-    )
+    memberFirstNames: list[constr(min_length=1, max_length=60)] = Field(..., max_length=9)
 
 
 class InvitationsAcceptParams(BaseModel):
     code: constr(pattern=r'^LRN-[A-Z2-9]{4}$') = Field(
-        ...,
-        description='Code d’invitation `LRN-XXXX` (lettres et chiffres, sans caractère ambigu).',
+        ..., description='Code d’invitation `LRN-XXXX` (lettres et chiffres, sans caractère ambigu).'
     )
 
 
@@ -3927,8 +3888,7 @@ class InvitationsGetOutput(BaseModel):
         extra='forbid',
     )
     code: constr(pattern=r'^LRN-[A-Z2-9]{4}$') = Field(
-        ...,
-        description='Code d’invitation `LRN-XXXX` (lettres et chiffres, sans caractère ambigu).',
+        ..., description='Code d’invitation `LRN-XXXX` (lettres et chiffres, sans caractère ambigu).'
     )
     formationId: constr(
         pattern=r'^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$'
@@ -3941,8 +3901,7 @@ class InvitationsGetOutput(BaseModel):
 
 class InvitationsGetParams(BaseModel):
     code: constr(pattern=r'^LRN-[A-Z2-9]{4}$') = Field(
-        ...,
-        description='Code d’invitation `LRN-XXXX` (lettres et chiffres, sans caractère ambigu).',
+        ..., description='Code d’invitation `LRN-XXXX` (lettres et chiffres, sans caractère ambigu).'
     )
 
 
@@ -3959,9 +3918,9 @@ class MeAiCredentialsCreateBody(BaseModel):
     apiKey: constr(pattern=r'^\S+$', min_length=8, max_length=512) | None = None
     baseUrl: constr(min_length=1, max_length=2048) | None = None
     label: constr(min_length=1, max_length=80) | None = None
-    modelIds: list[
-        constr(pattern=r'^[A-Za-z0-9._:/-]+$', min_length=1, max_length=120)
-    ] = Field(..., max_length=500, min_length=1)
+    modelIds: list[constr(pattern=r'^[A-Za-z0-9._:/-]+$', min_length=1, max_length=120)] = Field(
+        ..., max_length=500, min_length=1
+    )
     provider: Provider
 
 
@@ -4231,17 +4190,9 @@ class MeAiCredentialsQualifyOutput3(BaseModel):
 
 
 class MeAiCredentialsQualifyOutput(
-    RootModel[
-        MeAiCredentialsQualifyOutput1
-        | MeAiCredentialsQualifyOutput2
-        | MeAiCredentialsQualifyOutput3
-    ]
+    RootModel[MeAiCredentialsQualifyOutput1 | MeAiCredentialsQualifyOutput2 | MeAiCredentialsQualifyOutput3]
 ):
-    root: (
-        MeAiCredentialsQualifyOutput1
-        | MeAiCredentialsQualifyOutput2
-        | MeAiCredentialsQualifyOutput3
-    )
+    root: MeAiCredentialsQualifyOutput1 | MeAiCredentialsQualifyOutput2 | MeAiCredentialsQualifyOutput3
 
 
 class MeAiCredentialsQualifyParams(BaseModel):
@@ -4763,9 +4714,7 @@ class MeAutomationActionsListQuery(BaseModel):
         )
         | None
     ) = None
-    kind: constr(pattern=r'^[a-z][a-z0-9_]*$', min_length=1, max_length=80) | None = (
-        None
-    )
+    kind: constr(pattern=r'^[a-z][a-z0-9_]*$', min_length=1, max_length=80) | None = None
     limit: conint(ge=1, le=100) | None = 20
     since: (
         constr(
@@ -5873,8 +5822,7 @@ class Course1(BaseModel):
         | None
     )
     progress: Progress = Field(
-        ...,
-        description='Progression de lecture du chapitre et du cours, monotone et bornée à 0–100.',
+        ..., description='Progression de lecture du chapitre et du cours, monotone et bornée à 0–100.'
     )
     quiz: Quiz1
     readingMinutes: conint(ge=1, le=9007199254740991)
@@ -6693,9 +6641,7 @@ class Module5(BaseModel):
         extra='forbid',
     )
     chapters: list[Chapter3] = Field(..., max_length=40, min_length=1)
-    objectives: list[constr(min_length=1, max_length=200)] = Field(
-        ..., max_length=8, min_length=1
-    )
+    objectives: list[constr(min_length=1, max_length=200)] = Field(..., max_length=8, min_length=1)
     plannedEnd: constr(pattern=r'^\d{4}-\d{2}-\d{2}$')
     plannedStart: constr(pattern=r'^\d{4}-\d{2}-\d{2}$')
     position: conint(ge=1, le=100)
@@ -6789,9 +6735,7 @@ class Module6(BaseModel):
         extra='forbid',
     )
     chapters: list[Chapter4] = Field(..., max_length=40, min_length=1)
-    objectives: list[constr(min_length=1, max_length=200)] = Field(
-        ..., max_length=8, min_length=1
-    )
+    objectives: list[constr(min_length=1, max_length=200)] = Field(..., max_length=8, min_length=1)
     plannedEnd: constr(pattern=r'^\d{4}-\d{2}-\d{2}$')
     plannedStart: constr(pattern=r'^\d{4}-\d{2}-\d{2}$')
     position: conint(ge=1, le=100)
@@ -6868,9 +6812,7 @@ class Module7(BaseModel):
         extra='forbid',
     )
     chapters: list[Chapter5] = Field(..., max_length=40, min_length=1)
-    objectives: list[constr(min_length=1, max_length=200)] = Field(
-        ..., max_length=8, min_length=1
-    )
+    objectives: list[constr(min_length=1, max_length=200)] = Field(..., max_length=8, min_length=1)
     plannedEnd: constr(pattern=r'^\d{4}-\d{2}-\d{2}$')
     plannedStart: constr(pattern=r'^\d{4}-\d{2}-\d{2}$')
     position: conint(ge=1, le=100)
@@ -7075,9 +7017,7 @@ class ProgrammeImportBody2(BaseModel):
     model_config = ConfigDict(
         extra='forbid',
     )
-    contentBase64: constr(
-        pattern=r'^[A-Za-z0-9+/]*={0,2}$', min_length=1, max_length=950000
-    )
+    contentBase64: constr(pattern=r'^[A-Za-z0-9+/]*={0,2}$', min_length=1, max_length=950000)
     expectedVersion: conint(ge=0, le=9007199254740991) | None = 0
     filename: constr(min_length=1, max_length=200)
     kind: Literal['file']
@@ -7101,9 +7041,7 @@ class Module9(BaseModel):
         extra='forbid',
     )
     chapters: list[Chapter7] = Field(..., max_length=40, min_length=1)
-    objectives: list[constr(min_length=1, max_length=200)] = Field(
-        ..., max_length=8, min_length=1
-    )
+    objectives: list[constr(min_length=1, max_length=200)] = Field(..., max_length=8, min_length=1)
     plannedEnd: constr(pattern=r'^\d{4}-\d{2}-\d{2}$')
     plannedStart: constr(pattern=r'^\d{4}-\d{2}-\d{2}$')
     position: conint(ge=1, le=100)
@@ -7187,9 +7125,7 @@ class Module10(BaseModel):
         extra='forbid',
     )
     chapters: list[Chapter8] = Field(..., max_length=40, min_length=1)
-    objectives: list[constr(min_length=1, max_length=200)] = Field(
-        ..., max_length=8, min_length=1
-    )
+    objectives: list[constr(min_length=1, max_length=200)] = Field(..., max_length=8, min_length=1)
     plannedEnd: constr(pattern=r'^\d{4}-\d{2}-\d{2}$')
     plannedStart: constr(pattern=r'^\d{4}-\d{2}-\d{2}$')
     position: conint(ge=1, le=100)
@@ -7375,9 +7311,7 @@ class QuizAnswersCheckOutput(BaseModel):
     model_config = ConfigDict(
         extra='forbid',
     )
-    feedback: Feedback3 = Field(
-        ..., description='Retour immédiat d’une question vérifiée.'
-    )
+    feedback: Feedback3 = Field(..., description='Retour immédiat d’une question vérifiée.')
     locked: Literal[True]
     position: conint(ge=1, le=9007199254740991)
 
@@ -7442,17 +7376,9 @@ class QuizAttemptsCreateOutput3(BaseModel):
 
 
 class QuizAttemptsCreateOutput(
-    RootModel[
-        QuizAttemptsCreateOutput1
-        | QuizAttemptsCreateOutput2
-        | QuizAttemptsCreateOutput3
-    ]
+    RootModel[QuizAttemptsCreateOutput1 | QuizAttemptsCreateOutput2 | QuizAttemptsCreateOutput3]
 ):
-    root: (
-        QuizAttemptsCreateOutput1
-        | QuizAttemptsCreateOutput2
-        | QuizAttemptsCreateOutput3
-    )
+    root: QuizAttemptsCreateOutput1 | QuizAttemptsCreateOutput2 | QuizAttemptsCreateOutput3
 
 
 class QuizAttemptsCreateParams(BaseModel):
@@ -7530,9 +7456,7 @@ class Question1(BaseModel):
     brickVersionId: constr(
         pattern=r'^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$'
     )
-    feedback: Feedback4 | None = Field(
-        None, description='Retour immédiat d’une question vérifiée.'
-    )
+    feedback: Feedback4 | None = Field(None, description='Retour immédiat d’une question vérifiée.')
     maxScore: confloat(ge=0.0, le=100.0)
     notionId: constr(
         pattern=r'^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$'
@@ -7848,9 +7772,7 @@ class Question2(BaseModel):
     brickVersionId: constr(
         pattern=r'^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$'
     )
-    feedback: Feedback5 | None = Field(
-        None, description='Retour immédiat d’une question vérifiée.'
-    )
+    feedback: Feedback5 | None = Field(None, description='Retour immédiat d’une question vérifiée.')
     maxScore: confloat(ge=0.0, le=100.0)
     notionId: constr(
         pattern=r'^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$'
@@ -7951,9 +7873,7 @@ class ResourcesCreateBody3(BaseModel):
     url: constr(max_length=2048)
 
 
-class ResourcesCreateBody(
-    RootModel[ResourcesCreateBody1 | ResourcesCreateBody2 | ResourcesCreateBody3]
-):
+class ResourcesCreateBody(RootModel[ResourcesCreateBody1 | ResourcesCreateBody2 | ResourcesCreateBody3]):
     root: ResourcesCreateBody1 | ResourcesCreateBody2 | ResourcesCreateBody3
 
 
@@ -8587,9 +8507,7 @@ class Alternative(BaseModel):
         pattern=r'^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d:[0-5]\d(?:\.\d+)?(?:Z|([+-](?:[01]\d|2[0-3]):[0-5]\d)))$'
     )
     moment: Moment
-    reasons: list[constr(min_length=1, max_length=120)] = Field(
-        ..., max_length=5, min_length=1
-    )
+    reasons: list[constr(min_length=1, max_length=120)] = Field(..., max_length=5, min_length=1)
     startMinutes: conint(ge=0, le=1439)
     startsAt: constr(
         pattern=r'^(?:(?:\d\d[2468][048]|\d\d[13579][26]|\d\d0[48]|[02468][048]00|[13579][26]00)-02-29|\d{4}-(?:(?:0[13578]|1[02])-(?:0[1-9]|[12]\d|3[01])|(?:0[469]|11)-(?:0[1-9]|[12]\d|30)|(?:02)-(?:0[1-9]|1\d|2[0-8])))T(?:(?:[01]\d|2[0-3]):[0-5]\d:[0-5]\d(?:\.\d+)?(?:Z|([+-](?:[01]\d|2[0-3]):[0-5]\d)))$'
