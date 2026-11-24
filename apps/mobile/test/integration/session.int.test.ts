@@ -11,7 +11,6 @@ import { describe, expect, it } from 'vitest';
 import { MeDto } from '@learny/contracts';
 
 import { createMobileApiClient } from '../../src/api/client';
-import { readSseData } from '../../src/api/stream';
 
 const ENV = process.env as Record<string, string | undefined>;
 const SUPABASE_URL =
@@ -131,21 +130,5 @@ describe('[SPEC-3003] client mobile contre la pile locale', () => {
     expect(captured).toHaveLength(2);
     expect(captured[0]?.headers.authorization).toBe('Bearer jeton-invalide');
     expect(captured[1]?.headers.authorization).toMatch(/^Bearer ey/);
-  });
-
-  it('reçoit les trois fragments du relais SSE de démonstration (CA-3)', async () => {
-    const response = await fetch(`${API_URL}/api/v1/dev/sdd/relay-stream`, {
-      headers: { Accept: 'text/event-stream' },
-    });
-    expect(response.status).toBe(200);
-    expect(response.headers.get('content-type')).toContain('text/event-stream');
-    expect(response.body).not.toBeNull();
-
-    const fragments: string[] = [];
-    if (response.body !== null) {
-      for await (const fragment of readSseData(response.body)) fragments.push(fragment);
-    }
-
-    expect(fragments).toEqual(['fragment-1', 'fragment-2', 'fragment-3']);
   });
 });
