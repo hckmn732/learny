@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-11-24T06:44:19.052Z",
+  "updatedAt": "2026-11-24T07:43:18.371Z",
   "specs": {
     "SPEC-001": {
       "status": "done",
@@ -7976,6 +7976,36 @@
       "commit": null,
       "lastError": null,
       "validations": {}
+    },
+    "SPEC-4001": {
+      "status": "pending",
+      "attempts": 0,
+      "startedAt": null,
+      "completedAt": null,
+      "branch": null,
+      "commit": null,
+      "lastError": null,
+      "validations": {}
+    },
+    "SPEC-4002": {
+      "status": "pending",
+      "attempts": 0,
+      "startedAt": null,
+      "completedAt": null,
+      "branch": null,
+      "commit": null,
+      "lastError": null,
+      "validations": {}
+    },
+    "SPEC-4003": {
+      "status": "pending",
+      "attempts": 0,
+      "startedAt": null,
+      "completedAt": null,
+      "branch": null,
+      "commit": null,
+      "lastError": null,
+      "validations": {}
     }
   },
   "checkpoints": {
@@ -8126,6 +8156,12 @@
       "report": "evidence/checkpoints/CP-34/summary.md"
     },
     "CP-35": {
+      "status": "pending",
+      "at": null,
+      "tag": null,
+      "report": null
+    },
+    "CP-40": {
       "status": "pending",
       "at": null,
       "tag": null,

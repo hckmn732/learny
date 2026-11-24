@@ -264,7 +264,7 @@ Origine : **Validée** = décision prise avec le porteur du projet ; **Déduite*
 | [ADR-2043](ADR-2043-backend-100-python-retrait-du-backend-typescript.md) | Backend 100 % Python, retrait du backend TypeScript | Déduite | SPEC-2302, ADR-2001, ADR-2005, ADR-2006, ADR-2008, ADR-2012, ADR-2019, ADR-2035, ADR-2041, ADR-2042 |
 | [ADR-2044](ADR-2044-renommage-de-l-arborescence-apps-api-apps-worker-et-python-l.md) | Renommage de l arborescence apps/api, apps/worker et python/learny | Déduite | ADR-2043, SPEC-2302 |
 | [ADR-3001](ADR-3001-piste-sdd-mobile-et-branche-mobile.md) | Piste SDD « mobile » sur la branche `mobile` | Validée | ADR-1004, ADR-1006, ADR-2001, SPEC-3001 |
-| [ADR-3002](ADR-3002-perimetre-v1-de-l-application-mobile-compagnon.md) | Périmètre V1 de l'application mobile : compagnon d'apprentissage | Déduite | ADR-0005, ADR-1004, SPEC-3102 |
+| [ADR-3002](ADR-3002-perimetre-v1-de-l-application-mobile-compagnon.md) | Périmètre V1 de l'application mobile : compagnon d'apprentissage (remplacée par ADR-4002) | Déduite | ADR-0005, ADR-1004, SPEC-3102 |
 | [ADR-3003](ADR-3003-maquette-mobile-de-reference-et-corrections-normatives.md) | Maquette mobile de référence et corrections normatives | Déduite | ADR-0034, SPEC-3002, SPEC-3304, SPEC-3305 |
 | [ADR-3004](ADR-3004-socle-technique-de-l-application-mobile.md) | Socle technique de l'application mobile | Déduite | ADR-1004, SPEC-3001, SPEC-3002, SPEC-3003 |
 | [ADR-3005](ADR-3005-paquets-partages-conserves-pour-le-client-mobile.md) | Paquets partagés conservés pour le client mobile | Déduite | ADR-1007, ADR-2004, SPEC-3001 |
@@ -283,3 +283,6 @@ Origine : **Validée** = décision prise avec le porteur du projet ; **Déduite*
 | [ADR-3020](ADR-3020-feuille-du-tuteur-mobile-sans-post-tutor-cards.md) | Feuille du tuteur mobile sans POST /tutor/cards | Déduite | SPEC-3303, SPEC-717, ADR-0193, ADR-3010, ADR-3018 |
 | [ADR-3021](ADR-3021-conformite-visuelle-du-tuteur-mobile-ligne-de-base-versionnee.md) | Conformité visuelle du tuteur : ligne de base versionnée, pas superposition à l'export | Déduite | SPEC-3303, ADR-3003, ADR-3019 |
 | [ADR-3024](ADR-3024-profil-mobile-ligne-de-base-selection-de-date-et-suppression.md) | Profil mobile : ligne de base versionnée, sélecteur de date borné et suppression bloquée côté serveur | Déduite | SPEC-3401, ADR-3001, ADR-3003, ADR-3022 |
+| [ADR-4001](ADR-4001-piste-sdd-mode-simple-sur-la-branche-mobile.md) | Piste SDD « mode-simple » sur la branche `mobile` | Validée | ADR-1006, ADR-3001, ADR-4002, ADR-4003, SPEC-4001, SPEC-4002, SPEC-4003 |
+| [ADR-4002](ADR-4002-application-mobile-iso-web-en-fonctionnalites.md) | Application mobile iso web en fonctionnalités (remplace ADR-3002) | Validée | ADR-3002, ADR-3001, ADR-3003, ADR-3006, ADR-4001, ADR-4003, SPEC-4003 |
+| [ADR-4003](ADR-4003-mode-simple-creation-d-une-formation-par-depot-de-documents.md) | Mode simple : création d'une formation par dépôt de documents | Validée | ADR-0005, ADR-0008, ADR-0039, ADR-0340, ADR-4001, ADR-4002, SPEC-605, SPEC-607, SPEC-608, SPEC-4001, SPEC-4002, SPEC-4003 |

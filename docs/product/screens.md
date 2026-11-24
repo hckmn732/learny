@@ -26,6 +26,10 @@ Les maquettes cliquables sont dans `design/maquettes/` (fichiers `*.dc.html`, mo
 | SCR-18 | Résultats de recherche | `/recherche?q=` | *aucune* (le panneau d'en-tête suit la maquette du panneau notifications) | SPEC-307 |
 | SCR-19 | Pages légales | `/legal/cgu`, `/legal/confidentialite`, `/legal/mentions` | *aucune* | SPEC-806 |
 | SCR-20 | Pages système | `not-found`, `error`, `/hors-ligne` | *aucune* | SPEC-308, 801 |
+| SCR-21 | Mode simple : dépôt de documents | `/formations/depot`, `/formations/[fid]/depot` | `design/mode-simple/index.html#step=1` (proposition, ADR-4003) | SPEC-4002, SPEC-4003 |
+| SCR-22 | Mode simple : analyse | `/formations/[fid]/depot` (état analyse) | `design/mode-simple/index.html#step=2` | SPEC-4002, SPEC-4003 |
+| SCR-23 | Mode simple : aperçu du programme | `/formations/[fid]/apercu` | `design/mode-simple/index.html#step=3` | SPEC-4002, SPEC-4003 |
+| SCR-24 | Mode simple : diagnostic et premier chapitre | `/formations/[fid]/diagnostic`, `/formations/[fid]/diagnostic/resultat` | `design/mode-simple/index.html#step=4` et `#step=5` | SPEC-4002, SPEC-4003 |
 
 `[fid]`, `[mid]`, `[cid]`, `[aid]` sont des UUID. Les routes sont en français (ADR-0046).
 

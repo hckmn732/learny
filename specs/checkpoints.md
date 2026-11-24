@@ -171,3 +171,10 @@ Mobile — notifications et publication (SPEC-3501, SPEC-3502). Exige CP-23 (bac
 - Canaux push natifs APNs et FCM dans le worker Python, soumis aux préférences, heures calmes et plafond ; contrat compatible ; aucune régression Web Push.
 - Parcours de bout en bout Android et iOS, audit d'accessibilité sans anomalie bloquante, budgets mobiles mesurés, builds de production signés en test interne (ou blocage `--external`).
 - Après réussite : fusion de `mobile` dans `main` selon ADR-3001 §6.
+
+## CP-40
+
+Mode simple, lot 1 (SPEC-4001, SPEC-4002, SPEC-4003), piste `mode-simple` (ADR-4001).
+- Contrat et backend : parcours complet en mock prouvé, refus sans clé d'IA, RLS, aucune régression de SPEC-605, SPEC-607, SPEC-608 et SPEC-611.
+- Web et mobile (Android et iOS) : parcours de bout en bout filmés, conformité aux maquettes `design/mode-simple/`, axe et lecteurs d'écran sans anomalie bloquante.
+- Parité web et mobile prouvée (ADR-4002) : mêmes `testID`, mêmes opérations d'API pour le même parcours.

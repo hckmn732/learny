@@ -99,13 +99,12 @@ Fonctionnellement, tout est identique au web. Ce qui suit ne concerne que l'ergo
 - Téléversement reprenable : un gros PDF sur réseau mobile ne doit pas échouer à 90 %.
 - Notification push « Ton programme est prêt » si l'apprenant a quitté l'écran (P35).
 
-## 8. Découpage proposé en lots
+## 8. Découpage en lots (ADR-4003)
 
-0. **Lot 0** : ADR « mobile iso web » qui remplace ADR-3002 (D1), avec le plan de rattrapage des écrans mobiles exclus.
-1. **Lot 1** : un ou plusieurs PDF, DOCX ou fichiers texte deviennent une formation (web et mobile en même temps), avec rôles des fichiers, aperçu et premier chapitre prioritaire, dans les limites actuelles.
-2. **Lot 2** : gros documents, avec découpage structurel, génération progressive et plus de 500 pages.
-3. **Lot 3** : photos de pages (plusieurs images), lien YouTube, page web.
-4. **Lot 4** : fichiers vidéo et audio (transcription).
+0. **Lot 0** : ADR-4002, « mobile iso web », qui remplace ADR-3002 ; le rattrapage des écrans mobiles exclus est planifié après P40.
+1. **Lot 1 (P40)** : un ou plusieurs documents (PDF, DOCX, texte, images, page web, YouTube) deviennent une formation, sur le web et le mobile en même temps, dans les limites actuelles (BR-APP-02). Spécifications : SPEC-4001 (backend et contrat), SPEC-4002 (web), SPEC-4003 (mobile).
+2. **Lot 2** : documents au-delà de 500 pages.
+3. **Lot 3** : fichiers vidéo et audio, avec transcription.
 
 **Prérequis** :
 

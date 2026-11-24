@@ -1,6 +1,6 @@
 # ADR-3002 — Périmètre V1 de l'application mobile : compagnon d'apprentissage
 
-- **Statut** : Acceptée — précise ADR-1004 et ADR-0005 pour la piste mobile
+- **Statut** : Remplacée par ADR-4002 (2026-11-24) — précisait ADR-1004 et ADR-0005 pour la piste mobile
 - **Origine** : Déduite (préparation de la piste mobile)
 - **Date** : 2026-11-22
 - **Liens** : ADR-0005, ADR-1004, ADR-3001, ADR-3003, SPEC-3102

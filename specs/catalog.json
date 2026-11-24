@@ -22,6 +22,11 @@
       "baseBranch": "mobile",
       "versionTags": false,
       "adrBase": 3000
+    },
+    "mode-simple": {
+      "baseBranch": "mobile",
+      "versionTags": false,
+      "adrBase": 4000
     }
   },
   "phases": [
@@ -203,6 +208,13 @@
       "requires": [
         "CP-23"
       ]
+    },
+    {
+      "id": "P40",
+      "dir": "p40-mode-simple",
+      "title": "Mode simple — lot 1 : dépôt de documents et formation automatique (web et mobile)",
+      "checkpoint": "CP-40",
+      "track": "mode-simple"
     }
   ],
   "specs": [
@@ -5441,6 +5453,141 @@
         "e2e": true,
         "visual": "demo",
         "acceptance": true
+      }
+    },
+    {
+      "id": "SPEC-4001",
+      "phase": "P40",
+      "title": "Mode simple — backend et contrat",
+      "dependsOn": [],
+      "businessRules": [
+        "BR-FOR-01",
+        "BR-FOR-02",
+        "BR-FOR-04",
+        "BR-FOR-05",
+        "BR-FOR-10",
+        "BR-FOR-16",
+        "BR-APP-01",
+        "BR-APP-02",
+        "BR-APP-03",
+        "BR-APP-04",
+        "BR-APP-06",
+        "BR-APP-07",
+        "BR-IA-06",
+        "BR-IA-08",
+        "BR-IA-10",
+        "BR-IA-11",
+        "BR-IA-12",
+        "BR-IA-13",
+        "BR-MEM-03"
+      ],
+      "screens": [],
+      "adrs": [
+        "ADR-4001",
+        "ADR-4002",
+        "ADR-4003",
+        "ADR-0008",
+        "ADR-0039",
+        "ADR-0340",
+        "ADR-2011",
+        "ADR-2014"
+      ],
+      "visual": "demo",
+      "path": "specs/p40-mode-simple/SPEC-4001-mode-simple-backend-et-contrat.md",
+      "scope": "Contrat et backend Python du mode simple : création, dépôt multiple avec rôles, analyse (structure, résumés, programme tiré du document), échéance, validation avec génération progressive, diagnostic global.",
+      "priority": "mode-simple",
+      "validation": {
+        "unit": true,
+        "integration": true,
+        "e2e": true,
+        "acceptance": true,
+        "visual": "demo"
+      }
+    },
+    {
+      "id": "SPEC-4002",
+      "phase": "P40",
+      "title": "Mode simple — parcours web « Dépose ton cours »",
+      "dependsOn": [
+        "SPEC-4001"
+      ],
+      "businessRules": [
+        "BR-FOR-04",
+        "BR-FOR-13",
+        "BR-FOR-16",
+        "BR-APP-01",
+        "BR-APP-02",
+        "BR-APP-07",
+        "BR-IA-06",
+        "BR-PLA-03"
+      ],
+      "screens": [
+        "SCR-03",
+        "SCR-21",
+        "SCR-22",
+        "SCR-23",
+        "SCR-24"
+      ],
+      "adrs": [
+        "ADR-4002",
+        "ADR-4003",
+        "ADR-0034",
+        "ADR-0046"
+      ],
+      "visual": "mockup",
+      "path": "specs/p40-mode-simple/SPEC-4002-mode-simple-parcours-web.md",
+      "scope": "Accueil à deux cartes, dépôt, analyse, aperçu avec échéance, diagnostic et premier chapitre sur le web, conformes à design/mode-simple.",
+      "priority": "mode-simple",
+      "validation": {
+        "unit": true,
+        "integration": true,
+        "e2e": true,
+        "acceptance": true,
+        "visual": "mockup"
+      }
+    },
+    {
+      "id": "SPEC-4003",
+      "phase": "P40",
+      "title": "Mode simple — parcours mobile iOS et Android",
+      "dependsOn": [
+        "SPEC-4001"
+      ],
+      "businessRules": [
+        "BR-FOR-04",
+        "BR-FOR-16",
+        "BR-APP-01",
+        "BR-APP-02",
+        "BR-APP-07",
+        "BR-IA-06",
+        "BR-PLA-03"
+      ],
+      "screens": [
+        "SCR-03",
+        "SCR-21",
+        "SCR-22",
+        "SCR-23",
+        "SCR-24"
+      ],
+      "adrs": [
+        "ADR-4002",
+        "ADR-4003",
+        "ADR-3003",
+        "ADR-3004",
+        "ADR-3008",
+        "ADR-3014",
+        "ADR-3015"
+      ],
+      "visual": "mockup",
+      "path": "specs/p40-mode-simple/SPEC-4003-mode-simple-parcours-mobile.md",
+      "scope": "Même parcours que le web sur iOS et Android (ADR-4002) : sélecteurs natifs, photos de pages, partage vers Learny, téléversement reprenable ; parité prouvée.",
+      "priority": "mode-simple",
+      "validation": {
+        "unit": true,
+        "integration": true,
+        "e2e": true,
+        "acceptance": true,
+        "visual": "mockup"
       }
     }
   ]
