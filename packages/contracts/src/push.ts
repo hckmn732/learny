@@ -122,6 +122,8 @@ export const PushSubscriptionBody = z.discriminatedUnion('kind', [
 
 /** Request body as a client writes it (`kind` may be omitted on the browser form). */
 export type PushSubscriptionBody = z.input<typeof PushSubscriptionBody>;
+/** The historical browser body of SPEC-205, unchanged: the type a Web Push client builds. */
+export type WebPushSubscriptionBody = z.input<typeof WebPushSubscriptionBody>;
 /** Request body once parsed: `kind` is always present. */
 export type ParsedPushSubscriptionBody = z.output<typeof PushSubscriptionBody>;
 

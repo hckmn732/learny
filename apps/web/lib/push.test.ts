@@ -1,7 +1,7 @@
 // Unit tests of the browser flow (SPEC-205 EF-3, CL-1, CL-2, CL-7) against a simulated browser.
 import { describe, expect, it } from 'vitest';
 
-import type { PushSubscriptionBody } from '@learny/contracts';
+import type { WebPushSubscriptionBody } from '@learny/contracts';
 
 import {
   detectPushBrowser,
@@ -20,7 +20,7 @@ interface Simulated {
   browser: PushBrowser;
   requests: number;
   subscriptions: number;
-  current: PushSubscriptionBody | null;
+  current: WebPushSubscriptionBody | null;
 }
 
 function simulate(
@@ -71,7 +71,7 @@ describe('[SPEC-205] browser push flow', () => {
 
   it('asks the permission once, subscribes with the key and saves the subscription (EF-3)', async () => {
     const sim = simulate('default', 'granted');
-    const saved: PushSubscriptionBody[] = [];
+    const saved: WebPushSubscriptionBody[] = [];
     const outcome = await enableBrowserPush({
       browser: sim.browser,
       publicKey: KEY,

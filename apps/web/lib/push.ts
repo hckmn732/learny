@@ -3,7 +3,7 @@
 // asked again automatically, and the in-app inbox stays the always-on channel (BR-NOT-03). The
 // browser APIs are injected so that the flow runs identically against a real browser and against
 // the simulated one of the SDD demonstration.
-import type { PushSubscriptionBody } from '@learny/contracts';
+import type { WebPushSubscriptionBody } from '@learny/contracts';
 
 export type BrowserPermission = 'default' | 'granted' | 'denied';
 
@@ -19,13 +19,13 @@ export interface PushBrowser {
 }
 
 export interface PushRegistration {
-  getSubscription: () => Promise<PushSubscriptionBody | null>;
-  subscribe: (applicationServerKey: Uint8Array) => Promise<PushSubscriptionBody>;
+  getSubscription: () => Promise<WebPushSubscriptionBody | null>;
+  subscribe: (applicationServerKey: Uint8Array) => Promise<WebPushSubscriptionBody>;
   unsubscribe: () => Promise<boolean>;
 }
 
 export type EnablePushOutcome =
-  | { state: 'subscribed'; subscription: PushSubscriptionBody; permissionRequested: boolean }
+  | { state: 'subscribed'; subscription: WebPushSubscriptionBody; permissionRequested: boolean }
   | { state: 'denied'; permissionRequested: boolean }
   | { state: 'dismissed'; permissionRequested: boolean }
   | { state: 'unsupported' }
@@ -36,7 +36,7 @@ export interface EnablePushOptions {
   /** `NEXT_PUBLIC_VAPID_PUBLIC_KEY`, base64url; `undefined` when the channel is not configured. */
   publicKey: string | undefined;
   /** Sends the subscription to `POST /api/v1/me/push-subscriptions`. */
-  save: (subscription: PushSubscriptionBody) => Promise<unknown>;
+  save: (subscription: WebPushSubscriptionBody) => Promise<unknown>;
 }
 
 /** Base64url → bytes, the form `PushManager.subscribe` expects for `applicationServerKey`. */
@@ -73,7 +73,7 @@ export function detectPushBrowser(window: Window | undefined): PushBrowser {
     register: async () => {
       await serviceWorker.register('/sw.js', { scope: '/' });
       const registration = await serviceWorker.ready;
-      const toBody = (subscription: PushSubscription): PushSubscriptionBody => {
+      const toBody = (subscription: PushSubscription): WebPushSubscriptionBody => {
         const json = subscription.toJSON();
         return {
           endpoint: json.endpoint ?? subscription.endpoint,
@@ -135,7 +135,7 @@ async function run(options: EnablePushOptions): Promise<EnablePushOutcome> {
   const existing = await registration.getSubscription();
   const subscription =
     existing ?? (await registration.subscribe(urlBase64ToUint8Array(options.publicKey)));
-  const body: PushSubscriptionBody = {
+  const body: WebPushSubscriptionBody = {
     ...subscription,
     ...(browser.userAgent() === '' ? {} : { userAgent: browser.userAgent() }),
   };

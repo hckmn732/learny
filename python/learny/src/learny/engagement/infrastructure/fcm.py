@@ -6,8 +6,8 @@ of ADR-2015). The token lives about an hour; it is cached in memory until its ex
 the next send, so a round of a hundred devices signs in once.
 
 The message carries the title and the text of the Web Push in the system notification, the internal
-destination and the icon in the data payload, and the high-importance Android channel " Rappels
-Learny " (`learny-reminders`) declared by `app.config.ts` (EF-7). No badge, no sound override other
+destination and the icon in the data payload, and the high-importance Android channel « Rappels
+Learny » (`learny-reminders`) declared by `app.config.ts` (EF-7). No badge, no sound override other
 than the channel default.
 
 The answer decides the fate of the subscription exactly like the browser channel (ADR-0055):
@@ -69,7 +69,7 @@ class GoogleServiceAccountTokens:
         from google.oauth2 import service_account
 
         self._request = Request()
-        self._credentials = service_account.Credentials.from_service_account_info(
+        self._credentials = service_account.Credentials.from_service_account_info(  # type: ignore[no-untyped-call]
             dict(info), scopes=[FCM_SCOPE]
         )
 
@@ -173,7 +173,9 @@ class FcmTransport:
     def mode(self) -> str:
         return "live"
 
-    async def send(self, target: PushTarget, payload: str, *, ttl: int, topic: str | None) -> PushSendResult:
+    async def send(
+        self, target: PushTarget, payload: str, *, ttl: int, topic: str | None
+    ) -> PushSendResult:
         if not isinstance(target.token, str) or target.token == "":
             return PushSendResult(ok=False, status_code=None, reason="gone")
         headers = {
