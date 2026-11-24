@@ -1,7 +1,7 @@
 # Preuves — SPEC-4001 : Mode simple — backend et contrat
 
-- Date : 2026-11-24T19:07:57.116Z
-- Commit : 38fd5c88
+- Date : 2026-11-24T19:30:24.411Z
+- Commit : 8bb25667
 - Spécification : `specs/p40-mode-simple/SPEC-4001-mode-simple-backend-et-contrat.md`
 
 ## Rapports

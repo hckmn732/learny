@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-11-24T19:07:57.124Z",
+  "updatedAt": "2026-11-24T19:30:24.418Z",
   "specs": {
     "SPEC-001": {
       "status": "done",
@@ -8060,12 +8060,12 @@
       "validations": {
         "lint": {
           "status": "passed",
-          "at": "2026-11-24T19:03:05.984Z",
+          "at": "2026-11-24T19:29:40.328Z",
           "details": ""
         },
         "typecheck": {
           "status": "passed",
-          "at": "2026-11-24T19:04:36.673Z",
+          "at": "2026-11-24T19:29:50.157Z",
           "details": ""
         },
         "build": {
@@ -8080,7 +8080,7 @@
         },
         "integration": {
           "status": "failed",
-          "at": "2026-11-24T19:06:57.176Z",
+          "at": "2026-11-24T19:30:24.389Z",
           "details": "0 test(s) réussi(s), 0 échec(s) ; pytest : 12 réussi(s), 0 échec(s)"
         },
         "e2e": {
@@ -8095,7 +8095,7 @@
         },
         "acceptance": {
           "status": "passed",
-          "at": "2026-11-24T19:07:57.124Z",
+          "at": "2026-11-24T19:30:24.418Z",
           "details": "7/7 critères ✅"
         }
       }
