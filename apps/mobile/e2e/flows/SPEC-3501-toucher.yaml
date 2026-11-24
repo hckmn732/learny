@@ -1,0 +1,64 @@
+# SPEC-3501 — toucher d'une notification native (EF-2 ; BR-NOT-02 ; CA-3).
+#
+# La notification est produite **en local** sur l'émulateur, avec la même charge qu'un push
+# (titre, texte, destination interne, tag, icône) : la page de démonstration `/_dev/sdd/push` du
+# build e2e la programme, puis le flux met l'application en arrière-plan, ouvre le volet des
+# notifications et touche la notification. L'application doit alors ouvrir l'écran du quiz après la
+# garde d'authentification (CA-3) : c'est la destination `/quiz/<tentative>` que porte la charge.
+#
+# La tentative du quiz est préparée par `e2e/sql/SPEC-3501-seed-quiz.sql` avec un identifiant fixe
+# (celui du lien ci-dessous) ; `SPEC-3501-cleanup-quiz.sql` supprime le jeu à la fin de la campagne.
+appId: fr.learny.app
+name: SPEC-3501 toucher
+tags:
+  - SPEC-3501
+---
+- launchApp:
+    clearState: true
+- extendedWaitUntil:
+    visible:
+      id: sdd-health
+    timeout: 30000
+- openLink: learny://connexion?demo=1
+- waitForAnimationToEnd:
+    timeout: 5000
+- runFlow:
+    when:
+      visible:
+        id: onboarding-error
+    commands:
+      - tapOn:
+          id: onboarding-error-retry
+- extendedWaitUntil:
+    visible:
+      id: tab-aujourdhui
+    timeout: 60000
+# La page de démonstration programme la notification locale de même charge (EF-2).
+- openLink: learny://_dev/sdd/push?href=/quiz/35010000-0000-4000-8000-000000000001
+- extendedWaitUntil:
+    visible:
+      id: sdd-push-status
+    timeout: 20000
+- extendedWaitUntil:
+    visible: 'notification programmée'
+    timeout: 20000
+# Application en arrière-plan : la notification apparaît dans le volet du système.
+- pressKey: HOME
+- waitForAnimationToEnd:
+    timeout: 5000
+- swipe:
+    start: 50%, 2%
+    end: 50%, 80%
+- extendedWaitUntil:
+    visible: 'Quiz de validation'
+    timeout: 20000
+# CA-3 — le toucher ouvre l'écran du quiz, après la garde d'authentification.
+- tapOn: 'Quiz de validation'
+- extendedWaitUntil:
+    visible:
+      id: quiz-question
+    timeout: 30000
+- assertVisible:
+    id: quiz-count
+- assertVisible:
+    id: quiz-attempt-meta

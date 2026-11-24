@@ -14,15 +14,14 @@ import type { DeviceChannelState } from '../../src/notifications/register';
 import { NOTIFICATIONS as mockNotifications } from './fixtures';
 
 const mockRouter = { push: jest.fn(), replace: jest.fn(), back: jest.fn() };
-const mockToggle = jest.fn(() => Promise.resolve());
-const mockOpenSettings = jest.fn();
 
-const device = {
+/** The view the mocked hook returns; `mock`-prefixed so the hoisted factory may close over it. */
+const mockDeviceView = {
   state: 'off' as DeviceChannelState,
   pending: false,
   failed: false,
-  toggle: mockToggle,
-  openSettings: mockOpenSettings,
+  toggle: jest.fn((value: boolean) => Promise.resolve(value)),
+  openSettings: jest.fn(),
 };
 
 jest.mock('expo-router', () => ({
@@ -39,7 +38,7 @@ jest.mock('../../src/api/registry', () => ({
 }));
 
 jest.mock('../../src/notifications/use-device-channel', () => ({
-  useDeviceChannel: () => device,
+  useDeviceChannel: () => mockDeviceView,
 }));
 
 const METRICS = {
@@ -63,11 +62,11 @@ async function renderNotifications(): Promise<void> {
 
 describe('[SPEC-3501] canal appareil de l’écran Notifications', () => {
   beforeEach(() => {
-    device.state = 'off';
-    device.pending = false;
-    device.failed = false;
-    mockToggle.mockClear();
-    mockOpenSettings.mockClear();
+    mockDeviceView.state = 'off';
+    mockDeviceView.pending = false;
+    mockDeviceView.failed = false;
+    mockDeviceView.toggle.mockClear();
+    mockDeviceView.openSettings.mockClear();
   });
 
   it('affiche l’interrupteur du canal appareil, éteint sans abonnement (BR-SET-03)', async () => {
@@ -89,11 +88,11 @@ describe('[SPEC-3501] canal appareil de l’écran Notifications', () => {
       true,
     );
 
-    expect(mockToggle).toHaveBeenCalledWith(true);
+    expect(mockDeviceView.toggle).toHaveBeenCalledWith(true);
   });
 
   it('reflète l’état activé quand l’appareil est abonné (CA-1)', async () => {
-    device.state = 'on';
+    mockDeviceView.state = 'on';
     await renderNotifications();
 
     expect(
@@ -102,19 +101,19 @@ describe('[SPEC-3501] canal appareil de l’écran Notifications', () => {
   });
 
   it('propose « Autoriser dans les réglages » quand la permission est refusée (CL-1)', async () => {
-    device.state = 'denied';
+    mockDeviceView.state = 'denied';
     await renderNotifications();
 
     expect(screen.getByTestId('notifications-permission-hint')).toBeTruthy();
     const cta = screen.getByTestId('notifications-permission-cta');
     await fireEvent.press(cta);
 
-    expect(mockOpenSettings).toHaveBeenCalledTimes(1);
+    expect(mockDeviceView.openSettings).toHaveBeenCalledTimes(1);
   });
 
   it('désactive l’interrupteur pendant l’enregistrement et signale un échec (EF-1)', async () => {
-    device.pending = true;
-    device.failed = true;
+    mockDeviceView.pending = true;
+    mockDeviceView.failed = true;
     await renderNotifications();
 
     expect(

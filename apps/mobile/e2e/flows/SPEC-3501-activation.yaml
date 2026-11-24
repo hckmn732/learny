@@ -1,0 +1,72 @@
+# SPEC-3501 — activation du canal appareil (EF-1, EF-7 ; BR-NOT-03, BR-NOT-04, BR-SET-03 ; CA-1).
+#
+# La permission système POST_NOTIFICATIONS est accordée à l'application avant la campagne
+# (`adb shell pm grant fr.learny.app android.permission.POST_NOTIFICATIONS`) : le flux prouve donc
+# l'activation du canal, l'inscription du jeton natif par l'API et l'état de l'interrupteur, pas la
+# boîte de dialogue du système. Un refus éventuel de la boîte est couvert défensivement ci-dessous ;
+# le cas « permission refusée » est prouvé par le test Jest de l'écran (CL-1).
+#
+# Le flux laisse l'interrupteur **éteint** : la désactivation supprime l'abonnement de l'appareil
+# (BR-SET-03), donc le compte de démonstration ne garde aucune ligne après la campagne.
+appId: fr.learny.app
+name: SPEC-3501 activation
+tags:
+  - SPEC-3501
+---
+- launchApp:
+    clearState: true
+- extendedWaitUntil:
+    visible:
+      id: sdd-health
+    timeout: 30000
+- openLink: learny://connexion?demo=1
+- waitForAnimationToEnd:
+    timeout: 5000
+- runFlow:
+    when:
+      visible:
+        id: onboarding-error
+    commands:
+      - tapOn:
+          id: onboarding-error-retry
+- extendedWaitUntil:
+    visible:
+      id: tab-aujourdhui
+    timeout: 60000
+- tapOn:
+    id: tab-profil
+- extendedWaitUntil:
+    visible:
+      id: profile-identity
+    timeout: 30000
+- tapOn:
+    id: profile-row-notifications
+- extendedWaitUntil:
+    visible:
+      id: notifications-screen
+    timeout: 20000
+# CA-1 — le canal appareil est présent, éteint, avec son libellé d'état.
+- assertVisible:
+    id: notifications-device-switch
+- assertVisible: 'Aucun rappel n’arrive sur cet appareil.'
+# CA-1 — l'activation demande la permission (déjà accordée ici) puis inscrit le jeton natif.
+- tapOn:
+    id: notifications-device-switch-control
+- runFlow:
+    when:
+      visible: 'Autoriser'
+    commands:
+      - tapOn: 'Autoriser'
+- extendedWaitUntil:
+    visible: 'Les rappels arrivent sur cet appareil.'
+    timeout: 20000
+- assertVisible:
+    id: notifications-device-switch
+# BR-SET-03 — la désactivation supprime l'abonnement de l'appareil.
+- tapOn:
+    id: notifications-device-switch-control
+- extendedWaitUntil:
+    visible: 'Aucun rappel n’arrive sur cet appareil.'
+    timeout: 20000
+- assertVisible:
+    id: notifications-channel-email
