@@ -14,6 +14,7 @@ from learny.engagement.infrastructure.unsubscribe_page import (
     wants_json,
 )
 from learny.shared.errors import AppError
+from pydantic import RootModel
 from starlette.responses import Response
 
 from learny_api.pipeline import Call, handler
@@ -25,8 +26,15 @@ def _actor(call: Call) -> Any:
 
 
 def _body(call: Call, *, partial: bool = False) -> dict[str, Any]:
-    """The validated body as a plain mapping; `partial` keeps only the fields the caller sent."""
-    return cast(dict[str, Any], cast(Any, call.body).model_dump(exclude_unset=partial))
+    """The validated body as a plain mapping; `partial` keeps only the fields the caller sent.
+
+    A body declared as a discriminated union (`pushSubscriptions.upsert` and its `DELETE`,
+    SPEC-3501 EF-3) is generated as a root model: the mapping is the root of that model.
+    """
+    payload: Any = cast(Any, call.body)
+    if isinstance(payload, RootModel):
+        payload = payload.root
+    return cast(dict[str, Any], payload.model_dump(exclude_unset=partial))
 
 
 def _params(call: Call) -> dict[str, Any]:

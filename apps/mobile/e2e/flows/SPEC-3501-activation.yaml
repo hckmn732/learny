@@ -1,0 +1,95 @@
+# SPEC-3501 — activation du canal appareil (EF-1, EF-7 ; BR-NOT-03, BR-NOT-04, BR-SET-03 ; CA-1).
+#
+# La permission système POST_NOTIFICATIONS est accordée à l'application avant la campagne
+# (`adb shell pm grant fr.learny.app android.permission.POST_NOTIFICATIONS`) : le flux prouve donc
+# l'activation du canal, l'inscription du jeton natif par l'API et l'état de l'interrupteur, pas la
+# boîte de dialogue du système. Un refus éventuel de la boîte est couvert défensivement ci-dessous ;
+# le cas « permission refusée » est prouvé par le test Jest de l'écran (CL-1).
+#
+# Le flux laisse l'interrupteur **éteint** : la désactivation supprime l'abonnement de l'appareil
+# (BR-SET-03), donc le compte de démonstration ne garde aucune ligne après la campagne.
+appId: fr.learny.app
+name: SPEC-3501 activation
+tags:
+  - SPEC-3501
+---
+- launchApp:
+    clearState: true
+- extendedWaitUntil:
+    visible:
+      id: sdd-health
+    timeout: 30000
+- openLink: learny://connexion?demo=1
+- waitForAnimationToEnd:
+    timeout: 5000
+- runFlow:
+    when:
+      visible:
+        id: onboarding-error
+    commands:
+      - tapOn:
+          id: onboarding-error-retry
+- extendedWaitUntil:
+    visible:
+      id: tab-aujourdhui
+    timeout: 60000
+- tapOn:
+    id: tab-profil
+- extendedWaitUntil:
+    visible:
+      id: profile-identity
+    timeout: 30000
+- tapOn:
+    id: profile-row-notifications
+- extendedWaitUntil:
+    visible:
+      id: notifications-screen
+    timeout: 20000
+# CA-1 — le canal appareil est présent. `clearState` vide les données de l'application mais pas la
+# permission déjà accordée par une campagne précédente : quand elle l'est, le démarrage réinscrit
+# le jeton (EF-1) et l'interrupteur est déjà activé. Le flux part donc d'un état normalisé : le
+# canal est coupé d'abord, pour que l'activation soit celle du flux, jamais un état hérité.
+- assertVisible:
+    id: notifications-device-switch
+- extendedWaitUntil:
+    visible:
+      id: notifications-device-switch-control
+    timeout: 20000
+- waitForAnimationToEnd:
+    timeout: 5000
+- assertVisible:
+    id: notifications-device-switch-control
+    enabled: true
+- runFlow:
+    when:
+      visible: 'Les rappels arrivent sur cet appareil.'
+    commands:
+      - tapOn:
+          id: notifications-device-switch-control
+      - extendedWaitUntil:
+          notVisible: 'Les rappels arrivent sur cet appareil.'
+          timeout: 20000
+- assertNotVisible: 'Les rappels arrivent sur cet appareil.'
+# CA-1 — l'activation demande la permission (si elle ne l'est pas encore) puis inscrit le jeton
+# natif ; l'interrupteur passe à l'état activé.
+- tapOn:
+    id: notifications-device-switch-control
+- waitForAnimationToEnd:
+    timeout: 5000
+- tapOn:
+    text: 'Autoriser'
+    optional: true
+- extendedWaitUntil:
+    visible: 'Les rappels arrivent sur cet appareil.'
+    timeout: 30000
+- assertVisible:
+    id: notifications-device-switch
+# BR-SET-03 — la désactivation supprime l'abonnement de l'appareil.
+- tapOn:
+    id: notifications-device-switch-control
+- extendedWaitUntil:
+    notVisible: 'Les rappels arrivent sur cet appareil.'
+    timeout: 20000
+- assertNotVisible: 'Les rappels arrivent sur cet appareil.'
+- assertVisible:
+    id: notifications-channel-email

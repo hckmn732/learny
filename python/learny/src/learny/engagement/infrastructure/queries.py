@@ -174,34 +174,55 @@ DISABLE_EMAIL_CHANNEL = text(
 )
 
 FIND_SUBSCRIPTION = text(
-    "select id, user_id, endpoint, p256dh, auth, user_agent, created_at, updated_at, "
-    "last_success_at, failure_count from public.push_subscriptions "
-    "where user_id = cast(:user_id as uuid) and endpoint = :endpoint limit 1"
+    "select id, user_id, kind, endpoint, p256dh, auth, token, platform, user_agent, created_at, "
+    "updated_at, last_success_at, failure_count from public.push_subscriptions "
+    "where user_id = cast(:user_id as uuid) and kind = 'webpush' and endpoint = :endpoint "
+    "limit 1"
+)
+
+FIND_NATIVE_SUBSCRIPTION = text(
+    "select id, user_id, kind, endpoint, p256dh, auth, token, platform, user_agent, created_at, "
+    "updated_at, last_success_at, failure_count from public.push_subscriptions "
+    "where user_id = cast(:user_id as uuid) and kind = :kind and token = :token limit 1"
 )
 
 INSERT_SUBSCRIPTION = text(
     "insert into public.push_subscriptions "
-    "(user_id, endpoint, p256dh, auth, user_agent, created_at, updated_at) "
-    "values (cast(:user_id as uuid), :endpoint, :p256dh, :auth, :user_agent, :created_at, "
-    ":updated_at) returning id, user_id, endpoint, p256dh, auth, user_agent, created_at, "
+    "(user_id, kind, endpoint, p256dh, auth, token, platform, user_agent, created_at, updated_at) "
+    "values (cast(:user_id as uuid), :kind, :endpoint, :p256dh, :auth, :token, :platform, "
+    ":user_agent, :created_at, :updated_at) "
+    "returning id, user_id, kind, endpoint, p256dh, auth, token, platform, user_agent, created_at, "
     "updated_at, last_success_at, failure_count"
 )
 
 UPDATE_SUBSCRIPTION = text(
     "update public.push_subscriptions set p256dh = :p256dh, auth = :auth, "
     "user_agent = :user_agent, updated_at = :updated_at "
-    "where id = cast(:subscription_id as uuid) returning id, user_id, endpoint, p256dh, auth, "
-    "user_agent, created_at, updated_at, last_success_at, failure_count"
+    "where id = cast(:subscription_id as uuid) returning id, user_id, kind, endpoint, p256dh, "
+    "auth, token, platform, user_agent, created_at, updated_at, last_success_at, failure_count"
+)
+
+UPDATE_SUBSCRIPTION_DEVICE = text(
+    "update public.push_subscriptions set platform = coalesce(:platform, platform), "
+    "user_agent = coalesce(:user_agent, user_agent), updated_at = :updated_at "
+    "where id = cast(:subscription_id as uuid) returning id, user_id, kind, endpoint, p256dh, "
+    "auth, token, platform, user_agent, created_at, updated_at, last_success_at, failure_count"
 )
 
 DELETE_SUBSCRIPTION = text(
     "delete from public.push_subscriptions "
-    "where user_id = cast(:user_id as uuid) and endpoint = :endpoint returning id"
+    "where user_id = cast(:user_id as uuid) and kind = 'webpush' and endpoint = :endpoint "
+    "returning id"
+)
+
+DELETE_NATIVE_SUBSCRIPTION = text(
+    "delete from public.push_subscriptions "
+    "where user_id = cast(:user_id as uuid) and kind = :kind and token = :token returning id"
 )
 
 LIST_SUBSCRIPTIONS = text(
-    "select id, user_id, endpoint, p256dh, auth, user_agent, created_at, updated_at, "
-    "last_success_at, failure_count from public.push_subscriptions "
+    "select id, user_id, kind, endpoint, p256dh, auth, token, platform, user_agent, created_at, "
+    "updated_at, last_success_at, failure_count from public.push_subscriptions "
     "where user_id = cast(:user_id as uuid) order by created_at, id"
 )
 
@@ -279,13 +300,16 @@ class SettingsRow:
 
 @dataclass(frozen=True, slots=True)
 class SubscriptionRow:
-    """One row of `push_subscriptions`."""
+    """One row of `push_subscriptions` (browser endpoint or native device token, ADR-3007)."""
 
     id: str
     user_id: str
-    endpoint: str
-    p256dh: str
-    auth: str
+    kind: str
+    endpoint: str | None
+    p256dh: str | None
+    auth: str | None
+    token: str | None
+    platform: str | None
     user_agent: str | None
     created_at: datetime
     updated_at: datetime
@@ -366,14 +390,21 @@ def _settings(row: Any) -> SettingsRow:
     )
 
 
+def _optional_text(value: Any) -> str | None:
+    return None if value is None else str(value)
+
+
 def _subscription(row: Any) -> SubscriptionRow:
     return SubscriptionRow(
         id=str(row["id"]),
         user_id=str(row["user_id"]),
-        endpoint=str(row["endpoint"]),
-        p256dh=str(row["p256dh"]),
-        auth=str(row["auth"]),
-        user_agent=None if row["user_agent"] is None else str(row["user_agent"]),
+        kind=str(row["kind"]),
+        endpoint=_optional_text(row["endpoint"]),
+        p256dh=_optional_text(row["p256dh"]),
+        auth=_optional_text(row["auth"]),
+        token=_optional_text(row["token"]),
+        platform=_optional_text(row["platform"]),
+        user_agent=_optional_text(row["user_agent"]),
         created_at=row["created_at"],
         updated_at=row["updated_at"],
         failure_count=int(row["failure_count"]),
@@ -605,23 +636,38 @@ async def find_subscription(tx: Tx, *, user_id: str, endpoint: str) -> Subscript
     return None if row is None else _subscription(row)
 
 
+async def find_native_subscription(tx: Tx, *, user_id: str, kind: str, token: str) -> SubscriptionRow | None:
+    """CL-3 - the row of one device token: a reinstalled application refreshes it, never doubles it."""
+    result = await tx.conn.execute(
+        FIND_NATIVE_SUBSCRIPTION, {"user_id": user_id, "kind": kind, "token": token}
+    )
+    row = result.mappings().first()
+    return None if row is None else _subscription(row)
+
+
 async def insert_subscription(
     tx: Tx,
     *,
     user_id: str,
-    endpoint: str,
-    p256dh: str,
-    auth: str,
+    endpoint: str | None,
+    p256dh: str | None,
+    auth: str | None,
     user_agent: str | None,
     now: datetime,
+    kind: str = "webpush",
+    token: str | None = None,
+    platform: str | None = None,
 ) -> SubscriptionRow:
     result = await tx.conn.execute(
         INSERT_SUBSCRIPTION,
         {
             "user_id": user_id,
+            "kind": kind,
             "endpoint": endpoint,
             "p256dh": p256dh,
             "auth": auth,
+            "token": token,
+            "platform": platform,
             "user_agent": user_agent,
             "created_at": now,
             "updated_at": now,
@@ -652,8 +698,37 @@ async def update_subscription(
     return _subscription(result.mappings().one())
 
 
+async def update_subscription_device(
+    tx: Tx,
+    *,
+    subscription_id: str,
+    platform: str | None,
+    user_agent: str | None,
+    now: datetime,
+) -> SubscriptionRow:
+    """CL-3 - a known device token only refreshes its description, never duplicates the delivery."""
+    result = await tx.conn.execute(
+        UPDATE_SUBSCRIPTION_DEVICE,
+        {
+            "subscription_id": subscription_id,
+            "platform": platform,
+            "user_agent": user_agent,
+            "updated_at": now,
+        },
+    )
+    return _subscription(result.mappings().one())
+
+
 async def delete_subscription(tx: Tx, *, user_id: str, endpoint: str) -> int:
     result = await tx.conn.execute(DELETE_SUBSCRIPTION, {"user_id": user_id, "endpoint": endpoint})
+    return len(list(result.mappings()))
+
+
+async def delete_native_subscription(tx: Tx, *, user_id: str, kind: str, token: str) -> int:
+    """EF-1 - removes the device token of the caller; a replay deletes nothing and still succeeds."""
+    result = await tx.conn.execute(
+        DELETE_NATIVE_SUBSCRIPTION, {"user_id": user_id, "kind": kind, "token": token}
+    )
     return len(list(result.mappings()))
 
 

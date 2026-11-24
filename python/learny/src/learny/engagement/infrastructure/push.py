@@ -19,6 +19,12 @@ from datetime import datetime
 from typing import Literal, Protocol, cast
 from urllib.parse import urljoin, urlparse
 
+from learny.engagement.domain.push_token import (
+    NATIVE_KINDS,
+    is_native_kind,
+    mask_endpoint,
+    mask_token,
+)
 from learny.shared.clock import Clock
 from learny.shared.errors import AppError
 from learny.shared.locale_fr import engagement as fr
@@ -69,18 +75,31 @@ class PushPayload:
 
 @dataclass(frozen=True, slots=True)
 class PushTarget:
-    endpoint: str
-    p256dh: str
-    auth: str
+    """One subscription, as the transport of its channel needs it (ADR-3007).
+
+    `webpush` carries the endpoint and the two client keys; `apns` and `fcm` carry the device token.
+    The defaults keep every historical call of the browser channel valid.
+    """
+
+    kind: str = "webpush"
+    endpoint: str | None = None
+    p256dh: str | None = None
+    auth: str | None = None
+    token: str | None = None
 
 
 @dataclass(frozen=True, slots=True)
 class PushSendResult:
-    """One answer of the push service; `gone` is definitive, `transient` may be retried."""
+    """One answer of a channel; `gone` is definitive, `transient` may be retried.
+
+    `detail` carries a code for the journal only (`channel_not_configured`), never a provider body:
+    a token or a device name never reaches a log line (ET-4).
+    """
 
     ok: bool
     status_code: int | None
     reason: PushFailureReason | None = None
+    detail: str | None = None
 
 
 @dataclass(frozen=True, slots=True)
@@ -102,7 +121,11 @@ class RoundSummary:
 
 @dataclass(frozen=True, slots=True)
 class MockPushRecord:
-    """One simulated call, kept in memory for the tests and the demonstration."""
+    """One simulated call, kept in memory for the tests and the demonstration (EF-6).
+
+    The three channels write into the same box: `kind` tells them apart and the token is already
+    masked (ET-4), so the demonstration can be inspected without ever exposing a credential.
+    """
 
     at: str
     host: str
@@ -112,6 +135,8 @@ class MockPushRecord:
     topic: str | None
     payload_bytes: int
     payload: str
+    kind: str = "webpush"
+    target: str = ""
 
 
 class PushTransport(Protocol):
@@ -227,6 +252,25 @@ def mock_push_endpoint(scope: str, outcome: MockPushOutcome) -> str:
     return f"https://{MOCK_PUSH_HOST}/{scope}/{outcome}"
 
 
+def mock_native_outcome_of(token: str) -> str:
+    """EF-6 - the outcome a mock native send simulates, read from the token itself.
+
+    A token that spells an outcome (`...-gone-...`) simulates it; anything else succeeds. The rule keeps
+    the simulated channels deterministic without any network access, exactly like the endpoint rule
+    of the browser channel.
+    """
+    for outcome in ("gone", "transient"):
+        if outcome in token.lower():
+            return outcome
+    return "success"
+
+
+def mock_native_token(scope: str, outcome: MockPushOutcome = "success") -> str:
+    """A well-formed token of the mock channel, distinct per `scope` (tests, demonstrations)."""
+    marker = "" if outcome == "success" else f"-{outcome}-"
+    return f"mock{marker}-{scope}-token-0123456789abcdef"
+
+
 class MockPushTransport:
     """The deterministic push service of the tests and the demonstration (EF-6)."""
 
@@ -242,18 +286,28 @@ class MockPushTransport:
         encoded = payload.encode("utf-8")
         if len(encoded) > PUSH_PAYLOAD_MAX_BYTES:
             raise AppError("VALIDATION_FAILED", fr.DELIVERY_PUSH_TOO_LARGE)
-        outcome = mock_outcome_of(target.endpoint)
+        native = is_native_kind(target.kind)
+        if native:
+            outcome = mock_native_outcome_of(target.token or "")
+            host = target.kind
+            target_label = mask_token(target.token)
+        else:
+            outcome = mock_outcome_of(target.endpoint or "")
+            host = urlparse(target.endpoint or "").hostname or ""
+            target_label = mask_endpoint(target.endpoint)
         status_code = MOCK_STATUS[outcome]
         self._outbox.append(
             MockPushRecord(
                 at=self._now().isoformat(),
-                host=urlparse(target.endpoint).hostname or "",
+                host=host,
                 outcome=outcome,
                 status_code=status_code,
                 ttl=ttl,
                 topic=topic,
                 payload_bytes=len(encoded),
                 payload=payload,
+                kind=target.kind,
+                target=target_label,
             )
         )
         return classify_push_status(status_code)
@@ -280,6 +334,8 @@ class WebPushTransport:
     async def send(self, target: PushTarget, payload: str, *, ttl: int, topic: str | None) -> PushSendResult:
         from pywebpush import WebPushException, webpush  # type: ignore[import-untyped]
 
+        if target.endpoint is None or target.p256dh is None or target.auth is None:
+            return PushSendResult(ok=False, status_code=None, reason="gone")
         subscription = {
             "endpoint": target.endpoint,
             "keys": {"p256dh": target.p256dh, "auth": target.auth},
@@ -321,6 +377,77 @@ def create_push_transport(
     return WebPushTransport(subject, public_key, private_key)
 
 
+class PushChannelRouter:
+    """Routes one round to the channel each subscription belongs to (EF-5, ADR-3007 section 3).
+
+    The unified notification service keeps its single entry point: it asks the router for one send
+    per subscription and receives the same `PushSendResult` whatever the channel. Preferences,
+    quiet hours, the daily cap and the journal are decided upstream and never depend on the channel.
+    A channel the configuration does not provide is reported as `channel_not_configured` - a
+    transient failure that costs one of the five attempts, never a silent success (ET-4).
+    """
+
+    def __init__(self, channels: Mapping[str, PushTransport], *, mode: str) -> None:
+        self._channels = dict(channels)
+        self._mode = mode
+
+    @property
+    def mode(self) -> str:
+        return self._mode
+
+    @property
+    def kinds(self) -> tuple[str, ...]:
+        return tuple(sorted(self._channels))
+
+    def channel(self, kind: str) -> PushTransport | None:
+        return self._channels.get(kind)
+
+    async def send(self, target: PushTarget, payload: str, *, ttl: int, topic: str | None) -> PushSendResult:
+        channel = self._channels.get(target.kind)
+        if channel is None:
+            return PushSendResult(
+                ok=False, status_code=None, reason="transient", detail="channel_not_configured"
+            )
+        return await channel.send(target, payload, ttl=ttl, topic=topic)
+
+
+def create_push_channels(
+    mode: PushMode,
+    *,
+    clock: Clock,
+    ci: str | None = None,
+    subject: str | None = None,
+    public_key: str | None = None,
+    private_key: str | None = None,
+    apns: PushTransport | None = None,
+    fcm: PushTransport | None = None,
+) -> PushChannelRouter:
+    """Builds the three channels of the configuration (EF-6, ET-2).
+
+    In `mock` mode one `MockPushTransport` serves all three kinds: the native sends land in the very
+    box the browser one writes to, which is what EF-6 asks for. In `live` mode the browser channel
+    keeps its VAPID guard (refused in CI) and the native channels are the adapters built from the
+    typed configuration; an absent credential leaves that channel out instead of failing the start.
+    """
+    if mode == "mock":
+        mock = MockPushTransport(clock.now)
+        return PushChannelRouter({kind: mock for kind in ("webpush", *NATIVE_KINDS)}, mode="mock")
+    web = create_push_transport(
+        "live",
+        clock=clock,
+        ci=ci,
+        subject=subject,
+        public_key=public_key,
+        private_key=private_key,
+    )
+    channels: dict[str, PushTransport] = {"webpush": web}
+    if apns is not None:
+        channels["apns"] = apns
+    if fcm is not None:
+        channels["fcm"] = fcm
+    return PushChannelRouter(channels, mode="live")
+
+
 __all__ = [
     "BODY_MAX",
     "GONE_STATUSES",
@@ -336,6 +463,7 @@ __all__ = [
     "AttemptDecision",
     "MockPushRecord",
     "MockPushTransport",
+    "PushChannelRouter",
     "PushMode",
     "PushPayload",
     "PushSendResult",
@@ -345,8 +473,11 @@ __all__ = [
     "WebPushTransport",
     "build_push_payload",
     "classify_push_status",
+    "create_push_channels",
     "create_push_transport",
     "decide_attempt",
+    "mock_native_outcome_of",
+    "mock_native_token",
     "mock_outcome_of",
     "mock_push_endpoint",
     "safe_notification_url",

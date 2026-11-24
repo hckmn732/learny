@@ -100,6 +100,19 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
     // SPEC-3003 ET-1 — the encryption key of the session cache lives in the platform keychain:
     // the plugin keeps it out of the Android backups (`allowBackup` rules).
     'expo-secure-store',
+    // SPEC-3501 EF-7, ADR-3007 — native notifications (FCM and APNs). The Android channel
+    // « Rappels Learny » (high importance) and its monochrome icon are created at runtime by
+    // `src/notifications/expo-device.ts`; iOS keeps the default sound and declares no badge (V1).
+    [
+      'expo-notifications',
+      {
+        icon: './assets/android-icon-foreground.png',
+        color: CANVAS,
+        defaultChannel: 'learny-reminders',
+        sounds: [],
+        enableBackgroundRemoteNotifications: false,
+      },
+    ],
     // SPEC-3402 ET-2 — Google Sign-In native. The identifiers are public and come from the
     // porteur; the iOS URL scheme has the shape Google requires even before the real client
     // exists, so a build never fails on a missing development credential. No secret is involved.

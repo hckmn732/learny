@@ -177,14 +177,29 @@ describe('[SPEC-102] schéma identité', () => {
     );
   });
 
-  it('declares push subscriptions and their unique endpoint (CL-8)', () => {
-    expect(column(pushSubscriptions, 'endpoint').notNull).toBe(true);
-    expect(column(pushSubscriptions, 'endpoint').isUnique).toBe(true);
-    expect(column(pushSubscriptions, 'p256dh').notNull).toBe(true);
-    expect(column(pushSubscriptions, 'auth').notNull).toBe(true);
+  it('declares push subscriptions and their partial uniqueness (CL-8, SPEC-3501 EF-4)', () => {
+    // SPEC-3501 EF-4 — a row is either a browser subscription (endpoint + keys) or a native device
+    // token (kind + token): the browser columns became nullable, `kind` discriminates, and the
+    // uniqueness moved to two partial indexes (one per channel) instead of the column.
+    expect(column(pushSubscriptions, 'kind').notNull).toBe(true);
+    expect(column(pushSubscriptions, 'kind').default).toBe('webpush');
+    expect(column(pushSubscriptions, 'endpoint').notNull).toBe(false);
+    expect(column(pushSubscriptions, 'p256dh').notNull).toBe(false);
+    expect(column(pushSubscriptions, 'auth').notNull).toBe(false);
+    expect(column(pushSubscriptions, 'token').notNull).toBe(false);
+    expect(column(pushSubscriptions, 'platform').notNull).toBe(false);
     expect(column(pushSubscriptions, 'failure_count').default).toBe(0);
-    expect(config(pushSubscriptions).indexes.map((index) => index.config.name)).toContain(
-      'push_subscriptions_user_id_idx',
+    const indexes = config(pushSubscriptions).indexes.map((index) => index.config.name);
+    expect(indexes).toEqual(
+      expect.arrayContaining([
+        'push_subscriptions_user_id_idx',
+        'push_subscriptions_user_endpoint_key',
+        'push_subscriptions_endpoint_key',
+        'push_subscriptions_user_token_key',
+      ]),
+    );
+    expect(config(pushSubscriptions).checks.map((check) => check.name)).toEqual(
+      expect.arrayContaining(['push_subscriptions_kind_check', 'push_subscriptions_shape_check']),
     );
   });
 

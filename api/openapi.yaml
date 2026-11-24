@@ -14661,47 +14661,95 @@ components:
         - fid
       type: object
     PushSubscriptionsDeleteBody:
-      properties:
-        endpoint:
-          maxLength: 2048
-          minLength: 1
-          type: string
-      required:
-        - endpoint
-      type: object
-    PushSubscriptionsUpsertBody:
-      properties:
-        endpoint:
-          maxLength: 2048
-          minLength: 1
-          type: string
-        expirationTime:
-          type:
-            - number
-            - "null"
-        keys:
-          properties:
-            auth:
-              maxLength: 128
+      oneOf:
+        - properties:
+            endpoint:
+              maxLength: 2048
               minLength: 1
-              pattern: ^[A-Za-z0-9_-]+={0,2}$
               type: string
-            p256dh:
-              maxLength: 256
-              minLength: 1
-              pattern: ^[A-Za-z0-9_-]+={0,2}$
+            kind:
+              const: webpush
+              default: webpush
               type: string
           required:
-            - p256dh
-            - auth
+            - endpoint
           type: object
-        userAgent:
-          maxLength: 512
-          type: string
-      required:
-        - endpoint
-        - keys
-      type: object
+        - properties:
+            kind:
+              enum:
+                - apns
+                - fcm
+              type: string
+            token:
+              maxLength: 512
+              minLength: 16
+              pattern: ^[A-Za-z0-9_.:-]+$
+              type: string
+          required:
+            - kind
+            - token
+          type: object
+    PushSubscriptionsUpsertBody:
+      oneOf:
+        - properties:
+            endpoint:
+              maxLength: 2048
+              minLength: 1
+              type: string
+            expirationTime:
+              type:
+                - number
+                - "null"
+            keys:
+              properties:
+                auth:
+                  maxLength: 128
+                  minLength: 1
+                  pattern: ^[A-Za-z0-9_-]+={0,2}$
+                  type: string
+                p256dh:
+                  maxLength: 256
+                  minLength: 1
+                  pattern: ^[A-Za-z0-9_-]+={0,2}$
+                  type: string
+              required:
+                - p256dh
+                - auth
+              type: object
+            kind:
+              const: webpush
+              default: webpush
+              type: string
+            userAgent:
+              maxLength: 512
+              type: string
+          required:
+            - endpoint
+            - keys
+          type: object
+        - properties:
+            deviceName:
+              maxLength: 120
+              type: string
+            kind:
+              enum:
+                - apns
+                - fcm
+              type: string
+            platform:
+              enum:
+                - ios
+                - android
+              type: string
+            token:
+              maxLength: 512
+              minLength: 16
+              pattern: ^[A-Za-z0-9_.:-]+$
+              type: string
+          required:
+            - kind
+            - token
+          type: object
     PushSubscriptionsUpsertOutput:
       additionalProperties: false
       properties:
@@ -25988,7 +26036,7 @@ paths:
       security:
         - bearerAuth: []
         - cookieAuth: []
-      summary: "Retire l’abonnement Web Push du navigateur courant (SPEC-205). Idempotent : une suppression répétée répond 204."
+      summary: "Retire l’abonnement push de l’appareil courant : Web Push (SPEC-205) ou jeton natif (SPEC-3501). Idempotent : une suppression répétée répond 204."
       x-learny:
         auth: user
         freshAuth: false
@@ -26047,7 +26095,7 @@ paths:
       security:
         - bearerAuth: []
         - cookieAuth: []
-      summary: Enregistre ou rafraîchit l’abonnement Web Push du navigateur courant (SPEC-205). Idempotent sur le point de terminaison.
+      summary: "Enregistre ou rafraîchit l’abonnement push de l’appareil courant : Web Push du navigateur (SPEC-205) ou jeton natif APNs/FCM (SPEC-3501). Idempotent sur le point de terminaison ou le jeton."
       x-learny:
         auth: user
         freshAuth: false

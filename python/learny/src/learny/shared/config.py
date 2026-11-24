@@ -47,6 +47,14 @@ ENVIRONMENT_VARIABLES: tuple[str, ...] = (
     "EMAIL_FROM",
     "RESEND_API_KEY",
     "VAPID_PRIVATE_KEY",
+    # Native push channels (SPEC-3501, ADR-3007): APNs provider token and FCM service account.
+    "APNS_KEY_ID",
+    "APNS_TEAM_ID",
+    "APNS_PRIVATE_KEY",
+    "APNS_TOPIC",
+    "APNS_ENVIRONMENT",
+    "FCM_PROJECT_ID",
+    "FCM_SERVICE_ACCOUNT_JSON",
     "STRIPE_SECRET_KEY",
     "STRIPE_WEBHOOK_SECRET",
     "STRIPE_PRICE_ID",
@@ -147,6 +155,16 @@ class Settings(BaseSettings):
     email_from: str | None = None
     resend_api_key: str | None = None
     vapid_private_key: str | None = None
+    # Native push channels (SPEC-3501, ADR-3007): never in the repository, never logged. A missing
+    # value leaves the channel out of the router instead of failing the start (the Web Push of
+    # SPEC-205 keeps working); `APNS_ENVIRONMENT=sandbox` targets the development APNs host.
+    apns_key_id: str | None = None
+    apns_team_id: str | None = None
+    apns_private_key: str | None = None
+    apns_topic: str | None = None
+    apns_environment: str | None = None
+    fcm_project_id: str | None = None
+    fcm_service_account_json: str | None = None
     stripe_secret_key: str | None = None
     stripe_webhook_secret: str | None = None
     stripe_price_id: str | None = None

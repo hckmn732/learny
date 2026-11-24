@@ -1,0 +1,20 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<testsuites>
+  <testsuite name="Test Suite" device="learny" tests="3" failures="0" time="117.647" timestamp="2026-11-24T10:47:27">
+    <testcase id="SPEC-3501 toucher" name="SPEC-3501 toucher" classname="SPEC-3501 toucher" file="apps/mobile/e2e/flows/SPEC-3501-toucher.yaml" time="48.595" timestamp="2026-11-24T10:47:27" status="SUCCESS">
+      <properties>
+        <property name="tags" value="SPEC-3501"/>
+      </properties>
+    </testcase>
+    <testcase id="SPEC-3501 activation" name="SPEC-3501 activation" classname="SPEC-3501 activation" file="apps/mobile/e2e/flows/SPEC-3501-activation.yaml" time="42.188" timestamp="2026-11-24T10:48:15" status="SUCCESS">
+      <properties>
+        <property name="tags" value="SPEC-3501"/>
+      </properties>
+    </testcase>
+    <testcase id="SPEC-3501 notifications" name="SPEC-3501 notifications" classname="SPEC-3501 notifications" file="apps/mobile/e2e/flows/SPEC-3501-notifications.yaml" time="26.846" timestamp="2026-11-24T10:48:57" status="SUCCESS">
+      <properties>
+        <property name="tags" value="SPEC-3501, visual"/>
+      </properties>
+    </testcase>
+  </testsuite>
+</testsuites>

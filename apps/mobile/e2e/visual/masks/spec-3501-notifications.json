@@ -1,0 +1,9 @@
+[
+  {
+    "x": 0,
+    "y": 0.92,
+    "width": 1,
+    "height": 0.08,
+    "why": "Barre d'onglets native (ADR-3003 § 3) : la pile de réglages la laisse visible, elle est rendue par Material 3 et diffère de l'export. La barre d'état du haut et l'indicateur d'accueil du bas sont déjà couverts par les zones natives par défaut (5 % haut et bas). Aucune zone de contenu n'est masquée."
+  }
+]

@@ -16,6 +16,7 @@ from datetime import datetime
 from typing import Any, cast
 
 from learny.engagement.application.ports import EngagementDeps
+from learny.engagement.domain.push_token import mask_endpoint, mask_token
 from learny.engagement.domain.routing import DeliveryChannel, DeliverySettings, decide_delivery
 from learny.engagement.domain.templates import (
     NOTIFICATION_TEMPLATES,
@@ -483,16 +484,44 @@ async def _record_push_delivery(
         )
 
 
+def push_target_of(subscription: queries.SubscriptionRow) -> PushTarget | None:
+    """ADR-3007 - the material of one subscription, or `None` when its channel's data is missing."""
+    if subscription.kind == "webpush":
+        if subscription.endpoint is None or subscription.p256dh is None or subscription.auth is None:
+            return None
+        return PushTarget(
+            kind="webpush",
+            endpoint=subscription.endpoint,
+            p256dh=subscription.p256dh,
+            auth=subscription.auth,
+        )
+    if subscription.token is None:
+        return None
+    return PushTarget(kind=subscription.kind, token=subscription.token)
+
+
+def masked_target_of(subscription: queries.SubscriptionRow) -> str:
+    """ET-4 - the only form of a subscription a journal line or a demonstration may carry."""
+    if subscription.kind == "webpush":
+        return mask_endpoint(subscription.endpoint)
+    return mask_token(subscription.token)
+
+
 async def send_push(
     deps: EngagementDeps,
     *,
     user_id: str,
     notification: Mapping[str, object],
 ) -> dict[str, Any]:
-    """Sends one notification to every subscription of the learner and records the round."""
+    """Sends one notification to every subscription of the learner and records the round.
+
+    The three channels of ADR-3007 are routed one subscription at a time: preferences, quiet hours,
+    the daily cap and the journal were decided upstream and are the same whatever the channel.
+    """
     payload: PushPayload = build_push_payload(notification)
     body = payload.to_json()
     now = deps.clock.now()
+    topic = payload.tag.replace("-", "")[:32]
     async with deps.db.service_tx() as tx:
         subscriptions = await queries.list_subscriptions(tx, user_id)
     notification_id = str(notification["id"])
@@ -514,19 +543,16 @@ async def send_push(
             "remainingSubscriptions": 0,
         }
 
-    # 1. The push service, outside any transaction (network time never holds a connection).
+    # 1. The channels, outside any transaction (network time never holds a connection).
     results: list[tuple[queries.SubscriptionRow, PushSendResult]] = []
     for subscription in subscriptions:
-        result = await deps.push.send(
-            PushTarget(
-                endpoint=subscription.endpoint,
-                p256dh=subscription.p256dh,
-                auth=subscription.auth,
-            ),
-            body,
-            ttl=PUSH_TTL_SECONDS,
-            topic=payload.tag.replace("-", "")[:32],
-        )
+        target = push_target_of(subscription)
+        if target is None:
+            # A row missing the material of its channel can never be delivered: it is handled like
+            # a dead token, so the round removes it instead of retrying forever (CL-2, ET-4).
+            results.append((subscription, PushSendResult(ok=False, status_code=None, reason="gone")))
+            continue
+        result = await deps.push.send(target, body, ttl=PUSH_TTL_SECONDS, topic=topic)
         results.append((subscription, result))
 
     # 2. One transaction for the counters, the removals and the journal (ET-5).
@@ -544,7 +570,8 @@ async def send_push(
             attempts.append(
                 {
                     "subscriptionId": subscription.id,
-                    "endpoint": subscription.endpoint,
+                    "kind": subscription.kind,
+                    "target": masked_target_of(subscription),
                     "result": result,
                     "removed": decision.removed,
                     "failureCount": decision.failure_count,
@@ -554,8 +581,9 @@ async def send_push(
             deps.logger.info(
                 "push attempt",
                 userId=user_id,
+                channel=subscription.kind,
                 status=result.status_code or 0,
-                outcome="sent" if result.ok else result.reason,
+                outcome="sent" if result.ok else (result.detail or result.reason),
             )
         summary = summarize_round(summaries)
         delivery = await _record_push_delivery(
@@ -593,7 +621,9 @@ __all__ = [
     "count_sent_notifications",
     "deliver_due_deliveries",
     "deliver_notification",
+    "masked_target_of",
     "notify",
+    "push_target_of",
     "send_push",
     "settings_of",
 ]

@@ -1,10 +1,13 @@
-// Écran Notifications (SPEC-3401 EF-3, CL-1 ; BR-SET-03).
+// Écran Notifications (SPEC-3401 EF-3, CL-1 ; SPEC-3501 EF-1 ; BR-SET-03).
 //
-// The application channel is locked (the contract only accepts `true`), the e-mail channel and the
-// six types are configurable, the counter « N sur 6 activés » follows the server (BR-SET-03), and
-// the quiet hours, the daily programme and the weekend rule are edited here. The browser channel is
-// not displayed before SPEC-3501 (BR-SET-03). A save carries the version it read (CL-1); the draft is
-// derived from that version, never written in an effect.
+// The device channel of the native application is the browser channel of the mockup: the switch
+// asks for the system permission when it is turned on (never at first launch, BR-NOT-03), shows
+// « Autoriser dans les réglages » when the learner refused it (CL-1) and removes the subscription
+// when it is turned off (BR-SET-03). The application channel is locked (the contract only accepts
+// `true`), the e-mail channel and the six types are configurable, the counter « N sur 6 activés »
+// follows the server, and the quiet hours, the daily programme and the weekend rule are edited here.
+// A save carries the version it read (CL-1); the draft is derived from that version, never written
+// in an effect.
 import { useRouter } from 'expo-router';
 import { useState } from 'react';
 import { StyleSheet, View } from 'react-native';
@@ -17,8 +20,10 @@ import {
   useNotificationSettings,
   useSaveNotificationSettings,
 } from '../../data/notification-settings';
+import { useDeviceChannel } from '../../notifications/use-device-channel';
 import { useOnlineStatus } from '../../offline/network';
 import { theme } from '../../theme';
+import { Button } from '../../ui/Button';
 import { Chip } from '../../ui/Chip';
 import { ErrorState } from '../../ui/ErrorState';
 import { Skeleton } from '../../ui/Skeleton';
@@ -69,6 +74,7 @@ export function NotificationsScreen() {
   const online = useOnlineStatus();
   const settings = useNotificationSettings();
   const saver = useSaveNotificationSettings();
+  const device = useDeviceChannel();
   const data = settings.data;
 
   const [edited, setEdited] = useState<{ version: string; value: Draft } | null>(null);
@@ -180,6 +186,44 @@ export function NotificationsScreen() {
           onValueChange={() => undefined}
           testID="notifications-channel-app"
         />
+        {/* SPEC-3501 EF-1, BR-SET-03 — le canal appareil, forme mobile du canal navigateur. */}
+        <Switch
+          label={t.device}
+          description={
+            device.state === 'on'
+              ? t.deviceOn
+              : device.state === 'denied'
+                ? t.deviceDenied
+                : device.state === 'unsupported'
+                  ? t.deviceUnsupported
+                  : t.deviceOff
+          }
+          value={device.state === 'on'}
+          disabled={device.pending || device.state === 'unknown'}
+          onValueChange={(value) => {
+            void device.toggle(value);
+          }}
+          testID="notifications-device-switch"
+        />
+        {device.state === 'denied' ? (
+          <View style={styles.permission}>
+            <Text variant="rowSubtitle" tone="muted" testID="notifications-permission-hint">
+              {t.permissionHint}
+            </Text>
+            <Button
+              label={t.permissionCta}
+              variant="outline"
+              size="sm"
+              onPress={device.openSettings}
+              testID="notifications-permission-cta"
+            />
+          </View>
+        ) : null}
+        {device.failed ? (
+          <Text variant="caption" tone="danger" testID="notifications-device-error">
+            {t.deviceError}
+          </Text>
+        ) : null}
         <Switch
           label={st.channels.email.label}
           value={draft.email}
@@ -285,4 +329,5 @@ export function NotificationsScreen() {
 
 const styles = StyleSheet.create({
   options: { flexDirection: 'row', flexWrap: 'wrap', gap: theme.spacing.sm },
+  permission: { gap: theme.spacing.xs, paddingVertical: theme.spacing.xs },
 });

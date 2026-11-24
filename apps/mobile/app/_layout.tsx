@@ -31,6 +31,7 @@ import { appQueryClient } from '../src/data/query-client';
 import { AuthGate } from '../src/features/auth/AuthGate';
 import { ConfigErrorPage } from '../src/features/sdd/ConfigErrorPage';
 import { AppErrorScreen } from '../src/features/shell/AppErrorScreen';
+import { PushBridge } from '../src/notifications/PushBridge';
 import { startOfflineWiring } from '../src/offline/network-wiring';
 import { theme } from '../src/theme';
 
@@ -115,6 +116,8 @@ export default function RootLayout() {
               options={{ gestureEnabled: false, animation: 'slide_from_right' }}
             />
           </Stack>
+          {/* SPEC-3501 EF-2 — toucher d'une notification et bannière interne du premier plan. */}
+          <PushBridge />
         </SafeAreaProvider>
       </AppQueryProvider>
     </SessionProvider>

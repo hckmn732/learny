@@ -1,0 +1,75 @@
+# SPEC-3501 — écran Profil → Notifications avec le canal appareil (EF-1, EF-7 ; CA-1).
+#
+# Unique flux `@visual` de la spécification : la capture montre les trois canaux de la feuille
+# « Notifications » de la planche mobile (application verrouillée, notifications de l'appareil,
+# e-mail), les six types, le compteur et les heures calmes. Elle est prise **avant toute mutation**
+# (l'interrupteur appareil est éteint, aucune permission n'a été demandée par ce flux) puis comparée
+# à la ligne de base versionnée `e2e/visual/baselines/SPEC-3501-notifications.png` (écart ≤ 12 %,
+# ADR-3003 § 4).
+#
+# Masque `e2e/visual/masks/spec-3501-notifications.json` : aucun rectangle propre à ce flux. L'écran
+# est une pile de réglages sans barre d'onglets ; seules les zones natives par défaut (barre d'état
+# du haut, indicateur d'accueil du bas) sortent de la comparaison. Aucune zone de contenu n'est
+# masquée.
+appId: fr.learny.app
+name: SPEC-3501 notifications
+tags:
+  - SPEC-3501
+  - visual
+---
+- launchApp:
+    clearState: true
+- extendedWaitUntil:
+    visible:
+      id: sdd-health
+    timeout: 30000
+- openLink: learny://connexion?demo=1
+- waitForAnimationToEnd:
+    timeout: 5000
+- runFlow:
+    when:
+      visible:
+        id: onboarding-error
+    commands:
+      - tapOn:
+          id: onboarding-error-retry
+- extendedWaitUntil:
+    visible:
+      id: tab-aujourdhui
+    timeout: 60000
+- tapOn:
+    id: tab-profil
+- extendedWaitUntil:
+    visible:
+      id: profile-identity
+    timeout: 30000
+- tapOn:
+    id: profile-row-notifications
+- extendedWaitUntil:
+    visible:
+      id: notifications-screen
+    timeout: 20000
+- assertVisible:
+    id: notifications-channels
+- assertVisible:
+    id: notifications-types
+- assertVisible:
+    id: notifications-device-switch
+- waitForAnimationToEnd:
+    timeout: 5000
+# Capture déterministe : si la permission a été accordée par une campagne précédente, le démarrage a
+# réinscrit le jeton et l'interrupteur est activé ; il est coupé pour que la capture montre toujours
+# l'état de référence (canal appareil éteint, aucune inscription).
+- runFlow:
+    when:
+      visible: 'Les rappels arrivent sur cet appareil.'
+    commands:
+      - tapOn:
+          id: notifications-device-switch-control
+      - extendedWaitUntil:
+          notVisible: 'Les rappels arrivent sur cet appareil.'
+          timeout: 20000
+- assertNotVisible: 'Les rappels arrivent sur cet appareil.'
+- waitForAnimationToEnd:
+    timeout: 5000
+- takeScreenshot: SPEC-3501-notifications

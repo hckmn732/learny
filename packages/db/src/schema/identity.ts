@@ -160,7 +160,15 @@ export const notificationSettings = pgTable(
   (table) => [check('notification_settings_max_per_day_check', sql`${table.maxPerDay} in (3,5,8)`)],
 );
 
-/** Browser push subscriptions (SPEC-205). */
+/**
+ * Push subscriptions (SPEC-205 for the browser, SPEC-3501 for the native channels).
+ *
+ * A row is either a Web Push subscription (`kind = 'webpush'`: an HTTPS endpoint and the two client
+ * keys of `PushManager.subscribe()`) or a native device token (`kind = 'apns' | 'fcm'`: the token
+ * `expo-notifications` hands to the application, ADR-3007). The additive migration of SPEC-3501
+ * made the browser columns nullable and added the three native ones; the RLS policies are the ones
+ * of SPEC-205 and did not change.
+ */
 export const pushSubscriptions = pgTable(
   'push_subscriptions',
   {
@@ -168,9 +176,12 @@ export const pushSubscriptions = pgTable(
     userId: uuid('user_id')
       .notNull()
       .references(() => profiles.id, { onDelete: 'cascade' }),
-    endpoint: text('endpoint').notNull().unique(),
-    p256dh: text('p256dh').notNull(),
-    auth: text('auth').notNull(),
+    kind: text('kind').notNull().default('webpush'),
+    endpoint: text('endpoint'),
+    p256dh: text('p256dh'),
+    auth: text('auth'),
+    token: text('token'),
+    platform: text('platform'),
     userAgent: text('user_agent'),
     createdAt: timestamp('created_at', { withTimezone: true }).notNull().defaultNow(),
     updatedAt: timestamp('updated_at', { withTimezone: true }).notNull().defaultNow(),
@@ -179,9 +190,45 @@ export const pushSubscriptions = pgTable(
   },
   (table) => [
     index('push_subscriptions_user_id_idx').on(table.userId),
+    // EF-4 — one endpoint per account for the browser channel (a second registration refreshes
+    // the keys of the first, SPEC-205 EF-1). The global partial unique below keeps the neutral
+    // refusal of SPEC-205 CL-3: an endpoint already used by another account is refused, never
+    // silently shared.
+    uniqueIndex('push_subscriptions_user_endpoint_key')
+      .on(table.userId, table.endpoint)
+      .where(sql`${table.kind} = 'webpush'`),
+    uniqueIndex('push_subscriptions_endpoint_key')
+      .on(table.endpoint)
+      .where(sql`${table.kind} = 'webpush'`),
+    // EF-4, CL-3 — the native uniqueness: one token per (account, channel). A reinstalled device
+    // gets a new token and refreshes its row, never a duplicate delivery.
+    uniqueIndex('push_subscriptions_user_token_key')
+      .on(table.userId, table.kind, table.token)
+      .where(sql`${table.kind} in ('apns', 'fcm')`),
+    check('push_subscriptions_kind_check', sql`${table.kind} in ('webpush', 'apns', 'fcm')`),
     check(
       'push_subscriptions_endpoint_check',
-      sql`${table.endpoint} like 'https://%' and char_length(${table.endpoint}) <= 2048`,
+      sql`${table.endpoint} is null or (${table.endpoint} like 'https://%' and char_length(${table.endpoint}) <= 2048)`,
+    ),
+    // ET-1 — the shape of a row follows its channel: the browser form carries an endpoint and
+    // both keys, the native form carries a token and no browser material.
+    check(
+      'push_subscriptions_shape_check',
+      sql`(
+        ${table.kind} = 'webpush'
+        and ${table.endpoint} is not null
+        and ${table.p256dh} is not null
+        and ${table.auth} is not null
+        and ${table.token} is null
+      ) or (
+        ${table.kind} in ('apns', 'fcm')
+        and ${table.token} is not null
+        and char_length(${table.token}) between 16 and 512
+        and ${table.endpoint} is null
+        and ${table.p256dh} is null
+        and ${table.auth} is null
+        and (${table.platform} is null or ${table.platform} in ('ios', 'android'))
+      )`,
     ),
     check('push_subscriptions_user_agent_check', sql`char_length(${table.userAgent}) <= 512`),
     check('push_subscriptions_failure_count_check', sql`${table.failureCount} >= 0`),

@@ -1679,9 +1679,9 @@ export interface paths {
         };
         get?: never;
         put?: never;
-        /** Enregistre ou rafraîchit l’abonnement Web Push du navigateur courant (SPEC-205). Idempotent sur le point de terminaison. */
+        /** Enregistre ou rafraîchit l’abonnement push de l’appareil courant : Web Push du navigateur (SPEC-205) ou jeton natif APNs/FCM (SPEC-3501). Idempotent sur le point de terminaison ou le jeton. */
         post: operations["pushSubscriptions.upsert"];
-        /** Retire l’abonnement Web Push du navigateur courant (SPEC-205). Idempotent : une suppression répétée répond 204. */
+        /** Retire l’abonnement push de l’appareil courant : Web Push (SPEC-205) ou jeton natif (SPEC-3501). Idempotent : une suppression répétée répond 204. */
         delete: operations["pushSubscriptions.delete"];
         options?: never;
         head?: never;
@@ -6286,6 +6286,15 @@ export interface components {
         };
         PushSubscriptionsDeleteBody: {
             endpoint: string;
+            /**
+             * @default webpush
+             * @constant
+             */
+            kind: "webpush";
+        } | {
+            /** @enum {string} */
+            kind: "apns" | "fcm";
+            token: string;
         };
         PushSubscriptionsUpsertBody: {
             endpoint: string;
@@ -6294,7 +6303,19 @@ export interface components {
                 auth: string;
                 p256dh: string;
             };
+            /**
+             * @default webpush
+             * @constant
+             */
+            kind: "webpush";
             userAgent?: string;
+        } | {
+            deviceName?: string;
+            /** @enum {string} */
+            kind: "apns" | "fcm";
+            /** @enum {string} */
+            platform?: "ios" | "android";
+            token: string;
         };
         PushSubscriptionsUpsertOutput: {
             created: boolean;

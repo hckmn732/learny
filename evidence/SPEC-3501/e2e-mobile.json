@@ -1,0 +1,85 @@
+{
+  "spec": "SPEC-3501",
+  "platform": "android",
+  "transport": "local",
+  "device": {
+    "platform": "android",
+    "model": "sdk_gphone64_x86_64",
+    "apiLevel": "35",
+    "size": "Physical size: 1080x2400"
+  },
+  "tags": [
+    "SPEC-3501"
+  ],
+  "startedAt": "2026-11-24T10:47:23.502Z",
+  "finishedAt": "2026-11-24T10:49:25.719Z",
+  "passed": 3,
+  "failed": 0,
+  "videos": 1,
+  "campaignVideo": "artifacts/campagne/campagne.mp4",
+  "visual": 1,
+  "junitCases": 3,
+  "flows": [
+    {
+      "file": "apps/mobile/e2e/flows/SPEC-3501-activation.yaml",
+      "name": "SPEC-3501 activation",
+      "tags": [
+        "SPEC-3501"
+      ],
+      "status": "passed",
+      "durationSec": 42.188,
+      "message": null,
+      "videos": [],
+      "screenshots": [
+        "artifacts/spec-3501-activation/step-023-tapOnElement-Autoriser.png"
+      ],
+      "visual": null
+    },
+    {
+      "file": "apps/mobile/e2e/flows/SPEC-3501-notifications.yaml",
+      "name": "SPEC-3501 notifications",
+      "tags": [
+        "SPEC-3501",
+        "visual"
+      ],
+      "status": "passed",
+      "durationSec": 26.846,
+      "message": null,
+      "videos": [],
+      "screenshots": [
+        "artifacts/spec-3501-notifications/SPEC-3501-notifications.png"
+      ],
+      "visual": {
+        "flow": "SPEC-3501 notifications",
+        "status": "passed",
+        "diffRatio": 0.0022,
+        "capture": "/root/learny-mobile/test-results/sdd/SPEC-3501/artifacts/spec-3501-notifications/SPEC-3501-notifications.png",
+        "baseline": "/root/learny-mobile/apps/mobile/e2e/visual/baselines/SPEC-3501-notifications.png",
+        "diff": "/root/learny-mobile/test-results/sdd/SPEC-3501/artifacts/spec-3501-notifications/SPEC-3501-notifications.diff.png"
+      }
+    },
+    {
+      "file": "apps/mobile/e2e/flows/SPEC-3501-toucher.yaml",
+      "name": "SPEC-3501 toucher",
+      "tags": [
+        "SPEC-3501"
+      ],
+      "status": "passed",
+      "durationSec": 48.595,
+      "message": null,
+      "videos": [],
+      "screenshots": [
+        "artifacts/spec-3501-toucher/step-018-tapOnElement-Autoriser.png"
+      ],
+      "visual": null
+    }
+  ],
+  "visualChecks": [
+    {
+      "flow": "SPEC-3501 notifications",
+      "status": "passed",
+      "diffRatio": 0.0022
+    }
+  ],
+  "unattributed": []
+}

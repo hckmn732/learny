@@ -37,7 +37,7 @@ Normatif. Implémenté par SPEC-201 (socle) puis par chaque spécification fonct
 | GET `/health` | Santé (base, version) | SPEC-006, 010 |
 | POST `/auth/magic-link` · POST `/auth/sign-up` · POST `/auth/sign-in` · POST `/auth/resend` · POST `/auth/sign-out` · GET `/auth/callback` | Authentification | SPEC-202 |
 | GET/PATCH `/me` · GET/PATCH `/me/preferences` · GET/PATCH `/me/onboarding` | Profil, rythme et état complet des écrans d’onboarding | SPEC-602, 707, 1202 |
-| GET/PATCH `/me/notification-settings` · POST/DELETE `/me/push-subscriptions` | Notifications | SPEC-205, 708 |
+| GET/PATCH `/me/notification-settings` · POST/DELETE `/me/push-subscriptions` (Web Push et jetons natifs APNs/FCM) | Notifications | SPEC-205, 708, 3501 |
 | GET/PATCH `/me/automations` · GET `/me/automation-actions` · POST `/me/automation-actions/:id/(accept|decline|undo)` | Automatismes | SPEC-711, 710 |
 | GET `/warmups/today` · POST `/warmups/:activityId/answers` | Échauffement : une entrée par formation triée par heure de séance ; réponse de première passe idempotente par position (409 sur une position déjà répondue, 422 hors bornes), FSRS et quiz global du soir dans la même transaction | SPEC-714 |
 | POST/GET/DELETE `/me/pause` · POST `/me/pause/diagnostic` | Mode pause, reprise et diagnostic de retour | SPEC-721 |
