@@ -1,6 +1,6 @@
 # Progression du projet Learny
 
-> Généré par `node tools/sdd/status.mjs` le 2026-11-24T01:29:12.291Z. Ne pas éditer à la main.
+> Généré par `node tools/sdd/status.mjs` le 2026-11-24T01:36:28.766Z. Ne pas éditer à la main.
 
 ## Synthèse
 
@@ -16,7 +16,7 @@
 | **Avancement global** | **81.1 %** |
 | Avancement V1 | 99.2 % |
 | Piste active | mobile |
-| Prochaine action | checkpoint CP-34 |
+| Prochaine action | stuck |
 
 ## Phases et checkpoints
 
@@ -44,7 +44,7 @@
 | P31 | Mobile — accès et coquille | 2/2 | CP-31 | ✅ 2026-11-23 cp-31 |
 | P32 | Mobile — Aujourd’hui, Programme et Agenda | 3/3 | CP-32 | ✅ 2026-11-23 cp-32 |
 | P33 | Mobile — cours, tuteur, quiz et révisions | 5/5 | CP-33 | ✅ 2026-11-23 cp-33 |
-| P34 | Mobile — profil, réglages et connexion tierce | 2/2 | CP-34 | ⏳ |
+| P34 | Mobile — profil, réglages et connexion tierce | 2/2 | CP-34 | ✅ 2026-11-24 cp-34 |
 | P35 | Mobile — notifications push et publication (exige CP-23) | 0/2 | CP-35 | ⏳ |
 
 ## Détail des spécifications
