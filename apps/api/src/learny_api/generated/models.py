@@ -7060,6 +7060,7 @@ class ProposalStatus(StrEnum):
 class Source8(StrEnum):
     generated = 'generated'
     imported = 'imported'
+    document = 'document'
 
 
 class Version(BaseModel):

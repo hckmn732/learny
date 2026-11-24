@@ -6283,7 +6283,7 @@ export interface components {
                 /** @enum {string} */
                 proposalStatus: "proposed" | "active";
                 /** @enum {string} */
-                source: "generated" | "imported";
+                source: "generated" | "imported" | "document";
                 summary: string | null;
                 title: string;
                 version: number;
@@ -6292,7 +6292,7 @@ export interface components {
                     createdAt: string;
                     current: boolean;
                     /** @enum {string} */
-                    source: "generated" | "imported";
+                    source: "generated" | "imported" | "document";
                     version: number;
                 }[];
                 volumeHours: number | null;
@@ -6346,7 +6346,7 @@ export interface components {
                 /** @enum {string} */
                 proposalStatus: "proposed" | "active";
                 /** @enum {string} */
-                source: "generated" | "imported";
+                source: "generated" | "imported" | "document";
                 summary: string | null;
                 title: string;
                 version: number;
@@ -6355,7 +6355,7 @@ export interface components {
                     createdAt: string;
                     current: boolean;
                     /** @enum {string} */
-                    source: "generated" | "imported";
+                    source: "generated" | "imported" | "document";
                     version: number;
                 }[];
                 volumeHours: number | null;
@@ -6405,7 +6405,7 @@ export interface components {
                 /** @enum {string} */
                 proposalStatus: "proposed" | "active";
                 /** @enum {string} */
-                source: "generated" | "imported";
+                source: "generated" | "imported" | "document";
                 summary: string | null;
                 title: string;
                 version: number;
@@ -6414,7 +6414,7 @@ export interface components {
                     createdAt: string;
                     current: boolean;
                     /** @enum {string} */
-                    source: "generated" | "imported";
+                    source: "generated" | "imported" | "document";
                     version: number;
                 }[];
                 volumeHours: number | null;
@@ -6551,7 +6551,7 @@ export interface components {
                 /** @enum {string} */
                 proposalStatus: "proposed" | "active";
                 /** @enum {string} */
-                source: "generated" | "imported";
+                source: "generated" | "imported" | "document";
                 summary: string | null;
                 title: string;
                 version: number;
@@ -6560,7 +6560,7 @@ export interface components {
                     createdAt: string;
                     current: boolean;
                     /** @enum {string} */
-                    source: "generated" | "imported";
+                    source: "generated" | "imported" | "document";
                     version: number;
                 }[];
                 volumeHours: number | null;
@@ -6613,7 +6613,7 @@ export interface components {
                 /** @enum {string} */
                 proposalStatus: "proposed" | "active";
                 /** @enum {string} */
-                source: "generated" | "imported";
+                source: "generated" | "imported" | "document";
                 summary: string | null;
                 title: string;
                 version: number;
@@ -6622,7 +6622,7 @@ export interface components {
                     createdAt: string;
                     current: boolean;
                     /** @enum {string} */
-                    source: "generated" | "imported";
+                    source: "generated" | "imported" | "document";
                     version: number;
                 }[];
                 volumeHours: number | null;

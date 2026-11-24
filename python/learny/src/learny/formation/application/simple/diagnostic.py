@@ -113,6 +113,7 @@ def _build_questions(
             questions.append(
                 {
                     "moduleId": str(module["id"]),
+                    "notionLabel": str(module["title"])[:120],
                     "stem": stem[:600],
                     "correct": str(template.get("correct") or summary)[:200],
                     "wrong": [str(entry)[:200] for entry in (template.get("wrong") or [])][:2],

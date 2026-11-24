@@ -137,6 +137,8 @@ export interface AppErrorExtra {
   availableAt?: string;
   /** SPEC-715 EF-5 — the mandatory remediation must be finished before a new attempt. */
   remediationRequired?: boolean;
+  /** SPEC-4001 ET-2 — structured details of a business refusal (`AI_NOT_CONFIGURED.tasks`). */
+  details?: Record<string, unknown>;
   /** Product link explaining how to restore the service (SPEC-504 EF-2). */
   link?: string;
   /** Personal key that caused the failure, for the qualification flow (SPEC-504 CL-2). */

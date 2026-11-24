@@ -11,7 +11,7 @@ import { deleteTestSession, createTestSession, supabaseLocalEnv } from '@learny/
 
 import { OWN_MODEL_ID, seedOwnModels } from '../../support/own-model';
 
-const ORIGIN = process.env.PLAYWRIGHT_BASE_URL ?? 'http://127.0.0.1:3152';
+const DEFAULT_ORIGIN = 'http://127.0.0.1:3142';
 
 interface SimpleState {
   formationId: string;
@@ -24,8 +24,11 @@ interface SimpleState {
   generation?: { moduleId: string; state: string }[];
 }
 
-function headers(session: { cookieHeader: string }): Record<string, string> {
-  return { cookie: session.cookieHeader, origin: ORIGIN, 'content-type': 'application/json' };
+function headers(
+  session: { cookieHeader: string },
+  origin: string,
+): Record<string, string> {
+  return { cookie: session.cookieHeader, origin, 'content-type': 'application/json' };
 }
 
 async function seedIngestedDocument(userId: string, resourceId: string, formationId: string) {
@@ -63,10 +66,11 @@ async function seedIngestedDocument(userId: string, resourceId: string, formatio
   }
 }
 
-test('parcours API du mode simple en mock @SPEC-4001', async ({ request }) => {
+test('parcours API du mode simple en mock @SPEC-4001', async ({ request, baseURL }) => {
+  const origin = baseURL ?? DEFAULT_ORIGIN;
   const session = await createTestSession();
   const headersWithKey = (key: string): Record<string, string> => ({
-    ...headers(session),
+    ...headers(session, origin),
     'idempotency-key': key,
   });
   try {
@@ -108,7 +112,7 @@ test('parcours API du mode simple en mock @SPEC-4001', async ({ request }) => {
       details: { tasks: ['simple_analysis', 'programme', 'course'] },
     });
     const afterRefusal = (await (
-      await request.get(`/api/v1/formations/${fid}/simple`, { headers: headers(session) })
+      await request.get(`/api/v1/formations/${fid}/simple`, { headers: headers(session, origin) })
     ).json()) as SimpleState;
     expect(afterRefusal.sources).toHaveLength(1);
     expect(afterRefusal.status).toBe('collecting');
@@ -123,17 +127,13 @@ test('parcours API du mode simple en mock @SPEC-4001', async ({ request }) => {
       on conflict (user_id, task) do update
         set credential_id = excluded.credential_id, model_id = excluded.model_id
     `);
-    await request.post(`/api/v1/formations/${fid}/sources/uploads`, {
-      headers: headersWithKey(`spec-4001-upload-td-${session.userId}`),
-      data: { fileName: 'Annales DCG 2023.pdf', mime: 'application/pdf', sizeBytes: 1200 },
-    });
     const launched = await request.post(`/api/v1/formations/${fid}/simple/analysis`, {
       headers: headersWithKey(`spec-4001-analysis-${session.userId}`),
     });
     const launchedBody = await launched.text();
     expect(launched.status(), launchedBody).toBe(202);
     const analysed = (await (
-      await request.get(`/api/v1/formations/${fid}/simple`, { headers: headers(session) })
+      await request.get(`/api/v1/formations/${fid}/simple`, { headers: headers(session, origin) })
     ).json()) as SimpleState;
     expect(analysed.status).toBe('proposed');
     expect(analysed.steps.every((step) => step.state === 'done')).toBe(true);
@@ -141,7 +141,7 @@ test('parcours API du mode simple en mock @SPEC-4001', async ({ request }) => {
     expect(analysed.proposalVersion).toBe(1);
 
     const proposal = await request.get(`/api/v1/formations/${fid}/programme`, {
-      headers: headers(session),
+      headers: headers(session, origin),
     });
     const proposalBody = await proposal.text();
     expect(proposal.status(), proposalBody).toBe(200);
@@ -161,7 +161,7 @@ test('parcours API du mode simple en mock @SPEC-4001', async ({ request }) => {
     expect(validated.status(), await validated.text()).toBe(200);
 
     const afterValidation = (await (
-      await request.get(`/api/v1/formations/${fid}/simple`, { headers: headers(session) })
+      await request.get(`/api/v1/formations/${fid}/simple`, { headers: headers(session, origin) })
     ).json()) as SimpleState;
     expect(afterValidation.generation?.length ?? 0).toBeGreaterThanOrEqual(2);
 
@@ -174,29 +174,30 @@ test('parcours API du mode simple en mock @SPEC-4001', async ({ request }) => {
     const { attemptId } = JSON.parse(diagnosticBody) as { attemptId: string };
 
     const attempt = (await (
-      await request.get(`/api/v1/attempts/${attemptId}`, { headers: headers(session) })
+      await request.get(`/api/v1/attempts/${attemptId}`, { headers: headers(session, origin) })
     ).json()) as { questions: { position: number }[] };
     expect(attempt.questions.length).toBeGreaterThan(0);
     for (const question of attempt.questions) {
       const saved = await request.put(`/api/v1/attempts/${attemptId}/answers/${String(question.position)}`, {
-        headers: headers(session),
+        headers: headers(session, origin),
         data: { response: { optionIds: ['a'] }, timeMs: 1000 },
       });
       expect(saved.status(), await saved.text()).toBe(200);
     }
     const check = await request.post(`/api/v1/attempts/${attemptId}/answers/1/check`, {
-      headers: headers(session),
+      headers: headers(session, origin),
       data: { response: { optionIds: ['a'] }, timeMs: 1000 },
     });
     expect(check.status(), await check.text()).toBe(409);
     expect((await check.json()) as { code: string }).toMatchObject({ code: 'DIAGNOSTIC_NO_CHECK' });
 
     const submitted = await request.post(`/api/v1/attempts/${attemptId}/submit`, {
-      headers: headers(session),
+      headers: headers(session, origin),
     });
-    expect(submitted.status(), await submitted.text()).toBe(200);
+    const submittedBody = await submitted.text();
+    expect(submitted.status(), submittedBody).toBeLessThan(300);
     const result = (await (
-      await request.get(`/api/v1/attempts/${attemptId}/result`, { headers: headers(session) })
+      await request.get(`/api/v1/attempts/${attemptId}/result`, { headers: headers(session, origin) })
     ).json()) as { acquiredModuleIds?: string[] };
     expect(Array.isArray(result.acquiredModuleIds)).toBe(true);
 

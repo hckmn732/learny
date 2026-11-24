@@ -94,6 +94,10 @@ def to_problem(
     ):
         if value is not None:
             problem[key] = value
+    # SPEC-4001 ET-2 - the tasks missing a model are named in `details.tasks`.
+    details = error.extra.get("details")
+    if details is not None and status < 500:
+        problem["details"] = details
     return problem
 
 

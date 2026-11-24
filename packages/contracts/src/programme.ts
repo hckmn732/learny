@@ -8,8 +8,8 @@ import { defineRoute } from './define-route';
 // The tutor output (draft) has no positions: the service numbers it. A stored proposal and every
 // API answer carry positions so a duplicate or a missing order is rejected before any write.
 
-/** BR-FOR-04 — the tutor proposed it, or the learner imported and the tutor structured it. */
-export const PROGRAMME_SOURCES = ['generated', 'imported'] as const;
+/** BR-FOR-04 — the tutor proposed it, the learner imported it, or it comes from the documents. */
+export const PROGRAMME_SOURCES = ['generated', 'imported', 'document'] as const;
 export const ProgrammeSource = z.enum(PROGRAMME_SOURCES);
 export type ProgrammeSource = z.infer<typeof ProgrammeSource>;
 

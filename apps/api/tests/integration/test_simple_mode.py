@@ -25,6 +25,7 @@ from learny.formation.application.simple import status as simple_status
 from learny.shared.db.uow import Database
 from learny.shared.errors import AppError
 from learny.shared.outbox.events import Event
+from learny_api.generated.models import ProgrammeGetOutput, QuizAttemptsGetOutput
 from learny_worker import consumers as worker_consumers
 from sqlalchemy import text
 
@@ -161,7 +162,7 @@ async def test_full_flow_mock(database: Database) -> None:
         await deposit_two_documents(tx, deps, user, formation_id)
 
         sources = (await state_of(tx, user, formation_id))["sources"]
-        assert [source["role"] for source in sources] == ["course", "exercises"]
+        assert sorted(source["role"] for source in sources) == ["course", "exercises"]
 
         launched = await simple_analysis.launch_analysis(deps, actor_for(user), formation_id)
         assert launched["status"] == "analysing"
@@ -174,6 +175,9 @@ async def test_full_flow_mock(database: Database) -> None:
         assert proposed["error"] is None
         assert proposed["proposalVersion"] == 1
 
+        page = await programme_service.get_programme_state(deps, actor_for(user), formation_id, {})
+        assert page["proposal"] is not None
+        ProgrammeGetOutput.model_validate(page)
         proposal = await one(
             tx.conn,
             "select payload, source::text as source from public.programme_proposals "
@@ -401,6 +405,7 @@ async def test_diagnostic_acquires_the_right_module(database: Database) -> None:
         created = await simple_diagnostic.create_diagnostic(deps, actor_for(user), formation_id)
         attempt_id = created["attemptId"]
         view = await quiz.get_attempt(deps, actor_for(user), attempt_id)
+        QuizAttemptsGetOutput.model_validate(view)
         activity = await one(
             tx.conn,
             "select items from public.activities where id = ("

@@ -36,9 +36,7 @@ DIAGNOSTIC_THRESHOLD = 80
 def _payload(question: Mapping[str, Any]) -> dict[str, Any]:
     """The `choice_question` payload built from one generated question."""
     correct = str(question["correct"])[:200]
-    options: list[dict[str, Any]] = [
-        {"id": "a", "text": correct, "correct": True, "notionId": None}
-    ]
+    options: list[dict[str, Any]] = [{"id": "a", "text": correct, "correct": True, "notionId": None}]
     for index, wrong in enumerate(question.get("wrong") or [], start=1):
         options.append(
             {
@@ -109,7 +107,7 @@ async def create_diagnostic_attempt(
                     "brickVersionId": version_id,
                     "points": 1.0,
                     "notionId": None,
-                    "notionLabel": "",
+                    "notionLabel": str(question.get("notionLabel") or texts.DIAGNOSTIC_OBJECTIVE)[:120],
                     "type": QUESTION_TYPE,
                     "payload": payload,
                     "moduleId": str(question.get("moduleId") or module_id),

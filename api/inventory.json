@@ -15,7 +15,7 @@
     "crons": 2,
     "events": 17,
     "handlers": 165,
-    "gaps": 115,
+    "gaps": 114,
     "operationsWithoutHandler": 0,
     "specialWithoutInstall": 0,
     "consumersWithoutEvent": 0,
@@ -961,8 +961,10 @@
       "handler": "apps/api/src/learny_api/handlers/simple.py",
       "installedBy": "pipeline",
       "specialModule": null,
-      "tests": [],
-      "gap": true,
+      "tests": [
+        "apps/api/tests/integration/test_simple_mode.py"
+      ],
+      "gap": false,
       "served": true
     },
     {
@@ -985,6 +987,7 @@
       "installedBy": "pipeline",
       "specialModule": null,
       "tests": [
+        "apps/api/tests/integration/test_simple_mode.py",
         "apps/api/tests/unit/test_contract_artifacts.py"
       ],
       "gap": false,
@@ -4574,6 +4577,6 @@
     }
   ],
   "python": {
-    "testFiles": 244
+    "testFiles": 248
   }
 }

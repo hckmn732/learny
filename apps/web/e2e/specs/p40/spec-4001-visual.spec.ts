@@ -8,17 +8,17 @@ import { colors } from '@learny/ui/tokens';
 
 import { OWN_MODEL_ID, seedOwnModels } from '../../support/own-model';
 
-const ORIGIN = process.env.PLAYWRIGHT_BASE_URL ?? 'http://127.0.0.1:3152';
+const DEFAULT_ORIGIN = 'http://127.0.0.1:3142';
 
 interface Session {
   cookieHeader: string;
   userId: string;
 }
 
-function headers(session: Session, key?: string): Record<string, string> {
+function headers(session: Session, origin: string, key?: string): Record<string, string> {
   const base: Record<string, string> = {
     cookie: session.cookieHeader,
-    origin: ORIGIN,
+    origin,
     'content-type': 'application/json',
   };
   return key === undefined ? base : { ...base, 'idempotency-key': key };
@@ -62,6 +62,7 @@ async function seedIngestedDocument(userId: string, resourceId: string, formatio
 async function createDocumentProposal(
   request: import('@playwright/test').APIRequestContext,
   session: Session,
+  origin: string,
 ): Promise<string> {
   await seedOwnModels(session.userId);
   await serviceDb().execute(sql`
@@ -72,24 +73,24 @@ async function createDocumentProposal(
       set credential_id = excluded.credential_id, model_id = excluded.model_id
   `);
   const created = await request.post('/api/v1/formations/simple', {
-    headers: headers(session, `spec-4001-visual-create-${session.userId}`),
+    headers: headers(session, origin, `spec-4001-visual-create-${session.userId}`),
     data: {},
   });
   expect(created.status(), await created.text()).toBe(201);
   const { formationId } = (await created.json()) as { formationId: string };
   const upload = await request.post(`/api/v1/formations/${formationId}/sources/uploads`, {
-    headers: headers(session, `spec-4001-visual-upload-${session.userId}`),
+    headers: headers(session, origin, `spec-4001-visual-upload-${session.userId}`),
     data: { fileName: 'Comptabilite generale.pdf', mime: 'application/pdf', sizeBytes: 2048 },
   });
   expect(upload.status(), await upload.text()).toBe(201);
   const { resourceId } = (await upload.json()) as { resourceId: string };
   await seedIngestedDocument(session.userId, resourceId, formationId);
   const launched = await request.post(`/api/v1/formations/${formationId}/simple/analysis`, {
-    headers: headers(session, `spec-4001-visual-analysis-${session.userId}`),
+    headers: headers(session, origin, `spec-4001-visual-analysis-${session.userId}`),
   });
   expect(launched.status(), await launched.text()).toBe(202);
   const state = (await (
-    await request.get(`/api/v1/formations/${formationId}/simple`, { headers: headers(session) })
+    await request.get(`/api/v1/formations/${formationId}/simple`, { headers: headers(session, origin) })
   ).json()) as { status: string };
   expect(state.status).toBe('proposed');
   return formationId;
@@ -104,7 +105,18 @@ test('conformité SCR-05 avec une proposition tirée d’un document @SPEC-4001 
 }) => {
   const session = await createTestSession();
   try {
-    const formationId = await createDocumentProposal(request, session);
+    // The learner reaches the programme through the ordinary shell: onboarding is finished and the
+    // rhythm is the documented default, exactly like the demonstration accounts.
+    await serviceDb().execute(sql`
+      update public.profiles set onboarding_step = 'done' where id = ${session.userId}::uuid
+    `);
+    await serviceDb().execute(sql`
+      insert into public.study_preferences (user_id, hours_per_day, study_days, preferred_slots)
+      values (${session.userId}::uuid, 2, '{1,2,3,4,5}'::smallint[], '{soir}'::public.study_slot[])
+      on conflict (user_id) do nothing
+    `);
+    const origin = baseURL ?? DEFAULT_ORIGIN;
+    const formationId = await createDocumentProposal(request, session, origin);
     await context.addCookies(
       session.cookies.map((cookie) => ({
         ...cookie,
@@ -112,7 +124,13 @@ test('conformité SCR-05 avec une proposition tirée d’un document @SPEC-4001 
       })),
     );
     await page.goto(`/formations/${formationId}/programme`);
-    await expect(page.getByTestId('programme-proposal')).toBeVisible({ timeout: 30_000 });
+    try {
+      await expect(page.getByTestId('programme-proposal')).toBeVisible({ timeout: 30_000 });
+    } catch (error) {
+      throw new Error(`proposition absente : ${await page.locator('body').innerText()}`, {
+        cause: error,
+      });
+    }
     await expect(page.getByTestId('programme-module-1')).toBeVisible();
     await page.emulateMedia({ reducedMotion: 'reduce' });
 

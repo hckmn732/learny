@@ -2213,7 +2213,7 @@ LIST_SIMPLE_SOURCES = text(
      where r.formation_id = cast(:formation_id as uuid)
        and r.chapter_id is null
        and r.deleted_at is null
-     order by r.created_at asc, r.id asc
+     order by r.created_at asc, r.title asc
     """
 )
 

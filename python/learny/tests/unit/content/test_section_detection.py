@@ -75,9 +75,7 @@ def test_without_any_structure_the_document_is_cut_in_fifteen_page_blocks() -> N
 
 
 def test_a_document_without_pages_gives_one_section() -> None:
-    sections = detect_sections(
-        [{"position": 0, "text": "Un document sans pagination.", "location": {}}]
-    )
+    sections = detect_sections([{"position": 0, "text": "Un document sans pagination.", "location": {}}])
     assert len(sections) == 1
     assert sections[0].page_from is None
     assert "pagination" in sections[0].text

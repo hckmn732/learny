@@ -64,15 +64,11 @@ class FakeStorage:
     def __init__(self) -> None:
         self.calls: list[tuple[str, str]] = []
 
-    async def sign_upload(
-        self, bucket: str, path: str, access_token: str, expires_in_seconds: int
-    ) -> str:
+    async def sign_upload(self, bucket: str, path: str, access_token: str, expires_in_seconds: int) -> str:
         self.calls.append((bucket, path))
         return f"https://storage.test/{bucket}/{path}"
 
-    async def sign_read(
-        self, bucket: str, path: str, access_token: str, expires_in_seconds: int
-    ) -> str:
+    async def sign_read(self, bucket: str, path: str, access_token: str, expires_in_seconds: int) -> str:
         return f"https://storage.test/{bucket}/{path}"
 
     async def remove(self, bucket: str, path: str, access_token: str) -> None:
