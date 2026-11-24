@@ -117,3 +117,7 @@ Fonctionnellement, tout est identique au web. Ce qui suit ne concerne que l'ergo
 Q1 à Q6 et Q8 sont tranchées : voir §2 bis (D1 à D7). Q7 rappelle une règle existante.
 
 - **Q7, droits** : les documents restent privés à leur propriétaire (BR-APP-03), y compris en groupe.
+
+## Maquettes
+
+Planche interactive web, iOS et Android : `design/mode-simple/index.html`.
