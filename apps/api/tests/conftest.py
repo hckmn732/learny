@@ -1,0 +1,25 @@
+"""Test configuration of the facade (SPEC-2202): determinism and the support package on sys.path."""
+
+import os
+import sys
+from pathlib import Path
+
+TESTS = Path(__file__).resolve().parent
+LEARNY_TESTS = Path(__file__).resolve().parents[3] / "python" / "learny" / "tests"
+for entry in (str(TESTS), str(LEARNY_TESTS)):
+    if entry not in sys.path:
+        sys.path.insert(0, entry)
+
+os.environ.setdefault("TZ", "UTC")
+os.environ.setdefault("CLOCK_FIXED_AT", "2026-11-11T12:20:00Z")
+os.environ.setdefault("LLM_MODE", "mock")
+
+
+def pytest_configure(config: object) -> None:
+    """Refuses a real AI provider, like `assertMockLlm` (ADR-0048)."""
+    mode = os.environ.get("LLM_MODE", "mock")
+    if mode not in ("", "mock"):
+        raise RuntimeError(f"LLM_MODE={mode} is refused in tests: only mock is allowed")
+    app_env = os.environ.get("APP_ENV", "")
+    if app_env in ("preview", "production"):
+        raise RuntimeError(f"APP_ENV={app_env} is refused in tests: its modes are live")

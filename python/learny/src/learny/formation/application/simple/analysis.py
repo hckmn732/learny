@@ -99,7 +99,8 @@ async def launch_analysis(deps: FormationDeps, actor: Actor, formation_id: str) 
             tx,
             formation_id,
             status="analysing",
-            steps=steps_json(),
+            # CL-3 - a relaunch keeps the steps already done and resumes at the first unfinished one.
+            steps=steps_json() if status == "collecting" else None,
             chapters=None,
             summaries=None,
             error_code=None,
@@ -238,7 +239,10 @@ async def _structure(
             for entry in raw:
                 if isinstance(entry, list) and len(entry) == 2 and isinstance(entry[0], int):
                     bookmarks.append((int(entry[0]), str(entry[1])))
-    sections = content.detect_sections(chunks, bookmarks=bookmarks)
+    declared_pages = None
+    if isinstance(metadata, Mapping) and isinstance(metadata.get("pages"), int):
+        declared_pages = int(metadata["pages"])
+    sections = content.detect_sections(chunks, bookmarks=bookmarks, total_pages=declared_pages)
     chapters: list[dict[str, Any]] = []
     summaries: list[dict[str, Any]] = []
     for section in sections:

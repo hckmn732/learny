@@ -53,7 +53,10 @@ def _has_marker(text: str, marker: str) -> bool:
     """A marker made of one token is matched on word boundaries, a phrase as a substring."""
     if " " in marker:
         return marker in text
-    return re.search(rf"(?<![a-z0-9]){re.escape(marker)}(?![a-z0-9])", text) is not None
+    # A marker made of one token also matches its plural, on word boundaries.
+    return (
+        re.search(rf"(?<![a-z0-9]){re.escape(marker)}s?(?![a-z0-9])", text) is not None
+    )
 
 
 def matches_any(text: str, markers: tuple[str, ...]) -> bool:

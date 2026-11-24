@@ -16233,7 +16233,6 @@ components:
       description: Résultat complet de la tentative, prêt pour SCR-09.
       properties:
         acquiredModuleIds:
-          default: []
           items:
             format: uuid
             pattern: ^([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-8][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$
@@ -16506,7 +16505,6 @@ components:
         - pointsMissing
         - isLastModule
         - nextModule
-        - acquiredModuleIds
         - history
         - gaps
         - mastered

@@ -37,7 +37,7 @@ def _payload(question: Mapping[str, Any]) -> dict[str, Any]:
     """The `choice_question` payload built from one generated question."""
     correct = str(question["correct"])[:200]
     options: list[dict[str, Any]] = [
-        {"id": "a", "text": correct, "correct": True, "notionId": None, "rationale": None}
+        {"id": "a", "text": correct, "correct": True, "notionId": None}
     ]
     for index, wrong in enumerate(question.get("wrong") or [], start=1):
         options.append(
@@ -46,7 +46,6 @@ def _payload(question: Mapping[str, Any]) -> dict[str, Any]:
                 "text": str(wrong)[:200],
                 "correct": False,
                 "notionId": None,
-                "rationale": None,
             }
         )
     while len(options) < 2:
@@ -56,7 +55,6 @@ def _payload(question: Mapping[str, Any]) -> dict[str, Any]:
                 "text": texts.DIAGNOSTIC_WRONG_DEFAULT,
                 "correct": False,
                 "notionId": None,
-                "rationale": None,
             }
         )
     return {

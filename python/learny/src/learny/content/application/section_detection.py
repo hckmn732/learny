@@ -17,7 +17,8 @@ HEADING_MAX_LENGTH = 120
 _TOC_HEADING = re.compile(r"^\s*(sommaire|table des mati\u00e8res|contents)\s*$", re.IGNORECASE)
 _TOC_LINE = re.compile(r"^(?P<title>.{3,120}?)[\s.\u00b7]{2,}(?P<page>\d{1,4})\s*$")
 _HEADING = re.compile(
-    r"^\s*(?:(?:chapitre|chapter|partie|part|section|module)\s+[\w.-]+|(?:\d+\.)+\d*\s+\S.{0,100})\s*$",
+    r"^\s*(?:(?:chapitre|chapter|partie|part|section|module)\s+[\w.-]+"
+    r"|(?:\d+\.)+\d*\s+\S.{0,100})(?:\s+\S.{0,100})?\s*$",
     re.IGNORECASE,
 )
 
@@ -133,9 +134,11 @@ def _sections_from_boundaries(
     return sections
 
 
-def _fallback(pages: Mapping[int, str], total: int | None) -> list[DocumentSection]:
+def _fallback(pages: Mapping[int, str], total: int | None, plain_text: str = "") -> list[DocumentSection]:
     if not pages or total is None:
-        text = "\n".join(pages.values())
+        text = "\n".join(pages.values()) or plain_text
+        if text.strip() == "":
+            return []
         return [
             DocumentSection(
                 position=1,
@@ -166,10 +169,11 @@ def detect_sections(
     chunks: Sequence[Mapping[str, object]],
     *,
     bookmarks: Sequence[tuple[int, str]] | None = None,
+    total_pages: int | None = None,
 ) -> list[DocumentSection]:
     """EF-7 - bookmarks, table of contents, headings, then blocks of fifteen pages (CL-2)."""
     pages = page_texts(chunks)
-    total = _pages_from_texts(pages)
+    total = total_pages if total_pages is not None else _pages_from_texts(pages)
     usable = [(int(page), str(title)) for page, title in (bookmarks or []) if int(page) >= 1]
     if len(usable) >= 2:
         sections = _sections_from_boundaries(usable, pages, total)
@@ -182,7 +186,10 @@ def detect_sections(
             if len(found) >= 2:
                 sections = _sections_from_boundaries(found, pages, total)
             else:
-                sections = _fallback(pages, total)
+                plain = "\n".join(
+                    str(chunk.get("text")) for chunk in chunks if isinstance(chunk.get("text"), str)
+                )
+                sections = _fallback(pages, total, plain)
     return sections[:MAX_SECTIONS]
 
 

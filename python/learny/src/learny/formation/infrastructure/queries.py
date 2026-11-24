@@ -713,7 +713,8 @@ READ_PROGRAMME_FORMATION_OWNER = text(
            start_date::text as start_date,
            end_date::text as end_date,
            default_threshold,
-           course_language::text as course_language
+           course_language::text as course_language,
+           creation_mode::text as creation_mode
       from public.formations
      where id = cast(:formation_id as uuid)
        and owner_id = cast(:user_id as uuid)
@@ -733,7 +734,8 @@ READ_PROGRAMME_FORMATION_MEMBER = text(
            start_date::text as start_date,
            end_date::text as end_date,
            default_threshold,
-           course_language::text as course_language
+           course_language::text as course_language,
+           creation_mode::text as creation_mode
       from public.formations
      where id = cast(:formation_id as uuid)
      limit 1

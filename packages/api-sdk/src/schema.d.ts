@@ -6871,8 +6871,7 @@ export interface components {
         };
         /** @description Résultat complet de la tentative, prêt pour SCR-09. */
         QuizAttemptsResultOutput: {
-            /** @default [] */
-            acquiredModuleIds: string[];
+            acquiredModuleIds?: string[];
             /** Format: uuid */
             attemptId: string;
             attemptNo: number;

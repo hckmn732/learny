@@ -407,6 +407,13 @@
       "when": 1795542983717,
       "tag": "0058_simple_mode_rules",
       "breakpoints": true
+    },
+    {
+      "idx": 59,
+      "version": "7",
+      "when": 1795545050622,
+      "tag": "0059_simple_mode_events",
+      "breakpoints": true
     }
   ]
 }
