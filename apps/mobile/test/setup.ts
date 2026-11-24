@@ -37,3 +37,34 @@ jest.mock('react-native-reanimated', () => {
     Easing: { inOut: () => 0, ease: () => 0, linear: () => 0 },
   };
 });
+
+// SPEC-3501 — notifications of the device. `expo-notifications` is a native module (its channel
+// manager only exists on a device): the process-wide stub below answers the platform questions with
+// neutral values, so a screen that mounts the device channel renders without one. No test asserts
+// these defaults; a suite that needs another state overrides them locally with its own `jest.mock`.
+jest.mock('expo-notifications', () => ({
+  getPermissionsAsync: jest.fn(() => Promise.resolve({ status: 'undetermined', canAskAgain: true })),
+  requestPermissionsAsync: jest.fn(() =>
+    Promise.resolve({ status: 'undetermined', canAskAgain: true }),
+  ),
+  getDevicePushTokenAsync: jest.fn(() => Promise.resolve({ type: 'android', data: '' })),
+  getExpoPushTokenAsync: jest.fn(() => Promise.resolve({ data: '' })),
+  setNotificationHandler: jest.fn(),
+  setNotificationChannelAsync: jest.fn(() => Promise.resolve(null)),
+  getNotificationChannelsAsync: jest.fn(() => Promise.resolve([])),
+  scheduleNotificationAsync: jest.fn(() => Promise.resolve('notification-id')),
+  cancelAllScheduledNotificationsAsync: jest.fn(() => Promise.resolve()),
+  addNotificationResponseReceivedListener: jest.fn(() => ({ remove: jest.fn() })),
+  addNotificationReceivedListener: jest.fn(() => ({ remove: jest.fn() })),
+  getLastNotificationResponse: jest.fn(() => null),
+  getLastNotificationResponseAsync: jest.fn(() => Promise.resolve(null)),
+  PermissionStatus: { GRANTED: 'granted', DENIED: 'denied', UNDETERMINED: 'undetermined' },
+  AndroidImportance: { MIN: 1, LOW: 2, DEFAULT: 3, HIGH: 4, MAX: 5 },
+  AndroidNotificationVisibility: { UNKNOWN: 0, PUBLIC: 1, PRIVATE: 2, SECRET: 3 },
+  SchedulableTriggerInputTypes: {
+    TIME_INTERVAL: 'timeInterval',
+    DATE: 'date',
+    DAILY: 'daily',
+    CALENDAR: 'calendar',
+  },
+}));
