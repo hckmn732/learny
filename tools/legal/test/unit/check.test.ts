@@ -4,7 +4,7 @@ import path from 'node:path';
 
 import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 
-import { REPO, checkLegal } from '../../check.mjs';
+import { REPO, checkLegal, configIdentity } from '../../check.mjs';
 
 const COMPLETE_IDENTITY = {
   LEGAL_ENTITY_NAME: 'Learny Éditions SAS',
@@ -105,6 +105,25 @@ describe('[SPEC-806] legal:check', () => {
     expect(text).toContain('variable inconnue {{LEGAL_INCONNUE}}');
     expect(text).toContain('lien cassé /legal/inexistant');
     expect(report.ok).toBe(false);
+  });
+
+  it('ADR-4007 — l’identité est lue dans la constante LEGAL_IDENTITY du code', () => {
+    write(
+      'packages/config/src/product.ts',
+      [
+        "export const LEGAL_VERSIONS = { cgu: '2026-11-11', privacy: '2026-11-11' } as const;",
+        'export const LEGAL_IDENTITY = {',
+        "  entityName: 'Learny Éditions SAS',",
+        '  entityAddress: LEGAL_PLACEHOLDER,',
+        "  contactEmail: 'bonjour@learny.test',",
+        '  hostName: LEGAL_PLACEHOLDER,',
+        '} as const;',
+      ].join('\n'),
+    );
+    expect(configIdentity(root)).toEqual({
+      LEGAL_ENTITY_NAME: 'Learny Éditions SAS',
+      LEGAL_CONTACT_EMAIL: 'bonjour@learny.test',
+    });
   });
 
   it('CA-4 — l’ordre du pied de page et la présence des pages sont contrôlés', () => {

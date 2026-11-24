@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 
 import { MarkdownContent } from '@learny/bricks/view';
+import { legalConfig } from '@learny/config';
 import { fr } from '@learny/i18n';
 
 import { SiteFooter } from '../../components/site-footer/SiteFooter';
@@ -16,9 +17,11 @@ export const metadata: Metadata = {
 export const dynamic = 'force-dynamic';
 
 export default function AccessibilitePage() {
+  // ADR-4007: the legal identity is a code constant (`LEGAL_IDENTITY` of @learny/config).
+  const { identity } = legalConfig();
   const markdown = renderAccessibilityDeclaration({
-    entityName: process.env.LEGAL_ENTITY_NAME ?? '',
-    contactEmail: process.env.LEGAL_CONTACT_EMAIL ?? '',
+    entityName: identity.entityName,
+    contactEmail: identity.contactEmail,
   });
 
   return (

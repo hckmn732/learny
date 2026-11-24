@@ -1,16 +1,15 @@
 // Legal identity and document versions (SPEC-806 ET-1, EF-2; ADR-0045).
 //
-// The legal entity is not known by the repository: every identity value comes from the environment
-// and an absent value stays explicitly « [à compléter] ». No caller ever invents an entity, and a
-// production pre-publication check must report the missing names instead of hiding them.
+// The legal identity and the versions are code constants of `product.ts` (ADR-4007): nothing is read
+// from the environment. A value still equal to « [à compléter] » is reported as missing; no caller
+// ever invents an entity, and the pre-publication check reports the missing names.
 import { z } from 'zod';
 
-import { LEGAL_VERSIONS } from './product';
+import { LEGAL_IDENTITY, LEGAL_PLACEHOLDER, LEGAL_VERSIONS } from './product';
 
-/** Exact marker shown where the legal identity is not provided (ADR-0045). */
-export const LEGAL_PLACEHOLDER = '[à compléter]';
+export { LEGAL_PLACEHOLDER };
 
-/** Identity variables, in the order the legal documents present them. */
+/** Identity fields (template markers), in the order the legal documents present them. */
 export const LEGAL_IDENTITY_KEYS = [
   'LEGAL_ENTITY_NAME',
   'LEGAL_ENTITY_ADDRESS',
@@ -18,7 +17,7 @@ export const LEGAL_IDENTITY_KEYS = [
   'LEGAL_HOST_NAME',
 ] as const;
 
-/** Version variables of the acceptance documents. */
+/** Version markers of the acceptance documents. */
 export const LEGAL_VERSION_KEYS = ['LEGAL_CGU_VERSION', 'LEGAL_PRIVACY_VERSION'] as const;
 
 /** Documents whose acceptance is tracked by `legal_acceptances` (BR-ACC-02). */
@@ -87,7 +86,7 @@ function parsed<T>(schema: z.ZodType<T>, value: unknown, key: string): T {
 }
 
 /**
- * Validates the legal configuration. Missing identity values become the exact placeholder; a
+ * Validates a named legal record (template markers). Missing identity values become the exact placeholder; a
  * non-empty but invalid value (for example a malformed contact e-mail) is refused by field name.
  */
 export function parseLegalConfig(
@@ -150,18 +149,23 @@ export function parseLegalConfig(
   };
 }
 
-/** Reads the legal configuration from a process-like environment (server components, scripts). */
-export function legalConfigFromEnv(
-  env: Readonly<Record<string, string | undefined>> = process.env,
-): LegalConfig {
-  return parseLegalConfig(env);
+function provided(value: string): string | undefined {
+  return value === LEGAL_PLACEHOLDER ? undefined : value;
+}
+
+/** The legal configuration of the code constants (server components, scripts, ADR-4007). */
+export function legalConfig(identity: Readonly<LegalIdentity> = LEGAL_IDENTITY): LegalConfig {
+  return parseLegalConfig({
+    LEGAL_ENTITY_NAME: provided(identity.entityName),
+    LEGAL_ENTITY_ADDRESS: provided(identity.entityAddress),
+    LEGAL_CONTACT_EMAIL: provided(identity.contactEmail),
+    LEGAL_HOST_NAME: provided(identity.hostName),
+  });
 }
 
 /** Active versions, without the identity: every acceptance comparison uses this source. */
-export function activeLegalVersions(
-  env: Readonly<Record<string, string | undefined>> = process.env,
-): LegalVersions {
-  return legalConfigFromEnv(env).versions;
+export function activeLegalVersions(): LegalVersions {
+  return { cgu: LEGAL_VERSIONS.cgu, privacy: LEGAL_VERSIONS.privacy };
 }
 
 /** A version is accepted only when it is exactly the active one (BR-ACC-02, SPEC-806 ET-3). */

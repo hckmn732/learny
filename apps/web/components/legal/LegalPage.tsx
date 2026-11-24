@@ -1,5 +1,5 @@
 import { MarkdownContent } from '@learny/bricks/view';
-import { legalConfigFromEnv } from '@learny/config';
+import { legalConfig, type LegalConfig } from '@learny/config';
 import { fr } from '@learny/i18n';
 import { Card, Link } from '@learny/ui';
 
@@ -23,8 +23,10 @@ function hrefOf(key: LegalPageKey): string {
  * precedes the content and is built from the explicit stable anchors. Placeholders stay visible and
  * are announced as information to complete, never hidden or replaced by an invented entity.
  */
-export function LegalPage({ document }: Readonly<{ document: LegalPageKey }>) {
-  const config = legalConfigFromEnv();
+export function LegalPage({
+  document,
+  config = legalConfig(),
+}: Readonly<{ document: LegalPageKey; config?: LegalConfig }>) {
   const view = loadLegalDocument(document, { config });
   const others = LEGAL_PAGE_KEYS.filter((key) => key !== document);
 

@@ -56,6 +56,29 @@ export function configDefaults(root = REPO) {
   return { cgu: match[1], privacy: match[2] };
 }
 
+const IDENTITY_FIELDS = {
+  LEGAL_ENTITY_NAME: 'entityName',
+  LEGAL_ENTITY_ADDRESS: 'entityAddress',
+  LEGAL_CONTACT_EMAIL: 'contactEmail',
+  LEGAL_HOST_NAME: 'hostName',
+};
+
+/**
+ * Identity of `LEGAL_IDENTITY` in `packages/config/src/product.ts` (ADR-4007), keyed by template
+ * marker. A field still set to `LEGAL_PLACEHOLDER` is left out: it is reported as missing.
+ */
+export function configIdentity(root = REPO) {
+  const source = read(root, 'packages/config/src/product.ts');
+  const block = /LEGAL_IDENTITY\s*=\s*\{([^}]*)\}/.exec(source);
+  const identity = {};
+  if (block === null) return identity;
+  for (const [key, field] of Object.entries(IDENTITY_FIELDS)) {
+    const match = new RegExp(`${field}:\\s*'([^']*)'`).exec(block[1]);
+    if (match !== null && match[1].trim() !== '') identity[key] = match[1];
+  }
+  return identity;
+}
+
 export function activeVersions(
   env = process.env,
   defaults = { cgu: '2026-11-11', privacy: '2026-11-11' },
@@ -168,7 +191,8 @@ function checkTests(root, errors) {
  */
 export function checkLegal(options = {}) {
   const root = options.root ?? REPO;
-  const env = options.env ?? process.env;
+  // The identity and the versions are code constants (ADR-4007); `env` only injects them in tests.
+  const env = options.env ?? { APP_ENV: process.env.APP_ENV, ...configIdentity(root) };
   const errors = [];
   const warnings = [];
   const versions = checkDocuments(root, env, errors);

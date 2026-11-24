@@ -46,7 +46,7 @@ export {
   LegalConfigError,
   activeLegalVersions,
   isCurrentVersion,
-  legalConfigFromEnv,
+  legalConfig,
   parseLegalConfig,
 } from './legal';
 export type {
@@ -72,6 +72,7 @@ export {
   EMBEDDING_DIM,
   EXERCISE_DEFAULT_MIN,
   LEGAL_DOCUMENTS_VERSION,
+  LEGAL_IDENTITY,
   LEGAL_VERSIONS,
   QUIZ_RULES,
   RESOURCE_LIMITS,

@@ -36,6 +36,22 @@ export const ACCOUNT_RULES = {
   accountDeletionDays: 30,
 } as const;
 
+/** Exact marker shown where the legal identity is not provided (ADR-0045). */
+export const LEGAL_PLACEHOLDER = '[à compléter]';
+
+/**
+ * Legal identity of the publisher (SPEC-806 EF-2, ADR-4007): a code constant, no longer read from
+ * the environment. A value equal to `LEGAL_PLACEHOLDER` is shown as information to complete and
+ * reported by `legal:check` before a publication.
+ */
+// TODO(owner): replace the four placeholders with the real legal identity of the publisher.
+export const LEGAL_IDENTITY = {
+  entityName: LEGAL_PLACEHOLDER,
+  entityAddress: LEGAL_PLACEHOLDER,
+  contactEmail: LEGAL_PLACEHOLDER,
+  hostName: LEGAL_PLACEHOLDER,
+} as const;
+
 /** Versions of the legal documents accepted at sign-up (SPEC-202 ET-4; SPEC-601 ET-5; SPEC-806 makes them evolve). */
 export const LEGAL_VERSIONS = { cgu: '2026-11-11', privacy: '2026-11-11' } as const;
 
