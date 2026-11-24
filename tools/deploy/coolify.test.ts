@@ -1,8 +1,7 @@
 // [SPEC-2301] The versioned Coolify configuration of the two Python services (ADR-2007).
 //
-// The services live in an overlay included by the stack (`include:`), so the deployment is the same
-// Coolify resource while the topology page of SPEC-1103 keeps its rendered service list — its visual
-// baseline is an oracle of another specification (ADR-1001, ADR-2008). The two services come from
+// The services are declared in the stack itself: Coolify does not follow `include:` (ADR-4006),
+// and the topology page that once listed the stack services is gone (ADR-2041). They come from
 // the single image of `docker/api.Dockerfile` and differ only by their command; every
 // environment entry is a name (a `${…}` interpolation), never a value, so no secret is committed.
 import fs from 'node:fs';
@@ -14,8 +13,8 @@ import YAML from 'yaml';
 
 const ROOT = fileURLToPath(new URL('../../', import.meta.url));
 const STACKS = [
-  { base: 'docker/compose.coolify.yml', overlay: './compose.coolify-py.yml' },
-  { base: 'docker/compose.coolify-qa.yml', overlay: './compose.coolify-qa-py.yml' },
+  { base: 'docker/compose.coolify.yml', overlay: 'docker/compose.coolify.yml' },
+  { base: 'docker/compose.coolify-qa.yml', overlay: 'docker/compose.coolify-qa.yml' },
 ] as const;
 const PY_DOCKERFILE = 'docker/api.Dockerfile';
 
@@ -30,10 +29,6 @@ function readYaml(relative: string): { text: string; doc: ComposeDoc } {
   const text = fs.readFileSync(path.join(ROOT, relative), 'utf8');
   // `merge: true` expands `<<: *py-environment`, comme le fait Docker Compose.
   return { text, doc: YAML.parse(text, { merge: true }) as ComposeDoc };
-}
-
-function overlayFile(overlay: string): string {
-  return path.posix.join('docker', overlay.replace('./', ''));
 }
 
 /** One service of a parsed Compose document; a missing name is a broken fixture. */
@@ -56,19 +51,15 @@ const ALLOWED_LITERAL = /^(production|live|mock|resend|smtp|on|off|true|false|wo
 
 describe.each(STACKS)('[SPEC-2301] $base — services Python de la bascule', ({ base, overlay }) => {
   const stack = readYaml(base);
-  const python = readYaml(overlayFile(overlay));
+  const python = stack;
   const api = service(python.doc, 'api-py');
   const worker = service(python.doc, 'worker-py');
 
-  it('includes the overlay without touching the rendered topology', () => {
-    expect(
-      stack.doc.include?.map((entry) => entry.path),
-      base,
-    ).toContain(overlay);
-    // La page de topologie de SPEC-1103 énumère les services du fichier principal : les services
-    // Python vivent dans l'inclusion, donc son rendu et sa ligne de base ne changent pas.
-    expect(stack.doc.services['api-py'], base).toBeUndefined();
-    expect(stack.doc.services['worker-py'], base).toBeUndefined();
+  it('declares the Python services in the stack itself, without include', () => {
+    // Coolify parses the Compose file itself and ignores `include:` (ADR-4006).
+    expect(stack.doc.include, base).toBeUndefined();
+    expect(stack.doc.services['api-py'], base).toBeDefined();
+    expect(stack.doc.services['worker-py'], base).toBeDefined();
   });
 
   it('declares one image and two commands', () => {

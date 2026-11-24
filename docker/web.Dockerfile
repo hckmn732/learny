@@ -17,27 +17,18 @@ FROM base AS deps
 # Manifests only: the lockfile install layer is reused as long as dependencies do not change.
 # Add a line when a new workspace package appears.
 COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
+COPY apps/mobile/package.json ./apps/mobile/package.json
 COPY apps/web/package.json ./apps/web/package.json
-COPY apps/api/package.json ./apps/api/package.json
 COPY packages/api-client/package.json ./packages/api-client/package.json
-COPY packages/api-routes/package.json ./packages/api-routes/package.json
-COPY packages/automations/package.json ./packages/automations/package.json
+COPY packages/api-sdk/package.json ./packages/api-sdk/package.json
 COPY packages/bricks/package.json ./packages/bricks/package.json
 COPY packages/config/package.json ./packages/config/package.json
 COPY packages/contracts/package.json ./packages/contracts/package.json
 COPY packages/core/package.json ./packages/core/package.json
 COPY packages/db/package.json ./packages/db/package.json
 COPY packages/domain/package.json ./packages/domain/package.json
-COPY packages/http/package.json ./packages/http/package.json
 COPY packages/i18n/package.json ./packages/i18n/package.json
-COPY packages/ingestion/package.json ./packages/ingestion/package.json
-COPY packages/jobs/package.json ./packages/jobs/package.json
-COPY packages/learning-engine/package.json ./packages/learning-engine/package.json
-COPY packages/llm/package.json ./packages/llm/package.json
-COPY packages/notifications/package.json ./packages/notifications/package.json
-COPY packages/services/package.json ./packages/services/package.json
 COPY packages/testing/package.json ./packages/testing/package.json
-COPY packages/tutor/package.json ./packages/tutor/package.json
 COPY packages/ui/package.json ./packages/ui/package.json
 RUN --mount=type=cache,id=pnpm-store,target=/pnpm/store \
     pnpm install --frozen-lockfile --filter @learny/web...

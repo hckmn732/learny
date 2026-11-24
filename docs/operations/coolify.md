@@ -262,11 +262,10 @@ le job refuse une empreinte différente.
 ## 10. Services Python de la bascule (SPEC-2301)
 
 Le backend est **uniquement Python** (SPEC-2302, ADR-2043) : **deux services à la même image**,
-`docker/api.Dockerfile` (SPEC-2003), aux côtés de `web` et `migrate`. Ils sont déclarés dans un
-fichier inclus par la pile — `docker/compose.coolify-py.yml` pour la production,
-`docker/compose.coolify-qa-py.yml` pour la QA — et `docker/compose.coolify.yml` / `-qa.yml` portent
-`include:`. Coolify déploie donc une seule ressource : le Compose résolu contient bien `api-py` et
-`worker-py`, et aucun service Hono ni Inngest. Le web pointe déjà sur
+`docker/api.Dockerfile` (SPEC-2003), aux côtés de `web` et `migrate`. Ils sont déclarés directement
+dans la pile — `docker/compose.coolify.yml` pour la production, `docker/compose.coolify-qa.yml`
+pour la QA : Coolify analyse lui-même le Compose et **ne suit pas `include:`** (ADR-4006). Le
+Compose résolu contient donc `api-py` et `worker-py`, et aucun service Hono ni Inngest. Le web pointe déjà sur
 `API_INTERNAL_URL=http://api-py:8000` (SPEC-2301) : il n'y a plus de bascule par contexte ni de
 relais.
 
@@ -300,8 +299,8 @@ relais.
   (`sk_live_` : live, autre : test), la clé du limiteur d'`APP_ENCRYPTION_KEY`, la clé publique
   et le sujet VAPID de `VAPID_PRIVATE_KEY` et d'`EMAIL_FROM` ; le réglage du worker, la taille du
   pool et le nombre de processus sont des constantes. **Aucune valeur de secret n'est écrite dans le dépôt** : la liste des
-  noms est dans l'ancre `x-py-environment` des fichiers inclus (`docker/compose.coolify-py.yml`,
-  `docker/compose.coolify-qa-py.yml`), les valeurs restent dans Coolify.
+  noms est dans l'ancre `x-py-environment` des piles (`docker/compose.coolify.yml`,
+  `docker/compose.coolify-qa.yml`), les valeurs restent dans Coolify.
 - **Rollback** : le retour à l'image précédente (`ghcr.io/<owner>/learny-py:<sha>` antérieur) sur
   `api-py` **et** `worker-py`, sans changement de variables ; il n'y a plus de rollback par
   contexte ni de retour vers Hono (la pile ne le contient plus).

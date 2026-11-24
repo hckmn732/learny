@@ -18,9 +18,6 @@
 # SPEC-2301 — la pile de QA gagne les services Python `api-py` et `worker-py`
 # (ADR-2007), déclarés dans un fichier inclus pour ne pas changer le rendu de la page
 # `/_dev/sdd/SPEC-1103` (ligne de base visuelle d'une autre spécification, ADR-1001).
-include:
-  - path: ./compose.coolify-qa-py.yml
-
 x-logging: &logging
   driver: json-file
   options:
@@ -123,7 +120,128 @@ x-app-environment: &app-environment
   # Pages /_dev/sdd/* : seule la valeur exacte `true` les active ; refusées en production.
   ENABLE_SDD_PAGES: ${ENABLE_SDD_PAGES:-true}
 
+# Contrat d'environnement du backend Python (ADR-2042) : APP_ENV=local et l'horloge figée donnent
+# les modes simulés (IA, Stripe, push), le SMTP Mailpit, les jobs par le worker et le limiteur coupé.
+x-py-environment: &py-environment
+  APP_ENV: ${APP_ENV:-local}
+  APP_VERSION: ${APP_VERSION:-}
+  GIT_COMMIT: ${GIT_COMMIT:-}
+  DATABASE_URL: postgresql://postgres:${POSTGRES_PASSWORD:?}@db:5432/postgres
+  NEXT_PUBLIC_SUPABASE_URL: ${LEARNY_PUBLIC_SUPABASE_URL:?}
+  NEXT_PUBLIC_SUPABASE_ANON_KEY: ${NEXT_PUBLIC_SUPABASE_ANON_KEY:?}
+  SUPABASE_SERVICE_ROLE_KEY: ${SUPABASE_SERVICE_ROLE_KEY:?}
+  SUPABASE_JWT_SECRET: ${SUPABASE_JWT_SECRET:?}
+  NEXT_PUBLIC_APP_URL: ${LEARNY_PUBLIC_APP_URL:?}
+  API_PROXY_SECRET: ${API_PROXY_SECRET:?}
+  APP_ENCRYPTION_KEY: ${APP_ENCRYPTION_KEY:?}
+  APP_ENCRYPTION_KEY_PREVIOUS: ${APP_ENCRYPTION_KEY_PREVIOUS:-}
+  CLOCK_FIXED_AT: ${CLOCK_FIXED_AT:-2026-11-11T12:20:00Z}
+  VOYAGE_API_KEY: ${VOYAGE_API_KEY:-}
+  SEARCH_API_KEY: ${SEARCH_API_KEY:-}
+  EMAIL_FROM: ${EMAIL_FROM:-Learny QA <qa@learny.test>}
+  EMAIL_LINK_SECRET: ${EMAIL_LINK_SECRET:?}
+  RESEND_API_KEY: ${RESEND_API_KEY:-}
+  SMTP_HOST: ${SMTP_HOST:-mailpit}
+  VAPID_PRIVATE_KEY: ${VAPID_PRIVATE_KEY:-}
+  STRIPE_SECRET_KEY: ${STRIPE_SECRET_KEY:-}
+  STRIPE_WEBHOOK_SECRET: ${STRIPE_WEBHOOK_SECRET:-}
+  STRIPE_PRICE_ID: ${STRIPE_PRICE_ID:-}
+  ENABLE_SDD_PAGES: ${ENABLE_SDD_PAGES:-true}
+
 services:
+  # Backend Python (SPEC-2301, ADR-2043) : une image, deux commandes. Coolify ne suit pas
+  # `include:`, les services sont donc déclarés ici même (ADR-4006).
+  api-py:
+    build:
+      context: ..
+      dockerfile: docker/api.Dockerfile
+    command:
+      - sh
+      - -c
+      - exec uvicorn learny_api.main:app --host 0.0.0.0 --port 8000 --workers 2
+    user: '1001:1001'
+    read_only: true
+    tmpfs:
+      - /tmp:size=32m
+    security_opt:
+      - no-new-privileges:true
+    cap_drop: [ALL]
+    environment:
+      <<: *py-environment
+    expose:
+      - '8000'
+    depends_on:
+      seed:
+        condition: service_completed_successfully
+      db:
+        condition: service_healthy
+    healthcheck:
+      test:
+        - CMD-SHELL
+        - >-
+          python -c "import sys, urllib.request;
+          sys.exit(0 if urllib.request.urlopen('http://127.0.0.1:8000/health', timeout=3).status == 200 else 1)"
+      interval: 10s
+      timeout: 5s
+      retries: 6
+      start_period: 20s
+    restart: unless-stopped
+    deploy:
+      resources:
+        limits:
+          cpus: '2.0'
+          memory: 2g
+    logging:
+      driver: json-file
+      options:
+        max-size: '10m'
+        max-file: '5'
+
+  worker-py:
+    build:
+      context: ..
+      dockerfile: docker/api.Dockerfile
+    command: ['python', '-m', 'learny_worker']
+    user: '1001:1001'
+    read_only: true
+    tmpfs:
+      - /tmp:size=32m
+    security_opt:
+      - no-new-privileges:true
+    cap_drop: [ALL]
+    environment:
+      <<: *py-environment
+      # Port standard du serveur de santé du worker (sondé par Coolify uniquement).
+      PORT: '8081'
+    depends_on:
+      seed:
+        condition: service_completed_successfully
+      db:
+        condition: service_healthy
+    healthcheck:
+      test:
+        - CMD-SHELL
+        - >-
+          python -c "import os, sys, urllib.request;
+          port = os.environ['PORT'];
+          urls = [f'http://127.0.0.1:{port}/health/live', f'http://127.0.0.1:{port}/health/ready'];
+          sys.exit(0 if all(urllib.request.urlopen(url, timeout=3).status == 200 for url in urls) else 1)"
+      interval: 10s
+      timeout: 5s
+      retries: 6
+      start_period: 30s
+    restart: unless-stopped
+    deploy:
+      resources:
+        limits:
+          cpus: '1.0'
+          memory: 1g
+    logging:
+      driver: json-file
+      options:
+        max-size: '10m'
+        max-file: '5'
+
   db:
     build:
       context: ..
