@@ -238,23 +238,31 @@ export async function captureReferences({
             dir,
             referenceDir,
           }));
-          // Zone comparable à l'application, mesurée dans la planche (comparaison de région).
-          const rectSelector = viewport === 'desktop' ? scenario.rectSelector : (scenario.mobileRectSelector ?? scenario.rectSelector);
-          if (rectSelector) {
-            rects[referenceFile(scenario.screenId, scenario.state, viewport).replace(/\.png$/u, '')] =
-              await page.evaluate((selector) => {
-                const element = document.querySelector(selector);
-                if (!element) return null;
-                // `getBoundingClientRect` rend déjà les coordonnées visuelles : sous `zoom: 0.9`, la
-                // boîte mesurée est celle des pixels de la capture (aucune mise à l'échelle en plus).
-                const box = element.getBoundingClientRect();
-                return {
-                  x: Math.round(box.x),
-                  y: Math.round(box.y),
-                  width: Math.round(box.width),
-                  height: Math.round(box.height),
-                };
-              }, rectSelector);
+          // Zones comparables à l'application, mesurées dans la planche (comparaison de région) :
+          // la zone principale, puis les régions nommées que l'écran possède réellement.
+          const rectSelector =
+            viewport === 'desktop'
+              ? scenario.rectSelector
+              : (scenario.mobileRectSelector ?? scenario.rectSelector);
+          const key = referenceFile(scenario.screenId, scenario.state, viewport).replace(/\.png$/u, '');
+          const measure = async (selector) =>
+            page.evaluate((value) => {
+              const element = document.querySelector(value);
+              if (!element) return null;
+              // `getBoundingClientRect` rend déjà les coordonnées visuelles : sous `zoom: 0.9`, la
+              // boîte mesurée est celle des pixels de la capture (aucune mise à l'échelle en plus).
+              const box = element.getBoundingClientRect();
+              return {
+                x: Math.round(box.x),
+                y: Math.round(box.y),
+                width: Math.round(box.width),
+                height: Math.round(box.height),
+              };
+            }, selector);
+          if (rectSelector) rects[key] = await measure(rectSelector);
+          for (const [name, selector] of Object.entries(scenario.extraRegions ?? {})) {
+            const region = await measure(selector);
+            if (region !== null) rects[`${key}-${name}`] = region;
           }
           if (viewport === 'desktop' && (scenario.state === 'base' || !scenarios.some((s) => s.screenId === scenario.screenId && s.state === 'base' && sourceFile(s.source) === sourceFile(scenario.source)))) {
             tokens.push(...(await collectTokens(page, scenario)));

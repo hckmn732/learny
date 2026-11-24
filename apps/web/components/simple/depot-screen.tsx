@@ -488,6 +488,7 @@ export function DepotScreen({ fid, initialState }: DepotScreenProps) {
             </button>
             <input
               accept=".pdf,.docx,.txt,.md,.markdown,image/*"
+              aria-label={t.depot.dropzone.ariaLabel}
               className="sr-only"
               data-testid="simple-dropzone-input"
               multiple

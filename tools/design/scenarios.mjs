@@ -119,7 +119,7 @@ const waitChapter = (page) =>
   page.getByText('La consolidation (introduction)').first().waitFor({ state: 'visible' });
 
 /** Une étape de la planche, capturée en bureau (vue Web) et en mobile (vue Mobile, iOS). */
-function modeSimpleStep(screenId, state, step, expect, extra = '') {
+function modeSimpleStep(screenId, state, step, expect, extra = '', extraRegions = undefined) {
   const hash = `#step=${String(step)}${extra}`;
   return {
     screenId,
@@ -132,7 +132,10 @@ function modeSimpleStep(screenId, state, step, expect, extra = '') {
       mobile: `index.html${hash}${MOBILE}`,
     },
     rectSelector: '.page',
-    mobileRectSelector: '.screen',
+    // Sur mobile, la zone utile est le corps de l'écran (`pbody`) : la barre d'état, l'îlot et les
+    // onglets du cadre téléphone ne font pas partie de l'écran de l'application.
+    mobileRectSelector: '.pbody',
+    ...(extraRegions === undefined ? {} : { extraRegions }),
     setup: () => Promise.resolve(),
     expect,
   };
@@ -140,9 +143,17 @@ function modeSimpleStep(screenId, state, step, expect, extra = '') {
 
 export const MODE_SIMPLE_SCENARIOS = [
   // Étape 1 — accueil : les deux portes d'entrée (SCR-03). La vue Web et la vue Mobile ne portent
-  // pas le même titre de page : la carte « Dépose ton cours » est commune aux deux.
-  modeSimpleStep('SCR-03', 'base', 0, (page) =>
-    page.getByText('Dépose ton cours').first().waitFor()),
+  // pas le même titre de page : la carte « Dépose ton cours » est commune aux deux. L'accueil de
+  // l'application garde le reste de la journée d'apprentissage, que la planche grise : la
+  // comparaison porte sur la grille des deux cartes.
+  modeSimpleStep(
+    'SCR-03',
+    'base',
+    0,
+    (page) => page.getByText('Dépose ton cours').first().waitFor(),
+    '',
+    { cartes: '.page div[style*="1.25fr"]' },
+  ),
   // Étape 2 — dépôt des documents (SCR-21).
   modeSimpleStep('SCR-21', 'base', 1, (page) =>
     page.getByText('Créer ma formation').first().waitFor()),
@@ -155,7 +166,14 @@ export const MODE_SIMPLE_SCENARIOS = [
   modeSimpleStep('SCR-23', 'base', 3, (page) => page.getByText('Programme prêt').waitFor()),
   // Étape 5 — diagnostic global (SCR-24) : le badge « Diagnostic · 10 min » est commun aux vues.
   modeSimpleStep('SCR-24', 'base', 4, (page) => page.getByText('Diagnostic · 10 min').first().waitFor()),
-  // Étape 6 — résultat et premier chapitre prêt (SCR-24).
-  modeSimpleStep('SCR-24', 'resultat', 5, (page) =>
-    page.getByText('Ton premier chapitre est prêt').waitFor()),
+  // Étape 6 — résultat et premier chapitre prêt (SCR-24) : la carte noire du premier chapitre est
+  // la zone que l'écran possède (le reste dépend du nombre de modules du document).
+  modeSimpleStep(
+    'SCR-24',
+    'resultat',
+    5,
+    (page) => page.getByText('Ton premier chapitre est prêt').waitFor(),
+    '',
+    { 'carte-pret': '.page .dark' },
+  ),
 ];

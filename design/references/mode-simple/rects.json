@@ -5,11 +5,17 @@
     "width": 938,
     "height": 598
   },
+  "SCR-03-base-desktop-cartes": {
+    "x": 415,
+    "y": 364,
+    "width": 822,
+    "height": 209
+  },
   "SCR-03-base-mobile": {
     "x": 53,
-    "y": 349,
+    "y": 388,
     "width": 283,
-    "height": 635
+    "height": 542
   },
   "SCR-21-base-desktop": {
     "x": 357,
@@ -19,9 +25,9 @@
   },
   "SCR-21-base-mobile": {
     "x": 53,
-    "y": 387,
+    "y": 425,
     "width": 283,
-    "height": 635
+    "height": 522
   },
   "SCR-21-sans-cle-desktop": {
     "x": 357,
@@ -31,9 +37,9 @@
   },
   "SCR-21-sans-cle-mobile": {
     "x": 53,
-    "y": 387,
+    "y": 425,
     "width": 283,
-    "height": 635
+    "height": 522
   },
   "SCR-22-base-desktop": {
     "x": 357,
@@ -43,9 +49,9 @@
   },
   "SCR-22-base-mobile": {
     "x": 53,
-    "y": 349,
+    "y": 388,
     "width": 283,
-    "height": 635
+    "height": 581
   },
   "SCR-23-base-desktop": {
     "x": 357,
@@ -55,9 +61,9 @@
   },
   "SCR-23-base-mobile": {
     "x": 53,
-    "y": 349,
+    "y": 388,
     "width": 283,
-    "height": 635
+    "height": 479
   },
   "SCR-24-base-desktop": {
     "x": 357,
@@ -67,9 +73,9 @@
   },
   "SCR-24-base-mobile": {
     "x": 53,
-    "y": 330,
+    "y": 369,
     "width": 283,
-    "height": 635
+    "height": 479
   },
   "SCR-24-resultat-desktop": {
     "x": 357,
@@ -77,10 +83,16 @@
     "width": 938,
     "height": 480
   },
+  "SCR-24-resultat-desktop-carte-pret": {
+    "x": 415,
+    "y": 385,
+    "width": 439,
+    "height": 205
+  },
   "SCR-24-resultat-mobile": {
     "x": 53,
-    "y": 349,
+    "y": 388,
     "width": 283,
-    "height": 635
+    "height": 542
   }
 }
