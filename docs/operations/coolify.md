@@ -44,11 +44,10 @@ PostgreSQL (`event_outbox`, `job_deliveries`), donc dans `db-data`.
 - Deux noms de domaine qui pointent vers le serveur, par exemple `learny.exemple.fr` (web) et
   `api.learny.exemple.fr` (Supabase). Coolify leur fournit le HTTPS ; la production refuse une URL
   `http://`.
-- Un SMTP pour les e-mails de Supabase Auth (inscription, lien de connexion). Avec Resend :
-  `smtp.resend.com`, port `465` ou `587`, utilisateur `resend`, mot de passe = une clé Resend.
-- Les comptes et clés exigés en production (`PRODUCTION_REQUIRED_KEYS`, `packages/config`) :
-  Anthropic, Voyage (embeddings), Resend avec un domaine d'envoi vérifié, Stripe (mode `live`, ou
-  `test` pour commencer), une paire de clés VAPID, et les mentions légales.
+- Les comptes et clés des fournisseurs : Voyage (embeddings), Resend avec un domaine d'envoi
+  vérifié (il sert aussi de SMTP à Supabase Auth), Stripe (clés `live`, ou `test` pour commencer).
+- L'identité légale de l'éditeur, renseignée dans le code (`LEGAL_IDENTITY` de
+  `packages/config/src/product.ts`, ADR-4007) : ce n'est plus une variable.
 
 Cette pile a son propre Supabase. Un autre Supabase déjà présent sur le serveur n'est ni utilisé
 ni modifié.
@@ -61,10 +60,11 @@ En local, depuis le dépôt :
 node tools/docker/selfhost-secrets.mjs
 ```
 
-Les neuf lignes sont toutes utilisées : `POSTGRES_PASSWORD`, `SUPABASE_JWT_SECRET`,
+Les cinq lignes sont toutes utilisées : `POSTGRES_PASSWORD`, `SUPABASE_JWT_SECRET`,
 `NEXT_PUBLIC_SUPABASE_ANON_KEY`, `SUPABASE_SERVICE_ROLE_KEY` (clés `anon` et `service_role`
-signées avec ce secret JWT), `INNGEST_EVENT_KEY`, `INNGEST_SIGNING_KEY`, `APP_ENCRYPTION_KEY`,
-`RATE_LIMIT_IP_SECRET` et `EMAIL_LINK_SECRET`.
+signées avec ce secret JWT) et `APP_ENCRYPTION_KEY`. Les secrets internes (relais du web vers
+l'API, liens e-mail, paire VAPID, clé du limiteur) sont dérivés d'`APP_ENCRYPTION_KEY`
+(ADR-4007) : il n'y a plus rien à générer pour eux.
 
 Conservez-les dans un coffre de secrets **avant** le premier déploiement, et ne les changez pas
 ensuite sans procédure :
@@ -74,7 +74,9 @@ ensuite sans procédure :
 - `SUPABASE_JWT_SECRET` signe les clés `anon`/`service_role` et les sessions : le changer impose de
   régénérer ces clés et déconnecte tout le monde.
 - `APP_ENCRYPTION_KEY` chiffre les clés d'IA personnelles des utilisateurs : perdue ou changée, ces
-  clés deviennent illisibles. Rotation : `docs/operations/key-rotation.md`.
+  clés deviennent illisibles. La changer fait aussi tourner les secrets dérivés : les liens
+  e-mail déjà envoyés deviennent invalides et les abonnements push doivent être renouvelés.
+  Rotation : `docs/operations/key-rotation.md`.
 
 ## 3. Créer l'application dans Coolify
 
@@ -105,11 +107,13 @@ tag) une fois la CI verte. Coolify déploie ce qui se trouve sur la branche, san
 Les variables se saisissent dans l'onglet *Environment Variables* de l'application ; la vue
 développeur de Coolify permet de coller un bloc au format `.env`.
 
+Contrat minimal (ADR-4007) : 7 variables obligatoires, 8 clés de fournisseurs et 3 facultatives.
+`tools/deploy/coolify.test.ts` refuse toute variable retirée.
+
 ### Secrets (section 2)
 
 `POSTGRES_PASSWORD`, `SUPABASE_JWT_SECRET`, `NEXT_PUBLIC_SUPABASE_ANON_KEY`,
-`SUPABASE_SERVICE_ROLE_KEY`, `INNGEST_EVENT_KEY`, `INNGEST_SIGNING_KEY`, `APP_ENCRYPTION_KEY`,
-`RATE_LIMIT_IP_SECRET`, `EMAIL_LINK_SECRET`.
+`SUPABASE_SERVICE_ROLE_KEY`, `APP_ENCRYPTION_KEY`.
 
 ### URLs publiques
 
@@ -125,12 +129,9 @@ ces trois-là.
 
 ### E-mails de Supabase Auth
 
-| Variable | Valeur |
-|---|---|
-| `SMTP_HOST`, `SMTP_PORT` | serveur SMTP (Resend : `smtp.resend.com`, `465` ou `587`) |
-| `SMTP_USER`, `SMTP_PASS` | identifiants SMTP (Resend : `resend` et une clé Resend) |
-| `SMTP_ADMIN_EMAIL` | adresse d'expédition, sur un domaine vérifié |
-| `SMTP_SENDER_NAME` | facultatif, `Learny` par défaut |
+Aucune variable dédiée : le Compose envoie les e-mails d'Auth par le SMTP de Resend
+(`smtp.resend.com`, port `465`, utilisateur `resend`, mot de passe `RESEND_API_KEY`), avec
+l'expéditeur `EMAIL_FROM` et le nom affiché `Learny`.
 
 Le Compose configure déjà Supabase Auth avec les modèles Learny (`supabase/templates`, servis par
 `auth-templates`) : le lien des e-mails mène à
@@ -140,32 +141,27 @@ Le Compose configure déjà Supabase Auth avec les modèles Learny (`supabase/te
 
 | Variable | Valeur |
 |---|---|
-| `ANTHROPIC_API_KEY` | clé Anthropic de la plateforme (plus utilisée pour répondre aux tâches : aucun modèle n'est fourni, ADR-0340) |
 | `VOYAGE_API_KEY` | clé Voyage |
-| `RESEND_API_KEY` | clé Resend (e-mails de l'application) |
-| `EMAIL_FROM` | `Learny <bonjour@exemple.fr>`, sur un domaine vérifié dans Resend |
-| `NEXT_PUBLIC_VAPID_PUBLIC_KEY`, `VAPID_PRIVATE_KEY` | `npx web-push generate-vapid-keys` |
-| `VAPID_SUBJECT` | `mailto:contact@exemple.fr` |
-| `STRIPE_MODE` | `live` par défaut ; `test` accepté pour démarrer avec les clés de test |
-| `STRIPE_SECRET_KEY`, `STRIPE_PRICE_ID`, `NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY` | tableau de bord Stripe (même mode que `STRIPE_MODE`) |
+| `RESEND_API_KEY` | clé Resend (e-mails de l'application et de Supabase Auth) |
+| `EMAIL_FROM` | `bonjour@exemple.fr`, sur un domaine vérifié dans Resend ; le nom affiché `Learny` est ajouté |
+| `STRIPE_SECRET_KEY`, `STRIPE_PRICE_ID`, `NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY` | tableau de bord Stripe ; le mode suit la clé secrète (`sk_live_` : live, sinon test) |
 | `STRIPE_WEBHOOK_SECRET` | secret du webhook créé en section 5 |
-| `LEGAL_ENTITY_NAME`, `LEGAL_ENTITY_ADDRESS`, `LEGAL_CONTACT_EMAIL`, `LEGAL_HOST_NAME` | mentions légales (`LEGAL_HOST_NAME` : l'hébergeur du serveur) |
+| `SEARCH_API_KEY` | recherche web de repli (facultative au démarrage) |
 
 ### Facultatives
 
-`APP_VERSION` (affichée par `/api/v1/health`), `LOG_LEVEL` (`info`), `DATABASE_POOL_MAX` (`10`
-par conteneur), `GOTRUE_DISABLE_SIGNUP` (`false` ; `true` ferme les inscriptions),
-`STORAGE_FILE_SIZE_LIMIT` (50 Mo), `SEARCH_API_KEY`, `SENTRY_DSN`, `NEXT_PUBLIC_SENTRY_DSN`,
-`ALLOWED_ORIGINS`, `APP_ENCRYPTION_KEY_PREVIOUS` (rotation), `GIT_COMMIT` (empreinte du commit
-livré, 7 à 40 caractères hexadécimaux, affichée par `/api/v1/health`). Ne reliez pas `GIT_COMMIT`
+`APP_VERSION` (affichée par `/api/v1/health`), `APP_ENCRYPTION_KEY_PREVIOUS` (rotation),
+`GIT_COMMIT` (empreinte du commit livré, 7 à 40 caractères hexadécimaux, affichée par
+`/api/v1/health`). Ne reliez pas `GIT_COMMIT`
 à `SOURCE_COMMIT` : Coolify y met `unknown` quand le commit n'est pas inclus au build, et
 l'application refuse alors de démarrer.
 
-Le Compose fixe le reste : `APP_ENV=production`, `ENABLE_SDD_PAGES=false`. Depuis ADR-2042, les
-modes ne se saisissent plus : `LLM_MODE`/`PUSH_MODE` valent `live` hors local et test, `EMAIL_MODE`
-vaut `resend` sauf `SMTP_HOST`, `JOBS_MODE` vaut `worker` (le worker ne le consulte pas),
-`RATE_LIMIT_MODE` vaut `on`, `TRUST_PROXY` est désactivé (le secret du proxy authentifie
-`api-py`).
+Le Compose fixe le reste en littéral : `APP_ENV=production`, `ENABLE_SDD_PAGES=false`,
+`LOG_LEVEL=info`, `GOTRUE_DISABLE_SIGNUP=false`, la limite de Storage (50 Mo, BR-APP-02) et les
+schémas PostgREST. Les modes sont dérivés d'`APP_ENV` (ADR-2042) et les secrets internes
+d'`APP_ENCRYPTION_KEY` (ADR-4007). Une ancienne variable encore présente dans la ressource
+Coolify (`API_PROXY_SECRET`, `EMAIL_LINK_SECRET`, `VAPID_*`, `LEGAL_*`, `SMTP_*`, `*_MODE`,
+`INNGEST_*`…) est ignorée : supprimez-la.
 
 ## 5. Premier déploiement et vérifications
 
@@ -290,14 +286,15 @@ relais.
 - **Variables** (ADR-2042) : le backend Python ne lit que le contrat de
   `learny.shared.config.ENVIRONMENT_VARIABLES` — `APP_ENV`, `NEXT_PUBLIC_APP_URL`, `DATABASE_URL`,
   `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY`, `SUPABASE_SERVICE_ROLE_KEY`,
-  `SUPABASE_JWT_SECRET`, `APP_ENCRYPTION_KEY`, `API_PROXY_SECRET`, `EMAIL_LINK_SECRET`, `EMAIL_FROM`,
-  `RESEND_API_KEY`, `VAPID_PRIVATE_KEY`, `STRIPE_SECRET_KEY`, `STRIPE_WEBHOOK_SECRET`,
-  `STRIPE_PRICE_ID`, `VOYAGE_API_KEY`, `SEARCH_API_KEY` et les facultatives (rotation `*_PREVIOUS`,
+  `SUPABASE_JWT_SECRET`, `APP_ENCRYPTION_KEY`, `EMAIL_FROM`, `RESEND_API_KEY`,
+  `STRIPE_SECRET_KEY`, `STRIPE_WEBHOOK_SECRET`, `STRIPE_PRICE_ID`,
+  `NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY`, `VOYAGE_API_KEY`, `SEARCH_API_KEY` et les facultatives
+  (`APP_ENCRYPTION_KEY_PREVIOUS`,
   `SMTP_HOST`, `ALLOW_LOCAL_MODELS`, `ENABLE_SDD_PAGES`, `CLOCK_FIXED_AT`, `GIT_COMMIT`,
   `APP_VERSION`). Les modes
   (IA, push, e-mail, jobs, limiteur) sont dérivés d'`APP_ENV`, le mode Stripe de la clé secrète
-  (`sk_live_` : live, autre : test), la clé du limiteur d'`APP_ENCRYPTION_KEY`, la clé publique
-  et le sujet VAPID de `VAPID_PRIVATE_KEY` et d'`EMAIL_FROM` ; le réglage du worker, la taille du
+  (`sk_live_` : live, autre : test), le secret du relais, celui des liens e-mail, la paire VAPID
+  et la clé du limiteur d'`APP_ENCRYPTION_KEY` (ADR-4007), le sujet VAPID d'`EMAIL_FROM` ; le réglage du worker, la taille du
   pool et le nombre de processus sont des constantes. **Aucune valeur de secret n'est écrite dans le dépôt** : la liste des
   noms est dans l'ancre `x-py-environment` des piles (`docker/compose.coolify.yml`,
   `docker/compose.coolify-qa.yml`), les valeurs restent dans Coolify.

@@ -212,15 +212,17 @@ async def submit_attempt(call: Call) -> object:
 `learny.shared.config.Settings(BaseSettings)` reads **only** `ENVIRONMENT_VARIABLES`, the closed list
 of ADR-2042: `APP_ENV`, `NEXT_PUBLIC_APP_URL`, `DATABASE_URL`, `NEXT_PUBLIC_SUPABASE_URL`,
 `NEXT_PUBLIC_SUPABASE_ANON_KEY`, `SUPABASE_SERVICE_ROLE_KEY`, `SUPABASE_JWT_SECRET`,
-`APP_ENCRYPTION_KEY(_PREVIOUS)`, `API_PROXY_SECRET(_PREVIOUS)`, `EMAIL_LINK_SECRET`, `EMAIL_FROM`,
-`RESEND_API_KEY`, `VAPID_PRIVATE_KEY`, `STRIPE_SECRET_KEY`, `STRIPE_WEBHOOK_SECRET`,
-`STRIPE_PRICE_ID`, `VOYAGE_API_KEY`, `SEARCH_API_KEY`, plus the optional `SMTP_HOST`,
+`APP_ENCRYPTION_KEY(_PREVIOUS)`, `EMAIL_FROM`, `RESEND_API_KEY`, `STRIPE_SECRET_KEY`,
+`STRIPE_WEBHOOK_SECRET`, `STRIPE_PRICE_ID`, `NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY`,
+`VOYAGE_API_KEY`, `SEARCH_API_KEY`, plus the optional `SMTP_HOST`,
 `ALLOW_LOCAL_MODELS`, `ENABLE_SDD_PAGES`, `CLOCK_FIXED_AT`, `GIT_COMMIT`, `APP_VERSION` and the
 standard `CI`/`PORT`. The coexistence variables (`PY_HONO_UPSTREAM_URL`, `OWNERSHIP_OVERRIDES`) are
 gone with the relay (SPEC-2302). Same production guards as before (`LLM_MODE=mock`,
 `JOBS_MODE=inline`, `RATE_LIMIT_MODE=off` refused in production).
 
 **Amended by ADR-2042 (2026-11-23):** `Settings` reads only `ENVIRONMENT_VARIABLES` (18 contract variables plus optional rotation, SMTP target, local models, test/QA switches and build metadata). The Supabase names are the public ones (`NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY`); `LLM_MODE`, `EMAIL_MODE`, `PUSH_MODE`, `JOBS_MODE`, `RATE_LIMIT_MODE` derive from `APP_ENV`/`CLOCK_FIXED_AT`, `STRIPE_MODE` from the secret key, `RATE_LIMIT_IP_SECRET` from `APP_ENCRYPTION_KEY`, the VAPID public key and subject from `VAPID_PRIVATE_KEY`/`EMAIL_FROM`; `PY_*` tuning, pool size, SMTP port, JWT audience/JWKS/issuer, legal versions and `TRUST_PROXY`/`ALLOWED_ORIGINS` are constants. No new variable without amending ADR-2042.
+
+**Amended by ADR-4007 (2026-11-24):** `API_PROXY_SECRET(_PREVIOUS)`, `EMAIL_LINK_SECRET` and `VAPID_PRIVATE_KEY` are no longer read: they are HMAC-SHA256 subkeys of `APP_ENCRYPTION_KEY` (labels `learny/api-proxy/v1`, `learny/email-link/v1`, `learny/vapid/v1`; the previous relay secret comes from `APP_ENCRYPTION_KEY_PREVIOUS`), computed identically by `@learny/config/derived-secrets` on the web. `NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY` joins the contract for `config.public`. The legal identity is a code constant.
 
 ## 9. Logging and observability
 
