@@ -4,6 +4,14 @@ import { z } from 'zod';
 import { buildOpenApiDocument, serializeOpenApiDocument } from './openapi';
 import { ROUTES } from './routes';
 
+/** Reads an object the document must contain; a missing one fails the case explicitly. */
+function entry(value: unknown): Record<string, unknown> {
+  if (value === null || typeof value !== 'object') {
+    throw new Error('élément attendu absent du document OpenAPI');
+  }
+  return value as Record<string, unknown>;
+}
+
 /**
  * [SPEC-201] The OpenAPI 3.1 document built from the route registry (EF-8, ET-8).
  *
@@ -11,10 +19,10 @@ import { ROUTES } from './routes';
  * itself was never measured; these cases pin the shape it must produce for every kind of route.
  */
 describe('[SPEC-201] buildOpenApiDocument', () => {
-  const params = z.object({ id: z.string().uuid() });
+  const params = z.object({ id: z.uuid() });
   const query = z.object({ from: z.string(), limit: z.number().int().optional() });
   const body = z.object({ title: z.string().min(1) });
-  const output = z.object({ id: z.string().uuid(), title: z.string() });
+  const output = z.object({ id: z.uuid(), title: z.string() });
 
   const registry = {
     'demo.get': {
@@ -86,22 +94,25 @@ describe('[SPEC-201] buildOpenApiDocument', () => {
       '/api/v1/demo/redirect',
       '/api/v1/demo/{id}',
     ]);
-    const operation = paths['/api/v1/demo/{id}']!.get as {
+    const operation = entry(paths['/api/v1/demo/{id}']).get as {
       parameters: { name: string; in: string; required: boolean }[];
       security: unknown[];
     };
-    expect(operation.parameters).toEqual([
-      { name: 'id', in: 'path', required: true, schema: expect.anything() },
-      { name: 'from', in: 'query', required: true, schema: expect.anything() },
-      { name: 'limit', in: 'query', required: false, schema: expect.anything() },
+    expect(operation.parameters.map(({ name, in: location, required }) => [name, location, required])).toEqual([
+      ['id', 'path', true],
+      ['from', 'query', true],
+      ['limit', 'query', false],
     ]);
+    for (const parameter of operation.parameters) {
+      expect(entry(entry(parameter).schema).type).toBeTypeOf('string');
+    }
     expect(operation.security).toEqual([{ bearerAuth: [] }, { cookieAuth: [] }]);
   });
 
   it('ajoute la clé d’idempotence, les erreurs et le corps attendu', () => {
     const document = buildOpenApiDocument(registry, { version: '1' });
     const paths = document.paths as unknown as Record<string, Record<string, Record<string, unknown>>>;
-    const create = paths['/api/v1/demo']!.post!;
+    const create = entry(entry(paths['/api/v1/demo']).post);
     const parameters = create.parameters as { name: string; in: string; required: boolean }[];
     expect(parameters).toContainEqual({
       name: 'Idempotency-Key',
@@ -109,10 +120,9 @@ describe('[SPEC-201] buildOpenApiDocument', () => {
       required: true,
       schema: { type: 'string', pattern: '^[A-Za-z0-9_-]{8,128}$' },
     });
-    expect(create.requestBody).toMatchObject({
-      required: true,
-      content: { 'application/json': { schema: expect.anything() } },
-    });
+    const requestBody = entry(create.requestBody);
+    expect(requestBody.required).toBe(true);
+    expect(Object.keys(entry(requestBody.content))).toEqual(['application/json']);
     const responses = create.responses as Record<string, unknown>;
     expect(Object.keys(responses).sort()).toEqual(['201', '400', '500']);
     expect(create.security).toBeUndefined();
@@ -121,15 +131,15 @@ describe('[SPEC-201] buildOpenApiDocument', () => {
   it('décrit une redirection et une réponse sans corps', () => {
     const document = buildOpenApiDocument(registry, { version: '1' });
     const paths = document.paths as unknown as Record<string, Record<string, Record<string, unknown>>>;
-    const redirect = paths['/api/v1/demo/redirect']!.get!;
+    const redirect = entry(entry(paths['/api/v1/demo/redirect']).get);
     expect((redirect.responses as Record<string, unknown>)['302']).toMatchObject({
       description: 'Redirection',
       headers: { Location: { schema: { type: 'string' } } },
     });
-    const accepted = paths['/api/v1/demo/accepted']!.post;
-    const acceptedResponse = (accepted!.responses as Record<string, Record<string, unknown>>)[
-      '202'
-    ]!;
+    const accepted = entry(entry(paths['/api/v1/demo/accepted']).post);
+    const acceptedResponse = entry(
+      (accepted.responses as Record<string, Record<string, unknown>>)['202'],
+    );
     expect(acceptedResponse.description).toBe('Succès');
     expect(acceptedResponse.content).toBeUndefined();
   });
@@ -139,12 +149,18 @@ describe('[SPEC-201] buildOpenApiDocument', () => {
     const paths = document.paths as unknown as Record<string, Record<string, unknown>>;
     const operations = Object.values(paths).reduce((total, item) => total + Object.keys(item).length, 0);
     expect(operations).toBe(Object.keys(ROUTES).length);
-    expect(document.components).toMatchObject({
-      schemas: { ProblemDetails: expect.anything() },
-      securitySchemes: {
-        bearerAuth: { type: 'http', scheme: 'bearer', bearerFormat: 'JWT' },
-        cookieAuth: { type: 'apiKey', in: 'cookie', name: 'sb-access-token' },
-      },
+    const components = entry(document.components);
+    expect(Object.keys(entry(components.schemas))).toContain('ProblemDetails');
+    const securitySchemes = entry(components.securitySchemes);
+    expect(securitySchemes.bearerAuth).toEqual({
+      type: 'http',
+      scheme: 'bearer',
+      bearerFormat: 'JWT',
+    });
+    expect(securitySchemes.cookieAuth).toEqual({
+      type: 'apiKey',
+      in: 'cookie',
+      name: 'sb-access-token',
     });
   });
 });
