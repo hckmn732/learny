@@ -120,6 +120,38 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
       // Publication : l'application n'utilise que le chiffrement fourni par le système (HTTPS,
       // Keychain). La déclaration évite une question bloquante à chaque revue (SPEC-3502 EF-4).
       ITSAppUsesNonExemptEncryption: false,
+      // SPEC-4003 ET-3, CA-2 — « Ouvrir avec Learny » : les types de documents que l'application
+      // accepte et qui ouvrent le dépôt avec le fichier déjà ajouté.
+      CFBundleDocumentTypes: [
+        {
+          CFBundleTypeName: 'Document de cours',
+          CFBundleTypeRole: 'Editor',
+          LSHandlerRank: 'Alternate',
+          LSItemContentTypes: [
+            'com.adobe.pdf',
+            'org.openxmlformats.wordprocessingml.document',
+            'public.plain-text',
+            'public.image',
+          ],
+        },
+      ],
+      UTImportedTypeDeclarations: [
+        {
+          UTTypeIdentifier: 'org.openxmlformats.wordprocessingml.document',
+          UTTypeDescription: 'Document Word',
+          UTTypeConformsTo: ['public.data', 'public.composite-content'],
+          UTTypeTagSpecification: {
+            'public.filename-extension': ['docx'],
+            'public.mime-type': [
+              'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+            ],
+          },
+        },
+      ],
+      NSCameraUsageDescription:
+        'Prendre en photo les pages de ton cours pour en faire une formation.',
+      NSPhotoLibraryUsageDescription:
+        'Choisir les photos de pages de ton cours pour en faire une formation.',
     },
     // SPEC-3502 ET-3, BR-PLA-05 — manifeste de confidentialité (`PrivacyInfo.xcprivacy`) : API à
     // raison requise et données collectées, aucune collecte publicitaire ni de suivi.
@@ -139,13 +171,16 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
       'android.permission.INTERNET',
       'android.permission.POST_NOTIFICATIONS',
       'android.permission.VIBRATE',
+      'android.permission.CAMERA',
     ],
     // SPEC-3101 ET-3, EF-6 — App Links verified on the two paths a link can land on: the
     // static page `/auth/mobile` and the callback of the API carried by the e-mails.
-    ...(linkHost === null
-      ? {}
-      : {
-          intentFilters: [
+    // SPEC-4003 ET-3, CA-2 — « Partager vers Learny » : ACTION_SEND et ACTION_SEND_MULTIPLE pour
+    // un PDF, un DOCX ou une image. L'application reçoit l'URI du document et ouvre le dépôt.
+    intentFilters: [
+      ...(linkHost === null
+        ? []
+        : [
             {
               action: 'VIEW',
               autoVerify: true,
@@ -155,8 +190,44 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
               ],
               category: ['BROWSABLE', 'DEFAULT'],
             },
-          ],
-        }),
+          ]),
+      // « Ouvrir avec Learny » depuis un gestionnaire de fichiers : le même dépôt, sans partage.
+      {
+        action: 'VIEW',
+        category: ['DEFAULT', 'BROWSABLE'],
+        data: [
+          { scheme: 'file', mimeType: 'application/pdf' },
+          { scheme: 'content', mimeType: 'application/pdf' },
+          {
+            scheme: 'file',
+            mimeType: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+          },
+          { scheme: 'content', mimeType: 'image/*' },
+        ],
+      },
+      {
+        action: 'SEND',
+        category: ['DEFAULT'],
+        data: [
+          { mimeType: 'application/pdf' },
+          {
+            mimeType: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+          },
+          { mimeType: 'image/*' },
+        ],
+      },
+      {
+        action: 'SEND_MULTIPLE',
+        category: ['DEFAULT'],
+        data: [
+          { mimeType: 'application/pdf' },
+          {
+            mimeType: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+          },
+          { mimeType: 'image/*' },
+        ],
+      },
+    ],
     adaptiveIcon: {
       foregroundImage: './assets/android-icon-foreground.png',
       backgroundColor: CANVAS,
@@ -169,6 +240,17 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
     // SPEC-3003 ET-1 — the encryption key of the session cache lives in the platform keychain:
     // the plugin keeps it out of the Android backups (`allowBackup` rules).
     'expo-secure-store',
+    // SPEC-4003 ET-3 — sélecteurs natifs et partage.
+    'expo-sharing',
+    [
+      'expo-image-picker',
+      {
+        photosPermission: 'Choisir les photos de pages de ton cours pour en faire une formation.',
+        cameraPermission: 'Prendre en photo les pages de ton cours pour en faire une formation.',
+      },
+    ],
+    'expo-document-picker',
+    '@react-native-community/datetimepicker',
     // SPEC-3501 EF-7, ADR-3007 — native notifications (FCM and APNs). The Android channel
     // « Rappels Learny » (high importance) and its monochrome icon are created at runtime by
     // `src/notifications/expo-device.ts`; iOS keeps the default sound and declares no badge (V1).

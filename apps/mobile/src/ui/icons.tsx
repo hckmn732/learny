@@ -7,6 +7,53 @@ import type { ReactNode } from 'react';
 import { Circle, Path, Rect } from 'react-native-svg';
 
 export const STROKE_ICONS = {
+  upload: (
+    <>
+      <Path d="M12 16V4M6 10l6-6 6 6" />
+      <Path d="M4 16v3a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-3" />
+    </>
+  ),
+  camera: (
+    <>
+      <Path d="M4 8h3l2-3h6l2 3h3v11H4z" />
+      <Circle cx="12" cy="13" r="3.5" />
+    </>
+  ),
+  link: (
+    <>
+      <Path d="M10 14a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1 1" />
+      <Path d="M14 10a4 4 0 0 0-5.7 0l-3 3a4 4 0 0 0 5.7 5.7l1-1" />
+    </>
+  ),
+  key: (
+    <>
+      <Circle cx="8" cy="15" r="4" />
+      <Path d="m11 12 9-9M17 6l3 3" />
+    </>
+  ),
+  chat: (
+    <>
+      <Path d="M4 5h16v11H9l-5 4z" />
+    </>
+  ),
+  file: (
+    <>
+      <Path d="M6 3h8l4 4v14H6z" />
+      <Path d="M14 3v5h5" />
+    </>
+  ),
+  image: (
+    <>
+      <Rect x="3" y="4" width="18" height="16" rx="3" />
+      <Circle cx="8.5" cy="9.5" r="1.5" />
+      <Path d="m4 18 5-5 4 4 3-3 4 4" />
+    </>
+  ),
+  close: (
+    <>
+      <Path d="M6 6l12 12M18 6 6 18" />
+    </>
+  ),
   logo: (
     <>
       <Path d="M4 19V6l8 6 8-6v13" />
