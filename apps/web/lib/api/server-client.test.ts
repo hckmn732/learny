@@ -14,7 +14,8 @@ describe('[SPEC-1202] server api client', () => {
   beforeEach(() => {
     vi.stubGlobal('fetch', mocks.fetch);
     vi.stubEnv('API_INTERNAL_URL', 'http://api.internal:3001');
-    vi.stubEnv('API_PROXY_SECRET', 'test-only-proxy-secret-with-at-least-32-bytes');
+    // ADR-4007: the relay secret is derived from the master key (vector of packages/config).
+    vi.stubEnv('APP_ENCRYPTION_KEY', 'MDEyMzQ1Njc4OWFiY2RlZjAxMjM0NTY3ODlhYmNkZWY=');
     mocks.headers.mockResolvedValue(
       new Headers({
         cookie: 'session=abc',
@@ -45,7 +46,7 @@ describe('[SPEC-1202] server api client', () => {
     expect(Object.fromEntries(sent)).toEqual(
       expect.objectContaining({
         cookie: 'session=abc',
-        'x-learny-proxy-secret': 'test-only-proxy-secret-with-at-least-32-bytes',
+        'x-learny-proxy-secret': '75f53c11c2c358025613ab3c5b34ad3ae93ca6f18c529caf8f8b7dd5405c8bbe',
         'x-forwarded-for': '203.0.113.8',
         'x-forwarded-host': 'learny.test',
         'x-forwarded-proto': 'https',

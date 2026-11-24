@@ -3,7 +3,9 @@ import { afterEach, describe, expect, it, vi } from 'vitest';
 
 import { relayToApi } from './relay';
 
-const SECRET = 'learny-test-only-api-proxy-secret-value';
+// ADR-4007: the relay secret is derived from the master key (vector of packages/config).
+const MASTER_KEY = 'MDEyMzQ1Njc4OWFiY2RlZjAxMjM0NTY3ODlhYmNkZWY=';
+const SECRET = '75f53c11c2c358025613ab3c5b34ad3ae93ca6f18c529caf8f8b7dd5405c8bbe'; // learny-test-only
 
 afterEach(() => {
   vi.restoreAllMocks();
@@ -13,7 +15,7 @@ afterEach(() => {
 describe('[SPEC-1201] relay', () => {
   it('cible apps/api et remplace les en-têtes de confiance', async () => {
     vi.stubEnv('API_INTERNAL_URL', 'http://127.0.0.1:4011');
-    vi.stubEnv('API_PROXY_SECRET', SECRET);
+    vi.stubEnv('APP_ENCRYPTION_KEY', MASTER_KEY);
     const fetchMock = vi.spyOn(globalThis, 'fetch').mockResolvedValue(
       new Response('{"ok":true}', {
         status: 200,

@@ -2,7 +2,8 @@
 
 Only the variables of `ENVIRONMENT_VARIABLES` are read from the process environment. Every other
 setting is a constant of the code or is derived from `APP_ENV` (and from `CLOCK_FIXED_AT` for the
-frozen-clock stacks); a test or a tool may still pass any field explicitly to `Settings(...)`.
+frozen-clock stacks); the internal secrets are subkeys of `APP_ENCRYPTION_KEY` (ADR-4007). A test
+or a tool may still pass any field explicitly to `Settings(...)`.
 """
 
 import base64
@@ -42,11 +43,8 @@ ENVIRONMENT_VARIABLES: tuple[str, ...] = (
     "SUPABASE_SERVICE_ROLE_KEY",
     "SUPABASE_JWT_SECRET",
     "APP_ENCRYPTION_KEY",
-    "API_PROXY_SECRET",
-    "EMAIL_LINK_SECRET",
     "EMAIL_FROM",
     "RESEND_API_KEY",
-    "VAPID_PRIVATE_KEY",
     # Native push channels (SPEC-3501, ADR-3007): APNs provider token and FCM service account.
     "APNS_KEY_ID",
     "APNS_TEAM_ID",
@@ -58,11 +56,12 @@ ENVIRONMENT_VARIABLES: tuple[str, ...] = (
     "STRIPE_SECRET_KEY",
     "STRIPE_WEBHOOK_SECRET",
     "STRIPE_PRICE_ID",
+    # Served to the clients by `config.public` (ADR-4007).
+    "NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY",
     "VOYAGE_API_KEY",
     "SEARCH_API_KEY",
     # Optional.
     "APP_ENCRYPTION_KEY_PREVIOUS",
-    "API_PROXY_SECRET_PREVIOUS",
     "SMTP_HOST",
     "ALLOW_LOCAL_MODELS",
     "ENABLE_SDD_PAGES",
@@ -81,8 +80,14 @@ SUPABASE_JWT_AUDIENCE = "authenticated"
 LEGAL_CGU_VERSION = "2026-11-11"
 LEGAL_PRIVACY_VERSION = "2026-11-11"
 DEFAULT_EMAIL_FROM = "Learny <bonjour@learny.local>"
-# The rate-limit IP key is derived from the master key instead of being one more secret.
+# ADR-4007: every internal secret is an HMAC-SHA256 subkey of the master key instead of being one
+# more variable. Changing `APP_ENCRYPTION_KEY` therefore rotates all of them.
 RATE_LIMIT_KEY_LABEL = b"learny/rate-limit-ip/v1"
+API_PROXY_KEY_LABEL = b"learny/api-proxy/v1"
+EMAIL_LINK_KEY_LABEL = b"learny/email-link/v1"
+VAPID_KEY_LABEL = b"learny/vapid/v1"
+# Order of the P-256 group: a derived VAPID scalar lies in [1, n - 1].
+P256_ORDER = 0xFFFFFFFF00000000FFFFFFFFFFFFFFFFBCE6FAADA7179E84F3B9CAC2FC632551
 
 _SIMULATED_ENVS = ("local", "test", "development", "")
 _EMAIL_ADDRESS = re.compile(r"<([^<>\s]+@[^<>\s]+)>|^\s*([^<>\s]+@[^<>\s]+)\s*$")
@@ -98,9 +103,29 @@ class _ContractEnvSource(EnvSettingsSource):
         return {key: value for key, value in loaded.items() if key.lower() in self._allowed}
 
 
+def _subkey(master_key: str, label: bytes) -> bytes:
+    return hmac.new(master_key.strip().encode(), label, hashlib.sha256).digest()
+
+
 def derive_rate_limit_secret(master_key: str) -> str:
     """HMAC-SHA256 subkey of `APP_ENCRYPTION_KEY` keying the IP hashes of the rate limiter."""
-    return hmac.new(master_key.strip().encode(), RATE_LIMIT_KEY_LABEL, hashlib.sha256).hexdigest()
+    return _subkey(master_key, RATE_LIMIT_KEY_LABEL).hex()
+
+
+def derive_api_proxy_secret(master_key: str) -> str:
+    """Relay secret shared by the web and the facade (`X-Learny-Proxy-Secret`, ADR-4007)."""
+    return _subkey(master_key, API_PROXY_KEY_LABEL).hex()
+
+
+def derive_email_link_secret(master_key: str) -> str:
+    """Key of the signed e-mail links (unsubscribe, ADR-4007)."""
+    return _subkey(master_key, EMAIL_LINK_KEY_LABEL).hex()
+
+
+def derive_vapid_private_key(master_key: str) -> str:
+    """P-256 VAPID private key, base64url of the 32-byte big-endian scalar (ADR-4007)."""
+    scalar = int.from_bytes(_subkey(master_key, VAPID_KEY_LABEL), "big") % (P256_ORDER - 1) + 1
+    return base64.urlsafe_b64encode(scalar.to_bytes(32, "big")).rstrip(b"=").decode()
 
 
 def vapid_public_key_of(private_key: str) -> str | None:
@@ -149,12 +174,10 @@ class Settings(BaseSettings):
     supabase_service_role_key: str = ""
     supabase_jwt_secret: str = ""
     app_encryption_key: str | None = None
-    api_proxy_secret: str | None = None
-    api_proxy_secret_previous: str | None = None
-    email_link_secret: str | None = None
+    # Previous master key during a rotation (ADR-0227): it keeps the former relay secret valid.
+    app_encryption_key_previous: str | None = None
     email_from: str | None = None
     resend_api_key: str | None = None
-    vapid_private_key: str | None = None
     # Native push channels (SPEC-3501, ADR-3007): never in the repository, never logged. A missing
     # value leaves the channel out of the router instead of failing the start (the Web Push of
     # SPEC-205 keeps working); `APNS_ENVIRONMENT=sandbox` targets the development APNs host.
@@ -168,6 +191,10 @@ class Settings(BaseSettings):
     stripe_secret_key: str | None = None
     stripe_webhook_secret: str | None = None
     stripe_price_id: str | None = None
+    stripe_publishable_key: str | None = Field(
+        default=None,
+        validation_alias=AliasChoices("stripe_publishable_key", "NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY"),
+    )
     voyage_api_key: str | None = None
     search_api_key: str | None = None
     smtp_host: str | None = None
@@ -189,7 +216,12 @@ class Settings(BaseSettings):
     stripe_mode: str | None = None
     jobs_mode: JobsMode | None = None
     rate_limit_mode: RateLimitMode | None = None
+    # ADR-4007: subkeys of `APP_ENCRYPTION_KEY` (and of the previous key for the relay secret).
     rate_limit_ip_secret: str | None = None
+    api_proxy_secret: str | None = None
+    api_proxy_secret_previous: str | None = None
+    email_link_secret: str | None = None
+    vapid_private_key: str | None = None
     vapid_public_key: str | None = None
     vapid_subject: str | None = None
 
@@ -228,7 +260,9 @@ class Settings(BaseSettings):
         IA and push follow `APP_ENV`; e-mail goes to memory in `test`, to SMTP when `SMTP_HOST` is
         set or in local development, to Resend otherwise; Stripe follows its secret key (none:
         simulated, `sk_live_`/`rk_live_`: live, any other: test mode); a frozen clock runs the
-        consumers inline in `test` and switches the limiter off outside production.
+        consumers inline in `test` and switches the limiter off outside production. The internal
+        secrets are subkeys of `APP_ENCRYPTION_KEY` (ADR-4007), the VAPID private key first so that
+        its public key is derived from it.
         """
         simulated = self.app_env in _SIMULATED_ENVS
         frozen = self.fixed_instant is not None
@@ -249,8 +283,19 @@ class Settings(BaseSettings):
         if self.rate_limit_mode is None:
             # ADR-0336: a frozen clock never refills the buckets, so the limiter is off there.
             self.rate_limit_mode = "off" if frozen and not self.is_production else "on"
-        if self.rate_limit_ip_secret is None and (self.app_encryption_key or "").strip():
-            self.rate_limit_ip_secret = derive_rate_limit_secret(self.app_encryption_key or "")
+        master = (self.app_encryption_key or "").strip()
+        previous = (self.app_encryption_key_previous or "").strip()
+        if master:
+            if self.rate_limit_ip_secret is None:
+                self.rate_limit_ip_secret = derive_rate_limit_secret(master)
+            if self.api_proxy_secret is None:
+                self.api_proxy_secret = derive_api_proxy_secret(master)
+            if self.email_link_secret is None:
+                self.email_link_secret = derive_email_link_secret(master)
+            if self.vapid_private_key is None:
+                self.vapid_private_key = derive_vapid_private_key(master)
+        if self.api_proxy_secret_previous is None and previous:
+            self.api_proxy_secret_previous = derive_api_proxy_secret(previous)
         if self.vapid_public_key is None and self.vapid_private_key:
             self.vapid_public_key = vapid_public_key_of(self.vapid_private_key)
         if self.vapid_subject is None:
@@ -317,10 +362,8 @@ class ConfigurationError(RuntimeError):
 
 PRODUCTION_REQUIRED_ENV: tuple[str, ...] = (
     "APP_ENCRYPTION_KEY",
-    "API_PROXY_SECRET",
     "DATABASE_URL",
     "EMAIL_FROM",
-    "EMAIL_LINK_SECRET",
     "NEXT_PUBLIC_APP_URL",
     "NEXT_PUBLIC_SUPABASE_ANON_KEY",
     "NEXT_PUBLIC_SUPABASE_URL",
@@ -329,7 +372,6 @@ PRODUCTION_REQUIRED_ENV: tuple[str, ...] = (
     "STRIPE_SECRET_KEY",
     "STRIPE_WEBHOOK_SECRET",
     "SUPABASE_SERVICE_ROLE_KEY",
-    "VAPID_PRIVATE_KEY",
     "VOYAGE_API_KEY",
 )
 

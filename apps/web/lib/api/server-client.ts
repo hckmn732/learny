@@ -6,6 +6,7 @@ import { headers } from 'next/headers';
 
 import { createApiClient, type ApiClient } from '@learny/api-client';
 import { ApiError } from '@learny/api-client';
+import { apiProxySecretFromEnv } from '@learny/config/derived-secrets';
 
 const DEFAULT_API_INTERNAL_URL = 'http://127.0.0.1:3001';
 
@@ -22,7 +23,8 @@ function forwardedHeaders(source: HeaderSource): Record<string, string> {
   const host = source.get('x-forwarded-host') ?? source.get('host') ?? 'localhost';
   const proto = source.get('x-forwarded-proto') ?? 'http';
   const address = source.get('x-forwarded-for') ?? source.get('x-real-ip');
-  const secret = process.env.API_PROXY_SECRET;
+  // ADR-4007: the relay secret is a subkey of APP_ENCRYPTION_KEY, never a variable of its own.
+  const secret = apiProxySecretFromEnv(process.env);
   const origin = source.get('origin');
   const secFetchSite = source.get('sec-fetch-site');
 
@@ -31,7 +33,7 @@ function forwardedHeaders(source: HeaderSource): Record<string, string> {
   result['X-Forwarded-Host'] = host;
   result['X-Forwarded-Proto'] = proto;
   if (address !== null) result['X-Forwarded-For'] = address;
-  if (secret !== undefined && secret !== '') result['X-Learny-Proxy-Secret'] = secret;
+  if (secret !== undefined) result['X-Learny-Proxy-Secret'] = secret;
   // SPEC-208: a mutation served by a server component still carries its origin proof. The browser
   // headers win when they exist; on a render without them the page asserts its own origin, which
   // is exactly what a same-origin fetch from the browser would send. Without it the origin guard

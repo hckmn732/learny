@@ -5,6 +5,7 @@
   "type": "module",
   "exports": {
     ".": "./src/index.ts",
+    "./derived-secrets": "./src/derived-secrets.ts",
     "./product": "./src/product.ts",
     "./server": "./src/server.ts"
   },

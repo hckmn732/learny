@@ -1,6 +1,7 @@
 import { notFound, redirect } from 'next/navigation';
 
-import { BYOK_RECOMMENDED_MODELS, parsePublicEnv } from '@learny/config';
+import { BYOK_RECOMMENDED_MODELS } from '@learny/config';
+import { vapidPublicKeyFromEnv } from '@learny/config/derived-secrets';
 
 import { AiStep } from '../../../../components/onboarding/AiStep';
 import { DepartureStep } from '../../../../components/onboarding/DepartureStep';
@@ -71,12 +72,7 @@ export default async function OnboardingStepPage({
     case 'ia':
       return <AiStep recommendedModels={BYOK_RECOMMENDED_MODELS} />;
     case 'rappels':
-      return (
-        <RemindersStep
-          initial={reminders}
-          publicKey={parsePublicEnv(process.env).NEXT_PUBLIC_VAPID_PUBLIC_KEY}
-        />
-      );
+      return <RemindersStep initial={reminders} publicKey={vapidPublicKeyFromEnv(process.env)} />;
     case 'depart':
       return (
         <DepartureStep firstName={profile.firstName ?? 'Alex'} tutorTone={profile.tutorTone} />

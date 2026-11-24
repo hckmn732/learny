@@ -49,7 +49,8 @@ const API_INTERNAL_URL = `http://127.0.0.1:${String(FACADE_PORT)}`;
 // `process.env`, so the relay target and the proxy secret must be exported here, not only in
 // the `webServer` block (the health route relays to the API since SPEC-1203).
 process.env.API_INTERNAL_URL ??= API_INTERNAL_URL;
-process.env.API_PROXY_SECRET ??= 'learny-test-only-api-proxy-secret-value';
+// ADR-4007: the relay secret is derived from APP_ENCRYPTION_KEY by the web and the facade.
+process.env.APP_ENCRYPTION_KEY ??= TEST_ENCRYPTION_KEY;
 // SPEC-2102: the Python worker is the fourth process of the stack; its health server proves it is
 // alive before the end-to-end test emits an event. A dedicated port, like the other three.
 const WORKER_PORT = PORT + 3;
@@ -158,6 +159,8 @@ export default defineConfig({
           process.env.DATABASE_URL ?? 'postgresql://postgres:postgres@127.0.0.1:54322/postgres',
         // ADR-2042: the worker health server listens on the standard PORT.
         PORT: String(WORKER_PORT),
+        // ADR-4007: same master key as the facade, hence the same derived e-mail link secret.
+        APP_ENCRYPTION_KEY: TEST_ENCRYPTION_KEY,
         // The Python settings read the public Supabase names, like the web (ADR-2042).
         NEXT_PUBLIC_SUPABASE_URL: process.env.NEXT_PUBLIC_SUPABASE_URL ?? 'http://127.0.0.1:54321',
         NEXT_PUBLIC_SUPABASE_ANON_KEY: process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ?? '',
@@ -190,9 +193,6 @@ export default defineConfig({
         // Stripe gateway (SPEC-2206), the inline consumers of the facade (P21 plan step 6) and the
         // limiter switched off (ADR-0336); the relay secret makes TRUST_PROXY unnecessary.
         APP_ENV: 'test',
-        // SPEC-2201: the facade serves the operations owned by `py`, so it must trust the web
-        // relay (SPEC-208 origin guard) — same secret, same forwarded host.
-        API_PROXY_SECRET: 'learny-test-only-api-proxy-secret-value',
         // SPEC-2207: the demonstration routes are served by the Python facade, so it needs the
         // same development flag as the web or `devOnly` answers 404 to every page.
         ENABLE_SDD_PAGES: 'true',
@@ -217,7 +217,6 @@ export default defineConfig({
         APP_ENCRYPTION_KEY: TEST_ENCRYPTION_KEY,
         ENABLE_SDD_PAGES: 'true',
         API_INTERNAL_URL,
-        API_PROXY_SECRET: 'learny-test-only-api-proxy-secret-value',
         // SPEC-804: rapport de démonstration figé pour la page de performance.
         PERF_DEMO_FIXTURE: '1',
         // The server sits behind a trusted proxy in these tests: each test announces its own address

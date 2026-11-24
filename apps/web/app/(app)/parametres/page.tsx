@@ -1,4 +1,4 @@
-import { parsePublicEnv } from '@learny/config';
+import { vapidPublicKeyFromEnv } from '@learny/config/derived-secrets';
 
 import { SettingsView } from '../../../components/settings/settings-view';
 import { AppShell } from '../../../components/shell/app-shell';
@@ -31,7 +31,8 @@ export default async function ParametresPage() {
         notificationError={!notifications.ok}
         initialAiModels={aiModels.ok ? aiModels.data : null}
         aiModelsError={!aiModels.ok}
-        pushPublicKey={parsePublicEnv(process.env).NEXT_PUBLIC_VAPID_PUBLIC_KEY}
+        // ADR-4007: the VAPID key pair is derived from APP_ENCRYPTION_KEY on the server.
+        pushPublicKey={vapidPublicKeyFromEnv(process.env)}
         {...(settings.ok || settings.requestId === undefined
           ? {}
           : { requestId: settings.requestId })}
