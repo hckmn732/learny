@@ -160,6 +160,8 @@ def build_proposal_dto(
                 "plannedEnd": row["planned_end"] if row else module["plannedEnd"],
                 "threshold": int(row["threshold"]) if row else module["threshold"],
                 "status": row["status"] if row else None,
+                "pageFrom": module.get("pageFrom"),
+                "pageTo": module.get("pageTo"),
                 "chapters": chapters,
             }
         )
@@ -339,7 +341,9 @@ async def read_active_programme(
         for row in chapter_rows
     ]
     first, last = modules[0], modules[-1]
-    weeks = rules.calendar_weeks(str(first["plannedStart"]), str(last["plannedEnd"]))
+    # SPEC-4001 EF-8 - a fixed deadline shortens the plan, so the indicators follow it.
+    plan_end = current["end_date"] or last["plannedEnd"]
+    weeks = rules.calendar_weeks(str(first["plannedStart"]), str(plan_end))
     return {
         "formation": {
             "id": current["id"],
@@ -618,6 +622,19 @@ async def validate_proposal(
             raise AppError("FORMATION_LIMIT_REACHED", FORMATION_LIMIT_REACHED, status=422)
 
         created_by = "import" if proposal["source"] == "imported" else "tutor"
+        simple_mode = str(formation.get("creation_mode") or "tutor") == "simple"
+        source_id: str | None = None
+        if simple_mode:
+            sources = await queries.list_simple_sources(tx, formation_id)
+            course = next(
+                (
+                    source
+                    for source in sources
+                    if isinstance(source.get("metadata"), dict) and source["metadata"].get("role") == "course"
+                ),
+                None,
+            )
+            source_id = None if course is None else str(course["id"])
         for index, module in enumerate(payload["modules"]):
             module_id = await queries.insert_module(tx, formation_id, module, index=index, now=now)
             if module_id is None:
@@ -627,6 +644,18 @@ async def validate_proposal(
                 chapter_id = await queries.insert_chapter(tx, formation_id, module_id, chapter, now)
                 if chapter_id is None:
                     raise AppError("INTERNAL_ERROR", PROGRAMME_CHAPTER_MISSING)
+                if simple_mode and source_id is not None:
+                    # EF-9 - the page range of the document, and no "chapter finished" step.
+                    await queries.insert_chapter_source(
+                        tx,
+                        chapter_id=chapter_id,
+                        resource_id=source_id,
+                        formation_id=formation_id,
+                        page_from=chapter.get("pageFrom"),
+                        page_to=chapter.get("pageTo"),
+                    )
+                if simple_mode:
+                    await queries.mark_chapter_contributions_done(tx, actor.user_id, chapter_id, to_iso(now))
                 for position, notion in enumerate(chapter["notions"], start=1):
                     await queries.insert_notion(
                         tx,
@@ -639,6 +668,13 @@ async def validate_proposal(
                         now=now,
                     )
         await queries.activate_formation(tx, actor.user_id, formation_id, payload, proposal, now)
+        if str(formation.get("creation_mode") or "tutor") == "simple":
+            # EF-9 - the server starts the progressive generation, no declared completion.
+            await tx.emit(
+                "simple.generation.requested",
+                {"userId": actor.user_id, "formationId": formation_id},
+                event_id=f"simple-generation-requested:{formation_id}:{to_iso(now)}",
+            )
         await tx.emit(
             "formation/programme-validated",
             {

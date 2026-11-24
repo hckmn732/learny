@@ -1116,3 +1116,19 @@ async def update_chapter_summary_feedback(tx: Tx, *, row_id: str, user_id: str, 
         UPDATE_CHAPTER_SUMMARY_FEEDBACK,
         {"id": row_id, "user_id": user_id, "feedback": feedback},
     )
+
+
+LIST_RESOURCE_CHUNKS = text(
+    """
+    select position, text, location
+      from public.resource_chunks
+     where resource_id = cast(:resource as uuid)
+     order by position asc
+    """
+)
+
+
+async def list_resource_chunks(tx: Tx, resource_id: str) -> list[Mapping[str, Any]]:
+    """SPEC-4001 EF-7 - the located passages of one resource, in position order."""
+    result = await tx.conn.execute(LIST_RESOURCE_CHUNKS, {"resource": resource_id})
+    return [dict(row) for row in result.mappings().all()]

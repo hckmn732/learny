@@ -290,3 +290,9 @@ OPEN_GRADE_INSTRUCTIONS = (
 QUIZ_GRADE_TASK_LABEL = "La correction de votre quiz"
 QUIZ_GRADE_MODEL_LABEL = "personnel"
 QUIZ_GRADE_SUBJECT = "Correction de votre quiz"
+
+# SPEC-4001 EF-10 — questions of the global diagnostic.
+DIAGNOSTIC_WRONG_DEFAULT = "Aucune de ces réponses"
+DIAGNOSTIC_EXPLANATION = "Réponse tirée du résumé de la section du document."
+DIAGNOSTIC_OBJECTIVE = "Vérifier la maîtrise du module."
+DIAGNOSTIC_NO_CHECK = "La correction immédiate n’est pas disponible pendant le diagnostic."

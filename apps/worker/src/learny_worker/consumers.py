@@ -46,6 +46,9 @@ REMINDER_JOB_BATCH = 200
 EXAM_DEADLINE_GRACE_SECONDS = 5
 LONG_JOB_TIMEOUT_S = 900
 INGESTION_TIMEOUT_S = 600
+# SPEC-4001 - the two modules generated before the queued ones.
+SIMPLE_DIRECT_MODULES = 2
+SIMPLE_ANALYSIS_TIMEOUT_S = 1_800
 GENERATION_TIMEOUT_S = 600
 # Hotfix QA: the bank of a just generated course is produced in the same run (`timeouts.finish`).
 QUESTION_BANK_PREPARE_TIMEOUT_S = 1800
@@ -340,6 +343,48 @@ async def assessments_submit_exam_at_deadline(deps: Any, event: Event) -> None:
     )
 
 
+async def formation_simple_analysis(deps: Any, event: Event) -> None:
+    """`simple.analysis.requested`: the four steps of the document analysis (SPEC-4001 EF-7)."""
+    await formation.run_analysis(
+        deps,
+        _text_of(event.data, "userId"),
+        _text_of(event.data, "formationId"),
+    )
+
+
+async def formation_simple_generation(deps: Any, event: Event) -> None:
+    """`simple.generation.requested`: two modules now, the others queued (SPEC-4001 EF-9, EF-12).
+
+    The first two modules of the formation are generated directly; the following ones are enqueued
+    with the ordinary `chapter/contributions-completed` event, so the same course job and the same
+    idempotence guard produce them. At least two modules stay ready ahead of the first open module.
+    """
+    user_id = _text_of(event.data, "userId")
+    formation_id = _text_of(event.data, "formationId")
+    modules = await formation.list_generation_modules(deps, formation_id)
+    pending = [
+        module
+        for module in modules
+        if str(module["status"]) != "validated" and module.get("course_status") is None
+    ]
+    for index, module in enumerate(pending):
+        module_id = str(module["id"])
+        if index < SIMPLE_DIRECT_MODULES:
+            await tutor.generate_course(deps, user_id, module_id, f"simple-course:{module_id}")
+            continue
+        async with deps.db.service_tx() as tx:
+            await tx.emit(
+                "chapter/contributions-completed",
+                {
+                    "userId": user_id,
+                    "moduleId": module_id,
+                    "chapterId": None,
+                    "force": True,
+                },
+                event_id=f"simple-course:{module_id}",
+            )
+
+
 async def formation_unlock_module(deps: Any, event: Event) -> None:
     """`module-unlock`: unlocks the next module of a passed validation quiz."""
     await formation.unlock_module(
@@ -554,6 +599,22 @@ CONSUMERS: tuple[Consumer, ...] = (
         timeout_s=QUESTION_BANK_PREPARE_TIMEOUT_S,
         validate=payload_validator(userId=UUID, courseId=UUID, moduleId=UUID),
         tags={"context": "tutor"},
+    ),
+    Consumer(
+        name="formation.simple_analysis",
+        on="simple.analysis.requested",
+        run=formation_simple_analysis,
+        timeout_s=SIMPLE_ANALYSIS_TIMEOUT_S,
+        validate=payload_validator(userId=UUID, formationId=UUID),
+        tags={"context": "formation"},
+    ),
+    Consumer(
+        name="formation.simple_generation",
+        on="simple.generation.requested",
+        run=formation_simple_generation,
+        timeout_s=GENERATION_TIMEOUT_S,
+        validate=payload_validator(userId=UUID, formationId=UUID),
+        tags={"context": "formation"},
     ),
     Consumer(
         name="learning.plan_programme",

@@ -344,6 +344,9 @@ async def check_answer(
     async with deps.db.user_tx(actor) as tx:
         await queries.lock_quiz_answer(tx, attempt_id, position)
         attempt = await _locked_attempt(tx, actor.user_id, attempt_id)
+        # SPEC-4001 EF-10 - the diagnostic never corrects an answer immediately.
+        if str(attempt.get("kind") or "") == "diagnostic":
+            raise AppError("DIAGNOSTIC_NO_CHECK", texts.DIAGNOSTIC_NO_CHECK, status=409)
         answer = await _answer_at(tx, attempt_id, position)
         items = items_of(attempt["items"])
         item = items[position - 1] if position <= len(items) else {}

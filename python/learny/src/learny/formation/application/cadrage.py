@@ -15,6 +15,7 @@ from learny.formation.application.tutor import (
     run_cadrage_turn,
 )
 from learny.formation.domain import cadrage as rules
+from learny.formation.domain import simple as simple_rules
 from learny.formation.infrastructure import queries
 from learny.identity.domain.actor import Actor
 from learny.platform.llm.resolve import resolve_task_model
@@ -32,6 +33,7 @@ from learny.shared.locale_fr.details import (
     PROFILE_NOT_FOUND,
 )
 from learny.shared.naming import formation_monogram, next_accent
+from learny.shared.time import to_iso
 
 
 async def _read_formation(tx: Tx, user_id: str, formation_id: str) -> queries.CadrageFormationRow:
@@ -62,18 +64,51 @@ async def list_formations(deps: FormationDeps, actor: Actor) -> dict[str, Any]:
     """`GET /formations`: the owner's formations, most recent first."""
     async with deps.db.user_tx(actor) as tx:
         rows = await queries.list_owned_formations(tx, actor.user_id)
-        return {"items": [{"id": row["id"], "title": row["title"], "status": row["status"]} for row in rows]}
+        return {
+            "items": [
+                {
+                    "id": row["id"],
+                    "title": row["title"],
+                    "status": row["status"],
+                    "creationMode": row.get("creation_mode") or "tutor",
+                    "simpleStatus": row.get("simple_status"),
+                }
+                for row in rows
+            ]
+        }
 
 
 async def update_formation_title(
     deps: FormationDeps, actor: Actor, formation_id: str, body: Mapping[str, Any]
 ) -> dict[str, Any]:
-    """`PATCH /formations/:fid` (EF-11, EF-13): the monogram follows the new title."""
+    """`PATCH /formations/:fid`: the title, and the exam deadline of a simple-mode formation (EF-8)."""
     now = deps.clock.now()
     async with deps.db.user_tx(actor) as tx:
         formation = await _read_formation(tx, actor.user_id, formation_id)
+        scope = await queries.read_simple_formation(tx, actor.user_id, formation_id)
         title = body.get("title")
         final_title = formation.title if title is None else str(title)
+        if "endDate" in body and scope is not None and str(scope.get("creation_mode")) == "simple":
+            deadline = body.get("endDate")
+            today = now.date().isoformat()
+            if deadline is None:
+                modules = await queries.read_simple_modules(tx, formation_id)
+                end_date = (None if not modules else str(modules[-1].get("planned_end") or "")) or scope.get(
+                    "start_date"
+                )
+                objectives: tuple[str, ...] = ("operational",)
+            else:
+                simple_rules.assert_deadline(str(deadline), today)
+                end_date = simple_rules.deadline_end_date(str(deadline), today)
+                objectives = simple_rules.deadline_objectives(str(deadline))
+            await queries.update_formation_deadline(
+                tx,
+                actor.user_id,
+                formation_id,
+                objectives=objectives,
+                end_date=end_date,
+                now=to_iso(now),
+            )
         updated = await queries.update_formation_title(
             tx,
             actor.user_id,
@@ -84,7 +119,12 @@ async def update_formation_title(
         )
         if updated is None:
             raise AppError("NOT_FOUND", FORMATION_NOT_FOUND)
-        return {"id": updated["id"], "title": updated["title"], "status": updated["status"]}
+        return {
+            "id": updated["id"],
+            "title": updated["title"],
+            "status": updated["status"],
+            "creationMode": updated.get("creation_mode") or "tutor",
+        }
 
 
 async def create_formation(deps: FormationDeps, actor: Actor, body: Mapping[str, Any]) -> dict[str, Any]:

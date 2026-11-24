@@ -1,0 +1,20 @@
+{
+  "task": "simple_analysis",
+  "scenario": "simple-section",
+  "promptId": "simple_analysis.simple_analysis",
+  "promptVersion": 1,
+  "description": "Résumé déterministe d'une section du document de cours (SPEC-4001 EF-7).",
+  "steps": [
+    {
+      "type": "text",
+      "text": "{\"title\": \"Section du document\", \"summary\": \"Cette section présente les notions essentielles du chapitre, les définitions à retenir et les applications attendues. Elle sert de base au programme et au cours généré : les notions citées sont celles que l’apprenant doit maîtriser pour réussir l’évaluation.\", \"notions\": [\"Notion principale\", \"Définition clé\", \"Application\"]}",
+      "usage": {
+        "inputTokens": 320,
+        "outputTokens": 90,
+        "cacheReadTokens": 0,
+        "cacheWriteTokens": 0
+      },
+      "latencyMs": 120
+    }
+  ]
+}

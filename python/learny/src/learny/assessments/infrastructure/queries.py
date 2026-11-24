@@ -510,12 +510,13 @@ READ_QUIZ_ATTEMPT = text(
            act.module_id::text as module_id,
            act.formation_id::text as formation_id,
            act.config,
-           act.items
+           act.items,
+           act.kind::text as kind
       from public.attempts at
       join public.activities act on act.id = at.activity_id
      where at.id = cast(:attempt_id as uuid)
        and at.user_id = cast(:user_id as uuid)
-       and act.kind in ('validation_quiz', 'remediation')
+       and act.kind in ('validation_quiz', 'remediation', 'diagnostic')
      limit 1
     """
 )
@@ -1765,12 +1766,13 @@ READ_SUBMIT_ATTEMPT = text(
            act.module_id::text as module_id,
            act.formation_id::text as formation_id,
            (act.config ->> 'threshold')::int as threshold,
-           act.items
+           act.items,
+           act.kind::text as kind
       from public.attempts at
       join public.activities act on act.id = at.activity_id
      where at.id = cast(:attempt_id as uuid)
        and at.user_id = cast(:user_id as uuid)
-       and act.kind = 'validation_quiz'
+       and act.kind in ('validation_quiz', 'diagnostic')
      limit 1
     """
 )
@@ -1876,6 +1878,8 @@ READ_RESULT_ATTEMPT = text(
            at.passed,
            at.per_notion,
            act.items,
+           act.config,
+           act.kind::text as kind,
            act.module_id::text as module_id,
            act.formation_id::text as formation_id,
            m.position::int as position,
@@ -1886,7 +1890,7 @@ READ_RESULT_ATTEMPT = text(
       join public.modules m on m.id = act.module_id
      where at.id = cast(:attempt_id as uuid)
        and at.user_id = cast(:user_id as uuid)
-       and act.kind = 'validation_quiz'
+       and act.kind in ('validation_quiz', 'diagnostic')
      limit 1
     """
 )
@@ -3021,3 +3025,85 @@ async def read_sync_profile_timezone(tx: Tx, user_id: str) -> str | None:
     result = await tx.conn.execute(READ_SYNC_PROFILE_TIMEZONE, {"user_id": user_id})
     found = result.mappings().first()
     return None if found is None else str(found["timezone"])
+
+
+# --------------------------------------------------------------------------------------------------
+# Diagnostic attempt of simple mode (SPEC-4001 EF-10, EF-11).
+# --------------------------------------------------------------------------------------------------
+
+INSERT_DIAGNOSTIC_ACTIVITY = text(
+    """
+    insert into public.activities (
+      owner_id, formation_id, module_id, kind, config, items, status
+    ) values (
+      cast(:user_id as uuid), cast(:formation_id as uuid), cast(:module_id as uuid),
+      'diagnostic', cast(:config as jsonb), cast(:items as jsonb), 'ready'
+    )
+    returning id::text as id
+    """
+)
+
+UPDATE_ACTIVITY_CONFIG = text(
+    """
+    update public.activities
+       set config = config || cast(:patch as jsonb)
+     where id = cast(:activity_id as uuid)
+    """
+)
+
+READ_DIAGNOSTIC_ATTEMPT = text(
+    """
+    select at.id::text as id,
+           at.activity_id::text as activity_id,
+           at.attempt_no,
+           at.status::text as status,
+           at.started_at,
+           act.module_id::text as module_id,
+           act.formation_id::text as formation_id,
+           act.config,
+           act.items,
+           act.kind::text as kind
+      from public.attempts at
+      join public.activities act on act.id = at.activity_id
+     where at.id = cast(:attempt_id as uuid)
+       and at.user_id = cast(:user_id as uuid)
+       and act.kind = 'diagnostic'
+     limit 1
+    """
+)
+
+
+async def insert_diagnostic_activity(
+    tx: Tx,
+    *,
+    user_id: str,
+    formation_id: str,
+    module_id: str,
+    config: str,
+    items: str,
+) -> str | None:
+    """EF-10 - the diagnostic activity, `ready` with its questions."""
+    result = await tx.conn.execute(
+        INSERT_DIAGNOSTIC_ACTIVITY,
+        {
+            "user_id": user_id,
+            "formation_id": formation_id,
+            "module_id": module_id,
+            "config": config,
+            "items": items,
+        },
+    )
+    found = result.mappings().first()
+    return None if found is None else str(found["id"])
+
+
+async def update_activity_config(tx: Tx, activity_id: str, patch: str) -> None:
+    """EF-10 - the outcome of the diagnostic is kept on the activity for `/result`."""
+    await tx.conn.execute(UPDATE_ACTIVITY_CONFIG, {"activity_id": activity_id, "patch": patch})
+
+
+async def read_diagnostic_attempt(tx: Tx, user_id: str, attempt_id: str) -> Mapping[str, Any] | None:
+    """The diagnostic attempt of this learner, whatever its status."""
+    result = await tx.conn.execute(READ_DIAGNOSTIC_ATTEMPT, {"user_id": user_id, "attempt_id": attempt_id})
+    found = result.mappings().all()
+    return None if not found else row_of(found[0])

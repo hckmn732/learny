@@ -7,7 +7,7 @@ chooses it (BR-IA-02), so this table only declares what each task needs.
 from dataclasses import dataclass
 from typing import Literal
 
-AiTask = Literal["programme", "course", "gaps", "tutor", "light"]
+AiTask = Literal["programme", "course", "gaps", "tutor", "light", "simple_analysis"]
 ThinkingEffort = Literal["low", "medium", "high"]
 
 # `AI_TASKS` (`packages/config/src/models.ts`): the mockup order of the five AI tasks.
@@ -44,6 +44,8 @@ TASK_CONFIG: dict[AiTask, TaskConfig] = {
     "gaps": TaskConfig("medium", 16_000, 120_000, ("structured",)),
     "tutor": TaskConfig("low", 8_000, 60_000, ("tools", "structured")),
     "light": TaskConfig("low", 4_000, 30_000, ("structured", "vision")),
+    # SPEC-4001 - reading, summarizing and questioning the deposited documents (simple mode).
+    "simple_analysis": TaskConfig("low", 8_000, 60_000, ("structured",)),
 }
 
 

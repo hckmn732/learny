@@ -39,6 +39,8 @@ def test_the_task_table_is_the_typescript_one() -> None:
         "gaps": ("medium", 16_000, 120_000),
         "tutor": ("low", 8_000, 60_000),
         "light": ("low", 4_000, 30_000),
+        # SPEC-4001 - the document analysis of simple mode.
+        "simple_analysis": ("low", 8_000, 60_000),
     }
     assert TASK_CONFIG["programme"].capabilities == ("tools", "structured", "web_search")
 

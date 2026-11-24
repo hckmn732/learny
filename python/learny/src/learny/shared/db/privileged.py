@@ -47,6 +47,12 @@ PRIVILEGED_CALLERS: Final = MappingProxyType(
         "learny.formation.application.groups": "invitee has no membership yet (ADR-0246) and member events",
         # SPEC-2201 - failed import and adjustment reasons, programme events
         "learny.formation.application.programme": "failed import and adjustment reasons, programme events",
+        # SPEC-4001 - the four analysis steps are persisted from the worker, outside any request,
+        # and the generation job reads the modules of every member (service scope of the outbox).
+        "learny.formation.application.simple.analysis": "analysis steps persisted by the worker (SPEC-4001)",
+        "learny.formation.application.simple.generation": "generation modules read by the worker (SPEC-4001)",
+        "learny.formation.application.simple.status": "preparation state read by the worker (SPEC-4001)",
+        "learny.formation.application.simple.create": "formation lookup shared with the read model (SPEC-4001)",
         # SPEC-2202 - milestones are system-managed and read-only for the authenticated role
         "learny.learning.application.series": "milestone rows are read-only for the authenticated role",
         "learny.learning.application.final_review": "skips the reminders of a stopped interview (ADR-0112)",

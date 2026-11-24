@@ -249,3 +249,19 @@ CURSOR_INVALID = "Le curseur de pagination est illisible."
 CURSOR_INVALID_ITEM = "Curseur invalide."
 # Production start refused (SPEC-009, ADR-2040), verbatim of packages/config/src/env-shared.ts.
 CONFIGURATION_INVALID = "Configuration {scope} invalide : variables à corriger : {names}."
+
+# --------------------------------------------------------------------------------------------------
+# Mode simple (SPEC-4001 ET-2, EF-4, EF-5, EF-8, EF-10, CL-8).
+# --------------------------------------------------------------------------------------------------
+SIMPLE_NOT_SIMPLE = "Cette formation a été créée avec le tuteur : le mode simple ne s’y applique pas."
+SIMPLE_NO_COURSE_SOURCE = "Déposez au moins un document de cours prêt avant de lancer l’analyse."
+SIMPLE_TOO_MANY_SOURCES = "Une formation accepte dix documents au plus."
+SIMPLE_ANALYSIS_LOCKED = "L’analyse a commencé : les documents ne sont plus modifiables."
+SIMPLE_DEADLINE_TOO_SOON = "Choisissez une échéance dans au moins quinze jours."
+SIMPLE_NOT_FOUND = "Analyse introuvable."
+SIMPLE_STEP_FAILED = "L’analyse n’a pas pu aboutir."
+SIMPLE_AI_NOT_CONFIGURED = "Choisissez un modèle personnel pour les tâches : {tasks}."
+SIMPLE_ANALYSIS_RUNNING = "L’analyse est déjà en cours."
+DIAGNOSTIC_ALREADY_DONE = "Le diagnostic a déjà été réalisé ou passé."
+DIAGNOSTIC_NO_CHECK = "La correction immédiate n’est pas disponible pendant le diagnostic."
+SIMPLE_UPLOAD_UNSUPPORTED = "Ce format de document n’est pas pris en charge."

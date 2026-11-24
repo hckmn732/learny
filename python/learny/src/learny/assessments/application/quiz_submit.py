@@ -11,6 +11,7 @@ import json
 from collections.abc import Mapping, Sequence
 from typing import Any
 
+from learny.assessments.application import diagnostic as diagnostic_service
 from learny.assessments.application.ports import AssessmentDeps
 from learny.assessments.application.quiz import is_checked
 from learny.assessments.domain import quiz_score as score_domain
@@ -60,6 +61,21 @@ async def submit_attempt(deps: AssessmentDeps, actor: Actor, attempt_id: str) ->
     """EF-7, CL-6 - closes the attempt and emits `quiz/submitted` in the same transaction."""
     now = deps.clock.now()
     user_id = actor.user_id
+    async with deps.db.user_tx(actor) as tx:
+        attempt = await queries.read_submit_attempt(tx, user_id, attempt_id)
+    if attempt is None:
+        raise AppError("NOT_FOUND", texts.QUIZ_ATTEMPT_NOT_FOUND)
+    if str(attempt.get("kind") or "") == "diagnostic":
+        # SPEC-4001 EF-10 - a diagnostic is graded at submission, without immediate correction.
+        outcome = await diagnostic_service.grade_diagnostic_attempt(deps, actor, attempt_id)
+        return {
+            "status": "graded",
+            "pendingOpenCount": 0,
+            "_diagnostic": {
+                "formationId": outcome["formationId"],
+                "acquiredModuleIds": outcome["acquiredModuleIds"],
+            },
+        }
     async with deps.db.user_tx(actor) as tx:
         attempt = await queries.read_submit_attempt(tx, user_id, attempt_id)
         if attempt is None:
