@@ -1,7 +1,7 @@
 """Device tokens of the native push channels (SPEC-3501, ADR-3007).
 
 A token identifies one installation and authenticates the delivery: it is a credential. This module
-owns its two properties, both of them pure — the shape a token must have to be stored (EF-3, EF-4)
+owns its two properties, both of them pure - the shape a token must have to be stored (EF-3, EF-4)
 and the mask under which it may appear in a journal line (ET-4). Nothing here talks to a provider:
 only APNs and FCM know whether a well-formed token is still live.
 """
@@ -31,7 +31,7 @@ def is_push_kind(kind: object) -> bool:
 
 
 def is_valid_token(token: object) -> bool:
-    """ET-1 — the shape of a device token: bounded length, no whitespace, no separator."""
+    """ET-1 - the shape of a device token: bounded length, no whitespace, no separator."""
     if not isinstance(token, str):
         return False
     if len(token) < TOKEN_MIN_LENGTH or len(token) > TOKEN_MAX_LENGTH:
@@ -51,19 +51,19 @@ def platform_of(kind: str, platform: object = None) -> str | None:
 
 
 def mask_token(token: object) -> str:
-    """ET-4 — the only form of a token a journal line may carry: its last four characters."""
+    """ET-4 - the only form of a token a journal line may carry: its last four characters."""
     if not isinstance(token, str) or token == "":
-        return "…"
+        return "..."
     kept = token[-_MASK_KEPT:] if len(token) > _MASK_KEPT else ""
-    return f"…{kept}"
+    return f"...{kept}"
 
 
 def mask_endpoint(endpoint: object) -> str:
-    """ET-4 — a Web Push endpoint names its client in the path: only the host is journalled."""
+    """ET-4 - a Web Push endpoint names its client in the path: only the host is journalled."""
     if not isinstance(endpoint, str) or endpoint == "":
-        return "…"
+        return "..."
     host = endpoint.split("://", 1)[-1].split("/", 1)[0]
-    return host or "…"
+    return host or "..."
 
 
 __all__ = [

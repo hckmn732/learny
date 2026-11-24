@@ -253,9 +253,9 @@ def mock_push_endpoint(scope: str, outcome: MockPushOutcome) -> str:
 
 
 def mock_native_outcome_of(token: str) -> str:
-    """EF-6 — the outcome a mock native send simulates, read from the token itself.
+    """EF-6 - the outcome a mock native send simulates, read from the token itself.
 
-    A token that spells an outcome (`…-gone-…`) simulates it; anything else succeeds. The rule keeps
+    A token that spells an outcome (`...-gone-...`) simulates it; anything else succeeds. The rule keeps
     the simulated channels deterministic without any network access, exactly like the endpoint rule
     of the browser channel.
     """
@@ -378,12 +378,12 @@ def create_push_transport(
 
 
 class PushChannelRouter:
-    """Routes one round to the channel each subscription belongs to (EF-5, ADR-3007 §3).
+    """Routes one round to the channel each subscription belongs to (EF-5, ADR-3007 section 3).
 
     The unified notification service keeps its single entry point: it asks the router for one send
     per subscription and receives the same `PushSendResult` whatever the channel. Preferences,
     quiet hours, the daily cap and the journal are decided upstream and never depend on the channel.
-    A channel the configuration does not provide is reported as `channel_not_configured` — a
+    A channel the configuration does not provide is reported as `channel_not_configured` - a
     transient failure that costs one of the five attempts, never a silent success (ET-4).
     """
 

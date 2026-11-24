@@ -129,8 +129,8 @@ def build_push(settings: Settings, clock: Clock) -> PushTransport:
 
     `mock` outside production (derived from `APP_ENV`, ADR-2042) writes each send of the three
     channels into the same demonstration box (EF-6). `live` keeps the VAPID guard of the browser
-    channel — public key and subject derived from the private key and from `EMAIL_FROM`, so a
-    production process without the private key fails at startup — and adds the native channels only
+    channel - public key and subject derived from the private key and from `EMAIL_FROM`, so a
+    production process without the private key fails at startup - and adds the native channels only
     when their credentials are configured.
     """
     return create_push_channels(

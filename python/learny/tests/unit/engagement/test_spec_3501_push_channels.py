@@ -143,7 +143,7 @@ def test_a_malformed_token_is_refused(token: object) -> None:
 
 
 def test_a_token_is_never_journalled_in_clear() -> None:
-    assert mask_token(TOKEN) == "…cdef"
+    assert mask_token(TOKEN) == "...cdef"
     assert TOKEN not in mask_token(TOKEN)
     assert mask_endpoint("https://push.example.test/send/secret-client-id") == "push.example.test"
 

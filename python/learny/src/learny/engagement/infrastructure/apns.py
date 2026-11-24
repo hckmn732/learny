@@ -1,7 +1,7 @@
 """APNs channel of the native push (SPEC-3501 ET-2, ADR-3007).
 
 Apple Push Notification service: HTTP/2 to `api.push.apple.com` (or the sandbox host), one POST per
-device token, authenticated by a *provider token* — a JWT signed ES256 with the `.p8` key, carrying
+device token, authenticated by a *provider token* - a JWT signed ES256 with the `.p8` key, carrying
 the key identifier (`kid`) and the team identifier (`iss`). Apple refuses a provider token older
 than one hour and asks for a renewal every 50 minutes; the provider caches it for that long and a
 test drives the injected clock to observe the renewal.

@@ -3,7 +3,7 @@
 The suite runs inside a transaction that is always rolled back, with the push channels in
 `PUSH_MODE=mock`: the native sends land in the demonstration box of the round instead of reaching
 Apple or Google (EF-6). What is asserted is the stored row, the journal line, the demonstration box
-and the delivery counter — never a hand-written expectation of a provider answer.
+and the delivery counter - never a hand-written expectation of a provider answer.
 """
 
 import json
