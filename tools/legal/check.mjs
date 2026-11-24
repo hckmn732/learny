@@ -173,7 +173,9 @@ function checkFooter(root, errors) {
 
 function checkTests(root, errors) {
   const configTest = 'packages/config/src/legal.test.ts';
-  const acceptTest = 'packages/services/src/legal/accept.test.ts';
+  // SPEC-2302 retired `packages/services`: the Python backend (SPEC-2201) is now the only writer
+  // of an acceptance, so its integration test is the proof that the active pair is accepted.
+  const acceptTest = 'python/learny/tests/integration/identity/test_legal.py';
   for (const relative of [configTest, acceptTest]) {
     if (!exists(root, relative)) errors.push(`${relative} : test de version absent`);
   }
@@ -181,6 +183,17 @@ function checkTests(root, errors) {
     const source = read(root, configTest);
     if (!source.includes('LEGAL_VERSIONS')) {
       errors.push(`${configTest} : les versions actives ne sont pas comparées`);
+    }
+  }
+  if (exists(root, acceptTest)) {
+    const source = read(root, acceptTest);
+    // The file alone proves nothing: it must accept the active pair and read the stored rows.
+    const covered =
+      source.includes('accept_legal_versions') &&
+      /\bACTIVE\s*=/.test(source) &&
+      source.includes('legal_acceptances');
+    if (!covered) {
+      errors.push(`${acceptTest} : l'acceptation de la version active n'est pas prouvée`);
     }
   }
 }

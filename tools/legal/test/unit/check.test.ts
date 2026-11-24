@@ -35,7 +35,18 @@ beforeEach(() => {
     'packages/config/src/legal.test.ts',
     "import { LEGAL_VERSIONS } from './product';\nvoid LEGAL_VERSIONS;\n",
   );
-  write('packages/services/src/legal/accept.test.ts', "describe('[SPEC-806]', () => {});\n");
+  write(
+    'python/learny/tests/integration/identity/test_legal.py',
+    [
+      'ACTIVE = {"cguVersion": "2026-11-11", "privacyVersion": "2026-11-11"}',
+      '',
+      'async def test_accept_records_the_active_pair(database):',
+      '    result = await accept_legal_versions(deps_for(tx), actor_for(user), ACTIVE)',
+      '    rows = await one(tx.conn, "select count(*) from public.legal_acceptances")',
+      '    assert result["complete"] is True',
+      '',
+    ].join('\n'),
+  );
   write(
     'apps/web/lib/site-footer-links.ts',
     [
@@ -137,5 +148,24 @@ describe('[SPEC-806] legal:check', () => {
     expect(report.ok).toBe(false);
     expect(report.errors.join('\n')).toContain('ordre du pied de page inattendu');
     expect(report.errors.join('\n')).toContain('page apps/web/app/accessibilite/page.tsx absente');
+  });
+
+  it('SPEC-2302 — l’acceptation de la version active doit être prouvée par un test', () => {
+    fs.writeFileSync(
+      path.join(root, 'python/learny/tests/integration/identity/test_legal.py'),
+      'async def test_placeholder():\n    pass\n',
+    );
+    const report = checkLegal({ root, env: COMPLETE_IDENTITY });
+    expect(report.ok).toBe(false);
+    expect(report.errors.join('\n')).toContain(
+      "l'acceptation de la version active n'est pas prouvée",
+    );
+  });
+
+  it('SPEC-2302 — le test d’acceptation absent est une erreur nommée', () => {
+    fs.rmSync(path.join(root, 'python/learny/tests/integration/identity/test_legal.py'));
+    const report = checkLegal({ root, env: COMPLETE_IDENTITY });
+    expect(report.ok).toBe(false);
+    expect(report.errors.join('\n')).toContain('test de version absent');
   });
 });
