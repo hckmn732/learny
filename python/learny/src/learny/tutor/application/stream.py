@@ -8,6 +8,7 @@ from collections.abc import AsyncIterator, Mapping
 from typing import Any
 
 from learny.identity.domain.actor import Actor
+from learny.platform.llm.caller import AiCaller
 from learny.shared.errors import AppError
 from learny.shared.ids import new_id
 from learny.shared.locale_fr import tutor as texts
@@ -319,6 +320,7 @@ async def stream_reply(
             TUTOR_CHAT_PROMPT_ID,
             step_input(prompt),
             scenario=scenario_for(text, follow_up, context.gap_first),
+            caller=AiCaller(actor.user_id, context.formation_id),
         ).__aiter__()
         try:
             first = await anext(iterator)

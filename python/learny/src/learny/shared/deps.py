@@ -23,6 +23,7 @@ from learny.engagement.infrastructure.push import PushTransport, create_push_tra
 from learny.identity.infrastructure.gotrue import GoTrueClient
 from learny.identity.infrastructure.jwt import JwtVerifier
 from learny.platform.llm.gateway import LlmGateway, MockGateway
+from learny.platform.llm.live import LiveGateway
 from learny.platform.llm.mock import load_registry
 from learny.platform.storage import SupabaseStorage
 from learny.platform.stripe import StripeGateway, WebhookJournal, build_stripe_gateway
@@ -72,17 +73,18 @@ def build_deps(settings: Settings) -> Deps:
     stripe = build_stripe_gateway(resolve_billing_config(settings.billing_env()), clock)
     # EF-8 - the simulated mode keeps the recent webhook outcomes in memory (dev routes, SPEC-2207).
     webhook_journal = WebhookJournal() if stripe.mode == "mock" else None
+    db = Database.from_settings(settings)
     return Deps(
         settings=settings,
         clock=clock,
-        db=Database.from_settings(settings),
+        db=db,
         jwks=JwtVerifier(settings, clock, jwks_fetcher(settings)),
         gotrue=GoTrueClient(settings),
         # The Storage gateway signs with the **system** clock: Supabase checks `exp` against its own clock,
         # never against the injected one.
         storage=SupabaseStorage(settings, SystemClock()),
         logger=structlog.get_logger("learny"),
-        llm=build_llm(settings),
+        llm=build_llm(settings, db),
         email_config=email_config,
         email=create_email_transport(email_config, clock),
         push=build_push(settings, clock),
@@ -108,14 +110,15 @@ def build_push(settings: Settings, clock: Clock) -> PushTransport:
     )
 
 
-def build_llm(settings: Settings) -> LlmGateway:
-    """The AI capability of the use cases (SPEC-2201).
+def build_llm(settings: Settings, db: Database | None = None) -> LlmGateway:
+    """The AI capability of the use cases (SPEC-2201, ADR-4005).
 
-    Only the deterministic mock adapter ships with this specification: the live providers land with
-    the spec that first needs them (SPEC-2204). A non-mock mode (derived from `APP_ENV`, ADR-2042)
-    therefore fails at startup instead of silently serving simulated answers in production.
+    The deterministic mock in the simulated environments (derived from `APP_ENV`, ADR-2042), the
+    learner's own provider and key everywhere else (BYOK, BR-IA-01).
     """
     mode = settings.llm_mode or "mock"
-    if mode != "mock":
-        raise RuntimeError(f"LLM_MODE={mode} is not served yet: only the mock adapter ships")
-    return MockGateway(load_registry())
+    if mode == "mock":
+        return MockGateway(load_registry())
+    if db is None:
+        raise RuntimeError("the live AI gateway needs the database")
+    return LiveGateway(db)

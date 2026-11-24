@@ -31,6 +31,7 @@ from learny.platform.llm.qualification import (
     evaluate_task_compatibility,
     qualification_registry,
 )
+from learny.platform.llm.resolve import ResolvedModel
 from learny.platform.llm.tasks import AiTask
 from learny.platform.llm.types import StepInput, SystemPart
 from learny.platform.safe_fetch import resolve_public_url
@@ -184,7 +185,15 @@ async def create_credential(
     region = provider_region(provider)
 
     probe_started_at = deps.clock.now()
-    connection = await _probe_connection(deps, scenario=CONNECTION_SCENARIO)
+    # The new key is not stored yet: the probe calls the declared model with the plain key.
+    connection = await _probe_connection(
+        deps,
+        scenario=CONNECTION_SCENARIO,
+        model=ResolvedModel(
+            provider, probe_model_id, "", "light", base_url if isinstance(base_url, str) else None
+        ),
+        api_key=plain,
+    )
     if connection.text.strip() == "":
         raise AppError("AI_PROVIDER_ERROR", texts.CHAT_MODEL_UNCONFIRMED, status=502)
     connection_report = {
@@ -275,15 +284,35 @@ def _connection_input() -> StepInput:
     )
 
 
-async def _probe_connection(deps: TutorDeps, *, scenario: str) -> Any:
-    """One connection probe on the qualification fixtures of the session."""
+async def _probe_connection(
+    deps: TutorDeps,
+    *,
+    scenario: str,
+    model: ResolvedModel | None = None,
+    api_key: str | None = None,
+) -> Any:
+    """One connection probe: the fixtures in simulation, the probed model itself when live."""
     session = deps.llm.session(
         "light",
         CONNECTION_PROMPT_ID,
         scenario=scenario,
         fixtures=qualification_registry(),
+        model=model,
+        api_key=api_key,
     )
     return await session.step(_connection_input())
+
+
+def _probe_model(row: Mapping[str, Any], credential_id: str, model_id: str, task: AiTask) -> ResolvedModel:
+    """The stored key a probe targets; the live gateway decrypts it from `credential_id`."""
+    base_url = row.get("base_url")
+    return ResolvedModel(
+        str(row.get("provider") or ""),
+        model_id,
+        credential_id,
+        task,
+        base_url if isinstance(base_url, str) and base_url else None,
+    )
 
 
 async def _load_probe_credential(
@@ -343,11 +372,12 @@ async def _check_credential_connection(
     scenario: str | None,
 ) -> dict[str, Any]:
     """`checkCredentialConnection`: one light probe, then the `qualified` status and its date."""
-    await _load_probe_credential(deps, actor, credential_id, model_id)
+    row = await _load_probe_credential(deps, actor, credential_id, model_id)
     started_at = deps.clock.now()
     connected = await _probe_connection(
         deps,
         scenario=scenario if scenario is not None else CONNECTION_SCENARIO,
+        model=_probe_model(row, credential_id, model_id, "light"),
     )
     if connected.text.strip() == "":
         raise AppError("AI_PROVIDER_ERROR", texts.CHAT_MODEL_UNCONFIRMED)
@@ -387,12 +417,13 @@ async def _check_task_compatibility(
     scenario: str | None,
 ) -> dict[str, Any]:
     """`checkTaskCompatibility`: only the probes of the task, persisted under their tuple."""
-    await _load_probe_credential(deps, actor, credential_id, model_id)
+    row = await _load_probe_credential(deps, actor, credential_id, model_id)
     session = deps.llm.session(
         task,
         COMPATIBILITY_PROMPT_ID,
         scenario=scenario if scenario is not None else f"compatibility-{task}-success",
         fixtures=qualification_registry(),
+        model=_probe_model(row, credential_id, model_id, task),
     )
     report = await evaluate_task_compatibility(
         credential_id=credential_id,

@@ -19,6 +19,7 @@ from learny.identity.public import (
     assert_legal_acceptance,
     authenticate,
 )
+from learny.platform.llm.caller import ai_caller
 from learny.shared.errors import AppError, ErrorEntry, to_problem
 from learny.shared.ids import new_id
 from learny.shared.jsonx import dumps
@@ -321,20 +322,21 @@ async def handle(spec: RouteSpec, request: Request, context: PipelineContext) ->
                 raise AppError("UNAUTHENTICATED", UNAUTHENTICATED)
             await assert_legal_acceptance(context.deps, actor, spec.id)
         function = context.handlers[spec.id]
-        payload = await function(
-            Call(
-                deps=context.deps,
-                actor=actor,
-                request_id=request_id,
-                params=params,
-                query=query,
-                body=body,
-                request=request,
-                ip=ip if ip is not None else "unknown",
-                logger=logger(),
-                response_headers=extra,
-            ),
-        )
+        with ai_caller(None if actor is None else actor.user_id, request.path_params.get("fid")):
+            payload = await function(
+                Call(
+                    deps=context.deps,
+                    actor=actor,
+                    request_id=request_id,
+                    params=params,
+                    query=query,
+                    body=body,
+                    request=request,
+                    ip=ip if ip is not None else "unknown",
+                    logger=logger(),
+                    response_headers=extra,
+                ),
+            )
         if isinstance(payload, Response):
             return _direct(spec, request_id, payload, extra, duration())
         checked = _check_output(spec, payload, logger())

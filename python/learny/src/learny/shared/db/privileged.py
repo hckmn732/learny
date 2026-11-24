@@ -34,6 +34,9 @@ PRIVILEGED_CALLERS: Final = MappingProxyType(
         "learny.learning.application.review": "quiz smoothing automation journal row",
         # Storage objects and export archives are signed or written with the service role.
         "learny.platform.storage": "signed URLs and export objects",
+        # The live AI gateway runs inside jobs too: it reads the caller's own key (scoped by user_id)
+        # and appends the call journal, which has no insert policy for learners (BR-IA-08, ADR-4005).
+        "learny.platform.llm.live": "BYOK key read and ai_calls journal (ADR-4005)",
         # Admin Auth calls (user creation, deletion) need the service role key.
         "learny.identity.infrastructure.gotrue": "GoTrue admin endpoints",
         # SPEC-2201 - outbox metadata of the cadrage conclusion (ADR-0246)

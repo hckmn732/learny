@@ -94,3 +94,16 @@ def personal_label(provider_label: str, model_id: str | None) -> str:
     if model_id is None:
         return f"{provider_label} · ma clé"
     return f"{provider_label} · {model_id}"
+
+
+# --- appels aux fournisseurs (passerelle réelle, ADR-4005 ; textes de packages/llm/src/errors.ts) ---
+
+AI_KEY_REFUSED = "La clé du fournisseur d’IA est refusée."
+AI_KEY_MISSING = "Aucune clé utilisable pour ce fournisseur d’IA."
+AI_RATE_LIMITED = "Le fournisseur d’IA limite temporairement les appels."
+AI_TIMEOUT = "Le modèle n’a pas répondu dans le délai imparti."
+AI_CONTEXT_TOO_LONG = "Le contexte envoyé au modèle dépasse sa fenêtre maximale."
+AI_REFUSED = "Le modèle a refusé de produire une réponse."
+AI_PROVIDER_UNAVAILABLE = "Le fournisseur d’IA est momentanément indisponible."
+AI_PROVIDER_MISCONFIGURED = "Fournisseur d’IA mal configuré : adresse de service absente."
+AI_INVALID_OUTPUT = "La sortie du modèle ne respecte pas le schéma attendu."

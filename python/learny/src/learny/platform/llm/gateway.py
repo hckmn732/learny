@@ -14,6 +14,7 @@ from typing import Any, Protocol
 
 from pydantic import BaseModel, ValidationError
 
+from learny.platform.llm.caller import AiCaller
 from learny.platform.llm.mock import (
     ErrorStep,
     FixtureFile,
@@ -25,6 +26,7 @@ from learny.platform.llm.mock import (
     select_fixture,
     strip_mock_markers,
 )
+from learny.platform.llm.resolve import ResolvedModel
 from learny.platform.llm.tasks import AiTask
 from learny.platform.llm.types import (
     StepInput,
@@ -66,6 +68,7 @@ class LlmGateway(Protocol):
         input: StepInput,
         *,
         scenario: str | None = None,
+        caller: AiCaller | None = None,
     ) -> StepOutput: ...
 
     async def object(
@@ -76,6 +79,7 @@ class LlmGateway(Protocol):
         input: StepInput,
         *,
         scenario: str | None = None,
+        caller: AiCaller | None = None,
     ) -> BaseModel: ...
 
     def stream(
@@ -85,6 +89,7 @@ class LlmGateway(Protocol):
         input: StepInput,
         *,
         scenario: str | None = None,
+        caller: AiCaller | None = None,
     ) -> AsyncIterator[str]: ...
 
     def session(
@@ -94,6 +99,9 @@ class LlmGateway(Protocol):
         *,
         scenario: str | None = None,
         fixtures: Sequence[RegisteredFixture] | None = None,
+        caller: AiCaller | None = None,
+        model: ResolvedModel | None = None,
+        api_key: str | None = None,
     ) -> LlmSession: ...
 
 
@@ -202,6 +210,7 @@ class MockGateway:
         input: StepInput,
         *,
         scenario: str | None = None,
+        caller: AiCaller | None = None,
     ) -> StepOutput:
         fixture = self.fixture(task, prompt_id, input, scenario)
         for step in fixture.steps:
@@ -217,6 +226,7 @@ class MockGateway:
         input: StepInput,
         *,
         scenario: str | None = None,
+        caller: AiCaller | None = None,
     ) -> BaseModel:
         fixture = self.fixture(task, prompt_id, input, scenario)
         for step in fixture.steps:
@@ -235,6 +245,7 @@ class MockGateway:
         input: StepInput,
         *,
         scenario: str | None = None,
+        caller: AiCaller | None = None,
     ) -> AsyncIterator[str]:
         fixture = self.fixture(task, prompt_id, input, scenario)
         for step in fixture.steps:
@@ -256,6 +267,9 @@ class MockGateway:
         *,
         scenario: str | None = None,
         fixtures: Sequence[RegisteredFixture] | None = None,
+        caller: AiCaller | None = None,
+        model: ResolvedModel | None = None,
+        api_key: str | None = None,
     ) -> LlmSession:
         """One session whose fixture steps are consumed in order."""
         return MockSession(

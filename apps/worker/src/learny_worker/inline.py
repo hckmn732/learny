@@ -18,6 +18,7 @@ from collections.abc import Iterable
 from typing import Any
 
 import structlog
+from learny.platform.llm.caller import ai_caller
 from learny.shared.db.uow import collect_committed_events
 from learny.shared.outbox.errors import PermanentJobError
 from learny.shared.outbox.events import Event
@@ -64,7 +65,8 @@ async def _execute(
 ) -> None:
     for execution in range(1, MAX_INLINE_EXECUTIONS + 1):
         try:
-            await consumer.run(deps, event)
+            with ai_caller(event.user_id, _formation_of(event)):
+                await consumer.run(deps, event)
             return
         except PermanentJobError as error:
             log.error(
@@ -132,3 +134,9 @@ def next_depth(depth: int) -> int | None:
     """The depth of the events produced by a consumer, or None when the cap is reached."""
     candidate = depth + 1
     return candidate if candidate <= MAX_INLINE_DEPTH else None
+
+
+def _formation_of(event: Any) -> str | None:
+    """The formation an event belongs to, for the AI journal (ADR-4005)."""
+    value = event.data.get("formationId") if hasattr(event.data, "get") else None
+    return value if isinstance(value, str) and value else None

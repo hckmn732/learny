@@ -19,6 +19,7 @@ READ_TASK_MODEL = text(
     select tm.credential_id::text as credential_id,
            tm.model_id,
            c.provider::text as provider,
+           c.base_url,
            c.model_ids
       from public.ai_task_models tm
       left join public.ai_credentials c
@@ -39,6 +40,7 @@ class ResolvedModel:
     model_id: str
     credential_id: str
     task: AiTask
+    base_url: str | None = None
 
 
 def _unavailable(reason: str) -> AppError:
@@ -70,4 +72,5 @@ async def resolve_task_model(tx: Tx, user_id: str, task: AiTask) -> ResolvedMode
         model_id=str(row["model_id"]),
         credential_id=str(row["credential_id"]),
         task=task,
+        base_url=None if row["base_url"] is None else str(row["base_url"]),
     )

@@ -287,3 +287,4 @@ Origine : **Validée** = décision prise avec le porteur du projet ; **Déduite*
 | [ADR-4002](ADR-4002-application-mobile-iso-web-en-fonctionnalites.md) | Application mobile iso web en fonctionnalités (remplace ADR-3002) | Validée | ADR-3002, ADR-3001, ADR-3003, ADR-3006, ADR-4001, ADR-4003, SPEC-4003 |
 | [ADR-4003](ADR-4003-mode-simple-creation-d-une-formation-par-depot-de-documents.md) | Mode simple : création d'une formation par dépôt de documents | Validée | ADR-0005, ADR-0008, ADR-0039, ADR-0340, ADR-4001, ADR-4002, SPEC-605, SPEC-607, SPEC-608, SPEC-4001, SPEC-4002, SPEC-4003 |
 | [ADR-4004](ADR-4004-branche-unique-main.md) | Branche unique `main` | Validée | ADR-1006, ADR-3001, ADR-4001, ADR-4002 |
+| [ADR-4005](ADR-4005-passerelle-llm-reelle-du-backend-python.md) | Passerelle LLM réelle du backend Python | Validée | ADR-0340, ADR-0341, ADR-2011, ADR-2042, ADR-2043, SPEC-504, SPEC-505, SPEC-506, SPEC-2201, SPEC-2204 |

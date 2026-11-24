@@ -48,17 +48,28 @@ class RecordingGateway:
     def _record(self, task: str, prompt_id: str, scenario: str | None, input: Any) -> None:
         self.calls.append({"task": task, "promptId": prompt_id, "scenario": scenario, "input": input})
 
-    async def step(self, task: Any, prompt_id: str, input: Any, *, scenario: Any = None) -> Any:
+    async def step(
+        self, task: Any, prompt_id: str, input: Any, *, scenario: Any = None, caller: Any = None
+    ) -> Any:
         self._record(task, prompt_id, scenario, input)
         return await self._inner.step(task, prompt_id, input, scenario=scenario)
 
     async def object(
-        self, task: Any, prompt_id: str, schema: Any, input: Any, *, scenario: Any = None
+        self,
+        task: Any,
+        prompt_id: str,
+        schema: Any,
+        input: Any,
+        *,
+        scenario: Any = None,
+        caller: Any = None,
     ) -> Any:
         self._record(task, prompt_id, scenario, input)
         return await self._inner.object(task, prompt_id, schema, input, scenario=scenario)
 
-    async def stream(self, task: Any, prompt_id: str, input: Any, *, scenario: Any = None) -> Any:
+    async def stream(
+        self, task: Any, prompt_id: str, input: Any, *, scenario: Any = None, caller: Any = None
+    ) -> Any:
         self._record(task, prompt_id, scenario, input)
         async for chunk in self._inner.stream(task, prompt_id, input, scenario=scenario):
             yield chunk
@@ -70,6 +81,9 @@ class RecordingGateway:
         *,
         scenario: Any = None,
         fixtures: Any = None,
+        caller: Any = None,
+        model: Any = None,
+        api_key: Any = None,
     ) -> Any:
         """A mock session over the given fixtures, recorded like the other entry points."""
         self._record(task, prompt_id, scenario, None)

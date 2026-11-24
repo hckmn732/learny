@@ -15,6 +15,7 @@ from datetime import timedelta
 from typing import Any
 
 import structlog
+from learny.platform.llm.caller import ai_caller
 from learny.shared.outbox import deliveries as outbox
 from learny.shared.outbox.errors import PermanentJobError
 from learny.shared.outbox.events import Delivery, Event
@@ -119,7 +120,8 @@ class Runner:
         try:
             if consumer is None:
                 raise PermanentJobError("UNKNOWN_CONSUMER", delivery.consumer)
-            await asyncio.wait_for(consumer.run(self._deps, event), timeout=consumer.timeout_s)
+            with ai_caller(event.user_id, _formation_of(event)):
+                await asyncio.wait_for(consumer.run(self._deps, event), timeout=consumer.timeout_s)
         except Exception as error:
             await self._failed(delivery, consumer, error)
             return
@@ -178,3 +180,9 @@ def _describe(error: BaseException) -> str:
     if isinstance(error, TimeoutError):
         return "TIMEOUT: the consumer exceeded its timeout"
     return f"{type(error).__name__}: {str(error)[:200]}"
+
+
+def _formation_of(event: Any) -> str | None:
+    """The formation an event belongs to, for the AI journal (ADR-4005)."""
+    value = event.data.get("formationId") if hasattr(event.data, "get") else None
+    return value if isinstance(value, str) and value else None
