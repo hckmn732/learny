@@ -70,8 +70,8 @@ def test_headings_are_used_when_no_bookmark_nor_contents_exist() -> None:
 def test_without_any_structure_the_document_is_cut_in_fifteen_page_blocks() -> None:
     sections = detect_sections(pages(40))
     assert len(sections) == 3
-    assert sections[0].page_from == 1 and sections[0].page_to == FALLBACK_PAGES
-    assert sections[2].page_from == 31 and sections[2].page_to == 40
+    assert (sections[0].page_from, sections[0].page_to) == (1, FALLBACK_PAGES)
+    assert (sections[2].page_from, sections[2].page_to) == (31, 40)
 
 
 def test_a_document_without_pages_gives_one_section() -> None:

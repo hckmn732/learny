@@ -60,7 +60,7 @@ async def seed_ready_document(
     *,
     role: str,
     pages: int,
-    bookmarks: list[list[Any]] | None = None,
+    bookmarks: list[tuple[int, str]] | list[list[Any]] | None = None,
     chunks: list[tuple[int, str]] | None = None,
 ) -> None:
     """Simulates the ingestion of a deposited document: ready, pages, bookmarks and passages."""
@@ -230,12 +230,12 @@ async def test_full_flow_mock(database: Database) -> None:
             async def generate_course(self, _deps: Any, _user: str, module_id: str, _event: str) -> None:
                 generated.append(module_id)
 
-        original = worker_consumers.tutor
-        worker_consumers.tutor = Recorder()  # type: ignore[assignment]
+        original = worker_consumers.tutor  # type: ignore[attr-defined]
+        worker_consumers.tutor = Recorder()  # type: ignore[attr-defined,assignment]
         try:
             await worker_consumers.formation_simple_generation(deps, _event(user, formation_id))
         finally:
-            worker_consumers.tutor = original
+            worker_consumers.tutor = original  # type: ignore[attr-defined]
         return {"generated": generated, "formation_id": formation_id}
 
     result = await rolled_back(database, run)

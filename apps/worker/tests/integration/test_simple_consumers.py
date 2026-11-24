@@ -121,7 +121,7 @@ async def test_a_failed_analysis_is_resumed_from_the_first_unfinished_step(datab
         deps, user, formation_id = await ready_formation(tx)
         await simple_analysis.launch_analysis(deps, actor_for(user), formation_id)
         failing = FailingLlm()
-        deps.llm = failing  # type: ignore[assignment]
+        deps.llm = failing
         with pytest.raises(AppError):
             await simple_analysis.run_analysis(deps, user, formation_id)
         failed = await one(

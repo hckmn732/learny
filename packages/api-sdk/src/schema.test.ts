@@ -22,7 +22,7 @@ describe('[SPEC-2002] generated SDK', () => {
       .map((operation) => operation.id)
       .filter((id) => !source.includes(`"${id}"`));
     expect(missing).toEqual([]);
-    expect(inventory.operations).toHaveLength(157);
+    expect(inventory.operations).toHaveLength(165);
   });
 
   it('types a read operation and its errors from the contract', () => {
