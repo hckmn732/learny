@@ -24,7 +24,6 @@ const SOURCE = path.join(
   'SPEC-3502',
   'artifacts',
   'spec-3502-captures-store',
-  'takeScreenshot',
 );
 const TARGET = path.join(HERE, 'screenshots', 'android-phone');
 const WIDTH = 1080;

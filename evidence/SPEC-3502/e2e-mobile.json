@@ -1,0 +1,74 @@
+{
+  "spec": "SPEC-3502",
+  "platform": "android",
+  "transport": "local",
+  "device": {
+    "platform": "android",
+    "model": "sdk_gphone64_x86_64",
+    "apiLevel": "35",
+    "size": "Physical size: 1080x2400"
+  },
+  "tags": [
+    "SPEC-3502"
+  ],
+  "startedAt": "2026-11-24T12:33:58.397Z",
+  "finishedAt": "2026-11-24T12:36:12.826Z",
+  "passed": 2,
+  "failed": 0,
+  "videos": 1,
+  "campaignVideo": "artifacts/campagne/campagne.mp4",
+  "visual": 1,
+  "junitCases": 2,
+  "flows": [
+    {
+      "file": "apps/mobile/e2e/flows/SPEC-3502-captures-store.yaml",
+      "name": "SPEC-3502 captures store",
+      "tags": [
+        "SPEC-3502",
+        "visual"
+      ],
+      "status": "passed",
+      "durationSec": 41.122,
+      "message": null,
+      "videos": [],
+      "screenshots": [
+        "artifacts/spec-3502-captures-store/SPEC-3502-budgets.png",
+        "artifacts/spec-3502-captures-store/SPEC-3502-store-agenda.png",
+        "artifacts/spec-3502-captures-store/SPEC-3502-store-aujourdhui.png",
+        "artifacts/spec-3502-captures-store/SPEC-3502-store-cours.png",
+        "artifacts/spec-3502-captures-store/SPEC-3502-store-profil.png",
+        "artifacts/spec-3502-captures-store/SPEC-3502-store-reviser.png",
+        "artifacts/spec-3502-captures-store/SPEC-3502-store-tuteur.png"
+      ],
+      "visual": {
+        "flow": "SPEC-3502 captures store",
+        "status": "passed",
+        "diffRatio": 0,
+        "capture": "/root/learny-mobile/test-results/sdd/SPEC-3502/artifacts/spec-3502-captures-store/SPEC-3502-budgets.png",
+        "baseline": "/root/learny-mobile/apps/mobile/e2e/visual/baselines/SPEC-3502-captures-store.png",
+        "diff": "/root/learny-mobile/test-results/sdd/SPEC-3502/artifacts/spec-3502-captures-store/SPEC-3502-captures-store.diff.png"
+      }
+    },
+    {
+      "file": "apps/mobile/e2e/flows/SPEC-3502-parcours.yaml",
+      "name": "SPEC-3502 parcours",
+      "tags": [
+        "SPEC-3502"
+      ],
+      "status": "passed",
+      "durationSec": 88.863,
+      "message": null,
+      "videos": [],
+      "screenshots": [],
+      "visual": null
+    }
+  ],
+  "visualChecks": [
+    {
+      "flow": "SPEC-3502 captures store",
+      "status": "passed",
+      "diffRatio": 0
+    }
+  ],
+  "unattributed": []
+}

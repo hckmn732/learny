@@ -27,12 +27,7 @@ function Row({ testID, label, value }: RowProps) {
       <Text variant="caption" tone="muted">
         {label}
       </Text>
-      <Text
-        variant="body"
-        testID={testID}
-        accessibilityRole="text"
-        accessibilityLabel={`${label} : ${value}`}
-      >
+      <Text variant="body" testID={testID}>
         {value}
       </Text>
     </View>
@@ -50,7 +45,7 @@ export default function Spec3502Route() {
       <Text variant="eyebrow" tone="muted">
         {t.eyebrow}
       </Text>
-      <Text variant="largeTitle" accessibilityRole="header" testID="sdd-3502-title">
+      <Text variant="largeTitle" testID="sdd-3502-title">
         {t.title}
       </Text>
 

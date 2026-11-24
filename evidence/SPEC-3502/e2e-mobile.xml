@@ -1,0 +1,15 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<testsuites>
+  <testsuite name="Test Suite" device="learny" tests="2" failures="0" time="130.019" timestamp="2026-11-24T12:34:01">
+    <testcase id="SPEC-3502 captures store" name="SPEC-3502 captures store" classname="SPEC-3502 captures store" file="apps/mobile/e2e/flows/SPEC-3502-captures-store.yaml" time="41.122" timestamp="2026-11-24T12:34:01" status="SUCCESS">
+      <properties>
+        <property name="tags" value="SPEC-3502, visual"/>
+      </properties>
+    </testcase>
+    <testcase id="SPEC-3502 parcours" name="SPEC-3502 parcours" classname="SPEC-3502 parcours" file="apps/mobile/e2e/flows/SPEC-3502-parcours.yaml" time="88.863" timestamp="2026-11-24T12:34:42" status="SUCCESS">
+      <properties>
+        <property name="tags" value="SPEC-3502"/>
+      </properties>
+    </testcase>
+  </testsuite>
+</testsuites>

@@ -67,22 +67,48 @@ const dump = adb(['shell', 'uiautomator', 'dump', '/sdcard/window.xml']);
 const xml = adb(['shell', 'cat', '/sdcard/window.xml']);
 const todayVisible = /Aujourd/u.test(xml) || /today-screen/u.test(xml);
 
+// Garde : les mesures d'appui et de défilement exigent l'écran Aujourd'hui au premier plan.
+// `--skip-guard` sert quand l'appelant vient de vérifier l'écran (le dump uiautomator est alors
+// inutile et coûteux) ; sans lui, le script relance l'application et attend Aujourd'hui.
+const skipGuard = process.argv.includes('--skip-guard');
+if (!skipGuard) {
+adb(['shell', 'am', 'force-stop', PACKAGE]);
+sleep(500);
+adb(['shell', 'am', 'start', '-W', '-n', ACTIVITY]);
+sleep(2500);
+let onToday = false;
+for (let attempt = 0; attempt < 15 && !onToday; attempt += 1) {
+  adb(['shell', 'uiautomator', 'dump', '/sdcard/ready.xml']);
+  const ready = adb(['shell', 'cat', '/sdcard/ready.xml']);
+  onToday = /Aujourd/u.test(ready);
+  if (!onToday) sleep(1000);
+}
+if (!onToday) {
+  console.error("✖ l'écran Aujourd'hui n'est pas affiché : mesures d'appui et de défilement annulées.");
+  process.exit(3);
+}
+}
+if (process.argv.includes('--guard-only')) process.exit(0);
+
 // 2. Réponse à un appui -----------------------------------------------------
 adb(['shell', 'dumpsys', 'gfxinfo', PACKAGE, 'reset']);
+// Appuis sur la barre d'onglets native : Aujourd'hui (108) puis Programme (324), quatre fois.
 for (let i = 0; i < 4; i += 1) {
-  adb(['shell', 'input', 'tap', '540', '1200']);
-  sleep(500);
-  adb(['shell', 'input', 'tap', '540', '2200']);
-  sleep(500);
+  adb(['shell', 'input', 'tap', '108', '2280']);
+  sleep(700);
+  adb(['shell', 'input', 'tap', '324', '2280']);
+  sleep(700);
 }
+adb(['shell', 'input', 'tap', '108', '2280']);
+sleep(1200);
 const frameStats = adb(['shell', 'dumpsys', 'gfxinfo', PACKAGE, 'framestats']);
 const latencies = [];
 const rows = frameStats.split('\n').filter((line) => /^\d+,/u.test(line.trim()));
 for (const row of rows) {
   const cells = row.trim().split(',').map((cell) => Number(cell.trim()));
-  // Colonnes de gfxinfo framestats : 0 FLAGS, 1 INTENDED_VSYNC, 4 OLDEST_INPUT_EVENT,
-  // 5 HANDLE_INPUT_START, 13 FRAME_COMPLETED.
-  const oldestInput = cells[4];
+  // Colonnes de gfxinfo framestats : 0 FLAGS, 1 INTENDED_VSYNC, 2 VSYNC, 3 OLDEST_INPUT_EVENT,
+  // 4 NEWEST_INPUT_EVENT, 5 HANDLE_INPUT_START, 13 FRAME_COMPLETED.
+  const oldestInput = cells[3];
   const completed = cells[13];
   if (Number.isFinite(oldestInput) && Number.isFinite(completed) && oldestInput > 0 && completed > oldestInput) {
     latencies.push((completed - oldestInput) / 1e6);

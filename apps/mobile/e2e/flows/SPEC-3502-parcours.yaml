@@ -189,25 +189,13 @@ tags:
     visible:
       id: replan
     timeout: 20000
-# La replanification est proposée par le serveur : le créneau du 11 novembre 2026 est passé pour
-# l'horloge réelle de la pile (24 novembre), donc l'API refuse une alternative et la feuille reste
-# vide. Les trois étapes sont donc `optional` : le flux exerce la replanification quand le serveur
-# propose des créneaux (c'était le cas de SPEC-3203) et atteste sinon que l'agenda reste intact.
-# La replanification elle-même est prouvée par `test/agenda/replan-sheet.test.tsx` et SPEC-3203.
-- tapOn:
+# CA-1 — la replanification est proposée par l'agenda (action « Replanifier » du créneau
+# sélectionné). La confirmation n'est pas rejouée ici : le créneau du jeu de démonstration est daté
+# du 11 novembre 2026 et l'API refuse une alternative pour un créneau passé (horloge réelle de la
+# pile). La limite est consignée dans `evidence/SPEC-3502/acceptance.md` § 5.5 ; le déplacement
+# lui-même est prouvé par `test/agenda/replan-sheet.test.tsx` et par SPEC-3203.
+- assertVisible:
     id: replan
-    optional: true
-- extendedWaitUntil:
-    visible:
-      id: replan-option-0
-    timeout: 15000
-    optional: true
-- tapOn:
-    id: replan-option-0
-    optional: true
-- tapOn:
-    id: replan-confirm
-    optional: true
 - extendedWaitUntil:
     visible:
       id: agenda-screen

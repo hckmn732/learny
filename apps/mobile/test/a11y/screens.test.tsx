@@ -73,7 +73,7 @@ type Demo = typeof import('./demo');
  * renvoie `any` par conception ; la conversion vers `Demo` rétablit le type.
  */
 const demoOf = <K extends keyof Demo>(key: K): Demo[K] =>
-  (jest.requireActual('./demo') as Demo)[key];
+  jest.requireActual<Demo>('./demo')[key];
 
 jest.mock('../../src/auth/session', () => demoOf('session'));
 jest.mock('../../src/data/home', () => demoOf('home'));
