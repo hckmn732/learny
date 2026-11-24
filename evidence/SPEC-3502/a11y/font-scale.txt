@@ -1,0 +1,19 @@
+=== texte 200 % ===
+2.0
+=== lancement de l application, session de demonstration ===
+Starting: Intent { cmp=fr.learny.app/.MainActivity }
+Status: ok
+LaunchState: COLD
+Activity: fr.learny.app/.MainActivity
+TotalTime: 2011
+WaitTime: 2036
+Complete
+Starting: Intent { act=android.intent.action.VIEW dat=learny://connexion/... }
+Warning: Activity not started, intent has been delivered to currently running top-most instance.
+a11y-aujourdhui : 46 libellés
+a11y-profil : 37 libellés
+a11y-retour : 23 libellés
+=== restauration ===
+1.0
+=== animations reduites ===
+0

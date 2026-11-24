@@ -25,7 +25,7 @@ for (const file of storeFiles()) {
   }
   fs.mkdirSync(path.dirname(target), { recursive: true });
   fs.writeFileSync(target, file.content);
-  console.log(`✔ ${file.path} (${String(Array.from(file.content).length)} caractères)`);
+  console.log(`✔ ${file.path} (${String([...file.content].length)} caractères)`);
 }
 
 if (drift.length > 0) {

@@ -1,0 +1,143 @@
+# SPEC-3502 — captures des stores et page de démonstration (EF-4, § 10 ; CA-1, CA-2).
+#
+# Unique flux `@visual` de la spécification. La **première** capture est la page
+# `/_dev/sdd/SPEC-3502` (budgets, audit, builds, fiches) : c'est elle que le lanceur compare à
+# `e2e/visual/baselines/SPEC-3502-captures-store.png` (écart ≤ 12 %, ADR-3003 § 4), parce que le
+# runner retient la première capture du flux dans l'ordre des noms. Les captures suivantes sont les
+# visuels des fiches de stores (`SPEC-3502-store-*`), découpés en 1080 × 2160 par
+# `store/crop-screenshots.mjs` : aucune n'est comparée.
+#
+# Le flux ne mute rien : il ouvre des écrans en lecture (Aujourd'hui, cours, tuteur, réviser,
+# agenda, profil) et revient. La page de démonstration n'existe que dans un build SDD
+# (`EXPO_PUBLIC_ENABLE_SDD_PAGES=1`), jamais en production.
+appId: fr.learny.app
+name: SPEC-3502 captures store
+tags:
+  - SPEC-3502
+  - visual
+---
+- launchApp:
+    clearState: true
+- extendedWaitUntil:
+    visible:
+      id: sdd-health
+    timeout: 30000
+- openLink: learny://connexion?demo=1
+- waitForAnimationToEnd:
+    timeout: 5000
+- runFlow:
+    when:
+      visible:
+        id: onboarding-error
+    commands:
+      - tapOn:
+          id: onboarding-error-retry
+- extendedWaitUntil:
+    visible:
+      id: tab-aujourdhui
+    timeout: 60000
+# § 10 — la page de démonstration, capture de référence (avant toute autre capture).
+- openLink: learny://_dev/sdd/SPEC-3502
+- extendedWaitUntil:
+    visible:
+      id: sdd-3502
+    timeout: 30000
+- assertVisible:
+    id: sdd-3502-startup
+- assertVisible:
+    id: sdd-3502-tap
+- assertVisible:
+    id: sdd-3502-scroll
+- assertVisible:
+    id: sdd-3502-size
+- assertVisible:
+    id: sdd-3502-screens
+- assertVisible:
+    id: sdd-3502-builds
+- assertVisible:
+    id: sdd-3502-store
+- waitForAnimationToEnd:
+    timeout: 3000
+- takeScreenshot: SPEC-3502-budgets
+# EF-4 — visuels de la fiche : Aujourd'hui.
+- openLink: learny://aujourdhui
+- extendedWaitUntil:
+    visible:
+      id: today-screen
+    timeout: 30000
+- waitForAnimationToEnd:
+    timeout: 3000
+- takeScreenshot: SPEC-3502-store-aujourdhui
+# EF-4 — le cours, depuis le programme (chapitre 2 du module 3, jeu de démonstration).
+- tapOn:
+    id: tab-programme
+- extendedWaitUntil:
+    visible:
+      id: programme-screen
+    timeout: 30000
+- swipe:
+    start: 50%, 80%
+    end: 50%, 45%
+    duration: 500
+- extendedWaitUntil:
+    visible:
+      id: chapter-74e85d27-6960-51a1-b712-ab9cc7aba756
+    timeout: 20000
+- tapOn:
+    id: chapter-74e85d27-6960-51a1-b712-ab9cc7aba756
+- extendedWaitUntil:
+    visible:
+      id: course-header
+    timeout: 20000
+- waitForAnimationToEnd:
+    timeout: 3000
+- takeScreenshot: SPEC-3502-store-cours
+# EF-4 — le tuteur (feuille), ouvert par lien profond.
+- openLink: learny://tuteur
+- extendedWaitUntil:
+    visible:
+      id: tutor-sheet
+    timeout: 20000
+- waitForAnimationToEnd:
+    timeout: 3000
+- takeScreenshot: SPEC-3502-store-tuteur
+- tapOn:
+    id: tutor-close
+- extendedWaitUntil:
+    notVisible:
+      id: tutor-sheet
+    timeout: 10000
+# EF-4 — Réviser, en lecture (aucune note n'est envoyée).
+- openLink: learny://reviser
+- extendedWaitUntil:
+    visible:
+      id: review-screen
+    timeout: 30000
+- waitForAnimationToEnd:
+    timeout: 3000
+- takeScreenshot: SPEC-3502-store-reviser
+# EF-4 — l'agenda du 11 novembre, en lecture.
+- openLink: learny://agenda
+- extendedWaitUntil:
+    visible:
+      id: agenda-screen
+    timeout: 30000
+- waitForAnimationToEnd:
+    timeout: 3000
+- takeScreenshot: SPEC-3502-store-agenda
+# EF-4 — le profil, en lecture.
+- openLink: learny://profil
+- extendedWaitUntil:
+    visible:
+      id: profil-screen
+    timeout: 30000
+- waitForAnimationToEnd:
+    timeout: 3000
+- takeScreenshot: SPEC-3502-store-profil
+# Retour à l'onglet Aujourd'hui : la campagne laisse l'application dans son état d'entrée.
+- tapOn:
+    id: tab-aujourdhui
+- extendedWaitUntil:
+    visible:
+      id: today-screen
+    timeout: 20000

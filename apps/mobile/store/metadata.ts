@@ -219,5 +219,5 @@ export const REQUIRED_REASON_APIS = [
  * démonstration partagent exactement la même règle.
  */
 export function withinLimit(value: string, limit: number): boolean {
-  return Array.from(value).length <= limit;
+  return [...value].length <= limit;
 }

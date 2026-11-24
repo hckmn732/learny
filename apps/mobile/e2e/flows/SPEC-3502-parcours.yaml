@@ -1,0 +1,278 @@
+# SPEC-3502 — parcours de bout en bout Android (EF-1, CA-1).
+#
+# Connexion → Aujourd'hui → cours → tuteur → quiz de validation → Réviser hors ligne → agenda
+# (replanifier) → profil → déconnexion, dans un seul flux, avec la vidéo de campagne
+# (`MOBILE_RECORD_VIDEO=1`). La plateforme iOS est déclarée dans `acceptance.md` : sans macOS, le
+# même fichier ne peut pas y être exécuté (`- runFlow: when: platform: iOS` est proscrit par ADR-3015,
+# la variante iOS est donc une dépendance externe, pas un flux conditionnel).
+#
+# État préparé : la tentative de validation est celle de `e2e/sql/SPEC-3304-seed-quiz.sql` (module 3
+# du jeu de démonstration ; la banque de questions n'est jamais régénérée sur la pile locale, donc
+# `POST /quiz/attempts` resterait « preparing »). Le flux répond à une question puis quitte : la
+# tentative reste reprenable et `SPEC-3304-cleanup-quiz.sql` la supprime en fin de campagne.
+#
+# Précautions Maestro 2.12.1 : `scrollUntilVisible` n'est pas fiable, les assertions portent sur des
+# `id`, les défilements sont bornés et les retours utilisent la touche système `back`.
+appId: fr.learny.app
+name: SPEC-3502 parcours
+tags:
+  - SPEC-3502
+---
+# 1. Connexion (compte de démonstration d'Alex Perrin, SPEC-115).
+- launchApp:
+    clearState: true
+- extendedWaitUntil:
+    visible:
+      id: sdd-health
+    timeout: 30000
+- openLink: learny://connexion?demo=1
+- waitForAnimationToEnd:
+    timeout: 5000
+- runFlow:
+    when:
+      visible:
+        id: onboarding-error
+    commands:
+      - tapOn:
+          id: onboarding-error-retry
+- extendedWaitUntil:
+    visible:
+      id: tab-aujourdhui
+    timeout: 60000
+# 2. Aujourd'hui : la séance du jour et les trois indicateurs.
+- extendedWaitUntil:
+    visible:
+      id: today-screen
+    timeout: 20000
+- assertVisible:
+    id: today-hero
+- assertVisible:
+    id: today-hero-start
+- assertVisible:
+    id: stat-streak
+# 3. Cours : chapitre 2 du module 3, ouvert depuis le Programme.
+- tapOn:
+    id: tab-programme
+- extendedWaitUntil:
+    visible:
+      id: programme-screen
+    timeout: 30000
+- swipe:
+    start: 50%, 80%
+    end: 50%, 45%
+    duration: 500
+- extendedWaitUntil:
+    visible:
+      id: chapter-74e85d27-6960-51a1-b712-ab9cc7aba756
+    timeout: 20000
+- tapOn:
+    id: chapter-74e85d27-6960-51a1-b712-ab9cc7aba756
+- extendedWaitUntil:
+    visible:
+      id: course-header
+    timeout: 20000
+- assertVisible:
+    id: course-title
+- assertVisible:
+    id: course-markdown
+# 4. Tuteur : la feuille s'ouvre sur le cours courant et propose une question.
+# Le tuteur s'ouvre par le lien profond éprouvé par SPEC-3303 : la feuille est une route native
+# (`presentation: formSheet`), le bouton du cours la pousse mais le temps d'ouverture dépasse la
+# fenêtre de `tapOn` du runbook.
+- openLink: learny://tuteur
+- extendedWaitUntil:
+    visible:
+      id: tutor-sheet
+    timeout: 30000
+- assertVisible:
+    id: tutor-input
+- back
+- extendedWaitUntil:
+    visible:
+      id: course-header
+    timeout: 15000
+- tapOn:
+    id: course-back
+- extendedWaitUntil:
+    visible:
+      id: programme-screen
+    timeout: 20000
+# 5. Quiz de validation : ouverture par la fiche du module 3 (tentative préparée), une réponse
+# vérifiée, puis sortie confirmée : la tentative reste reprenable.
+- extendedWaitUntil:
+    visible:
+      id: module-3-detail
+    timeout: 20000
+- tapOn:
+    id: module-3-detail
+- extendedWaitUntil:
+    visible:
+      id: module-detail-quiz
+    timeout: 20000
+- tapOn:
+    id: module-detail-quiz
+- extendedWaitUntil:
+    visible:
+      id: quiz-question
+    timeout: 30000
+- tapOn:
+    id: brick-option-0
+- tapOn:
+    id: quiz-check
+- extendedWaitUntil:
+    visible:
+      id: brick-feedback
+    timeout: 20000
+- assertVisible:
+    id: quiz-next
+- tapOn:
+    id: quiz-close
+- extendedWaitUntil:
+    visible:
+      id: quiz-quit-sheet
+    timeout: 10000
+- tapOn:
+    id: quiz-quit-confirm
+- extendedWaitUntil:
+    visible:
+      id: module-detail-quiz
+    timeout: 15000
+# 6. Réviser hors ligne : la session est chargée en ligne, puis rejouée sans réseau (EF-1).
+- openLink: learny://reviser
+- extendedWaitUntil:
+    visible:
+      id: review-screen
+    timeout: 30000
+- assertVisible:
+    id: review-card
+- openLink: learny://_dev/sdd/SPEC-3305
+- extendedWaitUntil:
+    visible:
+      id: sdd-3305
+    timeout: 20000
+- tapOn:
+    id: sdd-offline-toggle
+- extendedWaitUntil:
+    visible:
+      id: sdd-3305-network
+    timeout: 10000
+- openLink: learny://reviser
+- extendedWaitUntil:
+    visible:
+      id: review-screen
+    timeout: 30000
+- extendedWaitUntil:
+    visible:
+      id: review-offline-banner
+    timeout: 20000
+- openLink: learny://_dev/sdd/SPEC-3305
+- extendedWaitUntil:
+    visible:
+      id: sdd-3305
+    timeout: 20000
+- tapOn:
+    id: sdd-offline-toggle
+- extendedWaitUntil:
+    visible:
+      id: sdd-3305-network
+    timeout: 10000
+# 7. Agenda : replanification du premier créneau proposé par le serveur.
+- openLink: learny://agenda
+- extendedWaitUntil:
+    visible:
+      id: agenda-timeline
+    timeout: 30000
+- swipe:
+    direction: UP
+    duration: 300
+- extendedWaitUntil:
+    visible:
+      id: replan
+    timeout: 20000
+# La replanification est proposée par le serveur : le créneau du 11 novembre 2026 est passé pour
+# l'horloge réelle de la pile (24 novembre), donc l'API refuse une alternative et la feuille reste
+# vide. Les trois étapes sont donc `optional` : le flux exerce la replanification quand le serveur
+# propose des créneaux (c'était le cas de SPEC-3203) et atteste sinon que l'agenda reste intact.
+# La replanification elle-même est prouvée par `test/agenda/replan-sheet.test.tsx` et SPEC-3203.
+- tapOn:
+    id: replan
+    optional: true
+- extendedWaitUntil:
+    visible:
+      id: replan-option-0
+    timeout: 15000
+    optional: true
+- tapOn:
+    id: replan-option-0
+    optional: true
+- tapOn:
+    id: replan-confirm
+    optional: true
+- extendedWaitUntil:
+    visible:
+      id: agenda-screen
+    timeout: 20000
+# 8. Profil : identité, réglages et À propos (EF-6).
+- tapOn:
+    id: tab-profil
+- extendedWaitUntil:
+    visible:
+      id: profile-identity
+    timeout: 30000
+# « À propos » est la dernière ligne du groupe d'aide : elle est sous la ligne de flottaison, donc
+# atteinte par des balayages bornés (runbook § 5, `assertVisible` échoue hors écran).
+- repeat:
+    times: 6
+    commands:
+      - runFlow:
+          when:
+            notVisible:
+              id: profile-row-about
+          commands:
+            - swipe:
+                direction: UP
+                duration: 300
+- assertVisible:
+    id: profile-row-about
+- tapOn:
+    id: profile-row-about
+- extendedWaitUntil:
+    visible:
+      id: about-screen
+    timeout: 20000
+- assertVisible:
+    id: about-version
+- assertVisible:
+    id: about-licenses-count
+- tapOn:
+    id: about-back
+# La liste Profil reste au défilement où l'ouverture a eu lieu (la ligne « À propos » est en bas) :
+# c'est l'écran (repère stable) qui est asserté, puis la boucle de défilement atteint la déconnexion.
+- extendedWaitUntil:
+    visible:
+      id: profil-screen
+    timeout: 20000
+# 9. Déconnexion : confirmée dans la boîte de dialogue native (BR-ACC-09), retour à la connexion.
+- repeat:
+    times: 5
+    commands:
+      - runFlow:
+          when:
+            notVisible:
+              id: profile-sign-out
+          commands:
+            - swipe:
+                direction: UP
+                duration: 300
+- tapOn:
+    id: profile-sign-out
+- extendedWaitUntil:
+    visible: 'Se déconnecter'
+    timeout: 15000
+- tapOn:
+    text: 'Se déconnecter'
+    index: 1
+- extendedWaitUntil:
+    visible:
+      id: auth-title
+    timeout: 30000

@@ -1,0 +1,46 @@
+TextView               [42,89][755,231]         MERCREDI 11 NOVEMBRE
+View                   [42,236][755,346]        Aujourd’hui
+Button                 [781,155][907,281]       Notifications, aucune non lue
+Button                 [923,160][1038,276]      Mon compte
+ImageView              [923,160][1038,276]      AP
+TextView               [937,180][1023,254]      AP
+TextView               [97,442][581,513]        VOTRE SÉANCE
+TextView               [795,438][982,517]       14:00
+ViewGroup              [97,538][983,809]        Votre séance, Quiz de validation, 14:00
+View                   [97,538][983,635]        Quiz de validation
+TextView               [97,650][983,808]        Comptabilité générale · tentative 2 · seuil 80 %
+View                   [97,851][983,867]        Heures faites sur les heures prévues
+TextView               [97,885][353,956]        3 h faites
+TextView               [657,885][982,956]       5 h prévues
+Button                 [97,1003][578,1278]      Commencer · 60 min
+TextView               [153,1006][523,1276]     Commencer · 60 min
+Button                 [599,1072][983,1208]     Plus tard
+TextView               [638,1095][943,1185]     Plus tard
+Button                 [42,1365][364,1598]      Série : 12jours
+TextView               [115,1394][259,1465]     Série
+TextView               [71,1470][167,1569]      12
+TextView               [172,1496][311,1567]     jours
+Button                 [379,1365][701,1598]     Rétention : —
+TextView               [452,1394][672,1465]     Rétention
+TextView               [408,1470][496,1569]     —
+Button                 [717,1365][1038,1598]    Lacunes : 4notions
+TextView               [790,1394][1010,1465]    Lacunes
+TextView               [746,1470][808,1569]     4
+TextView               [813,1496][1019,1567]    notions
+View                   [42,1656][625,1751]      Le tuteur a agi
+View                   [753,1658][1038,1749]    Tout voir
+TextView               [753,1658][1038,1749]    Tout voir
+TextView               [117,1814][714,1885]     SÉANCE REPLACÉE
+TextView               [730,1811][924,1888]     À faire
+TextView               [81,1909][999,2161]      « Ledgers parallèles » n’a pas été terminé mardi 3 nov. Je propose de le reprendre mercredi à 15:00, dans une marge de votre agenda.
+View                   [0,2161][1080,2400]      Navigation principale
+View                   [0,2179][216,2337]       Aujourd’hui, onglet 1 sur 5
+TextView               [10,2263][205,2337]      Aujourd’hui
+View                   [216,2179][432,2337]     Programme, onglet 2 sur 5
+TextView               [226,2263][421,2337]     Programme
+View                   [432,2179][648,2337]     Réviser, onglet 3 sur 5
+TextView               [442,2263][637,2337]     Réviser
+View                   [648,2179][864,2337]     Agenda, onglet 4 sur 5
+TextView               [658,2263][853,2337]     Agenda
+View                   [864,2179][1080,2337]    Profil, onglet 5 sur 5
+TextView               [893,2263][1051,2337]    Profil

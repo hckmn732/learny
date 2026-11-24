@@ -45,14 +45,14 @@ describe('[SPEC-3502] fiches des stores', () => {
     expect(withinLimit(APP_STORE.description, LIMITS.appStore.description)).toBe(true);
     expect(withinLimit(APP_STORE.keywords, LIMITS.appStore.keywords)).toBe(true);
     // Une fiche vide ou squelettique est refusée par la revue : la description porte le produit.
-    expect(Array.from(APP_STORE.description).length).toBeGreaterThanOrEqual(500);
+    expect([...APP_STORE.description].length).toBeGreaterThanOrEqual(500);
   });
 
   it('respecte les longueurs de Google Play', () => {
     expect(withinLimit(PLAY.title, LIMITS.play.title)).toBe(true);
     expect(withinLimit(PLAY.shortDescription, LIMITS.play.shortDescription)).toBe(true);
     expect(withinLimit(PLAY.fullDescription, LIMITS.play.fullDescription)).toBe(true);
-    expect(Array.from(PLAY.fullDescription).length).toBeGreaterThanOrEqual(500);
+    expect([...PLAY.fullDescription].length).toBeGreaterThanOrEqual(500);
   });
 
   it('ne contient aucune valeur locale, de test ou de remplissage', () => {

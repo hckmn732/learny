@@ -1,0 +1,37 @@
+TextView               [42,89][886,160]         MON COMPTE
+View                   [42,165][886,275]        Profil
+Button                 [912,119][1038,245]      Réglages
+ImageView              [82,426][250,594]        AP
+View                   [276,336][700,431]       Alex Perrin
+View                   [114,462][218,557]       AP
+TextView               [276,441][998,520]       Apprenant · 2 formations en cours
+TextView               [304,533][969,681]       Membre depuis novembre
+TextView               [126,768][339,839]       de série
+TextView               [82,844][178,943]        12
+TextView               [183,870][198,941]       j
+TextView               [456,768][669,839]       retenu à 1 mois
+TextView               [412,844][500,943]       —
+TextView               [787,768][1000,839]      lacunes
+TextView               [743,844][805,943]       4
+TextView               [79,1035][1003,1106]     COMPTE
+Button                 [53,1117][1028,1424]     Identité, Alex Perrin · alex.perrin@demo.learny.test
+TextView               [221,1143][923,1234]     Identité
+TextView               [221,1239][923,1397]     Alex Perrin · alex.perrin@demo.learny.test
+Button                 [53,1424][1028,1733]     Notifications, Tout est lu · rappels et bilans
+TextView               [221,1453][923,1544]     Notifications
+TextView               [221,1549][923,1707]     Tout est lu · rappels et bilans
+Button                 [53,1733][1028,2042]     Sécurité et connexion, E-mail, méthode et appareils
+TextView               [221,1762][923,1853]     Sécurité et connexion
+TextView               [221,1858][923,2016]     E-mail, méthode et appareils
+TextView               [79,2079][1003,2150]     APPRENTISSAGE
+View                   [0,2161][1080,2400]      Navigation principale
+View                   [0,2179][216,2337]       Aujourd’hui, onglet 1 sur 5
+TextView               [10,2263][205,2337]      Aujourd’hui
+View                   [216,2179][432,2337]     Programme, onglet 2 sur 5
+TextView               [226,2263][421,2337]     Programme
+View                   [432,2179][648,2337]     Réviser, onglet 3 sur 5
+TextView               [442,2263][637,2337]     Réviser
+View                   [648,2179][864,2337]     Agenda, onglet 4 sur 5
+TextView               [658,2263][853,2337]     Agenda
+View                   [864,2179][1080,2337]    Profil, onglet 5 sur 5
+TextView               [893,2263][1051,2337]    Profil

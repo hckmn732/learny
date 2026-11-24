@@ -149,6 +149,12 @@ describe('[SPEC-3502] audit d’accessibilité des écrans', () => {
   it('Aujourd’hui : séance, indicateurs et actions du tuteur', async () => {
     const view = await renderScreen(<TodayScreen />, 'today-screen');
     expectAccessibleScreen(view, 'aujourdhui');
+    // Regression de l'audit TalkBack : la valeur et son unite sont separees par un espace
+    // (« Serie : 12 jours »), sinon le lecteur d'ecran annonce « 12jours ».
+    const card = view.getByTestId('stat-streak') as unknown as {
+      props: { accessibilityLabel?: string };
+    };
+    expect(card.props.accessibilityLabel).toBe('Série : 12 jours');
   });
 
   it('Programme : carte de formation, modules et chapitres', async () => {

@@ -151,7 +151,27 @@ illimitée pour le texte courant ; aucune troncature d'information à 200 %.
 - Preuves dans `evidence/SPEC-3xxx/` : rapports Vitest/Jest, vidéos Maestro, captures et
   comparaisons, `acceptance.md`.
 
-## 6. Pièges connus
+## 6. Publication (SPEC-3502, ADR-3004 § 8, ADR-3006)
+
+| Étape | Commande | Prérequis |
+|---|---|---|
+| Configuration | `app.config.ts` (identifiants, liens universels, permissions, `ios.privacyManifests`), `eas.json` (profils `development`, `e2e`, `preview`, `production`) | — |
+| Build de production | `eas build --profile production --platform all` | projet EAS lié (`eas init`), comptes Apple Developer et Google Play, secrets de signature |
+| Soumission test interne | `eas submit --profile production --platform android` (piste `internal`) et `--platform ios` (`ascAppId` fourni par le porteur) | identifiants des consoles |
+| Fiches | `apps/mobile/store/` : textes FR générés depuis `store/metadata.ts`, icône 1024², captures Android 1080 × 2160 | captures iOS : macOS requis |
+| Licences affichées | `node --experimental-strip-types apps/mobile/scripts/generate-licenses.mjs` puis écran Profil → À propos | — |
+| Manifeste de confidentialité | produit par `expo prebuild` depuis `ios.privacyManifests` (`PrivacyInfo.xcprivacy`) | macOS pour compiler iOS |
+| EAS Update | canal `production` déclaré, **aucun update publié** en V1 (`expo-updates` n'est pas une dépendance) | ADR pour ajouter le client |
+
+- Le profil `production` ne pose **aucune** variable de démonstration : `extra.enableSddPages` y vaut
+  `false`, le plugin du HTTP local (`with-e2e-cleartext.cjs`) reste inactif sans `LEARNY_E2E_CLEARTEXT`,
+  et `test/integration/release-config.int.test.ts` vérifie cette absence.
+- Les numéros de build sont gérés par EAS (`cli.appVersionSource = "remote"`, `autoIncrement`).
+- Ce qui n'est pas prouvable dans cet environnement (pas de compte Apple/Google/EAS, pas de macOS)
+  est consigné dans `evidence/SPEC-3502/acceptance.md` : builds signés, TestFlight, Play test
+  interne, captures et manifeste iOS compilé.
+
+## 7. Pièges connus
 
 - **pnpm et Metro** : configurer `metro.config.js` (`watchFolders` sur la racine,
   `resolver.unstable_enableSymlinks`, `disableHierarchicalLookup` si nécessaire) ; vérifier que

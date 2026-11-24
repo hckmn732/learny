@@ -71,7 +71,9 @@ export function StatCard({
     <Pressable
       {...(testID === undefined ? {} : { testID })}
       accessibilityRole="button"
-      accessibilityLabel={`${label} : ${value}${unit ?? ''}`}
+      // SPEC-3502 BR-PLA-03 — un espace separe la valeur de son unite : sans lui, TalkBack
+      // annonce « Serie : 12jours » (audit du 24/11/2026, texte a 200 %).
+      accessibilityLabel={`${label} : ${value}${unit === undefined ? '' : ` ${unit}`}`}
       onPress={onPress}
       style={container}
     >
