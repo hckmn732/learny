@@ -10,10 +10,11 @@ import { Button } from '@learny/ui';
 import { colors } from '@learny/ui/tokens';
 
 import { AnalysisPanel } from './analysis-panel';
-import { ArrowLeftIcon, LinkIcon, RemoveIcon, UploadIcon } from './icons';
+import { ArrowLeftIcon, LinkIcon, UploadIcon } from './icons';
 import { KeyWarning } from './key-warning';
-import { errorMessage, hasReadyCourseFile, ROLE_ORDER, type FileStatus } from './simple-mode';
-import { formatSize, guessRole, putFile, runPool } from './simple-upload';
+import { SimpleFileList } from './simple-file-list';
+import { errorMessage, hasReadyCourseFile, type FileStatus } from './simple-mode';
+import { guessRole, putFile, runPool } from './simple-upload';
 
 const t = fr.simple;
 
@@ -472,126 +473,34 @@ export function DepotScreen({ fid, initialState }: DepotScreenProps) {
               type="file"
             />
 
-            <ul className="m-0 flex list-none flex-col gap-8 p-0">
-              {files.map((entry, index) => (
-                <li
-                  className="flex flex-wrap items-center gap-12 rounded-14 border border-solid border-border bg-surface px-14 py-12"
-                  data-status={entry.status}
-                  data-testid={`simple-file-${String(index)}`}
-                  key={entry.id}
-                >
-                  <span
-                    aria-hidden="true"
-                    className="flex size-38 shrink-0 items-center justify-center rounded-8 bg-orange-soft text-10 font-700 text-orange-ink"
-                  >
-                    {entry.name.split('.').at(-1)?.slice(0, 3).toUpperCase() ?? 'DOC'}
-                  </span>
-                  <div className="flex min-w-0 flex-1 flex-col gap-2">
-                    <span className="truncate text-14 font-600">{entry.name}</span>
-                    <span className="text-12 text-ink-muted">
-                      {t.depot.file.meta(entry.pages, formatSize(entry.sizeBytes))}
-                      {entry.status === 'ready' ? ` · ${t.depot.file.statuses.ready}` : ''}
-                    </span>
-                    {entry.status === 'failed' ? (
-                      <span className="text-12 font-600 text-orange-ink" role="alert">
-                        {entry.message ?? t.depot.file.statuses.failed}
-                      </span>
-                    ) : null}
-                    {entry.status === 'uploading' || entry.status === 'processing' ? (
-                      <span
-                        aria-label={t.depot.file.progressLabel(entry.name)}
-                        aria-valuemax={100}
-                        aria-valuemin={0}
-                        aria-valuenow={entry.progress}
-                        className="h-6 w-full overflow-hidden rounded-full bg-surface-muted"
-                        role="progressbar"
-                      >
-                        <span
-                          className="block h-full rounded-full bg-lime"
-                          style={{ width: `${String(entry.progress)} %` }}
-                        />
-                      </span>
-                    ) : null}
-                  </div>
-                  <select
-                    aria-label={t.depot.file.roleLabel(roleLabel(entry.role))}
-                    className="cursor-pointer rounded-9 border border-solid border-border-strong bg-surface px-10 py-6 text-13 font-500"
-                    data-testid={`simple-role-${String(index)}`}
-                    onChange={(event) => {
-                      void changeRole(entry.id, event.target.value as ResourceRole);
-                    }}
-                    value={entry.role}
-                  >
-                    {ROLE_ORDER.map((role) => (
-                      <option key={role} value={role}>
-                        {roleLabel(role)}
-                      </option>
-                    ))}
-                  </select>
-                  {entry.status === 'failed' ? (
-                    <Button
-                      onClick={() => void retryUpload(entry.id)}
-                      size="md"
-                      type="button"
-                      variant="outline"
-                    >
-                      {t.depot.file.retry}
-                    </Button>
-                  ) : null}
-                  <button
-                    aria-label={t.depot.file.remove}
-                    className="cursor-pointer border-0 bg-transparent p-4 text-ink-muted"
-                    data-testid={`simple-file-remove-${String(index)}`}
-                    onClick={() => void removeFile(entry.id)}
-                    type="button"
-                  >
-                    <RemoveIcon />
-                  </button>
-                </li>
-              ))}
-
-              {links.map((entry, offset) => {
-                const index = files.length + offset;
-                return (
-                  <li
-                    className="flex flex-wrap items-center gap-12 rounded-14 border border-solid border-border bg-surface px-14 py-12"
-                    data-status={entry.status}
-                    data-testid={`simple-file-${String(index)}`}
-                    key={entry.resourceId}
-                  >
-                    <span className="flex min-w-0 flex-1 flex-col gap-2">
-                      <span className="truncate text-14 font-600">{entry.title}</span>
-                      <span className="text-12 text-ink-muted">
-                        {t.depot.file.meta(null, formatSize(0))}
-                      </span>
-                    </span>
-                    <select
-                      aria-label={t.depot.file.roleLabel(roleLabel(entry.role))}
-                      className="cursor-pointer rounded-9 border border-solid border-border-strong bg-surface px-10 py-6 text-13 font-500"
-                      data-testid={`simple-role-${String(index)}`}
-                      onChange={(event) => {
-                        void changeLinkRole(entry.resourceId, event.target.value as ResourceRole);
-                      }}
-                      value={entry.role}
-                    >
-                      {ROLE_ORDER.map((role) => (
-                        <option key={role} value={role}>
-                          {roleLabel(role)}
-                        </option>
-                      ))}
-                    </select>
-                    <button
-                      aria-label={t.depot.file.remove}
-                      className="cursor-pointer border-0 bg-transparent p-4 text-ink-muted"
-                      onClick={() => void removeLink(entry.resourceId)}
-                      type="button"
-                    >
-                      <RemoveIcon />
-                    </button>
-                  </li>
-                );
-              })}
-            </ul>
+            <SimpleFileList
+              files={files.map((entry) => ({
+                id: entry.id,
+                name: entry.name,
+                sizeBytes: entry.sizeBytes,
+                pages: entry.pages,
+                role: entry.role,
+                status: entry.status,
+                progress: entry.progress,
+                message: entry.message,
+              }))}
+              links={links}
+              onChangeLinkRole={(resourceId, role) => {
+                void changeLinkRole(resourceId, role);
+              }}
+              onChangeRole={(id, role) => {
+                void changeRole(id, role);
+              }}
+              onRemove={(id) => {
+                void removeFile(id);
+              }}
+              onRemoveLink={(resourceId) => {
+                void removeLink(resourceId);
+              }}
+              onRetry={(id) => {
+                void retryUpload(id);
+              }}
+            />
 
             <div className="flex flex-wrap items-center gap-8 rounded-11 border border-solid border-border-strong bg-surface px-12 py-2">
               <span className="text-ink-muted">
