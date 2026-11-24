@@ -11,6 +11,7 @@ import { fr } from '@learny/i18n';
 
 import { useAttempt, useAttemptResult } from '../../../src/data/attempts';
 import { useModuleCourse, useProgramme } from '../../../src/data/use-programme';
+import { useMe } from '../../../src/data/use-programme';
 import { GenerationList } from '../../../src/simple/GenerationList';
 import { ReadyCard } from '../../../src/simple/ReadyCard';
 import { SimpleHeader } from '../../../src/simple/SimpleHeader';
@@ -27,7 +28,11 @@ const t = fr.mobile.simple.result;
 export default function DiagnosticResultRoute() {
   const router = useRouter();
   const params = useLocalSearchParams<{ fid?: string; aid?: string; skipped?: string }>();
-  const fid = typeof params.fid === 'string' ? params.fid : '';
+  const me = useMe();
+  const fid =
+    typeof params.fid === 'string' && params.fid !== ''
+      ? params.fid
+      : (me.data?.currentFormationId ?? '');
   const aid = typeof params.aid === 'string' && params.aid !== '' ? params.aid : null;
   const skipped = params.skipped === '1';
   const result = useAttemptResult(skipped ? null : aid);

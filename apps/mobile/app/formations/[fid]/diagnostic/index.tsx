@@ -79,11 +79,11 @@ export default function DiagnosticRoute() {
     setBusy(true);
     try {
       await skipper.skip();
-      router.replace({ pathname: '/formations/[fid]/resultat', params: { fid, skipped: '1' } });
+      router.push('/formations/resultat?skipped=1');
     } catch {
       setBusy(false);
     }
-  }, [busy, fid, router, skipper]);
+  }, [busy, router, skipper]);
 
   useEffect(() => {
     const subscription = BackHandler.addEventListener('hardwareBackPress', () => {
@@ -107,10 +107,7 @@ export default function DiagnosticRoute() {
       }
       if (index >= total - 1) {
         const result = await submitter.submit(attemptId);
-        router.replace({
-          pathname: '/formations/[fid]/resultat',
-          params: { fid, aid: result.attemptId },
-        });
+        router.push(`/formations/resultat?aid=${result.attemptId}`);
         return;
       }
       setIndex((current) => current + 1);

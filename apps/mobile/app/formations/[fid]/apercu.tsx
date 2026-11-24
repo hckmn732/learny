@@ -90,10 +90,10 @@ export default function PreviewRoute() {
     try {
       await validator.validate(proposal.version);
       const attemptId = await diagnostic.create();
-      router.replace({ pathname: '/formations/[fid]/diagnostic', params: { fid, aid: attemptId } });
+      router.replace(`/formations/${fid}/diagnostic?aid=${attemptId}`);
     } catch (error) {
       if (codeOf(error) === 'DIAGNOSTIC_ALREADY_DONE') {
-        router.push(`/formations/${fid}/resultat?skipped=0`);
+        router.push('/formations/resultat?skipped=0');
         return;
       }
       if (codeOf(error) === 'FORMATION_LIMIT_REACHED') {
