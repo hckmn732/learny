@@ -18,7 +18,7 @@ Rule for the whole phase: **every production change is a reversible step with a 
 
 ### Step 1 — Build and ship
 
-- CI builds `docker/api-py.Dockerfile` on every `main` commit and pushes `ghcr.io/<owner>/learny-py:<sha>` (use the existing GitHub token permissions; no new registry).
+- CI builds `docker/api.Dockerfile` on every `main` commit and pushes `ghcr.io/<owner>/learny-py:<sha>` (use the existing GitHub token permissions; no new registry).
 - `docker/compose.coolify.yml` (and `compose.coolify-qa.yml`) gain two services from that image: `api-py` (`uvicorn …`, port 8000, healthcheck `GET /health`, `PY_API_WORKERS=2`) and `worker-py` (`python -m learny_worker`, healthcheck on `PY_WORKER_HEALTH_PORT`). Migrations stay a release job run by the existing `tools/deploy/migrate.mjs`.
 - `docs/operations/coolify.md` documents the services, env vars (same names as TS + `PY_*`), secrets, ports, resource limits.
 - Connection budget (write it down in the runbook): Supabase pooler limit ≥ api replicas × `PY_API_WORKERS` × `DATABASE_POOL_MAX` + worker replicas × `DATABASE_POOL_MAX` + Hono (during coexistence). Start with `DATABASE_POOL_MAX=5`.
@@ -59,7 +59,7 @@ Deploy, flip a context, canary, rollback a context, jobs rollback, drain the wor
 2. `apps/api` (Hono), its Dockerfile/Vercel config, deploy steps (`deploy.yml` Vercel API deploy, `tools/deploy/sync-inngest.mjs`), Inngest services in `docker/compose.*.yml`, Inngest env vars.
 3. Backend packages no longer imported by `apps/web` or tools: compute the set with the import graph (`pnpm why`, `tsc --listFiles` on the web) — expected: `api-routes`, `services`, `jobs`, `llm`, `tutor`, `ingestion`, `notifications`, `automations`, `learning-engine`, `http`, `domain`, and the runtime part of `db`. Keep what the web needs (`contracts`, `api-client`, `api-sdk`, `bricks`, `ui`, `i18n`, `config`, `testing`, `core` if imported).
 4. `packages/db`: keep `migrations/`, the Drizzle schema used to generate migrations, `scripts/` (`db:check`, sync, custom migrations) and the RLS matrix data; delete the runtime client, repositories and their tests (Python twins exist).
-5. Move the files Python still reads from TS packages before deleting them: `packages/llm/fixtures/` → `packages-py/learny/src/learny/platform/llm/fixtures/`, `packages/tutor/prompts/` → `packages-py/learny/src/learny/tutor/prompts/` (`git mv`, update loaders).
+5. Move the files Python still reads from TS packages before deleting them: `packages/llm/fixtures/` → `python/learny/src/learny/platform/llm/fixtures/`, `packages/tutor/prompts/` → `python/learny/src/learny/tutor/prompts/` (`git mv`, update loaders).
 6. The TS tests of removed packages: delete only rows of `test-port-map.md` whose Python twin is green; the map must have no `todo` left.
 7. Keep `tools/parity` and the recordings as a permanent regression suite against Python (CI job).
 

@@ -6,10 +6,10 @@ Everything here is binding for the Python backend. Section numbers are reference
 
 - **English**: module/package names, identifiers, comments, docstrings, log messages and log field names, exception class names, test names, Python READMEs, `TODO`s, internal error `detail` that never reaches a user (e.g. contract violations logged server-side).
 - **French, verbatim from TypeScript**, and only in these places:
-  - `packages-py/learny/src/learny/shared/locale_fr/` — Python modules holding user-facing strings: `errors.py` (problem titles, generated from `api/errors.json`), `details.py` (problem `detail` texts thrown by services), `validation.py` (Zod-equivalent validation messages), `stream.py` (SSE `errorText`), `notifications.py` (in-app/push texts).
+  - `python/learny/src/learny/shared/locale_fr/` — Python modules holding user-facing strings: `errors.py` (problem titles, generated from `api/errors.json`), `details.py` (problem `detail` texts thrown by services), `validation.py` (Zod-equivalent validation messages), `stream.py` (SSE `errorText`), `notifications.py` (in-app/push texts).
   - Jinja2 templates under `learny/engagement/templates/` (emails, unsubscribe pages).
   - Never in code paths: code references `locale_fr.details.FORMATION_NOT_FOUND`, never an inline French literal.
-- Enforcement: `packages-py/learny/tests/unit/test_language_policy.py` fails if a `.py` file outside `locale_fr/` contains non-ASCII letters or one of a small list of French stop words in string literals (`" de la "`, `" introuvable"`, `"Une erreur"`, …).
+- Enforcement: `python/learny/tests/unit/test_language_policy.py` fails if a `.py` file outside `locale_fr/` contains non-ASCII letters or one of a small list of French stop words in string literals (`" de la "`, `" introuvable"`, `"Une erreur"`, …).
 - SDD artefacts (specs, ADRs, `evidence/*/acceptance.md`, commit messages) keep the repository convention (French, `docs/engineering/git.md`).
 - LLM prompts are already English (`packages/tutor/prompts/*.md`); keep them byte-identical.
 
@@ -26,7 +26,7 @@ api/
   inventory.json               # final inventory of the Python backend (SPEC-2302)
   contract-exceptions.yaml     # accepted contract deviations, each with an ADR id (normally empty)
   oracles/                     # parity scenarios + recordings (SPEC-2001)
-apps/api-py/
+apps/api/
   pyproject.toml               # project "learny-api"
   src/learny_api/
     main.py                    # create_app(); `learny_api.main:app` for uvicorn
@@ -45,7 +45,7 @@ apps/api-py/
                                # sprints.py, dev_email.py, dev_events.py, dev_stripe.py, guards.py
     dev_demos/                 # helpers of the development routes (SPEC-2207)
   tests/{unit,integration}/
-apps/worker-py/
+apps/worker/
   pyproject.toml               # project "learny-worker"
   src/learny_worker/
     __main__.py                # `python -m learny_worker`
@@ -57,7 +57,7 @@ apps/worker-py/
     health.py                  # worker health file / port
     inline.py                  # JOBS_MODE=inline execution used by API in tests
   tests/{unit,integration}/
-packages-py/learny/
+python/learny/
   pyproject.toml               # project "learny" (library)
   src/learny/
     shared/                    # clock, errors, jsonx, config, logging, db (engine, uow, privileged), outbox, crypto, ids, locale_fr/
@@ -69,7 +69,7 @@ packages-py/learny/
       infrastructure/          # SQL query modules, context-specific adapters
     views/                     # read-only aggregations across contexts (home, header, sidebar, search...)
   tests/{unit,integration}/<context>/
-docker/api-py.Dockerfile       # one image, two commands (api, worker)
+docker/api.Dockerfile       # one image, two commands (api, worker)
 ```
 
 `views/` exists to avoid contorted cross-context calls for screens that aggregate (home, header, sidebar, search, agenda views): query-only SQL under RLS, no writes, no rules. Contexts never import `views`.
@@ -180,7 +180,7 @@ No other runtime dependency without an ADR.
 Handlers register by route id and stay thin:
 
 ```python
-# apps/api-py/src/learny_api/handlers/assessments.py
+# apps/api/src/learny_api/handlers/assessments.py
 from learny_api.pipeline import handler, Call
 from learny.assessments import public as assessments
 
@@ -194,7 +194,7 @@ async def submit_attempt(call: Call) -> object:
 - Output is validated against the generated output model; failure → 500 problem with `contract_violation` logged (same as TS).
 - `formations.access` is forced to 204 (TS quirk) — keep it.
 - FastAPI is used to host the app and nothing else; routes are registered with `app.add_api_route(path, endpoint, methods=[m], include_in_schema=False)` and `openapi_url=None`: no application serves the contract any more (the TypeScript backend did, SPEC-2302 removed it). `api/openapi.yaml` stays the source, the generated table and the SDK are its consumers.
-- `pipeline.install` refuses to start when an operation of `ROUTES` has no handler (`RuntimeError`), and `special.install` registers the routes outside the generic pipeline first (a development route must refuse before any authentication). `apps/api-py/tests/unit/test_route_coverage.py` pins both, with `api/inventory.json`.
+- `pipeline.install` refuses to start when an operation of `ROUTES` has no handler (`RuntimeError`), and `special.install` registers the routes outside the generic pipeline first (a development route must refuse before any authentication). `apps/api/tests/unit/test_route_coverage.py` pins both, with `api/inventory.json`.
 - Response headers: `x-request-id`, `cache-control: no-store` for user routes, `server-timing: app;dur=N`, merged cookies/extra headers, `x-served-by: learny-api`.
 
 ## 7. Data conventions
@@ -256,4 +256,4 @@ gone with the relay (SPEC-2302). Same production guards as before (`LLM_MODE=moc
 - Same loop (`start.mjs` → commits → `validate.mjs` → `complete.mjs`), branches `spec/SPEC-2xxx-slug` from `main`.
 - Commit scopes `SPEC-2xxx`, French subject (repo convention), code in English.
 - Before each commit: `uv run ruff format --check && uv run ruff check && uv run mypy && uv run lint-imports && uv run pytest tests/unit` on touched projects, plus the TS checks if TS files changed.
-- Generated files (`apps/api-py/src/learny_api/generated/*`, `packages/api-sdk`) are committed and checked fresh in CI (`--check` modes).
+- Generated files (`apps/api/src/learny_api/generated/*`, `packages/api-sdk`) are committed and checked fresh in CI (`--check` modes).

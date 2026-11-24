@@ -18,7 +18,7 @@ For each spec, in this order, one commit (or a few) per step:
    - keep every `for update`, advisory lock, `on conflict` and `set_config('learny.actor', …)` the TS code has.
    Each query function takes `tx: Tx` as first parameter and returns a frozen dataclass row or a generated model.
 4. **Use cases** — `learny/<ctx>/application/<topic>.py`, one async function per TS service function, signature `(deps, actor, ...)`. Same event names, payloads and ids via `tx.emit`. Same `AppError` codes and `locale_fr.details` texts. Export what other contexts/apps need through `public.py`. **Use cases that jobs call are ported here too** (they are wired to the worker in SPEC-2207).
-5. **Handlers** — `apps/api-py/src/learny_api/handlers/<ctx>.py`, one `@handler("<route id>")` per operation, no logic.
+5. **Handlers** — `apps/api/src/learny_api/handlers/<ctx>.py`, one `@handler("<route id>")` per operation, no logic.
 6. **Tests** — port the TS unit/integration tests listed for the context in `test-port-map.md` (same cases), add `[SPEC-xxxx]` tags; update the map.
 7. **Parity** — with a local override (`OWNERSHIP_OVERRIDES` in a test env file) set the context to `py`, run `pnpm parity:check --group <ctx>`; fix Python until zero unexplained divergence.
 8. **Flip** — commit `api/ownership.yaml` with the context's entries at `py`; run the e2e tests of the specs listed in the scope (grep `@SPEC-` tags from the inventory) and then the full e2e + visual suite through the facade.
@@ -89,7 +89,7 @@ Also builds **`learny.platform.llm`** (first user: scoping and programme generat
 
 ## SPEC-2204 — tutor (12 operations, the hardest)
 
-- **SSE writer** (`apps/api-py/src/learny_api/sse.py`): AI SDK UI message stream v1, chunks `data: <jsonx.dumps(chunk)>\n\n` in the exact order `start{messageId}`, `text-start{id}`, `text-delta{id,delta}`…, `text-end`, `data-sources`, `data-follow-ups` | `data-self-test`, `finish`, then `data: [DONE]`. Mid-stream failure → `{"type":"error","errorText": locale_fr.stream.ANSWER_FAILED}` then close. Headers `text/event-stream; charset=utf-8`, `cache-control: no-store`, `x-vercel-ai-ui-message-stream: v1`. Errors before the first byte are problem+json (including 409 when the conversation is already streaming).
+- **SSE writer** (`apps/api/src/learny_api/sse.py`): AI SDK UI message stream v1, chunks `data: <jsonx.dumps(chunk)>\n\n` in the exact order `start{messageId}`, `text-start{id}`, `text-delta{id,delta}`…, `text-end`, `data-sources`, `data-follow-ups` | `data-self-test`, `finish`, then `data: [DONE]`. Mid-stream failure → `{"type":"error","errorText": locale_fr.stream.ANSWER_FAILED}` then close. Headers `text/event-stream; charset=utf-8`, `cache-control: no-store`, `x-vercel-ai-ui-message-stream: v1`. Errors before the first byte are problem+json (including 409 when the conversation is already streaming).
 - Streaming lock: per-process set of conversation ids (TS keeps it in memory per instance) — same semantics, no distributed lock.
 - Persistence order: learner message committed before the model call; tutor message (sources, follow-ups, self-test) after the full stream. **Client disconnect**: read `packages/services/src/tutor-chat/stream.ts` and mirror exactly what happens to the model call and to persistence when the client cancels (if TS keeps consuming and persists, run the remainder in a shielded task).
 - History: last 20 messages + summary of older ones; prompt building (`context.ts`): cached stable system prompt + uncached profile part, `<document source chunk>`, `<task_context>`, `<learner_message>` wrappers, `escape_tutor_data` (entity-encode `& < > " '`, neutralise `[[mock:]]`).
@@ -166,6 +166,6 @@ Also builds **`learny.platform.llm`** (first user: scoping and programme generat
 4. Run worker integration tests with each consumer, then the full e2e suite.
 
 ### Dev/demo routes (51) and remaining special routes
-Port `dev`, `dev-migration`, `dev-sdd-migration` (43 demo routes of old specs, still used by e2e demo pages) and the `_dev` tools/relay-stream special routes into `apps/api-py/src/learny_api/special/dev_*.py` (dev-only guard `ENABLE_SDD_PAGES && APP_ENV != production`, allowed to use `service_tx`). They are thin; port them verbatim.
+Port `dev`, `dev-migration`, `dev-sdd-migration` (43 demo routes of old specs, still used by e2e demo pages) and the `_dev` tools/relay-stream special routes into `apps/api/src/learny_api/special/dev_*.py` (dev-only guard `ENABLE_SDD_PAGES && APP_ENV != production`, allowed to use `service_tx`). They are thin; port them verbatim.
 
 At the end of 2207 the facade relays **nothing**; Hono is still started by Playwright only as a safety net until SPEC-2302.

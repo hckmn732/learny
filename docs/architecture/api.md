@@ -3,7 +3,7 @@
 Normatif. Implémenté par SPEC-201 (socle) puis par chaque spécification fonctionnelle. Les schémas d'entrée/sortie vivent dans `packages/contracts/src/<domaine>.ts` ; le document OpenAPI 3.1 est exporté dans `api/openapi.yaml` (`pnpm contract:export`, ADR-2004) ; ce fichier est la source de la table de routes Python, des modèles Pydantic et du SDK (ADR-2012). Aucune application ne sert plus de document OpenAPI : le contrat est un artefact du dépôt.
 
 > **Séparation backend / frontend (ADR-1001, ADR-1005, ADR-2043).**
-> `apps/api-py` est l'unique serveur HTTP : la façade FastAPI sert les 156 opérations du contrat et
+> `apps/api` est l'unique serveur HTTP : la façade FastAPI sert les 156 opérations du contrat et
 > les 11 routes spéciales. Le pipeline générique (identifiant de requête, origine, limite,
 > idempotence, authentification, validation, CGU, validation de sortie) vit dans
 > `learny_api/pipeline.py` ; les adaptateurs minces sont les `@handler("<route id>")` de
@@ -21,7 +21,7 @@ Normatif. Implémenté par SPEC-201 (socle) puis par chaque spécification fonct
 - Limitation de débit par défaut : 120 requêtes/min/utilisateur ; routes IA (`/tutor/*`, génération) : 20/min ; auth : 10/min/IP.
 - Les routes ne contiennent aucune logique métier : une entrée `defineRoute` est déclarée dans
   `packages/contracts`, exportée dans `api/openapi.yaml`, puis servie par un `@handler` de
-  `apps/api-py` qui délègue au cas d'usage du contexte Python.
+  `apps/api` qui délègue au cas d'usage du contexte Python.
 - `apps/web/proxy.ts` relaie `/api/*` et `/openapi.json` vers `API_INTERNAL_URL` sur la même origine. Il remplace tout secret de proxy entrant, transmet `X-Learny-Proxy-Secret`, `X-Forwarded-Host`, `X-Forwarded-Proto` et `X-Forwarded-For`, préserve les flux SSE, cookies et corps bruts. La façade Python identifie ses réponses par `X-Served-By: learny-api`.
 - la façade accepte le secret courant `API_PROXY_SECRET` et, pendant une rotation uniquement,
   `API_PROXY_SECRET_PREVIOUS`. `apps/web` ne lit et n'envoie que le secret courant. Les deux

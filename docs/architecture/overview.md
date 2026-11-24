@@ -13,12 +13,12 @@ apps/web  (Next.js, client pur, ADR-1003)      │
    ├─ proxy.ts : session, gardes, relai /api ──┼──► en-têtes de proxy de confiance (ADR-1005)
    └─ Server Components → @learny/api-client ──┤
                                                ▼
-        apps/api-py  (façade FastAPI, ADR-2003, ADR-2012) — sert tout le contrat
+        apps/api  (façade FastAPI, ADR-2003, ADR-2012) — sert tout le contrat
            ├─ pipeline générique : identifiant de requête, origine, limite, idempotence,
            │  authentification, validation Pydantic, CGU, handler, validation de sortie
            ├─ 156 opérations d'api/openapi.yaml + 11 routes spéciales (santé, callback, dev)
            └─ ► PostgreSQL (Supabase, RLS), outbox, fournisseurs IA, Resend, Web Push, Stripe
-        apps/worker-py  (outbox PostgreSQL, ADR-2006, ADR-2014)
+        apps/worker  (outbox PostgreSQL, ADR-2006, ADR-2014)
            ├─ 23 consommateurs d'événements (learny_worker/consumers.py)
            └─ 2 crons : cron/hourly-tick (:05) et cron/nightly (01:30 UTC) (scheduler.py)
 ```
@@ -31,8 +31,8 @@ SPEC-2302 : il n'y a plus de table de propriété `api/ownership.yaml` ni de con
 | Contrat (TypeScript) | `packages/contracts` — registre Zod, export `api/openapi.yaml`, catalogue d'erreurs et d'événements | génération Python, SDK, web, outils |
 | Clients web | `packages/api-client`, `api-sdk`, `ui`, `bricks`, `i18n`, `config`, `core` (entrée `.`), `domain` | `apps/web`, piste mobile, tests |
 | Schéma de données | `packages/db` — schéma Drizzle, migrations SQL, matrice RLS (aucun accès à l'exécution) | migrations, `db:check`, `rls:check` |
-| Domaines Python | `packages-py/learny/src/learny/<contexte>` — `domain`, `application`, `infrastructure`, `public` | autres contextes via `public` uniquement |
-| Façade et worker | `apps/api-py/src/learny_api`, `apps/worker-py/src/learny_worker` | rien : ce sont des applications |
+| Domaines Python | `python/learny/src/learny/<contexte>` — `domain`, `application`, `infrastructure`, `public` | autres contextes via `public` uniquement |
+| Façade et worker | `apps/api/src/learny_api`, `apps/worker/src/learny_worker` | rien : ce sont des applications |
 
 Règles vérifiées : `pnpm lint` (`learny/web-is-a-client`, `tools/migration/report.mjs --check`)
 garantit que `apps/web` n'importe que des paquets présents du workspace ; import-linter interdit aux
@@ -59,11 +59,11 @@ apps/web  (Next.js App Router, Vercel région UE fra1)
    └─ proxy.ts : relai de même origine de /api/* et /openapi.json
    │
    │  Requêtes relayées avec les en-têtes ADR-1005 ; aucune route Next n'héberge l'API.
-   └──► apps/api-py (FastAPI + Uvicorn, Docker sur Coolify, ADR-2007)
+   └──► apps/api (FastAPI + Uvicorn, Docker sur Coolify, ADR-2007)
          ├─ /api/v1/* et flux SSE du tuteur
          └─ routes spéciales : /api/v1/health, callback d'e-mail, routes de développement
    │
-   ├──► apps/worker-py (python -m learny_worker, même image, autre commande)
+   ├──► apps/worker (python -m learny_worker, même image, autre commande)
    │      ├─ outbox → job_deliveries → consommateurs (baux FOR UPDATE SKIP LOCKED)
    │      └─ ordonnanceur unique (verrou consultatif PostgreSQL) : ticks horaire et nocturne
    │
@@ -80,7 +80,7 @@ apps/web  (Next.js App Router, Vercel région UE fra1)
 ├── AGENTS.md, CLAUDE.md, README.md, CONTRIBUTING.md, CHANGELOG.md
 ├── apps/
 │   ├── web/                    Next.js : app/, components/ (spécifiques), lib/, proxy.ts, e2e/ (Playwright)
-│   ├── api-py/                 façade FastAPI : pipeline, handlers par contexte, routes spéciales, tests
+│   ├── api/                    façade FastAPI : pipeline, handlers par contexte, routes spéciales, tests
 │   └── worker-py/              worker Python : consommateurs, ordonnanceur, santé, tests
 ├── packages/
 │   ├── config/                 constantes produit, identifiants de modèles, réglages du web
@@ -94,7 +94,7 @@ apps/web  (Next.js App Router, Vercel région UE fra1)
 │   ├── ui/                     design system : jetons, composants React, icônes, utilitaires d'accessibilité
 │   ├── bricks/                 types de briques : schéma, correction, vue, registre
 │   └── testing/                fabriques de données, helpers Vitest/Playwright, collecte de preuves, horloge figée
-├── packages-py/
+├── python/
 │   └── learny/                 bibliothèque Python : 9 contextes métier + platform + shared (+ views)
 │       └── src/learny/{identity,formation,learning,assessments,content,tutor,engagement,billing,privacy}
 ├── design/maquettes/           maquettes de référence (ne pas modifier)

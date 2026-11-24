@@ -8,8 +8,8 @@ Normatif. Le socle est livré par SPEC-001 (minimal) et SPEC-004 (complet). Une 
 |---|---|---|---|---|
 | Unitaire | Vitest | `**/src/**/*.test.ts(x)` | `pnpm test:unit` | fonctions pures, composants (Testing Library), schémas |
 | Intégration | Vitest (projet `integration`) | `**/test/integration/**/*.test.ts` | `pnpm test:int` | services + base réelle (Supabase local), RLS (côté TypeScript : schéma, clients, ponts) |
-| Unitaire Python | pytest | `packages-py/**/tests/unit`, `apps/*-py/tests/unit` | `pnpm py:test:unit` | contextes `learny.*`, façade `learny_api`, worker `learny_worker` |
-| Intégration Python | pytest | `packages-py/**/tests/integration`, `apps/*-py/tests/integration` | `flock /tmp/learny-sdd-db.lock pnpm py:test:unit` | cas d'usage + PostgreSQL réel, RLS, outbox/livraisons, façade complète |
+| Unitaire Python | pytest | `python/**/tests/unit`, `apps/*-py/tests/unit` | `pnpm py:test:unit` | contextes `learny.*`, façade `learny_api`, worker `learny_worker` |
+| Intégration Python | pytest | `python/**/tests/integration`, `apps/*-py/tests/integration` | `flock /tmp/learny-sdd-db.lock pnpm py:test:unit` | cas d'usage + PostgreSQL réel, RLS, outbox/livraisons, façade complète |
 | End-to-end | Playwright | `apps/web/e2e/specs/**/*.spec.ts` | `pnpm test:e2e` | parcours navigateur réels sur `next start`, base locale réinitialisée et ensemencée |
 | Visuel | Playwright | dans les tests e2e, étiquette `@visual` | `pnpm test:visual` | conformité aux maquettes et non-régression (§6) |
 | Accessibilité | `@axe-core/playwright` | dans les tests e2e | inclus dans `test:e2e` | aucune violation `serious`/`critical` sur les pages testées |
@@ -43,7 +43,7 @@ TEST_BASE=HEAD~5 pnpm test:related    # base de comparaison explicite
 - Fabriques : `packages/testing/src/factories/*.ts` (utilisateur, formation complète, module, notions, tentatives…).
 - Jeu de démonstration (SPEC-115) : `pnpm db:seed:demo` charge les données des maquettes (Alex Perrin, SAP S/4HANA Finance…). Les tests e2e des écrans maquettés l'utilisent.
 - Horloge figée (ADR-0047) : e2e → `page.clock.setFixedTime(new Date('2026-11-11T12:20:00Z'))` (13:20 à Paris) et serveur démarré avec `CLOCK_FIXED_AT=2026-11-11T12:20:00Z` ; unitaires → `createFixedClock()`.
-- IA : `LLM_MODE=mock` obligatoire en test ; les fixtures de `packages-py/learny/src/learny/platform/llm/fixtures/` couvrent chaque scénario testé côté Python (ADR-0048).
+- IA : `LLM_MODE=mock` obligatoire en test ; les fixtures de `python/learny/src/learny/platform/llm/fixtures/` couvrent chaque scénario testé côté Python (ADR-0048).
 - E-mails : Mailpit (dev) / transport `memory` (tests) inspectable via `packages/testing/src/mail.ts`.
 - Navigateurs : Chromium (obligatoire) ; Firefox et WebKit dans le projet `cross-browser` exécuté aux checkpoints CP-6, CP-7, CP-8.
 
@@ -55,7 +55,7 @@ Playwright démarre toujours les deux processus du système : la façade Python
 (`uv run uvicorn learny_api.main:app`, `FACADE_PORT = PLAYWRIGHT_PORT + 1`) puis `apps/web` avec
 `API_INTERNAL_URL` pointant vers elle. Un même test prend donc en charge le navigateur, le relais
 Next, la façade Python, le worker (inline en test) et les contrats. Vérifier qu'une route du
-contrat est servie par Python se fait en pytest (`apps/api-py/tests/unit/test_route_coverage.py`)
+contrat est servie par Python se fait en pytest (`apps/api/tests/unit/test_route_coverage.py`)
 et non par une assertion de plus dans le web : aucune assertion n'est placée dans
 `apps/web/app/api/`.
 

@@ -15,13 +15,13 @@ La coexistence avait un coût certain — deux jeux de variables et d'images, de
 
 ## Décision
 
-**1) Un seul backend, Python.** La façade FastAPI (`apps/api-py`, `uvicorn learny_api.main:app`) et le worker Python (`python -m learny_worker`) servent tout le contrat : 156 opérations d'`api/openapi.yaml`, 11 routes spéciales hors pipeline générique, 23 consommateurs d'événements et 2 crons. Aucun chemin de requête, d'événement ou de tâche ne dépend plus d'un processus TypeScript, et rien ne relaie vers un autre runtime.
+**1) Un seul backend, Python.** La façade FastAPI (`apps/api`, `uvicorn learny_api.main:app`) et le worker Python (`python -m learny_worker`) servent tout le contrat : 156 opérations d'`api/openapi.yaml`, 11 routes spéciales hors pipeline générique, 23 consommateurs d'événements et 2 crons. Aucun chemin de requête, d'événement ou de tâche ne dépend plus d'un processus TypeScript, et rien ne relaie vers un autre runtime.
 
 **2) Ce qui est supprimé.** `apps/api` et `apps/worker` ; Inngest (fonctions, synchronisation, interface, services Compose et variables) ; les paquets `api-routes`, `services`, `jobs`, `llm`, `tutor`, `ingestion`, `notifications`, `automations`, `learning-engine`, `http` ; le mécanisme `api/ownership.yaml`, `OWNERSHIP_OVERRIDES` et `PY_HONO_UPSTREAM_URL` ; la notion de propriétaire `ts`/`py` et le relais qui la lisait ; les Dockerfiles, les configurations Vercel, les services Compose et les étapes de CI du backend TypeScript. Les oracles e2e, visuels et de contrat restent inchangés : ils ont été rejoués contre la façade Python.
 
 **3) Ce qui reste en TypeScript, et pourquoi.** `packages/contracts` reste la source unique du contrat (registre Zod, export `api/openapi.yaml`, catalogue d'erreurs, schémas d'événements) : c'est un artefact de description, sans règle métier ni accès aux données, consommé par la génération Python (`tools/contract/generate-py-contract.mjs`, ADR-2012) et par le SDK. Restent également les clients et leurs dépendances — `apps/web`, `apps/mobile` (autre piste), `api-client`, `api-sdk`, `bricks`, `config`, `core`, `db` (schéma Drizzle, migrations, matrice RLS), `domain`, `i18n`, `testing`, `ui`. Aucun de ces paquets ne porte de règle serveur : le web et le mobile sont des clients purs de l'API, et le schéma `db` ne sert qu'à produire les migrations et la matrice RLS, jamais à répondre à une requête.
 
-**4) Le garde-fou remplace le relais.** La complétude n'est plus vérifiée par une table de propriété mais par construction : `pipeline.install` refuse de démarrer une opération sans handler, et `apps/api-py/tests/unit/test_route_coverage.py` (`[SPEC-2302]`) compare l'inventaire aux routes installées, à la table générée et au registre spécial, y compris les doublons et les handlers orphelins. `tools/migration/inventory.mjs` vérifie la même chose hors Python (`--check` en dérive, `--runtime` en verdict) et prouve qu'aucun chemin back-end TypeScript ne subsiste.
+**4) Le garde-fou remplace le relais.** La complétude n'est plus vérifiée par une table de propriété mais par construction : `pipeline.install` refuse de démarrer une opération sans handler, et `apps/api/tests/unit/test_route_coverage.py` (`[SPEC-2302]`) compare l'inventaire aux routes installées, à la table générée et au registre spécial, y compris les doublons et les handlers orphelins. `tools/migration/inventory.mjs` vérifie la même chose hors Python (`--check` en dérive, `--runtime` en verdict) et prouve qu'aucun chemin back-end TypeScript ne subsiste.
 
 **5) Le retrait est réversible par le déploiement, pas par le runtime.** Le rollback d'une régression Python est le retour à l'image précédente (procédure de `docs/operations/python-cutover.md`), pas le basculement vers Hono.
 
@@ -39,8 +39,8 @@ Points restés ouverts : la suppression du projet Vercel de l'API et de son doma
 
 | Chemin retiré | Nature | Remplacé par |
 |---|---|---|
-| `apps/api` | application Hono (217 routes, OpenAPI servi) | `apps/api-py`, façade FastAPI |
-| `apps/worker` | fonctions Inngest, crons, synchronisation | `apps/worker-py` (outbox PostgreSQL) |
+| `apps/api` | application Hono (217 routes, OpenAPI servi) | `apps/api`, façade FastAPI |
+| `apps/worker` | fonctions Inngest, crons, synchronisation | `apps/worker` (outbox PostgreSQL) |
 | `packages/api-routes` | implémentations, manifeste des routes spéciales | `learny_api/handlers`, `learny_api/special` |
 | `packages/services` | cas d'usage et SQL | domaines `learny.*` (public/application/infrastructure) |
 | `packages/jobs`, `packages/automations` | définitions Inngest, moteur d'automatismes | `learny_worker/consumers.py`, `learny.engagement` |

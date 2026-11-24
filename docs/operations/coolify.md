@@ -10,7 +10,7 @@ Fichiers de référence :
 - `docker/compose.coolify.yml` — la pile déployée par Coolify ;
 - `docker/coolify-support.Dockerfile` — images d'appoint qui embarquent la configuration
   versionnée (Coolify ne monte pas les fichiers du dépôt) ;
-- `docker/web.Dockerfile` et `docker/api-py.Dockerfile` (une image, deux commandes : `api-py` et
+- `docker/web.Dockerfile` et `docker/api.Dockerfile` (une image, deux commandes : `api-py` et
   `worker-py`, SPEC-2003).
 
 L'architecture et les images épinglées sont celles de la pile auto-hébergée
@@ -262,7 +262,7 @@ le job refuse une empreinte différente.
 ## 10. Services Python de la bascule (SPEC-2301)
 
 Le backend est **uniquement Python** (SPEC-2302, ADR-2043) : **deux services à la même image**,
-`docker/api-py.Dockerfile` (SPEC-2003), aux côtés de `web` et `migrate`. Ils sont déclarés dans un
+`docker/api.Dockerfile` (SPEC-2003), aux côtés de `web` et `migrate`. Ils sont déclarés dans un
 fichier inclus par la pile — `docker/compose.coolify-py.yml` pour la production,
 `docker/compose.coolify-qa-py.yml` pour la QA — et `docker/compose.coolify.yml` / `-qa.yml` portent
 `include:`. Coolify déploie donc une seule ressource : le Compose résolu contient bien `api-py` et
@@ -275,7 +275,7 @@ relais.
 | `api-py` | façade FastAPI : tout le contrat | `uvicorn learny_api.main:app --port 8000 --workers 2` | `GET /health` | 8000 |
 | `worker-py` | outbox, livraisons, planificateur singleton | `python -m learny_worker` | `GET /health/live` et `/health/ready` sur le port standard `PORT` | 8081 (sondes locales au conteneur) |
 
-- **Une image, deux commandes** : la CI construit `docker/api-py.Dockerfile` à chaque commit
+- **Une image, deux commandes** : la CI construit `docker/api.Dockerfile` à chaque commit
   (`.github/workflows/ci.yml`), et Coolify construit la même image depuis le Compose ; aucun
   registre ni secret de registre n'est nécessaire.
 - **Limites de ressources** : `api-py` 2 vCPU / 2 Go, `worker-py` 1 vCPU / 1 Go

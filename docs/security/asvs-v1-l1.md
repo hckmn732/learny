@@ -38,9 +38,9 @@ dans cette grille.
 | V12.5.1 | URL utilisateur validées après résolution DNS | Vérifié | [ssrf.test.ts](../../packages/ingestion/test/integration/ssrf.test.ts) | ingestion |
 | V13.2.1 | Requêtes SQL paramétrées (Drizzle) | Vérifié | [rls-matrix.test.ts](../../packages/db/test/integration/rls-matrix.test.ts) | db |
 | V14.1.1 | En-têtes de sécurité configurés | Vérifié | [security-headers.test.ts](../../apps/web/test/integration/security-headers.test.ts) | app |
-| V14.2.1 | Méthodes HTTP et refus des mutations non prévues | Vérifié | [test_pipeline_install.py](../../apps/api-py/tests/integration/test_pipeline_install.py) | api |
+| V14.2.1 | Méthodes HTTP et refus des mutations non prévues | Vérifié | [test_pipeline_install.py](../../apps/api/tests/integration/test_pipeline_install.py) | api |
 | V14.3.1 | Vérification d’origine des mutations | Vérifié | [security-headers.test.ts](../../apps/web/test/integration/security-headers.test.ts) | api |
-| V14.4.1 | En-têtes de cache adaptés aux données privées | Vérifié | [test_pipeline.py](../../apps/api-py/tests/unit/test_pipeline.py) | api |
+| V14.4.1 | En-têtes de cache adaptés aux données privées | Vérifié | [test_pipeline.py](../../apps/api/tests/unit/test_pipeline.py) | api |
 | V14.5.1 | Content-Security-Policy stricte à nonce | Vérifié | [csp.test.ts](../../apps/web/lib/security/csp.test.ts) | app |
 | V14.6.1 | CORS restreint | Non applicable | L’API est same-origin ; aucune route ne renvoie `Access-Control-Allow-Origin`. | api |
 | V14.7.1 | HSTS sans contournement local | Vérifié | [security-headers.test.ts](../../apps/web/test/integration/security-headers.test.ts) | app |
