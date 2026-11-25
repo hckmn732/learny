@@ -201,6 +201,18 @@ def bearer_without_origin(headers: Mapping[str, str]) -> bool:
     return BEARER_WITHOUT_ORIGIN.match(headers.get("authorization") or "") is not None
 
 
+def native_without_credentials(headers: Mapping[str, str]) -> bool:
+    """A mutation with neither `Origin` nor cookie nor token is exempt (ADR-4010).
+
+    It is what a native client sends before it holds a session (sign-up, ADR-3008 section 5). With no
+    ambient credential there is nothing for a forged request to ride on, and a browser always
+    sends `Origin` on a cross-origin POST: the cookie case stays refused.
+    """
+    if headers.get("origin") is not None or headers.get("cookie") is not None:
+        return False
+    return not (headers.get("authorization") or "").strip()
+
+
 @dataclass(frozen=True, slots=True)
 class RequestOriginGuard:
     """The guard used by the pipeline: it reads the request itself."""
@@ -208,7 +220,7 @@ class RequestOriginGuard:
     env: Mapping[str, str | None]
 
     def check(self, request: HttpRequest) -> None:
-        if bearer_without_origin(request.headers):
+        if bearer_without_origin(request.headers) or native_without_credentials(request.headers):
             return
         create_origin_guard(
             app_url=self.env.get("NEXT_PUBLIC_APP_URL"),

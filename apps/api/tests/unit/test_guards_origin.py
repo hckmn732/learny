@@ -223,6 +223,17 @@ def test_exempts_an_origin_less_bearer_mutation_but_not_a_cookie_mutation() -> N
     assert refused(lambda: guard.check(cookie)).code == "ORIGIN_REJECTED"
 
 
+def test_exempts_a_credential_less_native_mutation_but_not_a_cookie_or_foreign_one() -> None:
+    # ADR-4010: the mobile sign-up carries no Origin, no cookie and no token yet.
+    guard = create_request_origin_guard(ENV)
+    guard.check(FakeRequest(headers={"host": "api.internal"}))
+    guard.check(FakeRequest(headers={"host": "api.internal", "authorization": "  "}))
+    cookie = FakeRequest(headers={"cookie": "session=value", "host": "api.internal"})
+    assert refused(lambda: guard.check(cookie)).code == "ORIGIN_REJECTED"
+    foreign = FakeRequest(headers={"origin": "https://evil.example", "host": "api.internal"})
+    assert refused(lambda: guard.check(foreign)).code == "ORIGIN_REJECTED"
+
+
 def test_accepts_a_mutation_forwarded_by_the_relay_and_rejects_a_spoofed_one() -> None:
     local_env = {"API_PROXY_SECRET": SECRET}
     guard = create_request_origin_guard(local_env)

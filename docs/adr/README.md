@@ -294,3 +294,4 @@ Origine : **Validée** = décision prise avec le porteur du projet ; **Déduite*
 | [ADR-4008](ADR-4008-mode-simple-noms-d-evenements-pointes-et-tache-simple-analys.md) | Mode simple : noms d'événements pointés et tâche simple_analysis hors sélecteur | Déduite | SPEC-4001, ADR-4003, ADR-2014 |
 | [ADR-4009](ADR-4009-mode-simple-mobile-reception-du-partage-compte-sans-cle-et-e.md) | Mode simple mobile : réception du partage, compte sans clé et espace de libellés | Déduite | SPEC-4003, SPEC-4002, ADR-4002, ADR-3005 |
 | [ADR-0342](ADR-0342-cloture-administrative-des-pistes-produit-et-migration.md) | Cloture administrative des pistes produit et migration | Déduite | SPEC-808, SPEC-901, SPEC-1101, ADR-2043 |
+| [ADR-4010](ADR-4010-mutations-anonymes-des-clients-natifs-sans-origin.md) | Mutations anonymes des clients natifs sans Origin | Déduite | ADR-1005, ADR-3008, SPEC-3101, SPEC-2101 |
