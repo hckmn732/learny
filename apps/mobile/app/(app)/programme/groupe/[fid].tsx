@@ -1,18 +1,20 @@
 // /programme/groupe/:fid — Formations à plusieurs (maquette Groupe.dc.html).
-// TODO(quickfix/A) : remplacer la coquille par l'écran de design/app-mobile-rattrapage/ecrans/Groupe.dc.html.
-import { useLocalSearchParams } from 'expo-router';
+//
+// Thin route: the screen lives in `src/features/mr/programme`.
+import { useLocalSearchParams, useRouter } from 'expo-router';
 
-import { fr } from '@learny/i18n';
-
-import { QuickfixPlaceholder } from '../../../../src/features/mr/QuickfixPlaceholder';
+import { GroupeScreen } from '../../../../src/features/mr/programme/GroupeScreen';
 
 export default function GroupeRoute() {
-  const { fid } = useLocalSearchParams<{ fid: string }>();
+  const router = useRouter();
+  const params = useLocalSearchParams<{ fid?: string }>();
+
   return (
-    <QuickfixPlaceholder
-      screen={fr.mr.programme.groupe.title}
-      testID="qf-groupe"
-      note={fid === undefined ? undefined : `Formation ${fid}`}
+    <GroupeScreen
+      formationId={typeof params.fid === 'string' ? params.fid : ''}
+      onBack={() => {
+        router.back();
+      }}
     />
   );
 }
