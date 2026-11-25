@@ -11,7 +11,7 @@ import type { AiModelsTaskId, AiTaskModelState } from '@learny/contracts';
 import { fr } from '@learny/i18n';
 
 import { messageFor } from '../../api/errors';
-import { useAssignTaskModel, useTaskModels } from '../../data/task-models';
+import { useAssignTaskModel, useAutoCheckPending, useTaskModels } from '../../data/task-models';
 import { Button } from '../../ui/Button';
 import { Chip } from '../../ui/Chip';
 import { ErrorState } from '../../ui/ErrorState';
@@ -45,6 +45,7 @@ function unavailableLabel(task: AiTaskModelState): string {
 export function ModelsScreen() {
   const router = useRouter();
   const models = useTaskModels();
+  useAutoCheckPending(models.data);
   const assigner = useAssignTaskModel();
   const [openTask, setOpenTask] = useState<AiModelsTaskId | null>(null);
   const [toast, setToast] = useState<string | null>(null);
@@ -157,6 +158,7 @@ export function ModelsScreen() {
             key={`${option.credentialId}:${option.modelId}`}
             testID={`model-option-${String(index)}`}
             title={option.label}
+            titleLines={3}
             subtitle={option.providerLabel}
             {...(option.outsideEu ? { trailing: <Chip label={t.outsideEu} tone="orange" /> } : {})}
             onPress={() => {

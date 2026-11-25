@@ -4,8 +4,18 @@
 // screen, a scrollable body, and an optional footer that holds the « Enregistrer » action. Leaving
 // a screen with unsaved changes asks for a confirmation first (EF-3), on the back chevron and on
 // the Android system gesture.
-import { useCallback, useEffect, type ReactNode } from 'react';
-import { Alert, BackHandler, ScrollView, StyleSheet, View } from 'react-native';
+import { useCallback, useEffect, useRef, type ReactNode } from 'react';
+import {
+  Alert,
+  BackHandler,
+  Keyboard,
+  KeyboardAvoidingView,
+  ScrollView,
+  StyleSheet,
+  TextInput,
+  View,
+  type ScrollViewInstance,
+} from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { fr } from '@learny/i18n';
@@ -76,6 +86,39 @@ export function SettingsScaffold({
   // EF-3, canevas § 3 — the back chevron of a stacked screen is drawn under the native status bar
   // unless the inset is reserved: without it the target sits outside the touchable area.
   const insets = useSafeAreaInsets();
+  const scrollRef = useRef<ScrollViewInstance>(null);
+
+  // QA 2026-11-25 — with edge-to-edge Android the window is not resized by the keyboard: the
+  // body rises with the keyboard (KeyboardAvoidingView below) and the focused field is scrolled
+  // into view, so a learner always sees what they type.
+  useEffect(() => {
+    const subscription = Keyboard.addListener('keyboardDidShow', () => {
+      const input = TextInput.State.currentlyFocusedInput() as
+        | {
+            measureLayout: (
+              relative: never,
+              onSuccess: (x: number, y: number) => void,
+              onFail: () => void,
+            ) => void;
+          }
+        | null
+        | undefined;
+      const scroll = scrollRef.current;
+      const inner = scroll?.getInnerViewRef() ?? null;
+      if (input == null || scroll === null || inner === null) return;
+      input.measureLayout(
+        inner as never,
+        (_x: number, y: number) => {
+          scroll.scrollTo({ y: Math.max(0, y - theme.spacing.xxxl * 3), animated: true });
+        },
+        () => undefined,
+      );
+    });
+    return () => {
+      subscription.remove();
+    };
+  }, []);
+
   return (
     <View style={styles.screen} testID={testID}>
       <View style={[styles.nav, { paddingTop: insets.top + theme.spacing.lg }]}>
@@ -89,20 +132,24 @@ export function SettingsScaffold({
           {title}
         </Text>
       </View>
-      <ScrollView
-        style={styles.scroll}
-        contentContainerStyle={styles.content}
-        showsVerticalScrollIndicator={false}
-        {...(scrollTestID === undefined ? {} : { testID: scrollTestID })}
-      >
-        {subtitle === undefined ? null : (
-          <Text variant="rowSubtitle" tone="muted">
-            {subtitle}
-          </Text>
-        )}
-        {children}
-      </ScrollView>
-      {footer === undefined ? null : <View style={styles.footer}>{footer}</View>}
+      <KeyboardAvoidingView behavior="padding" style={styles.scroll}>
+        <ScrollView
+          ref={scrollRef}
+          style={styles.scroll}
+          contentContainerStyle={styles.content}
+          keyboardShouldPersistTaps="handled"
+          showsVerticalScrollIndicator={false}
+          {...(scrollTestID === undefined ? {} : { testID: scrollTestID })}
+        >
+          {subtitle === undefined ? null : (
+            <Text variant="rowSubtitle" tone="muted">
+              {subtitle}
+            </Text>
+          )}
+          {children}
+        </ScrollView>
+        {footer === undefined ? null : <View style={styles.footer}>{footer}</View>}
+      </KeyboardAvoidingView>
       {toast === undefined ? null : <View style={styles.toast}>{toast}</View>}
     </View>
   );

@@ -5,6 +5,7 @@
 // testing and deleting a provider stay on the web (ADR-3002): the mobile client only lists the
 // models of the keys the learner already qualified.
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { useEffect, useRef } from 'react';
 
 import type { AiModelsState, AiModelsTaskId, AiModelsUpdateBody } from '@learny/contracts';
 
@@ -68,12 +69,52 @@ export function useAssignTaskModel(): TaskModelAssigner {
   return {
     assign: async (task, modelId, credentialId) => {
       await mutation.mutateAsync({ action: 'assign', task, modelId, credentialId });
+      // As on the web: the choice starts its compatibility check, the status then refreshes.
+      void checkCompatibility(client, task, modelId, credentialId);
     },
     clear: async (task) => {
       await mutation.mutateAsync({ action: 'clear', task });
     },
     pending: mutation.isPending,
   };
+}
+
+/** Runs the compatibility probes of one task (`me.ai.credentials.qualify`) and refreshes the tab. */
+async function checkCompatibility(
+  client: ReturnType<typeof useQueryClient>,
+  task: AiModelsTaskId,
+  modelId: string,
+  credentialId: string,
+): Promise<void> {
+  try {
+    await requireApiClient().api.meAiCredentialsQualify({
+      params: { id: credentialId },
+      body: { modelId, task },
+    });
+  } catch {
+    // The report keeps its status; a later visit retries.
+  }
+  await client.invalidateQueries({ queryKey: queryKeys.aiModels() });
+}
+
+/**
+ * Tasks left « pending » (chosen before the check existed, or interrupted) are checked once per
+ * visit of the screen, so the status never stays on « Vérification en cours ».
+ */
+export function useAutoCheckPending(state: AiModelsState | null): void {
+  const client = useQueryClient();
+  const started = useRef(new Set<string>());
+  useEffect(() => {
+    if (state === null) return;
+    for (const task of state.tasks) {
+      if (task.compatibility?.status !== 'pending') continue;
+      if (task.modelId === null || task.credentialId === null) continue;
+      const key = `${task.credentialId}:${task.modelId}:${task.task}`;
+      if (started.current.has(key)) continue;
+      started.current.add(key);
+      void checkCompatibility(client, task.task, task.modelId, task.credentialId);
+    }
+  }, [client, state]);
 }
 
 /** The model of one task, for the subtitle of the root screen (BR-SET-05). */

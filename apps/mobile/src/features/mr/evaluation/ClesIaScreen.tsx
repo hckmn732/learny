@@ -5,6 +5,7 @@
 // `me.ai.credentials.list`, le test de `me.ai.credentials.discover` et l'écriture de
 // `me.ai.credentials.create` (contrats de SPEC-505). Aucune clé en clair ne reste à l'écran après
 // l'enregistrement.
+import { useQueryClient } from '@tanstack/react-query';
 import { useState } from 'react';
 import { Alert, Pressable, StyleSheet, View } from 'react-native';
 
@@ -12,7 +13,7 @@ import type { AiCredentialProvider, CredentialDto } from '@learny/contracts';
 import { fr } from '@learny/i18n';
 
 import { messageFor } from '../../../api/errors';
-import { Pop, Rise } from '../motion';
+import { queryKeys } from '../../../data/keys';
 import { theme } from '../../../theme';
 import { Button } from '../../../ui/Button';
 import { Card } from '../../../ui/Card';
@@ -22,6 +23,7 @@ import { Skeleton } from '../../../ui/Skeleton';
 import { Text } from '../../../ui/Text';
 import { Toast } from '../../../ui/Toast';
 import { SettingsScaffold } from '../../profil/SettingsScaffold';
+import { Pop, Rise } from '../motion';
 
 import { Field } from './Field';
 import {
@@ -90,6 +92,10 @@ export interface ClesIaScreenProps {
 /** Écran « Clés d'IA personnelles » : mes clés, puis ajout et test d'une clé. */
 export function ClesIaScreen({ onBack, onOpenModels }: ClesIaScreenProps) {
   const credentials = useAiCredentials();
+  const queryClient = useQueryClient();
+  // A new or deleted key changes the models each task can pick (Profil › Modèles d'IA).
+  const refreshModels = (): Promise<void> =>
+    queryClient.invalidateQueries({ queryKey: queryKeys.aiModels() });
   const [provider, setProvider] = useState<AiCredentialProvider>('mistral');
   const [apiKey, setApiKey] = useState('');
   const [baseUrl, setBaseUrl] = useState('');
@@ -159,7 +165,7 @@ export function ClesIaScreen({ onBack, onOpenModels }: ClesIaScreenProps) {
       setBaseUrl('');
       setDiscovered(null);
       setToast(t.saved);
-      await credentials.refetch();
+      await Promise.all([credentials.refetch(), refreshModels()]);
     } catch (cause) {
       setError(messageFor(cause));
     } finally {
@@ -173,7 +179,7 @@ export function ClesIaScreen({ onBack, onOpenModels }: ClesIaScreenProps) {
     try {
       await deleteCredential(id);
       setToast(t.deleted);
-      await credentials.refetch();
+      await Promise.all([credentials.refetch(), refreshModels()]);
     } catch (cause) {
       setError(messageFor(cause));
     } finally {

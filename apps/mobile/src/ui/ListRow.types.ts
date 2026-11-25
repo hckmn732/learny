@@ -7,6 +7,8 @@ import type { IconName } from './icons';
 export interface ListRowProps {
   readonly title: string;
   readonly subtitle?: string;
+  /** Lines of the title before it is cut (1 by default; long model names need more). */
+  readonly titleLines?: number;
   readonly icon?: IconName;
   readonly onPress?: () => void;
   /** Trailing content (a value, a switch, a badge). */

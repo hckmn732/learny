@@ -11,6 +11,7 @@ import { Text } from './Text';
 export function ListRow({
   title,
   subtitle,
+  titleLines = 1,
   icon,
   onPress,
   trailing,
@@ -25,7 +26,7 @@ export function ListRow({
         </View>
       )}
       <View style={styles.body}>
-        <Text variant="rowTitle" numberOfLines={1}>
+        <Text variant="rowTitle" numberOfLines={titleLines}>
           {title}
         </Text>
         {subtitle === undefined ? null : (
