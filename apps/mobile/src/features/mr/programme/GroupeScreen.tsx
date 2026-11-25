@@ -310,7 +310,13 @@ export function GroupeScreen({ formationId, onBack }: GroupeScreenProps) {
             onPress={submitCode}
             testID="qf-groupe-join-submit"
           />
-          <Button label={g.rotateCancel} variant="text" onPress={() => setJoinOpen(false)} />
+          <Button
+            label={g.rotateCancel}
+            variant="text"
+            onPress={() => {
+              setJoinOpen(false);
+            }}
+          />
         </View>
       </Sheet>
 

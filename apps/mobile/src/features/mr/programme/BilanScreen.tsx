@@ -6,9 +6,8 @@
 // route does not exist yet: the button says so instead of inventing a file.
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useState, type ReactNode } from 'react';
-import { ScrollView, StyleSheet, View } from 'react-native';
+import { ScrollView, Share, StyleSheet, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { Share } from 'react-native';
 
 import type { FinalReviewDto, FinalReviewMode } from '@learny/contracts';
 import { fr } from '@learny/i18n';
@@ -18,7 +17,6 @@ import { radius, theme } from '../../../theme';
 import { Button } from '../../../ui/Button';
 import { Card } from '../../../ui/Card';
 import { Chip } from '../../../ui/Chip';
-import { EmptyState } from '../../../ui/EmptyState';
 import { ErrorState } from '../../../ui/ErrorState';
 import { IconButton } from '../../../ui/IconButton';
 import { Skeleton } from '../../../ui/Skeleton';

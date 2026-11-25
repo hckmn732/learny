@@ -10,8 +10,8 @@ import { uuidV4 } from '../../../api/uuid';
 import { configResult } from '../../../config';
 import { deviceUploadUrl } from '../../../simple/upload-transport';
 
-import { apportTitleFromName } from './view-model';
 import type { PickedApport } from './pickers';
+import { apportTitleFromName } from './view-model';
 
 /** A deposit that the API or the storage refused. */
 export class ApportUploadError extends Error {

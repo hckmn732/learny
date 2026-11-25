@@ -13,22 +13,22 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { fr } from '@learny/i18n';
 
 import { requireApiClient } from '../../../api/registry';
-import { radius, theme, verticalHitSlop } from '../../../theme';
+import { radius, theme } from '../../../theme';
 import { Button } from '../../../ui/Button';
 import { Chip } from '../../../ui/Chip';
 import { EmptyState } from '../../../ui/EmptyState';
 import { ErrorState } from '../../../ui/ErrorState';
 import { Icon } from '../../../ui/Icon';
-import type { IconName } from '../../../ui/icons';
 import { IconButton } from '../../../ui/IconButton';
+import type { IconName } from '../../../ui/icons';
 import { Sheet } from '../../../ui/Sheet';
 import { Skeleton } from '../../../ui/Skeleton';
 import { Text } from '../../../ui/Text';
 import { Toast } from '../../../ui/Toast';
 
 import { ApportList } from './ApportList';
-import { ImportProgrammeSheet } from './ImportProgrammeSheet';
 import { mrKeys, useModuleScreen } from './data';
+import { ImportProgrammeSheet } from './ImportProgrammeSheet';
 import { pickApportFiles, pickApportPhotos, type PickedApport } from './pickers';
 import { uploadApport } from './upload';
 import { isHttpsUrl, linkKindOf } from './view-model';
