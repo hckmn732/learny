@@ -23,7 +23,8 @@ const PROVIDER_OPTIONS: readonly { value: AiCredentialProvider; label: string }[
   { value: 'openai', label: 'OpenAI' },
   { value: 'mistral', label: 'Mistral' },
   { value: 'deepseek', label: 'DeepSeek' },
-  { value: 'opencode', label: 'OpenCode' },
+  { value: 'opencode', label: 'OpenCode Zen' },
+  { value: 'opencode_go', label: 'OpenCode Go' },
   { value: 'openai_compatible', label: 'Service compatible OpenAI' },
   { value: 'local', label: 'Modèle local (Ollama, vLLM)' },
 ];
@@ -34,6 +35,7 @@ const OUTSIDE_EU_PROVIDERS: readonly AiCredentialProvider[] = [
   'openai',
   'deepseek',
   'opencode',
+  'opencode_go',
 ];
 
 function needsBaseUrl(provider: AiCredentialProvider): boolean {

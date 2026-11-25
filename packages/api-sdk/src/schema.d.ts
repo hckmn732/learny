@@ -4837,7 +4837,7 @@ export interface components {
             label?: string;
             modelIds: string[];
             /** @enum {string} */
-            provider: "anthropic" | "openai" | "mistral" | "deepseek" | "opencode" | "openai_compatible" | "local";
+            provider: "anthropic" | "openai" | "mistral" | "deepseek" | "opencode" | "opencode_go" | "openai_compatible" | "local";
         };
         MeAiCredentialsCreateOutput: {
             baseUrl: string | null;
@@ -4853,7 +4853,7 @@ export interface components {
             modelIds: string[];
             outsideEu: boolean;
             /** @enum {string} */
-            provider: "anthropic" | "openai" | "mistral" | "deepseek" | "opencode" | "openai_compatible" | "local";
+            provider: "anthropic" | "openai" | "mistral" | "deepseek" | "opencode" | "opencode_go" | "openai_compatible" | "local";
             providerLabel: string;
             qualifiedAt: string | null;
             /** @enum {string} */
@@ -4867,7 +4867,7 @@ export interface components {
             apiKey?: string;
             baseUrl?: string;
             /** @enum {string} */
-            provider: "anthropic" | "openai" | "mistral" | "deepseek" | "opencode" | "openai_compatible" | "local";
+            provider: "anthropic" | "openai" | "mistral" | "deepseek" | "opencode" | "opencode_go" | "openai_compatible" | "local";
         };
         MeAiCredentialsDiscoverOutput: {
             modelIds: string[];
@@ -4887,7 +4887,7 @@ export interface components {
                 modelIds: string[];
                 outsideEu: boolean;
                 /** @enum {string} */
-                provider: "anthropic" | "openai" | "mistral" | "deepseek" | "opencode" | "openai_compatible" | "local";
+                provider: "anthropic" | "openai" | "mistral" | "deepseek" | "opencode" | "opencode_go" | "openai_compatible" | "local";
                 providerLabel: string;
                 qualifiedAt: string | null;
                 /** @enum {string} */
@@ -4956,7 +4956,7 @@ export interface components {
             modelId: string;
             modelVersion: string;
             /** @enum {string} */
-            provider: "anthropic" | "openai" | "mistral" | "deepseek" | "opencode" | "openai_compatible" | "local";
+            provider: "anthropic" | "openai" | "mistral" | "deepseek" | "opencode" | "opencode_go" | "openai_compatible" | "local";
             /** Format: date-time */
             startedAt: string;
             /** @enum {string} */
@@ -4992,7 +4992,7 @@ export interface components {
                 models: string[];
                 outsideEu: boolean;
                 /** @enum {string} */
-                provider: "anthropic" | "openai" | "mistral" | "deepseek" | "opencode" | "openai_compatible" | "local";
+                provider: "anthropic" | "openai" | "mistral" | "deepseek" | "opencode" | "opencode_go" | "openai_compatible" | "local";
                 providerLabel: string;
                 qualifiedAt: string | null;
                 /** @enum {string} */
@@ -5041,13 +5041,13 @@ export interface components {
                     modelId: string;
                     outsideEu: boolean;
                     /** @enum {string} */
-                    provider: "anthropic" | "openai" | "mistral" | "deepseek" | "opencode" | "openai_compatible" | "local";
+                    provider: "anthropic" | "openai" | "mistral" | "deepseek" | "opencode" | "opencode_go" | "openai_compatible" | "local";
                     providerLabel: string;
                     /** @enum {string} */
                     qualificationStatus: "qualified" | "unqualified";
                 }[];
                 outsideEu: boolean;
-                provider: ("anthropic" | "openai" | "mistral" | "deepseek" | "opencode" | "openai_compatible" | "local") | null;
+                provider: ("anthropic" | "openai" | "mistral" | "deepseek" | "opencode" | "opencode_go" | "openai_compatible" | "local") | null;
                 providerLabel: string | null;
                 requiredCapabilities: ("tools" | "structured" | "web_search" | "passage_refs" | "vision")[];
                 /** @enum {string} */
@@ -5088,7 +5088,7 @@ export interface components {
                 models: string[];
                 outsideEu: boolean;
                 /** @enum {string} */
-                provider: "anthropic" | "openai" | "mistral" | "deepseek" | "opencode" | "openai_compatible" | "local";
+                provider: "anthropic" | "openai" | "mistral" | "deepseek" | "opencode" | "opencode_go" | "openai_compatible" | "local";
                 providerLabel: string;
                 qualifiedAt: string | null;
                 /** @enum {string} */
@@ -5137,13 +5137,13 @@ export interface components {
                     modelId: string;
                     outsideEu: boolean;
                     /** @enum {string} */
-                    provider: "anthropic" | "openai" | "mistral" | "deepseek" | "opencode" | "openai_compatible" | "local";
+                    provider: "anthropic" | "openai" | "mistral" | "deepseek" | "opencode" | "opencode_go" | "openai_compatible" | "local";
                     providerLabel: string;
                     /** @enum {string} */
                     qualificationStatus: "qualified" | "unqualified";
                 }[];
                 outsideEu: boolean;
-                provider: ("anthropic" | "openai" | "mistral" | "deepseek" | "opencode" | "openai_compatible" | "local") | null;
+                provider: ("anthropic" | "openai" | "mistral" | "deepseek" | "opencode" | "opencode_go" | "openai_compatible" | "local") | null;
                 providerLabel: string | null;
                 requiredCapabilities: ("tools" | "structured" | "web_search" | "passage_refs" | "vision")[];
                 /** @enum {string} */

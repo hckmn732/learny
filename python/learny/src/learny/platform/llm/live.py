@@ -57,6 +57,7 @@ _CHAT_ENDPOINTS: dict[str, str] = {
     "mistral": "https://api.mistral.ai/v1",
     "deepseek": "https://api.deepseek.com",
     "opencode": "https://opencode.ai/zen/v1",
+    "opencode_go": "https://opencode.ai/zen/go/v1",
 }
 _CONTEXT_TOO_LONG = re.compile(
     r"\bcontext[_ -]?length[_ -]?exceeded\b|\bmaximum context (?:length|window)\b"
