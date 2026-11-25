@@ -76,13 +76,13 @@ export function SimpleCards({ onDrop, onTutor }: SimpleCardsProps) {
 }
 
 const styles = StyleSheet.create({
-  section: { gap: theme.spacing.sm },
+  section: { gap: theme.spacing.md },
   sectionTitle: { marginBottom: 0 },
   // QA 2026-11-25: compact cards so the home screen fits without scrolling.
-  card: { paddingVertical: theme.spacing.md, paddingHorizontal: theme.spacing.lg, gap: 2 },
+  card: { gap: theme.spacing.xs },
   badgeRow: { flexDirection: 'row', alignItems: 'center', gap: theme.spacing.sm },
   dropCard: { backgroundColor: theme.colors.lime, borderColor: theme.colors.lime },
-  title: { marginTop: 2 },
+  title: { marginTop: theme.spacing.xs },
   footer: {
     flexDirection: 'row',
     alignItems: 'center',
