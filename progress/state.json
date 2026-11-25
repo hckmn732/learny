@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-11-24T20:02:46.318Z",
+  "updatedAt": "2026-11-25T02:25:09.276Z",
   "specs": {
     "SPEC-001": {
       "status": "done",
@@ -8111,14 +8111,50 @@
       "validations": {}
     },
     "SPEC-4003": {
-      "status": "pending",
+      "status": "done",
       "attempts": 0,
-      "startedAt": null,
-      "completedAt": null,
-      "branch": null,
-      "commit": null,
+      "startedAt": "2026-11-24T20:06:03.262Z",
+      "completedAt": "2026-11-25T02:25:09.268Z",
+      "branch": "spec/SPEC-4003-mode-simple-parcours-mobile",
+      "commit": "d5db8927",
       "lastError": null,
-      "validations": {}
+      "validations": {
+        "lint": {
+          "status": "passed",
+          "at": "2026-11-25T02:21:05.635Z",
+          "details": ""
+        },
+        "typecheck": {
+          "status": "passed",
+          "at": "2026-11-25T02:21:32.902Z",
+          "details": ""
+        },
+        "unit": {
+          "status": "passed",
+          "at": "2026-11-25T02:23:10.136Z",
+          "details": "16 Vitest + 7 Jest test(s) [SPEC-4003] réussi(s), 0 échec(s)"
+        },
+        "integration": {
+          "status": "passed",
+          "at": "2026-11-25T01:06:38.628Z",
+          "details": "3 test(s) réussi(s), 0 échec(s)"
+        },
+        "e2e": {
+          "status": "passed",
+          "at": "2026-11-25T01:09:57.121Z",
+          "details": "3 flux réussi(s), 0 échec(s), 1 vidéo(s)"
+        },
+        "visual": {
+          "status": "passed",
+          "at": "2026-11-25T01:09:57.122Z",
+          "details": "1 flux @visual réussi(s) (mode mockup)"
+        },
+        "acceptance": {
+          "status": "passed",
+          "at": "2026-11-25T02:23:10.192Z",
+          "details": "5/5 critères ✅"
+        }
+      }
     }
   },
   "checkpoints": {
