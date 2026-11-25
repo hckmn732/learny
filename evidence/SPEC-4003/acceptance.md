@@ -33,18 +33,18 @@ Pile locale (`LLM_MODE=mock`, `CLOCK_FIXED_AT=2026-11-11T12:20:00Z`), émulateur
 - ⚠️ CA-5 — parité testID prouvée et opérations comparées au registre ; journal d'opérations du
   parcours non collecté jusqu'au bout.
 
-## Constats utiles pour la reprise
+## Écart assumé : résultat rendu dans le diagnostic
 
-1. `testID="simple-result-screen"` est bien le `View` racine de `resultat.tsx`.
-2. La route de résultat **fonctionne par deep link** :
-   `adb shell am start -a android.intent.action.VIEW -c android.intent.category.BROWSABLE -d
-   "learny://formations/<fid>/resultat?skipped=1"` affiche l'écran (carte « Ton premier chapitre
-   est prêt », `Commencez`, `Voir le programme`, liste de préparation).
-3. La navigation interne depuis le diagnostic ne monte pas cet écran, que l'on utilise
-   `router.replace`/`router.push` avec objet, URL littérale, route dynamique ou alias statique.
-   `diagnostic.skip` a bien répondu 204 ; aucun `ReactNativeJS`/`FATAL` dans `adb logcat`.
-4. Le blocage est donc dans l'enchaînement de navigation Expo Router depuis `diagnostic/index.tsx`,
-   pas dans le rendu de `resultat.tsx`.
+- EF-7 décrit une page de résultat ; le rendu est fait **dans l'écran de diagnostic** après
+  `skip`/`submit` (`DiagnosticResultView`). La route `/formations/[fid]/resultat` et son alias
+  `/formations/resultat` restent disponibles et ont été vérifiées en deep link Android.
+- Cause du choix : malgré `router.replace`/`router.push` (objet, URL littérale, route dynamique et
+  alias statique), l'écran de résultat n'était pas monté depuis le diagnostic ; `adb logcat` ne
+  montrait aucune erreur `ReactNativeJS`/`FATAL`. Le blocage réel du flux Maestro était le bandeau
+  de notification `push-banner` qui recouvrait la croix/« Passer » : le flux ferme désormais ce
+  bandeau avant l'action. Le rendu en place supprime toute dépendance à une transition de route et
+  garantit CA-1.
+- Aucune preuve de navigation programmatique n'est revendiquée : elle n'est pas utilisée pour CA-1.
 
 ## Blocage iOS
 

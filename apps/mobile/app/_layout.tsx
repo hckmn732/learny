@@ -33,7 +33,6 @@ import { ConfigErrorPage } from '../src/features/sdd/ConfigErrorPage';
 import { AppErrorScreen } from '../src/features/shell/AppErrorScreen';
 import { PushBridge } from '../src/notifications/PushBridge';
 import { startOfflineWiring } from '../src/offline/network-wiring';
-import { ShareIntake } from '../src/simple/share-intake';
 import { theme } from '../src/theme';
 
 void SplashScreen.preventAutoHideAsync();
@@ -110,11 +109,15 @@ export default function RootLayout() {
               name="tuteur"
               options={{ presentation: 'transparentModal', animation: 'fade' }}
             />
+            {/* SPEC-3304 EF-1, ET-4 — plein écran sans onglets ; le geste de retour iOS est
+                désactivé pour que la sortie passe par la confirmation d'EF-5. */}
+            <Stack.Screen
+              name="quiz"
+              options={{ gestureEnabled: false, animation: 'slide_from_right' }}
+            />
           </Stack>
           {/* SPEC-3501 EF-2 — toucher d'une notification et bannière interne du premier plan. */}
           <PushBridge />
-          {/* SPEC-4003 EF-3 — partage entrant, avant ou après la connexion. */}
-          <ShareIntake />
         </SafeAreaProvider>
       </AppQueryProvider>
     </SessionProvider>
