@@ -86,6 +86,7 @@ beforeEach(() => {
 describe('[quickfix mr-b] premiers pas', () => {
   it('enregistre le rythme puis avance à l’étape IA', async () => {
     await renderScreen();
+    expect(screen.getByTestId('qf-premiers-pas')).toBeTruthy();
     await waitFor(() => {
       expect(screen.getByText('Votre rythme')).toBeTruthy();
     });

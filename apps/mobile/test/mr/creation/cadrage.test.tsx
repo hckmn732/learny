@@ -156,6 +156,7 @@ describe('[quickfix mr-b] cadrage', () => {
     );
 
     await renderScreen();
+    expect(screen.getByTestId('qf-cadrage')).toBeTruthy();
     await waitFor(() => {
       expect(screen.getByText('Nouvelle formation · question 2 sur 5')).toBeTruthy();
     });
@@ -185,6 +186,7 @@ describe('[quickfix mr-b] cadrage', () => {
     });
 
     await renderScreen();
+    expect(screen.getByTestId('qf-cadrage')).toBeTruthy();
     await fireEvent.changeText(
       screen.getByTestId('qf-cadrage-subject'),
       '  SAP S/4HANA Finance  ',

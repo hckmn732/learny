@@ -155,6 +155,7 @@ describe('[quickfix mr-b] proposition', () => {
     mockApi.programmeValidate.mockResolvedValue(proposalState(2, 'active'));
 
     await renderScreen();
+    expect(screen.getByTestId('qf-proposition')).toBeTruthy();
     await waitFor(() => {
       expect(screen.getByText('Ton programme SAP S/4HANA Finance')).toBeTruthy();
     });
