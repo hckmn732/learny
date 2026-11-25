@@ -175,6 +175,9 @@ def _boolean_of(data: Mapping[str, Any], name: str) -> bool:
     return bool(data[name])
 
 
+# Backoff 10 s, 20 s, … 1280 s between the nine attempts of an ingestion: ~42 minutes in all.
+INGESTION_MAX_ATTEMPTS = 9
+
 def _job_actor(user_id: str) -> Actor:
     """The actor a job carries: the identifier only."""
     return Actor(user_id=user_id, email="", email_confirmed=True, transport="bearer")
@@ -214,6 +217,11 @@ async def tutor_process_question_bank_jobs(deps: Any, event: Event) -> None:
 async def identity_purge_security_rows(deps: Any, event: Event) -> None:
     """`security-purge`: idempotency keys and rate-limit buckets older than a day."""
     await identity.purge_security_rows(deps)
+
+
+async def content_fail_stale_resources(deps: Any, event: Event) -> None:
+    """`stale-resources`: documents stuck in analysis with no job left end in `failed`."""
+    await content.fail_stale_resources(deps)
 
 
 async def engagement_plan_daily_digests(deps: Any, event: Event) -> None:
@@ -557,6 +565,13 @@ CONSUMERS: tuple[Consumer, ...] = (
         tags={"context": "identity"},
     ),
     Consumer(
+        name="content.fail_stale_resources",
+        on="cron/hourly-tick",
+        run=content_fail_stale_resources,
+        validate=payload_validator(tickAt=INSTANT),
+        tags={"context": "content"},
+    ),
+    Consumer(
         name="engagement.plan_daily_digests",
         on="cron/hourly-tick",
         run=engagement_plan_daily_digests,
@@ -607,6 +622,9 @@ CONSUMERS: tuple[Consumer, ...] = (
         on="resource/uploaded",
         run=content_process_resource,
         timeout_s=INGESTION_TIMEOUT_S,
+        # A saturated embedding provider (429) is retried for about 45 minutes before giving up;
+        # a refusal (invalid key, rejected request) fails at once (QA 2026-11-25).
+        max_attempts=INGESTION_MAX_ATTEMPTS,
         on_final_failure=content_resource_given_up,
         validate=payload_validator(userId=UUID, resourceId=UUID),
         tags={"context": "content"},

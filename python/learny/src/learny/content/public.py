@@ -12,6 +12,7 @@ from learny.content.application.ingestion import (
     IngestionPorts,
     default_ports,
     fail_after_last_attempt,
+    fail_stale_resources,
     process_resource,
 )
 from learny.content.application.module_screen import get_module_screen
@@ -86,6 +87,7 @@ __all__ = [
     "estimate_reading_minutes",
     "excerpt_of",
     "fail_after_last_attempt",
+    "fail_stale_resources",
     "fake_embedding",
     "finalize_upload",
     "format_document_chunk",

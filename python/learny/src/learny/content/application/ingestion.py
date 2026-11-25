@@ -497,6 +497,27 @@ async def fail_after_last_attempt(deps: ContentDeps, resource_id: str, code: str
         await _publish_failed(deps, resource_id)
 
 
+# A resource untouched this long, with no job left to finish it, is stuck: the hourly sweep marks it
+# `failed` so the learner can retry instead of waiting forever (QA 2026-11-25).
+STALE_RESOURCE_AFTER = timedelta(hours=2)
+STALE_SWEEP_LIMIT = 50
+
+
+async def fail_stale_resources(deps: ContentDeps, *, limit: int = STALE_SWEEP_LIMIT) -> int:
+    """Marks `failed` the resources stuck in `queued`/`processing`; returns how many."""
+    before = to_iso(deps.clock.now() - STALE_RESOURCE_AFTER)
+    async with deps.db.service_tx() as tx:
+        result = await tx.conn.execute(
+            sql.SELECT_STALE_RESOURCES,
+            {"before": before, "kinds": sorted(SUPPORTED_KINDS), "limit": limit},
+        )
+        stale = [str(row["id"]) for row in result.mappings().all()]
+    for resource_id in stale:
+        await fail_after_last_attempt(deps, resource_id, "RESOURCE_GIVEN_UP", texts.RESOURCE_GIVEN_UP)
+    if stale:
+        _warn(deps, "stale resources failed", component="ingestion", outcome="failed", code=str(len(stale)))
+    return len(stale)
+
 def _skipped(resource_id: str) -> dict[str, Any]:
     return {
         "resourceId": resource_id,
@@ -676,6 +697,7 @@ __all__ = [
     "UploadPdf",
     "UploadPdfInput",
     "default_ports",
+    "fail_stale_resources",
     "process_resource",
     "select_resource",
 ]

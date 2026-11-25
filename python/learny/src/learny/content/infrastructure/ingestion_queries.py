@@ -145,6 +145,7 @@ MARK_FAILED = text(
 )
 
 __all__ = [
+    "SELECT_STALE_RESOURCES",
     "CLAIM_EVENT",
     "CLEAR_EVENT_CLAIM",
     "DELETE_CHUNKS",
@@ -158,3 +159,25 @@ __all__ = [
     "SELECT_RESOURCE_FOR_UPDATE",
     "UPDATE_READY",
 ]
+
+# Resources stuck in `queued`/`processing` with no live job left to finish them (QA 2026-11-25):
+# untouched since `:before` and without a pending or running delivery of their ingestion event.
+SELECT_STALE_RESOURCES = text(
+    """
+    select r.id::text as id
+      from public.resources r
+     where r.status in ('queued', 'processing')
+       and r.deleted_at is null
+       and r.kind::text = any(cast(:kinds as text[]))
+       and r.updated_at < cast(:before as timestamptz)
+       and not exists (
+         select 1
+           from public.event_outbox o
+           left join public.job_deliveries d on d.event_id = o.event_id
+          where o.data ->> 'resourceId' = r.id::text
+            and (o.dispatched_at is null or d.status in ('pending', 'running'))
+       )
+     order by r.updated_at
+     limit :limit
+    """
+)

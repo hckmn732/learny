@@ -45,6 +45,7 @@ PLAN: dict[str, str] = {
     "assessments.purge_offline_receipts": "cron/nightly",
     "tutor.process_question_bank_jobs": "cron/nightly",
     "identity.purge_security_rows": "cron/hourly-tick",
+    "content.fail_stale_resources": "cron/hourly-tick",
     "engagement.plan_daily_digests": "cron/hourly-tick",
     "engagement.deliver_due_deliveries": "cron/hourly-tick",
     "engagement.sync_validation_quiz_reminders": "cron/hourly-tick",
@@ -73,6 +74,7 @@ VALID_PAYLOADS: dict[str, dict[str, Any]] = {
     "assessments.purge_offline_receipts": {"runDate": DAY},
     "tutor.process_question_bank_jobs": {"runDate": DAY},
     "identity.purge_security_rows": {"tickAt": AT},
+    "content.fail_stale_resources": {"tickAt": AT},
     "engagement.plan_daily_digests": {"tickAt": AT},
     "engagement.deliver_due_deliveries": {"tickAt": AT},
     "engagement.sync_validation_quiz_reminders": {"tickAt": AT},
@@ -122,7 +124,7 @@ def event(name: str, data: dict[str, Any], event_id: str = "spec-2207:event") ->
 def test_the_registry_declares_the_consumers_of_the_plan() -> None:
     declared = {consumer.name: consumer.on for consumer in CONSUMERS if consumer.name != DEMO_CONSUMER}
     assert declared == PLAN
-    assert len(declared) == 24
+    assert len(declared) == 25
 
 
 def test_every_consumer_has_a_valid_name_and_options() -> None:
