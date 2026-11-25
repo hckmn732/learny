@@ -432,6 +432,19 @@ class _Target:
     caller: AiCaller
 
 
+OPENCODE_GO_CHAT_URL = "https://opencode.ai/zen/go/v1/chat/completions"
+
+
+def _needs_opencode_go(target: "_Target", status: int, body: str) -> bool:
+    """A Zen call refused for credits by an account whose subscription is OpenCode Go."""
+    return (
+        target.resolved.provider == "opencode"
+        and not (target.resolved.base_url or "").strip()
+        and status == 402
+        and "OpenCode Go" in body
+    )
+
+
 def chat_url(resolved: ResolvedModel) -> str:
     base = (resolved.base_url or "").strip() or _CHAT_ENDPOINTS.get(resolved.provider, "")
     if not base:
@@ -598,6 +611,16 @@ class LiveGateway:
                 raise AppError("AI_TIMEOUT", texts.AI_TIMEOUT, status=504) from error
             except httpx.HTTPError as error:
                 raise AppError("AI_PROVIDER_ERROR", texts.AI_PROVIDER_UNAVAILABLE, status=503) from error
+            if _needs_opencode_go(target, response.status_code, response.text):
+                # An OpenCode subscription is served by the Go endpoint only (QA, 2026-11-25).
+                try:
+                    response = await client.post(
+                        OPENCODE_GO_CHAT_URL, headers=self._headers(target, input), json=body
+                    )
+                except httpx.TimeoutException as error:
+                    raise AppError("AI_TIMEOUT", texts.AI_TIMEOUT, status=504) from error
+                except httpx.HTTPError as error:
+                    raise AppError("AI_PROVIDER_ERROR", texts.AI_PROVIDER_UNAVAILABLE, status=503) from error
         if response.status_code >= 400:
             raise self._rejected(task, target, response.status_code, response.text[:2000])
         try:
@@ -705,29 +728,32 @@ class LiveGateway:
         try:
             async with self._client(task) as client:
                 try:
-                    async with client.stream(
-                        "POST", url, headers=self._headers(target, clean), json=body
-                    ) as response:
-                        if response.status_code >= 400:
-                            raise self._rejected(
-                                task,
-                                target,
-                                response.status_code,
-                                (await response.aread()).decode("utf-8", "replace")[:2000],
-                            )
-                        async for line in response.aiter_lines():
-                            if not line.startswith("data:"):
-                                continue
-                            data = line[5:].strip()
-                            if data == "[DONE]":
-                                break
-                            try:
-                                event = json.loads(data)
-                            except json.JSONDecodeError:
-                                continue
-                            chunk = _stream_chunk(event, anthropic, usage)
-                            if chunk:
-                                yield chunk
+                    attempt_url = url
+                    for attempt in range(2):
+                        async with client.stream(
+                            "POST", attempt_url, headers=self._headers(target, clean), json=body
+                        ) as response:
+                            if response.status_code >= 400:
+                                refusal = (await response.aread()).decode("utf-8", "replace")[:2000]
+                                if attempt == 0 and _needs_opencode_go(target, response.status_code, refusal):
+                                    # An OpenCode subscription is served by the Go endpoint only.
+                                    attempt_url = OPENCODE_GO_CHAT_URL
+                                    continue
+                                raise self._rejected(task, target, response.status_code, refusal)
+                            async for line in response.aiter_lines():
+                                if not line.startswith("data:"):
+                                    continue
+                                data = line[5:].strip()
+                                if data == "[DONE]":
+                                    break
+                                try:
+                                    event = json.loads(data)
+                                except json.JSONDecodeError:
+                                    continue
+                                chunk = _stream_chunk(event, anthropic, usage)
+                                if chunk:
+                                    yield chunk
+                        break
                 except httpx.TimeoutException as error:
                     raise AppError("AI_TIMEOUT", texts.AI_TIMEOUT, status=504) from error
                 except httpx.HTTPError as error:

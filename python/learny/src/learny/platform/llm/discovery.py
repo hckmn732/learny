@@ -176,7 +176,18 @@ async def discover_provider_models(
     status, payload = await transport(endpoint, headers_of(provider, api_key))
     if status < 200 or status >= 300:
         raise RuntimeError(f"Provider model discovery failed ({status})")
-    return chat_model_ids_of(payload)
+    models = chat_model_ids_of(payload)
+    if provider == "opencode" and not base_url:
+        # A subscription key reaches the Go models: list them first so the key test and the
+        # task choices start with models the account can actually call (QA, 2026-11-25).
+        try:
+            go_status, go_payload = await transport(_ENDPOINTS["opencode_go"], headers_of(provider, api_key))
+        except Exception:
+            go_status, go_payload = 0, None
+        if 200 <= go_status < 300:
+            go_models = chat_model_ids_of(go_payload)
+            models = go_models + [m for m in models if m not in go_models]
+    return models
 
 
 async def _default_fetch(url: str, headers: Mapping[str, str]) -> tuple[int, Any]:
