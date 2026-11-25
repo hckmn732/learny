@@ -21,7 +21,7 @@ tags:
       id: qf-cadrage
     timeout: 20000
 - takeScreenshot: quickfix-mr-cadrage
-- openLink: learny://programme/proposition/79c6d8b4-ee55-5f27-9da1-e958882bfdfc
+- openLink: learny://programme/proposition/6d5dc4a2-89d5-53c6-9cc9-7a01d119b754
 - extendedWaitUntil:
     visible:
       id: qf-proposition

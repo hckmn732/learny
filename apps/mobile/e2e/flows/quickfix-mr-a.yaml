@@ -22,13 +22,13 @@ tags:
       id: qf-apports
     timeout: 20000
 - takeScreenshot: quickfix-mr-apports
-- openLink: learny://programme/bilan/79c6d8b4-ee55-5f27-9da1-e958882bfdfc
+- openLink: learny://programme/bilan/f4563ac4-affa-504c-8dfb-6d8f67231deb
 - extendedWaitUntil:
     visible:
       id: qf-bilan
     timeout: 20000
 - takeScreenshot: quickfix-mr-bilan
-- openLink: learny://programme/groupe/79c6d8b4-ee55-5f27-9da1-e958882bfdfc
+- openLink: learny://programme/groupe/a6931bf7-729c-5a21-b556-1a18245b3e1e
 - extendedWaitUntil:
     visible:
       id: qf-groupe

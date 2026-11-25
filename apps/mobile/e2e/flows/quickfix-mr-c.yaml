@@ -15,13 +15,13 @@ tags:
     visible:
       id: tab-programme
     timeout: 60000
-- openLink: learny://exercice/brique-demo
+- openLink: learny://exercice/d22ba132-ff0a-5497-8eac-98e3b946bbad?fid=79c6d8b4-ee55-5f27-9da1-e958882bfdfc&mid=cc5035ad-7ab4-597e-a2af-15a815151f4d
 - extendedWaitUntil:
     visible:
       id: qf-exercice
     timeout: 20000
 - takeScreenshot: quickfix-mr-exercice
-- openLink: learny://aujourdhui/examen-blanc/activite-demo
+- openLink: learny://aujourdhui/examen-blanc/70122a24-297f-526d-a4bc-c76ec0b39b58
 - extendedWaitUntil:
     visible:
       id: qf-examen-blanc

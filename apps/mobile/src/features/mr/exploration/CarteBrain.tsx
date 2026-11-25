@@ -243,7 +243,7 @@ export function CarteBrain({ nodes, links, selectedId, onSelect }: CarteBrainPro
           : theme.colors.lime;
       result.push({
         id: module.id,
-        label: module.label.toUpperCase().slice(0, 18),
+        label: (module.label.split(' · ')[0] ?? module.label).toUpperCase().slice(0, 14),
         x,
         y,
         r,

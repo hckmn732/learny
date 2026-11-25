@@ -32,4 +32,11 @@ tags:
     visible:
       id: qf-recherche
     timeout: 20000
+- tapOn:
+    id: qf-recherche-field
+- inputText: compta
+- extendedWaitUntil:
+    visible:
+      id: qf-recherche-results
+    timeout: 20000
 - takeScreenshot: quickfix-mr-recherche
