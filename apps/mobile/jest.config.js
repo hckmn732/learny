@@ -15,6 +15,9 @@ module.exports = {
     '<rootDir>/test/resolution.test.ts',
   ],
   setupFilesAfterEnv: ['<rootDir>/test/setup.ts'],
+  // SPEC-4003 : la suite complète est sérialisée ; les animations natives d'un test ne doivent
+  // pas entrer en concurrence avec un autre worker (échec intermittent de recall-card).
+  maxWorkers: 1,
   // Transform the React Native/Expo packages, the workspace TypeScript packages (pnpm symlinks)
   // and the ESM-only dependencies of @learny/core.
   transformIgnorePatterns: [
