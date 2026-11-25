@@ -20,6 +20,12 @@ import { formatConfigError, parseConfig, readPublicEnv } from './src/config.ts';
 const CANVAS = '#F4F4F1';
 
 /**
+ * Lime of the brand tile (`colors.lime` of `@learny/ui/tokens`): background of the adaptive icon
+ * behind the ink « M » mark of the mockup (`logo` of `src/ui/icons.tsx`), as in the app header.
+ */
+const BRAND_LIME = '#C6F432';
+
+/**
  * API à raison requise du manifeste de confidentialité iOS (SPEC-3502 ET-3, BR-PLA-05). La même
  * liste est publiée par `store/metadata.ts` (`REQUIRED_REASON_APIS`) et la fiche de confidentialité
  * `store/privacy/app-store.md` ; `test/integration/release-config.int.test.ts` vérifie que les trois
@@ -230,11 +236,22 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
     ],
     adaptiveIcon: {
       foregroundImage: './assets/android-icon-foreground.png',
-      backgroundColor: CANVAS,
+      monochromeImage: './assets/android-icon-monochrome.png',
+      backgroundColor: BRAND_LIME,
     },
   },
   plugins: [
     'expo-router',
+    // Launch screen: the Learny mark on the canvas of the mockups (never the Expo placeholder).
+    [
+      'expo-splash-screen',
+      {
+        image: './assets/splash-icon.png',
+        imageWidth: 112,
+        resizeMode: 'contain',
+        backgroundColor: CANVAS,
+      },
+    ],
     // ADR-3018 — HTTP local de l'émulateur (10.0.2.2) autorisé dans les seuls builds e2e.
     './plugins/with-e2e-cleartext.cjs',
     // SPEC-3003 ET-1 — the encryption key of the session cache lives in the platform keychain:

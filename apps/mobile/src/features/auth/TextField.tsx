@@ -9,7 +9,7 @@ import { Pressable, StyleSheet, TextInput, View, type KeyboardTypeOptions } from
 
 import { fr } from '@learny/i18n';
 
-import { controls, radius, spacing, theme } from '../../theme';
+import { controls, radius, spacing, theme, touchTarget } from '../../theme';
 import { Text } from '../../ui/Text';
 
 export interface TextFieldProps {
@@ -26,6 +26,8 @@ export interface TextFieldProps {
   readonly returnKeyType?: 'next' | 'go' | 'done' | 'send';
   readonly onSubmitEditing?: () => void;
   readonly editable?: boolean;
+  /** Compact rhythm of a screen that must fit without scrolling (48 dp field, AuthScreen). */
+  readonly dense?: boolean;
   readonly testID?: string | undefined;
 }
 
@@ -43,6 +45,7 @@ export function TextField({
   returnKeyType,
   onSubmitEditing,
   editable = true,
+  dense = false,
   testID,
 }: TextFieldProps): ReactElement {
   const [focused, setFocused] = useState(false);
@@ -51,13 +54,14 @@ export function TextField({
   const t = fr.mobile.auth;
 
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, dense ? styles.containerDense : null]}>
       <Text tone="secondary" variant="label">
         {label}
       </Text>
       <View
         style={[
           styles.frame,
+          dense ? styles.frameDense : null,
           focused ? styles.frameFocused : null,
           hidden ? styles.frameError : null,
           editable ? null : styles.frameDisabled,
@@ -84,7 +88,7 @@ export function TextField({
           {...(returnKeyType === undefined ? {} : { returnKeyType })}
           secureTextEntry={secure && !revealed}
           selectionColor={theme.colors.indigo}
-          style={[theme.type.body, styles.input]}
+          style={[theme.type.body, styles.input, dense ? styles.inputDense : null]}
           {...(textContentType === undefined ? {} : { textContentType })}
           value={value}
         />
@@ -122,6 +126,7 @@ export function TextField({
 
 const styles = StyleSheet.create({
   container: { gap: spacing.sm },
+  containerDense: { gap: spacing.xs },
   frame: {
     alignItems: 'center',
     backgroundColor: theme.colors.surface,
@@ -132,9 +137,11 @@ const styles = StyleSheet.create({
     minHeight: controls.row,
     paddingHorizontal: spacing.lg,
   },
+  frameDense: { minHeight: touchTarget.height },
   frameDisabled: { backgroundColor: theme.colors.surfaceSubtle, opacity: 0.7 },
   frameError: { borderColor: theme.colors.danger },
   frameFocused: { borderColor: theme.colors.ink },
   input: { color: theme.colors.ink, flex: 1, paddingVertical: spacing.md },
+  inputDense: { paddingVertical: spacing.sm },
   reveal: { paddingLeft: spacing.md },
 });

@@ -9,6 +9,7 @@ import { SafeAreaProvider, type Metrics } from 'react-native-safe-area-context';
 import { fr } from '@learny/i18n';
 
 import { AuthScreen } from '../../src/features/auth/AuthScreen';
+import { theme } from '../../src/theme';
 
 const mockReplace = jest.fn<Promise<void>, [unknown]>(() => Promise.resolve(undefined));
 const mockSignIn = jest.fn<Promise<void>, [unknown, string, string]>(() =>
@@ -93,6 +94,30 @@ describe('[SPEC-3101] écran de connexion et d’inscription', () => {
     expect(view.getByTestId('auth-strength')).toBeTruthy();
     expect(view.getByTestId('auth-terms-checkbox')).toBeTruthy();
     expect(view.getByTestId('auth-submit')).toBeDisabled();
+  });
+
+  it('bascule de mode sur place, sans navigation ni transition d’écran', async () => {
+    const view = await renderScreen('login');
+
+    await fireEvent.press(view.getByTestId('auth-mode-signup'));
+
+    expect(view.getByTestId('auth-title')).toHaveTextContent('Créez votre espace d’apprentissage.');
+    expect(view.getByTestId('auth-terms-checkbox')).toBeTruthy();
+    await fireEvent.press(view.getByTestId('auth-mode-login'));
+    expect(view.getByTestId('auth-title')).toHaveTextContent('Reprenez là où vous en êtes.');
+    expect(mockReplace).not.toHaveBeenCalled();
+  });
+
+  it('passe au rythme compact quand le formulaire dépasse l’écran', async () => {
+    const view = await renderScreen('signup');
+    const scroll = view.getByTestId('auth-screen');
+
+    await fireEvent(scroll, 'layout', {
+      nativeEvent: { layout: { height: 600, width: 390, x: 0, y: 0 } },
+    });
+    await fireEvent(scroll, 'contentSizeChange', 390, 900);
+
+    expect(view.getByTestId('auth-title')).toHaveStyle({ fontSize: theme.type.title.fontSize });
   });
 
   it('active le bouton de création une fois la case cochée (BR-ACC-02, CA-2)', async () => {

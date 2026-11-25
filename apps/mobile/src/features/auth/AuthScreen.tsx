@@ -2,7 +2,8 @@
 // ADR-3003 § 2).
 //
 // One screen for the two modes of the mockup (`welcome`), reached by `(auth)/connexion` and
-// `(auth)/inscription`: segmented control, e-mail and password, strength indicator and terms case
+// `(auth)/inscription`; the segmented control switches the mode in place, without a navigation
+// (no screen transition between the two forms). Segmented control, e-mail and password, strength indicator and terms case
 // at sign-up, « Mot de passe oublié ? » and magic link sheet, legal footer, and the redirect of
 // EF-7. The magic-link buttons never show whether an account exists (ADR-0121, CA-4).
 import { useLocalSearchParams, useRouter, type Href } from 'expo-router';
@@ -62,7 +63,7 @@ const a = fr.auth;
 const SHELL: Href = '/(app)/aujourdhui';
 
 /** Connexion / inscription screen (EF-1, EF-2). */
-export function AuthScreen({ mode }: AuthScreenProps): ReactElement {
+export function AuthScreen({ mode: initialMode }: AuthScreenProps): ReactElement {
   const router = useRouter();
   const insets = useSafeAreaInsets();
   const legalGate = useLegalGate();
@@ -78,6 +79,17 @@ export function AuthScreen({ mode }: AuthScreenProps): ReactElement {
   const [fieldErrors, setFieldErrors] = useState<FieldErrors>({});
   const [globalError, setGlobalError] = useState<string | null>(null);
   const [magicOpen, setMagicOpen] = useState(params.magic === '1');
+  const [mode, setMode] = useState<AuthMode>(initialMode);
+  // The whole form must fit the screen without scrolling: when the content is taller than the
+  // viewport, the screen switches once to a compact rhythm (smaller title, tighter gaps, 48 dp
+  // fields). A screen as tall as the mockup keeps the mockup rhythm.
+  const [dense, setDense] = useState(false);
+  const viewportHeight = useRef(0);
+  const contentHeight = useRef(0);
+  const fitToScreen = (): void => {
+    if (dense || viewportHeight.current === 0) return;
+    if (contentHeight.current > viewportHeight.current + 1) setDense(true);
+  };
 
   const signup = mode === 'signup';
   const submitLabel = signup ? a.submit.signupPassword : a.submit.loginPassword;
@@ -227,8 +239,19 @@ export function AuthScreen({ mode }: AuthScreenProps): ReactElement {
         style={styles.flex}
       >
         <ScrollView
-          contentContainerStyle={[styles.content, { paddingBottom: insets.bottom + spacing.xxxl }]}
+          contentContainerStyle={[
+            styles.content,
+            { paddingBottom: insets.bottom + (dense ? spacing.md : spacing.xxxl) },
+          ]}
           keyboardShouldPersistTaps="handled"
+          onContentSizeChange={(_width, height) => {
+            contentHeight.current = height;
+            fitToScreen();
+          }}
+          onLayout={(event) => {
+            viewportHeight.current = event.nativeEvent.layout.height;
+            fitToScreen();
+          }}
           testID="auth-screen"
         >
           <View style={styles.brand}>
@@ -238,8 +261,8 @@ export function AuthScreen({ mode }: AuthScreenProps): ReactElement {
             <Text variant="sectionTitle">{a.layout.label}</Text>
           </View>
 
-          <View style={styles.headings}>
-            <Text testID="auth-title" variant="largeTitle">
+          <View style={[styles.headings, dense ? styles.headingsDense : null]}>
+            <Text testID="auth-title" variant={dense ? 'title' : 'largeTitle'}>
               {signup ? t.titleSignup : t.titleLogin}
             </Text>
             <Text tone="secondary" variant="body">
@@ -254,7 +277,7 @@ export function AuthScreen({ mode }: AuthScreenProps): ReactElement {
               if (next === mode) return;
               setFieldErrors({});
               setGlobalError(null);
-              router.replace(next === 'signup' ? '/(auth)/inscription' : '/(auth)/connexion');
+              setMode(next);
             }}
             options={[
               { value: 'login', label: t.modeLogin },
@@ -264,9 +287,10 @@ export function AuthScreen({ mode }: AuthScreenProps): ReactElement {
             value={mode}
           />
 
-          <View style={styles.fields}>
+          <View style={[styles.fields, dense ? styles.fieldsDense : null]}>
             <TextField
               autoComplete="email"
+              dense={dense}
               editable={!submitting}
               keyboardType="email-address"
               label={a.account.emailLabel}
@@ -283,6 +307,7 @@ export function AuthScreen({ mode }: AuthScreenProps): ReactElement {
             />
             <TextField
               autoComplete={signup ? 'new-password' : 'current-password'}
+              dense={dense}
               editable={!submitting}
               error={fieldErrors.password ?? null}
               label={a.account.passwordLabel}
@@ -373,7 +398,7 @@ export function AuthScreen({ mode }: AuthScreenProps): ReactElement {
             </View>
           )}
 
-          <View style={styles.submit}>
+          <View style={dense ? styles.submitDense : styles.submit}>
             <Button
               block
               disabled={signup && !termsAccepted}
@@ -386,7 +411,7 @@ export function AuthScreen({ mode }: AuthScreenProps): ReactElement {
             />
           </View>
 
-          <View style={styles.dividerRow}>
+          <View style={[styles.dividerRow, dense ? styles.dividerRowDense : null]}>
             <View style={styles.dividerLine} />
             <Text tone="muted" variant="caption">
               {t.divider}
@@ -412,7 +437,7 @@ export function AuthScreen({ mode }: AuthScreenProps): ReactElement {
             onPress={() => {
               setMagicOpen(true);
             }}
-            style={styles.magicLink}
+            style={[styles.magicLink, dense ? styles.magicLinkDense : null]}
             testID="auth-magic-link"
           >
             <Text tone="indigo" variant="button">
@@ -421,7 +446,12 @@ export function AuthScreen({ mode }: AuthScreenProps): ReactElement {
           </Pressable>
 
           {signup ? null : (
-            <Text align="center" style={styles.legal} tone="muted" variant="caption">
+            <Text
+              align="center"
+              style={dense ? styles.legalDense : styles.legal}
+              tone="muted"
+              variant="caption"
+            >
               {`${a.account.termsBefore}${a.account.termsCgu}${a.account.termsAnd}${a.account.termsPrivacy}${a.account.termsAfter}`}
             </Text>
           )}
@@ -486,7 +516,9 @@ const styles = StyleSheet.create({
     gap: spacing.md,
     marginVertical: spacing.lg,
   },
+  dividerRowDense: { marginVertical: spacing.xs },
   legal: { marginTop: spacing.lg },
+  legalDense: { marginTop: spacing.xs },
   // SPEC-3402 EF-1 — the magic link stays available under the providers, as a light link so the
   // provider zone keeps the proportions of the mockup (CA-4).
   magicLink: {
@@ -495,10 +527,14 @@ const styles = StyleSheet.create({
     marginTop: spacing.sm,
     minHeight: touchTarget.height,
   },
+  magicLinkDense: { marginTop: 0 },
   submit: { marginTop: spacing.lg },
+  submitDense: { marginTop: spacing.md },
   fields: { gap: spacing.lg, marginTop: spacing.xl },
+  fieldsDense: { gap: spacing.sm, marginTop: spacing.md },
   flex: { flex: 1 },
   headings: { gap: spacing.md, marginTop: spacing.xxl },
+  headingsDense: { gap: spacing.xs, marginTop: spacing.md },
   hintRow: {
     alignItems: 'center',
     flexDirection: 'row',

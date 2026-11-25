@@ -2,7 +2,7 @@
 // 28 on Android with a grabber (canevas § 3). Dismissed by the backdrop, the grabber or the
 // system back gesture; announced as a modal.
 import type { ReactNode } from 'react';
-import { Modal, Pressable, ScrollView, StyleSheet, View } from 'react-native';
+import { KeyboardAvoidingView, Modal, Pressable, ScrollView, StyleSheet, View } from 'react-native';
 import Animated from 'react-native-reanimated';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
@@ -37,7 +37,9 @@ export function Sheet({ visible, onClose, title, children, testID }: SheetProps)
       onRequestClose={onClose}
       {...(testID === undefined ? {} : { supportedOrientations: ['portrait'] as const })}
     >
-      <View style={styles.root}>
+      {/* A modal window is never resized by the soft keyboard on Android: the sheet rises above it
+          itself, so a field of the sheet stays visible while it is typed in (both platforms). */}
+      <KeyboardAvoidingView behavior="padding" style={styles.root}>
         <Pressable
           testID={testID === undefined ? undefined : `${testID}-backdrop`}
           accessibilityRole="button"
@@ -69,7 +71,7 @@ export function Sheet({ visible, onClose, title, children, testID }: SheetProps)
             {children}
           </ScrollView>
         </Animated.View>
-      </View>
+      </KeyboardAvoidingView>
     </Modal>
   );
 }
