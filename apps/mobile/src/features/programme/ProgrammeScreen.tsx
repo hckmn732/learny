@@ -1,8 +1,10 @@
 // Programme tab (SPEC-3202 EF-1 to EF-7, ET-1, ET-3; ADR-3002 § 3, ADR-3003).
 //
 // The formation being read with its progress, the modules and their chapters (locked, open,
-// validated), the reading resume, the calendar, the formation switcher and the web hand-offs of
-// creation and import. Every value comes from the API; the cache of SPEC-3003 keeps the screen
+// validated), the reading resume, the calendar and the formation switcher. The hand-offs of
+// creation, proposed programme and final assessment open the native screens of the quickfix
+// « rattrapage mobile » (quickfix/mobile-rattrapage); import and pause stay on the web, see the
+// TODO(quickfix) below. Every value comes from the API; the cache of SPEC-3003 keeps the screen
 // readable offline (CL-4). Nothing of the programme is ever written from the application: the only
 // mutation is the current-formation preference (BR-FOR-11, CA-3).
 import { useRouter } from 'expo-router';
@@ -391,10 +393,14 @@ export function ProgrammeScreen() {
             setSheet(null);
           }}
           onContinue={() => {
-            openWeb('/formations/nouvelle');
+            // Quickfix « rattrapage mobile » — le cadrage est un écran natif (zone B).
+            setSheet(null);
+            router.push('/programme/cadrage');
           }}
         />
       ) : null}
+      {/* TODO(quickfix) — l'import demande un module choisi et un sélecteur de fichiers
+          (/programme/apports/[moduleId], zone A) : la feuille reste branchée sur le web. */}
       {sheet === 'import' && formationId !== null ? (
         <WebHandoffSheet
           kind="import"
@@ -415,10 +421,16 @@ export function ProgrammeScreen() {
             setSheet(null);
           }}
           onContinue={() => {
-            openWeb(`/formations/${formationId}/programme`);
+            // Quickfix « rattrapage mobile » — programme proposé natif (zone B).
+            setSheet(null);
+            router.push({
+              pathname: '/programme/proposition/[fid]',
+              params: { fid: formationId },
+            });
           }}
         />
       ) : null}
+      {/* TODO(quickfix) — le mode pause reste hors périmètre du rattrapage : renvoi web conservé. */}
       {sheet === 'paused' && formationId !== null ? (
         <WebHandoffSheet
           kind="paused"
@@ -439,7 +451,9 @@ export function ProgrammeScreen() {
             setSheet(null);
           }}
           onContinue={() => {
-            openWeb(`/formations/${formationId}/bilan`);
+            // Quickfix « rattrapage mobile » — bilan final natif (zone A).
+            setSheet(null);
+            router.push({ pathname: '/programme/bilan/[fid]', params: { fid: formationId } });
           }}
         />
       ) : null}
