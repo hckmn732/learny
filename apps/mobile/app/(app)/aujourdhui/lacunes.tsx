@@ -1,9 +1,19 @@
 // /aujourdhui/lacunes — Mes lacunes (maquette Lacunes.dc.html).
-// TODO(quickfix/D) : remplacer la coquille par l'écran de design/app-mobile-rattrapage/ecrans/Lacunes.dc.html.
-import { fr } from '@learny/i18n';
+//
+// Le corps de l'écran vit dans `src/features/mr/exploration/LacunesScreen` : cette route ne porte
+// que la navigation de la pile (retour vers l'onglet Aujourd'hui).
+import { useRouter } from 'expo-router';
 
-import { QuickfixPlaceholder } from '../../../src/features/mr/QuickfixPlaceholder';
+import { LacunesScreen } from '../../../src/features/mr/exploration/LacunesScreen';
 
 export default function LacunesRoute() {
-  return <QuickfixPlaceholder screen={fr.mr.exploration.lacunes.title} testID="qf-lacunes" />;
+  const router = useRouter();
+  return (
+    <LacunesScreen
+      onBack={() => {
+        if (router.canGoBack()) router.back();
+        else router.replace('/aujourdhui');
+      }}
+    />
+  );
 }
