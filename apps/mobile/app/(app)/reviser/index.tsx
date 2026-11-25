@@ -74,6 +74,8 @@ export default function ReviserRoute() {
   const currentFormationId =
     formationId ?? sidebar.current?.id ?? me.data?.currentFormationId ?? null;
   const quiz = useGlobalQuizToday(currentFormationId);
+  // No formation at all: the session query never runs, so the screen must not wait for it.
+  const noFormation = currentFormationId === null && sidebar.status !== 'loading';
   const answer = useReviewAnswer();
   const complete = useReviewComplete();
   const undo = useUndoSmoothing();
@@ -327,7 +329,7 @@ export default function ReviserRoute() {
       <View style={styles.state} testID="reviser-screen">
         {expired ? (
           <EmptyState icon="cards" title={t.offline.expired} testID="reviser-expired" />
-        ) : quiz.status === 'loading' ? (
+        ) : quiz.status === 'loading' && !noFormation ? (
           <Skeleton testID="reviser-loading" />
         ) : paused ? (
           <EmptyState
