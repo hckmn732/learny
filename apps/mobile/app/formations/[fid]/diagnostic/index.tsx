@@ -4,7 +4,7 @@
 // équivaut à « Passer » : elle abandonne la tentative et ouvre le résultat sans ligne de score.
 // « Valider » enregistre le brouillon et avance ; « Je ne sais pas » avance sans réponse. Les deux
 // boutons sont fixés en bas.
-import { useLocalSearchParams, useRouter } from 'expo-router';
+import { useLocalSearchParams } from 'expo-router';
 import { useCallback, useEffect, useState } from 'react';
 import { BackHandler, ScrollView, StyleSheet, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
@@ -29,11 +29,11 @@ import { IconButton } from '../../../../src/ui/IconButton';
 import { ProgressBar } from '../../../../src/ui/ProgressBar';
 import { Skeleton } from '../../../../src/ui/Skeleton';
 import { Text } from '../../../../src/ui/Text';
+import { DiagnosticResultView } from '../resultat';
 
 const t = fr.mobile.simple.diagnostic;
 
 export default function DiagnosticRoute() {
-  const router = useRouter();
   const insets = useSafeAreaInsets();
   const params = useLocalSearchParams<{ fid?: string; aid?: string }>();
   const fid = typeof params.fid === 'string' ? params.fid : '';
@@ -47,6 +47,7 @@ export default function DiagnosticRoute() {
   const [index, setIndex] = useState(0);
   const [response, setResponse] = useState<unknown>(null);
   const [busy, setBusy] = useState(false);
+  const [finished, setFinished] = useState<{ aid: string | null; skipped: boolean } | null>(null);
 
   useEffect(() => {
     if (attemptId !== null) return;
@@ -79,11 +80,12 @@ export default function DiagnosticRoute() {
     setBusy(true);
     try {
       await skipper.skip();
-      router.push('/formations/resultat?skipped=1');
+      // Rendu en place du résultat : aucune transition de route n'est nécessaire (CA-1).
+      setFinished({ aid: null, skipped: true });
     } catch {
       setBusy(false);
     }
-  }, [busy, router, skipper]);
+  }, [busy, skipper]);
 
   useEffect(() => {
     const subscription = BackHandler.addEventListener('hardwareBackPress', () => {
@@ -107,7 +109,7 @@ export default function DiagnosticRoute() {
       }
       if (index >= total - 1) {
         const result = await submitter.submit(attemptId);
-        router.push(`/formations/resultat?aid=${result.attemptId}`);
+        setFinished({ aid: result.attemptId, skipped: false });
         return;
       }
       setIndex((current) => current + 1);
@@ -188,6 +190,10 @@ export default function DiagnosticRoute() {
       </>
     );
   })();
+
+  if (finished !== null) {
+    return <DiagnosticResultView fid={fid} aid={finished.aid} skipped={finished.skipped} />;
+  }
 
   return (
     <View

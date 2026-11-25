@@ -123,8 +123,7 @@ tags:
 - takeScreenshot: z-SPEC-4003-etape-5
 - assertVisible:
     id: diagnostic-skip
-- tapOn:
-    id: diagnostic-skip
+- tapOn: 'Passer'
 # EF-8 — le résultat et le premier chapitre.
 - extendedWaitUntil:
     visible:

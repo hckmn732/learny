@@ -10,8 +10,7 @@ import { isActiveProgramme } from '@learny/contracts';
 import { fr } from '@learny/i18n';
 
 import { useAttempt, useAttemptResult } from '../../../src/data/attempts';
-import { useModuleCourse, useProgramme } from '../../../src/data/use-programme';
-import { useMe } from '../../../src/data/use-programme';
+import { useMe, useModuleCourse, useProgramme } from '../../../src/data/use-programme';
 import { GenerationList } from '../../../src/simple/GenerationList';
 import { ReadyCard } from '../../../src/simple/ReadyCard';
 import { SimpleHeader } from '../../../src/simple/SimpleHeader';
@@ -25,16 +24,15 @@ import { Text } from '../../../src/ui/Text';
 
 const t = fr.mobile.simple.result;
 
-export default function DiagnosticResultRoute() {
+export interface DiagnosticResultViewProps {
+  readonly fid: string;
+  readonly aid: string | null;
+  readonly skipped: boolean;
+}
+
+/** Vue de résultat réutilisable : route dédiée ou rendu en place depuis le diagnostic. */
+export function DiagnosticResultView({ fid, aid, skipped }: DiagnosticResultViewProps) {
   const router = useRouter();
-  const params = useLocalSearchParams<{ fid?: string; aid?: string; skipped?: string }>();
-  const me = useMe();
-  const fid =
-    typeof params.fid === 'string' && params.fid !== ''
-      ? params.fid
-      : (me.data?.currentFormationId ?? '');
-  const aid = typeof params.aid === 'string' && params.aid !== '' ? params.aid : null;
-  const skipped = params.skipped === '1';
   const result = useAttemptResult(skipped ? null : aid);
   const attempt = useAttempt(aid);
   const simple = useSimpleState(fid === '' ? null : fid);
@@ -158,3 +156,20 @@ const styles = StyleSheet.create({
   screen: { flex: 1, backgroundColor: theme.colors.canvas },
   content: { padding: theme.spacing.xl, paddingBottom: theme.spacing.xxxl, gap: theme.spacing.md },
 });
+
+/** Route `/formations/[fid]/resultat` (deep link et navigation directe). */
+export default function DiagnosticResultRoute() {
+  const params = useLocalSearchParams<{ fid?: string; aid?: string; skipped?: string }>();
+  const me = useMe();
+  const fid =
+    typeof params.fid === 'string' && params.fid !== ''
+      ? params.fid
+      : (me.data?.currentFormationId ?? '');
+  return (
+    <DiagnosticResultView
+      fid={fid}
+      aid={typeof params.aid === 'string' && params.aid !== '' ? params.aid : null}
+      skipped={params.skipped === '1'}
+    />
+  );
+}
