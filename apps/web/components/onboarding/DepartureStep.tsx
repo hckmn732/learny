@@ -16,6 +16,17 @@ import { StepHeading } from './StepHeading';
 
 const t = fr.onboarding.depart;
 
+/** Deep link that closes the in-app browser of the mobile application (QA, 2026-11-25). */
+const APP_RETURN_URL = 'learny://onboarding-termine';
+
+/** True once, when the web session was opened from the mobile app (cookie set by the callback). */
+function consumeFromAppMarker(): boolean {
+  if (typeof document === 'undefined') return false;
+  const fromApp = document.cookie.split(';').some((part) => part.trim() === 'lr-from-app=1');
+  if (fromApp) document.cookie = 'lr-from-app=; Max-Age=0; Path=/; SameSite=Lax';
+  return fromApp;
+}
+
 export interface DepartureStepProps {
   firstName: string;
   tutorTone: TutorTone;
@@ -40,6 +51,10 @@ export function DepartureStep({ firstName, tutorTone }: Readonly<DepartureStepPr
     setSaveError(null);
     try {
       await markDone();
+      if (consumeFromAppMarker()) {
+        window.location.href = APP_RETURN_URL;
+        return;
+      }
       router.push(destination);
       router.refresh();
     } catch {

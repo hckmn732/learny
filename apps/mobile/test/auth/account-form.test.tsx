@@ -81,7 +81,7 @@ describe('[SPEC-3101] écran de connexion et d’inscription', () => {
     const view = await renderScreen('login');
 
     expect(view.getByTestId('auth-title')).toHaveTextContent('Reprenez là où vous en êtes.');
-    expect(view.getByText(fr.mobile.auth.ledeLogin)).toBeTruthy();
+    expect(view.queryByText(fr.mobile.auth.ledeLogin)).toBeNull();
     expect(view.getByTestId('auth-mode')).toBeTruthy();
     expect(view.getByTestId('auth-forgot')).toBeTruthy();
     expect(view.getByTestId('auth-magic-link')).toBeTruthy();

@@ -54,9 +54,32 @@ export function AiStep({ recommendedModels }: Readonly<AiStepProps>) {
     router.push('/premiers-pas/rythme');
   };
 
+  // The key is optional (QA, 2026-11-25): without a tested key the step is simply skipped.
+  const skipStep = (): void => {
+    if (saving) return;
+    setError(null);
+    setSaving(true);
+    void api
+      .meOnboardingUpdate({ body: { step: 'rappels' } })
+      .then(() => {
+        router.push('/premiers-pas/rappels');
+        router.refresh();
+      })
+      .catch(() => {
+        setError(fr.onboarding.common.saveError);
+      })
+      .finally(() => {
+        setSaving(false);
+      });
+  };
+
   const continueStep = (): void => {
     if (saving) return;
     setError(null);
+    if (apiKey.trim() === '' && qualification.status === 'untested') {
+      skipStep();
+      return;
+    }
     if (
       qualification.status !== 'qualified' ||
       qualification.credentialId === null ||
@@ -195,6 +218,18 @@ export function AiStep({ recommendedModels }: Readonly<AiStepProps>) {
       >
         {fr.onboarding.common.continue}
       </Button>
+      <div className="flex flex-col items-center gap-6">
+        <button
+          className="text-14 font-600 text-indigo-ink underline-offset-2 hover:underline"
+          data-testid="onboarding-ai-skip"
+          disabled={saving}
+          onClick={skipStep}
+          type="button"
+        >
+          {t.skip}
+        </button>
+        <p className="m-0 text-center text-12 leading-1.5 text-ink-muted">{t.skipNote}</p>
+      </div>
     </section>
   );
 }

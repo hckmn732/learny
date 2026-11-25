@@ -377,7 +377,7 @@ export const mobile = {
       relaunch: 'Relancer',
       onboardingTitle: 'Terminez votre configuration sur le web',
       onboardingBody:
-        'Votre tuteur a besoin de votre rythme, de votre objectif et de vos apports avant la première séance. La configuration se poursuit sur le web, puis vous revenez ici.',
+        'Votre tuteur a besoin de votre rythme, de votre objectif et de vos apports avant la première séance. La configuration se poursuit sur le web, puis vous revenez automatiquement ici.',
       onboardingContinue: 'Continuer sur le web',
       onboardingDone: 'J’ai terminé',
       onboardingChecking: 'Vérification de votre configuration…',

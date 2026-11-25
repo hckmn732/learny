@@ -250,6 +250,22 @@ class GoTrueClient:
         """Reads one account with the service role."""
         return parse_user(await self._send("GET", f"/auth/v1/admin/users/{user_id}", service=True))
 
+    async def admin_magic_link_token(self, email: str) -> str:
+        """`/admin/generate_link`: a single-use magic-link token hash, no e-mail sent."""
+        payload = await self._send(
+            "POST",
+            "/auth/v1/admin/generate_link",
+            service=True,
+            body={"type": "magiclink", "email": email},
+        )
+        token = payload.get("hashed_token") if isinstance(payload, dict) else None
+        if not isinstance(token, str) or token == "":
+            properties = payload.get("properties") if isinstance(payload, dict) else None
+            token = properties.get("hashed_token") if isinstance(properties, dict) else None
+        if not isinstance(token, str) or token == "":
+            raise GoTrueError(502, "generate_link_failed", "no hashed_token in the answer")
+        return token
+
     async def admin_delete_user(self, user_id: str) -> None:
         """Deletes an account and its sessions (account deletion, SPEC-211)."""
         await self._send("DELETE", f"/auth/v1/admin/users/{user_id}", service=True)

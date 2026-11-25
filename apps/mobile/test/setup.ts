@@ -28,9 +28,12 @@ jest.mock('react-native-reanimated', () => {
   const { View } = jest.requireActual<typeof import('react-native')>('react-native');
   return {
     __esModule: true,
-    default: { View },
+    default: { View, createAnimatedComponent: <T>(component: T): T => component },
     useSharedValue: (initial: number) => ({ value: initial }),
     useAnimatedStyle: (factory: () => object) => factory(),
+    useAnimatedProps: (factory: () => object) => factory(),
+    useReducedMotion: () => true,
+    withDelay: (_delay: number, value: number) => value,
     withTiming: (value: number) => value,
     withRepeat: (value: number) => value,
     withSequence: (...values: number[]) => values[0],
@@ -43,7 +46,9 @@ jest.mock('react-native-reanimated', () => {
 // neutral values, so a screen that mounts the device channel renders without one. No test asserts
 // these defaults; a suite that needs another state overrides them locally with its own `jest.mock`.
 jest.mock('expo-notifications', () => ({
-  getPermissionsAsync: jest.fn(() => Promise.resolve({ status: 'undetermined', canAskAgain: true })),
+  getPermissionsAsync: jest.fn(() =>
+    Promise.resolve({ status: 'undetermined', canAskAgain: true }),
+  ),
   requestPermissionsAsync: jest.fn(() =>
     Promise.resolve({ status: 'undetermined', canAskAgain: true }),
   ),

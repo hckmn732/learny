@@ -73,6 +73,8 @@ export const onboarding = {
     },
     note: 'Votre clé est chiffrée et ne sert qu’à vos propres demandes. Le test vérifie uniquement la connexion à un modèle de chat ; la compatibilité est contrôlée séparément pour chaque tâche.',
     continueError: 'Testez votre clé avant de continuer.',
+    skip: 'Configurer plus tard',
+    skipNote: 'Vous pourrez ajouter votre clé plus tard dans Paramètres › Modèles d’IA.',
   },
   rappels: {
     title: 'Rappels et automatismes',

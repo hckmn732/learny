@@ -1,5 +1,6 @@
 // Jest + RNTL [SPEC-3102] — garde d'onboarding (BR-ACC-04, CA-3, CL-4).
-import { fireEvent, render, waitFor } from '@testing-library/react-native';
+import { fireEvent, render } from '@testing-library/react-native';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 import { OnboardingGateScreen } from '../../src/features/shell/OnboardingGateScreen';
 import { OnboardingGuard } from '../../src/features/shell/OnboardingGuard';
@@ -90,20 +91,25 @@ describe('[SPEC-3102] garde d’onboarding', () => {
     expect(retry).toHaveBeenCalledTimes(1);
   });
 
-  it('propose « Continuer sur le web » et « J’ai terminé » (BR-ACC-04, CL-4)', async () => {
+  it('propose « Continuer sur le web », sans bouton « J’ai terminé » (retour automatique)', async () => {
     const onContinue = jest.fn();
-    const onDone = jest.fn(() => Promise.resolve(true));
-    const view = await render(<OnboardingGateScreen onContinue={onContinue} onDone={onDone} />);
+    const view = await render(
+      <SafeAreaProvider
+        initialMetrics={{
+          frame: { x: 0, y: 0, width: 390, height: 844 },
+          insets: { top: 47, left: 0, right: 0, bottom: 34 },
+        }}
+      >
+        <OnboardingGateScreen onContinue={onContinue} />
+      </SafeAreaProvider>,
+    );
 
     expect(view.getByTestId('onboarding-gate')).toBeTruthy();
     expect(view.getByText('Terminez votre configuration sur le web')).toBeTruthy();
+    expect(view.getByTestId('onboarding-bot')).toBeTruthy();
+    expect(view.queryByTestId('onboarding-done')).toBeNull();
 
     await fireEvent.press(view.getByTestId('onboarding-continue'));
     expect(onContinue).toHaveBeenCalledTimes(1);
-
-    await fireEvent.press(view.getByTestId('onboarding-done'));
-    await waitFor(() => {
-      expect(onDone).toHaveBeenCalledTimes(1);
-    });
   });
 });

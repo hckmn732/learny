@@ -265,9 +265,6 @@ export function AuthScreen({ mode: initialMode }: AuthScreenProps): ReactElement
             <Text testID="auth-title" variant={dense ? 'title' : 'largeTitle'}>
               {signup ? t.titleSignup : t.titleLogin}
             </Text>
-            <Text tone="secondary" variant="body">
-              {signup ? t.ledeSignup : t.ledeLogin}
-            </Text>
           </View>
 
           <Segmented
@@ -533,8 +530,9 @@ const styles = StyleSheet.create({
   fields: { gap: spacing.lg, marginTop: spacing.xl },
   fieldsDense: { gap: spacing.sm, marginTop: spacing.md },
   flex: { flex: 1 },
-  headings: { gap: spacing.md, marginTop: spacing.xxl },
-  headingsDense: { gap: spacing.xs, marginTop: spacing.md },
+  // Title alone (no lede, QA 2026-11-25): air above it and before the mode switch.
+  headings: { gap: spacing.md, marginBottom: spacing.xl, marginTop: spacing.huge },
+  headingsDense: { gap: spacing.xs, marginBottom: spacing.md, marginTop: spacing.xl },
   hintRow: {
     alignItems: 'center',
     flexDirection: 'row',

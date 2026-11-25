@@ -15,7 +15,7 @@ from learny.identity.domain.actor import Actor
 from learny.identity.infrastructure import queries
 from learny.shared.db.uow import Tx
 from learny.shared.errors import AppError
-from learny.shared.locale_fr.details import ONBOARDING_AI_REQUIRED, PROFILE_NOT_FOUND
+from learny.shared.locale_fr.details import PROFILE_NOT_FOUND
 from learny.shared.product import (
     AUTOMATION_DEFAULTS,
     NOTIFICATION_DEFAULT_EMAIL,
@@ -122,12 +122,8 @@ async def advance_onboarding(
             raise AppError("NOT_FOUND", PROFILE_NOT_FOUND)
 
         stored = current.onboarding_step
-        crosses_ia = RANK[stored] < RANK["rappels"] and RANK[requested] >= RANK["rappels"]
-
-        # EF-8 - the platform provides no model: the IA step is crossed only with a qualified
-        # personal model assigned to each of the five tasks.
-        if crosses_ia and not await has_five_qualified_assignments(tx, actor.user_id):
-            raise AppError("ONBOARDING_AI_REQUIRED", ONBOARDING_AI_REQUIRED, status=422)
+        # The AI key is optional to finish the configuration (QA, 2026-11-25): the learner can
+        # add it later in Settings; the AI features answer AI_UNAVAILABLE until then.
 
         if isinstance(reminders, Mapping):
             await apply_reminder_choices(tx, actor.user_id, reminders, now)

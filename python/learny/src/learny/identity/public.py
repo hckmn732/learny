@@ -5,16 +5,19 @@ Other contexts and the apps import only this module; everything else stays inter
 
 from learny.identity.application.ai_models import assign_task_model
 from learny.identity.application.auth import (
+    FROM_APP_COOKIE,
     INVALID_LINK_DESTINATION,
     NEXT_COOKIE,
     AuthRequest,
     complete_verification,
     expire_cookie,
+    from_app_cookie,
     request_magic_link,
     resend_link,
     sign_in,
     sign_out,
     sign_up,
+    web_handoff_url,
 )
 from learny.identity.application.authenticate import (
     AuthDeps,
@@ -54,6 +57,7 @@ from learny.identity.infrastructure.supabase_cookies import access_token_from_co
 
 __all__ = [
     "DEFAULT_DESTINATION",
+    "FROM_APP_COOKIE",
     "INVALID_LINK_DESTINATION",
     "NEXT_COOKIE",
     "PROFILE_DELETION_DESTINATION",
@@ -78,6 +82,7 @@ __all__ = [
     "complete_verification",
     "expected_versions",
     "expire_cookie",
+    "from_app_cookie",
     "get_me",
     "get_onboarding_state",
     "get_preferences",
@@ -103,4 +108,5 @@ __all__ = [
     "update_profile",
     "update_settings_profile",
     "update_sidebar",
+    "web_handoff_url",
 ]

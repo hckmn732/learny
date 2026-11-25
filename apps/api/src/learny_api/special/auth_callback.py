@@ -77,6 +77,10 @@ async def callback_response(request: Request, deps: Any, request_id: str) -> Res
             next_cookie=auth.cookies.get(identity.NEXT_COOKIE),
             emit=emit,
         )
+        # Hand-off from the mobile application: mark the web session so the end of the
+        # onboarding sends the browser back to the app.
+        if request.query_params.get("app") == "1" and destination != identity.INVALID_LINK_DESTINATION:
+            emit(identity.from_app_cookie(auth.secure))
     elapsed = deps.clock.now() - started
     response = Response(
         status_code=302,

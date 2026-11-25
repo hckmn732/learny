@@ -14,6 +14,7 @@ from contextlib import AbstractAsyncContextManager
 from dataclasses import dataclass, field
 from datetime import UTC, datetime
 from typing import Any, Protocol
+from urllib.parse import urlencode
 
 from learny.identity.domain.destination import (
     is_safe_next_path,
@@ -70,6 +71,37 @@ class AuthServer(Protocol):
     async def sign_out(self, access_token: str) -> None: ...
 
     async def verify_otp(self, token_hash: str, kind: str) -> GoTrueSession | None: ...
+
+    async def admin_get_user(self, user_id: str) -> Any: ...
+
+    async def admin_magic_link_token(self, email: str) -> str: ...
+
+
+# Marker of a web session opened from the mobile application: the end of the onboarding sends
+# the browser back to the application. Readable by the page (no HttpOnly), one hour.
+FROM_APP_COOKIE = "lr-from-app"
+FROM_APP_MAX_AGE = 3600
+
+
+def from_app_cookie(secure: bool) -> str:
+    """The short-lived marker cookie written by the callback of a mobile hand-off."""
+    header = f"{FROM_APP_COOKIE}=1; Max-Age={FROM_APP_MAX_AGE}; Path=/; SameSite=Lax"
+    return f"{header}; Secure" if secure else header
+
+
+async def web_handoff_url(deps: "AuthDeps", app_url: str, user_id: str) -> str:
+    """A single-use link that opens the web session of the authenticated mobile user.
+
+    The token is minted with the service role for the caller's own account only (the route
+    requires the caller's access token), is never e-mailed, and is consumed by the callback.
+    """
+    user = await deps.gotrue.admin_get_user(user_id)
+    email = getattr(user, "email", None)
+    if not email:
+        raise GoTrueError(404, "user_not_found", "no e-mail on the account")
+    token_hash = await deps.gotrue.admin_magic_link_token(str(email))
+    query = urlencode({"token_hash": token_hash, "type": "magiclink", "app": "1"})
+    return f"{app_url.rstrip('/')}{CALLBACK_PATH}?{query}"
 
 
 class AuthDeps(Protocol):

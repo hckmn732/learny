@@ -16,7 +16,7 @@ from starlette.responses import Response
 from learny_api import pipeline
 from learny_api.generated.routes import ROUTES_BY_ID, RouteSpec
 from learny_api.pipeline import PipelineContext
-from learny_api.special import auth_callback, liveness, sprints
+from learny_api.special import auth_callback, liveness, sprints, web_handoff
 from learny_api.special.guards import dev_routes_enabled, not_found_problem, sdd_pages_enabled
 
 # SPEC-2207 - the `dev.*` operations whose path is also a special route of the inventory. The
@@ -53,6 +53,7 @@ def install(app: FastAPI, context: PipelineContext) -> list[str]:
     installed += _install_ungated(app, context)
     installed += auth_callback.install(app, context)
     installed += sprints.install(app, context)
+    installed += web_handoff.install(app, context)
     installed += liveness.install(app, context)
     return installed
 
