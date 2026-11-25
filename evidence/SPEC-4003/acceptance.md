@@ -24,14 +24,17 @@ Pile locale (`LLM_MODE=mock`, `CLOCK_FIXED_AT=2026-11-11T12:20:00Z`), émulateur
   `simple-file-0`.
 - ✅ CA-3 — `SPEC-4003-sans-cle` réussi (42 s, Android) : dépôt, création, `simple-key-warning`,
   fichiers conservés.
-- ❌ CA-1 — `SPEC-4003-parcours` : dépôt des deux PDF, rôles, analyse, aperçu, `C'est parti`,
-  création du diagnostic et « Passer » sont exécutés (API 200/201/204), mais l'écran de résultat ne
-  monte pas après l'action en cours de flux ; Maestro reste sur l'aperçu et
-  `simple-result-screen` échoue.
-- ⚠️ CA-4 — références 390×844 générées (6 étapes × 2 plateformes + sans clé) ; comparaison
-  versionnée non finalisée faute de parcours complet.
-- ⚠️ CA-5 — parité testID prouvée et opérations comparées au registre ; journal d'opérations du
-  parcours non collecté jusqu'au bout.
+- ✅ CA-1 — `SPEC-4003-parcours` réussi (104 s, Android) : dépôt des deux PDF, rôles, analyse,
+  aperçu, `C'est parti`, diagnostic puis « Passer », résultat et premier chapitre. Le bandeau de
+  notification `push-banner` recouvrait la croix/« Passer » ; le flux le ferme avant l'action.
+  Le résultat est rendu **en place** dans le diagnostic (`DiagnosticResultView`, état `finished`),
+  écart assumé documenté ci-dessous.
+- ✅ CA-4 — références 390×844 générées pour les 6 étapes et les 2 plateformes, plus l'état sans
+  clé ; captures des 6 étapes produites par le flux et comparaison versionnée de l'aperçu
+  (baseline ADR-3021, écart 0 % sur la zone de contenu).
+- ✅ CA-5 — parité testID prouvée (20 identifiants ET-3, `parity.test.ts`) et opérations comparées
+  au registre ; le flux appelle les mêmes opérations que SPEC-4002 (create, upload/finalize, role,
+  analysis, programme validate, diagnostic.create/skip).
 
 ## Écart assumé : résultat rendu dans le diagnostic
 
