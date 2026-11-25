@@ -190,7 +190,14 @@ const styles = StyleSheet.create({
     backgroundColor: theme.colors.surface,
   },
   saveRow: { gap: theme.spacing.sm },
-  toast: { paddingHorizontal: theme.spacing.xl, paddingBottom: theme.spacing.lg },
+  // QA 2026-11-25: the toast floats above the footer; in the flow it left a grey strip between
+  // the « Enregistrer » footer and the tab bar.
+  toast: {
+    position: 'absolute',
+    left: theme.spacing.xl,
+    right: theme.spacing.xl,
+    bottom: 96,
+  },
   section: { gap: theme.spacing.xs },
   sectionBody: { gap: theme.spacing.sm, paddingTop: theme.spacing.sm },
 });

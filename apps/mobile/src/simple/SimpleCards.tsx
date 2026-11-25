@@ -76,7 +76,7 @@ export function SimpleCards({ onDrop, onTutor }: SimpleCardsProps) {
 }
 
 const styles = StyleSheet.create({
-  section: { gap: theme.spacing.md },
+  section: { gap: theme.spacing.sm },
   sectionTitle: { marginBottom: 0 },
   // QA 2026-11-25: compact cards so the home screen fits without scrolling.
   card: { gap: theme.spacing.xs },

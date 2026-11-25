@@ -151,13 +151,15 @@ export function ProfileScreen() {
         title={t.title}
         testID="profil-header"
         actions={
+          // QA 2026-11-25: the settings sheet repeated the rows of the page; the header button
+          // now pauses directly.
           <IconButton
-            name="settings"
-            accessibilityLabel={t.settingsAction}
+            name="pause"
+            accessibilityLabel={t.pause.title}
             onPress={() => {
-              setSheet('settings');
+              setSheet('pause');
             }}
-            testID="profile-settings"
+            testID="profile-pause"
           />
         }
       />
