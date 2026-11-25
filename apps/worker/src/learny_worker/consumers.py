@@ -178,6 +178,7 @@ def _boolean_of(data: Mapping[str, Any], name: str) -> bool:
 # Backoff 10 s, 20 s, … 1280 s between the nine attempts of an ingestion: ~42 minutes in all.
 INGESTION_MAX_ATTEMPTS = 9
 
+
 def _job_actor(user_id: str) -> Actor:
     """The actor a job carries: the identifier only."""
     return Actor(user_id=user_id, email="", email_confirmed=True, transport="bearer")

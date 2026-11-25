@@ -518,6 +518,7 @@ async def fail_stale_resources(deps: ContentDeps, *, limit: int = STALE_SWEEP_LI
         _warn(deps, "stale resources failed", component="ingestion", outcome="failed", code=str(len(stale)))
     return len(stale)
 
+
 def _skipped(resource_id: str) -> dict[str, Any]:
     return {
         "resourceId": resource_id,
