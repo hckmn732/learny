@@ -7,7 +7,7 @@
 export const mobileSimple = {
   section: 'Nouvelle formation',
   cards: {
-    dropBadge: 'Nouveau · le plus rapide',
+    dropBadge: 'Rapide',
     dropTitle: 'Dépose ton cours',
     dropBody:
       'PDF, Word, photos de pages ou lien vidéo. On en fait un programme complet : cours, exercices, quiz et révisions.',

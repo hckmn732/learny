@@ -237,7 +237,7 @@ export function AgendaScreen({ now }: AgendaScreenProps = {}) {
 
   return (
     <View
-      style={[styles.base, { paddingTop: insets.top }]}
+      style={[styles.base, { paddingTop: insets.top + theme.spacing.md }]}
       testID="agenda-screen"
       {...pan.panHandlers}
     >

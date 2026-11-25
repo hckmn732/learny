@@ -6,7 +6,7 @@ export const simple = {
   choice: {
     kicker: 'Commencer une formation',
     dropCard: {
-      badge: 'Nouveau · le plus rapide',
+      badge: 'Rapide',
       title: 'Dépose ton cours',
       body: 'PDF, Word, photos de pages ou lien vidéo. On en fait un programme complet : cours, exercices, quiz et révisions.',
       hint: 'Prêt en quelques minutes',

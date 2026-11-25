@@ -34,7 +34,9 @@ import { SimpleCards } from '../../simple/SimpleCards';
 import { theme } from '../../theme';
 import { EmptyState } from '../../ui/EmptyState';
 import { ErrorState } from '../../ui/ErrorState';
+import { Icon } from '../../ui/Icon';
 import { Skeleton } from '../../ui/Skeleton';
+import { Text } from '../../ui/Text';
 import { Toast } from '../../ui/Toast';
 import { DeletionNotice } from '../profil/DeletionNotice';
 import { AppHeader } from '../shell/AppHeader';
@@ -204,19 +206,20 @@ export function TodayScreen() {
           />
         ) : null}
 
+        {/* QA 2026-11-25 — compact banner: the two creation cards below must fit on the screen
+            without scrolling (they already carry the actions). */}
         {noFormation ? (
-          <EmptyState
-            testID="today-no-formation"
-            icon="layers"
-            title={shell.states.noFormationTitle}
-            description={shell.states.noFormationBody}
-            action={{
-              label: shell.states.createFormation,
-              onPress: () => {
-                void openOnWeb('/formations/nouvelle');
-              },
-            }}
-          />
+          <View style={styles.noFormation} testID="today-no-formation">
+            <View style={styles.noFormationIcon}>
+              <Icon name="layers" size={18} color={theme.colors.inkSecondary} />
+            </View>
+            <View style={styles.noFormationTexts}>
+              <Text variant="rowTitle">{shell.states.noFormationTitle}</Text>
+              <Text variant="caption" tone="muted">
+                {shell.states.noFormationHint}
+              </Text>
+            </View>
+          </View>
         ) : null}
 
         {emptyDay ? (
@@ -407,6 +410,25 @@ export function TodayScreen() {
 
 const styles = StyleSheet.create({
   base: { flex: 1, backgroundColor: theme.colors.canvas },
+  noFormation: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: theme.spacing.md,
+    padding: theme.spacing.md,
+    borderRadius: theme.radius.card,
+    borderWidth: 1,
+    borderStyle: 'dashed',
+    borderColor: theme.colors.handle,
+  },
+  noFormationIcon: {
+    width: 36,
+    height: 36,
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderRadius: theme.radius.control,
+    backgroundColor: theme.colors.surfaceSubtle,
+  },
+  noFormationTexts: { flex: 1, gap: 2 },
   // `app.css` `.hero` (margin 2px 16px 0), `.stat-row` (12px 16px 0), `.section` (22px 16px 0):
   // the rhythm of the mockup is carried by explicit margins instead of one uniform gap.
   content: {

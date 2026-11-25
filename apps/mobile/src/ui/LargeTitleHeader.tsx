@@ -20,8 +20,9 @@ const EXPORT_STATUS_BAR = { ios: 54, android: 30 } as const;
 
 /** Padding of the exports, in pt/dp (`app.css` `.largehead`). */
 const PADDING = {
-  ios: { top: 12, horizontal: 20, bottom: 18 },
-  android: { top: 4, horizontal: 16, bottom: 12 },
+  // QA 2026-11-25: titles a little lower under the status bar (+12), less cramped.
+  ios: { top: 24, horizontal: 20, bottom: 18 },
+  android: { top: 16, horizontal: 16, bottom: 12 },
 } as const;
 
 export interface LargeTitleHeaderProps {

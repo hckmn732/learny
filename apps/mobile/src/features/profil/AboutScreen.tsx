@@ -23,7 +23,11 @@ import { Text } from '../../ui/Text';
 const t = fr.mobile.profile.about;
 
 interface LicensesFile {
-  readonly fonts: readonly { readonly name: string; readonly version: string; readonly license: string }[];
+  readonly fonts: readonly {
+    readonly name: string;
+    readonly version: string;
+    readonly license: string;
+  }[];
   readonly packages: readonly {
     readonly name: string;
     readonly version: string;
@@ -76,9 +80,7 @@ export function AboutScreen({ manifest, onBack, onOpenWeb }: AboutScreenProps = 
   const insets = useSafeAreaInsets();
   const [expanded, setExpanded] = useState(false);
   const config =
-    manifest === undefined
-      ? ((Constants.expoConfig ?? null) as ExpoConfigLike | null)
-      : manifest;
+    manifest === undefined ? ((Constants.expoConfig ?? null) as ExpoConfigLike | null) : manifest;
   const labels = versionLabels(config);
   const open = onOpenWeb ?? ((path: string) => void openOnWeb(path));
   const entries = [...file.fonts, ...file.packages];
@@ -86,7 +88,7 @@ export function AboutScreen({ manifest, onBack, onOpenWeb }: AboutScreenProps = 
 
   return (
     <View style={styles.screen} testID="about-screen">
-      <View style={[styles.nav, { paddingTop: insets.top + theme.spacing.sm }]}>
+      <View style={[styles.nav, { paddingTop: insets.top + theme.spacing.lg }]}>
         <IconButton
           name="chevronLeft"
           accessibilityLabel={fr.mobile.profile.back}

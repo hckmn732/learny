@@ -78,7 +78,7 @@ export function SettingsScaffold({
   const insets = useSafeAreaInsets();
   return (
     <View style={styles.screen} testID={testID}>
-      <View style={[styles.nav, { paddingTop: insets.top + theme.spacing.sm }]}>
+      <View style={[styles.nav, { paddingTop: insets.top + theme.spacing.lg }]}>
         <IconButton
           name="chevronLeft"
           accessibilityLabel={t.back}

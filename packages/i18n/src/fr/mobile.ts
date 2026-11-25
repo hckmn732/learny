@@ -370,6 +370,7 @@ export const mobile = {
       noFormationTitle: 'Aucune formation active',
       noFormationBody:
         'Créez votre première formation sur le web : le tuteur prépare ensuite votre programme.',
+      noFormationHint: 'Créez votre première formation ci-dessous.',
       createFormation: 'Créer une formation sur le web',
       loading: 'Chargement…',
       unexpectedTitle: 'Une erreur inattendue est survenue',
