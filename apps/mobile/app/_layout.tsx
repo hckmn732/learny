@@ -33,6 +33,7 @@ import { ConfigErrorPage } from '../src/features/sdd/ConfigErrorPage';
 import { AppErrorScreen } from '../src/features/shell/AppErrorScreen';
 import { PushBridge } from '../src/notifications/PushBridge';
 import { startOfflineWiring } from '../src/offline/network-wiring';
+import { ShareIntake } from '../src/simple/share-intake';
 import { theme } from '../src/theme';
 
 void SplashScreen.preventAutoHideAsync();
@@ -118,6 +119,8 @@ export default function RootLayout() {
           </Stack>
           {/* SPEC-3501 EF-2 — toucher d'une notification et bannière interne du premier plan. */}
           <PushBridge />
+          {/* SPEC-4003 EF-3 — partage entrant, avant ou après la connexion. */}
+          <ShareIntake />
         </SafeAreaProvider>
       </AppQueryProvider>
     </SessionProvider>
