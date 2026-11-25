@@ -1,0 +1,92 @@
+{
+  "spec": "SPEC-4003",
+  "platform": "android",
+  "transport": "local",
+  "device": {
+    "platform": "android",
+    "model": "sdk_gphone64_x86_64",
+    "apiLevel": "35",
+    "size": "Physical size: 1080x2400"
+  },
+  "tags": [
+    "SPEC-4003"
+  ],
+  "startedAt": "2026-11-25T01:06:43.154Z",
+  "finishedAt": "2026-11-25T01:09:57.075Z",
+  "passed": 3,
+  "failed": 0,
+  "videos": 1,
+  "campaignVideo": "artifacts/campagne/campagne.mp4",
+  "visual": 1,
+  "junitCases": 3,
+  "flows": [
+    {
+      "file": "apps/mobile/e2e/flows/SPEC-4003-parcours.yaml",
+      "name": "SPEC-4003 parcours",
+      "tags": [
+        "SPEC-4003",
+        "visual"
+      ],
+      "status": "passed",
+      "durationSec": 104.747,
+      "message": null,
+      "videos": [],
+      "screenshots": [
+        "artifacts/spec-4003-parcours/SPEC-4003-parcours.png",
+        "artifacts/spec-4003-parcours/step-016-tapOnElement-Téléchargements.png",
+        "artifacts/spec-4003-parcours/step-018-tapOnElement-Ouvrir.png",
+        "artifacts/spec-4003-parcours/step-023-tapOnElement-Ouvrir.png",
+        "artifacts/spec-4003-parcours/z-SPEC-4003-etape-1.png",
+        "artifacts/spec-4003-parcours/z-SPEC-4003-etape-2.png",
+        "artifacts/spec-4003-parcours/z-SPEC-4003-etape-3.png",
+        "artifacts/spec-4003-parcours/z-SPEC-4003-etape-4.png",
+        "artifacts/spec-4003-parcours/z-SPEC-4003-etape-5.png",
+        "artifacts/spec-4003-parcours/z-SPEC-4003-etape-6.png"
+      ],
+      "visual": {
+        "flow": "SPEC-4003 parcours",
+        "status": "passed",
+        "diffRatio": 0.0874,
+        "capture": "/home/ubuntu/learny-wt-SPEC-4003/test-results/sdd/SPEC-4003/artifacts/spec-4003-parcours/SPEC-4003-parcours.png",
+        "baseline": "/home/ubuntu/learny-wt-SPEC-4003/apps/mobile/e2e/visual/baselines/SPEC-4003-parcours.png",
+        "diff": "/home/ubuntu/learny-wt-SPEC-4003/test-results/sdd/SPEC-4003/artifacts/spec-4003-parcours/SPEC-4003-parcours.diff.png"
+      }
+    },
+    {
+      "file": "apps/mobile/e2e/flows/SPEC-4003-partage.yaml",
+      "name": "SPEC-4003 partage",
+      "tags": [
+        "SPEC-4003"
+      ],
+      "status": "passed",
+      "durationSec": 31.605,
+      "message": null,
+      "videos": [],
+      "screenshots": [],
+      "visual": null
+    },
+    {
+      "file": "apps/mobile/e2e/flows/SPEC-4003-sans-cle.yaml",
+      "name": "SPEC-4003 sans clé",
+      "tags": [
+        "SPEC-4003"
+      ],
+      "status": "passed",
+      "durationSec": 39.391,
+      "message": null,
+      "videos": [],
+      "screenshots": [
+        "artifacts/spec-4003-sans-cle/SPEC-4003-sans-cle.png"
+      ],
+      "visual": null
+    }
+  ],
+  "visualChecks": [
+    {
+      "flow": "SPEC-4003 parcours",
+      "status": "passed",
+      "diffRatio": 0.0874
+    }
+  ],
+  "unattributed": []
+}

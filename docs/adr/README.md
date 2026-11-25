@@ -292,3 +292,4 @@ Origine : **Validée** = décision prise avec le porteur du projet ; **Déduite*
 | [ADR-4006](ADR-4006-services-python-declares-dans-les-piles-coolify.md) | Services Python déclarés dans les piles Coolify, sans include | Déduite | ADR-2007, ADR-2041, ADR-2043, ADR-4005, SPEC-2301 |
 | [ADR-4007](ADR-4007-contrat-d-environnement-minimal.md) | Contrat d'environnement minimal | Validée | ADR-2042, ADR-4005, ADR-4006 |
 | [ADR-4008](ADR-4008-mode-simple-noms-d-evenements-pointes-et-tache-simple-analys.md) | Mode simple : noms d'événements pointés et tâche simple_analysis hors sélecteur | Déduite | SPEC-4001, ADR-4003, ADR-2014 |
+| [ADR-4009](ADR-4009-mode-simple-mobile-reception-du-partage-compte-sans-cle-et-e.md) | Mode simple mobile : réception du partage, compte sans clé et espace de libellés | Déduite | SPEC-4003, SPEC-4002, ADR-4002, ADR-3005 |

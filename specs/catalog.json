@@ -5588,7 +5588,8 @@
         "e2e": true,
         "acceptance": true,
         "visual": "mockup"
-      }
+      },
+      "track": "mobile"
     }
   ]
 }

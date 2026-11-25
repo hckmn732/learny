@@ -30,6 +30,7 @@ import {
 import { FALLBACK_TIME_ZONE } from '../../lib/dates';
 import { openOnWeb } from '../../lib/web';
 import { useOnlineStatus } from '../../offline/network';
+import { SimpleCards } from '../../simple/SimpleCards';
 import { theme } from '../../theme';
 import { EmptyState } from '../../ui/EmptyState';
 import { ErrorState } from '../../ui/ErrorState';
@@ -227,6 +228,28 @@ export function TodayScreen() {
           />
         ) : null}
 
+        {/* SPEC-4003 EF-1 — les deux portes d'entrée de la création, toujours visibles sur le
+            mobile ; le plafond de trois formations actives est décidé par le serveur à la
+            validation du programme (CL-4). */}
+        {home === null ? null : (
+          <View style={styles.cardsBlock}>
+            <SimpleCards
+              onDrop={() => {
+                router.push('/formations/depot');
+              }}
+              onTutor={() => {
+                void openOnWeb('/formations/nouvelle')
+                  .then(() => {
+                    notify(t.toasts.startOnWeb, 'today-toast-start');
+                  })
+                  .catch((cause: unknown) => {
+                    notify(messageFor(cause), 'today-toast-error');
+                  });
+              }}
+            />
+          </View>
+        )}
+
         {hero === null ? null : (
           <View style={styles.heroBlock}>
             <SessionHeroCard
@@ -390,6 +413,7 @@ const styles = StyleSheet.create({
     paddingBottom: theme.spacing.xxxl,
     paddingHorizontal: 16,
   },
+  cardsBlock: { marginTop: 18 },
   heroBlock: { marginTop: 2 },
   statsBlock: { marginTop: 12 },
   sectionBlock: { marginTop: 22 },

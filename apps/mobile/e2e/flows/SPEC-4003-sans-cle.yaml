@@ -1,0 +1,57 @@
+# SPEC-4003 — sans clé d'IA : l'encart, le blocage et les fichiers conservés (CA-3, EF-3).
+#
+# The demonstration account owns the three models, so the scenario removes them in the setup
+# script (SQL), runs the flow, then restores them. The deposit stays on screen with its files; the
+# banner leads to Profil → Modèles d'IA.
+appId: fr.learny.app
+name: SPEC-4003 sans clé
+tags:
+  - SPEC-4003
+---
+- launchApp:
+    clearState: true
+- extendedWaitUntil:
+    visible:
+      id: sdd-health
+    timeout: 30000
+- tapOn:
+    id: sdd-login-nokey
+- waitForAnimationToEnd:
+    timeout: 5000
+- runFlow:
+    when:
+      visible:
+        id: onboarding-error
+    commands:
+      - tapOn:
+          id: onboarding-error-retry
+- extendedWaitUntil:
+    visible:
+      id: tab-aujourdhui
+    timeout: 60000
+- tapOn:
+    id: simple-card-drop-action
+- extendedWaitUntil:
+    visible:
+      id: simple-deposit-screen
+    timeout: 15000
+- tapOn:
+    id: simple-dropzone
+- waitForAnimationToEnd:
+    timeout: 5000
+- tapOn:
+    text: 'Manuel.pdf'
+- extendedWaitUntil:
+    visible:
+      id: simple-file-0
+    timeout: 20000
+- takeScreenshot: SPEC-4003-sans-cle
+- tapOn:
+    id: simple-create
+- extendedWaitUntil:
+    visible:
+      id: simple-key-warning
+    timeout: 60000
+- assertVisible: 'Ajoute ta clé d’IA pour continuer'
+- assertVisible:
+    id: simple-file-0

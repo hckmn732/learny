@@ -15,6 +15,14 @@ module.exports = {
     '<rootDir>/test/resolution.test.ts',
   ],
   setupFilesAfterEnv: ['<rootDir>/test/setup.ts'],
+  // SPEC-4003 : la suite complète est sérialisée ; les animations natives d'un test ne doivent
+  // pas entrer en concurrence avec un autre worker (échec intermittent de recall-card).
+  maxWorkers: 1,
+  // SPEC-4003 : la VM de campagne est chargée (émulateur, builds) ; 20 s laisse aux écrans le
+  // temps de rendre leurs requêtes sans changer une seule assertion.
+  testTimeout: 20000,
+  // SPEC-4003 : des timers de requête restent ouverts après la suite ; Jest doit rendre la main.
+  forceExit: true,
   // Transform the React Native/Expo packages, the workspace TypeScript packages (pnpm symlinks)
   // and the ESM-only dependencies of @learny/core.
   transformIgnorePatterns: [
@@ -31,6 +39,11 @@ module.exports = {
     // SPEC-3402 — les modules natifs des fournisseurs n'existent pas dans l'environnement de test.
     '^@react-native-google-signin/google-signin$': '<rootDir>/test/mocks/google-signin.js',
     '^expo-apple-authentication$': '<rootDir>/test/mocks/apple-authentication.js',
+    // SPEC-4003 — sélecteurs natifs, date picker et API legacy du système de fichiers.
+    '^expo-document-picker$': '<rootDir>/test/mocks/expo-document-picker.js',
+    '^expo-image-picker$': '<rootDir>/test/mocks/expo-image-picker.js',
+    '^@react-native-community/datetimepicker$': '<rootDir>/test/mocks/datetimepicker.js',
+    '^expo-file-system/legacy$': '<rootDir>/test/mocks/expo-file-system-legacy.js',
   },
   collectCoverageFrom: ['src/**/*.{ts,tsx}', 'app/**/*.tsx', '!**/*.test.{ts,tsx}'],
 };

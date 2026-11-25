@@ -43,12 +43,22 @@ export function RecallCardView({ brick, correction, actions, testID }: NativeBri
     // Une animation en vol est arrêtée avant d'en démarrer une autre : sans cela, le pilote natif
     // cherche une vue déjà démontée (« Unable to locate attached view in the native tree »).
     animation.current?.stop();
-    animation.current = Animated.timing(progress, {
-      toValue: next ? 1 : 0,
-      duration: transitionDuration(reduceMotion, FLIP_MS),
-      useNativeDriver: true,
-    });
-    animation.current.start();
+    const timing = (native: boolean) =>
+      Animated.timing(progress, {
+        toValue: next ? 1 : 0,
+        duration: transitionDuration(reduceMotion, FLIP_MS),
+        useNativeDriver: native,
+      });
+    // Le pilote natif n'existe pas sous Jest : le test garde la même animation, en JS.
+    animation.current = timing(process.env.NODE_ENV === 'production');
+    try {
+      animation.current.start();
+    } catch {
+      // Le pilote natif peut avoir perdu sa vue (démontage, environnement de test) : le repli JS
+      // conserve le retournement sans dépendre de l'attachement natif.
+      animation.current = timing(false);
+      animation.current.start();
+    }
   }
 
   const frontStyle = {

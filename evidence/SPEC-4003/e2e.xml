@@ -1,0 +1,20 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<testsuites>
+  <testsuite name="Test Suite" device="learny" tests="3" failures="0" time="175.807" timestamp="2026-11-25T01:06:58">
+    <testcase id="SPEC-4003 partage" name="SPEC-4003 partage" classname="SPEC-4003 partage" file="apps/mobile/e2e/flows/SPEC-4003-partage.yaml" time="31.605" timestamp="2026-11-25T01:06:58" status="SUCCESS">
+      <properties>
+        <property name="tags" value="SPEC-4003"/>
+      </properties>
+    </testcase>
+    <testcase id="SPEC-4003 parcours" name="SPEC-4003 parcours" classname="SPEC-4003 parcours" file="apps/mobile/e2e/flows/SPEC-4003-parcours.yaml" time="104.747" timestamp="2026-11-25T01:07:30" status="SUCCESS">
+      <properties>
+        <property name="tags" value="SPEC-4003, visual"/>
+      </properties>
+    </testcase>
+    <testcase id="SPEC-4003 sans clé" name="SPEC-4003 sans clé" classname="SPEC-4003 sans clé" file="apps/mobile/e2e/flows/SPEC-4003-sans-cle.yaml" time="39.391" timestamp="2026-11-25T01:09:15" status="SUCCESS">
+      <properties>
+        <property name="tags" value="SPEC-4003"/>
+      </properties>
+    </testcase>
+  </testsuite>
+</testsuites>

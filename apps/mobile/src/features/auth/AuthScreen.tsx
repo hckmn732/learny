@@ -6,7 +6,7 @@
 // at sign-up, « Mot de passe oublié ? » and magic link sheet, legal footer, and the redirect of
 // EF-7. The magic-link buttons never show whether an account exists (ADR-0121, CA-4).
 import { useLocalSearchParams, useRouter, type Href } from 'expo-router';
-import { useEffect, useRef, useState, type ReactElement } from 'react';
+import { useEffect, useMemo, useRef, useState, type ReactElement } from 'react';
 import {
   KeyboardAvoidingView,
   Platform,
@@ -84,7 +84,9 @@ export function AuthScreen({ mode }: AuthScreenProps): ReactElement {
   const busyLabel = signup ? t.submitBusySignup : t.submitBusyLogin;
   // Test builds only: the credentials of the seeded account come from the build environment
   // (`EXPO_PUBLIC_SDD_DEMO_*`, never committed); the flow of CA-1 uses this button.
-  const demo = readDemoCredentials();
+  const account = params.demo === 'nokey' ? 'nokey' : params.demo === 'e2e' ? 'e2e' : 'default';
+  // Identité stable : sinon l'effet de connexion automatique se rejoue à chaque rendu.
+  const demo = useMemo(() => readDemoCredentials(account), [account]);
   // SPEC-3402 — Apple is displayed only when the platform supports it; Android reaches it by the
   // web flow of Supabase, which has no availability test (ET-1). Google stays hidden without Apple
   // (CA-1).
@@ -205,7 +207,8 @@ export function AuthScreen({ mode }: AuthScreenProps): ReactElement {
   // l'environnement du build, jamais du dépôt. L'appel est différé pour ne pas écrire d'état
   // pendant l'effet lui-même.
   useEffect(() => {
-    if (params.demo !== '1' || demo === null) return;
+    if ((params.demo !== '1' && params.demo !== 'nokey' && params.demo !== 'e2e') || demo === null)
+      return;
     const timer = setTimeout(() => {
       void submitDemo();
     }, 0);

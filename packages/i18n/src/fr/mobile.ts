@@ -1,7 +1,10 @@
 // Messages propres à l'application mobile : espace `mobile` de `@learny/i18n` (canevas § 2,
 // ADR-3005 § 3). Textes vus par l'utilisateur, en français (BR-ACC-06), ton neutre vouvoiement.
 import { mobileBricks } from './mobileBricks';
+import { mobileSimple } from './mobileSimple';
 export const mobile = {
+  // SPEC-4003 — libellés du mode simple propres au mobile (espace `mobile`, ADR-3005).
+  simple: mobileSimple,
   // SPEC-3301 — rendus natifs des briques et du Markdown (ADR-3009).
   bricks: mobileBricks,
   // SPEC-3303 — feuille du tuteur : fil, saisie, contexte, Teste-moi et carte (ADR-3010).
@@ -1088,8 +1091,7 @@ export const mobile = {
       deviceHint: 'Rappels hors application, sur ce téléphone (APNs ou FCM).',
       deviceOn: 'Les rappels arrivent sur cet appareil.',
       deviceOff: 'Aucun rappel n’arrive sur cet appareil.',
-      deviceDenied:
-        'Les notifications sont bloquées pour Learny dans les réglages du téléphone.',
+      deviceDenied: 'Les notifications sont bloquées pour Learny dans les réglages du téléphone.',
       deviceUnsupported: 'Cet appareil ne peut pas recevoir les rappels hors application.',
       permissionHint: 'Autorisez les notifications pour retrouver vos rappels hors application.',
       permissionCta: 'Autoriser dans les réglages',

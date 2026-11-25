@@ -16,7 +16,6 @@ const APP_DIR = path.resolve(HERE, '..');
 const ROOT = path.resolve(APP_DIR, '..', '..');
 const ANDROID_DIR = path.join(APP_DIR, 'android');
 const APK = path.join(ANDROID_DIR, 'app', 'build', 'outputs', 'apk', 'release', 'app-release.apk');
-const MIN_FREE_BYTES = 4 * 1024 ** 3;
 
 function readEnvFile() {
   const file = path.join(APP_DIR, 'e2e', 'e2e.env');
@@ -76,10 +75,11 @@ if (missing.length > 0) {
 }
 
 const stats = fs.statfsSync(ROOT);
+const minFreeBytes = Number(env.MOBILE_BUILD_MIN_FREE_GB ?? 4) * 1024 ** 3;
 const freeBytes = stats.bavail * stats.bsize;
-if (freeBytes < MIN_FREE_BYTES) {
+if (freeBytes < minFreeBytes) {
   console.error(
-    `✖ espace disque insuffisant : ${(freeBytes / 1024 ** 3).toFixed(1)} Go libres, 4 Go requis ` +
+    `✖ espace disque insuffisant : ${(freeBytes / 1024 ** 3).toFixed(1)} Go libres, ${String(Number(env.MOBILE_BUILD_MIN_FREE_GB ?? 4))} Go requis ` +
       `(voir la section « hygiène disque » du BRIEF).`,
   );
   process.exit(2);

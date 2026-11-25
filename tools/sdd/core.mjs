@@ -89,7 +89,8 @@ export function phaseOf(catalog, phaseId) {
 
 /** Piste d'une spécification (celle de sa phase). */
 export function specTrack(catalog, spec) {
-  return trackOf(phaseOf(catalog, spec.phase));
+  // Une spec peut déclarer sa piste de validation (ex. P40 web + mobile, SPEC-4003).
+  return spec.track ?? trackOf(phaseOf(catalog, spec.phase));
 }
 
 /**

@@ -51,6 +51,9 @@ export const queryKeys = {
   subscription: () => ['billing', 'subscription'] as const,
   pause: () => ['me', 'pause'] as const,
   exportRead: (exportId: string) => ['me', 'export', exportId] as const,
+  // SPEC-4003 — mode simple : l'état de préparation et le résultat du diagnostic.
+  simple: (formationId: string) => ['simple', formationId] as const,
+  simpleAttempt: (attemptId: string) => ['simple', 'diagnostic', attemptId] as const,
   attempt: (attemptId: string) => ['attempt', attemptId] as const,
   attemptResult: (attemptId: string) => ['attempt', attemptId, 'result'] as const,
 } as const;
