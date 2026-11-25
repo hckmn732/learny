@@ -53,9 +53,19 @@ describe('[SPEC-602] étape IA', () => {
     expect(providers).toContain('deepseek');
   });
 
-  it('bloque Continuer tant que la clé n’est pas qualifiée (EF-8, CA-4)', async () => {
+  it('passe l’étape sans clé : la clé d’IA est facultative (QA 2026-11-25)', async () => {
     const { user } = renderComponent(<AiStep recommendedModels={MODELS} />);
     expect(screen.getByTestId('ai-status').textContent).toBe('Pas encore testée');
+    await user.click(screen.getByTestId('onboarding-continue'));
+    await waitFor(() => {
+      expect(apiMock.meOnboardingUpdate).toHaveBeenCalledWith({ body: { step: 'rappels' } });
+    });
+    expect(router.push).toHaveBeenCalledWith('/premiers-pas/rappels');
+  });
+
+  it('bloque Continuer quand une clé saisie n’est pas encore testée (EF-8, CA-4)', async () => {
+    const { user } = renderComponent(<AiStep recommendedModels={MODELS} />);
+    await user.type(screen.getByTestId('ai-key'), 'sk-ant-test-000000000000');
     await user.click(screen.getByTestId('onboarding-continue'));
     expect(screen.getByTestId('ai-error').textContent).toBe('Testez votre clé avant de continuer.');
     expect(apiMock.meOnboardingUpdate).not.toHaveBeenCalled();
