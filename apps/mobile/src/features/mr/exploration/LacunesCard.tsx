@@ -16,6 +16,8 @@ import { Chip } from '../../../ui/Chip';
 import { ProgressBar } from '../../../ui/ProgressBar';
 import { Text } from '../../../ui/Text';
 
+import { Glow, Rise, Shine } from '../motion';
+
 import { chipToneOfNature, natureLabel } from './format';
 
 const t = fr.mr.exploration.lacunes;
@@ -45,57 +47,71 @@ export interface LacunesCardProps {
   readonly onTrain: () => void;
   /** `null` quand aucun passage du cours n'est disponible (ET-5). */
   readonly onCourse: (() => void) | null;
+  /** Rang dans la liste : les cartes arrivent en cascade. */
+  readonly index?: number;
 }
 
 /** Une lacune ouverte de la liste. */
-export function LacunesCard({ gap, timeZone, onTrain, onCourse }: LacunesCardProps) {
+export function LacunesCard({ gap, timeZone, onTrain, onCourse, index = 0 }: LacunesCardProps) {
   const revealed =
     gap.revealedBy.trim() === ''
       ? g.card.revealedFallback(formatDate(gap.detectedAt, timeZone))
       : gap.revealedBy;
 
   return (
-    <Card testID={`qf-lacunes-item-${gap.notionId}`} style={styles.card}>
-      <View style={styles.topRow}>
-        <Chip label={natureLabel(gap.nature)} tone={chipToneOfNature(gap.nature)} />
-        <Text variant="caption" tone="muted" numberOfLines={1} style={styles.module}>
-          {t.moduleLine(gap.modulePosition, gap.moduleTitle)}
+    <Rise index={index} step={90}>
+      <Card testID={`qf-lacunes-item-${gap.notionId}`} style={styles.card}>
+        <View style={styles.topRow}>
+          <Glow
+            color={
+              chipToneOfNature(gap.nature) === 'orange' ? theme.colors.orange : theme.colors.indigo
+            }
+            spread={3}
+            duration={1100 + index * 150}
+          >
+            <Chip label={natureLabel(gap.nature)} tone={chipToneOfNature(gap.nature)} />
+          </Glow>
+          <Text variant="caption" tone="muted" numberOfLines={1} style={styles.module}>
+            {t.moduleLine(gap.modulePosition, gap.moduleTitle)}
+          </Text>
+        </View>
+        <Text variant="title">{gap.notionLabel}</Text>
+        <Text variant="bodySmall" tone="secondary" numberOfLines={3}>
+          {revealed}
         </Text>
-      </View>
-      <Text variant="title">{gap.notionLabel}</Text>
-      <Text variant="bodySmall" tone="secondary" numberOfLines={3}>
-        {revealed}
-      </Text>
-      <View style={styles.mastery}>
-        <ProgressBar
-          value={gap.mastery / 100}
-          label={t.masteryAnnouncement(gap.notionLabel, gap.mastery)}
-        />
-        <Text variant="caption" tone="muted">
-          {t.masteryLine(gap.mastery, gap.threshold)}
-        </Text>
-      </View>
-      <Text variant="caption" tone="muted">
-        {`${g.card.tutorProposes} ${recommendationOf(gap)}`}
-      </Text>
-      <View style={styles.actions}>
-        <Button
-          label={g.card.train}
-          onPress={onTrain}
-          size="sm"
-          testID={`qf-lacunes-train-${gap.notionId}`}
-        />
-        {onCourse === null ? null : (
-          <Button
-            label={g.card.course}
-            onPress={onCourse}
-            size="sm"
-            variant="outline"
-            testID={`qf-lacunes-course-${gap.notionId}`}
+        <View style={styles.mastery}>
+          <ProgressBar
+            value={gap.mastery / 100}
+            label={t.masteryAnnouncement(gap.notionLabel, gap.mastery)}
           />
-        )}
-      </View>
-    </Card>
+          <Text variant="caption" tone="muted">
+            {t.masteryLine(gap.mastery, gap.threshold)}
+          </Text>
+        </View>
+        <Text variant="caption" tone="muted">
+          {`${g.card.tutorProposes} ${recommendationOf(gap)}`}
+        </Text>
+        <View style={styles.actions}>
+          <Shine every={3800 + index * 400}>
+            <Button
+              label={g.card.train}
+              onPress={onTrain}
+              size="sm"
+              testID={`qf-lacunes-train-${gap.notionId}`}
+            />
+          </Shine>
+          {onCourse === null ? null : (
+            <Button
+              label={g.card.course}
+              onPress={onCourse}
+              size="sm"
+              variant="outline"
+              testID={`qf-lacunes-course-${gap.notionId}`}
+            />
+          )}
+        </View>
+      </Card>
+    </Rise>
   );
 }
 

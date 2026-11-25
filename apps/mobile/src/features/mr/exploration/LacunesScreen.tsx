@@ -68,7 +68,12 @@ export function LacunesScreen({ onBack }: LacunesScreenProps) {
   };
 
   const loading = (
-    <View style={styles.loading} testID="qf-lacunes-loading" accessible accessibilityLabel={g.loading}>
+    <View
+      style={styles.loading}
+      testID="qf-lacunes-loading"
+      accessible
+      accessibilityLabel={g.loading}
+    >
       <Skeleton animated={false} height={96} />
       <Skeleton animated={false} height={96} />
       <Skeleton animated={false} height={96} />
@@ -110,11 +115,12 @@ export function LacunesScreen({ onBack }: LacunesScreenProps) {
   } else {
     body = (
       <View style={styles.list} testID="qf-lacunes-list">
-        {data.items.map((gap) => {
+        {data.items.map((gap, index) => {
           const courseHref = gap.course === null ? null : gap.course.href;
           return (
             <LacunesCard
               key={gap.notionId}
+              index={index}
               gap={gap}
               timeZone={data.timezone}
               onTrain={() => {

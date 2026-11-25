@@ -8,16 +8,23 @@ import { Pressable, StyleSheet, View } from 'react-native';
 import type { NotionGraphNode } from '@learny/contracts';
 import { fr } from '@learny/i18n';
 
+import { Pop } from '../motion';
 import { theme } from '../../../theme';
 import { Card } from '../../../ui/Card';
 import { Text } from '../../../ui/Text';
 
-import { statusColor, statusLabel, statusOfNode, type ModuleGroup, type NotionStatus } from './format';
+import {
+  statusColor,
+  statusLabel,
+  statusOfNode,
+  type ModuleGroup,
+  type NotionStatus,
+} from './format';
 
 const t = fr.mr.exploration.carte;
 
 /** Colonnes de la grille : six cases de 44 pt sur la largeur utile d'un téléphone. */
-const COLUMNS = 6;
+const COLUMNS = 8;
 
 /** Les quatre états de la légende, dans l'ordre de la maquette. */
 const LEGEND: readonly NotionStatus[] = ['mastered', 'inProgress', 'fragile', 'upcoming'];
@@ -52,9 +59,13 @@ export function CarteGrid({ groups, selectedId, onSelect }: CarteGridProps) {
       </View>
       <View accessibilityLabel={t.gridLabel} style={styles.modules}>
         {groups.map((group) => (
-          <Card key={group.module.id} style={styles.module} testID={`qf-carte-module-${group.module.id}`}>
+          <Card
+            key={group.module.id}
+            style={styles.module}
+            testID={`qf-carte-module-${group.module.id}`}
+          >
             <View style={styles.moduleHeader}>
-              <Text variant="title" numberOfLines={1} style={styles.moduleTitle}>
+              <Text variant="rowTitle" numberOfLines={1} style={styles.moduleTitle}>
                 {group.module.label}
               </Text>
               <Text variant="caption" tone="muted" testID={`qf-carte-score-${group.module.id}`}>
@@ -64,25 +75,31 @@ export function CarteGrid({ groups, selectedId, onSelect }: CarteGridProps) {
             <View style={styles.cells}>
               {chunk(group.notions, COLUMNS).map((row, rowIndex) => (
                 <View key={rowIndex} style={styles.row}>
-                  {row.map((notion: NotionGraphNode) => {
+                  {row.map((notion: NotionGraphNode, cellIndex: number) => {
                     const status = statusOfNode(notion);
                     const selected = notion.id === selectedId;
                     return (
-                      <Pressable
+                      <Pop
                         key={notion.id}
-                        accessibilityLabel={t.cellLabel(notion.label, statusLabel(status))}
-                        accessibilityRole="button"
-                        accessibilityState={{ selected }}
-                        onPress={() => {
-                          onSelect(notion.id);
-                        }}
-                        style={[
-                          styles.cell,
-                          { backgroundColor: statusColor(status) },
-                          selected ? styles.cellSelected : null,
-                        ]}
-                        testID={`qf-carte-cell-${notion.id}`}
-                      />
+                        delay={(rowIndex * COLUMNS + cellIndex) * 28}
+                        style={styles.cellWrap}
+                      >
+                        <Pressable
+                          accessibilityLabel={t.cellLabel(notion.label, statusLabel(status))}
+                          accessibilityRole="button"
+                          accessibilityState={{ selected }}
+                          onPress={() => {
+                            onSelect(notion.id);
+                          }}
+                          style={[
+                            styles.cell,
+                            { backgroundColor: statusColor(status) },
+                            selected ? styles.cellSelected : null,
+                          ]}
+                          hitSlop={{ top: 8, bottom: 8 }}
+                          testID={`qf-carte-cell-${notion.id}`}
+                        />
+                      </Pop>
                     );
                   })}
                 </View>
@@ -113,13 +130,13 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
   },
   moduleTitle: { flex: 1 },
-  cells: { gap: theme.spacing.sm },
-  row: { flexDirection: 'row', gap: theme.spacing.sm },
+  cells: { gap: 6 },
+  row: { flexDirection: 'row', gap: 6 },
+  // Maquette Carte.dc.html : 8 cases par ligne, compactes ; la zone tactile reste de 44 pt.
+  cellWrap: { width: '10.9%' },
   cell: {
-    borderRadius: theme.radius.badge,
-    flexGrow: 1,
-    flexShrink: 1,
-    height: theme.minTouchTarget.height,
+    borderRadius: 7,
+    height: 28,
   },
   cellSelected: {
     borderColor: theme.colors.ink,

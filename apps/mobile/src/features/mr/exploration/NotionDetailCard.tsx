@@ -39,9 +39,15 @@ export function NotionDetailCard({
 }: NotionDetailCardProps) {
   const status = statusOfNode(node);
   const actions = [
-    onTrain === null ? null : { key: 'train', label: t.detail.train, onPress: onTrain, variant: 'primary' as const },
-    onCourse === null ? null : { key: 'course', label: t.detail.course, onPress: onCourse, variant: 'outline' as const },
-    onGap === null ? null : { key: 'gap', label: t.detail.gap, onPress: onGap, variant: 'outline' as const },
+    onTrain === null
+      ? null
+      : { key: 'train', label: t.detail.train, onPress: onTrain, variant: 'primary' as const },
+    onCourse === null
+      ? null
+      : { key: 'course', label: t.detail.course, onPress: onCourse, variant: 'outline' as const },
+    onGap === null
+      ? null
+      : { key: 'gap', label: t.detail.gap, onPress: onGap, variant: 'outline' as const },
   ].filter((action): action is NonNullable<typeof action> => action !== null);
 
   return (

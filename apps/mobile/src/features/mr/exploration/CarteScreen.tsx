@@ -138,7 +138,12 @@ export function CarteScreen({ formationId, initialMode = 'grille', onBack }: Car
     );
   } else if (data === null) {
     body = (
-      <View style={styles.loading} testID="qf-carte-loading" accessible accessibilityLabel={n.loading}>
+      <View
+        style={styles.loading}
+        testID="qf-carte-loading"
+        accessible
+        accessibilityLabel={n.loading}
+      >
         <Skeleton animated={false} height={120} />
         <Skeleton animated={false} height={120} />
       </View>
@@ -168,7 +173,11 @@ export function CarteScreen({ formationId, initialMode = 'grille', onBack }: Car
       title={t.title}
       testID="qf-carte"
       onBack={onBack}
-      subtitle={data === null ? undefined : n.statsLine(data.stats.notions, data.stats.links, data.stats.modules)}
+      subtitle={
+        data === null
+          ? undefined
+          : n.statsLine(data.stats.notions, data.stats.links, data.stats.modules)
+      }
       footer={footer}
     >
       {valid ? (

@@ -5,7 +5,7 @@
 // glisser pour déplacer, pincer pour zoomer — et trois boutons de 44 pt font la même chose au
 // clavier et au lecteur d'écran : la carte n'est jamais seulement un dessin. Une liste accessible
 // énumère les nœuds et leurs relations, pour les lecteurs d'écran comme pour les tests.
-import { useCallback, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import {
   PanResponder,
   Pressable,
@@ -15,7 +15,17 @@ import {
   type GestureResponderEvent,
   type PanResponderGestureState,
 } from 'react-native';
-import Svg, { Circle, G, Line } from 'react-native-svg';
+import Animated, {
+  Easing,
+  useAnimatedProps,
+  useSharedValue,
+  withRepeat,
+  withTiming,
+} from 'react-native-reanimated';
+import Svg, { Circle, G, Line, Text as SvgText } from 'react-native-svg';
+
+import { useReducedMotion } from '../../../lib/motion';
+import { useLoop } from '../motion';
 
 import type { NotionGraphLink, NotionGraphNode } from '@learny/contracts';
 import { fr } from '@learny/i18n';
@@ -36,7 +46,10 @@ import { layoutGraph } from './graph-layout';
 
 const t = fr.mr.exploration.carte;
 
-const CANVAS_HEIGHT = 380;
+const CANVAS_HEIGHT = 460;
+
+const AnimatedCircle = Animated.createAnimatedComponent(Circle);
+const AnimatedLine = Animated.createAnimatedComponent(Line);
 const MIN_SCALE = 0.6;
 const MAX_SCALE = 2.6;
 
@@ -98,6 +111,102 @@ function ZoomButton({ label, text, onPress, testID }: ZoomButtonProps) {
   );
 }
 
+/** Ring pulsing around a fragile notion (maquette : les notions fragiles pulsent). */
+function PulseRing({
+  x,
+  y,
+  r,
+  color,
+}: {
+  readonly x: number;
+  readonly y: number;
+  readonly r: number;
+  readonly color: string;
+}) {
+  const loop = useLoop(900);
+  const props = useAnimatedProps(() => ({
+    r: r + 4 + loop.value * 6,
+    opacity: 0.7 - loop.value * 0.55,
+  }));
+  return (
+    <AnimatedCircle
+      cx={x}
+      cy={y}
+      fill="none"
+      stroke={color}
+      strokeWidth={2}
+      animatedProps={props}
+    />
+  );
+}
+
+/** Signal flowing along a link of the selected notion. */
+function FlowLine({
+  x1,
+  y1,
+  x2,
+  y2,
+  color,
+}: {
+  readonly x1: number;
+  readonly y1: number;
+  readonly x2: number;
+  readonly y2: number;
+  readonly color: string;
+}) {
+  const reduced = useReducedMotion();
+  const offset = useSharedValue(0);
+  useEffect(() => {
+    if (reduced) return;
+    offset.value = withRepeat(withTiming(-40, { duration: 1400, easing: Easing.linear }), -1);
+  }, [offset, reduced]);
+  const props = useAnimatedProps(() => ({ strokeDashoffset: offset.value }));
+  return (
+    <AnimatedLine
+      x1={x1}
+      y1={y1}
+      x2={x2}
+      y2={y2}
+      stroke={color}
+      strokeWidth={2.2}
+      strokeLinecap="round"
+      strokeDasharray="3 9"
+      animatedProps={props}
+    />
+  );
+}
+
+/** Breathing halo of a module cluster. */
+function ClusterHalo({
+  x,
+  y,
+  r,
+  color,
+  delay,
+}: {
+  readonly x: number;
+  readonly y: number;
+  readonly r: number;
+  readonly color: string;
+  readonly delay: number;
+}) {
+  const loop = useLoop(1600, delay);
+  const props = useAnimatedProps(() => ({
+    opacity: 0.07 + loop.value * 0.07,
+    r: r + loop.value * 4,
+  }));
+  return <AnimatedCircle cx={x} cy={y} fill={color} animatedProps={props} />;
+}
+
+interface Cluster {
+  readonly id: string;
+  readonly label: string;
+  readonly x: number;
+  readonly y: number;
+  readonly r: number;
+  readonly color: string;
+}
+
 export interface CarteBrainProps {
   readonly nodes: readonly NotionGraphNode[];
   readonly links: readonly NotionGraphLink[];
@@ -113,6 +222,37 @@ export function CarteBrain({ nodes, links, selectedId, onSelect }: CarteBrainPro
     () => layoutGraph({ nodes, links }, canvasWidth, CANVAS_HEIGHT),
     [nodes, links, canvasWidth],
   );
+  // Clusters : chaque module et les notions qu'il contient forment un halo nommé (maquette).
+  const clusters = useMemo((): readonly Cluster[] => {
+    const result: Cluster[] = [];
+    for (const module of nodes.filter((node) => node.kind === 'module')) {
+      const memberIds = links
+        .filter((link) => link.kind === 'contains' && link.from === module.id)
+        .map((link) => link.to);
+      const points = [module.id, ...memberIds]
+        .map((id) => layout.positions.get(id))
+        .filter((point): point is { x: number; y: number } => point !== undefined);
+      if (points.length === 0) continue;
+      const x = points.reduce((sum, point) => sum + point.x, 0) / points.length;
+      const y = points.reduce((sum, point) => sum + point.y, 0) / points.length;
+      const r = Math.max(34, ...points.map((point) => Math.hypot(point.x - x, point.y - y) + 18));
+      const statuses = nodes.filter((node) => memberIds.includes(node.id)).map(statusOfNode);
+      const color = statuses.includes('fragile')
+        ? theme.colors.orange
+        : statuses.length > 0 && statuses.every((status) => status === 'mastered')
+          ? theme.colors.green
+          : theme.colors.lime;
+      result.push({
+        id: module.id,
+        label: module.label.toUpperCase().slice(0, 18),
+        x,
+        y,
+        r,
+        color,
+      });
+    }
+    return result;
+  }, [layout, links, nodes]);
   const [interaction, setInteraction] = useState<Interaction>(INITIAL);
   const view = interaction.view;
   const [listOpen, setListOpen] = useState(false);
@@ -236,10 +376,22 @@ export function CarteBrain({ nodes, links, selectedId, onSelect }: CarteBrainPro
       >
         <Svg width={canvasWidth} height={CANVAS_HEIGHT} viewBox={viewBox}>
           <G transform={transform}>
+            {clusters.map((cluster, index) => (
+              <ClusterHalo
+                key={`halo-${cluster.id}`}
+                x={cluster.x}
+                y={cluster.y}
+                r={cluster.r}
+                color={cluster.color}
+                delay={index * 250}
+              />
+            ))}
             {links.map((link) => {
               const from = layout.positions.get(link.from);
               const to = layout.positions.get(link.to);
               if (from === undefined || to === undefined) return null;
+              const touched =
+                selectedId !== null && (link.from === selectedId || link.to === selectedId);
               return (
                 <Line
                   key={link.id}
@@ -248,31 +400,77 @@ export function CarteBrain({ nodes, links, selectedId, onSelect }: CarteBrainPro
                   x2={to.x}
                   y2={to.y}
                   stroke={linkColor(link.kind)}
-                  strokeWidth={link.kind === 'confusion' ? 1.8 : 1}
+                  strokeWidth={link.kind === 'confusion' ? 1.6 : 1}
                   strokeLinecap="round"
-                  opacity={0.55}
+                  opacity={selectedId === null ? 0.4 : touched ? 0.7 : 0.14}
                 />
               );
             })}
+            {selectedId === null
+              ? null
+              : links
+                  .filter((link) => link.from === selectedId || link.to === selectedId)
+                  .map((link) => {
+                    const from = layout.positions.get(link.from);
+                    const to = layout.positions.get(link.to);
+                    if (from === undefined || to === undefined) return null;
+                    return (
+                      <FlowLine
+                        key={`flow-${link.id}`}
+                        x1={from.x}
+                        y1={from.y}
+                        x2={to.x}
+                        y2={to.y}
+                        color={link.kind === 'confusion' ? theme.colors.orange : theme.colors.lime}
+                      />
+                    );
+                  })}
+            {clusters.map((cluster) => (
+              <SvgText
+                key={`label-${cluster.id}`}
+                x={cluster.x}
+                y={cluster.y - cluster.r - 6}
+                fill={theme.colors.onDarkMuted}
+                fontSize={9}
+                fontWeight="600"
+                letterSpacing={1.1}
+                textAnchor="middle"
+              >
+                {cluster.label}
+              </SvgText>
+            ))}
             {layout.nodes.map((node) => {
               const source = nodes.find((candidate) => candidate.id === node.id);
               if (source === undefined) return null;
               const status = statusOfNode(source);
+              const color = statusColor(status);
               const selected = node.id === selectedId;
+              const related = links.some(
+                (link) =>
+                  (link.from === selectedId && link.to === node.id) ||
+                  (link.to === selectedId && link.from === node.id),
+              );
+              const dim = selectedId !== null && !selected && !related;
               return (
                 <G
                   key={node.id}
+                  opacity={dim ? 0.35 : 1}
                   onPress={() => {
                     onSelect(node.id);
                   }}
                 >
+                  <Circle cx={node.x} cy={node.y} r={node.radius + 7} fill={color} opacity={0.12} />
+                  <Circle cx={node.x} cy={node.y} r={node.radius + 3} fill={color} opacity={0.28} />
+                  {status === 'fragile' ? (
+                    <PulseRing x={node.x} y={node.y} r={node.radius} color={theme.colors.orange} />
+                  ) : null}
                   {selected ? (
                     <Circle
                       cx={node.x}
                       cy={node.y}
                       r={node.radius + 6}
                       fill="none"
-                      stroke={theme.colors.ink}
+                      stroke={theme.colors.white}
                       strokeWidth={2}
                     />
                   ) : null}
@@ -280,8 +478,14 @@ export function CarteBrain({ nodes, links, selectedId, onSelect }: CarteBrainPro
                     cx={node.x}
                     cy={node.y}
                     r={node.radius}
-                    fill={statusColor(status)}
+                    fill={color}
                     opacity={source.kind === 'source' ? 0.85 : 1}
+                  />
+                  <Circle
+                    cx={node.x}
+                    cy={node.y}
+                    r={Math.max(12, node.radius + 6)}
+                    fill="transparent"
                   />
                 </G>
               );
@@ -366,8 +570,10 @@ const styles = StyleSheet.create({
     width: theme.minTouchTarget.height,
   },
   canvas: {
-    backgroundColor: theme.colors.darkSurface,
-    borderRadius: theme.radius.card,
+    backgroundColor: theme.colors.ink,
+    borderColor: theme.colors.darkSurface,
+    borderRadius: theme.radius.sheet,
+    borderWidth: 1,
     overflow: 'hidden',
   },
   toggle: {

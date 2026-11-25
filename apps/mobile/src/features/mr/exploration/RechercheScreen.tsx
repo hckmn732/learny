@@ -92,7 +92,12 @@ export function RechercheScreen({ onBack }: RechercheScreenProps) {
     );
   } else if (data === null) {
     body = (
-      <View style={styles.loading} testID="qf-recherche-loading" accessible accessibilityLabel={s.loading}>
+      <View
+        style={styles.loading}
+        testID="qf-recherche-loading"
+        accessible
+        accessibilityLabel={s.loading}
+      >
         <Skeleton animated={false} height={64} />
         <Skeleton animated={false} height={64} />
       </View>
@@ -255,7 +260,11 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     overflow: 'hidden',
   },
-  row: { gap: theme.spacing.xs, paddingHorizontal: theme.spacing.lg, paddingVertical: theme.spacing.md },
+  row: {
+    gap: theme.spacing.xs,
+    paddingHorizontal: theme.spacing.lg,
+    paddingVertical: theme.spacing.md,
+  },
   rowDivider: { borderTopColor: theme.colors.divider, borderTopWidth: 1 },
   rowPressed: { backgroundColor: theme.colors.surfaceSubtle },
 });
