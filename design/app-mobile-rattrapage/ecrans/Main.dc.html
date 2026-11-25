@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<title>Cartographie des renvois web du mobile</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Space+Grotesk:wght@500;600;700&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+a{color:#3A3AA8}a:hover{color:#26267A}
+</style>
+</helmet>
+<div style="width: 1480px; height: 1300px; box-sizing: border-box; padding: 56px 64px; background: #F4F4F1; font-family: Inter, sans-serif; color: #111113; display: flex; flex-direction: column; gap: 28px">
+  <div style="display: flex; justify-content: space-between; align-items: flex-end; gap: 40px">
+    <div style="display: flex; flex-direction: column; gap: 10px; max-width: 860px">
+      <div style="font-size: 13px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: #62626B">Learny · application mobile</div>
+      <h1 style="margin: 0; font-family: 'Space Grotesk', sans-serif; font-size: 44px; font-weight: 700; line-height: 1.05">Ce qui renvoie encore au web</h1>
+      <p style="margin: 0; font-size: 16px; line-height: 1.5; color: #3F3F46">Chaque point d’entrée de l’app qui ouvre « Continuer sur le web », le parcours web qu’il remplace et son rang dans le plan de rattrapage d’ADR-4002 §3. Aucune spécification ni maquette n’existe encore pour ces parcours : les écrans ci-dessous en sont la proposition.</p>
+    </div>
+    <div style="display: flex; gap: 12px">
+      <div style="background: #FFFFFF; border: 1px solid #E7E6E1; border-radius: 18px; padding: 16px 20px; display: flex; flex-direction: column; gap: 4px; min-width: 150px">
+        <span style="font-family: 'Space Grotesk', sans-serif; font-size: 34px; font-weight: 700">12</span>
+        <span style="font-size: 13px; color: #62626B">parcours à rattraper</span>
+      </div>
+      <div style="background: #C6F432; border-radius: 18px; padding: 16px 20px; display: flex; flex-direction: column; gap: 4px; min-width: 150px">
+        <span style="font-family: 'Space Grotesk', sans-serif; font-size: 34px; font-weight: 700">11</span>
+        <span style="font-size: 13px; color: #3F5A00">maquettes proposées</span>
+      </div>
+    </div>
+  </div>
+
+  <div style="background: #FFFFFF; border: 1px solid #E7E6E1; border-radius: 22px; overflow: hidden; display: flex; flex-direction: column">
+    <div style="display: grid; grid-template-columns: 56px 300px 250px 1fr 150px; gap: 0; background: #111113; color: #FFFFFF; font-size: 12px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase">
+      <div style="padding: 14px 16px">Rang</div>
+      <div style="padding: 14px 16px">Point d’entrée mobile</div>
+      <div style="padding: 14px 16px">Page web ouverte</div>
+      <div style="padding: 14px 16px">Parcours à rattraper</div>
+      <div style="padding: 14px 16px">Maquette</div>
+    </div>
+    <sc-for list="{{rows}}" as="row" hint-placeholder-count="13">
+      <div style="display: grid; grid-template-columns: 56px 300px 250px 1fr 150px; border-top: 1px solid #EEEDE8; font-size: 14px; line-height: 1.4; align-items: center">
+        <div style="padding: 12px 16px"><span style="display: inline-flex; width: 30px; height: 30px; border-radius: 999px; align-items: center; justify-content: center; font-weight: 700; background: {{row.rankBg}}; color: {{row.rankInk}}">{{row.rank}}</span></div>
+        <div style="padding: 12px 16px; color: #111113">{{row.entry}}</div>
+        <div style="padding: 12px 16px"><code style="font-size: 12.5px; background: #F0EFEA; border-radius: 6px; padding: 3px 6px; color: #3F3F46">{{row.path}}</code></div>
+        <div style="padding: 12px 16px; color: #3F3F46">{{row.flow}}</div>
+        <div style="padding: 12px 16px; font-weight: 600; color: {{row.mockInk}}">{{row.mock}}</div>
+      </div>
+    </sc-for>
+  </div>
+
+  <div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px">
+    <div style="background: #FFFFFF; border: 1px solid #E7E6E1; border-radius: 18px; padding: 18px 20px; display: flex; flex-direction: column; gap: 6px">
+      <div style="font-weight: 700">Restent sur le web, volontairement</div>
+      <div style="font-size: 14px; color: #3F3F46; line-height: 1.45">CGU, confidentialité, mentions légales (pages juridiques) et l’achat d’abonnement tant que les règles des stores (ADR-3006) ne sont pas tranchées.</div>
+    </div>
+    <div style="background: #FFFFFF; border: 1px solid #E7E6E1; border-radius: 18px; padding: 18px 20px; display: flex; flex-direction: column; gap: 6px">
+      <div style="font-weight: 700">Déjà rattrapé sur mobile</div>
+      <div style="font-size: 14px; color: #3F3F46; line-height: 1.45">Mode simple « Dépose ton cours » (SPEC-4003), session web signée depuis l’app pour les premiers pas, retour automatique dans l’app.</div>
+    </div>
+    <div style="background: #ECECFC; border-radius: 18px; padding: 18px 20px; display: flex; flex-direction: column; gap: 6px">
+      <div style="font-weight: 700; color: #2E2E8F">Le plan qui existe</div>
+      <div style="font-size: 14px; color: #3A3AA8; line-height: 1.45">ADR-4002 §3 fixe l’ordre et exige une spécification et une maquette par parcours, planifiées après P40. Aucune phase P41+ n’est encore écrite dans le catalogue.</div>
+    </div>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1480,"height":1300}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const lime = { rankBg: '#C6F432', rankInk: '#111113' };
+    const later = { rankBg: '#ECECFC', rankInk: '#2E2E8F' };
+    const keep = { rankBg: '#F0EFEA', rankInk: '#62626B' };
+    const yes = '#3F5A00';
+    const no = '#62626B';
+    const rows = [
+      { rank: '1', ...lime, entry: 'Programme › Importer un programme, Ajouter des apports ; créneau « Apports »', path: '/formations/:fid/programme', flow: 'Ajout d’apports et import du programme (SCR-06 en écriture)', mock: 'Apports', mockInk: yes },
+      { rank: '2', ...lime, entry: 'Aujourd’hui › Construire avec le tuteur ; Programme › + Nouvelle formation', path: '/formations/nouvelle', flow: 'Création et cadrage d’une formation par le tuteur (SCR-04)', mock: 'Cadrage', mockInk: yes },
+      { rank: '2', ...lime, entry: 'Programme › Proposition à valider ; Reprendre sur le web', path: '/formations/:fid/programme', flow: 'Génération et ajustement du programme proposé', mock: 'Proposition', mockInk: yes },
+      { rank: '3', ...lime, entry: 'Cours › briques consigne, dialogue scénarisé, minuteur, barème ; créneau « Exercice »', path: '/cours/:id (vue web)', flow: 'Exercice pratique (SCR-08)', mock: 'Exercice', mockInk: yes },
+      { rank: '4', ...lime, entry: 'Aujourd’hui › feuille Lacunes « Voir sur le web »', path: '/lacunes', flow: 'Lacunes (SCR-13)', mock: 'Lacunes', mockInk: yes },
+      { rank: '5', ...lime, entry: 'Module › « Ouvrir sur le web » (aucune entrée dédiée)', path: '/formations/:fid/carte', flow: 'Carte des notions (SCR-14)', mock: 'Carte', mockInk: yes },
+      { rank: '6', ...later, entry: 'Aujourd’hui et Agenda › créneau « Examen blanc »', path: 'href du créneau', flow: 'Examen blanc (SCR-11)', mock: 'ExamenBlanc', mockInk: yes },
+      { rank: '7', ...later, entry: 'Programme › Bilan de la formation', path: '/formations/:fid/bilan', flow: 'Bilan final (SCR-16)', mock: 'Bilan', mockInk: yes },
+      { rank: '8', ...later, entry: 'Aucun point d’entrée mobile', path: '/recherche', flow: 'Recherche (SCR-18)', mock: 'Recherche', mockInk: yes },
+      { rank: '9', ...later, entry: 'Écran « Terminez votre configuration sur le web »', path: '/premiers-pas/:etape', flow: 'Premiers pas (SCR-02)', mock: 'PremiersPas', mockInk: yes },
+      { rank: '10', ...later, entry: 'Profil › Modèles d’IA « Gérer sur le web » ; Tuteur › Choisir un modèle', path: '/parametres#modeles', flow: 'Clés d’IA personnelles', mock: 'ClesIA', mockInk: yes },
+      { rank: '11', ...later, entry: 'Accueil premiers pas › invitation ; Programme › formation de groupe', path: '/formations/:fid/groupe', flow: 'Formations à plusieurs (SCR-17)', mock: 'Groupe', mockInk: yes },
+      { rank: '12', ...keep, entry: 'Profil › Abonnement', path: '/parametres', flow: 'Abonnement, dans les règles des stores (ADR-3006)', mock: 'Reste web', mockInk: no },
+      { rank: '—', ...keep, entry: 'Quiz › remédiation ; Notifications ; Agenda › replanifier en détail', path: 'href fourni par l’API', flow: 'Suivent le parcours cible : disparaissent quand il est rattrapé', mock: 'Selon cible', mockInk: no },
+    ];
+    return { rows };
+  }
+}
+</script>
+</body>
+</html>

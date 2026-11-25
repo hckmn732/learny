@@ -1,0 +1,44 @@
+{
+  "v": 3,
+  "createdOnFiles": { "v": 1, "at": "2026-11-25T10:00:00Z" },
+  "title": "Learny mobile — rattrapage des parcours web",
+  "launch": { "view": "canvas" },
+  "pages": [],
+  "boards": {
+    "Main.dc.html": { "x": 0, "y": 0, "w": 1480, "h": 1300, "title": "Cartographie des renvois web" },
+    "Apports.dc.html": { "x": 0, "y": 1600, "w": 390, "h": 844, "title": "1 · Apports et import du programme" },
+    "Cadrage.dc.html": { "x": 470, "y": 1600, "w": 390, "h": 844, "title": "2a · Cadrage avec le tuteur" },
+    "Proposition.dc.html": { "x": 940, "y": 1600, "w": 390, "h": 844, "title": "2b · Programme proposé" },
+    "Exercice.dc.html": { "x": 1410, "y": 1600, "w": 390, "h": 844, "title": "3 · Exercice pratique" },
+    "Lacunes.dc.html": { "x": 1880, "y": 1600, "w": 390, "h": 844, "title": "4 · Lacunes" },
+    "Carte.dc.html": { "x": 2350, "y": 1600, "w": 390, "h": 844, "title": "5 · Carte des notions" },
+    "CarteCerveau.dc.html": { "x": 2820, "y": 1600, "w": 390, "h": 844, "title": "5b · Carte des notions — mode cerveau", "is_interactive": true },
+    "ExamenBlanc.dc.html": { "x": 0, "y": 2900, "w": 390, "h": 844, "title": "6 · Examen blanc" },
+    "Bilan.dc.html": { "x": 470, "y": 2900, "w": 390, "h": 844, "title": "7 · Bilan final" },
+    "Recherche.dc.html": { "x": 940, "y": 2900, "w": 390, "h": 844, "title": "8 · Recherche" },
+    "PremiersPas.dc.html": { "x": 1410, "y": 2900, "w": 390, "h": 844, "title": "9 · Premiers pas (natif)" },
+    "ClesIA.dc.html": { "x": 1880, "y": 2900, "w": 390, "h": 844, "title": "10 · Clés d'IA personnelles" },
+    "Groupe.dc.html": { "x": 2350, "y": 2900, "w": 390, "h": 844, "title": "11 · Formations à plusieurs" }
+  },
+  "order": [
+    "Main.dc.html",
+    "Apports.dc.html",
+    "Cadrage.dc.html",
+    "Proposition.dc.html",
+    "Exercice.dc.html",
+    "Lacunes.dc.html",
+    "Carte.dc.html",
+    "CarteCerveau.dc.html",
+    "ExamenBlanc.dc.html",
+    "Bilan.dc.html",
+    "Recherche.dc.html",
+    "PremiersPas.dc.html",
+    "ClesIA.dc.html",
+    "Groupe.dc.html"
+  ],
+  "notes": {
+    "row1": { "x": 0, "y": 1370, "text": "Maquettes mobiles · priorités 1 à 5 (ADR-4002 §3)", "kind": "title1", "maxW": 3210 },
+    "row2": { "x": 0, "y": 2620, "text": "Maquettes mobiles · priorités 6 à 11", "kind": "title1", "maxW": 2740 }
+  },
+  "designSystems": []
+}

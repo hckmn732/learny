@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<title>Exercice pratique</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Space+Grotesk:wght@500;600;700&amp;display=swap" rel="stylesheet">
+<style>body{margin:0}a{color:#3A3AA8}a:hover{color:#26267A}
+@keyframes lr-tick{0%,100%{box-shadow:0 0 0 0 rgba(198,244,50,.45)}50%{box-shadow:0 0 0 7px rgba(198,244,50,0)}}
+@keyframes lr-hand{to{transform:rotate(360deg)}}
+@keyframes lr-pop{0%{transform:scale(.6)}60%{transform:scale(1.18)}100%{transform:scale(1)}}
+@keyframes lr-in{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+@keyframes lr-score{0%{opacity:0;transform:scale(.7);letter-spacing:.2em}100%{opacity:1;transform:none;letter-spacing:0}}
+.lr-timer{animation:lr-tick 1s ease-out infinite}
+.lr-timer svg{animation:lr-hand 8s linear infinite}
+.lr-body>div{animation:lr-in .5s cubic-bezier(.2,.8,.2,1) both}.lr-body>div:nth-child(2){animation-delay:.12s}.lr-body>div:nth-child(3){animation-delay:.24s}
+.lr-body input:checked{animation:lr-pop .45s .5s both}
+.lr-score{display:inline-block;animation:lr-score .7s .45s cubic-bezier(.2,.8,.2,1) both}
+@media (prefers-reduced-motion: reduce){*{animation:none!important}}
+</style>
+</helmet>
+<div style="width: 390px; height: 844px; box-sizing: border-box; background: #F4F4F1; font-family: Inter, sans-serif; color: #111113; display: flex; flex-direction: column">
+  <div style="padding: 56px 20px 10px; display: flex; align-items: center; gap: 10px">
+    <button aria-label="Quitter l’exercice" style="width: 44px; height: 44px; border-radius: 999px; border: 1px solid #E7E6E1; background: #FFFFFF; display: flex; align-items: center; justify-content: center"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#111113" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
+    <span style="flex: 1; font-size: 13px; font-weight: 600; color: #3F3F46">Exercice · Clôture mensuelle</span>
+    <div class="lr-timer" style="display: flex; align-items: center; gap: 6px; padding: 8px 12px; border-radius: 999px; background: #111113; color: #C6F432; font-family: 'Space Grotesk', sans-serif; font-size: 16px; font-weight: 700"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#C6F432" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="13" r="8"/><path d="M12 9v4l2 2M10 2h4"/></svg>14:32</div>
+  </div>
+  <div class="lr-body" style="flex: 1; padding: 8px 20px; display: flex; flex-direction: column; gap: 12px">
+    <div style="background: #FFFFFF; border: 1px solid #E7E6E1; border-radius: 18px; padding: 16px; display: flex; flex-direction: column; gap: 8px">
+      <span style="font-size: 12px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: #3A3AA8">Consigne</span>
+      <p style="margin: 0; font-size: 15px; line-height: 1.5">Passe les écritures de régularisation de fin de mois pour la société FR01 : charges constatées d’avance et factures non parvenues.</p>
+    </div>
+    <div style="background: #FFFFFF; border: 1px solid #E7E6E1; border-radius: 18px; padding: 16px; display: flex; flex-direction: column; gap: 10px">
+      <span style="font-size: 12px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: #62626B">Barème · auto-évaluation</span>
+      <label style="display: flex; gap: 12px; align-items: center; min-height: 44px"><input type="checkbox" checked style="width: 22px; height: 22px; accent-color: #111113"><span style="flex: 1; font-size: 14px">Comptes de régularisation corrects</span><span style="font-size: 13px; font-weight: 700">4 pts</span></label>
+      <label style="display: flex; gap: 12px; align-items: center; min-height: 44px; border-top: 1px solid #EEEDE8"><input type="checkbox" checked style="width: 22px; height: 22px; accent-color: #111113"><span style="flex: 1; font-size: 14px">Montants et dates justes</span><span style="font-size: 13px; font-weight: 700">4 pts</span></label>
+      <label style="display: flex; gap: 12px; align-items: center; min-height: 44px; border-top: 1px solid #EEEDE8"><input type="checkbox" style="width: 22px; height: 22px; accent-color: #111113"><span style="flex: 1; font-size: 14px">Extourne planifiée au 1er du mois</span><span style="font-size: 13px; font-weight: 700">2 pts</span></label>
+    </div>
+    <div style="display: flex; justify-content: space-between; align-items: center; padding: 4px 4px 0">
+      <span style="font-size: 14px; color: #3F3F46">Score déclaré</span>
+      <span class="lr-score" style="font-family: 'Space Grotesk', sans-serif; font-size: 26px; font-weight: 700">8 / 10</span>
+    </div>
+  </div>
+  <div style="padding: 12px 20px 34px; background: #FFFFFF; border-top: 1px solid #EEEDE8; display: flex; gap: 10px">
+    <button style="flex: 1; height: 52px; border-radius: 999px; border: 1px solid #DAD9D3; background: #FFFFFF; font: 600 15px Inter, sans-serif; color: #111113">Demander au tuteur</button>
+    <button style="flex: 1; height: 52px; border-radius: 999px; border: 0; background: #C6F432; font: 600 15px Inter, sans-serif; color: #111113">Terminer</button>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+  renderVals() { return {}; }
+}
+</script>
+</body>
+</html>

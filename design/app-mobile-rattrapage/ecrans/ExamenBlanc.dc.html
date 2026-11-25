@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<title>Examen blanc</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Space+Grotesk:wght@500;600;700&amp;display=swap" rel="stylesheet">
+<style>body{margin:0}a{color:#3A3AA8}a:hover{color:#26267A}
+@keyframes lr-sheen{from{background-position:-100% 0}to{background-position:200% 0}}
+@keyframes lr-beat{0%,100%{opacity:1}50%{opacity:.55}}
+@keyframes lr-breath{0%,100%{box-shadow:0 0 0 0 rgba(198,244,50,.35)}50%{box-shadow:0 0 18px 2px rgba(198,244,50,.25)}}
+@keyframes lr-in{from{opacity:0;transform:translateX(24px)}to{opacity:1;transform:none}}
+.lr-sheen{background:linear-gradient(90deg,#C6F432 0%,#F1FBD3 50%,#C6F432 100%)!important;background-size:200% 100%!important;animation:lr-sheen 2.4s linear infinite}
+.lr-beat{animation:lr-beat 1s steps(2,jump-none) infinite}
+.lr-choice{animation:lr-breath 2.6s ease-in-out infinite}
+.lr-opts>button{animation:lr-in .45s cubic-bezier(.2,.8,.2,1) both}
+.lr-opts>button:nth-child(2){animation-delay:.07s}.lr-opts>button:nth-child(3){animation-delay:.14s}.lr-opts>button:nth-child(4){animation-delay:.21s}
+@media (prefers-reduced-motion: reduce){*{animation:none!important}}
+</style>
+</helmet>
+<div style="width: 390px; height: 844px; box-sizing: border-box; background: #111113; font-family: Inter, sans-serif; color: #FFFFFF; display: flex; flex-direction: column">
+  <div style="padding: 56px 20px 12px; display: flex; flex-direction: column; gap: 12px">
+    <div style="display: flex; justify-content: space-between; align-items: center">
+      <span style="font-size: 13px; font-weight: 600; color: #D4D4D8">Examen blanc · question 12 / 40</span>
+      <span style="font-family: 'Space Grotesk', sans-serif; font-size: 18px; font-weight: 700; color: #C6F432">38<span class="lr-beat">:</span>14</span>
+    </div>
+    <div style="height: 6px; border-radius: 3px; background: #2A2A2E; overflow: hidden"><div class="lr-sheen" style="width: 30%; height: 6px; background: #C6F432"></div></div>
+  </div>
+  <div style="flex: 1; padding: 12px 20px; display: flex; flex-direction: column; gap: 14px">
+    <span style="font-size: 12px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: #A1A1AA">Comptabilité fournisseurs</span>
+    <p style="margin: 0; font-family: 'Space Grotesk', sans-serif; font-size: 22px; line-height: 1.3">Une facture fournisseur est bloquée au paiement. Quelle transaction permet de la débloquer ?</p>
+    <div class="lr-opts" style="display: flex; flex-direction: column; gap: 10px; margin-top: 6px">
+      <button style="min-height: 56px; text-align: left; padding: 0 16px; border-radius: 16px; border: 1px solid #3F3F46; background: #1C1C1F; font: 500 15px Inter, sans-serif; color: #FFFFFF">MRBR — Débloquer factures</button>
+      <button class="lr-choice" style="min-height: 56px; text-align: left; padding: 0 16px; border-radius: 16px; border: 2px solid #C6F432; background: #23290F; font: 600 15px Inter, sans-serif; color: #FFFFFF">F110 — Paiement automatique</button>
+      <button style="min-height: 56px; text-align: left; padding: 0 16px; border-radius: 16px; border: 1px solid #3F3F46; background: #1C1C1F; font: 500 15px Inter, sans-serif; color: #FFFFFF">FB60 — Saisie facture</button>
+      <button style="min-height: 56px; text-align: left; padding: 0 16px; border-radius: 16px; border: 1px solid #3F3F46; background: #1C1C1F; font: 500 15px Inter, sans-serif; color: #FFFFFF">MIRO — Contrôle facture</button>
+    </div>
+    <label style="display: flex; gap: 10px; align-items: center; min-height: 44px; font-size: 14px; color: #D4D4D8"><input type="checkbox" style="width: 20px; height: 20px; accent-color: #C6F432">Marquer pour la relire avant de rendre</label>
+  </div>
+  <div style="padding: 12px 20px 34px; display: flex; gap: 10px">
+    <button style="flex: 1; height: 52px; border-radius: 999px; border: 1px solid #3F3F46; background: transparent; font: 600 15px Inter, sans-serif; color: #FFFFFF">Précédente</button>
+    <button style="flex: 1; height: 52px; border-radius: 999px; border: 0; background: #C6F432; font: 600 15px Inter, sans-serif; color: #111113">Suivante</button>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+  renderVals() { return {}; }
+}
+</script>
+</body>
+</html>

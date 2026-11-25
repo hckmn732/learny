@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<title>Bilan final</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Space+Grotesk:wght@500;600;700&amp;display=swap" rel="stylesheet">
+<style>body{margin:0}a{color:#3A3AA8}a:hover{color:#26267A}
+@keyframes lr-fall{0%{transform:translateY(-40px) rotate(0);opacity:0}10%{opacity:1}100%{transform:translateY(880px) rotate(540deg);opacity:.9}}
+@keyframes lr-score{0%{opacity:0;transform:scale(.6)}70%{transform:scale(1.08)}100%{opacity:1;transform:none}}
+@keyframes lr-sweep{0%,65%{transform:translateX(-120%) skewX(-18deg)}100%{transform:translateX(260%) skewX(-18deg)}}
+@keyframes lr-in{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+.lr-confetti{position:absolute;inset:0;pointer-events:none;overflow:hidden}
+.lr-confetti i{position:absolute;top:0;width:8px;height:12px;border-radius:2px;animation:lr-fall 6s linear infinite}
+.lr-confetti i:nth-child(1){left:8%;background:#C6F432;animation-delay:0s}.lr-confetti i:nth-child(2){left:22%;background:#5B5BD6;animation-delay:1.2s;width:6px}
+.lr-confetti i:nth-child(3){left:37%;background:#F97316;animation-delay:2.6s}.lr-confetti i:nth-child(4){left:51%;background:#34D399;animation-delay:.6s;height:8px}
+.lr-confetti i:nth-child(5){left:66%;background:#C6F432;animation-delay:3.4s}.lr-confetti i:nth-child(6){left:79%;background:#5B5BD6;animation-delay:1.9s;height:9px}
+.lr-confetti i:nth-child(7){left:91%;background:#F97316;animation-delay:4.2s;width:6px}.lr-confetti i:nth-child(8){left:44%;background:#111113;animation-delay:5s;width:5px}
+.lr-score{display:inline-block;animation:lr-score .8s .2s cubic-bezier(.2,.8,.2,1) both}
+.lr-hero{position:relative;overflow:hidden}.lr-hero::after{content:"";position:absolute;inset:0;width:45%;background:linear-gradient(90deg,transparent,rgba(255,255,255,.5),transparent);animation:lr-sweep 4.5s ease-in-out infinite}
+.lr-stats>div{animation:lr-in .5s both}.lr-stats>div:nth-child(2){animation-delay:.1s}.lr-stats>div:nth-child(3){animation-delay:.2s}
+@media (prefers-reduced-motion: reduce){*{animation:none!important}.lr-confetti{display:none}}
+</style>
+</helmet>
+<div style="width: 390px; height: 844px; box-sizing: border-box; background: #F4F4F1; font-family: Inter, sans-serif; color: #111113; display: flex; flex-direction: column; position: relative; overflow: hidden">
+  <div class="lr-confetti" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+  <div style="padding: 56px 20px 0; display: flex; flex-direction: column; gap: 14px">
+    <div class="lr-hero" style="background: #C6F432; border-radius: 24px; padding: 20px; display: flex; flex-direction: column; gap: 8px">
+      <span style="font-size: 12px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: #3F5A00">Formation terminée</span>
+      <h1 style="margin: 0; font-family: 'Space Grotesk', sans-serif; font-size: 28px; line-height: 1.1">SAP S/4HANA Finance</h1>
+      <div style="display: flex; align-items: baseline; gap: 8px; margin-top: 4px"><span class="lr-score" style="font-family: 'Space Grotesk', sans-serif; font-size: 52px; font-weight: 700; line-height: 1">86 %</span><span style="font-size: 14px; color: #3F5A00">de maîtrise · 9 semaines</span></div>
+    </div>
+    <div class="lr-stats" style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px">
+      <div style="background: #FFFFFF; border: 1px solid #E7E6E1; border-radius: 16px; padding: 12px; display: flex; flex-direction: column; gap: 2px"><span style="font-family: 'Space Grotesk', sans-serif; font-size: 22px; font-weight: 700">48</span><span style="font-size: 12px; color: #62626B">notions</span></div>
+      <div style="background: #FFFFFF; border: 1px solid #E7E6E1; border-radius: 16px; padding: 12px; display: flex; flex-direction: column; gap: 2px"><span style="font-family: 'Space Grotesk', sans-serif; font-size: 22px; font-weight: 700">31 j</span><span style="font-size: 12px; color: #62626B">meilleure série</span></div>
+      <div style="background: #FFFFFF; border: 1px solid #E7E6E1; border-radius: 16px; padding: 12px; display: flex; flex-direction: column; gap: 2px"><span style="font-family: 'Space Grotesk', sans-serif; font-size: 22px; font-weight: 700">2</span><span style="font-size: 12px; color: #62626B">examens blancs</span></div>
+    </div>
+    <div style="background: #FFFFFF; border: 1px solid #E7E6E1; border-radius: 18px; padding: 14px 16px; display: flex; flex-direction: column; gap: 10px">
+      <span style="font-weight: 700; font-size: 15px">Points forts</span>
+      <span style="font-size: 14px; color: #3F3F46">✓ Écritures et plan de comptes · ✓ Comptabilité clients</span>
+      <span style="font-weight: 700; font-size: 15px; margin-top: 4px">À entretenir</span>
+      <span style="font-size: 14px; color: #3F3F46">Clôture mensuelle : le quiz global continue de la reprogrammer.</span>
+    </div>
+  </div>
+  <div style="flex: 1"></div>
+  <div style="padding: 12px 20px 34px; display: flex; flex-direction: column; gap: 10px">
+    <button style="height: 52px; border-radius: 999px; border: 0; background: #111113; font: 600 15px Inter, sans-serif; color: #FFFFFF">Télécharger l’attestation</button>
+    <button style="height: 52px; border-radius: 999px; border: 1px solid #DAD9D3; background: #FFFFFF; font: 600 15px Inter, sans-serif; color: #111113">Partager mon bilan</button>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+  renderVals() { return {}; }
+}
+</script>
+</body>
+</html>

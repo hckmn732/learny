@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<title>Formation à plusieurs</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Space+Grotesk:wght@500;600;700&amp;display=swap" rel="stylesheet">
+<style>body{margin:0}a{color:#3A3AA8}a:hover{color:#26267A}
+@keyframes lr-online{0%{box-shadow:0 0 0 0 rgba(15,159,127,.55)}70%{box-shadow:0 0 0 7px rgba(15,159,127,0)}100%{box-shadow:0 0 0 0 rgba(15,159,127,0)}}
+@keyframes lr-code{from{background-position:0% 50%}to{background-position:200% 50%}}
+@keyframes lr-in{from{opacity:0;transform:translateX(-14px)}to{opacity:1;transform:none}}
+@keyframes lr-float{0%,100%{transform:translateY(0)}50%{transform:translateY(-4px)}}
+.lr-avatar{position:relative}
+.lr-dot{position:absolute;right:-1px;bottom:-1px;width:11px;height:11px;border-radius:999px;background:#0F9F7F;border:2px solid #FFFFFF;animation:lr-online 2s ease-out infinite}
+.lr-members>*{animation:lr-in .5s cubic-bezier(.2,.8,.2,1) both}.lr-members>*:nth-child(2){animation-delay:.1s}.lr-members>*:nth-child(3){animation-delay:.2s}
+.lr-code{background:linear-gradient(90deg,#C6F432,#F1FBD3,#8B8BF0,#C6F432);background-size:200% 100%;-webkit-background-clip:text;background-clip:text;color:transparent!important;animation:lr-code 4s linear infinite}
+.lr-invite{animation:lr-float 4s ease-in-out infinite}
+@media (prefers-reduced-motion: reduce){*{animation:none!important}.lr-code{color:#C6F432!important;background:none}}
+</style>
+</helmet>
+<div style="width: 390px; height: 844px; box-sizing: border-box; background: #F4F4F1; font-family: Inter, sans-serif; color: #111113; display: flex; flex-direction: column">
+  <div style="padding: 56px 20px 10px; display: flex; flex-direction: column; gap: 6px">
+    <span style="font-size: 12px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: #62626B">Gestion de projet agile</span>
+    <h1 style="margin: 0; font-family: 'Space Grotesk', sans-serif; font-size: 31px; line-height: 1.1">À plusieurs</h1>
+    <p style="margin: 0; font-size: 14px; line-height: 1.45; color: #3F3F46">Même programme et même agenda. Vos apports et vos résultats restent privés.</p>
+  </div>
+  <div style="flex: 1; padding: 8px 20px; display: flex; flex-direction: column; gap: 14px">
+    <div class="lr-members" style="background: #FFFFFF; border: 1px solid #E7E6E1; border-radius: 18px; overflow: hidden">
+      <sc-for list="{{members}}" as="m" hint-placeholder-count="3">
+        <div style="display: flex; align-items: center; gap: 12px; padding: 12px 14px; border-bottom: 1px solid #EEEDE8">
+          <span class="lr-avatar" style="width: 40px; height: 40px; border-radius: 999px; background: {{m.bg}}; color: {{m.ink}}; font-weight: 700; font-size: 14px; display: flex; align-items: center; justify-content: center">{{m.initials}}<span class="lr-dot"></span></span>
+          <div style="flex: 1; display: flex; flex-direction: column; gap: 2px"><span style="font-weight: 600; font-size: 14.5px">{{m.name}}</span><span style="font-size: 12.5px; color: #62626B">{{m.meta}}</span></div>
+        </div>
+      </sc-for>
+    </div>
+    <div class="lr-invite" style="background: #111113; color: #FFFFFF; border-radius: 20px; padding: 18px; display: flex; flex-direction: column; gap: 10px">
+      <span style="font-size: 12px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: #A1A1AA">Inviter · 2 places restantes</span>
+      <span class="lr-code" style="font-family: 'Space Grotesk', sans-serif; font-size: 30px; font-weight: 700; letter-spacing: 0.12em; color: #C6F432">AGIL-7K2Q</span>
+      <div style="display: flex; gap: 8px">
+        <button style="flex: 1; height: 46px; border-radius: 999px; border: 0; background: #C6F432; font: 600 14px Inter, sans-serif; color: #111113">Partager le lien</button>
+        <button style="height: 46px; padding: 0 16px; border-radius: 999px; border: 1px solid #3F3F46; background: transparent; font: 600 14px Inter, sans-serif; color: #FFFFFF">Copier</button>
+      </div>
+    </div>
+    <button style="height: 48px; border-radius: 999px; border: 1px solid #DAD9D3; background: #FFFFFF; font: 600 14px Inter, sans-serif; color: #111113">J’ai reçu un code d’invitation</button>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+  renderVals() {
+    return { members: [
+      { initials: 'BK', name: 'Benito (vous)', meta: 'Créateur · module 3', bg: '#5B5BD6', ink: '#FFFFFF' },
+      { initials: 'CR', name: 'Camille', meta: 'Module 3 · série de 6 j', bg: '#EEF8CF', ink: '#3F5A00' },
+      { initials: 'HM', name: 'Hugo', meta: 'Module 2', bg: '#FFEDE0', ink: '#8F3305' },
+    ] };
+  }
+}
+</script>
+</body>
+</html>

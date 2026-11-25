@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<title>Premiers pas — votre rythme</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Space+Grotesk:wght@500;600;700&amp;display=swap" rel="stylesheet">
+<style>body{margin:0}a{color:#3A3AA8}a:hover{color:#26267A}
+@keyframes lr-fill{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+@keyframes lr-pop{0%{opacity:0;transform:scale(.5)}70%{transform:scale(1.12)}100%{opacity:1;transform:none}}
+@keyframes lr-glow{0%,100%{box-shadow:0 0 0 0 rgba(198,244,50,.0)}50%{box-shadow:0 0 0 5px rgba(198,244,50,.35)}}
+@keyframes lr-in{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+.lr-steps>div:nth-child(2){transform-origin:left;animation:lr-fill .9s .3s cubic-bezier(.2,.8,.2,1) both}
+.lr-days>*{animation:lr-pop .4s cubic-bezier(.2,.8,.2,1) both}
+.lr-days>*:nth-child(2){animation-delay:.05s}.lr-days>*:nth-child(3){animation-delay:.1s}.lr-days>*:nth-child(4){animation-delay:.15s}.lr-days>*:nth-child(5){animation-delay:.2s}.lr-days>*:nth-child(6){animation-delay:.25s}.lr-days>*:nth-child(7){animation-delay:.3s}
+.lr-pick{animation:lr-glow 2.4s ease-in-out infinite}
+.lr-sections>div{animation:lr-in .5s cubic-bezier(.2,.8,.2,1) both}.lr-sections>div:nth-child(2){animation-delay:.12s}.lr-sections>div:nth-child(3){animation-delay:.24s}
+@media (prefers-reduced-motion: reduce){*{animation:none!important}}
+</style>
+</helmet>
+<div style="width: 390px; height: 844px; box-sizing: border-box; background: #F4F4F1; font-family: Inter, sans-serif; color: #111113; display: flex; flex-direction: column">
+  <div style="padding: 56px 20px 10px; display: flex; flex-direction: column; gap: 14px">
+    <div class="lr-steps" style="display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 5px">
+      <div style="height: 4px; border-radius: 2px; background: #C6F432"></div>
+      <div style="height: 4px; border-radius: 2px; background: #C6F432"></div>
+      <div style="height: 4px; border-radius: 2px; background: #DAD9D3"></div>
+      <div style="height: 4px; border-radius: 2px; background: #DAD9D3"></div>
+      <div style="height: 4px; border-radius: 2px; background: #DAD9D3"></div>
+    </div>
+    <span style="font-size: 12px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: #62626B">Étape 2 sur 5</span>
+    <h1 style="margin: 0; font-family: 'Space Grotesk', sans-serif; font-size: 31px; line-height: 1.1">Votre rythme</h1>
+    <p style="margin: 0; font-size: 14.5px; line-height: 1.45; color: #3F3F46">Le tuteur cale les séances sur vos disponibilités. Vous pourrez les changer à tout moment.</p>
+  </div>
+  <div class="lr-sections" style="flex: 1; padding: 8px 20px; display: flex; flex-direction: column; gap: 16px">
+    <div style="display: flex; flex-direction: column; gap: 8px">
+      <span style="font-weight: 600; font-size: 14px">Temps par semaine</span>
+      <div style="display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px">
+        <button style="height: 48px; border-radius: 14px; border: 1px solid #E7E6E1; background: #FFFFFF; font: 600 14px Inter, sans-serif; color: #111113">3 h</button>
+        <button style="height: 48px; border-radius: 14px; border: 1px solid #E7E6E1; background: #FFFFFF; font: 600 14px Inter, sans-serif; color: #111113">5 h</button>
+        <button class="lr-pick" style="height: 48px; border-radius: 14px; border: 2px solid #111113; background: #111113; font: 600 14px Inter, sans-serif; color: #C6F432">10 h</button>
+        <button style="height: 48px; border-radius: 14px; border: 1px solid #E7E6E1; background: #FFFFFF; font: 600 14px Inter, sans-serif; color: #111113">15 h</button>
+      </div>
+    </div>
+    <div style="display: flex; flex-direction: column; gap: 8px">
+      <span style="font-weight: 600; font-size: 14px">Jours d’étude</span>
+      <div class="lr-days" style="display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 6px">
+        <sc-for list="{{days}}" as="d" hint-placeholder-count="7">
+          <button style="height: 44px; border-radius: 12px; border: 1px solid {{d.border}}; background: {{d.bg}}; font: 600 13px Inter, sans-serif; color: {{d.ink}}">{{d.l}}</button>
+        </sc-for>
+      </div>
+    </div>
+    <div style="display: flex; flex-direction: column; gap: 8px">
+      <span style="font-weight: 600; font-size: 14px">Moment préféré</span>
+      <div style="background: #FFFFFF; border: 1px solid #E7E6E1; border-radius: 16px; overflow: hidden">
+        <label style="display: flex; align-items: center; gap: 12px; padding: 0 14px; min-height: 52px"><input type="radio" name="moment" style="width: 20px; height: 20px; accent-color: #111113"><span style="flex: 1; font-size: 14.5px">Matin</span></label>
+        <label style="display: flex; align-items: center; gap: 12px; padding: 0 14px; min-height: 52px; border-top: 1px solid #EEEDE8"><input type="radio" name="moment" style="width: 20px; height: 20px; accent-color: #111113"><span style="flex: 1; font-size: 14.5px">Midi</span></label>
+        <label style="display: flex; align-items: center; gap: 12px; padding: 0 14px; min-height: 52px; border-top: 1px solid #EEEDE8"><input type="radio" name="moment" checked style="width: 20px; height: 20px; accent-color: #111113"><span style="flex: 1; font-size: 14.5px">Soir</span></label>
+      </div>
+    </div>
+  </div>
+  <div style="padding: 12px 20px 34px; display: flex; gap: 10px">
+    <button style="height: 52px; padding: 0 20px; border-radius: 999px; border: 1px solid #DAD9D3; background: #FFFFFF; font: 600 15px Inter, sans-serif; color: #111113">Retour</button>
+    <button style="flex: 1; height: 52px; border-radius: 999px; border: 0; background: #C6F432; font: 600 15px Inter, sans-serif; color: #111113">Continuer</button>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const on = { bg: '#EEF8CF', border: '#9FC51F', ink: '#3F5A00' };
+    const off = { bg: '#FFFFFF', border: '#E7E6E1', ink: '#62626B' };
+    return { days: [
+      { l: 'L', ...on }, { l: 'M', ...on }, { l: 'M', ...off }, { l: 'J', ...on },
+      { l: 'V', ...on }, { l: 'S', ...off }, { l: 'D', ...off },
+    ] };
+  }
+}
+</script>
+</body>
+</html>

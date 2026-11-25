@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<title>Lacunes</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Space+Grotesk:wght@500;600;700&amp;display=swap" rel="stylesheet">
+<style>body{margin:0}a{color:#3A3AA8}a:hover{color:#26267A}
+@keyframes lr-in{from{opacity:0;transform:translateY(16px) rotate(-1deg)}to{opacity:1;transform:none}}
+@keyframes lr-ember{0%,100%{box-shadow:0 0 0 0 rgba(249,115,22,0)}50%{box-shadow:0 0 10px 1px rgba(249,115,22,.45)}}
+@keyframes lr-shine{0%,72%{transform:translateX(-140%) skewX(-20deg)}100%{transform:translateX(260%) skewX(-20deg)}}
+.lr-cards>*{animation:lr-in .55s cubic-bezier(.2,.8,.2,1) both}
+.lr-cards>*:nth-child(2){animation-delay:.1s}.lr-cards>*:nth-child(3){animation-delay:.2s}.lr-cards>*:nth-child(4){animation-delay:.3s}
+.lr-badge{animation:lr-ember 2.2s ease-in-out infinite}
+.lr-cards>*:nth-child(2) .lr-badge{animation-delay:.7s}.lr-cards>*:nth-child(3) .lr-badge{animation-delay:1.4s}
+.lr-go{position:relative;overflow:hidden}.lr-go::after{content:"";position:absolute;inset:0;width:40%;background:linear-gradient(90deg,transparent,rgba(255,255,255,.7),transparent);animation:lr-shine 3.8s ease-in-out infinite}
+@media (prefers-reduced-motion: reduce){*{animation:none!important}}
+</style>
+</helmet>
+<div style="width: 390px; height: 844px; box-sizing: border-box; background: #F4F4F1; font-family: Inter, sans-serif; color: #111113; display: flex; flex-direction: column">
+  <div style="padding: 56px 20px 10px; display: flex; flex-direction: column; gap: 6px">
+    <span style="font-size: 12px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: #62626B">Profil · Apprentissage</span>
+    <h1 style="margin: 0; font-family: 'Space Grotesk', sans-serif; font-size: 31px; line-height: 1.1">Lacunes</h1>
+  </div>
+  <div style="padding: 4px 20px 8px; display: flex; gap: 8px">
+    <button style="height: 36px; padding: 0 14px; border-radius: 999px; border: 0; background: #111113; color: #FFFFFF; font: 600 13px Inter, sans-serif">Ouvertes · 4</button>
+    <button style="height: 36px; padding: 0 14px; border-radius: 999px; border: 1px solid #DAD9D3; background: #FFFFFF; font: 600 13px Inter, sans-serif; color: #3F3F46">En cours · 2</button>
+    <button style="height: 36px; padding: 0 14px; border-radius: 999px; border: 1px solid #DAD9D3; background: #FFFFFF; font: 600 13px Inter, sans-serif; color: #3F3F46">Comblées</button>
+  </div>
+  <div class="lr-cards" style="flex: 1; padding: 8px 20px; display: flex; flex-direction: column; gap: 10px">
+    <sc-for list="{{gaps}}" as="g" hint-placeholder-count="4">
+      <div style="background: #FFFFFF; border: 1px solid #E7E6E1; border-radius: 18px; padding: 14px; display: flex; flex-direction: column; gap: 8px">
+        <div style="display: flex; justify-content: space-between; align-items: center; gap: 8px">
+          <span class="lr-badge" style="font-size: 12px; font-weight: 700; padding: 4px 9px; border-radius: 999px; background: {{g.bg}}; color: {{g.ink}}">{{g.level}}</span>
+          <span style="font-size: 12px; color: #62626B">{{g.module}}</span>
+        </div>
+        <span style="font-weight: 600; font-size: 15px">{{g.title}}</span>
+        <span style="font-size: 13px; line-height: 1.45; color: #3F3F46">{{g.why}}</span>
+        <div style="display: flex; gap: 8px; margin-top: 2px">
+          <button class="lr-go" style="height: 40px; padding: 0 14px; border-radius: 999px; border: 0; background: #C6F432; font: 600 13px Inter, sans-serif; color: #111113">Travailler (5 min)</button>
+          <button style="height: 40px; padding: 0 14px; border-radius: 999px; border: 1px solid #DAD9D3; background: #FFFFFF; font: 600 13px Inter, sans-serif; color: #111113">Expliquer</button>
+        </div>
+      </div>
+    </sc-for>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const high = { bg: '#FFEDE0', ink: '#8F3305' };
+    const mid = { bg: '#ECECFC', ink: '#2E2E8F' };
+    return { gaps: [
+      { ...high, level: 'Prioritaire', module: 'Module 6', title: 'Factures non parvenues', why: '3 erreurs sur les 2 derniers quiz : compte de charge confondu avec le compte de tiers.' },
+      { ...mid, level: 'À revoir', module: 'Module 3', title: 'Lettrage des comptes fournisseurs', why: 'Rappel en baisse depuis 9 jours.' },
+      { ...mid, level: 'À revoir', module: 'Module 5', title: 'Amortissement dégressif', why: 'Réponse lente et hésitante au quiz global.' },
+    ] };
+  }
+}
+</script>
+</body>
+</html>
