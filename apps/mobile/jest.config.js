@@ -21,6 +21,8 @@ module.exports = {
   // SPEC-4003 : la VM de campagne est chargée (émulateur, builds) ; 20 s laisse aux écrans le
   // temps de rendre leurs requêtes sans changer une seule assertion.
   testTimeout: 20000,
+  // SPEC-4003 : des timers de requête restent ouverts après la suite ; Jest doit rendre la main.
+  forceExit: true,
   // Transform the React Native/Expo packages, the workspace TypeScript packages (pnpm symlinks)
   // and the ESM-only dependencies of @learny/core.
   transformIgnorePatterns: [
