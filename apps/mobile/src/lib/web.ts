@@ -10,6 +10,8 @@ import { fr } from '@learny/i18n';
 
 import { configResult } from '../config';
 
+import { nativeRouteFor } from './native-routes';
+
 /** Label of every web hand-off (ADR-3002 § 3). */
 export const WEB_CONTINUE_LABEL: string = fr.mobile.shell.web.continue;
 
@@ -17,6 +19,16 @@ export const WEB_CONTINUE_LABEL: string = fr.mobile.shell.web.continue;
 export type BrowserOpener = (url: string) => Promise<unknown>;
 
 let installedOpener: BrowserOpener | null = null;
+
+/** Navigates to a native route; installed once by `web-browser.ts` (expo-router). */
+export type NativeNavigator = (route: string) => void;
+
+let installedNavigator: NativeNavigator | null = null;
+
+/** Installs the native navigator of the process (`null` removes it, for a test). */
+export function setNativeNavigator(navigator: NativeNavigator | null): void {
+  installedNavigator = navigator;
+}
 
 /** Installs the opener of the process (`null` removes it, for a test). */
 export function setWebOpener(opener: BrowserOpener | null): void {
@@ -43,6 +55,12 @@ export async function openOnWeb(
   options: { readonly baseUrl?: string; readonly open?: BrowserOpener } = {},
 ): Promise<string> {
   const url = webUrl(path, options.baseUrl ?? webBaseUrl());
+  // A page rebuilt natively opens in the application, not in the browser (QA 2026-11-25).
+  const native = options.open === undefined ? nativeRouteFor(path) : null;
+  if (native !== null && installedNavigator !== null) {
+    installedNavigator(native);
+    return url;
+  }
   const open = options.open ?? installedOpener;
   if (open === null) throw new Error('Aucun navigateur installé : importer src/lib/web-browser.');
   await open(url);
