@@ -38,12 +38,14 @@ export default function DiagnosticRoute() {
   const params = useLocalSearchParams<{ fid?: string; aid?: string }>();
   const fid = typeof params.fid === 'string' ? params.fid : '';
   const explicitAttempt = typeof params.aid === 'string' ? params.aid : null;
-  const creator = useCreateDiagnostic(fid === '' ? null : fid);
-  const skipper = useSkipDiagnostic(fid === '' ? null : fid);
-  const submitter = useSubmitDiagnostic(fid === '' ? null : fid);
   const [attemptId, setAttemptId] = useState<string | null>(explicitAttempt);
   const [loadError, setLoadError] = useState<string | null>(null);
   const attempt = useAttempt(attemptId);
+  // Le segment `[fid]` peut être vide selon le point d'entrée : la tentative porte la formation.
+  const formationId = fid !== '' ? fid : (attempt.data?.formationId ?? '');
+  const creator = useCreateDiagnostic(formationId === '' ? null : formationId);
+  const skipper = useSkipDiagnostic(formationId === '' ? null : formationId);
+  const submitter = useSubmitDiagnostic(formationId === '' ? null : formationId);
   const [index, setIndex] = useState(0);
   const [response, setResponse] = useState<unknown>(null);
   const [busy, setBusy] = useState(false);

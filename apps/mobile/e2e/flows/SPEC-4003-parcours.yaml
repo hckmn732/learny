@@ -114,6 +114,13 @@ tags:
     id: simple-deadline
 - takeScreenshot: SPEC-4003-parcours
 # EF-7 — le diagnostic, puis « Passer » jusqu'au résultat.
+- runFlow:
+    when:
+      visible:
+        id: push-banner
+    commands:
+      - tapOn:
+          id: push-banner-dismiss
 - tapOn:
     id: simple-start
 - extendedWaitUntil:
