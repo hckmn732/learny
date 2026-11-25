@@ -18,21 +18,20 @@ export class UploadHttpError extends Error {
   }
 }
 
+const LOOPBACK_HOSTS: readonly string[] = ['127.0.0.1', 'localhost', '[::1]', '::1'];
+
 /**
- * Réécrit l'hôte de l'URL signée pour l'appareil : la pile locale signe avec `127.0.0.1`, qui
- * désigne l'émulateur lui-même. Quand l'API est jointe par `10.0.2.2`, l'URL d'envoi garde son
- * schéma, son port et son chemin mais prend l'hôte de l'API.
+ * Réécrit l'hôte d'une URL signée **locale** pour l'appareil : la pile locale signe avec
+ * `127.0.0.1`, qui désigne l'émulateur lui-même ; quand l'API est jointe par `10.0.2.2`, l'URL
+ * d'envoi garde son schéma, son port et son chemin mais prend l'hôte de l'API. Une URL publique
+ * (le stockage d'un environnement déployé, sur son propre domaine) n'est jamais réécrite : le
+ * fichier partirait vers le site web au lieu du stockage (QA 2026-11-25).
  */
-export function deviceUploadUrl(uploadUrl: string): string {
-  if (!configResult.ok) return uploadUrl;
+export function rewriteUploadHost(uploadUrl: string, apiUrl: string): string {
   try {
-    const api = new URL(configResult.config.apiUrl);
+    const api = new URL(apiUrl);
     const signed = new URL(uploadUrl);
-    if (
-      api.hostname === signed.hostname ||
-      api.hostname === 'localhost' ||
-      api.hostname === '127.0.0.1'
-    ) {
+    if (!LOOPBACK_HOSTS.includes(signed.hostname) || LOOPBACK_HOSTS.includes(api.hostname)) {
       return uploadUrl;
     }
     signed.hostname = api.hostname;
@@ -40,6 +39,12 @@ export function deviceUploadUrl(uploadUrl: string): string {
   } catch {
     return uploadUrl;
   }
+}
+
+/** L'URL d'envoi binaire pour cet appareil (voir `rewriteUploadHost`). */
+export function deviceUploadUrl(uploadUrl: string): string {
+  if (!configResult.ok) return uploadUrl;
+  return rewriteUploadHost(uploadUrl, configResult.config.apiUrl);
 }
 
 /** Transport de production de la file. */
