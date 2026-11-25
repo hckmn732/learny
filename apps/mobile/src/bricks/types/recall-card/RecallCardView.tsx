@@ -49,7 +49,8 @@ export function RecallCardView({ brick, correction, actions, testID }: NativeBri
         duration: transitionDuration(reduceMotion, FLIP_MS),
         useNativeDriver: native,
       });
-    animation.current = timing(true);
+    // Le pilote natif n'existe pas sous Jest : le test garde la même animation, en JS.
+    animation.current = timing(process.env.NODE_ENV !== 'test');
     try {
       animation.current.start();
     } catch {
