@@ -1,18 +1,22 @@
 // /programme/apports/:moduleId — Apports et import du programme (maquette Apports.dc.html).
-// TODO(quickfix/A) : remplacer la coquille par l'écran de design/app-mobile-rattrapage/ecrans/Apports.dc.html.
-import { useLocalSearchParams } from 'expo-router';
+//
+// Thin route: the screen lives in `src/features/mr/programme` so that its states are tested
+// without the router. The chapter opened from the Programme tab travels in `?chapitre=`.
+import { useLocalSearchParams, useRouter } from 'expo-router';
 
-import { fr } from '@learny/i18n';
-
-import { QuickfixPlaceholder } from '../../../../src/features/mr/QuickfixPlaceholder';
+import { ApportsScreen } from '../../../../src/features/mr/programme/ApportsScreen';
 
 export default function ApportsRoute() {
-  const { moduleId } = useLocalSearchParams<{ moduleId: string }>();
+  const router = useRouter();
+  const params = useLocalSearchParams<{ moduleId?: string; chapitre?: string }>();
+
   return (
-    <QuickfixPlaceholder
-      screen={fr.mr.programme.apports.title}
-      testID="qf-apports"
-      note={moduleId === undefined ? undefined : `Module ${moduleId}`}
+    <ApportsScreen
+      moduleId={typeof params.moduleId === 'string' ? params.moduleId : ''}
+      initialChapterId={typeof params.chapitre === 'string' ? params.chapitre : null}
+      onBack={() => {
+        router.back();
+      }}
     />
   );
 }
