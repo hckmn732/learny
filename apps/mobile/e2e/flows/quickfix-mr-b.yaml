@@ -1,0 +1,35 @@
+# Quickfix mr — fumee de la zone B (creation : cadrage, proposition, premiers pas).
+appId: fr.learny.app
+name: quickfix mr-b
+tags:
+  - quickfix-mr
+---
+- launchApp:
+    clearState: true
+- extendedWaitUntil:
+    visible:
+      id: sdd-health
+    timeout: 30000
+- openLink: learny://connexion?demo=1
+- extendedWaitUntil:
+    visible:
+      id: tab-programme
+    timeout: 60000
+- openLink: learny://programme/cadrage
+- extendedWaitUntil:
+    visible:
+      id: qf-cadrage
+    timeout: 20000
+- takeScreenshot: quickfix-mr-cadrage
+- openLink: learny://programme/proposition/79c6d8b4-ee55-5f27-9da1-e958882bfdfc
+- extendedWaitUntil:
+    visible:
+      id: qf-proposition
+    timeout: 20000
+- takeScreenshot: quickfix-mr-proposition
+- openLink: learny://premiers-pas/1
+- extendedWaitUntil:
+    visible:
+      id: qf-premiers-pas
+    timeout: 20000
+- takeScreenshot: quickfix-mr-premiers-pas

@@ -1,0 +1,35 @@
+# Quickfix mr — fumee de la zone C (evaluation : exercice, examen blanc, cles IA).
+appId: fr.learny.app
+name: quickfix mr-c
+tags:
+  - quickfix-mr
+---
+- launchApp:
+    clearState: true
+- extendedWaitUntil:
+    visible:
+      id: sdd-health
+    timeout: 30000
+- openLink: learny://connexion?demo=1
+- extendedWaitUntil:
+    visible:
+      id: tab-programme
+    timeout: 60000
+- openLink: learny://exercice/brique-demo
+- extendedWaitUntil:
+    visible:
+      id: qf-exercice
+    timeout: 20000
+- takeScreenshot: quickfix-mr-exercice
+- openLink: learny://aujourdhui/examen-blanc/activite-demo
+- extendedWaitUntil:
+    visible:
+      id: qf-examen-blanc
+    timeout: 20000
+- takeScreenshot: quickfix-mr-examen-blanc
+- openLink: learny://profil/cles-ia
+- extendedWaitUntil:
+    visible:
+      id: qf-cles-ia
+    timeout: 20000
+- takeScreenshot: quickfix-mr-cles-ia

@@ -286,8 +286,32 @@ parcours selon la boucle SDD.
 
 ---
 
+## 11. Resultats du chantier (2026-11-25)
+
+Modele d'execution retenu en pratique : **tout sur la VM**, dans cinq worktrees
+(`/home/ubuntu/quickfix/{learny,a,b,c,d}`), les agents pilotant par SSH et le helper `~/bin/qf`
+(lecture, ecriture base64, tsc, jest, lint, git). Aucun fichier de projet n'a ete ecrit sur le poste
+local. La section 3.3 est donc a lire avec cette correction : D1 a ete tranchee en faveur de la VM.
+
+| Resultat | Valeur |
+|---|---|
+| Zones livrees | 4 (programme, creation, evaluation, exploration) + integration |
+| Ecrans fonctionnels | 13 (12 routes + mode cerveau) |
+| Commits d'agents | 15, plus 4 merges et 3 commits d'integration |
+| Tests de zone | 33 verts (12 suites) |
+| Typecheck integration | `tsc --noEmit` vert sur l'arbre complet |
+| APK e2e | 38,1 Mo, build incremental 1 min 36 s |
+| Fumee Maestro | 4/4 flux `quickfix-mr` verts (1 min 10 s) |
+| Captures | 13 dans `evidence/quickfix-mr/` |
+
+Dettes ouvertes a la reprise SDD : import de programme (409 sur formation active, reste au web),
+mode pause, remediation de quiz, attestation du bilan sans route API, « Copier » du code de groupe
+sans `expo-clipboard`, mode cerveau non persiste dans l'URL, parite visuelle pixel non mesuree,
+accessibilite non auditee, `EXPO_PUBLIC_QUICKFIX_MOCK` non utilise (aucun mock necessaire).
+
 ## Journal
 
 | Date | Événement |
 |---|---|
 | 2026-11-25 | Plan rédigé ; branche `quickfix/mobile-rattrapage` créée depuis `a2fc6208` ; VM auditée (SSH, API, SDK, disque). Chantier non démarré. |
+| 2026-11-25 | Chantier execute sur la VM : 13 ecrans, 33 tests, 4/4 flux Maestro, 13 captures. Branche `quickfix/mobile-rattrapage`. |
