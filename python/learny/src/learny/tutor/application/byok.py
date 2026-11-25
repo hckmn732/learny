@@ -185,17 +185,34 @@ async def create_credential(
     region = provider_region(provider)
 
     probe_started_at = deps.clock.now()
-    # The new key is not stored yet: the probe calls the declared model with the plain key.
-    connection = await _probe_connection(
-        deps,
-        scenario=CONNECTION_SCENARIO,
-        model=ResolvedModel(
-            provider, probe_model_id, "", "light", base_url if isinstance(base_url, str) else None
-        ),
-        api_key=plain,
-    )
-    if connection.text.strip() == "":
-        raise AppError("AI_PROVIDER_ERROR", texts.CHAT_MODEL_UNCONFIRMED, status=502)
+    # The new key is not stored yet: the probe calls a declared model with the plain key. A
+    # discovered list can start with a model the account cannot use (an exhausted free tier, a
+    # retired id): the probe tries a few models, free tiers last, and keeps the first that answers.
+    # A refused key stops at once (QA, 2026-11-25).
+    last_error: AppError | None = None
+    connection = None
+    for candidate in _probe_candidates(model_ids):
+        try:
+            answer = await _probe_connection(
+                deps,
+                scenario=CONNECTION_SCENARIO,
+                model=ResolvedModel(
+                    provider, candidate, "", "light", base_url if isinstance(base_url, str) else None
+                ),
+                api_key=plain,
+            )
+        except AppError as error:
+            if error.code == "AI_KEY_INVALID":
+                raise
+            last_error = error
+            continue
+        if answer.text.strip() == "":
+            last_error = AppError("AI_PROVIDER_ERROR", texts.CHAT_MODEL_UNCONFIRMED, status=502)
+            continue
+        connection, probe_model_id = answer, candidate
+        break
+    if connection is None:
+        raise last_error or AppError("AI_PROVIDER_ERROR", texts.CHAT_MODEL_UNCONFIRMED, status=502)
     connection_report = {
         "status": "connected",
         "modelId": probe_model_id,
@@ -282,6 +299,16 @@ def _connection_input() -> StepInput:
         system=(SystemPart(text=CONNECTION_PROBE_SYSTEM, cache=False),),
         messages=({"role": "user", "content": CONNECTION_PROBE_MESSAGE},),
     )
+
+
+PROBE_ATTEMPTS = 5
+
+
+def _probe_candidates(model_ids: list[str]) -> list[str]:
+    """The models a new key is probed with: declared order, free tiers last, a few at most."""
+    free = [m for m in model_ids if m.endswith(("-free", ":free"))]
+    paid = [m for m in model_ids if m not in free]
+    return (paid + free)[:PROBE_ATTEMPTS]
 
 
 async def _probe_connection(
