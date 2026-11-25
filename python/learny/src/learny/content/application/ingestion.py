@@ -487,6 +487,16 @@ async def _mark_failed(deps: ContentDeps, resource: LoadedResource, error: Inges
     return row is not None
 
 
+async def fail_after_last_attempt(deps: ContentDeps, resource_id: str, code: str, message: str) -> None:
+    """The worker gave up on a transient failure: the resource ends in `failed`, readable by the
+    learner, instead of staying `processing` forever (QA 2026-11-25)."""
+    loaded = await select_resource(deps, resource_id)
+    if loaded is None or loaded.deleted or loaded.status in ("ready", "failed"):
+        return
+    if await _mark_failed(deps, loaded, IngestionError(code, message)):
+        await _publish_failed(deps, resource_id)
+
+
 def _skipped(resource_id: str) -> dict[str, Any]:
     return {
         "resourceId": resource_id,

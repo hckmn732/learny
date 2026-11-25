@@ -11,6 +11,7 @@ from learny.content.application.generate import generate_course_now
 from learny.content.application.ingestion import (
     IngestionPorts,
     default_ports,
+    fail_after_last_attempt,
     process_resource,
 )
 from learny.content.application.module_screen import get_module_screen
@@ -84,6 +85,7 @@ __all__ = [
     "embed_texts",
     "estimate_reading_minutes",
     "excerpt_of",
+    "fail_after_last_attempt",
     "fake_embedding",
     "finalize_upload",
     "format_document_chunk",

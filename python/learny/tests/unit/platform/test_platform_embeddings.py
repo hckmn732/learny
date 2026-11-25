@@ -9,6 +9,7 @@ from learny.platform.embeddings import (
     MockEmbedder,
     VoyageEmbedder,
     default_embedder,
+    token_batches,
 )
 from learny.shared.config import Settings
 from learny.shared.errors import AppError
@@ -17,7 +18,11 @@ pytestmark = pytest.mark.spec("SPEC-2203")
 
 
 def embedder_with(handler: object) -> VoyageEmbedder:
-    return VoyageEmbedder("voyage-secret", transport=httpx.MockTransport(handler))  # type: ignore[arg-type]
+    return VoyageEmbedder(
+        "voyage-secret",
+        transport=httpx.MockTransport(handler),  # type: ignore[arg-type]
+        rate_limit_waits=(),
+    )
 
 
 async def test_the_mock_vector_is_deterministic_and_normalised() -> None:
@@ -117,3 +122,29 @@ async def test_an_invalid_answer_is_refused(payload: bytes) -> None:
 def test_the_default_adapter_follows_llm_mode() -> None:
     assert isinstance(default_embedder(Settings(llm_mode="mock")), MockEmbedder)
     assert isinstance(default_embedder(Settings(llm_mode="live", voyage_api_key="k")), VoyageEmbedder)
+
+
+async def test_rate_limit_waits_then_retries_the_same_batch() -> None:
+    calls: list[int] = []
+
+    def handler(request: httpx.Request) -> httpx.Response:
+        calls.append(1)
+        if len(calls) == 1:
+            return httpx.Response(429, headers={"retry-after": "0"})
+        size = len(json.loads(request.content)["input"])
+        return httpx.Response(200, json={"data": [{"embedding": [0.0] * 3} for _ in range(size)]})
+
+    embedder = VoyageEmbedder(
+        "voyage-secret",
+        transport=httpx.MockTransport(handler),  # type: ignore[arg-type]
+        rate_limit_waits=(0.0,),
+    )
+    assert len(await embedder.embed(["a", "b"])) == 2
+    assert len(calls) == 2
+
+
+def test_token_batches_stay_under_the_limit() -> None:
+    texts = ["x" * 4000] * 10  # ~1000 tokens each
+    batches = token_batches(texts, limit=2500)
+    assert [len(batch) for batch in batches] == [2, 2, 2, 2, 2]
+    assert token_batches(["x" * 40000], limit=2500) == [["x" * 40000]]

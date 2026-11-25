@@ -123,7 +123,7 @@ class Runner:
             with ai_caller(event.user_id, _formation_of(event)):
                 await asyncio.wait_for(consumer.run(self._deps, event), timeout=consumer.timeout_s)
         except Exception as error:
-            await self._failed(delivery, consumer, error)
+            await self._failed(delivery, consumer, error, event)
             return
         async with self._deps.db.service_tx() as tx:
             await outbox.complete(tx, delivery)
@@ -140,6 +140,7 @@ class Runner:
         delivery: Delivery,
         consumer: Consumer | None,
         error: BaseException,
+        event: Any = None,
     ) -> None:
         permanent = isinstance(error, PermanentJobError)
         max_attempts = consumer.max_attempts if consumer is not None else 1
@@ -164,6 +165,11 @@ class Runner:
         }
         if final:
             self._logger.error("delivery failed", final=True, error=message, **fields)
+            if consumer is not None and consumer.on_final_failure is not None and event is not None:
+                try:
+                    await consumer.on_final_failure(self._deps, event)
+                except Exception as hook_error:
+                    self._logger.warning("final failure hook failed", error=_describe(hook_error), **fields)
         else:
             self._logger.warning("delivery failed, will retry", error=message, **fields)
 

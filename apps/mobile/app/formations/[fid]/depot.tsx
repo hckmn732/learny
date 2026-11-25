@@ -180,6 +180,11 @@ export default function FormationDepositRoute() {
   const uploading = queue.items.some((task) => task.status === 'uploading');
   const failed = queue.items.some((task) => task.status === 'failed');
   const sources = sourceRows(simple.data);
+  // A queued file the server already lists shows once, with the server status (QA 2026-11-25).
+  const listed = new Set(sources.map((source) => source.id));
+  const pendingItems = queue.items.filter(
+    (task) => task.resourceId === undefined || !listed.has(task.resourceId),
+  );
 
   return (
     <View style={styles.screen} testID="simple-analysis-screen">
@@ -227,9 +232,9 @@ export default function FormationDepositRoute() {
             <Text variant="bodySmall" tone="secondary">
               {t.lede}
             </Text>
-            {queue.items.length > 0 || sources.length > 0 ? (
+            {pendingItems.length > 0 || sources.length > 0 ? (
               <View style={styles.files}>
-                {queue.items.map((task, index) => (
+                {pendingItems.map((task, index) => (
                   <QueuedRow
                     key={task.id}
                     task={task}

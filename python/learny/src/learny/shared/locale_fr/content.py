@@ -24,6 +24,10 @@ RETRIEVAL_UNAVAILABLE = (
 
 EMBEDDING_KEY_INVALID = "Le service d’embeddings n’est pas configuré : ajoutez la clé Voyage côté serveur."
 EMBEDDING_KEY_REFUSED = "La clé du service d’embeddings est refusée : vérifiez sa configuration."
+RESOURCE_GIVEN_UP = (
+    "L’analyse du document n’a pas abouti : le service d’indexation est saturé. "
+    "Réessayez dans quelques minutes."
+)
 EMBEDDING_UNAVAILABLE = (
     "Le service d’embeddings est momentanément indisponible : une nouvelle tentative est possible."
 )

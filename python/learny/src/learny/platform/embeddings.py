@@ -6,7 +6,9 @@ the network. A missing key is a permanent configuration failure, 429 and 5xx are
 provider body is never surfaced: it can quote the input.
 """
 
+import asyncio
 import json
+from collections.abc import Sequence
 from typing import Any, Protocol
 
 import httpx
@@ -24,6 +26,32 @@ from learny.shared.locale_fr import content as texts
 
 VOYAGE_ENDPOINT = "https://api.voyageai.com/v1/embeddings"
 VOYAGE_TIMEOUT_SECONDS = 60.0
+# A Voyage account without a payment method allows about 10 000 tokens a minute: one request stays
+# well under it (4 characters ~ 1 token), and a 429 waits before retrying (QA 2026-11-25).
+MAX_BATCH_TOKENS = 7000
+RATE_LIMIT_WAITS: tuple[float, ...] = (20.0, 30.0, 45.0, 60.0)
+MAX_RETRY_AFTER_SECONDS = 60.0
+
+
+def _estimated_tokens(text: str) -> int:
+    return max(1, len(text) // 4)
+
+
+def token_batches(texts_to_embed: Sequence[str], limit: int = MAX_BATCH_TOKENS) -> list[list[str]]:
+    """Consecutive batches whose estimated size stays under `limit` (a long passage goes alone)."""
+    batches: list[list[str]] = []
+    current: list[str] = []
+    size = 0
+    for text in texts_to_embed:
+        tokens = _estimated_tokens(text)
+        if current and size + tokens > limit:
+            batches.append(current)
+            current, size = [], 0
+        current.append(text)
+        size += tokens
+    if current:
+        batches.append(current)
+    return batches
 
 
 class EmbeddingProvider(Protocol):
@@ -48,14 +76,39 @@ class VoyageEmbedder:
         *,
         endpoint: str = VOYAGE_ENDPOINT,
         transport: httpx.AsyncBaseTransport | None = None,
+        rate_limit_waits: Sequence[float] = RATE_LIMIT_WAITS,
     ) -> None:
         self._api_key = api_key
         self._endpoint = endpoint
         self._transport = transport
+        self._waits = tuple(rate_limit_waits)
 
     async def embed(self, texts_to_embed: list[str]) -> list[list[float]]:
         if self._api_key is None or self._api_key.strip() == "":
             raise IngestionError("EMBEDDING_KEY_INVALID", texts.EMBEDDING_KEY_INVALID)
+        vectors: list[list[float]] = []
+        for batch in token_batches(texts_to_embed):
+            vectors.extend(await self._embed_batch(batch))
+        return vectors
+
+    async def _embed_batch(self, texts_to_embed: list[str]) -> list[list[float]]:
+        attempt = 0
+        while True:
+            try:
+                return await self._embed_once(texts_to_embed)
+            except _RateLimited as limited:
+                if attempt >= len(self._waits):
+                    raise IngestionError(
+                        "EMBEDDING_UNAVAILABLE",
+                        texts.EMBEDDING_UNAVAILABLE,
+                        permanent=False,
+                        status=429,
+                    ) from limited
+                wait = limited.retry_after if limited.retry_after is not None else self._waits[attempt]
+                attempt += 1
+                await asyncio.sleep(min(wait, MAX_RETRY_AFTER_SECONDS))
+
+    async def _embed_once(self, texts_to_embed: list[str]) -> list[list[float]]:
         payload = {
             "input": texts_to_embed,
             "model": EMBEDDING_MODEL,
@@ -84,6 +137,8 @@ class VoyageEmbedder:
                 texts.EMBEDDING_KEY_REFUSED,
                 status=response.status_code,
             )
+        if response.status_code == 429 and self._waits:
+            raise _RateLimited(_retry_after(response.headers.get("retry-after")))
         if response.status_code == 429 or response.status_code >= 500:
             raise IngestionError(
                 "EMBEDDING_UNAVAILABLE",
@@ -105,6 +160,21 @@ class VoyageEmbedder:
         if vectors is None:
             raise IngestionError("EMBEDDING_INVALID", texts.EMBEDDING_RESPONSE_INVALID)
         return vectors
+
+
+class _RateLimited(Exception):
+    """A 429 of Voyage, with its `Retry-After` when it gives one."""
+
+    def __init__(self, retry_after: float | None) -> None:
+        super().__init__("rate limited")
+        self.retry_after = retry_after
+
+
+def _retry_after(value: str | None) -> float | None:
+    try:
+        return None if value is None else max(0.0, float(value))
+    except ValueError:
+        return None
 
 
 def _vectors_of(payload: Any) -> list[list[float]] | None:
@@ -153,4 +223,5 @@ __all__ = [
     "default_embedder",
     "mode_of",
     "to_vector_literal",
+    "token_batches",
 ]

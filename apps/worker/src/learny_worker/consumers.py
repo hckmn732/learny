@@ -25,6 +25,7 @@ from learny.learning import public as learning
 from learny.privacy import public as privacy
 from learny.shared.clock import Clock
 from learny.shared.devtools import run_demo_pipeline
+from learny.shared.locale_fr import content as content_texts
 from learny.shared.locale_fr import simple as simple_texts
 from learny.shared.outbox.errors import PermanentJobError
 from learny.shared.outbox.events import Event
@@ -86,6 +87,8 @@ class Consumer:
     run_at: RunAt | None = None
     validate: Validate | None = None
     tags: dict[str, str] = field(default_factory=dict)
+    # Called once when the delivery fails for good (last attempt or permanent error).
+    on_final_failure: RunConsumer | None = None
 
     def run_after(self, event: Event, clock: Clock) -> datetime | None:
         """Delayed first execution; None means right now."""
@@ -273,6 +276,16 @@ async def engagement_send_daily_digest(deps: Any, event: Event) -> None:
         deps,
         user_id=_text_of(event.data, "userId"),
         at=_instant_of(event.data, "at"),
+    )
+
+
+async def content_resource_given_up(deps: Any, event: Event) -> None:
+    """The last attempt failed: the document is marked failed so the learner can retry."""
+    await content.fail_after_last_attempt(
+        deps,
+        _text_of(event.data, "resourceId"),
+        "EMBEDDING_UNAVAILABLE",
+        content_texts.RESOURCE_GIVEN_UP,
     )
 
 
@@ -594,6 +607,7 @@ CONSUMERS: tuple[Consumer, ...] = (
         on="resource/uploaded",
         run=content_process_resource,
         timeout_s=INGESTION_TIMEOUT_S,
+        on_final_failure=content_resource_given_up,
         validate=payload_validator(userId=UUID, resourceId=UUID),
         tags={"context": "content"},
     ),
