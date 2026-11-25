@@ -49,6 +49,11 @@
       "license": "Interne (paquet de l’espace de travail Learny)"
     },
     {
+      "name": "@react-native-community/datetimepicker",
+      "version": "9.2.1",
+      "license": "MIT"
+    },
+    {
       "name": "@react-native-community/netinfo",
       "version": "12.0.1",
       "license": "MIT"
@@ -99,6 +104,16 @@
       "license": "MIT"
     },
     {
+      "name": "expo-document-picker",
+      "version": "58.0.5",
+      "license": "MIT"
+    },
+    {
+      "name": "expo-file-system",
+      "version": "58.0.14",
+      "license": "MIT"
+    },
+    {
       "name": "expo-font",
       "version": "58.0.12",
       "license": "MIT"
@@ -106,6 +121,11 @@
     {
       "name": "expo-haptics",
       "version": "58.0.8",
+      "license": "MIT"
+    },
+    {
+      "name": "expo-image-picker",
+      "version": "58.0.10",
       "license": "MIT"
     },
     {
@@ -126,6 +146,11 @@
     {
       "name": "expo-secure-store",
       "version": "58.0.3",
+      "license": "MIT"
+    },
+    {
+      "name": "expo-sharing",
+      "version": "58.0.23",
       "license": "MIT"
     },
     {
