@@ -135,13 +135,30 @@ describe('[SPEC-3202] onglet Programme', () => {
     expect(screen.getByText('Se débloque quand le quiz du module 3 est validé.')).toBeTruthy();
   });
 
-  it('renvoie la création et l’import au web sans écrire le programme (CA-4)', async () => {
+  it('garde l’import sur le web sans écrire le programme (CA-4, quickfix)', async () => {
     await renderScreen();
     await fireEvent.press(screen.getByTestId('programme-import'));
     expect(screen.getByTestId('programme-web-import')).toBeTruthy();
     await fireEvent.press(screen.getByTestId('programme-web-import-action'));
     expect(mockOpenOnWeb).toHaveBeenCalledWith(`/formations/${FORMATION_ID}/programme`);
     expect(mockApi.currentFormationUpdate).not.toHaveBeenCalled();
+  });
+
+  it('ouvre le cadrage natif depuis la feuille de création (quickfix)', async () => {
+    await renderScreen();
+    await fireEvent.press(screen.getByLabelText('Nouvelle formation'));
+    expect(screen.getByTestId('programme-web-create')).toBeTruthy();
+    await fireEvent.press(screen.getByTestId('programme-web-create-action'));
+    expect(mockRouter.push).toHaveBeenCalledWith('/programme/cadrage');
+  });
+
+  it('ouvre les formations à plusieurs de la formation courante (quickfix)', async () => {
+    await renderScreen();
+    await fireEvent.press(screen.getByTestId('programme-groupe'));
+    expect(mockRouter.push).toHaveBeenCalledWith({
+      pathname: '/programme/groupe/[fid]',
+      params: { fid: FORMATION_ID },
+    });
   });
 
   it('ouvre le sélecteur de formation et propose la reprise en pause sur le web (BR-FOR-11)', async () => {

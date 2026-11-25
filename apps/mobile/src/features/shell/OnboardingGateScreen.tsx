@@ -1,8 +1,14 @@
-// Screen of the onboarding gate (SPEC-3102 BR-ACC-04; QA hot fix 2026-11-25).
+// Screen of the onboarding gate (SPEC-3102 BR-ACC-04; QA hot fix 2026-11-25; quickfix
+// « rattrapage mobile »).
 //
-// Centred: the title, the animated tutor, the explanation and « Continuer sur le web » right
-// below it. There is no « J'ai terminé » any more: the end of the web configuration brings the
-// learner back and the route re-reads the state by itself.
+// Centred: the title, the animated tutor, the explanation and the action that opens the native
+// first steps (`/premiers-pas/1`) right below it. There is no « J'ai terminé » any more: the end of
+// the configuration brings the learner back and the route re-reads the state by itself.
+//
+// TODO(quickfix) — l'écran web de secours (`openOnboardingOnWeb`,
+// `src/features/shell/web-handoff.ts`) n'est plus branché ici : les premiers pas natifs prennent le
+// relais.
+import { useRouter } from 'expo-router';
 import { StyleSheet, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
@@ -14,17 +20,11 @@ import { Text } from '../../ui/Text';
 
 import { TutorBot } from './TutorBot';
 
-export interface OnboardingGateScreenProps {
-  /** Continues the configuration on the web, signed in with the session of the app. */
-  readonly onContinue: () => void;
-  /** True while the web is being opened or the state re-read. */
-  readonly busy?: boolean;
-}
-
 const t = fr.mobile.shell.states;
 
 /** The only screen a learner with an unfinished configuration can see (CA-3). */
-export function OnboardingGateScreen({ onContinue, busy = false }: OnboardingGateScreenProps) {
+export function OnboardingGateScreen() {
+  const router = useRouter();
   const insets = useSafeAreaInsets();
   return (
     <View
@@ -45,10 +45,12 @@ export function OnboardingGateScreen({ onContinue, busy = false }: OnboardingGat
         <View style={styles.action}>
           <Button
             block
-            label={fr.mobile.shell.web.continue}
-            loading={busy}
+            label={t.onboardingContinue}
             testID="onboarding-continue"
-            onPress={onContinue}
+            onPress={() => {
+              // Quickfix « rattrapage mobile » — les premiers pas natifs prennent le relais.
+              router.replace('/premiers-pas/1');
+            }}
           />
         </View>
       </View>

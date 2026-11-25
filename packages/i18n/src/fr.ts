@@ -15,6 +15,11 @@ import { meta } from './fr/meta';
 import { mobile } from './fr/mobile';
 import { mockExam } from './fr/mockExam';
 import { moduleMessages } from './fr/module';
+import { mrCreation } from './fr/mr/creation';
+import { mrCommon } from './fr/mr/common';
+import { mrEvaluation } from './fr/mr/evaluation';
+import { mrExploration } from './fr/mr/exploration';
+import { mrProgramme } from './fr/mr/programme';
 import { notionGraph } from './fr/notionGraph';
 import { offline } from './fr/offline';
 import { onboarding } from './fr/onboarding';
@@ -62,6 +67,14 @@ export const fr = {
   settings,
   group,
   agenda,
+  // Chantier quickfix « rattrapage mobile » — namespace par zone, un écrivain par fichier.
+  mr: {
+    common: mrCommon,
+    programme: mrProgramme,
+    creation: mrCreation,
+    evaluation: mrEvaluation,
+    exploration: mrExploration,
+  },
 } as const;
 
 export type Messages = typeof fr;

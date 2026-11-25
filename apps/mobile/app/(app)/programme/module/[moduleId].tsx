@@ -2,8 +2,9 @@
 //
 // Opened from a module of the Programme tab: position, title, status, dates, threshold and the
 // chapters with their reading progress. A locked module shows only its unlock condition
-// (BR-FOR-08). Adding contributions, exercises and the quiz are out of the mobile scope and open
-// the web page (ADR-3002 § 3); nothing is written here.
+// (BR-FOR-08). « Apports » and « Carte des notions » open the native screens of the quickfix
+// « rattrapage mobile » (quickfix/mobile-rattrapage); the quiz opens the full-screen attempt.
+// Nothing is written here.
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { useMemo, useState } from 'react';
 import { ScrollView, StyleSheet, View } from 'react-native';
@@ -15,7 +16,6 @@ import { useMe, useModuleCourse, useProgramme } from '../../../../src/data/use-p
 import { ChapterRow } from '../../../../src/features/programme/ChapterRow';
 import { buildProgrammeView } from '../../../../src/features/programme/view-model';
 import { useStartQuiz } from '../../../../src/features/quiz/use-start-quiz';
-import { openOnWeb } from '../../../../src/lib/web';
 import { theme } from '../../../../src/theme';
 import { Button } from '../../../../src/ui/Button';
 import { Card } from '../../../../src/ui/Card';
@@ -140,16 +140,38 @@ export default function ModuleRoute() {
               </Card>
             )}
 
-            {module.href === null ? null : (
+            {module.locked ? null : (
               <View style={styles.actions}>
                 <Button
                   label={t.moduleScreen.apports}
                   variant="outline"
                   onPress={() => {
-                    void openOnWeb(module.href ?? '');
+                    // Quickfix « rattrapage mobile » — apports et import natifs (zone A). La
+                    // formation courante voyage avec le module pour l'en-tête de l'écran.
+                    router.push({
+                      pathname: '/programme/apports/[moduleId]',
+                      params:
+                        formationId === null
+                          ? { moduleId: module.id }
+                          : { moduleId: module.id, fid: formationId },
+                    });
                   }}
                   testID="module-detail-apports"
                 />
+                {formationId === null ? null : (
+                  <Button
+                    label={fr.notionGraph.title}
+                    variant="text"
+                    onPress={() => {
+                      // Quickfix « rattrapage mobile » — carte des notions (zone D).
+                      router.push({
+                        pathname: '/programme/carte/[fid]',
+                        params: { fid: formationId },
+                      });
+                    }}
+                    testID="module-detail-carte"
+                  />
+                )}
                 <Button
                   label={t.moduleScreen.quiz}
                   loading={starter.pending}

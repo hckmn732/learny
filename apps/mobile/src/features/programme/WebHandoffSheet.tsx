@@ -14,6 +14,9 @@ const t = fr.mobile.programme;
 export type WebHandoffKind = 'create' | 'import' | 'proposal' | 'paused' | 'completed';
 
 const CONTENT: Record<WebHandoffKind, { title: string; body: string; action: string }> = {
+  // TODO(quickfix) — la feuille « create » continue désormais vers /programme/cadrage : sa copie
+  // décrit encore la création sur le web, à reprendre avec la zone B. Les feuilles « import » et
+  // « paused » restent de vrais renvois web.
   create: {
     title: t.web.createTitle,
     body: t.web.createBody,

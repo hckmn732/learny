@@ -1,0 +1,36 @@
+# Quickfix mr — fumee de la zone A (programme : apports, bilan, groupe).
+# Ouvre chaque route par lien profond et verifie le testID racine du scaffold.
+appId: fr.learny.app
+name: quickfix mr-a
+tags:
+  - quickfix-mr
+---
+- launchApp:
+    clearState: true
+- extendedWaitUntil:
+    visible:
+      id: sdd-health
+    timeout: 30000
+- openLink: learny://connexion?demo=1
+- extendedWaitUntil:
+    visible:
+      id: tab-programme
+    timeout: 60000
+- openLink: learny://programme/apports/7a4c9e86-d395-5d10-b006-c3bf8236a8db
+- extendedWaitUntil:
+    visible:
+      id: qf-apports
+    timeout: 20000
+- takeScreenshot: quickfix-mr-apports
+- openLink: learny://programme/bilan/f4563ac4-affa-504c-8dfb-6d8f67231deb
+- extendedWaitUntil:
+    visible:
+      id: qf-bilan
+    timeout: 20000
+- takeScreenshot: quickfix-mr-bilan
+- openLink: learny://programme/groupe/a6931bf7-729c-5a21-b556-1a18245b3e1e
+- extendedWaitUntil:
+    visible:
+      id: qf-groupe
+    timeout: 20000
+- takeScreenshot: quickfix-mr-groupe

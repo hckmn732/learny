@@ -1,10 +1,11 @@
 // Detail sheets of the Aujourd'hui screen (SPEC-3201 EF-3, EF-4, EF-5, CL-4; BR-GAM-02, BR-MEM-06).
 //
 // Five fiches of the mockup: série (14 boxes), rétention (value at one and two months), lacunes (the
-// open gaps of the current formation, with « Voir mes lacunes sur le web »), reporter (three windows
-// of `GET /slots/:id/alternatives`, then `POST /slots/:id/move`) and journal (every action of the
-// week, with « Annuler »). They are non-routed sheets, so they keep the native geometry of
-// `Sheet` (canevas § 3) and never hide the screen behind them.
+// open gaps of the current formation, opened on the native route /aujourdhui/lacunes), reporter
+// (three windows of `GET /slots/:id/alternatives`, then `POST /slots/:id/move`) and journal (every
+// action of the week, with « Annuler »). They are non-routed sheets, so they keep the native
+// geometry of `Sheet` (canevas § 3) and never hide the screen behind them.
+import { useRouter } from 'expo-router';
 import { useState } from 'react';
 import { Pressable, StyleSheet, View } from 'react-native';
 
@@ -127,13 +128,13 @@ function MiniStat({ value, label }: { readonly value: number | null; readonly la
   );
 }
 
-/** EF-4, BR-LAC-05 — « Lacunes » fiche: the open gaps and the web hand-off. */
+/** EF-4, BR-LAC-05 — « Lacunes » fiche: the open gaps and the native hand-off of the quickfix. */
 export function GapsSheet({
   visible,
   onClose,
   gaps,
-  onOpenWeb,
-}: SheetVisibility & { readonly gaps: GapListDto | null; readonly onOpenWeb: () => void }) {
+}: SheetVisibility & { readonly gaps: GapListDto | null }) {
+  const router = useRouter();
   const count = gaps?.summary.openGaps ?? 0;
   return (
     <Sheet visible={visible} onClose={onClose} title={t.gapsTitle} testID="gaps-sheet">
@@ -160,11 +161,15 @@ export function GapsSheet({
         </View>
       ))}
       <Button
-        label={t.gapsWeb}
+        label={t.gapsOpen}
         variant="primary"
         block
-        testID="gaps-open-web"
-        onPress={onOpenWeb}
+        testID="gaps-open"
+        onPress={() => {
+          // Quickfix « rattrapage mobile » — l'écran des lacunes est natif (zone D).
+          onClose();
+          router.push('/aujourdhui/lacunes');
+        }}
       />
     </Sheet>
   );

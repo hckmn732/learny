@@ -1,9 +1,9 @@
 // Modèles d'IA (SPEC-3401 EF-3, CL-2 ; BR-SET-05 ; ADR-3002).
 //
 // The five tasks of `docs/architecture/ai.md`, the model chosen for each one and its compatibility.
-// A task accepts any model of a qualified personal key; adding, testing and deleting a provider stay
-// on the web (ADR-3002), hence the hand-off when the learner has no provider. Nothing is decided
-// here: the answer of `PATCH /me/ai/models` replaces the state.
+// A task accepts any model of a qualified personal key; managing a provider opens the native screen
+// of the quickfix « rattrapage mobile » (/profil/cles-ia), hence the hand-off when the learner has no
+// provider. Nothing is decided here: the answer of `PATCH /me/ai/models` replaces the state.
 import { useRouter } from 'expo-router';
 import { useState } from 'react';
 
@@ -12,7 +12,6 @@ import { fr } from '@learny/i18n';
 
 import { messageFor } from '../../api/errors';
 import { useAssignTaskModel, useTaskModels } from '../../data/task-models';
-import { openOnWeb } from '../../lib/web';
 import { Button } from '../../ui/Button';
 import { Chip } from '../../ui/Chip';
 import { ErrorState } from '../../ui/ErrorState';
@@ -101,7 +100,10 @@ export function ModelsScreen() {
             label={t.manage}
             variant="outline"
             onPress={() => {
-              void openOnWeb('/parametres');
+              // Quickfix « rattrapage mobile » — la gestion des clés d'IA est native (zone C). Le
+              // libellé « Gérer mes fournisseurs sur le web » est conservé : il est asservi par
+              // `test/profil/task-models.test.tsx`, hors du périmètre de ce recâblage.
+              router.push('/profil/cles-ia');
             }}
             testID="models-manage"
           />

@@ -1,0 +1,42 @@
+# Quickfix mr — fumee de la zone D (exploration : lacunes, carte, recherche).
+appId: fr.learny.app
+name: quickfix mr-d
+tags:
+  - quickfix-mr
+---
+- launchApp:
+    clearState: true
+- extendedWaitUntil:
+    visible:
+      id: sdd-health
+    timeout: 30000
+- openLink: learny://connexion?demo=1
+- extendedWaitUntil:
+    visible:
+      id: tab-programme
+    timeout: 60000
+- openLink: learny://aujourdhui/lacunes
+- extendedWaitUntil:
+    visible:
+      id: qf-lacunes
+    timeout: 20000
+- takeScreenshot: quickfix-mr-lacunes
+- openLink: learny://programme/carte/79c6d8b4-ee55-5f27-9da1-e958882bfdfc
+- extendedWaitUntil:
+    visible:
+      id: qf-carte
+    timeout: 20000
+- takeScreenshot: quickfix-mr-carte
+- openLink: learny://programme/recherche
+- extendedWaitUntil:
+    visible:
+      id: qf-recherche
+    timeout: 20000
+- tapOn:
+    id: qf-recherche-field
+- inputText: compta
+- extendedWaitUntil:
+    visible:
+      id: qf-recherche-results
+    timeout: 20000
+- takeScreenshot: quickfix-mr-recherche

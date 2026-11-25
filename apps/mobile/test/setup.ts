@@ -37,7 +37,7 @@ jest.mock('react-native-reanimated', () => {
     withTiming: (value: number) => value,
     withRepeat: (value: number) => value,
     withSequence: (...values: number[]) => values[0],
-    Easing: { inOut: () => 0, ease: () => 0, linear: () => 0 },
+    Easing: { inOut: () => 0, ease: () => 0, linear: () => 0, sin: () => 0, bezier: () => () => 0 },
   };
 });
 

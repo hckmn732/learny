@@ -16,6 +16,10 @@ const mockAlternatives = {
   },
 };
 
+jest.mock('expo-router', () => ({
+  useRouter: () => ({ push: jest.fn(), replace: jest.fn(), back: jest.fn() }),
+}));
+
 jest.mock('../../src/data/home', () => ({
   useSlotAlternatives: () => ({ ...mockAlternatives.value, refetch: jest.fn() }),
   useSlotMove: () => ({ move: mockMove, pending: false }),
