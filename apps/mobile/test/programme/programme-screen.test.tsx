@@ -135,7 +135,7 @@ describe('[SPEC-3202] onglet Programme', () => {
     expect(screen.getByText('Se débloque quand le quiz du module 3 est validé.')).toBeTruthy();
   });
 
-  it('renvoie la création et l’import au web sans écrire le programme (CA-4)', async () => {
+  it('garde l’import sur le web sans écrire le programme (CA-4, quickfix)', async () => {
     await renderScreen();
     await fireEvent.press(screen.getByTestId('programme-import'));
     expect(screen.getByTestId('programme-web-import')).toBeTruthy();

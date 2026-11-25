@@ -201,11 +201,14 @@ export function AgendaScreen({ now }: AgendaScreenProps = {}) {
     setSelectedId(slot.id);
   }, []);
 
-  const openActivity = useCallback((slot: AgendaSlot) => {
-    // EF-6 — the destination is the one the server computed (`href`); the P33 screens take over
-    // as they land (see `open-target.ts`).
-    void openSlot(slot).catch(() => undefined);
-  }, []);
+  const openActivity = useCallback(
+    (slot: AgendaSlot) => {
+      // EF-6 — l'écran natif quand l'application en a un (examen blanc), sinon la destination
+      // calculée par le serveur (`href`) ; les autres écrans arrivent au fil des spécifications.
+      void openSlot(slot, router).catch(() => undefined);
+    },
+    [router],
+  );
 
   const startReplan = useCallback(
     (slot: AgendaSlot) => {

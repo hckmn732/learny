@@ -7,12 +7,14 @@ import { OnboardingGuard } from '../../src/features/shell/OnboardingGuard';
 import type { OnboardingQuery } from '../../src/features/shell/use-shell';
 
 const mockRedirect = jest.fn();
+const mockReplace = jest.fn();
 
 jest.mock('expo-router', () => ({
   Redirect: (props: { href: string }) => {
     mockRedirect(props.href);
     return null;
   },
+  useRouter: () => ({ replace: mockReplace, push: jest.fn(), back: jest.fn() }),
 }));
 
 const mockUseOnboarding = jest.fn<OnboardingQuery, []>();
@@ -24,6 +26,7 @@ jest.mock('../../src/features/shell/use-shell', () => ({
 describe('[SPEC-3102] garde d’onboarding', () => {
   beforeEach(() => {
     mockRedirect.mockClear();
+    mockReplace.mockClear();
     mockUseOnboarding.mockReset();
   });
 
@@ -91,8 +94,7 @@ describe('[SPEC-3102] garde d’onboarding', () => {
     expect(retry).toHaveBeenCalledTimes(1);
   });
 
-  it('propose « Continuer sur le web », sans bouton « J’ai terminé » (retour automatique)', async () => {
-    const onContinue = jest.fn();
+  it('ouvre les premiers pas natifs, sans bouton « J’ai terminé » (quickfix)', async () => {
     const view = await render(
       <SafeAreaProvider
         initialMetrics={{
@@ -100,16 +102,16 @@ describe('[SPEC-3102] garde d’onboarding', () => {
           insets: { top: 47, left: 0, right: 0, bottom: 34 },
         }}
       >
-        <OnboardingGateScreen onContinue={onContinue} />
+        <OnboardingGateScreen />
       </SafeAreaProvider>,
     );
 
     expect(view.getByTestId('onboarding-gate')).toBeTruthy();
-    expect(view.getByText('Terminez votre configuration sur le web')).toBeTruthy();
+    expect(view.getByText('Terminez votre configuration')).toBeTruthy();
     expect(view.getByTestId('onboarding-bot')).toBeTruthy();
     expect(view.queryByTestId('onboarding-done')).toBeNull();
 
     await fireEvent.press(view.getByTestId('onboarding-continue'));
-    expect(onContinue).toHaveBeenCalledTimes(1);
+    expect(mockReplace).toHaveBeenCalledWith('/premiers-pas/1');
   });
 });

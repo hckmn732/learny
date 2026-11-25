@@ -363,10 +363,6 @@ export function TodayScreen() {
           setSheet(null);
         }}
         gaps={gaps.data}
-        onOpenWeb={() => {
-          setSheet(null);
-          void openOnWeb('/lacunes');
-        }}
       />
       <LaterSheet
         visible={sheet === 'later'}

@@ -245,7 +245,11 @@ export function ProgrammeScreen() {
             action={{
               label: t.proposal.action,
               onPress: () => {
-                void openOnWeb(`/formations/${formationId}/programme`);
+                // Quickfix « rattrapage mobile » — programme proposé natif (zone B).
+                router.push({
+                  pathname: '/programme/proposition/[fid]',
+                  params: { fid: formationId },
+                });
               },
             }}
           />

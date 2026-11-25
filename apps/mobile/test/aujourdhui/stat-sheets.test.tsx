@@ -6,6 +6,12 @@ import type { GapListDto, StreakDto } from '@learny/contracts';
 
 import { GapsSheet, RetentionSheet, StreakSheet } from '../../src/features/aujourdhui/TodaySheets';
 
+const mockPush = jest.fn();
+
+jest.mock('expo-router', () => ({
+  useRouter: () => ({ push: mockPush, replace: jest.fn(), back: jest.fn() }),
+}));
+
 jest.mock('../../src/data/home', () => ({
   useSlotAlternatives: () => ({ status: 'ready', data: null, refetch: jest.fn() }),
   useSlotMove: () => ({ move: jest.fn(), pending: false }),
@@ -116,17 +122,17 @@ describe('[SPEC-3201] fiche Rétention', () => {
 });
 
 describe('[SPEC-3201] fiche Lacunes', () => {
-  it('liste les notions et propose le web (EF-4)', async () => {
-    const onOpenWeb = jest.fn();
-    const view = await render(
-      withProviders(<GapsSheet visible onClose={jest.fn()} gaps={GAPS} onOpenWeb={onOpenWeb} />),
-    );
+  it('liste les notions et ouvre l’écran natif des lacunes (EF-4, quickfix)', async () => {
+    mockPush.mockClear();
+    const onClose = jest.fn();
+    const view = await render(withProviders(<GapsSheet visible onClose={onClose} gaps={GAPS} />));
     expect(view.getByTestId('gaps-sheet')).toBeTruthy();
     expect(view.getByText('4 notions à consolider')).toBeTruthy();
     expect(view.getByTestId('gaps-item-n-1')).toBeTruthy();
     expect(view.getByText('Clé de comptabilisation')).toBeTruthy();
-    await fireEvent.press(view.getByTestId('gaps-open-web'));
-    expect(onOpenWeb).toHaveBeenCalledTimes(1);
+    await fireEvent.press(view.getByTestId('gaps-open'));
+    expect(onClose).toHaveBeenCalledTimes(1);
+    expect(mockPush).toHaveBeenCalledWith('/aujourdhui/lacunes');
   });
 
   it('affiche l’état vide sans lacune', async () => {
@@ -136,7 +142,6 @@ describe('[SPEC-3201] fiche Lacunes', () => {
           visible
           onClose={jest.fn()}
           gaps={{ ...GAPS, items: [], summary: { ...GAPS.summary, openGaps: 0 } }}
-          onOpenWeb={jest.fn()}
         />,
       ),
     );
