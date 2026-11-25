@@ -62,7 +62,7 @@ export function TutorBot({ size = 180, testID }: TutorBotProps): ReactElement {
 
   const floating = useAnimatedStyle(() => ({ transform: [{ translateY: -8 * float.value }] }));
   const shadow = useAnimatedStyle(() => ({
-    opacity: 0.18 + 0.1 * (1 - float.value),
+    opacity: 0.08 + 0.06 * (1 - float.value),
     transform: [{ scaleX: 1 - 0.12 * float.value }],
   }));
   const leftEye = useAnimatedProps(() => ({ ry: 9 * blink.value }));
@@ -160,10 +160,10 @@ export function TutorBot({ size = 180, testID }: TutorBotProps): ReactElement {
 const styles = StyleSheet.create({
   shadow: {
     position: 'absolute',
-    bottom: 4,
-    left: '30%',
-    width: '40%',
-    height: 10,
+    bottom: '9%',
+    left: '33%',
+    width: '34%',
+    height: 7,
     borderRadius: 999,
     backgroundColor: theme.colors.ink,
   },

@@ -12,6 +12,15 @@ import { useSession } from '../auth/session';
 import { isAuthPath, resolveDeepLink } from '../lib/deep-links';
 import { webBaseUrl } from '../lib/web';
 
+/** Return link of the web onboarding: it only closes the browser, it is never followed. */
+const ONBOARDING_RETURN_PATH = '/onboarding-termine';
+
+/**
+ * Last link followed by the shell. `useLinkingURL` keeps answering the same URL, and the shell is
+ * remounted by the navigation it triggers: following it again would loop forever.
+ */
+let lastFollowedUrl: string | null = null;
+
 /** Follows an internal link once the session is open. */
 export function useDeepLinkNavigation(): void {
   const url = Linking.useLinkingURL();
@@ -19,9 +28,12 @@ export function useDeepLinkNavigation(): void {
   const { status } = useSession();
 
   useEffect(() => {
-    if (url === null || status !== 'signedIn') return;
+    if (url === null || status !== 'signedIn' || url === lastFollowedUrl) return;
     const link = resolveDeepLink(url, webBaseUrl());
-    if (link === null || isAuthPath(link.path)) return;
+    if (link === null || isAuthPath(link.path) || link.path.startsWith(ONBOARDING_RETURN_PATH)) {
+      return;
+    }
+    lastFollowedUrl = url;
     router.replace(link.path);
   }, [router, status, url]);
 }
