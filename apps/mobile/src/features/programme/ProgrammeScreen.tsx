@@ -278,16 +278,33 @@ export function ProgrammeScreen() {
               }}
             />
 
-            <Button
-              testID="programme-import"
-              label={t.importProgramme}
-              icon="plus"
-              variant="text"
-              size="sm"
-              onPress={() => {
-                setSheet('import');
-              }}
-            />
+            <View style={styles.quickLinks}>
+              <Button
+                testID="programme-import"
+                label={t.importProgramme}
+                icon="plus"
+                variant="text"
+                size="sm"
+                onPress={() => {
+                  setSheet('import');
+                }}
+              />
+              {formationId === null ? null : (
+                <Button
+                  testID="programme-groupe"
+                  label={fr.group.eyebrow}
+                  variant="text"
+                  size="sm"
+                  onPress={() => {
+                    // Quickfix « rattrapage mobile » — formations à plusieurs (zone A).
+                    router.push({
+                      pathname: '/programme/groupe/[fid]',
+                      params: { fid: formationId },
+                    });
+                  }}
+                />
+              )}
+            </View>
 
             {model.formation.paused ? (
               <View style={styles.banner} testID="programme-paused">
@@ -489,6 +506,12 @@ export function ProgrammeScreen() {
 
 const styles = StyleSheet.create({
   skeleton: { gap: theme.spacing.sm },
+  quickLinks: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    alignItems: 'center',
+    gap: theme.spacing.sm,
+  },
   banner: {
     gap: theme.spacing.sm,
     padding: theme.spacing.lg,

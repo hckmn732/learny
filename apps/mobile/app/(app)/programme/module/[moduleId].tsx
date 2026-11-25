@@ -146,10 +146,14 @@ export default function ModuleRoute() {
                   label={t.moduleScreen.apports}
                   variant="outline"
                   onPress={() => {
-                    // Quickfix « rattrapage mobile » — apports et import natifs (zone A).
+                    // Quickfix « rattrapage mobile » — apports et import natifs (zone A). La
+                    // formation courante voyage avec le module pour l'en-tête de l'écran.
                     router.push({
                       pathname: '/programme/apports/[moduleId]',
-                      params: { moduleId: module.id },
+                      params:
+                        formationId === null
+                          ? { moduleId: module.id }
+                          : { moduleId: module.id, fid: formationId },
                     });
                   }}
                   testID="module-detail-apports"
