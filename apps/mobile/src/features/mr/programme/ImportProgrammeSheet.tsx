@@ -208,6 +208,10 @@ export function ImportProgrammeSheet({
               setError(t.empty);
               return;
             }
+            if (file !== null && file.sizeBytes > MAX_BYTES) {
+              setError(t.tooLarge);
+              return;
+            }
             submit.mutate();
           }}
           testID="qf-import-submit"
