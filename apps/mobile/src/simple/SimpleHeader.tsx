@@ -4,6 +4,7 @@
 // chevron (EF-7): closing it equals « Passer », never a silent abandon.
 import type { ReactNode } from 'react';
 import { StyleSheet, View } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { theme } from '../theme';
 import { IconButton } from '../ui/IconButton';
@@ -27,8 +28,10 @@ export function SimpleHeader({
   closeLabel,
   right,
 }: SimpleHeaderProps) {
+  // QA 2026-11-25: the header starts under the status bar (it overlapped it).
+  const insets = useSafeAreaInsets();
   return (
-    <View style={styles.base}>
+    <View style={[styles.base, { paddingTop: insets.top + theme.spacing.md }]}>
       <View style={styles.row}>
         {onBack === undefined ? null : (
           <IconButton
@@ -63,7 +66,7 @@ export function SimpleHeader({
 }
 
 const styles = StyleSheet.create({
-  base: { paddingHorizontal: theme.spacing.xl, paddingTop: theme.spacing.sm },
+  base: { paddingHorizontal: theme.spacing.xl },
   row: { flexDirection: 'row', alignItems: 'flex-start', gap: theme.spacing.sm },
   titleBlock: { flex: 1, minWidth: 0, gap: theme.spacing.xs },
   right: { alignItems: 'flex-end' },
