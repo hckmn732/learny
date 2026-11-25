@@ -18,6 +18,7 @@ import { FileRow } from '../../../src/simple/FileRow';
 import { KeyWarning } from '../../../src/simple/KeyWarning';
 import { presentReadyNotification } from '../../../src/simple/ready-notification';
 import { SimpleHeader } from '../../../src/simple/SimpleHeader';
+import { SourceProgress } from '../../../src/simple/SourceProgress';
 import type { UploadTask } from '../../../src/simple/upload-queue';
 import {
   linkTask,
@@ -174,9 +175,6 @@ export default function FormationDepositRoute() {
     await simple.refetch();
   };
 
-  const canLaunch =
-    status === 'collecting' &&
-    (hasReadyCourse(simple.data) || queue.items.some((task) => task.role === 'course'));
   const uploading = queue.items.some((task) => task.status === 'uploading');
   const failed = queue.items.some((task) => task.status === 'failed');
   const sources = sourceRows(simple.data);
@@ -185,6 +183,12 @@ export default function FormationDepositRoute() {
   const pendingItems = queue.items.filter(
     (task) => task.resourceId === undefined || !listed.has(task.resourceId),
   );
+  // « Créer ma formation » reste grisé tant qu'un document est envoyé ou analysé (QA 2026-11-25).
+  const processing =
+    uploading ||
+    pendingItems.length > 0 ||
+    sources.some((source) => source.status === 'queued' || source.status === 'processing');
+  const canLaunch = status === 'collecting' && !processing && hasReadyCourse(simple.data);
 
   return (
     <View style={styles.screen} testID="simple-analysis-screen">
@@ -246,15 +250,22 @@ export default function FormationDepositRoute() {
                   />
                 ))}
                 {sources.map((source, index) => (
-                  <FileRow
-                    key={source.id}
-                    name={source.title}
-                    meta={source.pages === null ? '' : `${String(source.pages)} pages`}
-                    resourceRole={source.role}
-                    statusLabel={source.statusLabel}
-                    testID={`simple-source-${String(index)}`}
-                    roleTestID={`simple-source-role-${String(index)}`}
-                  />
+                  <View key={source.id} style={styles.sourceBlock}>
+                    <FileRow
+                      name={source.title}
+                      meta={source.pages === null ? '' : `${String(source.pages)} pages`}
+                      resourceRole={source.role}
+                      statusLabel={source.statusLabel}
+                      testID={`simple-source-${String(index)}`}
+                      roleTestID={`simple-source-role-${String(index)}`}
+                    />
+                    {source.status === 'ready' ? null : (
+                      <SourceProgress
+                        status={source.status}
+                        testID={`simple-source-progress-${String(index)}`}
+                      />
+                    )}
+                  </View>
                 ))}
               </View>
             ) : (
@@ -415,6 +426,7 @@ function QueuedRow({
 }
 
 const styles = StyleSheet.create({
+  sourceBlock: { gap: theme.spacing.xs },
   screen: { flex: 1, backgroundColor: theme.colors.canvas },
   content: { padding: theme.spacing.xl, paddingBottom: theme.spacing.xxxl, gap: theme.spacing.md },
   files: { gap: theme.spacing.sm },

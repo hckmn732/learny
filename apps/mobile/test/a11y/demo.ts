@@ -18,7 +18,6 @@ import {
 } from '../profil/fixtures';
 import { me, activeProgramme, courseProgress, sidebar } from '../programme/fixtures';
 
-
 const noop = (): void => undefined;
 const resolved = (): Promise<void> => Promise.resolve();
 
@@ -126,7 +125,12 @@ export const programme = {
     items: [{ id: 'f-sap', title: 'SAP S/4HANA Finance', status: 'active' }],
     retry: noop,
   }),
-  useModuleCourse: () => ({ status: 'ready', data: courseScreen(), retry: noop, refresh: resolved }),
+  useModuleCourse: () => ({
+    status: 'ready',
+    data: courseScreen(),
+    retry: noop,
+    refresh: resolved,
+  }),
   useSwitchFormation: () => ({ switchTo: resolved, pending: false, error: null }),
   formationSigil: (title: string) => title.slice(0, 3).toUpperCase(),
 };
@@ -140,7 +144,12 @@ export const agenda = {
 
 /** Module `src/data/course`. */
 export const course = {
-  useCourseScreen: () => ({ status: 'ready', data: courseScreen(), staleVersion: false, retry: noop }),
+  useCourseScreen: () => ({
+    status: 'ready',
+    data: courseScreen(),
+    staleVersion: false,
+    retry: noop,
+  }),
   useCourseProgress: () => ({
     chapterPercent: courseProgress().chapters[0]?.percent ?? 40,
     coursePercent: 38,
@@ -182,6 +191,7 @@ export const subscription = {
 export const taskModels = {
   useTaskModels: () => ({ status: 'ready', data: MODELS, refetch: noop }),
   useAssignTaskModel: () => ({ assign: resolved, pending: false }),
+  useAutoCheckPending: noop,
   chosenModelLabel: () => 'GPT-5 · Compte personnel',
 };
 

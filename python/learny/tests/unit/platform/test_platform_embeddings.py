@@ -136,7 +136,7 @@ async def test_rate_limit_waits_then_retries_the_same_batch() -> None:
 
     embedder = VoyageEmbedder(
         "voyage-secret",
-        transport=httpx.MockTransport(handler),  # type: ignore[arg-type]
+        transport=httpx.MockTransport(handler),
         rate_limit_waits=(0.0,),
     )
     assert len(await embedder.embed(["a", "b"])) == 2
