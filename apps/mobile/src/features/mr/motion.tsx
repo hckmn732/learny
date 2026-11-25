@@ -19,6 +19,19 @@ import { useReducedMotion } from '../../lib/motion';
 import { theme } from '../../theme';
 
 const EASE = Easing.bezier(0.2, 0.8, 0.2, 1);
+
+/**
+ * Test builds (Maestro, `build-e2e.mjs` sets `EXPO_PUBLIC_SDD_PUSH_MOCK`) keep looping animations
+ * still: UIAutomator waits for an idle screen before each step and a never-ending loop would block
+ * it. Real builds animate; entrances play in both.
+ */
+const E2E_STILL = process.env.EXPO_PUBLIC_SDD_PUSH_MOCK === '1';
+
+/** Reduced motion, or a test build: looping animations stay still. */
+export function useStillMotion(): boolean {
+  const reduced = useReducedMotion();
+  return reduced || E2E_STILL;
+}
 const SINE = Easing.inOut(Easing.sin);
 
 /** Entrance of a block: fades and rises, `index` staggers the siblings of a list. */
@@ -59,7 +72,7 @@ export function Rise({
 
 /** A value looping between 0 and 1 (and back), for breathing, floating or pulsing effects. */
 export function useLoop(duration: number, delay = 0) {
-  const reduced = useReducedMotion();
+  const reduced = useStillMotion();
   const value = useSharedValue(0);
   useEffect(() => {
     if (reduced) {
@@ -157,7 +170,7 @@ export function Shine({
   readonly style?: StyleProp<ViewStyle>;
   readonly children: ReactNode;
 }) {
-  const reduced = useReducedMotion();
+  const reduced = useStillMotion();
   const sweep = useSharedValue(0);
   useEffect(() => {
     if (reduced) return;
@@ -287,7 +300,7 @@ function ConfettiPiece({
   readonly size: number;
   readonly height: number;
 }) {
-  const reduced = useReducedMotion();
+  const reduced = useStillMotion();
   const fall = useSharedValue(0);
   useEffect(() => {
     if (reduced) return;
@@ -348,4 +361,33 @@ const styles = StyleSheet.create({
     opacity: 0.35,
   },
   confetti: { ...StyleSheet.absoluteFill, overflow: 'hidden' },
+});
+
+function Dot({ delay }: { readonly delay: number }) {
+  const loop = useLoop(420, delay);
+  const animated = useAnimatedStyle(() => ({
+    opacity: 0.35 + loop.value * 0.65,
+    transform: [{ translateY: -loop.value * 3 }],
+  }));
+  return <Animated.View style={[dotStyles.dot, animated]} />;
+}
+
+/** Three dots bouncing while the tutor writes. */
+export function TypingDots() {
+  return (
+    <View
+      style={dotStyles.row}
+      accessibilityElementsHidden
+      importantForAccessibility="no-hide-descendants"
+    >
+      <Dot delay={0} />
+      <Dot delay={140} />
+      <Dot delay={280} />
+    </View>
+  );
+}
+
+const dotStyles = StyleSheet.create({
+  row: { flexDirection: 'row', gap: 4, alignItems: 'center', height: 12 },
+  dot: { width: 6, height: 6, borderRadius: 3, backgroundColor: theme.colors.inkMuted },
 });

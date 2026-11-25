@@ -18,6 +18,7 @@ import type {
 } from '@learny/contracts';
 import { fr } from '@learny/i18n';
 
+import { Pop } from '../motion';
 import { theme } from '../../../theme';
 import { Button } from '../../../ui/Button';
 import { Card } from '../../../ui/Card';
@@ -43,7 +44,12 @@ import {
   type RhythmDraft,
   type Step,
 } from './premiers-pas-view';
-import { useOnboardingState, useOnboardingUpdate, useProfileUpdate, useRhythmUpdate } from './use-onboarding';
+import {
+  useOnboardingState,
+  useOnboardingUpdate,
+  useProfileUpdate,
+  useRhythmUpdate,
+} from './use-onboarding';
 
 const t = fr.onboarding;
 const c = fr.mr.creation.premiersPas;
@@ -65,7 +71,11 @@ function titleOf(step: Step, firstName: string): string {
   }
 }
 
-function StepHeader({ step, title, onBack }: Readonly<{
+function StepHeader({
+  step,
+  title,
+  onBack,
+}: Readonly<{
   step: Step;
   title: string;
   onBack: () => void;
@@ -104,7 +114,13 @@ function ErrorLine({ message }: Readonly<{ message: string | null }>) {
   );
 }
 
-function StepFooter({ onBack, onContinue, label, loading, testID }: Readonly<{
+function StepFooter({
+  onBack,
+  onContinue,
+  label,
+  loading,
+  testID,
+}: Readonly<{
   onBack: () => void;
   onContinue: () => void;
   label: string;
@@ -136,9 +152,17 @@ interface StepProps {
   readonly testID: string;
 }
 
-function ProfilStep({ state, saving, error, onBack, testID, onSubmit }: StepProps & Readonly<{
-  onSubmit: (firstName: string, tone: Tone) => void;
-}>) {
+function ProfilStep({
+  state,
+  saving,
+  error,
+  onBack,
+  testID,
+  onSubmit,
+}: StepProps &
+  Readonly<{
+    onSubmit: (firstName: string, tone: Tone) => void;
+  }>) {
   const [firstName, setFirstName] = useState(state.profile.firstName ?? '');
   const [tone, setTone] = useState<Tone>(state.profile.tutorTone);
   const [local, setLocal] = useState<string | null>(null);
@@ -209,9 +233,17 @@ function ProfilStep({ state, saving, error, onBack, testID, onSubmit }: StepProp
   );
 }
 
-function RhythmStep({ state, saving, error, onBack, testID, onSubmit }: StepProps & Readonly<{
-  onSubmit: (rhythm: StudyPreferencesDto) => void;
-}>) {
+function RhythmStep({
+  state,
+  saving,
+  error,
+  onBack,
+  testID,
+  onSubmit,
+}: StepProps &
+  Readonly<{
+    onSubmit: (rhythm: StudyPreferencesDto) => void;
+  }>) {
   const initial = draftFromPreferences(state.preferences);
   const [draft, setDraft] = useState<RhythmDraft>(initial);
   const [local, setLocal] = useState<string | null>(null);
@@ -247,25 +279,26 @@ function RhythmStep({ state, saving, error, onBack, testID, onSubmit }: StepProp
         </View>
         <Text variant="title">{c.daysLabel}</Text>
         <View style={styles.days}>
-          {STUDY_DAYS.map((day) => {
+          {STUDY_DAYS.map((day, dayIndex) => {
             const selected = draft.studyDays.includes(day);
             return (
-              <Pressable
-                key={day}
-                testID={`qf-premiers-pas-day-${String(day)}`}
-                accessibilityRole="button"
-                accessibilityLabel={DAY_LONG[day] ?? String(day)}
-                accessibilityState={{ selected }}
-                hitSlop={theme.spacing.xs}
-                onPress={() => {
-                  apply({ ...draft, studyDays: toggleDay(draft.studyDays, day) });
-                }}
-                style={[styles.day, selected ? styles.daySelected : null]}
-              >
-                <Text variant="chip" tone={selected ? 'limeInk' : 'muted'}>
-                  {DAY_SHORT[day] ?? String(day)}
-                </Text>
-              </Pressable>
+              <Pop key={day} delay={dayIndex * 50}>
+                <Pressable
+                  testID={`qf-premiers-pas-day-${String(day)}`}
+                  accessibilityRole="button"
+                  accessibilityLabel={DAY_LONG[day] ?? String(day)}
+                  accessibilityState={{ selected }}
+                  hitSlop={theme.spacing.xs}
+                  onPress={() => {
+                    apply({ ...draft, studyDays: toggleDay(draft.studyDays, day) });
+                  }}
+                  style={[styles.day, selected ? styles.daySelected : null]}
+                >
+                  <Text variant="chip" tone={selected ? 'limeInk' : 'muted'}>
+                    {DAY_SHORT[day] ?? String(day)}
+                  </Text>
+                </Pressable>
+              </Pop>
             );
           })}
         </View>
@@ -312,7 +345,14 @@ function RhythmStep({ state, saving, error, onBack, testID, onSubmit }: StepProp
   );
 }
 
-function AiStep({ saving, error, onBack, testID, onConfigure, onSkip }: Readonly<{
+function AiStep({
+  saving,
+  error,
+  onBack,
+  testID,
+  onConfigure,
+  onSkip,
+}: Readonly<{
   saving: boolean;
   error: string | null;
   onBack: () => void;
@@ -351,9 +391,17 @@ function AiStep({ saving, error, onBack, testID, onConfigure, onSkip }: Readonly
   );
 }
 
-function RemindersStep({ state, saving, error, onBack, testID, onSubmit }: StepProps & Readonly<{
-  onSubmit: (reminders: ReminderChoices) => void;
-}>) {
+function RemindersStep({
+  state,
+  saving,
+  error,
+  onBack,
+  testID,
+  onSubmit,
+}: StepProps &
+  Readonly<{
+    onSubmit: (reminders: ReminderChoices) => void;
+  }>) {
   const [reminders, setReminders] = useState<ReminderChoices>(state.reminders);
 
   return (
@@ -409,7 +457,15 @@ function RemindersStep({ state, saving, error, onBack, testID, onSubmit }: StepP
   );
 }
 
-function DepartStep({ state, saving, error, onBack, testID, onStart, onHome }: Readonly<{
+function DepartStep({
+  state,
+  saving,
+  error,
+  onBack,
+  testID,
+  onStart,
+  onHome,
+}: Readonly<{
   state: OnboardingState;
   saving: boolean;
   error: string | null;
@@ -438,19 +494,19 @@ function DepartStep({ state, saving, error, onBack, testID, onStart, onHome }: R
           onPress={onStart}
           testID={`${testID}-start`}
         />
-        <Button
-          label={c.home}
-          variant="text"
-          onPress={onHome}
-          testID={`${testID}-home`}
-        />
+        <Button label={c.home} variant="text" onPress={onHome} testID={`${testID}-home`} />
         <Text variant="caption" tone="muted">
           {t.depart.welcome(firstName)}
         </Text>
         <ErrorLine message={error} />
       </ScrollView>
       <View style={styles.footer}>
-        <Button label={c.back} variant="outline" onPress={onBack} testID={`${testID}-footer-back`} />
+        <Button
+          label={c.back}
+          variant="outline"
+          onPress={onBack}
+          testID={`${testID}-footer-back`}
+        />
       </View>
     </View>
   );
@@ -469,10 +525,8 @@ export function PremiersPasScreen() {
 
   const state = onboarding.state;
   const stored = state?.profile.onboardingStep ?? null;
-  const routeStep =
-    typeof params.step === 'string' && isStep(params.step) ? params.step : null;
-  const step: Step =
-    routeStep ?? (stored !== null && isStep(stored) ? stored : 'profil');
+  const routeStep = typeof params.step === 'string' && isStep(params.step) ? params.step : null;
+  const step: Step = routeStep ?? (stored !== null && isStep(stored) ? stored : 'profil');
   const saving = onboardingUpdate.pending || profileUpdate.pending || rhythmUpdate.pending;
 
   const go = (next: Step): void => {
@@ -556,7 +610,11 @@ export function PremiersPasScreen() {
         style={[styles.screen, { paddingTop: insets.top + theme.spacing.sm }]}
       >
         <View style={styles.state}>
-          <ErrorState title={c.saveError} onRetry={onboarding.retry} testID="qf-premiers-pas-load-error" />
+          <ErrorState
+            title={c.saveError}
+            onRetry={onboarding.retry}
+            testID="qf-premiers-pas-load-error"
+          />
         </View>
       </View>
     );

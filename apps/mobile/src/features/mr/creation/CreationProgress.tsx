@@ -4,6 +4,9 @@
 // porte l'annonce du lecteur d'écran (`progressbar`), les segments restent décoratifs.
 import { StyleSheet, View } from 'react-native';
 
+import Animated, { useAnimatedStyle } from 'react-native-reanimated';
+
+import { useLoop } from '../motion';
 import { controls, theme } from '../../../theme';
 
 export interface CreationProgressProps {
@@ -33,17 +36,28 @@ export function CreationProgress({
       accessibilityValue={{ min: 0, max: total, now: safe }}
       style={styles.row}
     >
-      {Array.from({ length: total }, (_, index) => (
-        <View
-          key={index}
-          style={[
-            styles.segment,
-            { backgroundColor: index < safe ? active : theme.colors.border },
-          ]}
-        />
-      ))}
+      {Array.from({ length: total }, (_, index) =>
+        index === safe - 1 ? (
+          <CurrentSegment key={index} color={active} />
+        ) : (
+          <View
+            key={index}
+            style={[
+              styles.segment,
+              { backgroundColor: index < safe ? active : theme.colors.border },
+            ]}
+          />
+        ),
+      )}
     </View>
   );
+}
+
+/** The step in progress: filled, with a slow shimmer. */
+function CurrentSegment({ color }: { readonly color: string }) {
+  const loop = useLoop(900);
+  const animated = useAnimatedStyle(() => ({ opacity: 1 - loop.value * 0.45 }));
+  return <Animated.View style={[styles.segment, { backgroundColor: color }, animated]} />;
 }
 
 const styles = StyleSheet.create({

@@ -24,8 +24,7 @@ import Animated, {
 } from 'react-native-reanimated';
 import Svg, { Circle, G, Line, Text as SvgText } from 'react-native-svg';
 
-import { useReducedMotion } from '../../../lib/motion';
-import { useLoop } from '../motion';
+import { useLoop, useStillMotion } from '../motion';
 
 import type { NotionGraphLink, NotionGraphNode } from '@learny/contracts';
 import { fr } from '@learny/i18n';
@@ -154,7 +153,7 @@ function FlowLine({
   readonly y2: number;
   readonly color: string;
 }) {
-  const reduced = useReducedMotion();
+  const reduced = useStillMotion();
   const offset = useSharedValue(0);
   useEffect(() => {
     if (reduced) return;

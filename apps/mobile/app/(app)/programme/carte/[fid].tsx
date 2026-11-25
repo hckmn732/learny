@@ -15,7 +15,7 @@ export default function CarteRoute() {
   return (
     <CarteScreen
       formationId={formationId}
-      initialMode={params.mode === 'cerveau' ? 'cerveau' : 'grille'}
+      initialMode={params.mode === 'cerveau' || params.mode === 'esprit' ? 'cerveau' : 'grille'}
       onBack={() => {
         if (router.canGoBack()) router.back();
         else router.replace('/programme');

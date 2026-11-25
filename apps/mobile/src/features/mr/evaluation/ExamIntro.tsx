@@ -8,6 +8,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import type { ExamIntroDto } from '@learny/contracts';
 import { fr } from '@learny/i18n';
 
+import { Rise } from '../motion';
 import { theme } from '../../../theme';
 import { Button } from '../../../ui/Button';
 import { Card } from '../../../ui/Card';
@@ -73,31 +74,39 @@ export function ExamIntro({
         </Text>
 
         <View style={styles.stats}>
-          <Card tone="ink" style={styles.stat} testID="qf-examen-blanc-format-questions">
-            <Text variant="figure" style={styles.lime}>
-              {String(format.questionCount)}
-            </Text>
-            <Text variant="caption" tone="onDarkSecondary">
-              {m.questionsLabel}
-            </Text>
-          </Card>
-          <Card style={styles.stat} testID="qf-examen-blanc-format-duration">
-            <Text variant="figure">{m.durationLabel(format.durationMin)}</Text>
-            <Text variant="caption" tone="muted">
-              {m.timedLabel}
-            </Text>
-          </Card>
-          <Card style={styles.stat} testID="qf-examen-blanc-format-threshold">
-            <Text variant="figure">{m.thresholdLabel(format.threshold)}</Text>
-            <Text variant="caption" tone="muted">
-              {m.passLabel}
-            </Text>
-          </Card>
+          <Rise index={0} style={styles.stat}>
+            <Card tone="ink" style={styles.statCard} testID="qf-examen-blanc-format-questions">
+              <Text variant="figure" style={styles.lime}>
+                {String(format.questionCount)}
+              </Text>
+              <Text variant="caption" tone="onDarkSecondary">
+                {m.questionsLabel}
+              </Text>
+            </Card>
+          </Rise>
+          <Rise index={1} style={styles.stat}>
+            <Card style={styles.statCard} testID="qf-examen-blanc-format-duration">
+              <Text variant="figure">{m.durationLabel(format.durationMin)}</Text>
+              <Text variant="caption" tone="muted">
+                {m.timedLabel}
+              </Text>
+            </Card>
+          </Rise>
+          <Rise index={2} style={styles.stat}>
+            <Card style={styles.statCard} testID="qf-examen-blanc-format-threshold">
+              <Text variant="figure">{m.thresholdLabel(format.threshold)}</Text>
+              <Text variant="caption" tone="muted">
+                {m.passLabel}
+              </Text>
+            </Card>
+          </Rise>
         </View>
 
         <View style={styles.banner} testID="qf-examen-blanc-format-banner">
           <Text variant="bodySmall" tone="indigoInk">
-            {intro.hasGuide ? `${m.formatGuide} ${format.confirmed ? '' : m.formatPending}` : m.formatDefault}
+            {intro.hasGuide
+              ? `${m.formatGuide} ${format.confirmed ? '' : m.formatPending}`
+              : m.formatDefault}
           </Text>
         </View>
 
@@ -196,7 +205,8 @@ const styles = StyleSheet.create({
     paddingBottom: theme.spacing.xxxl,
   },
   stats: { flexDirection: 'row', gap: theme.spacing.sm },
-  stat: { flex: 1, gap: theme.spacing.xs },
+  stat: { flex: 1 },
+  statCard: { flex: 1, gap: theme.spacing.xs },
   lime: { color: theme.colors.lime },
   banner: {
     borderRadius: theme.radius.card,

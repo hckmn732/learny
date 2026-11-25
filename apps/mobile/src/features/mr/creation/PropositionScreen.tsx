@@ -11,6 +11,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { fr } from '@learny/i18n';
 
+import { Rise, Shine, Twinkle } from '../motion';
 import { theme } from '../../../theme';
 import { Button } from '../../../ui/Button';
 import { Card } from '../../../ui/Card';
@@ -191,36 +192,39 @@ export function PropositionScreen() {
 
         {model !== null && view !== null ? (
           <View style={styles.modules}>
-            {view.modules.map((module) => (
-              <View
-                key={module.position}
-                style={styles.module}
-                testID={`qf-proposition-module-${String(module.position)}`}
-              >
-                <View style={styles.badge}>
-                  <Text variant="caption">{module.position}</Text>
+            {view.modules.map((module, index) => (
+              <Rise key={module.position} index={index} step={70}>
+                <View
+                  style={styles.module}
+                  testID={`qf-proposition-module-${String(module.position)}`}
+                >
+                  <View style={styles.badge}>
+                    <Text variant="caption">{module.position}</Text>
+                  </View>
+                  <View style={styles.moduleText}>
+                    <Text variant="title">{module.title}</Text>
+                    <Text variant="caption" tone="muted">
+                      {t.moduleMeta(module.notions, module.hours)}
+                    </Text>
+                  </View>
+                  <IconButton
+                    name="list"
+                    accessibilityLabel={t.reorder}
+                    onPress={() => {
+                      setLocalCode(null);
+                      setMessage(t.reorderHint.replace('{title}', module.title));
+                      setAdjustOpen(true);
+                    }}
+                    testID={`qf-proposition-reorder-${String(module.position)}`}
+                  />
                 </View>
-                <View style={styles.moduleText}>
-                  <Text variant="title">{module.title}</Text>
-                  <Text variant="caption" tone="muted">
-                    {t.moduleMeta(module.notions, module.hours)}
-                  </Text>
-                </View>
-                <IconButton
-                  name="list"
-                  accessibilityLabel={t.reorder}
-                  onPress={() => {
-                    setLocalCode(null);
-                    setMessage(t.reorderHint.replace('{title}', module.title));
-                    setAdjustOpen(true);
-                  }}
-                  testID={`qf-proposition-reorder-${String(module.position)}`}
-                />
-              </View>
+              </Rise>
             ))}
 
             <View style={styles.hint} testID="qf-proposition-hint">
-              <Icon name="sparkles" size={20} color={theme.colors.indigo} />
+              <Twinkle>
+                <Icon name="sparkles" size={20} color={theme.colors.indigo} />
+              </Twinkle>
               <Text variant="caption" tone="indigoInk" style={styles.hintText}>
                 {t.adjustHint}
               </Text>
@@ -241,15 +245,17 @@ export function PropositionScreen() {
             />
           </View>
           <View style={styles.startAction}>
-            <Button
-              label={actions.validating ? t.validating : t.start}
-              loading={actions.validating}
-              block
-              onPress={() => {
-                void validate();
-              }}
-              testID="qf-proposition-start"
-            />
+            <Shine>
+              <Button
+                label={actions.validating ? t.validating : t.start}
+                loading={actions.validating}
+                block
+                onPress={() => {
+                  void validate();
+                }}
+                testID="qf-proposition-start"
+              />
+            </Shine>
           </View>
         </View>
       )}

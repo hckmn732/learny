@@ -15,6 +15,7 @@ import { fr } from '@learny/i18n';
 
 import { requireApiClient } from '../../../api/registry';
 import { webBaseUrl, webUrl } from '../../../lib/web';
+import { Float, Glow, Rise, Shine } from '../motion';
 import { radius, theme } from '../../../theme';
 import { Avatar } from '../../../ui/Avatar';
 import { Button } from '../../../ui/Button';
@@ -121,7 +122,11 @@ export function GroupeScreen({ formationId, onBack }: GroupeScreenProps) {
     try {
       await Share.share({
         title: t.shareTitle,
-        message: t.shareMessage(group.formationTitle, group.inviteCode, webUrl(group.inviteLink, webBaseUrl())),
+        message: t.shareMessage(
+          group.formationTitle,
+          group.inviteCode,
+          webUrl(group.inviteLink, webBaseUrl()),
+        ),
       });
     } catch {
       setToast(t.shareError);
@@ -189,44 +194,59 @@ export function GroupeScreen({ formationId, onBack }: GroupeScreenProps) {
             <Chip label={t.membersCount(group.memberCount, group.maxMembers)} tone="green" />
           </View>
           {group.members.map((member, index) => (
-            <View
-              key={member.userId}
-              style={[styles.member, index === 0 ? null : styles.separator]}
-              testID={`qf-groupe-member-${member.userId}`}
-            >
-              <Avatar initials={initialsOf(memberName(member))} />
-              <View style={styles.grow}>
-                <Text variant="rowTitle" numberOfLines={1}>
-                  {memberLine(member, group)}
-                </Text>
-                <Text variant="caption" tone="muted" numberOfLines={1}>
-                  {memberMeta(member)}
-                </Text>
+            <Rise key={member.userId} index={index}>
+              <View
+                style={[styles.member, index === 0 ? null : styles.separator]}
+                testID={`qf-groupe-member-${member.userId}`}
+              >
+                <View>
+                  <Avatar initials={initialsOf(memberName(member))} />
+                  <Glow
+                    color={theme.colors.green}
+                    spread={2}
+                    duration={1000 + index * 200}
+                    style={styles.liveDot}
+                  >
+                    <View style={styles.liveDotCore} />
+                  </Glow>
+                </View>
+                <View style={styles.grow}>
+                  <Text variant="rowTitle" numberOfLines={1}>
+                    {memberLine(member, group)}
+                  </Text>
+                  <Text variant="caption" tone="muted" numberOfLines={1}>
+                    {memberMeta(member)}
+                  </Text>
+                </View>
+                {member.role === 'owner' ? <Chip label={t.owner} tone="lime" /> : null}
               </View>
-              {member.role === 'owner' ? <Chip label={t.owner} tone="lime" /> : null}
-            </View>
+            </Rise>
           ))}
         </Card>
 
-        <View style={styles.invite} testID="qf-groupe-invite">
-          <Text variant="label" tone="onDarkMuted">
-            {t.inviteLabel(places)}
-          </Text>
-          <Text variant="figure" tone="inverse" testID="qf-groupe-code">
-            {group.inviteCode}
-          </Text>
-          <Text variant="caption" tone="onDarkSecondary">
-            {g.codeHint}
-          </Text>
-          <Button
-            label={t.shareLink}
-            block
-            onPress={() => {
-              void share();
-            }}
-            testID="qf-groupe-share"
-          />
-        </View>
+        <Float distance={4} duration={2000}>
+          <View style={styles.invite} testID="qf-groupe-invite">
+            <Text variant="label" tone="onDarkMuted">
+              {t.inviteLabel(places)}
+            </Text>
+            <Text variant="figure" tone="inverse" testID="qf-groupe-code">
+              {group.inviteCode}
+            </Text>
+            <Text variant="caption" tone="onDarkSecondary">
+              {g.codeHint}
+            </Text>
+            <Shine>
+              <Button
+                label={t.shareLink}
+                block
+                onPress={() => {
+                  void share();
+                }}
+                testID="qf-groupe-share"
+              />
+            </Shine>
+          </View>
+        </Float>
 
         {group.canManage ? (
           <Button
@@ -333,6 +353,15 @@ export function GroupeScreen({ formationId, onBack }: GroupeScreenProps) {
 }
 
 const styles = StyleSheet.create({
+  liveDot: { position: 'absolute', right: -1, bottom: -1 },
+  liveDotCore: {
+    width: 11,
+    height: 11,
+    borderRadius: 6,
+    backgroundColor: theme.colors.green,
+    borderColor: theme.colors.surface,
+    borderWidth: 2,
+  },
   screen: { flex: 1, backgroundColor: theme.colors.canvas },
   nav: {
     flexDirection: 'row',

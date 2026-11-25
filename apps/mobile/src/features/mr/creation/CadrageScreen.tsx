@@ -20,6 +20,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import type { CadrageMessage, CadrageSuggestion } from '@learny/contracts';
 import { fr } from '@learny/i18n';
 
+import { Rise, Shine, TypingDots } from '../motion';
 import { theme } from '../../../theme';
 import { Button } from '../../../ui/Button';
 import { ErrorState } from '../../../ui/ErrorState';
@@ -255,7 +256,15 @@ export function CadrageScreen() {
               <Text variant="bodySmall">{t.welcome}</Text>
             </View>
           ) : (
-            state.messages.map((message) => <Bubble key={message.id} message={message} />)
+            state.messages.map((message, index) => (
+              <Rise
+                key={message.id}
+                index={Math.max(0, index - state.messages.length + 3)}
+                step={120}
+              >
+                <Bubble message={message} />
+              </Rise>
+            ))
           )}
 
           {multi && suggestions.length > 0 ? (
@@ -266,22 +275,24 @@ export function CadrageScreen() {
           {suggestions.length > 0 ? (
             <View style={styles.suggestions}>
               {suggestions.map((suggestion, index) => (
-                <SuggestionButton
-                  key={suggestion.value}
-                  suggestion={suggestion}
-                  index={index}
-                  selected={multi && selected.has(suggestion.value)}
-                  onPress={() => {
-                    if (multi) toggle(suggestion.value);
-                    else pick(suggestion.label);
-                  }}
-                />
+                <Rise key={suggestion.value} index={index + 2} step={80}>
+                  <SuggestionButton
+                    suggestion={suggestion}
+                    index={index}
+                    selected={multi && selected.has(suggestion.value)}
+                    onPress={() => {
+                      if (multi) toggle(suggestion.value);
+                      else pick(suggestion.label);
+                    }}
+                  />
+                </Rise>
               ))}
             </View>
           ) : null}
 
           {cadrage.sending ? (
             <View style={styles.typing} testID="qf-cadrage-typing">
+              <TypingDots />
               <Text variant="caption" tone="muted">
                 {t.thinking}
               </Text>
@@ -346,15 +357,17 @@ export function CadrageScreen() {
                   {t.subjectEmpty}
                 </Text>
               ) : null}
-              <Button
-                testID="qf-cadrage-start"
-                label={cadrage.creating ? t.creating : t.start}
-                loading={cadrage.creating}
-                block
-                onPress={() => {
-                  void start();
-                }}
-              />
+              <Shine>
+                <Button
+                  testID="qf-cadrage-start"
+                  label={cadrage.creating ? t.creating : t.start}
+                  loading={cadrage.creating}
+                  block
+                  onPress={() => {
+                    void start();
+                  }}
+                />
+              </Shine>
             </>
           ) : (
             <View style={styles.composerRow}>

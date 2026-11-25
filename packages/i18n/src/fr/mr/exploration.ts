@@ -29,10 +29,10 @@ export const mrExploration = {
   },
   carte: {
     title: 'Carte des notions',
-    cerveau: 'Mode cerveau',
+    cerveau: 'Mode esprit',
     eyebrow: 'Programme',
     viewLabel: 'Vue de la carte',
-    views: { grid: 'Grille', brain: 'Cerveau' },
+    views: { grid: 'Grille', brain: 'Esprit' },
     gridLabel: 'Carte des notions par module',
     legendLabel: 'Légende de la carte',
     legend: {

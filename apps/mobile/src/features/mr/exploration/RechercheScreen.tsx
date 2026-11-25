@@ -17,6 +17,7 @@ import {
 import { fr } from '@learny/i18n';
 
 import { openOnWeb } from '../../../lib/web';
+import { Rise, Twinkle } from '../motion';
 import { theme } from '../../../theme';
 import { Chip } from '../../../ui/Chip';
 import { EmptyState } from '../../../ui/EmptyState';
@@ -114,43 +115,45 @@ export function RechercheScreen({ onBack }: RechercheScreenProps) {
   } else {
     body = (
       <View style={styles.groups} testID="qf-recherche-results">
-        {visible.map((group) =>
+        {visible.map((group, groupIndex) =>
           group.items.length === 0 ? null : (
-            <View key={group.kind} style={styles.group} testID={`qf-recherche-group-${group.kind}`}>
-              <View style={styles.groupHeader}>
-                <Text variant="eyebrow" tone="muted">
-                  {t.groups[group.kind]}
-                </Text>
-                <Text variant="caption" tone="muted">
-                  {t.groupTotal(group.items.length, group.total)}
-                </Text>
+            <Rise key={group.kind} index={groupIndex}>
+              <View style={styles.group} testID={`qf-recherche-group-${group.kind}`}>
+                <View style={styles.groupHeader}>
+                  <Text variant="eyebrow" tone="muted">
+                    {t.groups[group.kind]}
+                  </Text>
+                  <Text variant="caption" tone="muted">
+                    {t.groupTotal(group.items.length, group.total)}
+                  </Text>
+                </View>
+                <View style={styles.rows}>
+                  {group.items.map((item: SearchItem, index) => (
+                    <Pressable
+                      key={item.id}
+                      accessibilityRole="button"
+                      accessibilityLabel={s.openResult(item.title)}
+                      onPress={() => {
+                        void openOnWeb(item.href);
+                      }}
+                      style={({ pressed }) => [
+                        styles.row,
+                        index === 0 ? null : styles.rowDivider,
+                        pressed ? styles.rowPressed : null,
+                      ]}
+                      testID={`qf-recherche-result-${item.id}`}
+                    >
+                      <Text variant="rowTitle">{item.title}</Text>
+                      {item.snippet === '' ? null : (
+                        <Text variant="rowSubtitle" tone="muted" numberOfLines={2}>
+                          {item.snippet}
+                        </Text>
+                      )}
+                    </Pressable>
+                  ))}
+                </View>
               </View>
-              <View style={styles.rows}>
-                {group.items.map((item: SearchItem, index) => (
-                  <Pressable
-                    key={item.id}
-                    accessibilityRole="button"
-                    accessibilityLabel={s.openResult(item.title)}
-                    onPress={() => {
-                      void openOnWeb(item.href);
-                    }}
-                    style={({ pressed }) => [
-                      styles.row,
-                      index === 0 ? null : styles.rowDivider,
-                      pressed ? styles.rowPressed : null,
-                    ]}
-                    testID={`qf-recherche-result-${item.id}`}
-                  >
-                    <Text variant="rowTitle">{item.title}</Text>
-                    {item.snippet === '' ? null : (
-                      <Text variant="rowSubtitle" tone="muted" numberOfLines={2}>
-                        {item.snippet}
-                      </Text>
-                    )}
-                  </Pressable>
-                ))}
-              </View>
-            </View>
+            </Rise>
           ),
         )}
       </View>
@@ -160,7 +163,9 @@ export function RechercheScreen({ onBack }: RechercheScreenProps) {
   return (
     <ExplorationScaffold eyebrow={t.eyebrow} title={t.title} testID="qf-recherche" onBack={onBack}>
       <View style={styles.field}>
-        <Icon name="search" size={18} color={theme.colors.ink} />
+        <Twinkle turn={-10} duration={1400}>
+          <Icon name="search" size={18} color={theme.colors.ink} />
+        </Twinkle>
         <TextInput
           testID="qf-recherche-field"
           accessibilityLabel={t.fieldLabel}

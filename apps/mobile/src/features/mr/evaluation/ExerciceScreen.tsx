@@ -8,11 +8,16 @@ import { useCallback, useEffect, useState } from 'react';
 import { Alert, BackHandler, ScrollView, StyleSheet, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
-import type { ExerciseCorrection, ExerciseSubmission, PracticeExerciseDto } from '@learny/contracts';
+import type {
+  ExerciseCorrection,
+  ExerciseSubmission,
+  PracticeExerciseDto,
+} from '@learny/contracts';
 import { fr } from '@learny/i18n';
 
 import { messageFor } from '../../../api/errors';
 import { clock } from '../../../lib/clock';
+import { Glow, Pop, Rise } from '../motion';
 import { theme } from '../../../theme';
 import { Button } from '../../../ui/Button';
 import { Card } from '../../../ui/Card';
@@ -50,8 +55,10 @@ function hasProduction(submission: ExerciseSubmission): boolean {
   if (submission.kind === 'file') return submission.resourceId.trim() !== '';
   const filled = (row: Record<string, string>): boolean =>
     Object.values(row).some((value) => value.trim() !== '');
-  return Object.values(submission.fields).some((value) => value.trim() !== '') ||
-    submission.rows.some(filled);
+  return (
+    Object.values(submission.fields).some((value) => value.trim() !== '') ||
+    submission.rows.some(filled)
+  );
 }
 
 /** `mm:ss`, ou `h:mm:ss` au-delà d'une heure. */
@@ -189,17 +196,19 @@ export function ExerciceScreen({
         <Text variant="bodySmall" tone="secondary" numberOfLines={1} style={styles.grow}>
           {t.header(instruction.title)}
         </Text>
-        <View
-          style={styles.timer}
-          accessibilityLabel={t.timerAria(time)}
-          accessibilityRole="text"
-          testID="qf-exercice-timer"
-        >
-          <Icon name="clock" size={16} color={theme.colors.lime} />
-          <Text variant="buttonSmall" style={styles.timerText}>
-            {time}
-          </Text>
-        </View>
+        <Glow spread={4}>
+          <View
+            style={styles.timer}
+            accessibilityLabel={t.timerAria(time)}
+            accessibilityRole="text"
+            testID="qf-exercice-timer"
+          >
+            <Icon name="clock" size={16} color={theme.colors.lime} />
+            <Text variant="buttonSmall" style={styles.timerText}>
+              {time}
+            </Text>
+          </View>
+        </Glow>
       </View>
 
       <ScrollView
@@ -207,39 +216,43 @@ export function ExerciceScreen({
         showsVerticalScrollIndicator={false}
         testID="qf-exercice-scroll"
       >
-        <Card testID="qf-exercice-brief">
-          <Text variant="label" tone="indigo">
-            {t.consigne}
-          </Text>
-          <Markdown markdown={instruction.taskMd} />
-          {instruction.data.length === 0 ? null : (
-            <View style={styles.chips}>
-              {instruction.data.map((entry) => (
-                <Chip key={entry} label={entry} tone="neutral" />
-              ))}
-            </View>
-          )}
-          <Text variant="caption" tone="secondary">
-            {t.deliverable(instruction.deliverable)}
-          </Text>
-        </Card>
+        <Rise index={0}>
+          <Card testID="qf-exercice-brief">
+            <Text variant="label" tone="indigo">
+              {t.consigne}
+            </Text>
+            <Markdown markdown={instruction.taskMd} />
+            {instruction.data.length === 0 ? null : (
+              <View style={styles.chips}>
+                {instruction.data.map((entry) => (
+                  <Chip key={entry} label={entry} tone="neutral" />
+                ))}
+              </View>
+            )}
+            <Text variant="caption" tone="secondary">
+              {t.deliverable(instruction.deliverable)}
+            </Text>
+          </Card>
+        </Rise>
 
-        <Card testID="qf-exercice-scale">
-          <Text variant="sectionTitle">{t.scoresTitle(maxScore)}</Text>
-          {instruction.criteria.map((criterion) => (
-            <View key={criterion.key} style={styles.criterion}>
-              <Text variant="bodySmall" style={styles.grow}>
-                {criterion.label}
-              </Text>
-              <Text variant="bodySmall" tone="secondary">
-                {t.points(criterion.points)}
-              </Text>
-            </View>
-          ))}
-          <Text variant="caption" tone="muted">
-            {ex.scaleHint}
-          </Text>
-        </Card>
+        <Rise index={1}>
+          <Card testID="qf-exercice-scale">
+            <Text variant="sectionTitle">{t.scoresTitle(maxScore)}</Text>
+            {instruction.criteria.map((criterion) => (
+              <View key={criterion.key} style={styles.criterion}>
+                <Text variant="bodySmall" style={styles.grow}>
+                  {criterion.label}
+                </Text>
+                <Text variant="bodySmall" tone="secondary">
+                  {t.points(criterion.points)}
+                </Text>
+              </View>
+            ))}
+            <Text variant="caption" tone="muted">
+              {ex.scaleHint}
+            </Text>
+          </Card>
+        </Rise>
 
         <Card testID="qf-exercice-entry">
           <Text variant="sectionTitle">{t.entry}</Text>
@@ -289,14 +302,14 @@ export function ExerciceScreen({
                 <Text variant="label" tone="muted">
                   {t.correctionTitle}
                 </Text>
-                <Text variant="figure" testID="qf-exercice-score">
-                  {t.scoreLine(correction.score, correction.maxScore)}
-                </Text>
+                <Pop delay={200}>
+                  <Text variant="figure" testID="qf-exercice-score">
+                    {t.scoreLine(correction.score, correction.maxScore)}
+                  </Text>
+                </Pop>
               </View>
               <Chip
-                label={
-                  correction.verdict === 'passed' ? ex.verdictPassed : ex.verdictRetry
-                }
+                label={correction.verdict === 'passed' ? ex.verdictPassed : ex.verdictRetry}
                 tone={correction.verdict === 'passed' ? 'green' : 'orange'}
                 testID="qf-exercice-verdict"
               />
@@ -336,16 +349,17 @@ export function ExerciceScreen({
         )}
       </ScrollView>
 
-      <View
-        style={[
-          styles.footer,
-          { paddingBottom: insets.bottom + theme.spacing.md },
-        ]}
-      >
+      <View style={[styles.footer, { paddingBottom: insets.bottom + theme.spacing.md }]}>
         {correction === null ? (
           <View style={styles.footerRow}>
             <View style={styles.footerItem}>
-              <Button label={t.askTutor} variant="outline" block onPress={onAskTutor} testID="qf-exercice-tutor" />
+              <Button
+                label={t.askTutor}
+                variant="outline"
+                block
+                onPress={onAskTutor}
+                testID="qf-exercice-tutor"
+              />
             </View>
             <View style={styles.footerItem}>
               <Button

@@ -13,6 +13,7 @@ import type { FinalReviewDto, FinalReviewMode } from '@learny/contracts';
 import { fr } from '@learny/i18n';
 
 import { requireApiClient } from '../../../api/registry';
+import { Confetti, Pop, Rise, Shine } from '../motion';
 import { radius, theme } from '../../../theme';
 import { Button } from '../../../ui/Button';
 import { Card } from '../../../ui/Card';
@@ -106,55 +107,59 @@ export function BilanScreen({ formationId, onBack, onOpenMap }: BilanScreenProps
 
     return (
       <>
-        <View style={styles.hero} testID="qf-bilan-hero">
-          <Text variant="label" tone="limeInk">
-            {t.eyebrow}
-          </Text>
-          <Text variant="heroTitle">{data.formationTitle}</Text>
-          <View style={styles.resultRow}>
-            <Text variant="figure">
-              {data.stats.resultPercent === null
-                ? f.result(null)
-                : t.mastery(data.stats.resultPercent)}
+        <Shine radius={theme.radius.sheet}>
+          <View style={styles.hero} testID="qf-bilan-hero">
+            <Text variant="label" tone="limeInk">
+              {t.eyebrow}
             </Text>
-            {data.stats.resultPercent === null ? null : (
-              <Text variant="bodySmall" tone="limeInk">
-                {t.masteryLabel}
-              </Text>
-            )}
-            {data.weeks === null ? null : (
-              <Text variant="bodySmall" tone="limeInk">
-                {t.weeks(data.weeks)}
-              </Text>
-            )}
+            <Text variant="heroTitle">{data.formationTitle}</Text>
+            <View style={styles.resultRow}>
+              <Pop delay={250}>
+                <Text variant="figure">
+                  {data.stats.resultPercent === null
+                    ? f.result(null)
+                    : t.mastery(data.stats.resultPercent)}
+                </Text>
+              </Pop>
+              {data.stats.resultPercent === null ? null : (
+                <Text variant="bodySmall" tone="limeInk">
+                  {t.masteryLabel}
+                </Text>
+              )}
+              {data.weeks === null ? null : (
+                <Text variant="bodySmall" tone="limeInk">
+                  {t.weeks(data.weeks)}
+                </Text>
+              )}
+            </View>
+            <Text variant="caption" tone="limeInk">
+              {f.completed(data.completedOn, data.weeks)}
+            </Text>
           </View>
-          <Text variant="caption" tone="limeInk">
-            {f.completed(data.completedOn, data.weeks)}
-          </Text>
-        </View>
+        </Shine>
 
         <View style={styles.stats} testID="qf-bilan-stats">
-          <View style={styles.stat}>
+          <Rise index={1} style={styles.stat}>
             <StatCard
               label={t.stats.notions}
               value={String(data.stats.totalNotions)}
               testID="qf-bilan-stat-notions"
             />
-          </View>
-          <View style={styles.stat}>
+          </Rise>
+          <Rise index={2} style={styles.stat}>
             <StatCard
               label={t.stats.hours}
               value={hoursLabel(data.stats.completedMinutes)}
               testID="qf-bilan-stat-hours"
             />
-          </View>
-          <View style={styles.stat}>
+          </Rise>
+          <Rise index={3} style={styles.stat}>
             <StatCard
               label={t.stats.fragile}
               value={String(data.stats.fragileNotions)}
               testID="qf-bilan-stat-fragile"
             />
-          </View>
+          </Rise>
         </View>
         <Text variant="caption" tone="muted" testID="qf-bilan-retention">
           {`${f.stats.retention(data.retention.oneMonth)} · ${f.stats.retentionLabel}`}
@@ -244,6 +249,7 @@ export function BilanScreen({ formationId, onBack, onOpenMap }: BilanScreenProps
 
   return (
     <SafeAreaView style={styles.screen} edges={['top', 'bottom']} testID="qf-bilan">
+      {data === null ? null : <Confetti />}
       <View style={styles.nav}>
         <IconButton
           name="chevronLeft"

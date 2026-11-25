@@ -13,6 +13,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { fr } from '@learny/i18n';
 
 import { requireApiClient } from '../../../api/registry';
+import { Float, Rise, Shine } from '../motion';
 import { radius, theme } from '../../../theme';
 import { Button } from '../../../ui/Button';
 import { Chip } from '../../../ui/Chip';
@@ -42,26 +43,29 @@ interface AddTileProps {
   readonly testID: string;
   readonly onPress: () => void;
   readonly disabled?: boolean;
+  readonly index?: number;
 }
 
 /** One of the three deposit tiles of the mockup (84 pt tall, icon over its label). */
-function AddTile({ icon, label, testID, onPress, disabled = false }: AddTileProps) {
+function AddTile({ icon, label, testID, onPress, disabled = false, index = 0 }: AddTileProps) {
+  const floatDelay = index * 500;
   return (
-    <Pressable
-      accessibilityRole="button"
-      accessibilityLabel={label}
-      accessibilityState={{ disabled }}
-      disabled={disabled}
-      onPress={onPress}
-      testID={testID}
-      style={({ pressed }) => [
-        styles.tile,
-        { opacity: disabled ? 0.45 : pressed ? 0.85 : 1 },
-      ]}
-    >
-      <Icon name={icon} size={22} color={theme.colors.ink} />
-      <Text variant="buttonSmall">{label}</Text>
-    </Pressable>
+    <Rise index={index} style={styles.tileWrap}>
+      <Pressable
+        accessibilityRole="button"
+        accessibilityLabel={label}
+        accessibilityState={{ disabled }}
+        disabled={disabled}
+        onPress={onPress}
+        testID={testID}
+        style={({ pressed }) => [styles.tile, { opacity: disabled ? 0.45 : pressed ? 0.85 : 1 }]}
+      >
+        <Float delay={floatDelay}>
+          <Icon name={icon} size={22} color={theme.colors.ink} />
+        </Float>
+        <Text variant="buttonSmall">{label}</Text>
+      </Pressable>
+    </Rise>
   );
 }
 
@@ -105,7 +109,9 @@ export function ApportsScreen({ moduleId, initialChapterId, onBack }: ApportsScr
       }),
     onSuccess: (result, nextDone) => {
       refresh();
-      setToast(result.generationRequested ? m.generationRequested : nextDone ? t.completed : t.reopened);
+      setToast(
+        result.generationRequested ? m.generationRequested : nextDone ? t.completed : t.reopened,
+      );
     },
     onError: () => {
       setToast(t.completeFailed);
@@ -184,8 +190,7 @@ export function ApportsScreen({ moduleId, initialChapterId, onBack }: ApportsScr
     addLink.mutate({ url: linkUrl, title: linkTitle });
   };
 
-  const eyebrow =
-    data === null ? t.title : t.eyebrow(data.module.position, data.module.title);
+  const eyebrow = data === null ? t.title : t.eyebrow(data.module.position, data.module.title);
 
   return (
     <SafeAreaView style={styles.screen} edges={['top', 'bottom']} testID="qf-apports">
@@ -238,6 +243,7 @@ export function ApportsScreen({ moduleId, initialChapterId, onBack }: ApportsScr
               />
               <AddTile
                 icon="camera"
+                index={1}
                 label={t.photos}
                 testID="qf-apports-photos"
                 disabled={uploading}
@@ -247,6 +253,7 @@ export function ApportsScreen({ moduleId, initialChapterId, onBack }: ApportsScr
               />
               <AddTile
                 icon="link"
+                index={2}
                 label={t.link}
                 testID="qf-apports-link"
                 disabled={uploading}
@@ -256,9 +263,14 @@ export function ApportsScreen({ moduleId, initialChapterId, onBack }: ApportsScr
               />
             </View>
             {uploading ? (
-              <Text variant="caption" tone="muted" testID="qf-apports-uploading">
-                {t.uploadInProgress}
-              </Text>
+              <View style={styles.uploading}>
+                <Text variant="caption" tone="muted" testID="qf-apports-uploading">
+                  {t.uploadInProgress}
+                </Text>
+                <Shine every={1600} radius={2}>
+                  <View style={styles.scan} />
+                </Shine>
+              </View>
             ) : null}
 
             {chapters.length > 1 ? (
@@ -331,16 +343,18 @@ export function ApportsScreen({ moduleId, initialChapterId, onBack }: ApportsScr
 
       {data === null ? null : (
         <View style={styles.footer}>
-          <Button
-            label={done ? t.reopen : t.done}
-            variant={done ? 'outline' : 'primary'}
-            block
-            loading={complete.isPending}
-            onPress={() => {
-              complete.mutate(!done);
-            }}
-            testID="qf-apports-done"
-          />
+          <Shine>
+            <Button
+              label={done ? t.reopen : t.done}
+              variant={done ? 'outline' : 'primary'}
+              block
+              loading={complete.isPending}
+              onPress={() => {
+                complete.mutate(!done);
+              }}
+              testID="qf-apports-done"
+            />
+          </Shine>
         </View>
       )}
 
@@ -471,6 +485,9 @@ export function ApportsScreen({ moduleId, initialChapterId, onBack }: ApportsScr
 }
 
 const styles = StyleSheet.create({
+  tileWrap: { flex: 1 },
+  uploading: { gap: theme.spacing.xs },
+  scan: { height: 3, borderRadius: 2, backgroundColor: theme.colors.limeSoft },
   screen: { flex: 1, backgroundColor: theme.colors.canvas },
   nav: {
     flexDirection: 'row',

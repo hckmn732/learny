@@ -12,6 +12,7 @@ import type { AiCredentialProvider, CredentialDto } from '@learny/contracts';
 import { fr } from '@learny/i18n';
 
 import { messageFor } from '../../../api/errors';
+import { Pop, Rise } from '../motion';
 import { theme } from '../../../theme';
 import { Button } from '../../../ui/Button';
 import { Card } from '../../../ui/Card';
@@ -252,43 +253,45 @@ export function ClesIaScreen({ onBack, onOpenModels }: ClesIaScreenProps) {
             {t.keysEmpty}
           </Text>
         ) : null}
-        {items.map((credential) => (
-          <Card key={credential.id} testID={`qf-cles-ia-key-${credential.id}`}>
-            <View style={styles.keyHead}>
-              <View style={styles.grow}>
-                <Text variant="title">{credential.providerLabel}</Text>
-                <Text variant="caption" tone="muted">
-                  {credential.keyMasked === null ? t.noKey : t.yourKey(credential.keyMasked)}
-                </Text>
+        {items.map((credential, index) => (
+          <Rise key={credential.id} index={index}>
+            <Card testID={`qf-cles-ia-key-${credential.id}`}>
+              <View style={styles.keyHead}>
+                <View style={styles.grow}>
+                  <Text variant="title">{credential.providerLabel}</Text>
+                  <Text variant="caption" tone="muted">
+                    {credential.keyMasked === null ? t.noKey : t.yourKey(credential.keyMasked)}
+                  </Text>
+                </View>
+                <Chip
+                  label={t.status[credential.status]}
+                  tone={statusTone(credential.status)}
+                  testID={`qf-cles-ia-status-${credential.id}`}
+                />
               </View>
-              <Chip
-                label={t.status[credential.status]}
-                tone={statusTone(credential.status)}
-                testID={`qf-cles-ia-status-${credential.id}`}
+              <View style={styles.row}>
+                <Text variant="caption" tone="secondary">
+                  {t.modelsCount(credential.modelIds.length)}
+                </Text>
+                {credential.outsideEu ? <Chip label={t.outsideEu} tone="orange" /> : null}
+              </View>
+              {credential.outsideEu ? (
+                <Text variant="caption" tone="danger">
+                  {t.regionWarning}
+                </Text>
+              ) : null}
+              <Button
+                label={deletingId === credential.id ? t.deleting : t.deleteKey}
+                variant="outline"
+                size="sm"
+                loading={deletingId === credential.id}
+                onPress={() => {
+                  confirmDelete(credential);
+                }}
+                testID={`qf-cles-ia-delete-${credential.id}`}
               />
-            </View>
-            <View style={styles.row}>
-              <Text variant="caption" tone="secondary">
-                {t.modelsCount(credential.modelIds.length)}
-              </Text>
-              {credential.outsideEu ? <Chip label={t.outsideEu} tone="orange" /> : null}
-            </View>
-            {credential.outsideEu ? (
-              <Text variant="caption" tone="danger">
-                {t.regionWarning}
-              </Text>
-            ) : null}
-            <Button
-              label={deletingId === credential.id ? t.deleting : t.deleteKey}
-              variant="outline"
-              size="sm"
-              loading={deletingId === credential.id}
-              onPress={() => {
-                confirmDelete(credential);
-              }}
-              testID={`qf-cles-ia-delete-${credential.id}`}
-            />
-          </Card>
+            </Card>
+          </Rise>
         ))}
         {items.length === 0 ? null : (
           <Button
@@ -374,19 +377,21 @@ export function ClesIaScreen({ onBack, onOpenModels }: ClesIaScreenProps) {
         />
 
         {discovered === null ? null : (
-          <View style={styles.discovered} testID="qf-cles-ia-models">
-            <Text variant="bodySmall" tone="success" testID="qf-cles-ia-test-ok">
-              {t.tested(discovered.length)}
-            </Text>
-            <Text variant="label" tone="secondary">
-              {t.modelsTitle}
-            </Text>
-            <View style={styles.chips}>
-              {discovered.slice(0, 6).map((modelId) => (
-                <Chip key={modelId} label={modelId} />
-              ))}
+          <Pop>
+            <View style={styles.discovered} testID="qf-cles-ia-models">
+              <Text variant="bodySmall" tone="success" testID="qf-cles-ia-test-ok">
+                {t.tested(discovered.length)}
+              </Text>
+              <Text variant="label" tone="secondary">
+                {t.modelsTitle}
+              </Text>
+              <View style={styles.chips}>
+                {discovered.slice(0, 6).map((modelId) => (
+                  <Chip key={modelId} label={modelId} />
+                ))}
+              </View>
             </View>
-          </View>
+          </Pop>
         )}
 
         {error === null ? null : (

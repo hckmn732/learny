@@ -14,6 +14,7 @@ import { fr } from '@learny/i18n';
 
 import { BrickView } from '../../../bricks/BrickView';
 import { clock } from '../../../lib/clock';
+import { Glow, Rise } from '../motion';
 import { theme } from '../../../theme';
 import { Button } from '../../../ui/Button';
 import { Card } from '../../../ui/Card';
@@ -131,7 +132,10 @@ export function ExamPaper({
 
   if (question === undefined) {
     return (
-      <View style={[styles.screen, { paddingTop: insets.top + theme.spacing.xl }]} testID="qf-examen-blanc-paper">
+      <View
+        style={[styles.screen, { paddingTop: insets.top + theme.spacing.xl }]}
+        testID="qf-examen-blanc-paper"
+      >
         <Text variant="body" tone="inverse" align="center">
           {m.errorTitle}
         </Text>
@@ -189,7 +193,10 @@ export function ExamPaper({
     <View
       style={[
         styles.screen,
-        { paddingTop: insets.top + theme.spacing.lg, paddingBottom: insets.bottom + theme.spacing.md },
+        {
+          paddingTop: insets.top + theme.spacing.lg,
+          paddingBottom: insets.bottom + theme.spacing.md,
+        },
       ]}
       testID="qf-examen-blanc-paper"
     >
@@ -209,16 +216,18 @@ export function ExamPaper({
             {m.answered(answeredCount, total)}
           </Text>
         </View>
-        <View
-          style={styles.timer}
-          accessibilityLabel={t.timerAria(time)}
-          accessibilityRole="text"
-          testID="qf-examen-blanc-timer"
-        >
-          <Text variant="buttonSmall" style={styles.timerText}>
-            {time}
-          </Text>
-        </View>
+        <Glow spread={4}>
+          <View
+            style={styles.timer}
+            accessibilityLabel={t.timerAria(time)}
+            accessibilityRole="text"
+            testID="qf-examen-blanc-timer"
+          >
+            <Text variant="buttonSmall" style={styles.timerText}>
+              {time}
+            </Text>
+          </View>
+        </Glow>
       </View>
 
       <ProgressBar
@@ -233,22 +242,24 @@ export function ExamPaper({
           {`${question.typeLabel.toUpperCase()} · ${question.notionLabel.toUpperCase()}`}
         </Text>
 
-        <Card testID="qf-examen-blanc-question">
-          <BrickView
-            brick={{
-              brickId: question.brickVersionId,
-              versionId: question.brickVersionId,
-              type: question.type,
-              notionIds: [],
-              publicPayload: question.payload as AnyPublicPayload,
-            }}
-            mode="play"
-            response={answers[question.position] ?? null}
-            onResponse={change}
-            disabled={false}
-            testID="qf-examen-blanc-brick"
-          />
-        </Card>
+        <Rise key={question.position} distance={20}>
+          <Card testID="qf-examen-blanc-question">
+            <BrickView
+              brick={{
+                brickId: question.brickVersionId,
+                versionId: question.brickVersionId,
+                type: question.type,
+                notionIds: [],
+                publicPayload: question.payload as AnyPublicPayload,
+              }}
+              mode="play"
+              response={answers[question.position] ?? null}
+              onResponse={change}
+              disabled={false}
+              testID="qf-examen-blanc-brick"
+            />
+          </Card>
+        </Rise>
 
         <Pressable
           accessibilityRole="checkbox"

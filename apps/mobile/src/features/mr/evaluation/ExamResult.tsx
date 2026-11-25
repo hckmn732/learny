@@ -86,7 +86,11 @@ export function ExamResult({ result, onRestart, onClose }: ExamResultProps) {
             {m.diagnosticLabel(1, result.modules.length)}
           </Text>
           <Text variant="title">
-            {t.diagnostic(result.diagnostic.score, result.diagnostic.correct, result.diagnostic.total)}
+            {t.diagnostic(
+              result.diagnostic.score,
+              result.diagnostic.correct,
+              result.diagnostic.total,
+            )}
           </Text>
           <Text variant="caption" tone="muted">
             {m.diagnosticNote}
@@ -172,12 +176,19 @@ export function ExamResult({ result, onRestart, onClose }: ExamResultProps) {
           </Text>
         ) : (
           rows.map((row) => (
-            <View key={row.position} style={styles.reviewRow} testID={`qf-examen-blanc-review-${String(row.position)}`}>
+            <View
+              key={row.position}
+              style={styles.reviewRow}
+              testID={`qf-examen-blanc-review-${String(row.position)}`}
+            >
               <View style={styles.line}>
                 <Text variant="bodySmall" style={styles.grow}>
                   {`${String(row.position)}. ${row.question}`}
                 </Text>
-                <Chip label={row.isCorrect ? t.correct : t.wrong} tone={row.isCorrect ? 'green' : 'orange'} />
+                <Chip
+                  label={row.isCorrect ? t.correct : t.wrong}
+                  tone={row.isCorrect ? 'green' : 'orange'}
+                />
               </View>
               <Text variant="caption" tone="secondary">
                 {t.given(row.given)}
@@ -198,7 +209,13 @@ export function ExamResult({ result, onRestart, onClose }: ExamResultProps) {
       </Card>
 
       <View style={styles.actions}>
-        <Button label={t.restart} variant="outline" block onPress={onRestart} testID="qf-examen-blanc-restart" />
+        <Button
+          label={t.restart}
+          variant="outline"
+          block
+          onPress={onRestart}
+          testID="qf-examen-blanc-restart"
+        />
         <Button label={t.home} block onPress={onClose} testID="qf-examen-blanc-home" />
       </View>
     </ScrollView>
