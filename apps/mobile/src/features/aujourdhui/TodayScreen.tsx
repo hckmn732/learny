@@ -32,7 +32,6 @@ import { openOnWeb } from '../../lib/web';
 import { useOnlineStatus } from '../../offline/network';
 import { SimpleCards } from '../../simple/SimpleCards';
 import { theme } from '../../theme';
-import { EmptyState } from '../../ui/EmptyState';
 import { ErrorState } from '../../ui/ErrorState';
 import { Icon } from '../../ui/Icon';
 import { Skeleton } from '../../ui/Skeleton';
@@ -223,12 +222,17 @@ export function TodayScreen() {
         ) : null}
 
         {emptyDay ? (
-          <EmptyState
-            testID="today-empty"
-            icon="calendar"
-            title={t.noSession}
-            description={nextActivityOf(home) ?? t.noSessionBody}
-          />
+          <View style={styles.noFormation} testID="today-empty">
+            <View style={styles.noFormationIcon}>
+              <Icon name="calendar" size={18} color={theme.colors.inkSecondary} />
+            </View>
+            <View style={styles.noFormationTexts}>
+              <Text variant="rowTitle">{t.noSession}</Text>
+              <Text variant="caption" tone="muted">
+                {nextActivityOf(home) ?? t.noSessionBody}
+              </Text>
+            </View>
+          </View>
         ) : null}
 
         {/* SPEC-4003 EF-1 — les deux portes d'entrée de la création, toujours visibles sur le

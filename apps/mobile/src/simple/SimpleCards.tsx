@@ -26,8 +26,13 @@ export function SimpleCards({ onDrop, onTutor }: SimpleCardsProps) {
       <Text variant="eyebrow" tone="muted" style={styles.sectionTitle}>
         {fr.mobile.simple.section}
       </Text>
-      <Card tone="surface" style={styles.dropCard} testID="simple-card-drop">
-        <Chip label={t.dropBadge} tone="ink" />
+      <Card tone="surface" style={[styles.card, styles.dropCard]} testID="simple-card-drop">
+        <View style={styles.badgeRow}>
+          <Chip label={t.dropBadge} tone="ink" />
+          <Text variant="caption" tone="limeInk">
+            {t.dropReady}
+          </Text>
+        </View>
         <Text variant="sectionTitle" style={styles.title}>
           {t.dropTitle}
         </Text>
@@ -35,9 +40,6 @@ export function SimpleCards({ onDrop, onTutor }: SimpleCardsProps) {
           {t.dropBody}
         </Text>
         <View style={styles.footer}>
-          <Text variant="caption" tone="limeInk">
-            {t.dropReady}
-          </Text>
           <Button
             label={t.dropAction}
             variant="ink"
@@ -48,7 +50,7 @@ export function SimpleCards({ onDrop, onTutor }: SimpleCardsProps) {
           />
         </View>
       </Card>
-      <Card tone="surface" testID="simple-card-tutor">
+      <Card tone="surface" style={styles.card} testID="simple-card-tutor">
         <Chip label={t.tutorBadge} tone="indigo" />
         <Text variant="sectionTitle" style={styles.title}>
           {t.tutorTitle}
@@ -75,9 +77,12 @@ export function SimpleCards({ onDrop, onTutor }: SimpleCardsProps) {
 
 const styles = StyleSheet.create({
   section: { gap: theme.spacing.sm },
-  sectionTitle: { marginBottom: theme.spacing.xs },
+  sectionTitle: { marginBottom: 0 },
+  // QA 2026-11-25: compact cards so the home screen fits without scrolling.
+  card: { paddingVertical: theme.spacing.md, paddingHorizontal: theme.spacing.lg, gap: 2 },
+  badgeRow: { flexDirection: 'row', alignItems: 'center', gap: theme.spacing.sm },
   dropCard: { backgroundColor: theme.colors.lime, borderColor: theme.colors.lime },
-  title: { marginTop: theme.spacing.xs },
+  title: { marginTop: 2 },
   footer: {
     flexDirection: 'row',
     alignItems: 'center',

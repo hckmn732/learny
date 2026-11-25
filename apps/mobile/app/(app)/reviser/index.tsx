@@ -437,7 +437,12 @@ export default function ReviserRoute() {
 
 const styles = StyleSheet.create({
   base: { flex: 1, backgroundColor: theme.colors.canvas },
-  state: { flex: 1, justifyContent: 'center', backgroundColor: theme.colors.canvas },
+  state: {
+    flex: 1,
+    justifyContent: 'center',
+    paddingHorizontal: theme.spacing.xl,
+    backgroundColor: theme.colors.canvas,
+  },
   formations: {
     gap: theme.spacing.sm,
     paddingHorizontal: theme.spacing.xl,
