@@ -560,6 +560,10 @@ class LiveGateway:
                 headers["anthropic-beta"] = ANTHROPIC_FILES_BETA
         elif target.api_key:
             headers["Authorization"] = f"Bearer {target.api_key}"
+        if target.resolved.provider in ("opencode", "opencode_go"):
+            # OpenCode routes (and bills subscriptions) by session: a call without it is refused
+            # with `MissingSessionID`. One session per learner keeps the provider cache warm.
+            headers["x-opencode-session"] = f"learny-{target.caller.user_id}"
         return headers
 
     def _client(self, task: AiTask) -> httpx.AsyncClient:
