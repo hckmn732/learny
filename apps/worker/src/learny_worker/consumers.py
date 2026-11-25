@@ -175,7 +175,7 @@ def _boolean_of(data: Mapping[str, Any], name: str) -> bool:
     return bool(data[name])
 
 
-# Backoff 10 s, 20 s, … 1280 s between the nine attempts of an ingestion: ~42 minutes in all.
+# Backoff 10 s, 20 s, ... 1280 s between the nine attempts of an ingestion: ~42 minutes in all.
 INGESTION_MAX_ATTEMPTS = 9
 
 
@@ -369,8 +369,8 @@ async def assessments_submit_exam_at_deadline(deps: Any, event: Event) -> None:
 async def formation_simple_analysis(deps: Any, event: Event) -> None:
     """`simple.analysis.requested`: the four steps of the document analysis (SPEC-4001 EF-7).
 
-    SPEC-4002 EF-4 — once the programme is proposed, the in-app notification « Ton programme est
-    prêt » is created, on the `course_ready` type with an explicit title and body: it is the same
+    SPEC-4002 EF-4 - once the programme is proposed, the in-app "programme ready"
+    notification is created, on the `course_ready` type with an explicit title and body: it is the same
     inbox, the same read state and the same dedupe, and no external channel is triggered.
     """
     user_id = _text_of(event.data, "userId")

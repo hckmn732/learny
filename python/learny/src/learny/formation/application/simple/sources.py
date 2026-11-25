@@ -36,11 +36,10 @@ _STORAGE_UNSAFE = re.compile(r"[^A-Za-z0-9._-]+")
 
 
 def storage_file_name(name: str) -> str:
-    """EF-2 - nom de fichier stocké, réduit à l'ASCII : Storage refuse les clés accentuées.
+    """EF-2 - stored file name, reduced to ASCII: Storage refuses accented keys.
 
-    Le titre affiché garde le nom d'origine (`normalize_storage_file_name`) ; seule la clé de
-    l'objet est translittérée, un fichier « Manuel de comptabilité générale.txt » devenant
-    « Manuel-de-comptabilite-generale.txt ».
+    The displayed title keeps the original name (`normalize_storage_file_name`); only the object
+    key is transliterated, so an accented name becomes its plain ASCII spelling.
     """
     decomposed = unicodedata.normalize("NFKD", name)
     ascii_name = decomposed.encode("ascii", "ignore").decode("ascii")
@@ -143,8 +142,8 @@ async def create_simple_upload(
             path=path,
             url=None,
             mime=str(body["mime"]).split(";")[0].strip().lower(),
-            # La taille déclarée reste dans `metadata.upload` : `resources.finalize` mesure l'objet
-            # réel et c'est lui qui renseigne `size_bytes` (SPEC-206 ET-5, réessai idempotent).
+            # The declared size stays in `metadata.upload`: `resources.finalize` measures the real
+            # object and fills `size_bytes` (SPEC-206 ET-5, idempotent retry).
             size_bytes=None,
             metadata=json.dumps(metadata, ensure_ascii=False),
         )

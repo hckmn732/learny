@@ -352,8 +352,8 @@ def _ongoing_row(
         else str(formation.get("simple_status") or "collecting")
     )
     if simple_status is not None:
-        # SPEC-4002 BR-FOR-16 — « Continuer » ramène à l'étape en cours du mode simple : l'analyse
-        # tant qu'elle n'a pas abouti, l'aperçu du programme une fois qu'il est proposé.
+        # SPEC-4002 BR-FOR-16 - "Continue" leads to the current simple-mode step: the analysis
+        # until it succeeds, then the programme preview once it is proposed.
         action = {
             "label": texts.ACTION_CONTINUE,
             "href": f"/formations/{formation_id}/" + ("apercu" if simple_status == "proposed" else "depot"),

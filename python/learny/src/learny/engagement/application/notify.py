@@ -129,11 +129,11 @@ async def count_sent_notifications(
 async def notify_programme_ready(
     deps: EngagementDeps, *, user_id: str, formation_id: str, title: str, body: str, href: str
 ) -> dict[str, Any]:
-    """SPEC-4002 EF-4 — la notification in-app « Ton programme est prêt » du mode simple.
+    """SPEC-4002 EF-4 - the in-app "programme ready" notification of the simple mode.
 
-    Le titre et le corps sont ceux de la maquette : ils ne passent pas par un gabarit, donc aucun
-    canal externe n'est décidé et la ligne est strictement in-app. La clé de déduplication rend un
-    second appel inoffensif (rejeu du consommateur d'analyse).
+    The title and body come from the mockup: they skip the templates, so no external channel is
+    chosen and the row is strictly in-app. The deduplication key makes a second call harmless
+    (replay of the analysis consumer).
     """
     now = deps.clock.now()
     key = f"simple-programme-ready:{formation_id}"

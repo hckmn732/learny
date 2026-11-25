@@ -2476,7 +2476,7 @@ async def insert_simple_resource(
     path: str | None,
     url: str | None,
     mime: str,
-    # `None` jusqu'à `resources.finalize`, qui mesure l'objet réellement reçu (SPEC-206 ET-5).
+    # `None` until `resources.finalize`, which measures the object actually received (SPEC-206 ET-5).
     size_bytes: int | None,
     metadata: str,
 ) -> str | None:

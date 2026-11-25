@@ -124,6 +124,8 @@ def test_the_provider_catalogue_projects_the_region_and_the_warning() -> None:
         "openai",
         "mistral",
         "deepseek",
+        "opencode",
+        "opencode_go",
         "openai_compatible",
         "local",
     }
