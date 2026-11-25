@@ -7,6 +7,7 @@ from typing import Any
 
 import httpx
 import pytest
+import structlog
 from learny.platform.llm.caller import AiCaller, ai_caller, current_caller
 from learny.platform.llm.live import (
     LiveGateway,
@@ -251,6 +252,19 @@ async def test_provider_failure_is_journaled_as_error() -> None:
     assert error.value.code == "AI_KEY_INVALID"
     assert db.journal[0]["status"] == "error"
     assert db.journal[0]["error_code"] == "AI_KEY_INVALID"
+
+
+async def test_provider_refusal_logs_the_sanitized_provider_reason() -> None:
+    body = '{"error":{"message":"Insufficient Balance","type":"insufficient_balance_error"}} sk-abcdef123456'
+    live, _ = gateway(lambda request: httpx.Response(402, text=body))
+    session = live.session("light", "p", caller=AiCaller(USER), model=model("deepseek"), api_key="k")
+    with structlog.testing.capture_logs() as logs, pytest.raises(AppError) as error:
+        await session.step(PROMPT)
+    assert error.value.code == "AI_PROVIDER_ERROR"
+    refusal = next(entry for entry in logs if entry["event"] == "provider refused the call")
+    assert refusal["providerStatus"] == 402
+    assert "Insufficient Balance" in refusal["providerMessage"]
+    assert "sk-abcdef123456" not in refusal["providerMessage"]
 
 
 async def test_streams_text_deltas_from_both_wire_formats() -> None:

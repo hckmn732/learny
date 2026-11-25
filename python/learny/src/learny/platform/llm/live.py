@@ -564,6 +564,24 @@ class LiveGateway:
         timeout = TASK_CONFIG[task].timeout_ms / 1000
         return httpx.AsyncClient(timeout=httpx.Timeout(timeout, connect=10.0), transport=self._transport)
 
+    def _rejected(self, task: AiTask, target: _Target, status: int, body: str) -> AppError:
+        """The catalogue error of an HTTP refusal, logged with the provider's own diagnostic.
+
+        The learner sees the catalogue message only; the operator needs the provider's reason
+        (an exhausted balance answers 402 and was indistinguishable from an outage).
+        """
+        error = provider_error(status, body)
+        self._logger.warning(
+            "provider refused the call",
+            component="llm",
+            task=task,
+            provider=target.resolved.provider,
+            providerStatus=status,
+            providerMessage=sanitized(body),
+            code=error.code,
+        )
+        return error
+
     async def _post(self, task: AiTask, target: _Target, input: StepInput, body: dict[str, Any]) -> Any:
         async with self._client(task) as client:
             try:
@@ -575,7 +593,7 @@ class LiveGateway:
             except httpx.HTTPError as error:
                 raise AppError("AI_PROVIDER_ERROR", texts.AI_PROVIDER_UNAVAILABLE, status=503) from error
         if response.status_code >= 400:
-            raise provider_error(response.status_code, response.text[:2000])
+            raise self._rejected(task, target, response.status_code, response.text[:2000])
         try:
             return response.json()
         except ValueError as error:
@@ -685,7 +703,9 @@ class LiveGateway:
                         "POST", url, headers=self._headers(target, clean), json=body
                     ) as response:
                         if response.status_code >= 400:
-                            raise provider_error(
+                            raise self._rejected(
+                                task,
+                                target,
                                 response.status_code,
                                 (await response.aread()).decode("utf-8", "replace")[:2000],
                             )
