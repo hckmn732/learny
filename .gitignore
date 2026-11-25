@@ -36,6 +36,9 @@ supabase/volumes/
 .sdd/lock.json
 .sdd/tmp/
 
+# --- Chantier quickfix (worktrees locaux des agents, docs/engineering/quickfix-rattrapage-mobile.md) ---
+.qf/
+
 # --- Systèmes et éditeurs ---
 .DS_Store
 Thumbs.db
