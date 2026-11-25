@@ -139,6 +139,11 @@ jobs:
         with:
           node-version: ${{ env.NODE_VERSION }}
           cache: pnpm
+      # ADR-2001/ADR-2043 : les suites Python (ruff, mypy, pytest, facade uvicorn) exigent uv ;
+      # l'image ubuntu-26.04 des runners ne le fournit plus.
+      - uses: astral-sh/setup-uv@v6
+        with:
+          enable-cache: true
       - name: Cache Turbo
         uses: actions/cache@v4
         continue-on-error: true
@@ -191,6 +196,11 @@ jobs:
         with:
           node-version: ${{ env.NODE_VERSION }}
           cache: pnpm
+      # ADR-2001/ADR-2043 : les suites Python (ruff, mypy, pytest, facade uvicorn) exigent uv ;
+      # l'image ubuntu-26.04 des runners ne le fournit plus.
+      - uses: astral-sh/setup-uv@v6
+        with:
+          enable-cache: true
       - name: Cache Next
         uses: actions/cache@v4
         with:
@@ -303,6 +313,11 @@ jobs:
         with:
           node-version: ${{ env.NODE_VERSION }}
           cache: pnpm
+      # ADR-2001/ADR-2043 : les suites Python (ruff, mypy, pytest, facade uvicorn) exigent uv ;
+      # l'image ubuntu-26.04 des runners ne le fournit plus.
+      - uses: astral-sh/setup-uv@v6
+        with:
+          enable-cache: true
       - name: Cache Turbo
         uses: actions/cache@v4
         continue-on-error: true
