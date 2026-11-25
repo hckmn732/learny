@@ -50,6 +50,7 @@ ANTHROPIC_LABEL = "Anthropic"
 OPENAI_LABEL = "OpenAI"
 MISTRAL_LABEL = "Mistral"
 DEEPSEEK_LABEL = "DeepSeek"
+OPENCODE_LABEL = "OpenCode"
 COMPATIBLE_LABEL = "Service compatible OpenAI"
 LOCAL_LABEL = "Modèle local"
 

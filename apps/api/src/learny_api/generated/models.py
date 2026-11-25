@@ -4295,6 +4295,7 @@ class Provider(StrEnum):
     openai = 'openai'
     mistral = 'mistral'
     deepseek = 'deepseek'
+    opencode = 'opencode'
     openai_compatible = 'openai_compatible'
     local = 'local'
 
@@ -4694,6 +4695,7 @@ class Provider7(StrEnum):
     openai = 'openai'
     mistral = 'mistral'
     deepseek = 'deepseek'
+    opencode = 'opencode'
     openai_compatible = 'openai_compatible'
     local = 'local'
 
@@ -4876,6 +4878,7 @@ class Provider11(StrEnum):
     openai = 'openai'
     mistral = 'mistral'
     deepseek = 'deepseek'
+    opencode = 'opencode'
     openai_compatible = 'openai_compatible'
     local = 'local'
 

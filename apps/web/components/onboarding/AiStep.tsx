@@ -137,6 +137,7 @@ export function AiStep({ recommendedModels }: Readonly<AiStepProps>) {
               { value: 'openai', label: t.providers.openai },
               { value: 'mistral', label: t.providers.mistral },
               { value: 'deepseek', label: t.providers.deepseek },
+              { value: 'opencode', label: t.providers.opencode },
               { value: 'openai_compatible', label: t.providers.openai_compatible },
             ]}
             value={provider}

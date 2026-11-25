@@ -8398,6 +8398,7 @@ components:
             - openai
             - mistral
             - deepseek
+            - opencode
             - openai_compatible
             - local
           type: string
@@ -8449,6 +8450,7 @@ components:
             - openai
             - mistral
             - deepseek
+            - opencode
             - openai_compatible
             - local
           type: string
@@ -8507,6 +8509,7 @@ components:
             - openai
             - mistral
             - deepseek
+            - opencode
             - openai_compatible
             - local
           type: string
@@ -8574,6 +8577,7 @@ components:
                   - openai
                   - mistral
                   - deepseek
+                  - opencode
                   - openai_compatible
                   - local
                 type: string
@@ -8849,6 +8853,7 @@ components:
                 - openai
                 - mistral
                 - deepseek
+                - opencode
                 - openai_compatible
                 - local
               type: string
@@ -8990,6 +8995,7 @@ components:
                   - openai
                   - mistral
                   - deepseek
+                  - opencode
                   - openai_compatible
                   - local
                 type: string
@@ -9220,6 +9226,7 @@ components:
                         - openai
                         - mistral
                         - deepseek
+                        - opencode
                         - openai_compatible
                         - local
                       type: string
@@ -9252,6 +9259,7 @@ components:
                       - openai
                       - mistral
                       - deepseek
+                      - opencode
                       - openai_compatible
                       - local
                     type: string
@@ -9423,6 +9431,7 @@ components:
                   - openai
                   - mistral
                   - deepseek
+                  - opencode
                   - openai_compatible
                   - local
                 type: string
@@ -9653,6 +9662,7 @@ components:
                         - openai
                         - mistral
                         - deepseek
+                        - opencode
                         - openai_compatible
                         - local
                       type: string
@@ -9685,6 +9695,7 @@ components:
                       - openai
                       - mistral
                       - deepseek
+                      - opencode
                       - openai_compatible
                       - local
                     type: string

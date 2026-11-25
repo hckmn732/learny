@@ -45,7 +45,7 @@ export type SlotCreator = 'planner' | 'automation' | 'learner';
 export type AutomationStatus =
   'pending_consent' | 'applied' | 'declined' | 'undone' | 'expired' | 'consumed';
 export type AiProviderValue =
-  'anthropic' | 'openai' | 'mistral' | 'deepseek' | 'openai_compatible' | 'local';
+  'anthropic' | 'openai' | 'mistral' | 'deepseek' | 'opencode' | 'openai_compatible' | 'local';
 export type CredentialStatusValue = 'untested' | 'qualified' | 'failed';
 export type AiCallStatusValue = 'ok' | 'error' | 'refused' | 'capped' | 'invalid_output';
 export type SubscriptionStatusValue = 'none' | 'active' | 'past_due' | 'canceled' | 'incomplete';

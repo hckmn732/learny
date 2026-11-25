@@ -11,6 +11,7 @@ export const AI_CREDENTIAL_PROVIDERS = [
   'openai',
   'mistral',
   'deepseek',
+  'opencode',
   'openai_compatible',
   'local',
 ] as const;

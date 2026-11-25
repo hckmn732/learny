@@ -28,6 +28,7 @@ _MOCK_MODELS: dict[str, tuple[str, ...]] = {
     "openai": ("gpt-5.5", "gpt-5-mini"),
     "mistral": ("mistral-large-latest", "mistral-small-latest"),
     "deepseek": ("deepseek-chat", "deepseek-reasoner"),
+    "opencode": ("qwen3-coder", "kimi-k2"),
     "openai_compatible": ("compatible-model",),
     "local": ("local-model",),
 }
@@ -37,6 +38,7 @@ _ENDPOINTS: dict[str, str] = {
     "openai": "https://api.openai.com/v1/models",
     "mistral": "https://api.mistral.ai/v1/models",
     "deepseek": "https://api.deepseek.com/models",
+    "opencode": "https://opencode.ai/zen/v1/models",
 }
 
 # The transport seam of the tests: `(url, headers) -> (status, decoded body)`, never a socket.

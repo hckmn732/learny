@@ -23,12 +23,18 @@ const PROVIDER_OPTIONS: readonly { value: AiCredentialProvider; label: string }[
   { value: 'openai', label: 'OpenAI' },
   { value: 'mistral', label: 'Mistral' },
   { value: 'deepseek', label: 'DeepSeek' },
+  { value: 'opencode', label: 'OpenCode' },
   { value: 'openai_compatible', label: 'Service compatible OpenAI' },
   { value: 'local', label: 'Modèle local (Ollama, vLLM)' },
 ];
 
 /** BR-IA-04, ADR-0154 point 4 — hosted providers whose data is processed outside the EU. */
-const OUTSIDE_EU_PROVIDERS: readonly AiCredentialProvider[] = ['anthropic', 'openai', 'deepseek'];
+const OUTSIDE_EU_PROVIDERS: readonly AiCredentialProvider[] = [
+  'anthropic',
+  'openai',
+  'deepseek',
+  'opencode',
+];
 
 function needsBaseUrl(provider: AiCredentialProvider): boolean {
   return provider === 'openai_compatible' || provider === 'local';
@@ -97,14 +103,17 @@ export function AiModelsTab({ initial, initialError, requestId }: Readonly<AiMod
     setError(null);
     setStatus(null);
     try {
-      const next = await api.meAiModelsUpdate({
-        body: {
-          action: 'assign',
-          task,
-          modelId: option.modelId,
-          credentialId: option.credentialId,
+      const next = await api.meAiModelsUpdate(
+        {
+          body: {
+            action: 'assign',
+            task,
+            modelId: option.modelId,
+            credentialId: option.credentialId,
+          },
         },
-      }, { idempotencyKey: crypto.randomUUID() });
+        { idempotencyKey: crypto.randomUUID() },
+      );
       setState(next);
       const assigned = next.tasks.find((candidate) => candidate.task === task);
       if (assigned?.compatibility?.status === 'pending') {

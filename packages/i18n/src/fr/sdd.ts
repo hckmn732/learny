@@ -871,6 +871,7 @@ export const sdd = {
         openai: 'OpenAI',
         mistral: 'Mistral',
         deepseek: 'DeepSeek',
+        opencode: 'OpenCode',
         openai_compatible: 'OpenAI compatible',
         local: 'local',
       },

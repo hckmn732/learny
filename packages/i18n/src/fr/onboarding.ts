@@ -47,13 +47,14 @@ export const onboarding = {
     subtitle:
       'Le tuteur a besoin d’un modèle d’IA. Vous pourrez changer à tout moment dans les paramètres.',
     intro:
-      'Learny ne fournit aucun modèle : vous branchez la clé d’un fournisseur (Anthropic, OpenAI, Mistral, DeepSeek…) et vous payez directement votre fournisseur, à l’usage.',
+      'Learny ne fournit aucun modèle : vous branchez la clé d’un fournisseur (Anthropic, OpenAI, Mistral, DeepSeek, OpenCode…) et vous payez directement votre fournisseur, à l’usage.',
     provider: 'Fournisseur',
     providers: {
       anthropic: 'Anthropic',
       openai: 'OpenAI',
       mistral: 'Mistral',
       deepseek: 'DeepSeek',
+      opencode: 'OpenCode',
       openai_compatible: 'Service compatible OpenAI',
     },
     keyLabel: 'Clé d’API',

@@ -17,6 +17,7 @@ AiProvider = Literal[
     "openai",
     "mistral",
     "deepseek",
+    "opencode",
     "openai_compatible",
     "local",
 ]
@@ -26,6 +27,7 @@ AI_PROVIDERS: tuple[AiProvider, ...] = (
     "openai",
     "mistral",
     "deepseek",
+    "opencode",
     "openai_compatible",
     "local",
 )
@@ -67,6 +69,12 @@ PROVIDER_REGIONS: dict[AiProvider, ProviderRegion] = {
         data_note=texts.OUTSIDE_EU_NOTE,
         provider_label=texts.DEEPSEEK_LABEL,
         default_label=texts.DEEPSEEK_LABEL,
+    ),
+    "opencode": ProviderRegion(
+        outside_eu=True,
+        data_note=texts.OUTSIDE_EU_NOTE,
+        provider_label=texts.OPENCODE_LABEL,
+        default_label=texts.OPENCODE_LABEL,
     ),
     "openai_compatible": ProviderRegion(
         outside_eu=False,
