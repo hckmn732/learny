@@ -53,9 +53,9 @@ from learny.content.infrastructure.figures import (
     upload_figures,
 )
 from learny.content.infrastructure.files import ReadFile, ReadFileInput, supabase_file_reader
+from learny.platform.embeddings import default_embedder, mode_of
 from learny.platform.llm.caller import ai_caller
 from learny.platform.llm.types import StepInput, SystemPart
-from learny.platform.embeddings import default_embedder, mode_of
 from learny.shared.db.uow import Tx
 from learny.shared.errors import AppError
 from learny.shared.locale_fr import content as texts
@@ -602,6 +602,7 @@ async def _read_figures(deps: ContentDeps, figures: list[Any]) -> list[Any]:
 
     read = await asyncio.gather(*(one(figure) for figure in figures))
     return [figure for figure in read if figure is not None]
+
 
 async def store_resource_figures(deps: ContentDeps, resource_id: str) -> int:
     """Backfill: the figures of a PDF ingested before they were extracted."""
