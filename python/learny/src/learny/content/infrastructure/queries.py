@@ -528,10 +528,17 @@ COUNT_READY_RESOURCES = text(
     select count(distinct r.id)::int as total
       from public.resources r
      where r.owner_id = cast(:user_id as uuid)
-       and r.chapter_id = cast(:chapter_id as uuid)
        and r.origin = 'learner'
        and r.status = 'ready'
        and r.deleted_at is null
+       and (
+         r.chapter_id = cast(:chapter_id as uuid)
+         -- Simple mode (QA 2026-11-26): the deposited document is linked by page range.
+         or exists (
+           select 1 from public.chapter_sources cs
+            where cs.resource_id = r.id and cs.chapter_id = cast(:chapter_id as uuid)
+         )
+       )
     """
 )
 SELECT_COURSE_SUGGESTIONS = text(
