@@ -24,6 +24,7 @@ _CHAPTER_LINE = re.compile(
 )
 # A chapter announced by the table of contents needs at least this many chapters to be trusted.
 MIN_CHAPTERS = 2
+CHAPTER_LINE_MAX = 90
 _TOC_LINE = re.compile(r"^(?P<title>.{3,120}?)[\s.\u00b7]{2,}(?P<page>\d{1,4})\s*$")
 _HEADING = re.compile(
     r"^\s*(?:(?:chapitre|chapter|partie|part|section|module)\s+[\w.-]+"
@@ -220,7 +221,11 @@ def chapter_starts(pages: Mapping[int, str], toc: set[int]) -> list[tuple[int, s
         if page in toc:
             continue
         lines = [line for line in pages[page].splitlines() if line.strip()]
-        for index, line in enumerate(lines[:4]):
+        for index, line in enumerate(lines):
+            # A chapter may start mid-page (after the answers of the previous exercises); a short
+            # line keeps a sentence that merely begins with "Chapitre" out.
+            if len(line.strip()) > CHAPTER_LINE_MAX:
+                continue
             match = _CHAPTER_LINE.match(line)
             if match is None:
                 continue
