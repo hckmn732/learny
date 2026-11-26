@@ -5,6 +5,7 @@ import { useId, useState, type KeyboardEvent } from 'react';
 import { Button, Select, cn } from '@learny/ui';
 
 import type { CorrectionView } from '../../correction-view';
+import { InlineCode } from '../../view/inline-code';
 import { resolveLabels } from '../../view/labels';
 import { QuestionHeader } from '../../view/question-header';
 import type { BrickViewProps } from '../../view-types';
@@ -94,7 +95,7 @@ export function MatchingView(props: BrickViewProps<'matching'>) {
                 data-testid={`brick-match-row-${left.id}`}
               >
                 <span className="flex-1 basis-170 font-display text-18 font-600 text-ink">
-                  {left.text}
+                  <InlineCode text={left.text} />
                 </span>
                 <Select
                   className="min-w-260 flex-1"
@@ -172,7 +173,9 @@ export function MatchingView(props: BrickViewProps<'matching'>) {
                 >
                   {String(index + 1)}
                 </span>
-                <span className="break-words">{left.text}</span>
+                <span className="break-words">
+                  <InlineCode text={left.text} />
+                </span>
                 {state !== undefined ? (
                   <span className="sr-only">
                     {state ? ' — relié correctement' : ' — relié incorrectement'}
@@ -221,7 +224,9 @@ export function MatchingView(props: BrickViewProps<'matching'>) {
                 >
                   {ownerIndex ?? ''}
                 </span>
-                <span className="break-words">{right.text}</span>
+                <span className="break-words">
+                  <InlineCode text={right.text} />
+                </span>
               </button>
             );
           })}

@@ -8,6 +8,7 @@ export { ExcerptChip } from './excerpt-chip';
 export type { ExcerptChipProps, ExcerptKind } from './excerpt-chip';
 export { brickViewLabels, resolveLabels } from './labels';
 export type { BrickViewLabels, BrickViewLabelsOverride } from './labels';
+export { InlineCode, mathMarkup } from './inline-code';
 export { MarkdownContent } from './markdown';
 export { QuestionHeader } from './question-header';
 export { brickViews } from './registry';

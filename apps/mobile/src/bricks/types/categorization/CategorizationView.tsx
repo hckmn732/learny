@@ -4,6 +4,7 @@ import { Pressable, StyleSheet, View } from 'react-native';
 
 import { fr } from '@learny/i18n';
 
+import { withReadableMath } from '../../../lib/latex-text';
 import { radius, theme } from '../../../theme';
 import { Text } from '../../../ui';
 import { emptyCategorization, tapCategory, tapItem, type CategorizationState } from '../../games';
@@ -87,7 +88,7 @@ export function CategorizationView({
               ]}
               testID={`brick-item-${item.id}`}
             >
-              <Text variant="body">{item.text}</Text>
+              <Text variant="body">{withReadableMath(item.text)}</Text>
               <Text variant="caption" tone="secondary">
                 {assigned === null ? t.unassigned : (labelOfCategory.get(assigned) ?? '')}
               </Text>
@@ -118,12 +119,12 @@ export function CategorizationView({
             style={styles.category}
             testID={`brick-category-${category.id}`}
           >
-            <Text variant="rowTitle">{category.label}</Text>
+            <Text variant="rowTitle">{withReadableMath(category.label)}</Text>
             {payload.items
               .filter((item) => state.assignments[item.id] === category.id)
               .map((item) => (
                 <Text key={item.id} variant="caption" tone="secondary">
-                  {item.text}
+                  {withReadableMath(item.text)}
                 </Text>
               ))}
           </Pressable>

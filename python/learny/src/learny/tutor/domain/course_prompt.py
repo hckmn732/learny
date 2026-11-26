@@ -49,11 +49,21 @@ Return exactly one `CourseChapterDraft` object and nothing else:
 - `resourceSuggestions`: only for a base course, one to five `{ title, url, reason }` public
   HTTPS resources.
 
+__MATH_RULE__
+
 Never invent a `chunkId`, a page, a minute, an anchor or a URL. A sentence taken from a
 contribution cites the exact passage it comes from. Write the learner-facing text in the course
 language of the profile; fixed interface labels stay in French."""
 
-STRUCTURE_INSTRUCTION: Final = _STRUCTURE.replace("__DONT_CONFUSE__", texts.DONT_CONFUSE).replace(
+# Every formula is written in LaTeX: the web typesets it with KaTeX, the application turns it into
+# readable Unicode (QA 2026-11-26).
+MATH_RULE: Final = (
+    "Write every mathematical expression, formula or complexity notation in LaTeX: inline between "
+    "single dollars ($T(n) = \\sum_{i=1}^{k} T_i(n)$), on its own line between double dollars. "
+    "Inside JSON strings, escape each backslash (\\\\sum). Never write a formula as plain text."
+)
+
+STRUCTURE_INSTRUCTION: Final = _STRUCTURE.replace("__MATH_RULE__", MATH_RULE).replace("__DONT_CONFUSE__", texts.DONT_CONFUSE).replace(
     "__TUTOR_COMPLETED__", texts.TUTOR_COMPLETED
 )
 

@@ -5,6 +5,7 @@ import { useId, type KeyboardEvent } from 'react';
 import { Button, cn } from '@learny/ui';
 
 import type { CorrectionView } from '../../correction-view';
+import { InlineCode } from '../../view/inline-code';
 import { resolveLabels } from '../../view/labels';
 import { QuestionHeader } from '../../view/question-header';
 import type { BrickViewProps } from '../../view-types';
@@ -97,7 +98,7 @@ export function OrderingView(props: BrickViewProps<'ordering'>) {
                 {String(index + 1)}
               </span>
               <span className="min-w-0 flex-1 basis-200 text-16 font-600 text-ink">
-                {item.text}
+                <InlineCode text={item.text} />
               </span>
               {state !== undefined ? (
                 <span className="sr-only">

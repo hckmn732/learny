@@ -5,6 +5,7 @@ import { useId } from 'react';
 import { Button, SegmentedControl, cn } from '@learny/ui';
 
 import type { CorrectionView } from '../../correction-view';
+import { InlineCode } from '../../view/inline-code';
 import { resolveLabels } from '../../view/labels';
 import { QuestionHeader } from '../../view/question-header';
 import type { BrickViewProps } from '../../view-types';
@@ -59,7 +60,7 @@ export function CategorizationView(props: BrickViewProps<'categorization'>) {
               key={category.id}
             >
               <span className="text-13 font-700 tracking-label text-ink uppercase">
-                {category.label}
+                <InlineCode text={category.label} />
               </span>
               <div className="flex flex-wrap gap-6">
                 {items.length === 0 ? (
@@ -73,7 +74,7 @@ export function CategorizationView(props: BrickViewProps<'categorization'>) {
                       )}
                       key={item.id}
                     >
-                      {item.text}
+                      <InlineCode text={item.text} />
                     </span>
                   ))
                 )}
@@ -98,7 +99,7 @@ export function CategorizationView(props: BrickViewProps<'categorization'>) {
               key={item.id}
             >
               <span className="min-w-0 flex-1 basis-200 text-15 font-600 text-ink">
-                {item.text}
+                <InlineCode text={item.text} />
               </span>
               {state !== undefined ? (
                 <span className="sr-only">

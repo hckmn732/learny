@@ -8,6 +8,7 @@ import { Pressable, StyleSheet, View } from 'react-native';
 import { fr } from '@learny/i18n';
 
 import { selectionFeedback } from '../../../lib/haptics';
+import { withReadableMath } from '../../../lib/latex-text';
 import { radius, theme } from '../../../theme';
 import { Icon, Text } from '../../../ui';
 import { parsePublicPayload } from '../../public-schemas';
@@ -101,7 +102,7 @@ export function ChoiceQuestionView({
                 </Text>
               </View>
               <Text variant="body" style={styles.optionText}>
-                {option.text}
+                {withReadableMath(option.text)}
               </Text>
               {correct ? <Icon name="check" size={18} color={theme.colors.greenInk} /> : null}
               {wrong ? <Icon name="alert" size={18} color={theme.colors.orangeInk} /> : null}

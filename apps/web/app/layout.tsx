@@ -6,6 +6,7 @@ import { colors } from '@learny/ui/tokens';
 
 import { fontVariables } from '../lib/fonts';
 
+import 'katex/dist/katex.min.css';
 import './globals.css';
 import { Providers } from './providers';
 

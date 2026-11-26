@@ -8,6 +8,7 @@ import { Pressable, StyleSheet, View } from 'react-native';
 
 import { fr } from '@learny/i18n';
 
+import { withReadableMath } from '../../../lib/latex-text';
 import { radius, theme } from '../../../theme';
 import { Text } from '../../../ui';
 import { emptyMatching, tapLeft, tapRight, type MatchingState } from '../../games';
@@ -87,7 +88,7 @@ export function MatchingView({
                 ]}
                 testID={`brick-item-${left.id}`}
               >
-                <Text variant="body">{left.text}</Text>
+                <Text variant="body">{withReadableMath(left.text)}</Text>
               </Pressable>
               {/* The placement is a sibling of the button, not a child: a pressable is one node of
                 the accessibility tree, so a child text would never be announced on its own. */}
@@ -129,7 +130,7 @@ export function MatchingView({
             style={[styles.chip, usedRights.has(right.id) ? styles.used : null]}
             testID={`brick-item-${right.id}`}
           >
-            <Text variant="bodySmall">{right.text}</Text>
+            <Text variant="bodySmall">{withReadableMath(right.text)}</Text>
           </Pressable>
         ))}
       </View>

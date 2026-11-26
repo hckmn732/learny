@@ -12,6 +12,8 @@ import { fromMarkdown } from 'mdast-util-from-markdown';
 import { gfmTableFromMarkdown } from 'mdast-util-gfm-table';
 import { gfmTable } from 'micromark-extension-gfm-table';
 
+import { withReadableMath } from '../lib/latex-text';
+
 /** Inline run of a paragraph, a heading, a list item or a table cell. */
 export type Inline =
   | { readonly kind: 'text'; readonly value: string }
@@ -274,6 +276,6 @@ function blocks(node: MarkdownNode): readonly Block[] {
 /** Parses one Markdown string of the charge into the block tree of the renderer. */
 export function parseMarkdown(markdown: string): readonly Block[] {
   if (markdown.trim() === '') return EMPTY;
-  const root = fromMarkdown(markdown, PARSE_OPTIONS) as unknown as MarkdownNode;
+  const root = fromMarkdown(withReadableMath(markdown), PARSE_OPTIONS) as unknown as MarkdownNode;
   return blocks(root);
 }

@@ -1,7 +1,9 @@
 import type { Components } from 'react-markdown';
 import Markdown from 'react-markdown';
+import rehypeKatex from 'rehype-katex';
 import rehypeSanitize, { defaultSchema } from 'rehype-sanitize';
 import remarkGfm from 'remark-gfm';
+import remarkMath from 'remark-math';
 
 import { ScrollableTable, cn } from '@learny/ui';
 
@@ -77,8 +79,13 @@ export function MarkdownContent({ markdown, className }: MarkdownContentProps) {
     <div className={cn('flex flex-col gap-12 break-words', className)} data-testid="brick-markdown">
       <Markdown
         components={COMPONENTS}
-        rehypePlugins={[[rehypeSanitize, defaultSchema]]}
-        remarkPlugins={[remarkGfm]}
+        // Sanitised first, then the formulas (`$…$`, `$$…$$`) are typeset by KaTeX: its markup is
+        // generated from the escaped source, never from raw HTML of the model.
+        rehypePlugins={[
+          [rehypeSanitize, defaultSchema],
+          [rehypeKatex, { throwOnError: false }],
+        ]}
+        remarkPlugins={[remarkGfm, [remarkMath, { singleDollarTextMath: true }]]}
         urlTransform={safeUrl}
       >
         {markdown}

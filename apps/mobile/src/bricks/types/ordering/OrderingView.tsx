@@ -9,6 +9,7 @@ import { PanResponder, Pressable, StyleSheet, View } from 'react-native';
 
 import { fr } from '@learny/i18n';
 
+import { withReadableMath } from '../../../lib/latex-text';
 import { radius, theme } from '../../../theme';
 import { Icon, Text } from '../../../ui';
 import { moveDown, moveItem, moveUp, tapOrderingItem, type OrderingState } from '../../games';
@@ -144,7 +145,7 @@ export function OrderingView({
   const payload = parsed.payload;
   const graded = correction?.kind === 'ordering' ? correction : undefined;
   const locked = mode === 'read' || disabled === true || graded !== undefined;
-  const textOf = new Map(payload.items.map((item) => [item.id, item.text]));
+  const textOf = new Map(payload.items.map((item) => [item.id, withReadableMath(item.text)]));
 
   function publish(next: OrderingState, message: string): void {
     setState(next);
