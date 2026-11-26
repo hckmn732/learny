@@ -12,6 +12,8 @@ The files go to the private `resources` bucket next to the document, with the se
 cannot be read keeps its text.
 """
 
+# ruff: noqa: S112 - an unreadable image or page is skipped silently: its content is never logged.
+
 import hashlib
 import io
 import logging
@@ -142,24 +144,20 @@ def _render(document: Any, number: int, pdfium: Any) -> Figure | None:
             kind = "page"
         else:
             left, bottom, right, top = box
-            bitmap = page.render(
-                scale=RENDER_SCALE, crop=(left, bottom, width - right, height - top)
-            )
+            bitmap = page.render(scale=RENDER_SCALE, crop=(left, bottom, width - right, height - top))
             kind = "image"
         encoded, out_width, out_height = _jpeg(bitmap.to_pil())
     except Exception:
         return None
     finally:
         page.close()
-    return Figure(
-        page=number, data=encoded, mime="image/jpeg", width=out_width, height=out_height, kind=kind
-    )
+    return Figure(page=number, data=encoded, mime="image/jpeg", width=out_width, height=out_height, kind=kind)
 
 
 def extract_pdf_figures(data: bytes) -> list[Figure]:
     """One figure per illustrated page, in page order, at most `MAX_FIGURES`; empty on failure."""
     try:
-        import pypdfium2 as pdfium
+        import pypdfium2 as pdfium  # type: ignore[import-untyped]
         from pypdf import PdfReader
     except ImportError:
         return []

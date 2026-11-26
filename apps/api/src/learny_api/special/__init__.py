@@ -44,6 +44,8 @@ SPECIAL_ROUTE_IDS: tuple[str, ...] = (
     *UNGATED_ROUTE_IDS,
     auth_callback.CALLBACK_ROUTE_ID,
     sprints.SPRINTS_ROUTE_ID,
+    web_handoff.WEB_HANDOFF_ROUTE_ID,
+    figures.FIGURE_ROUTE_ID,
 )
 
 

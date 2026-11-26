@@ -440,7 +440,9 @@ async def read_module_context(tx: Any, user_id: str, module_id: str) -> ModuleSn
             chunks[chunk.chunk_id] = chunk
             by_chapter.setdefault(chapter_id, []).append(chunk)
 
-    figures_by_resource = await _figures_by_resource(tx, user_id, {chunk.resource_id for chunk in chunks.values()})
+    figures_by_resource = await _figures_by_resource(
+        tx, user_id, {chunk.resource_id for chunk in chunks.values()}
+    )
     allowed: set[str] = set()
     snapshots: list[ChapterSnapshot] = []
     for chapter in chapters:
@@ -607,12 +609,18 @@ MAX_CHAPTER_FIGURES = 8
 _IMAGE = re.compile(r"!\[([^\]]*)\]\(([^)\s]+)\)")
 
 
-async def _figures_by_resource(tx: Any, user_id: str, resource_ids: set[str]) -> dict[str, list[dict[str, Any]]]:
+async def _figures_by_resource(
+    tx: Any, user_id: str, resource_ids: set[str]
+) -> dict[str, list[dict[str, Any]]]:
     """The stored figures of the resources the module cites, by resource."""
     if not resource_ids:
         return {}
     rows = (
-        (await tx.conn.execute(SELECT_RESOURCE_FIGURES, {"user_id": user_id, "ids": uuid_array(resource_ids)}))
+        (
+            await tx.conn.execute(
+                SELECT_RESOURCE_FIGURES, {"user_id": user_id, "ids": uuid_array(resource_ids)}
+            )
+        )
         .mappings()
         .all()
     )

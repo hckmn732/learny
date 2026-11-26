@@ -521,7 +521,6 @@ async def fail_stale_resources(deps: ContentDeps, *, limit: int = STALE_SWEEP_LI
     return len(stale)
 
 
-
 async def _store_figures(deps: ContentDeps, ports: IngestionPorts, resource: LoadedResource) -> int:
     """The figures of a PDF, extracted, stored and listed in its metadata; never fails the ingestion."""
     if resource.kind != "pdf" or resource.metadata.get("sourceKind") == "document":
@@ -555,6 +554,7 @@ async def store_resource_figures(deps: ContentDeps, resource_id: str) -> int:
     if loaded is None or loaded.deleted:
         return 0
     return await _store_figures(deps, default_ports(deps), loaded)
+
 
 def _skipped(resource_id: str) -> dict[str, Any]:
     return {
@@ -737,7 +737,7 @@ __all__ = [
     "UploadPdfInput",
     "default_ports",
     "fail_stale_resources",
-    "store_resource_figures",
     "process_resource",
     "select_resource",
+    "store_resource_figures",
 ]

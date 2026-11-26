@@ -23,7 +23,9 @@ FIGURE_PATH: Final = "/api/v1/resources/{rid}/figures/{n}"
 
 Uuid = Annotated[
     str,
-    StringConstraints(pattern=r"^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$"),
+    StringConstraints(
+        pattern=r"^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$"
+    ),
 ]
 
 

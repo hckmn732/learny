@@ -10,8 +10,8 @@
   ],
   "counts": {
     "operations": 165,
-    "special": 11,
-    "consumers": 25,
+    "special": 13,
+    "consumers": 26,
     "crons": 2,
     "events": 17,
     "handlers": 165,
@@ -4105,6 +4105,19 @@
       ]
     },
     {
+      "key": "resources.figure",
+      "id": "resources.figure",
+      "method": "GET",
+      "path": "/api/v1/resources/:rid/figures/:n",
+      "contractPath": "/api/v1/resources/{rid}/figures/{n}",
+      "inRegistry": false,
+      "handler": "apps/api/src/learny_api/special/figures.py",
+      "module": "apps/api/src/learny_api/special/figures.py",
+      "context": "special",
+      "spec": "SPEC-2207",
+      "tests": []
+    },
+    {
       "key": "formations.sprints.plan",
       "id": "formations.sprints.plan",
       "method": "POST",
@@ -4118,6 +4131,19 @@
       "tests": [
         "apps/api/tests/integration/test_special_sprints_route.py"
       ]
+    },
+    {
+      "key": "auth.webHandoff",
+      "id": "auth.webHandoff",
+      "method": "POST",
+      "path": "/api/v1/auth/web-handoff",
+      "contractPath": "/api/v1/auth/web-handoff",
+      "inRegistry": false,
+      "handler": "apps/api/src/learny_api/special/web_handoff.py",
+      "module": "apps/api/src/learny_api/special/web_handoff.py",
+      "context": "special",
+      "spec": "SPEC-2207",
+      "tests": []
     }
   ],
   "consumers": [
@@ -4152,12 +4178,22 @@
       "module": "apps/worker/src/learny_worker/consumers.py"
     },
     {
+      "name": "content.fail_stale_resources",
+      "event": "cron/hourly-tick",
+      "run": "content_fail_stale_resources",
+      "context": "content",
+      "timeoutS": null,
+      "maxAttempts": null,
+      "delayed": false,
+      "module": "apps/worker/src/learny_worker/consumers.py"
+    },
+    {
       "name": "content.process_resource",
       "event": "resource/uploaded",
       "run": "content_process_resource",
       "context": "content",
       "timeoutS": 600,
-      "maxAttempts": null,
+      "maxAttempts": 9,
       "delayed": false,
       "module": "apps/worker/src/learny_worker/consumers.py"
     },
@@ -4326,7 +4362,7 @@
       "event": "chapter/contributions-completed",
       "run": "tutor_generate_course",
       "context": "tutor",
-      "timeoutS": 600,
+      "timeoutS": 1800,
       "maxAttempts": 4,
       "delayed": false,
       "module": "apps/worker/src/learny_worker/consumers.py"
@@ -4378,6 +4414,7 @@
       "schedule": "5 * * * *",
       "task": "expire due automations, emit user/local-tick, emit the tick",
       "consumers": [
+        "content.fail_stale_resources",
         "engagement.deliver_due_deliveries",
         "engagement.plan_daily_digests",
         "engagement.sync_validation_quiz_reminders",
@@ -4422,6 +4459,7 @@
     {
       "name": "cron/hourly-tick",
       "consumers": [
+        "content.fail_stale_resources",
         "engagement.deliver_due_deliveries",
         "engagement.plan_daily_digests",
         "engagement.sync_validation_quiz_reminders",
@@ -4577,6 +4615,6 @@
     }
   ],
   "python": {
-    "testFiles": 248
+    "testFiles": 250
   }
 }

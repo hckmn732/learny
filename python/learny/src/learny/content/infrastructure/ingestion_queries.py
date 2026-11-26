@@ -145,7 +145,6 @@ MARK_FAILED = text(
 )
 
 __all__ = [
-    "SET_FIGURES",
     "CLAIM_EVENT",
     "CLEAR_EVENT_CLAIM",
     "DELETE_CHUNKS",
@@ -158,6 +157,7 @@ __all__ = [
     "SELECT_RESOURCE",
     "SELECT_RESOURCE_FOR_UPDATE",
     "SELECT_STALE_RESOURCES",
+    "SET_FIGURES",
     "UPDATE_READY",
 ]
 

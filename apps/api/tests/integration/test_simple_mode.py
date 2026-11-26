@@ -223,7 +223,8 @@ async def test_full_flow_mock(database: Database) -> None:
         )
         assert bound.mappings().all()[0]["total"] >= 1
 
-        # EF-9, EF-12 - the first two modules are generated directly, the rest is queued.
+        # EF-9, EF-12 - every module is queued as its own course job (QA 2026-11-26: two courses
+        # generated inside this job exceeded its timeout on a large document).
         generated: list[str] = []
 
         class Recorder:
@@ -236,10 +237,18 @@ async def test_full_flow_mock(database: Database) -> None:
             await worker_consumers.formation_simple_generation(deps, _event(user, formation_id))
         finally:
             worker_consumers.tutor = original  # type: ignore[attr-defined]
-        return {"generated": generated, "formation_id": formation_id}
+        queued = await tx.conn.execute(
+            text(
+                "select count(*) from public.event_outbox"
+                " where event_id like :pattern and user_id = cast(:user as uuid)"
+            ),
+            {"user": user, "pattern": "simple-course:%"},
+        )
+        return {"generated": generated, "queued": int(queued.scalar_one()), "formation_id": formation_id}
 
     result = await rolled_back(database, run)
-    assert len(result["generated"]) == 2
+    assert result["generated"] == []
+    assert result["queued"] >= 2
 
 
 async def prepare_active_formation(tx: Any) -> tuple[Any, str, str]:

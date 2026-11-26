@@ -7,8 +7,8 @@ from learny.content.application.chapters import chapter_counts, complete_chapter
 from learny.content.application.citations import get_citation_source
 from learny.content.application.course import get_module_course
 from learny.content.application.dev_uploads import simulate_upload
-from learny.content.application.generate import generate_course_now
 from learny.content.application.figures import figure_entries, figure_url, owned_figure
+from learny.content.application.generate import generate_course_now
 from learny.content.application.ingestion import (
     IngestionPorts,
     default_ports,
@@ -90,11 +90,9 @@ __all__ = [
     "excerpt_of",
     "fail_after_last_attempt",
     "fail_stale_resources",
+    "fake_embedding",
     "figure_entries",
     "figure_url",
-    "owned_figure",
-    "store_resource_figures",
-    "fake_embedding",
     "finalize_upload",
     "format_document_chunk",
     "generate_course_now",
@@ -105,6 +103,7 @@ __all__ = [
     "import_suggestion",
     "list_resource_chunks",
     "merge_progress",
+    "owned_figure",
     "process_resource",
     "reactivate_bricks",
     "read_pdf_bookmarks",
@@ -115,6 +114,7 @@ __all__ = [
     "retry_resource",
     "select_context",
     "simulate_upload",
+    "store_resource_figures",
     "submit_chapter_summary",
     "suspend_bricks_for_notions",
     "text_overlap_ratio",

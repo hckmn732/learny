@@ -263,7 +263,7 @@ function blocks(node: MarkdownNode): readonly Block[] {
     case 'footnoteDefinition':
       return EMPTY;
     case 'image':
-      return [{ kind: 'image', alt: (node.alt ?? '').trim() }];
+      return [{ kind: 'image', alt: (node.alt ?? '').trim(), url: (node.url ?? '').trim() }];
     default: {
       const children = node.children ?? [];
       return children.length === 0
