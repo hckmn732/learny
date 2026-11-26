@@ -58,13 +58,7 @@ class Runner:
         slots = self._concurrency if free_slots is None else min(free_slots, self._concurrency)
         if slots <= 0:
             return 0
-        async with self._deps.db.service_tx() as tx:
-            claimed = await outbox.claim(
-                tx,
-                now=self._deps.clock.now(),
-                lease_seconds=self._max_lease(),
-                free_slots=slots,
-            )
+        claimed = await self._claim(slots)
         if not claimed:
             return 0
         await asyncio.gather(
@@ -98,20 +92,44 @@ class Runner:
         """Runs one already-claimed delivery (used by the integration tests of the crash path)."""
         await self._run(delivery, event)
 
+    async def _claim(self, slots: int) -> list[Any]:
+        async with self._deps.db.service_tx() as tx:
+            return list(
+                await outbox.claim(
+                    tx,
+                    now=self._deps.clock.now(),
+                    lease_seconds=self._max_lease(),
+                    free_slots=slots,
+                )
+            )
+
     async def run(self, stop: asyncio.Event) -> None:
-        """Claims until `stop`; the batch in flight always finishes before returning (ET-1)."""
+        """Claims until `stop`; the deliveries in flight always finish before returning (ET-1).
+
+        Each slot is refilled as soon as its delivery ends: a long course generation no longer
+        holds back the short jobs claimed with it (QA 2026-11-26).
+        """
         self._logger.info("runner started", concurrency=self._concurrency)
+        inflight: set[asyncio.Task[None]] = set()
         while not stop.is_set():
-            ran = 0
-            try:
-                ran = await self.run_once()
-            except Exception as error:
-                self._logger.error("claim failed", code=type(error).__name__, error=str(error)[:200])
-            if ran == 0:
+            claimed: list[Any] = []
+            free = self._concurrency - len(inflight)
+            if free > 0:
+                try:
+                    claimed = await self._claim(free)
+                except Exception as error:
+                    self._logger.error("claim failed", code=type(error).__name__, error=str(error)[:200])
+            for item in claimed:
+                task = asyncio.create_task(self._run(item.delivery, item.event))
+                inflight.add(task)
+                task.add_done_callback(inflight.discard)
+            if not claimed:
                 try:
                     await asyncio.wait_for(stop.wait(), timeout=self._poll_interval)
                 except TimeoutError:
                     continue
+        if inflight:
+            await asyncio.gather(*inflight, return_exceptions=True)
         self._logger.info("runner stopped")
 
     async def _run(self, delivery: Delivery, event: Event) -> None:
