@@ -46,6 +46,8 @@ GENERATION_STATE_LABELS = {
 DEFAULT_TITLE = "Nouvelle formation"
 
 SECTION_CHAPTER_TITLE = "{title} — partie {index}"
+# Objectif d'un module quand le modèle ne propose pas de programme exploitable (QA 2026-11-26).
+FALLBACK_OBJECTIVE = "Comprendre et savoir appliquer : {title}"
 PRACTICE_DETAIL = "Exercices : {ready} document(s) rattaché(s), {failed} en échec."
 CADRAGE_BEGINNER = "Débutant"
 CADRAGE_MASTERY = "Maîtrise du contenu du document"
