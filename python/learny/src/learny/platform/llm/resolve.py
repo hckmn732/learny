@@ -45,7 +45,7 @@ class ResolvedModel:
 
 # A task no settings screen exposes borrows the model of a neighbour task until the learner assigns
 # one: without it the simple-mode analysis could never start (QA 2026-11-26).
-FALLBACK_TASKS: dict[str, tuple[AiTask, ...]] = {"simple_analysis": ("light", "course")}
+FALLBACK_TASKS: dict[str, tuple[AiTask, ...]] = {"simple_analysis": ("course", "light")}
 
 
 def _unavailable(reason: str) -> AppError:
