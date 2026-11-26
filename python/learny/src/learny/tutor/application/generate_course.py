@@ -425,9 +425,7 @@ async def read_module_context(tx: Any, user_id: str, module_id: str) -> ModuleSn
         chunks[chunk.chunk_id] = chunk
         by_chapter.setdefault(chunk.chapter_id or "", []).append(chunk)
     for chapter_id, rows in _source_passages(
-        (
-            await tx.conn.execute(SELECT_SOURCE_PASSAGES, {"user_id": user_id, "module_id": module_id})
-        )
+        (await tx.conn.execute(SELECT_SOURCE_PASSAGES, {"user_id": user_id, "module_id": module_id}))
         .mappings()
         .all(),
         has_own={key for key, value in by_chapter.items() if value},
