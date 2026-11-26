@@ -11,6 +11,7 @@ import { Breadcrumb, buildFormationBreadcrumb } from '@learny/ui';
 
 import { CourseArticle, type SectionActions } from './CourseArticle';
 import { CourseToc } from './CourseToc';
+import { InlineCode } from './InlineCode';
 import { SummaryEditor } from './SummaryEditor';
 
 const t = fr.course;
@@ -220,7 +221,7 @@ export function CourseScreen({ initial }: { initial: ModuleCourseScreen }) {
                   className="m-0 font-display text-34 font-600 tracking-title nav:text-40"
                   data-testid="course-title"
                 >
-                  {course.chapter.title}
+                  <InlineCode text={course.chapter.title} />
                 </h1>
                 {course.baseCourse ? (
                   <div

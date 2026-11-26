@@ -3,6 +3,7 @@
 import type { CourseStarter, CourseView } from '@learny/contracts';
 import { fr } from '@learny/i18n/fr/tutorChat';
 
+import { InlineCode } from '../course/InlineCode';
 const t = fr.tutorChat;
 
 function Sparkle(): React.ReactElement {
@@ -85,7 +86,7 @@ export function TutorAskCard({
             }}
             type="button"
           >
-            {starter.label}
+            <InlineCode text={starter.label} />
           </button>
         ))}
       </div>

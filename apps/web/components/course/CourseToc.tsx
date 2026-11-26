@@ -3,6 +3,7 @@
 import type { CourseChapterSummary, CourseSection, ModuleCourseScreen } from '@learny/contracts';
 import { fr } from '@learny/i18n/fr/course';
 
+import { InlineCode } from './InlineCode';
 const t = fr.course;
 
 function chapterHref(screen: ModuleCourseScreen, chapterId: string): string {
@@ -76,7 +77,9 @@ export function CourseToc({
                 {chapter.percent >= 100 ? '✓' : chapter.position}
               </span>
               <span className="flex min-w-0 flex-col gap-1">
-                <span>{chapter.title}</span>
+                <span>
+                  <InlineCode text={chapter.title} />
+                </span>
                 {active ? (
                   <span className="text-11 font-600 text-ink-muted">
                     {t.tocProgress(chapter.percent)}
@@ -91,7 +94,7 @@ export function CourseToc({
                     href={`#${section.anchor}`}
                     key={section.id}
                   >
-                    {sectionLabel(section)}
+                    <InlineCode text={sectionLabel(section)} />
                   </a>
                 ))
               : null}
