@@ -413,6 +413,8 @@ async def formation_simple_generation(deps: Any, event: Event) -> None:
                     "force": True,
                 },
                 event_id=f"simple-course:{module_id}",
+                # The course job resolves the learner's own AI model from the event owner.
+                user_id=user_id,
             )
 
 

@@ -21,7 +21,8 @@ from learny.shared.locale_fr import tutor as texts
 COURSE_TASK: Final = "course"
 COURSE_PROMPT_ID: Final = "course.course"
 COURSE_PROMPT_VERSION: Final = 1
-COURSE_MAX_CORRECTIONS: Final = 2
+# Four corrections: one off-contract answer of a live model no longer fails a whole module (QA 2026-11-26).
+COURSE_MAX_CORRECTIONS: Final = 4
 """SPEC-608 EF-1 - the initial call and its two corrections."""
 
 COURSE_TOKEN_BUDGET: Final = RETRIEVAL_TOKEN_BUDGETS["course"]
