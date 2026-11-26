@@ -198,6 +198,12 @@ def _clean_title(title: str) -> str:
     return cleaned[:HEADING_MAX_LENGTH]
 
 
+def _numbered(line: str, match: "re.Match[str]", name: str) -> str:
+    """The chapter line as written (`Chapitre 1 Les bases`), its trailing page number removed."""
+    label = line[: match.start("title")] if match.group("title") else line
+    return _clean_title(f"{' '.join(label.split())} {name}") if name else _clean_title(label)
+
+
 def chapter_titles(pages: Mapping[int, str], toc: set[int]) -> dict[int, str]:
     """`Chapitre N. Title` lines of the table of contents: the title of every numbered chapter."""
     titles: dict[int, str] = {}
@@ -207,9 +213,9 @@ def chapter_titles(pages: Mapping[int, str], toc: set[int]) -> dict[int, str]:
             if match is None:
                 continue
             number = int(match.group("number"))
-            title = _clean_title(match.group("title") or "")
-            if title and number not in titles:
-                titles[number] = title
+            name = _clean_title(match.group("title") or "")
+            if name and number not in titles:
+                titles[number] = _numbered(line, match, name)
     return titles
 
 
@@ -232,9 +238,11 @@ def chapter_starts(pages: Mapping[int, str], toc: set[int]) -> list[tuple[int, s
             number = int(match.group("number"))
             if number in starts:
                 break
-            own = _clean_title(match.group("title") or "")
+            name = _clean_title(match.group("title") or "")
+            own = _numbered(line, match, name) if name else ""
             if not own and index + 1 < len(lines):
-                own = _clean_title(lines[index + 1])
+                following = _clean_title(lines[index + 1])
+                own = f"Chapitre {number}. {following}"[:HEADING_MAX_LENGTH] if following else ""
             title = titles.get(number) or own or f"Chapitre {number}"
             starts[number] = (page, title)
             break
@@ -259,7 +267,10 @@ def _without_toc(sections: list[DocumentSection], toc: set[int]) -> list[Documen
                 section.page_from is not None
                 and section.page_to is not None
                 and toc
-                and all(page in toc or page < min(toc) for page in range(section.page_from, section.page_to + 1))
+                and all(
+                    page in toc or page < min(toc)
+                    for page in range(section.page_from, section.page_to + 1)
+                )
             )
         )
     ]
@@ -287,8 +298,8 @@ def detect_sections(
     pages = page_texts(chunks)
     total = total_pages if total_pages is not None else _pages_from_texts(pages)
     usable = [(int(page), str(title)) for page, title in (bookmarks or []) if int(page) >= 1]
-    toc = toc_pages(pages)
-    chapters = chapter_starts(pages, toc)
+    toc_set = toc_pages(pages)
+    chapters = chapter_starts(pages, toc_set)
     if len(usable) >= 2:
         sections = _sections_from_boundaries(usable, pages, total)
     elif len(chapters) >= MIN_CHAPTERS:
@@ -308,7 +319,7 @@ def detect_sections(
                     str(chunk.get("text")) for chunk in chunks if isinstance(chunk.get("text"), str)
                 )
                 sections = _fallback(pages, total, plain)
-    return _without_toc(sections, toc)[:MAX_SECTIONS]
+    return _without_toc(sections, toc_set)[:MAX_SECTIONS]
 
 
 def read_pdf_bookmarks(data: bytes) -> list[tuple[int, str]]:
