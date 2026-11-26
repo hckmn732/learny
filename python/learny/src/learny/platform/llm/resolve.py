@@ -43,6 +43,11 @@ class ResolvedModel:
     base_url: str | None = None
 
 
+# A task no settings screen exposes borrows the model of a neighbour task until the learner assigns
+# one: without it the simple-mode analysis could never start (QA 2026-11-26).
+FALLBACK_TASKS: dict[str, tuple[AiTask, ...]] = {"simple_analysis": ("light", "course")}
+
+
 def _unavailable(reason: str) -> AppError:
     """`aiUnavailable`: the same code, detail and `reason`."""
     return AppError("AI_UNAVAILABLE", AI_UNAVAILABLE_MODEL, reason=reason)
@@ -56,6 +61,18 @@ async def resolve_task_model(tx: Tx, user_id: str, task: AiTask) -> ResolvedMode
 
     # (1) no assignment: the learner has not chosen a model for this task.
     if row is None:
+        for fallback in FALLBACK_TASKS.get(task, ()):
+            try:
+                borrowed = await resolve_task_model(tx, user_id, fallback)
+            except AppError:
+                continue
+            return ResolvedModel(
+                provider=borrowed.provider,
+                model_id=borrowed.model_id,
+                credential_id=borrowed.credential_id,
+                task=task,
+                base_url=borrowed.base_url,
+            )
         raise _unavailable("no_model_selected")
 
     # (2) the assigned key was deleted (cascade) or never existed.
