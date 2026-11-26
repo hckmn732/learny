@@ -45,6 +45,7 @@ from learny.tutor.domain.course import (
     COURSE_MAX_CORRECTIONS,
     COURSE_PROMPT_ID,
     COURSE_TASK,
+    MAX_POINT,
     GENERATION_KEY_MAX_LENGTH,
     NOT_JSON_CORRECTION,
     SECTION_KIND,
@@ -597,18 +598,55 @@ def _lenient(value: Any) -> Any:
     if not isinstance(sections, list):
         return value
     kept: list[Any] = []
-    has_question = False
+    seen_once: set[str] = set()
     for section in sections:
         if isinstance(section, dict):
-            if section.get("kind") == "quick_question":
-                if has_question:
+            kind = section.get("kind")
+            # One flash question and one "do not confuse" block per chapter: the extra ones go.
+            if kind in ("quick_question", "comparison"):
+                if kind in seen_once:
                     continue
-                has_question = True
+                seen_once.add(str(kind))
             diagram = section.get("diagram")
             if diagram is not None and not isinstance(diagram, dict):
                 section = {key: item for key, item in section.items() if key != "diagram"}
+            points = section.get("points")
+            if kind == "takeaway" and isinstance(points, list):
+                section = {
+                    **section,
+                    "points": [
+                        _shortened(point) if isinstance(point, str) else point for point in points
+                    ],
+                }
         kept.append(section)
-    return {**value, "sections": kept}
+    # The chapter lists repeat exactly the union of its sections: recomputed, never argued over.
+    sources = [
+        chunk
+        for section in kept
+        if isinstance(section, dict)
+        for chunk in (section.get("sourceChunkIds") or [])
+    ]
+    notions = [
+        notion
+        for section in kept
+        if isinstance(section, dict)
+        for notion in (section.get("notionIds") or [])
+    ]
+    return {
+        **value,
+        "sections": kept,
+        "sourceChunkIds": list(dict.fromkeys(sources)),
+        "notionIds": list(dict.fromkeys(notions)) or value.get("notionIds") or [],
+    }
+
+
+def _shortened(point: str) -> str:
+    """A takeaway point cut at a word boundary under the contract limit."""
+    text = point.strip()
+    if len(text) <= MAX_POINT:
+        return text
+    cut = text[: MAX_POINT - 1].rsplit(" ", 1)[0].rstrip(" ,;:")
+    return f"{cut}…"
 
 
 def _cited_chunk_ids(draft: Mapping[str, Any]) -> list[str]:
