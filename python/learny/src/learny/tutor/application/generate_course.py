@@ -131,6 +131,38 @@ SELECT_PASSAGES = text(
     order by r.created_at asc, c.position asc, c.id asc
     """
 )
+# Simple mode (QA 2026-11-26): the deposited document is linked to the chapters by page range in
+# `chapter_sources`, its chunks carry no `chapter_id`. Without this read the course was written
+# from general knowledge, ignoring the document.
+SELECT_SOURCE_PASSAGES = text(
+    """
+    select
+      cs.chapter_id::text as source_chapter_id,
+      c.id::text as chunk_id,
+      c.resource_id::text as resource_id,
+      c.text,
+      c.location,
+      r.title,
+      r.kind::text as kind,
+      r.status::text as status,
+      r.deleted_at,
+      r.mime
+    from public.chapter_sources cs
+    join public.chapters ch on ch.id = cs.chapter_id
+    join public.resource_chunks c on c.resource_id = cs.resource_id
+    join public.resources r on r.id = c.resource_id
+    where ch.module_id = cast(:module_id as uuid)
+      and c.owner_id = cast(:user_id as uuid)
+      and r.status = 'ready'
+      and r.deleted_at is null
+      and (
+        cs.page_from is null
+        or (c.location ->> 'page') is null
+        or (c.location ->> 'page')::int between cs.page_from and coalesce(cs.page_to, cs.page_from)
+      )
+    order by ch.position asc, c.position asc, c.id asc
+    """
+)
 SELECT_CHUNKS_BY_IDS = text(
     """
     select
@@ -337,6 +369,28 @@ def _course_language(value: str) -> str:
     return value if value in ("en", "es", "de") else "fr"
 
 
+def _source_passages(
+    rows: Sequence[Mapping[str, Any]], *, has_own: set[str]
+) -> dict[str, list[dict[str, Any]]]:
+    """The document passages of each chapter; chapters sharing the same pages split them in order."""
+    by_chapter: dict[str, list[dict[str, Any]]] = {}
+    for row in rows:
+        chapter_id = str(row["source_chapter_id"])
+        if chapter_id not in has_own:
+            by_chapter.setdefault(chapter_id, []).append(dict(row))
+    groups: dict[tuple[str, ...], list[str]] = {}
+    for chapter_id, items in by_chapter.items():
+        groups.setdefault(tuple(str(item["chunk_id"]) for item in items), []).append(chapter_id)
+    shared: dict[str, list[dict[str, Any]]] = {}
+    for chapter_ids in groups.values():
+        items = by_chapter[chapter_ids[0]]
+        count = len(chapter_ids)
+        for index, chapter_id in enumerate(chapter_ids):
+            part = items[index * len(items) // count : (index + 1) * len(items) // count]
+            shared[chapter_id] = part or items[-1:]
+    return shared
+
+
 async def read_module_context(tx: Any, user_id: str, module_id: str) -> ModuleSnapshot:
     """`readModuleContext`: the module, its chapters, their notions and the selected passages."""
     modules = (
@@ -370,6 +424,18 @@ async def read_module_context(tx: Any, user_id: str, module_id: str) -> ModuleSn
         chunk = known_chunk(dict(row), user_id)
         chunks[chunk.chunk_id] = chunk
         by_chapter.setdefault(chunk.chapter_id or "", []).append(chunk)
+    for chapter_id, rows in _source_passages(
+        (
+            await tx.conn.execute(SELECT_SOURCE_PASSAGES, {"user_id": user_id, "module_id": module_id})
+        )
+        .mappings()
+        .all(),
+        has_own={key for key, value in by_chapter.items() if value},
+    ).items():
+        for row in rows:
+            chunk = known_chunk({**row, "chapter_id": chapter_id}, user_id)
+            chunks[chunk.chunk_id] = chunk
+            by_chapter.setdefault(chapter_id, []).append(chunk)
 
     allowed: set[str] = set()
     snapshots: list[ChapterSnapshot] = []
@@ -513,12 +579,38 @@ async def _generate_chapter(
             correction = NOT_JSON_CORRECTION
             continue
         parsed, issues = parse_chapter(
-            replace_course_placeholders(value, placeholders), f"chapter {chapter.position}"
+            _lenient(replace_course_placeholders(value, placeholders)), f"chapter {chapter.position}"
         )
         if parsed is not None:
             return parsed, generated.model_id or None
         correction = issue_summary(issues)
     raise _task_failed(AppError("INVALID_OUTPUT", texts.COURSE_INVALID_OUTPUT))
+
+
+def _lenient(value: Any) -> Any:
+    """Drops the optional parts a live model often gets wrong, instead of failing the course.
+
+    A malformed diagram is removed from its section and only the first quick question of the
+    chapter is kept (QA 2026-11-26); everything else is still checked by `parse_chapter`.
+    """
+    if not isinstance(value, dict):
+        return value
+    sections = value.get("sections")
+    if not isinstance(sections, list):
+        return value
+    kept: list[Any] = []
+    has_question = False
+    for section in sections:
+        if isinstance(section, dict):
+            if section.get("kind") == "quick_question":
+                if has_question:
+                    continue
+                has_question = True
+            diagram = section.get("diagram")
+            if diagram is not None and not isinstance(diagram, dict):
+                section = {key: item for key, item in section.items() if key != "diagram"}
+        kept.append(section)
+    return {**value, "sections": kept}
 
 
 def _cited_chunk_ids(draft: Mapping[str, Any]) -> list[str]:
