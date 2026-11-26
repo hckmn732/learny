@@ -107,6 +107,12 @@ def sanitized(value: str) -> str:
     return cleaned[:_PROVIDER_TEXT_MAX]
 
 
+_NO_CREDIT = re.compile(r"insufficient[ _]balance|insufficient[ _]credit|no credits|out of credits|billing", re.I)
+_MODEL_UNAVAILABLE = re.compile(
+    r"model[^.]{0,80}(not found|does not exist|isn.t included|not included|not available|unknown)", re.I
+)
+
+
 def provider_error(status: int, body: str) -> AppError:
     """`mapProviderError`: an HTTP failure of the provider as a catalogue error."""
     if status in (401, 403):
@@ -119,6 +125,11 @@ def provider_error(status: int, body: str) -> AppError:
         return AppError("AI_CONTEXT_TOO_LONG", texts.AI_CONTEXT_TOO_LONG, status=422)
     if _REFUSAL.search(body) and status < 500:
         return AppError("AI_REFUSED", texts.AI_REFUSED, status=422)
+    # The learner can act on these two causes: say which one instead of "unavailable" (QA 2026-11-26).
+    if status == 402 or _NO_CREDIT.search(body):
+        return AppError("AI_PROVIDER_ERROR", texts.AI_PROVIDER_NO_CREDIT, status=503)
+    if status in (400, 404) and _MODEL_UNAVAILABLE.search(body):
+        return AppError("AI_PROVIDER_ERROR", texts.AI_PROVIDER_MODEL_UNAVAILABLE, status=503)
     return AppError("AI_PROVIDER_ERROR", texts.AI_PROVIDER_UNAVAILABLE, status=503)
 
 

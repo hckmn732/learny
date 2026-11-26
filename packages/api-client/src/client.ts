@@ -7,6 +7,7 @@ import type { ROUTES } from '@learny/contracts/routes';
 import type { SendMessageInput } from '@learny/contracts/tutor-chat';
 import { AppError, ERROR_CATALOG, type ErrorCode } from '@learny/core';
 
+import { reportApiError } from './error-events';
 import { readTutorReplyStream, StreamInterruptedError, type TutorReplyPart } from './sse';
 import { createTokenManager, type TokenAuthOptions } from './token';
 
@@ -217,6 +218,8 @@ export interface CallOptions {
   fetch?: typeof fetch;
   /** Network retries of an idempotent call, with the same key (default 2). */
   networkRetries?: number;
+  /** The caller shows the error itself: the global report (toast) is skipped. */
+  silentError?: boolean;
 }
 
 export interface StreamCallOptions {
@@ -540,7 +543,12 @@ export function createApiClient(options: ApiClientOptions): ApiClient {
     const routes = await loadRoutes();
     const route = (routes as Record<string, AnyRoute | undefined>)[name];
     if (route === undefined) throw new Error(`Route inconnue : ${name}`);
-    return callApi(route, input, callOptions);
+    try {
+      return await callApi(route, input, callOptions);
+    } catch (error) {
+      if (callOptions?.silentError !== true) reportApiError(error, route.method);
+      throw error;
+    }
   }
 
   type ApiFunction = (input: never, options?: CallOptions) => Promise<unknown>;
@@ -621,7 +629,37 @@ export function createApiClient(options: ApiClientOptions): ApiClient {
     yield* readTutorReplyStream(response.body);
   }
 
-  return { apiFetch, callApi, api, loadRoutes, streamTutorReply };
+  async function reportedFetch<TInput, TOutput>(
+    req: ApiRequest<TInput, TOutput>,
+  ): Promise<TOutput> {
+    try {
+      return await apiFetch(req);
+    } catch (error) {
+      reportApiError(error, req.method);
+      throw error;
+    }
+  }
+
+  async function reportedCall<R extends AnyRoute>(
+    route: R,
+    input: RouteInput<R>,
+    callOptions?: CallOptions,
+  ): Promise<RouteOutput<R>> {
+    try {
+      return await callApi(route, input, callOptions);
+    } catch (error) {
+      if (callOptions?.silentError !== true) reportApiError(error, route.method);
+      throw error;
+    }
+  }
+
+  return {
+    apiFetch: reportedFetch,
+    callApi: reportedCall,
+    api,
+    loadRoutes,
+    streamTutorReply,
+  };
 }
 
 // ---------------------------------------------------------------------------------------------

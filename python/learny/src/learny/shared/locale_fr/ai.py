@@ -107,5 +107,13 @@ AI_TIMEOUT = "Le modèle n’a pas répondu dans le délai imparti."
 AI_CONTEXT_TOO_LONG = "Le contexte envoyé au modèle dépasse sa fenêtre maximale."
 AI_REFUSED = "Le modèle a refusé de produire une réponse."
 AI_PROVIDER_UNAVAILABLE = "Le fournisseur d’IA est momentanément indisponible."
+AI_PROVIDER_NO_CREDIT = (
+    "Votre compte chez le fournisseur d’IA n’a plus de crédit : rechargez-le ou choisissez un autre "
+    "modèle dans Paramètres › Modèles d’IA."
+)
+AI_PROVIDER_MODEL_UNAVAILABLE = (
+    "Ce modèle n’est pas disponible avec votre clé ou votre abonnement : choisissez-en un autre "
+    "dans Paramètres › Modèles d’IA."
+)
 AI_PROVIDER_MISCONFIGURED = "Fournisseur d’IA mal configuré : adresse de service absente."
 AI_INVALID_OUTPUT = "La sortie du modèle ne respecte pas le schéma attendu."

@@ -8,6 +8,7 @@ import { LiveAnnouncer, ToastProvider } from '@learny/ui';
 
 import { OfflineProvider } from '../offline/OfflineProvider';
 
+import { ApiErrorToasts } from './api-error-toasts';
 import { Header } from './header';
 import { Sidebar } from './sidebar';
 
@@ -44,6 +45,7 @@ export const AppShell = ({
     <ToastProvider>
       <LiveAnnouncer>
         <OfflineProvider />
+        <ApiErrorToasts />
         <div className="flex min-h-screen bg-canvas">
           <a
             href="#contenu"

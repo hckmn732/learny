@@ -2,5 +2,6 @@
 // every client of the API and parameterisable with createApiClient (browser today, mobile
 // tomorrow — ADR-1004, ADR-1007).
 export * from './client';
+export * from './error-events';
 export * from './sse';
 export * from './token';

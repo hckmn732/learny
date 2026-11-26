@@ -30,6 +30,7 @@ import { AppQueryProvider } from '../src/data/providers';
 import { appQueryClient } from '../src/data/query-client';
 import { AuthGate } from '../src/features/auth/AuthGate';
 import { ConfigErrorPage } from '../src/features/sdd/ConfigErrorPage';
+import { ApiErrorToast } from '../src/features/shell/ApiErrorToast';
 import { AppErrorScreen } from '../src/features/shell/AppErrorScreen';
 import { PushBridge } from '../src/notifications/PushBridge';
 import { startOfflineWiring } from '../src/offline/network-wiring';
@@ -121,6 +122,8 @@ export default function RootLayout() {
           <PushBridge />
           {/* SPEC-4003 EF-3 — partage entrant, avant ou après la connexion. */}
           <ShareIntake />
+          {/* QA 2026-11-26 — toute action en échec affiche sa cause. */}
+          <ApiErrorToast />
         </SafeAreaProvider>
       </AppQueryProvider>
     </SessionProvider>
