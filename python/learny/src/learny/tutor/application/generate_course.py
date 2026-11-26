@@ -21,7 +21,7 @@ consumer timeout of the job is 600 s (P22 plan); the model calls of one chapter 
 
 import json
 from collections.abc import Callable, Mapping, Sequence
-from dataclasses import dataclass
+from dataclasses import dataclass, replace
 from datetime import datetime
 from typing import Any
 
@@ -741,6 +741,15 @@ async def _publish(
             return _result_of(existing, module_id, created=False)
 
         fresh = await _fresh_chunks(tx, user_id, _cited_chunk_ids(draft))
+        # A document passage of the simple mode keeps the chapter it was assigned to in the snapshot.
+        fresh = {
+            chunk_id: (
+                replace(chunk, chapter_id=snapshot.chunks[chunk_id].chapter_id)
+                if chunk.chapter_id is None and chunk_id in snapshot.chunks
+                else chunk
+            )
+            for chunk_id, chunk in fresh.items()
+        }
         checked: CitationValidation = validate_course_citations(
             draft,
             user_id=user_id,
