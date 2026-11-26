@@ -45,8 +45,8 @@ from learny.tutor.domain.course import (
     COURSE_MAX_CORRECTIONS,
     COURSE_PROMPT_ID,
     COURSE_TASK,
-    MAX_POINT,
     GENERATION_KEY_MAX_LENGTH,
+    MAX_POINT,
     NOT_JSON_CORRECTION,
     SECTION_KIND,
     check_draft_belongs_to_chapter,
@@ -614,9 +614,7 @@ def _lenient(value: Any) -> Any:
             if kind == "takeaway" and isinstance(points, list):
                 section = {
                     **section,
-                    "points": [
-                        _shortened(point) if isinstance(point, str) else point for point in points
-                    ],
+                    "points": [_shortened(point) if isinstance(point, str) else point for point in points],
                 }
         kept.append(section)
     # The chapter lists repeat exactly the union of its sections: recomputed, never argued over.
@@ -627,10 +625,7 @@ def _lenient(value: Any) -> Any:
         for chunk in (section.get("sourceChunkIds") or [])
     ]
     notions = [
-        notion
-        for section in kept
-        if isinstance(section, dict)
-        for notion in (section.get("notionIds") or [])
+        notion for section in kept if isinstance(section, dict) for notion in (section.get("notionIds") or [])
     ]
     return {
         **value,
