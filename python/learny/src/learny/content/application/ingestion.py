@@ -13,6 +13,7 @@ engine: every stage below decides from the database row whether it has work left
 
 import asyncio
 import json
+import re
 import uuid
 from collections.abc import Awaitable, Callable
 from dataclasses import dataclass, field
@@ -45,8 +46,15 @@ from learny.content.infrastructure.extract import (
     extract_youtube,
     youtube_content,
 )
-from learny.content.infrastructure.figures import extract_pdf_figures, upload_figures
+from learny.content.infrastructure.figures import (
+    apply_reading,
+    extract_pdf_figures,
+    thumbnail,
+    upload_figures,
+)
 from learny.content.infrastructure.files import ReadFile, ReadFileInput, supabase_file_reader
+from learny.platform.llm.caller import ai_caller
+from learny.platform.llm.types import StepInput, SystemPart
 from learny.platform.embeddings import default_embedder, mode_of
 from learny.shared.db.uow import Tx
 from learny.shared.errors import AppError
@@ -539,6 +547,7 @@ async def _store_figures(deps: ContentDeps, ports: IngestionPorts, resource: Loa
         if not data:
             return 0
         found = await asyncio.to_thread(extract_pdf_figures, data)
+        found = await _read_figures(deps, found)
         entries = await upload_figures(deps.settings, resource.owner_id, resource.id, found)
         await _execute(deps, sql.SET_FIGURES, {"id": resource.id, "figures": json.dumps(entries)})
     except Exception as error:  # the text of the document stays usable without its figures
@@ -548,12 +557,59 @@ async def _store_figures(deps: ContentDeps, ports: IngestionPorts, resource: Loa
     return len(entries)
 
 
+FIGURE_VISION_PROMPT = (
+    "This is one page of a learner's course document. Is there a drawing, a diagram, a chart or a "
+    "photo on it (a page with only text or only a table has none)? Answer with one JSON object "
+    'only: {"hasFigure": boolean, "box": [left, top, right, bottom], "caption": string}. The box '
+    "surrounds the whole figure with its labels and printed caption, as fractions from 0 to 1 of "
+    "the page width and height. The caption is a short title in the language of the page."
+)
+FIGURE_VISION_CONCURRENCY = 4
+# The figure reading reuses the light structured prompt of the simple-mode analysis.
+FIGURE_PROMPT_ID = "simple_analysis.simple_analysis"
+
+
+async def _read_figure(deps: ContentDeps, figure: Any) -> Any:
+    """One figure after the model reading: cropped, captioned, or `None` for a text page."""
+    try:
+        step = StepInput(
+            system=(SystemPart(text="Answer with JSON only.", cache=True),),
+            messages=(
+                {
+                    "role": "user",
+                    "content": [
+                        {"type": "text", "text": FIGURE_VISION_PROMPT},
+                        {"type": "image", "image": thumbnail(figure), "mediaType": "image/jpeg"},
+                    ],
+                },
+            ),
+        )
+        output = await deps.llm.step("light", FIGURE_PROMPT_ID, step, scenario="figure-layout")
+        cleaned = re.sub(r"^```(?:json)?\s*|\s*```$", "", output.text.strip())
+        reading = json.loads(cleaned)
+    except Exception:  # an unreadable answer keeps the whole page
+        return figure
+    return apply_reading(figure, reading)
+
+
+async def _read_figures(deps: ContentDeps, figures: list[Any]) -> list[Any]:
+    """Every figure read by the model, a few at a time; text pages are dropped."""
+    gate = asyncio.Semaphore(FIGURE_VISION_CONCURRENCY)
+
+    async def one(figure: Any) -> Any:
+        async with gate:
+            return await _read_figure(deps, figure)
+
+    read = await asyncio.gather(*(one(figure) for figure in figures))
+    return [figure for figure in read if figure is not None]
+
 async def store_resource_figures(deps: ContentDeps, resource_id: str) -> int:
     """Backfill: the figures of a PDF ingested before they were extracted."""
     loaded = await select_resource(deps, resource_id)
     if loaded is None or loaded.deleted:
         return 0
-    return await _store_figures(deps, default_ports(deps), loaded)
+    with ai_caller(loaded.owner_id, loaded.formation_id):
+        return await _store_figures(deps, default_ports(deps), loaded)
 
 
 def _skipped(resource_id: str) -> dict[str, Any]:

@@ -645,6 +645,7 @@ def _chapter_figures(
                         "url": content.figure_url(resource_id, int(entry["n"])),
                         "page": int(entry["page"]),
                         "kind": str(entry.get("kind") or "image"),
+                        "caption": str(entry.get("caption") or ""),
                     }
                 )
     found.sort(key=lambda figure: figure["page"])
@@ -686,7 +687,8 @@ def _place_figures(draft: dict[str, Any], figures: Sequence[Mapping[str, Any]]) 
     missing = [figure for url, figure in allowed.items() if url not in used]
     if missing and target is not None:
         lines = [
-            f"![{texts.FIGURE_CAPTION.format(page=figure['page'])}]({figure['url']})" for figure in missing
+            f"![{figure.get('caption') or texts.FIGURE_CAPTION.format(page=figure['page'])}]({figure['url']})"
+            for figure in missing
         ]
         target["contentMd"] = target["contentMd"].rstrip() + "\n\n" + "\n\n".join(lines)
     return draft

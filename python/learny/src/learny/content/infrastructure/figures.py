@@ -20,7 +20,7 @@ import logging
 import re
 from collections import Counter
 from collections.abc import Sequence
-from dataclasses import dataclass
+from dataclasses import dataclass, replace
 from typing import Any
 from urllib.parse import quote
 
@@ -39,7 +39,7 @@ MAX_FIGURES = 150
 IMAGE_MIN_SHARE = 0.015
 IMAGE_MAX_SHARE = 0.85
 CROP_MARGIN = 0.02
-RENDER_SCALE = 1.6
+RENDER_SCALE = 2.0
 JPEG_QUALITY = 82
 UPLOAD_TIMEOUT_SECONDS = 30.0
 
@@ -56,6 +56,7 @@ class Figure:
     width: int
     height: int
     kind: str
+    caption: str = ""
 
 
 def _jpeg(image: Any) -> tuple[bytes, int, int]:
@@ -185,6 +186,71 @@ def extract_pdf_figures(data: bytes) -> list[Figure]:
     return figures
 
 
+# The model reading of a page: is there a drawing, where, and what does it show (QA 2026-11-26).
+VISION_MARGIN = 0.04
+THUMBNAIL_MAX_SIDE = 1100
+MIN_BOX_SHARE = 0.02
+
+
+def thumbnail(figure: Figure) -> bytes:
+    """A light copy of the figure for the vision model."""
+    from PIL import Image
+
+    image = Image.open(io.BytesIO(figure.data)).convert("RGB")
+    image.thumbnail((THUMBNAIL_MAX_SIDE, THUMBNAIL_MAX_SIDE))
+    buffer = io.BytesIO()
+    image.save(buffer, format="JPEG", quality=70)
+    return buffer.getvalue()
+
+
+def _box(raw: Any) -> tuple[float, float, float, float] | None:
+    if not isinstance(raw, (list, tuple)) or len(raw) != 4:
+        return None
+    try:
+        left, top, right, bottom = (float(value) for value in raw)
+    except (TypeError, ValueError):
+        return None
+    if not (0 <= left < right <= 1 and 0 <= top < bottom <= 1):
+        return None
+    if (right - left) * (bottom - top) < MIN_BOX_SHARE:
+        return None
+    return left, top, right, bottom
+
+
+def apply_reading(figure: Figure, reading: Any) -> Figure | None:
+    """The figure cropped to the drawing the model found; `None` for a page of text only.
+
+    Without a usable reading (model failure, malformed answer) the figure is kept as it is: an
+    image is never lost because the model could not be read.
+    """
+    if not isinstance(reading, dict):
+        return figure
+    if reading.get("hasFigure") is False:
+        return None
+    caption = " ".join(str(reading.get("caption") or "").split())[:160]
+    box = _box(reading.get("box"))
+    if box is None:
+        return replace(figure, caption=caption)
+    try:
+        from PIL import Image
+
+        image = Image.open(io.BytesIO(figure.data))
+        width, height = image.size
+        left, top, right, bottom = box
+        cropped = image.crop(
+            (
+                int(max(0.0, left - VISION_MARGIN) * width),
+                int(max(0.0, top - VISION_MARGIN) * height),
+                int(min(1.0, right + VISION_MARGIN) * width),
+                int(min(1.0, bottom + VISION_MARGIN) * height),
+            )
+        )
+        data, out_width, out_height = _jpeg(cropped)
+    except Exception:
+        return replace(figure, caption=caption)
+    return replace(figure, data=data, width=out_width, height=out_height, kind="image", caption=caption)
+
+
 def figure_path(owner_id: str, resource_id: str, index: int, mime: str) -> str:
     extension = "png" if mime == "image/png" else "jpg"
     return f"{owner_id}/{resource_id}/figure-{index}.{extension}"
@@ -228,6 +294,7 @@ async def upload_figures(
                     "width": figure.width,
                     "height": figure.height,
                     "path": path,
+                    "caption": figure.caption,
                 }
             )
     return entries
@@ -256,4 +323,12 @@ async def read_figure(settings: Settings, owner_id: str, path: str) -> bytes | N
     return response.content
 
 
-__all__ = ["Figure", "extract_pdf_figures", "figure_path", "read_figure", "upload_figures"]
+__all__ = [
+    "Figure",
+    "apply_reading",
+    "extract_pdf_figures",
+    "figure_path",
+    "read_figure",
+    "thumbnail",
+    "upload_figures",
+]
