@@ -88,13 +88,18 @@ def bank_of(rows: Sequence[Mapping[str, Any]]) -> tuple[list[dict[str, Any]], di
         parsed, issues = parse_payload(type_name, row["payload"])
         if parsed is None or issues:
             continue
+        notion_ids = [str(notion) for notion in (row["notion_ids"] or [])]
+        if not 1 <= len(notion_ids) <= 50:
+            # A brick tied to no notion cannot be drawn: it is skipped instead of failing the whole
+            # quiz with a 500 (QA 2026-11-26, exercises of a deposited document).
+            continue
         version_id = str(row["version_id"])
         payloads[version_id] = row["payload"]
         bank.append(
             {
                 "brickId": str(row["brick_id"]),
                 "brickVersionId": version_id,
-                "notionIds": [str(notion) for notion in (row["notion_ids"] or [])],
+                "notionIds": notion_ids,
                 "format": type_name,
                 "status": "active",
                 "valid": True,
