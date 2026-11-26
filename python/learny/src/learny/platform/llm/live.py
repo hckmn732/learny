@@ -107,7 +107,9 @@ def sanitized(value: str) -> str:
     return cleaned[:_PROVIDER_TEXT_MAX]
 
 
-_NO_CREDIT = re.compile(r"insufficient[ _]balance|insufficient[ _]credit|no credits|out of credits|billing", re.I)
+_NO_CREDIT = re.compile(
+    r"insufficient[ _]balance|insufficient[ _]credit|no credits|out of credits|billing", re.I
+)
 _MODEL_UNAVAILABLE = re.compile(
     r"model[^.]{0,80}(not found|does not exist|isn.t included|not included|not available|unknown)", re.I
 )
