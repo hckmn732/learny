@@ -63,8 +63,10 @@ MATH_RULE: Final = (
     "Inside JSON strings, escape each backslash (\\\\sum). Never write a formula as plain text."
 )
 
-STRUCTURE_INSTRUCTION: Final = _STRUCTURE.replace("__MATH_RULE__", MATH_RULE).replace("__DONT_CONFUSE__", texts.DONT_CONFUSE).replace(
-    "__TUTOR_COMPLETED__", texts.TUTOR_COMPLETED
+STRUCTURE_INSTRUCTION: Final = (
+    _STRUCTURE.replace("__MATH_RULE__", MATH_RULE)
+    .replace("__DONT_CONFUSE__", texts.DONT_CONFUSE)
+    .replace("__TUTOR_COMPLETED__", texts.TUTOR_COMPLETED)
 )
 
 
