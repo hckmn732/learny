@@ -103,13 +103,8 @@ class Runner:
                 )
             )
 
-    async def run(self, stop: asyncio.Event) -> None:
-        """Claims until `stop`; the deliveries in flight always finish before returning (ET-1).
-
-        Each slot is refilled as soon as its delivery ends: a long course generation no longer
-        holds back the short jobs claimed with it (QA 2026-11-26).
-        """
-        self._logger.info("runner started", concurrency=self._concurrency)
+    async def release_interrupted(self) -> None:
+        """At start: the deliveries a stopped worker left `running` become claimable at once."""
         try:
             async with self._deps.db.service_tx() as tx:
                 released = await outbox.release_running(tx)
@@ -117,6 +112,14 @@ class Runner:
                 self._logger.info("interrupted deliveries released", count=released)
         except Exception as error:
             self._logger.error("release failed", code=type(error).__name__, error=str(error)[:200])
+
+    async def run(self, stop: asyncio.Event) -> None:
+        """Claims until `stop`; the deliveries in flight always finish before returning (ET-1).
+
+        Each slot is refilled as soon as its delivery ends: a long course generation no longer
+        holds back the short jobs claimed with it (QA 2026-11-26).
+        """
+        self._logger.info("runner started", concurrency=self._concurrency)
         inflight: set[asyncio.Task[None]] = set()
         while not stop.is_set():
             claimed: list[Any] = []

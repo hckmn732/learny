@@ -72,6 +72,7 @@ async def serve(settings: Settings, loops: dict[str, Any]) -> None:
         consumers=[consumer.name for consumer in loops["consumers"]],
         concurrency=WORKER_CONCURRENCY,
     )
+    await loops["runner"].release_interrupted()
     server = _health_server(settings, loops["deps"])
     tasks = [
         asyncio.create_task(loops["dispatcher"].run(stop), name="dispatcher"),
