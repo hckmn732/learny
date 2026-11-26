@@ -286,6 +286,23 @@ async def complete(tx: Any, delivery: Delivery) -> None:
     await tx.conn.execute(COMPLETE, {"event_id": delivery.event_id, "consumer": delivery.consumer})
 
 
+# A worker that restarts (a deployment stops the previous one mid-job) takes back the deliveries left
+# `running`, instead of waiting for their lease, up to the consumer timeout (QA 2026-11-26).
+RELEASE_RUNNING = text(
+    """
+    update public.job_deliveries
+    set locked_until = now()
+    where status = 'running' and locked_until > now()
+    """
+)
+
+
+async def release_running(tx: Any) -> int:
+    """Makes every `running` delivery claimable again; returns how many."""
+    result = await tx.conn.execute(RELEASE_RUNNING)
+    return int(getattr(result, "rowcount", 0) or 0)
+
+
 async def reschedule(tx: Any, delivery: Delivery, run_after: datetime, error: str) -> None:
     await tx.conn.execute(
         RESCHEDULE,

@@ -110,6 +110,13 @@ class Runner:
         holds back the short jobs claimed with it (QA 2026-11-26).
         """
         self._logger.info("runner started", concurrency=self._concurrency)
+        try:
+            async with self._deps.db.service_tx() as tx:
+                released = await outbox.release_running(tx)
+            if released:
+                self._logger.info("interrupted deliveries released", count=released)
+        except Exception as error:
+            self._logger.error("release failed", code=type(error).__name__, error=str(error)[:200])
         inflight: set[asyncio.Task[None]] = set()
         while not stop.is_set():
             claimed: list[Any] = []
