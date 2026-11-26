@@ -14,7 +14,16 @@ FALLBACK_PAGES = 15
 MAX_SECTIONS = 100
 HEADING_MAX_LENGTH = 120
 
-_TOC_HEADING = re.compile(r"^\s*(sommaire|table des mati\u00e8res|contents)\s*$", re.IGNORECASE)
+_TOC_HEADING = re.compile(
+    r"^\s*(sommaire|table des mati\u00e8res|contents|table of contents)\s*[.:]?\s*$", re.IGNORECASE
+)
+# `Chapitre 3. La cellule : structure et fonction. 21`: number, optional title, optional page.
+_CHAPTER_LINE = re.compile(
+    r"^\s*(?:chapitre|chapter)\s+(?P<number>\d{1,3})\b\s*[.:\u2014-]?\s*(?P<title>.*?)\s*(?P<page>\d{1,4})?\s*$",
+    re.IGNORECASE,
+)
+# A chapter announced by the table of contents needs at least this many chapters to be trusted.
+MIN_CHAPTERS = 2
 _TOC_LINE = re.compile(r"^(?P<title>.{3,120}?)[\s.\u00b7]{2,}(?P<page>\d{1,4})\s*$")
 _HEADING = re.compile(
     r"^\s*(?:(?:chapitre|chapter|partie|part|section|module)\s+[\w.-]+"
@@ -165,6 +174,104 @@ def _fallback(pages: Mapping[int, str], total: int | None, plain_text: str = "")
     return sections
 
 
+def toc_pages(pages: Mapping[int, str]) -> set[int]:
+    """Pages of the table of contents: the page of a `Sommaire` heading and the pages after it that
+    still list chapters. They structure the document and never become a section (QA 2026-11-26)."""
+    found: set[int] = set()
+    ordered = sorted(pages)
+    for index, page in enumerate(ordered):
+        lines = pages[page].splitlines()
+        if not any(_TOC_HEADING.match(line) for line in lines):
+            continue
+        found.add(page)
+        for following in ordered[index + 1 :]:
+            listed = sum(1 for line in pages[following].splitlines() if _CHAPTER_LINE.match(line))
+            if listed < 2:
+                break
+            found.add(following)
+    return found
+
+
+def _clean_title(title: str) -> str:
+    cleaned = " ".join(title.split()).strip(" .:\u2014-")
+    return cleaned[:HEADING_MAX_LENGTH]
+
+
+def chapter_titles(pages: Mapping[int, str], toc: set[int]) -> dict[int, str]:
+    """`Chapitre N. Title` lines of the table of contents: the title of every numbered chapter."""
+    titles: dict[int, str] = {}
+    for page in sorted(toc):
+        for line in pages[page].splitlines():
+            match = _CHAPTER_LINE.match(line)
+            if match is None:
+                continue
+            number = int(match.group("number"))
+            title = _clean_title(match.group("title") or "")
+            if title and number not in titles:
+                titles[number] = title
+    return titles
+
+
+def chapter_starts(pages: Mapping[int, str], toc: set[int]) -> list[tuple[int, str]]:
+    """The body page where each numbered chapter begins, titled from the table of contents."""
+    titles = chapter_titles(pages, toc)
+    starts: dict[int, tuple[int, str]] = {}
+    for page in sorted(pages):
+        if page in toc:
+            continue
+        lines = [line for line in pages[page].splitlines() if line.strip()]
+        for index, line in enumerate(lines[:4]):
+            match = _CHAPTER_LINE.match(line)
+            if match is None:
+                continue
+            number = int(match.group("number"))
+            if number in starts:
+                break
+            own = _clean_title(match.group("title") or "")
+            if not own and index + 1 < len(lines):
+                own = _clean_title(lines[index + 1])
+            title = titles.get(number) or own or f"Chapitre {number}"
+            starts[number] = (page, title)
+            break
+    ordered = [starts[number] for number in sorted(starts)]
+    # A chapter that starts before the previous one is a cross-reference, not a start.
+    kept: list[tuple[int, str]] = []
+    for page, title in ordered:
+        if kept and page <= kept[-1][0]:
+            continue
+        kept.append((page, title))
+    return kept
+
+
+def _without_toc(sections: list[DocumentSection], toc: set[int]) -> list[DocumentSection]:
+    """Drops the sections that are only the table of contents, then renumbers them."""
+    kept = [
+        section
+        for section in sections
+        if not (
+            _TOC_HEADING.match(section.title)
+            or (
+                section.page_from is not None
+                and section.page_to is not None
+                and toc
+                and all(page in toc or page < min(toc) for page in range(section.page_from, section.page_to + 1))
+            )
+        )
+    ]
+    if not kept:
+        return sections
+    return [
+        DocumentSection(
+            position=index + 1,
+            title=section.title,
+            page_from=section.page_from,
+            page_to=section.page_to,
+            text=section.text,
+        )
+        for index, section in enumerate(kept)
+    ]
+
+
 def detect_sections(
     chunks: Sequence[Mapping[str, object]],
     *,
@@ -175,8 +282,14 @@ def detect_sections(
     pages = page_texts(chunks)
     total = total_pages if total_pages is not None else _pages_from_texts(pages)
     usable = [(int(page), str(title)) for page, title in (bookmarks or []) if int(page) >= 1]
+    toc = toc_pages(pages)
+    chapters = chapter_starts(pages, toc)
     if len(usable) >= 2:
         sections = _sections_from_boundaries(usable, pages, total)
+    elif len(chapters) >= MIN_CHAPTERS:
+        # The numbered chapters announced by the table of contents: the pages before the first
+        # one (cover, table of contents) belong to no section.
+        sections = _sections_from_boundaries(chapters, pages, total)
     else:
         toc = table_of_contents(pages)
         if len(toc) >= 2:
@@ -190,7 +303,7 @@ def detect_sections(
                     str(chunk.get("text")) for chunk in chunks if isinstance(chunk.get("text"), str)
                 )
                 sections = _fallback(pages, total, plain)
-    return sections[:MAX_SECTIONS]
+    return _without_toc(sections, toc)[:MAX_SECTIONS]
 
 
 def read_pdf_bookmarks(data: bytes) -> list[tuple[int, str]]:
