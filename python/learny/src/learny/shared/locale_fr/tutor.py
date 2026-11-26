@@ -132,6 +132,7 @@ COURSE_VERSION_NOT_CREATED = "La version du cours n\u2019a pas pu \u00eatre cr\u
 COURSE_SECTION_NOT_CREATED = "Une section du cours n\u2019a pas pu \u00eatre cr\u00e9\u00e9e."
 COURSE_CITATION_INVALID = "Une citation du cours ne correspond pas \u00e0 un passage pr\u00eat du chapitre."
 COURSE_CITATION_SOURCE_DELETED = "Une source du cours a chang\u00e9 pendant sa r\u00e9daction."
+FIGURE_CAPTION = "Figure du document, page {page}"
 COURSE_TASK_FAILED = "Le tuteur n\u2019a pas pu r\u00e9diger le cours de ce chapitre."
 COURSE_INVALID_OUTPUT = "Sortie invalide apr\u00e8s deux corrections."
 COURSE_LINK_RATIONALE = "Lien propos\u00e9 par le cours g\u00e9n\u00e9r\u00e9."

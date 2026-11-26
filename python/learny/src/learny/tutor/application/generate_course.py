@@ -20,6 +20,7 @@ consumer timeout of the job is 600 s (P22 plan); the model calls of one chapter 
 """
 
 import json
+import re
 from collections.abc import Callable, Mapping, Sequence
 from dataclasses import dataclass, replace
 from datetime import datetime
@@ -27,6 +28,7 @@ from typing import Any
 
 from sqlalchemy import text
 
+from learny.content import public as content
 from learny.content.domain.citations import (
     CitationValidation,
     KnownChunk,
@@ -345,6 +347,8 @@ class ChapterSnapshot:
     notions: tuple[dict[str, Any], ...]
     passages: tuple[KnownChunk, ...]
     documents: tuple[dict[str, Any], ...]
+    # Figures of the deposited document on the pages of these passages (QA 2026-11-26).
+    figures: tuple[dict[str, Any], ...] = ()
 
 
 @dataclass(frozen=True, slots=True)
@@ -436,6 +440,7 @@ async def read_module_context(tx: Any, user_id: str, module_id: str) -> ModuleSn
             chunks[chunk.chunk_id] = chunk
             by_chapter.setdefault(chapter_id, []).append(chunk)
 
+    figures_by_resource = await _figures_by_resource(tx, user_id, {chunk.resource_id for chunk in chunks.values()})
     allowed: set[str] = set()
     snapshots: list[ChapterSnapshot] = []
     for chapter in chapters:
@@ -450,6 +455,7 @@ async def read_module_context(tx: Any, user_id: str, module_id: str) -> ModuleSn
             if str(notion["chapter_id"]) == chapter_id
         )
         chapter_passages = tuple(by_chapter.get(chapter_id, []))
+        chapter_figures = _chapter_figures(chapter_passages, figures_by_resource)
         documents, selected = select_documents(chapter_passages)
         allowed.update(selected)
         snapshots.append(
@@ -460,6 +466,7 @@ async def read_module_context(tx: Any, user_id: str, module_id: str) -> ModuleSn
                 notions=chapter_notions,
                 passages=chapter_passages,
                 documents=tuple(documents),
+                figures=chapter_figures,
             )
         )
     return ModuleSnapshot(
@@ -563,6 +570,8 @@ async def _generate_chapter(
     correction: str | None = None
     for _attempt in range(COURSE_MAX_CORRECTIONS + 1):
         messages = prompt.messages
+        if chapter.figures:
+            messages = (*messages, {"role": "user", "content": _figures_instruction(chapter.figures)})
         if correction is not None:
             messages = (*messages, {"role": "user", "content": correction_prompt(correction)})
         try:
@@ -581,9 +590,98 @@ async def _generate_chapter(
             _lenient(replace_course_placeholders(value, placeholders)), f"chapter {chapter.position}"
         )
         if parsed is not None:
-            return parsed, generated.model_id or None
+            return _place_figures(parsed, chapter.figures), generated.model_id or None
         correction = issue_summary(issues)
     raise _task_failed(AppError("INVALID_OUTPUT", texts.COURSE_INVALID_OUTPUT))
+
+
+SELECT_RESOURCE_FIGURES = text(
+    """
+    select r.id::text as id, r.metadata -> 'figures' as figures
+      from public.resources r
+     where r.owner_id = cast(:user_id as uuid)
+       and r.id = any(cast(:ids as uuid[]))
+    """
+)
+MAX_CHAPTER_FIGURES = 8
+_IMAGE = re.compile(r"!\[([^\]]*)\]\(([^)\s]+)\)")
+
+
+async def _figures_by_resource(tx: Any, user_id: str, resource_ids: set[str]) -> dict[str, list[dict[str, Any]]]:
+    """The stored figures of the resources the module cites, by resource."""
+    if not resource_ids:
+        return {}
+    rows = (
+        (await tx.conn.execute(SELECT_RESOURCE_FIGURES, {"user_id": user_id, "ids": uuid_array(resource_ids)}))
+        .mappings()
+        .all()
+    )
+    return {str(row["id"]): content.figure_entries({"figures": row["figures"]}) for row in rows}
+
+
+def _chapter_figures(
+    passages: Sequence[KnownChunk], by_resource: Mapping[str, list[dict[str, Any]]]
+) -> tuple[dict[str, Any], ...]:
+    """The figures printed on the pages of the chapter passages, in page order."""
+    pages: dict[str, set[int]] = {}
+    for passage in passages:
+        page = passage.location.get("page")
+        if isinstance(page, int) and not isinstance(page, bool):
+            pages.setdefault(passage.resource_id, set()).add(page)
+    found: list[dict[str, Any]] = []
+    for resource_id, entries in by_resource.items():
+        for entry in entries:
+            if entry["page"] in pages.get(resource_id, set()):
+                found.append(
+                    {
+                        "url": content.figure_url(resource_id, int(entry["n"])),
+                        "page": int(entry["page"]),
+                        "kind": str(entry.get("kind") or "image"),
+                    }
+                )
+    found.sort(key=lambda figure: figure["page"])
+    return tuple(found[:MAX_CHAPTER_FIGURES])
+
+
+def _figures_instruction(figures: Sequence[Mapping[str, Any]]) -> str:
+    """The figures the chapter must show, with where they come from."""
+    listed = json.dumps(list(figures), ensure_ascii=False)
+    return (
+        "Figures of the learner's document for this chapter (page = page of the document; kind "
+        "`page` is the whole page drawn as an image): " + listed + ". Show every relevant figure "
+        "in the `contentMd` of the markdown section that covers its page, on its own line, as "
+        "`![short caption in the course language](url)` with the exact url. Use no other image URL."
+    )
+
+
+def _place_figures(draft: dict[str, Any], figures: Sequence[Mapping[str, Any]]) -> dict[str, Any]:
+    """Keeps only the document figures in the chapter and appends the ones the model left out."""
+    allowed = {str(figure["url"]): figure for figure in figures}
+    used: set[str] = set()
+    sections = draft.get("sections")
+    if not isinstance(sections, list):
+        return draft
+
+    def keep(match: "re.Match[str]") -> str:
+        url = match.group(2)
+        if url in allowed:
+            used.add(url)
+            return match.group(0)
+        return ""
+
+    target: dict[str, Any] | None = None
+    for section in sections:
+        if isinstance(section, dict) and isinstance(section.get("contentMd"), str):
+            section["contentMd"] = _IMAGE.sub(keep, section["contentMd"])
+            if section.get("kind") in ("markdown", "tutor_addition"):
+                target = target or section
+    missing = [figure for url, figure in allowed.items() if url not in used]
+    if missing and target is not None:
+        lines = [
+            f"![{texts.FIGURE_CAPTION.format(page=figure['page'])}]({figure['url']})" for figure in missing
+        ]
+        target["contentMd"] = target["contentMd"].rstrip() + "\n\n" + "\n\n".join(lines)
+    return draft
 
 
 def _lenient(value: Any) -> Any:

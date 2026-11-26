@@ -53,6 +53,20 @@ const COMPONENTS: Components = {
   code: ({ children }) => (
     <code className="rounded-4 bg-canvas px-4 py-1 font-mono text-15">{children}</code>
   ),
+  // A figure of the learner's document (QA 2026-11-26): the image, then its caption.
+  img: ({ src, alt }) => (
+    <span className="my-8 block" data-testid="course-figure">
+      <img
+        alt={alt ?? ''}
+        className="block h-auto max-w-full rounded-12 border border-solid border-border bg-white"
+        loading="lazy"
+        src={typeof src === 'string' ? src : ''}
+      />
+      {alt === undefined || alt === '' ? null : (
+        <span className="mt-6 block text-13 leading-1.4 text-ink-muted">{alt}</span>
+      )}
+    </span>
+  ),
   blockquote: ({ children }) => (
     <blockquote className="m-0 border-l-4 border-solid border-lime pl-16 text-ink-secondary">
       {children}

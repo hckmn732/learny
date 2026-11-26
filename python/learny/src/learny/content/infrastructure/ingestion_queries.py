@@ -145,6 +145,7 @@ MARK_FAILED = text(
 )
 
 __all__ = [
+    "SET_FIGURES",
     "CLAIM_EVENT",
     "CLEAR_EVENT_CLAIM",
     "DELETE_CHUNKS",
@@ -179,5 +180,15 @@ SELECT_STALE_RESOURCES = text(
        )
      order by r.updated_at
      limit :limit
+    """
+)
+
+
+# Figures of a deposited PDF (QA 2026-11-26): `metadata.figures`, one entry per illustrated page.
+SET_FIGURES = text(
+    """
+    update public.resources
+       set metadata = jsonb_set(coalesce(metadata, '{}'::jsonb), '{figures}', cast(:figures as jsonb))
+     where id = cast(:id as uuid)
     """
 )

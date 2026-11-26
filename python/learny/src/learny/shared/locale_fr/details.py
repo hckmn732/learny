@@ -261,6 +261,7 @@ SIMPLE_DEADLINE_TOO_SOON = "Choisissez une échéance dans au moins quinze jours
 SIMPLE_NOT_FOUND = "Analyse introuvable."
 SIMPLE_STEP_FAILED = "L’analyse n’a pas pu aboutir."
 SIMPLE_AI_NOT_CONFIGURED = "Choisissez un modèle personnel pour les tâches : {tasks}."
+FIGURE_NOT_FOUND = "Cette figure est introuvable."
 SIMPLE_ANALYSIS_RUNNING = "L’analyse est déjà en cours."
 DIAGNOSTIC_ALREADY_DONE = "Le diagnostic a déjà été réalisé ou passé."
 DIAGNOSTIC_NO_CHECK = "La correction immédiate n’est pas disponible pendant le diagnostic."

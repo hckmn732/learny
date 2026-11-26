@@ -11,6 +11,7 @@ The stage seam (`StepRunner`) is the one the worker wires in SPEC-2207. It is no
 engine: every stage below decides from the database row whether it has work left.
 """
 
+import asyncio
 import json
 import uuid
 from collections.abc import Awaitable, Callable
@@ -44,6 +45,7 @@ from learny.content.infrastructure.extract import (
     extract_youtube,
     youtube_content,
 )
+from learny.content.infrastructure.figures import extract_pdf_figures, upload_figures
 from learny.content.infrastructure.files import ReadFile, ReadFileInput, supabase_file_reader
 from learny.platform.embeddings import default_embedder, mode_of
 from learny.shared.db.uow import Tx
@@ -519,6 +521,41 @@ async def fail_stale_resources(deps: ContentDeps, *, limit: int = STALE_SWEEP_LI
     return len(stale)
 
 
+
+async def _store_figures(deps: ContentDeps, ports: IngestionPorts, resource: LoadedResource) -> int:
+    """The figures of a PDF, extracted, stored and listed in its metadata; never fails the ingestion."""
+    if resource.kind != "pdf" or resource.metadata.get("sourceKind") == "document":
+        return 0
+    if resource.storage_path is None or ports.mode != "live":
+        return 0
+    try:
+        data = await ports.read_file(
+            ReadFileInput(
+                owner_id=resource.owner_id,
+                resource_id=resource.id,
+                storage_path=resource.storage_path,
+                max_bytes=ports.limits.max_bytes,
+            )
+        )
+        if not data:
+            return 0
+        found = await asyncio.to_thread(extract_pdf_figures, data)
+        entries = await upload_figures(deps.settings, resource.owner_id, resource.id, found)
+        await _execute(deps, sql.SET_FIGURES, {"id": resource.id, "figures": json.dumps(entries)})
+    except Exception as error:  # the text of the document stays usable without its figures
+        _warn(deps, "figures skipped", component="ingestion", outcome="skipped", code=type(error).__name__)
+        return 0
+    _info(deps, "figures stored", component="ingestion", outcome="ready", code=str(len(entries)))
+    return len(entries)
+
+
+async def store_resource_figures(deps: ContentDeps, resource_id: str) -> int:
+    """Backfill: the figures of a PDF ingested before they were extracted."""
+    loaded = await select_resource(deps, resource_id)
+    if loaded is None or loaded.deleted:
+        return 0
+    return await _store_figures(deps, default_ports(deps), loaded)
+
 def _skipped(resource_id: str) -> dict[str, Any]:
     return {
         "resourceId": resource_id,
@@ -609,6 +646,7 @@ async def _process(
         )
         if outcome == "skipped":
             return _skipped(resource_id)
+        await step.run("figures", lambda: _store_figures(deps, ports, processing))
         await step.run("publish-ready", lambda: _publish_ready(deps, resource_id))
         _info(
             deps,
@@ -699,6 +737,7 @@ __all__ = [
     "UploadPdfInput",
     "default_ports",
     "fail_stale_resources",
+    "store_resource_figures",
     "process_resource",
     "select_resource",
 ]

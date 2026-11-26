@@ -14,6 +14,10 @@ dependencies = [
   "psycopg[binary,pool]>=3.2",
   "tzdata>=2024.1",
   "pypdf>=5.1",
+  # Figures of a deposited PDF: decoding of the embedded images and rendering of the pages that
+  # hold vector diagrams (QA 2026-11-26).
+  "pillow>=11.0",
+  "pypdfium2>=4.30",
   "readability-lxml>=0.8.1",
   "lxml-html-clean>=0.4",
   "youtube-transcript-api>=1.0",

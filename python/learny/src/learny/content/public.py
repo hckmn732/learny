@@ -8,12 +8,14 @@ from learny.content.application.citations import get_citation_source
 from learny.content.application.course import get_module_course
 from learny.content.application.dev_uploads import simulate_upload
 from learny.content.application.generate import generate_course_now
+from learny.content.application.figures import figure_entries, figure_url, owned_figure
 from learny.content.application.ingestion import (
     IngestionPorts,
     default_ports,
     fail_after_last_attempt,
     fail_stale_resources,
     process_resource,
+    store_resource_figures,
 )
 from learny.content.application.module_screen import get_module_screen
 from learny.content.application.ports import ContentDeps
@@ -88,6 +90,10 @@ __all__ = [
     "excerpt_of",
     "fail_after_last_attempt",
     "fail_stale_resources",
+    "figure_entries",
+    "figure_url",
+    "owned_figure",
+    "store_resource_figures",
     "fake_embedding",
     "finalize_upload",
     "format_document_chunk",

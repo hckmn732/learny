@@ -29,6 +29,7 @@ import { platform, radius, theme, typeScale } from '../theme';
 import { Icon } from './Icon';
 import type { Block, CalloutTone, Inline } from './markdown-ast';
 import { parseMarkdown } from './markdown-ast';
+import { MarkdownFigure } from './MarkdownFigure';
 
 const t = fr.mobile.bricks;
 const MONOSPACE = platform === 'ios' ? 'Menlo' : 'monospace';
@@ -353,10 +354,13 @@ function Blocks({
           case 'table':
             return <Table head={node.head} key={key} onLinkPress={onLinkPress} rows={node.rows} />;
           case 'image':
-            return (
+            // QA 2026-11-26 — a figure of the learner's document is shown, not only named.
+            return node.url === '' ? (
               <Run key={key} tone="muted" variant="caption">
                 {t.markdownImage(node.alt)}
               </Run>
+            ) : (
+              <MarkdownFigure alt={node.alt} key={key} url={node.url} />
             );
           case 'rule':
             return <View key={key} style={styles.rule} />;

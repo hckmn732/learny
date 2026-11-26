@@ -49,7 +49,7 @@ export type Block =
       readonly head: readonly (readonly Inline[])[];
       readonly rows: readonly (readonly (readonly Inline[])[])[];
     }
-  | { readonly kind: 'image'; readonly alt: string }
+  | { readonly kind: 'image'; readonly alt: string; readonly url: string }
   | { readonly kind: 'rule' };
 
 /** The three callouts of the course charge, in the wording of `fr.course` (EF-7). */
@@ -147,7 +147,7 @@ function imageParagraph(node: MarkdownNode): readonly Block[] | null {
   const children = node.children ?? [];
   const first = children[0];
   if (children.length !== 1 || first?.type !== 'image') return null;
-  return [{ kind: 'image', alt: (first.alt ?? '').trim() }];
+  return [{ kind: 'image', alt: (first.alt ?? '').trim(), url: (first.url ?? '').trim() }];
 }
 
 function listItem(node: MarkdownNode): readonly Inline[] {
