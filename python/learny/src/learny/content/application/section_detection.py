@@ -268,8 +268,7 @@ def _without_toc(sections: list[DocumentSection], toc: set[int]) -> list[Documen
                 and section.page_to is not None
                 and toc
                 and all(
-                    page in toc or page < min(toc)
-                    for page in range(section.page_from, section.page_to + 1)
+                    page in toc or page < min(toc) for page in range(section.page_from, section.page_to + 1)
                 )
             )
         )
