@@ -49,9 +49,9 @@ EXAM_DEADLINE_GRACE_SECONDS = 5
 LONG_JOB_TIMEOUT_S = 900
 INGESTION_TIMEOUT_S = 600
 # SPEC-4001 - the two modules generated before the queued ones.
-SIMPLE_DIRECT_MODULES = 2
 SIMPLE_ANALYSIS_TIMEOUT_S = 1_800
 GENERATION_TIMEOUT_S = 600
+COURSE_GENERATION_TIMEOUT_S = 1800
 # Hotfix QA: the bank of a just generated course is produced in the same run (`timeouts.finish`).
 QUESTION_BANK_PREPARE_TIMEOUT_S = 1800
 GRADING_TIMEOUT_S = 300
@@ -389,25 +389,20 @@ async def formation_simple_analysis(deps: Any, event: Event) -> None:
 
 
 async def formation_simple_generation(deps: Any, event: Event) -> None:
-    """`simple.generation.requested`: two modules now, the others queued (SPEC-4001 EF-9, EF-12).
+    """`simple.generation.requested`: every module queued in order (SPEC-4001 EF-9, EF-12).
 
-    The first two modules of the formation are generated directly; the following ones are enqueued
-    with the ordinary `chapter/contributions-completed` event, so the same course job and the same
-    idempotence guard produce them. At least two modules stay ready ahead of the first open module.
+    Each module is enqueued with the ordinary `chapter/contributions-completed` event, so the same
+    course job and the same idempotence guard produce them, one job per module.
     """
     user_id = _text_of(event.data, "userId")
     formation_id = _text_of(event.data, "formationId")
     modules = await formation.list_generation_modules(deps, formation_id)
-    pending = [
-        module
-        for module in modules
-        if str(module["status"]) != "validated" and module.get("course_status") is None
-    ]
-    for index, module in enumerate(pending):
+    # Every module gets its course, the ones the diagnostic validated included (they stay readable
+    # for revision). Each course is its own job, in module order: generating two of them inline made
+    # this job exceed its timeout on a large document and start over forever (QA 2026-11-26).
+    pending = [module for module in modules if module.get("course_status") is None]
+    for module in pending:
         module_id = str(module["id"])
-        if index < SIMPLE_DIRECT_MODULES:
-            await tutor.generate_course(deps, user_id, module_id, f"simple-course:{module_id}")
-            continue
         async with deps.db.service_tx() as tx:
             await tx.emit(
                 "chapter/contributions-completed",
@@ -634,7 +629,9 @@ CONSUMERS: tuple[Consumer, ...] = (
         name="tutor.generate_course",
         on="chapter/contributions-completed",
         run=tutor_generate_course,
-        timeout_s=GENERATION_TIMEOUT_S,
+        # A module of a long deposited document has many chapters, each one an AI call corrected
+        # up to twice: ten minutes were not enough (QA 2026-11-26).
+        timeout_s=COURSE_GENERATION_TIMEOUT_S,
         max_attempts=COURSE_GENERATION_ATTEMPTS,
         validate=validate_course_generation_event,
         tags={"context": "tutor"},
