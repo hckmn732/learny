@@ -140,7 +140,7 @@ def test_every_consumer_has_a_valid_name_and_options() -> None:
 def test_the_course_generation_runs_once_per_completion_event() -> None:
     consumer = consumer_named("tutor.generate_course")
     assert consumer.on == "chapter/contributions-completed"
-    assert consumer.timeout_s == 600
+    assert consumer.timeout_s == 1800
     # `retries: 3` in the job definition: the first attempt plus three retries.
     assert consumer.max_attempts == 4
     assert consumer.run_after(event(consumer.on, VALID_PAYLOADS[consumer.name]), FakeClock(FIXED)) is None
